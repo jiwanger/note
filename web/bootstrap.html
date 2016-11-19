@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="keywords" content="key1, key2" />
+<meta name="description" content=””>
+<meta name="author" content="nate">
+<meta name="author" content="nate &lt;jiwanger@126.com&gt;">
+<link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
+<link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<title>NATE--笔记</title>
+<!-- Bootstrap -->
+<link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
+	rel="stylesheet">
+<!-- 
+<link href="../support/bootstrap/css/bootstrap.css" rel="stylesheet">
+-->
+
+<link href="../commons/css/common.css" rel="stylesheet">
+
+<link href="css/demo-bootstrap.css" rel="stylesheet">
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+<script>
+	$(function() {
+		if (location.hash) {
+			var target = $(location.hash);
+			if (target.length == 1) {
+				var top = target.offset().top - 44;
+				if (top > 0) {
+					$('html,body').animate({
+						scrollTop : top
+					}, 1000);
+				}
+			}
+		}
+	});
+</script>
+</head>
+<body>
+	<!-- nav start -->
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="../index.html">
+					<img src="../commons/images/icon.png">
+				</a>
+			</div>
+
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul id="my-nav" class="nav navbar-nav">
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- nav end -->
+
+
+	<div class="container">
+		<div class="row">
+			<!-- left-menu start -->
+			<div class="col-md-3">
+				<div class="panel panel-default"
+					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
+					<div class="panel-heading">
+						<h3 class="panel-title">Bootstrap</h3>
+					</div>
+					<div class="list-group">
+						<a href="#" class="list-group-item">Bootstrap 简介</a>
+						<a href="#bootstrap-grid" class="list-group-item">栅格系统</a>
+						<a class="list-group-item active dropdown" data-toggle="collapse"
+							data-parent="#accordion" href="#bootstrap-typography-container"
+							aria-expanded="true">
+							排版<span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="bootstrap-typography-container"
+							class="panel-collapse collapse" role="tabpanel">
+							<a href="#bootstrap-publish" class="list-group-item">标题</a>
+							<a href="#bootstrap-page" class="list-group-item">页面主体与内联文本元素</a>
+							<a href="#bootstrap-align" class="list-group-item">对齐与大小写</a>
+							<a href="#bootstrap-blockquote" class="list-group-item">缩略语，地址与引用</a>
+							<a href="#bootstrap-list" class="list-group-item">列表</a>
+						</div>
+						<a href="#bootstrap-code" class="list-group-item">代码</a>
+						<a class="list-group-item active dropdown" data-toggle="collapse"
+							data-parent="#accordion" href="#bootstrap-table-container"
+							aria-expanded="true">
+							表格<span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="bootstrap-table-container"
+							class="panel-collapse collapse" role="tabpanel">
+							<a href="#bootstrap-table-striped" class="list-group-item">条纹状表格</a>
+							<a href="#bootstrap-table-bordered" class="list-group-item">带边框的表格</a>
+							<a href="#bootstrap-table-hover" class="list-group-item">鼠标悬停</a>
+							<a href="#bootstrap-table-condensed" class="list-group-item">紧缩表格</a>
+							<a href="#bootstrap-table-responsive" class="list-group-item">响应式表格-状态类</a>
+						</div>
+
+						<a class="list-group-item active dropdown"
+							style="border-top: 1px solid #FFFFFF;" data-toggle="collapse"
+							data-parent="#accordion" href="#bootstrap-form-container"
+							aria-expanded="true">
+							表单<span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="bootstrap-form-container" class="panel-collapse collapse"
+							role="tabpanel">
+							<a href="#bootstrap-form-base" class="list-group-item">基本实例</a>
+							<a href="#bootstrap-form-inline" class="list-group-item">内联表单</a>
+							<a href="#bootstrap-form-horizontal" class="list-group-item">水平排列的表单</a>
+							<a href="#bootstrap-form-" class="list-group-item">...</a>
+							<a href="#bootstrap-form-" class="list-group-item">...</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- left-menu over -->
+		</div>
+	</div>
+
+
+	<div class="container" style="margin-top: 70px;">
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-9" style="float: left;">
+				<!-- item start -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Bootstrap 简介</h3>
+					</div>
+					<div class="panel-body">
+						<p>Bootstrap，来自 Twitter，是目前很受欢迎的前端框架。Bootstrap 是基于
+							HTML、CSS、JAVASCRIPT 的，它简洁灵活，使得 Web 开发更加快捷。</p>
+						<p>Bootstrap是基于HTML5和CSS3开发的，它在jQuery的基础上进行了更为个性化和人性化的完善，形成一套自己独有的网站风格，并兼容大部分jQuery插件。</p>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="bootstrap-grid"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">栅格系统</h3>
+					</div>
+					<div class="panel-body">
+						<p>Bootstrap
+							提供了一套响应式、移动设备优先的流式栅格系统，随着屏幕或视口（viewport）尺寸的增加，系统会自动分为最多12列。栅格系统用于通过一系列的行（row）与列（column）的组合来创建页面布局。“行（row）”必须包含在
+							.container （固定宽度）或 .container-fluid （100%
+							宽度）中，以便为其赋予合适的排列（aligment）和内补（padding）</p>
+						<p>栅格参数 -- 通过下表可以详细查看 Bootstrap 的栅格系统是如何在多种屏幕设备上工作的:</p>
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th></th>
+									<th>超小屏幕 <small>手机 (&lt;768px)</small>
+									</th>
+									<th>小屏幕 <small>平板 (≥768px)</small>
+									</th>
+									<th>中等屏幕 <small>桌面显示器 (≥992px)</small>
+									</th>
+									<th>大屏幕 <small>大桌面显示器 (≥1200px)</small>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<th class="text-nowrap">栅格系统行为</th>
+									<td>总是水平排列</td>
+									<td colspan="3">开始是堆叠在一起的，当大于这些阈值时将变为水平排列C</td>
+								</tr>
+								<tr>
+									<th class="text-nowrap"><code>.container</code> 最大宽度</th>
+									<td>None （自动）</td>
+									<td>750px</td>
+									<td>970px</td>
+									<td>1170px</td>
+								</tr>
+								<tr>
+									<th class="text-nowrap">类前缀</th>
+									<td><code>.col-xs-</code></td>
+									<td><code>.col-sm-</code></td>
+									<td><code>.col-md-</code></td>
+									<td><code>.col-lg-</code></td>
+								</tr>
+								<tr>
+									<th class="text-nowrap">列（column）数</th>
+									<td colspan="4">12</td>
+								</tr>
+								<tr>
+									<th class="text-nowrap">最大列（column）宽</th>
+									<td class="text-muted">自动</td>
+									<td>~62px</td>
+									<td>~81px</td>
+									<td>~97px</td>
+								</tr>
+								<tr>
+									<th class="text-nowrap">槽（gutter）宽</th>
+									<td colspan="4">30px （每列左右均有 15px）</td>
+								</tr>
+								<tr>
+									<th class="text-nowrap">可嵌套</th>
+									<td colspan="4">是</td>
+								</tr>
+								<tr>
+									<th class="text-nowrap">偏移（Offsets）</th>
+									<td colspan="4">是</td>
+								</tr>
+								<tr>
+									<th class="text-nowrap">列排序</th>
+									<td colspan="4">是</td>
+								</tr>
+							</tbody>
+						</table>
+						<p class="text-primary">examples</p>
+						<div class="demo-grid">
+							<div class="row">
+								<div class="col-md-12">
+									<span class="h5">1.基本栅格</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-1">.col-md-1</div>
+								<div class="col-md-1">.col-md-1</div>
+								<div class="col-md-1">.col-md-1</div>
+								<div class="col-md-1">.col-md-1</div>
+								<div class="col-md-1">.col-md-1</div>
+								<div class="col-md-1">.col-md-1</div>
+								<div class="col-md-1">.col-md-1</div>
+								<div class="col-md-1">.col-md-1</div>
+								<div class="col-md-1">.col-md-1</div>
+								<div class="col-md-1">.col-md-1</div>
+								<div class="col-md-1">.col-md-1</div>
+								<div class="col-md-1">.col-md-1</div>
+							</div>
+							<div class="row">
+								<div class="col-md-8">.col-md-8</div>
+								<div class="col-md-4">.col-md-4</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">.col-md-4</div>
+								<div class="col-md-4">.col-md-4</div>
+								<div class="col-md-4">.col-md-4</div>
+							</div>
+							<div class="row">
+								<div class="col-md-6">.col-md-6</div>
+								<div class="col-md-6">.col-md-6</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">.col-md-12</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<span class="h5">2.手机、平板、桌面, 是否不希望在小屏幕设备上所有列都堆叠在一起?</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-12 col-sm-6 col-md-8">.col-xs-12
+									.col-sm-6 .col-md-8</div>
+								<div class="col-xs-6 col-md-4">.col-xs-6 .col-md-4</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 col-sm-4">.col-xs-6 .col-sm-4</div>
+								<div class="col-xs-6 col-sm-4">.col-xs-6 .col-sm-4</div>
+								<!-- Optional: clear the XS cols if their content doesn't match in height -->
+								<div class="clearfix visible-xs-block"></div>
+								<div class="col-xs-6 col-sm-4">.col-xs-6 .col-sm-4</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<span class="h5">3.列偏移 嵌套列 列排序</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-4">.col-md-4</div>
+								<div class="col-md-4 col-md-offset-4">.col-md-4
+									.col-md-offset-4</div>
+							</div>
+							<div class="row">
+								<div class="col-md-9">
+									level: 1 .col-md-9
+									<div class="row" style="margin: 0px; padding: 5px 0px 5px 0px;">
+										<div class="col-xs-8 col-sm-6">Level 2: .col-xs-8
+											.col-sm-6</div>
+										<div class="col-xs-4 col-sm-6">Level 2: .col-xs-4
+											.col-sm-6</div>
+									</div>
+								</div>
+								<div class="col-md-3">level: 1 .col-md-3</div>
+							</div>
+							<div class="row">
+								<div class="col-md-9 col-md-push-3">.col-md-9
+									.col-md-push-3</div>
+								<div class="col-md-3 col-md-pull-9">.col-md-3
+									.col-md-pull-9</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="bootstrap-publish"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">排版</h3>
+					</div>
+					<div class="panel-body">
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-title"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">标题 -- h1-h6标签和类，small标签</h5>
+							<div class="row">
+								<div class="col-md-4">
+									<h1>h1</h1>
+									<h2>h2</h2>
+									<h3>h3</h3>
+									<h4>h4</h4>
+									<h5>h5</h5>
+									<h6>h6</h6>
+								</div>
+								<div class="col-md-4">
+									<p class="h1">.h1</p>
+									<p class="h2">.h2</p>
+									<p class="h3">.h3</p>
+									<p class="h4">.h4</p>
+									<p class="h5">.h5</p>
+									<p class="h6">.h6</p>
+								</div>
+								<div class="col-md-4">
+									<h1>
+										h1 <small>small</small>
+									</h1>
+									<h2>
+										h2 <small>small</small>
+									</h2>
+									<h3>
+										h3 <small>small</small>
+									</h3>
+									<h4>
+										h4 <small>small</small>
+									</h4>
+									<h5>
+										h5 <small>small</small>
+									</h5>
+									<h6>
+										h6 <small>small</small>
+									</h6>
+								</div>
+							</div>
+						</div>
+						<!-- subitem over -->
+
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-page"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">页面主体</h5>
+							<p>Bootstrap 将全局 font-size 设置为 14px，line-height 设置为
+								1.428。这些属性直接赋予 body 元素和所有段落元素。另外， p（段落）元素还被设置了等于 1/2 行高（即
+								10px）的底部外边距（margin）</p>
+							<ul>
+								<li>
+									<p class="lead">
+										添加 <code>.lead</code> 类可以让段落突出显示
+								</li>
+								<li>
+									<p>
+										使用 <code>mark</code> 突出单词
+									</p>
+								</li>
+								<li>
+									<p>
+										<del>
+											使用 <code>del</code> 显示被删除的文本
+										</del>
+									</p>
+								</li>
+								<li>
+									<p>
+										<s>使用 <code>s</code> 显示无用文本
+										</s>
+									</p>
+								</li>
+								<li>
+									<p>
+										<ins>
+											使用 <code>ins</code> 显示插入文本
+										</ins>
+									</p>
+								</li>
+								<li>
+									<p>
+										<u>使用 <code>u</code> 显示带下划线的文本
+										</u>
+									</p>
+								</li>
+								<li>
+									<p>
+										<small>使用 <code>small 或 .small</code> 显示小号文本
+										</small>
+									</p>
+								</li>
+								<li>
+									<p>
+										<strong>使用 <code>strong</code> 显示着重文本
+										</strong>
+									</p>
+								</li>
+								<li>
+									<p>
+										<em>使用 <code>em</code> 显示斜体文本
+										</em>
+									</p>
+								</li>
+							</ul>
+						</div>
+						<!-- subitem over -->
+
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-align"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">对齐与大小写</h5>
+							<p class="text-left">.text-left</p>
+							<p class="text-center">.text-center</p>
+							<p class="text-right">.text-right</p>
+							<p class="text-justify">.text-justify</p>
+							<p class="text-nowrap">.text-nowrap</p>
+							<p>大小写</p>
+							<p class="text-lowercase">.text-lowercase</p>
+							<p class="text-uppercase">.text-uppercase</p>
+							<p class="text-capitalize">.text-capitalize</p>
+						</div>
+						<!-- subitem over -->
+
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-blockquote"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">缩略语，地址与引用</h5>
+							<p>
+								<abbr title="attribute">attr</abbr>
+							</p>
+							<p>
+								<abbr title="HyperText Markup Language" class="initialism">HTML</abbr>
+							</p>
+							<div>
+								<address>
+									<strong>Twitter, Inc.</strong><br> 795 Folsom Ave, Suite
+									600<br> San Francisco, CA 94107<br> <abbr
+										title="Phone">P:</abbr> (123) 456-7890
+								</address>
+								<address>
+									<strong>Full Name</strong><br>
+									<a href="mailto:#">first.last@example.com</a>
+								</address>
+							</div>
+							<blockquote>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+									Integer posuere erat a ante.</p>
+							</blockquote>
+							<blockquote>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+									Integer posuere erat a ante.</p>
+								<footer>
+									Someone famous in <cite title="Source Title">Source
+										Title</cite>
+								</footer>
+							</blockquote>
+							<blockquote class="blockquote-reverse">
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+									Integer posuere erat a ante.</p>
+								<footer>
+									Someone famous in <cite title="Source Title">Source
+										Title</cite>
+								</footer>
+							</blockquote>
+						</div>
+						<!-- subitem over -->
+
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-list"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">列表</h5>
+							<ul>
+								<li>
+									无序列表 -- <code>ul</code>
+								</li>
+								<li>
+									有序列表 -- <code>ol</code>
+								</li>
+								<li>
+									无样式列表 -- <code>.list-unstyled</code>
+								</li>
+								<li>
+									内联列表 -- <code>.list-inline</code>
+								</li>
+								<li>
+									带有描述的短语列表 -- <code>dl > dt</code>
+								</li>
+								<li>
+									水平排列的描述 -- <code>.dl-horizontal dl > dt</code>
+								</li>
+							</ul>
+							<dl>
+								<dt>Description lists</dt>
+								<dd>A description list is perfect for defining terms.</dd>
+								<dt>Euismod</dt>
+								<dd>Vestibulum id ligula porta felis euismod semper eget
+									lacinia odio sem nec elit.</dd>
+								<dd>Donec id elit non mi porta gravida at eget metus.</dd>
+								<dt>Malesuada porta</dt>
+								<dd>Etiam porta sem malesuada magna mollis euismod.</dd>
+							</dl>
+							<dl class="dl-horizontal">
+								<dt>Description lists</dt>
+								<dd>A description list is perfect for defining terms.</dd>
+								<dt>Euismod</dt>
+								<dd>Vestibulum id ligula porta felis euismod semper eget
+									lacinia odio sem nec elit.</dd>
+								<dd>Donec id elit non mi porta gravida at eget metus.</dd>
+								<dt>Malesuada porta</dt>
+								<dd>Etiam porta sem malesuada magna mollis euismod.</dd>
+								<dt>Felis euismod semper eget lacinia</dt>
+								<dd>Fusce dapibus, tellus ac cursus commodo, tortor mauris
+									condimentum nibh, ut fermentum massa justo sit amet risus.</dd>
+							</dl>
+
+						</div>
+						<!-- subitem over -->
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="bootstrap-code"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">代码</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							使用 <code>code</code> 标识代码 -- <code>public static final
+								void main(String[] args)</code>
+						</p>
+						<p>
+							使用 <code>kbd</code> 标识用户输入 --
+							<kbd>
+								ctrl + ,
+								<kbd>
+						</p>
+						<p>
+							通过 <code>var</code> 标记变量 --
+							<var>y</var>
+							=
+							<var>m</var>
+							<var>x</var>
+							+
+							<var>b</var>
+						</p>
+						<p>
+							多行代码可以使用 <code>pre</code> 标签 --
+						<pre>&lt;p&gt;Sample text here...&lt;/p&gt;</pre>
+						</p>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+
+				<!-- item start -->
+				<a class="offset" id="bootstrap-table"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">表格</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							为任意 <code>table</code> 标签添加 <code>.table</code> 类可以为其赋予基本的样式 —
+							少量的内补（padding）和水平方向的分隔线。
+						</p>
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-table-striped"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								条纹状表格 -- <code>.table-striped</code>
+							</h5>
+							<table class="table table-striped">
+								<colgroup>
+									<col class="col-xs-1">
+									<col class="col-xs-7">
+								</colgroup>
+								<thead>
+									<tr>
+										<th>Class</th>
+										<th>描述</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>.active</code></td>
+										<td>鼠标悬停在行或单元格上时所设置的颜色</td>
+									</tr>
+									<tr>
+										<td><code>.success</code></td>
+										<td>标识成功或积极的动作</td>
+									</tr>
+									<tr>
+										<td><code>.info</code></td>
+										<td>标识普通的提示信息或动作</td>
+									</tr>
+									<tr>
+										<td><code>.warning</code></td>
+										<td>标识警告或需要用户注意</td>
+									</tr>
+									<tr>
+										<td><code>.danger</code></td>
+										<td>标识危险或潜在的带来负面影响的动作</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- subitem over -->
+
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-table-bordered"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								带边框的表格 -- <code>.table-bordered</code>
+							</h5>
+							<table class="table table-bordered">
+								<colgroup>
+									<col class="col-xs-1">
+									<col class="col-xs-7">
+								</colgroup>
+								<thead>
+									<tr>
+										<th>Class</th>
+										<th>描述</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>.active</code></td>
+										<td>鼠标悬停在行或单元格上时所设置的颜色</td>
+									</tr>
+									<tr>
+										<td><code>.success</code></td>
+										<td>标识成功或积极的动作</td>
+									</tr>
+									<tr>
+										<td><code>.info</code></td>
+										<td>标识普通的提示信息或动作</td>
+									</tr>
+									<tr>
+										<td><code>.warning</code></td>
+										<td>标识警告或需要用户注意</td>
+									</tr>
+									<tr>
+										<td><code>.danger</code></td>
+										<td>标识危险或潜在的带来负面影响的动作</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- subitem over -->
+
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-table-hover"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								鼠标悬停 -- <code>.table-hover</code>
+							</h5>
+							<table class="table table-hover">
+								<colgroup>
+									<col class="col-xs-1">
+									<col class="col-xs-7">
+								</colgroup>
+								<thead>
+									<tr>
+										<th>Class</th>
+										<th>描述</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>.active</code></td>
+										<td>鼠标悬停在行或单元格上时所设置的颜色</td>
+									</tr>
+									<tr>
+										<td><code>.success</code></td>
+										<td>标识成功或积极的动作</td>
+									</tr>
+									<tr>
+										<td><code>.info</code></td>
+										<td>标识普通的提示信息或动作</td>
+									</tr>
+									<tr>
+										<td><code>.warning</code></td>
+										<td>标识警告或需要用户注意</td>
+									</tr>
+									<tr>
+										<td><code>.danger</code></td>
+										<td>标识危险或潜在的带来负面影响的动作</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- subitem over -->
+
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-table-condensed"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								紧缩表格 -- <code>.table-condensed</code>
+							</h5>
+							<table class="table table-condensed">
+								<colgroup>
+									<col class="col-xs-1">
+									<col class="col-xs-7">
+								</colgroup>
+								<thead>
+									<tr>
+										<th>Class</th>
+										<th>描述</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>.active</code></td>
+										<td>鼠标悬停在行或单元格上时所设置的颜色</td>
+									</tr>
+									<tr>
+										<td><code>.success</code></td>
+										<td>标识成功或积极的动作</td>
+									</tr>
+									<tr>
+										<td><code>.info</code></td>
+										<td>标识普通的提示信息或动作</td>
+									</tr>
+									<tr>
+										<td><code>.warning</code></td>
+										<td>标识警告或需要用户注意</td>
+									</tr>
+									<tr>
+										<td><code>.danger</code></td>
+										<td>标识危险或潜在的带来负面影响的动作</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- subitem over -->
+
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-table-responsive"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								响应式表格(加了状态类) -- <code>.table-responsive</code>
+							</h5>
+							<table class="table table-responsive">
+								<colgroup>
+									<col class="col-xs-1">
+									<col class="col-xs-7">
+								</colgroup>
+								<thead>
+									<tr>
+										<th>Class</th>
+										<th>描述</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr class="active">
+										<td><code>.active</code></td>
+										<td>鼠标悬停在行或单元格上时所设置的颜色</td>
+									</tr>
+									<tr class="success">
+										<td><code>.success</code></td>
+										<td>标识成功或积极的动作</td>
+									</tr>
+									<tr class="info">
+										<td><code>.info</code></td>
+										<td>标识普通的提示信息或动作</td>
+									</tr>
+									<tr class="warning">
+										<td><code>.warning</code></td>
+										<td>标识警告或需要用户注意</td>
+									</tr>
+									<tr class="danger">
+										<td><code>.danger</code></td>
+										<td>标识危险或潜在的带来负面影响的动作</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!-- subitem over -->
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="bootstrap-form"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">表单</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							单独的表单控件会被自动赋予一些全局样式。所有设置了 <code>.form-control</code> 类的 <code>input</code>
+							、 <code>textarea</code> 和 <code>select</code> 元素都将被默认设置宽度属性为 <code>width:
+								100%;</code> 。 将 <code>label</code> 元素和前面提到的控件包裹在 <code>.form-group</code>
+							中可以获得最好的排列。
+						</p>
+						<p class="text-warning">
+							不要将表单组直接和输入框组混合使用。建议将输入框组嵌套到表单组(<code>.form-group</code>)中使用。
+						</p>
+
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-form-base"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">基本实例</h5>
+							<form role="form">
+								<div class="form-group">
+									<label for="exampleInputEmail1">Email address</label> <input
+										type="email" class="form-control" id="exampleInputEmail1"
+										placeholder="Enter email">
+								</div>
+								<div class="form-group">
+									<label for="exampleInputPassword1">Password</label> <input
+										type="password" class="form-control"
+										id="exampleInputPassword1" placeholder="Password">
+								</div>
+								<div class="form-group">
+									<label for="exampleInputFile">File input</label> <input
+										type="file" id="exampleInputFile">
+									<p class="help-block">Example block-level help text here.</p>
+								</div>
+								<div class="checkbox">
+									<label> <input type="checkbox"> Check me out
+									</label>
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-default">Submit</button>
+								</div>
+							</form>
+						</div>
+						<!-- subitem over -->
+
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-form-inline"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">内联表单</h5>
+							<p>
+								为 <code>form </code> 元素添加 <code>.form-inline</code>
+								类可使其内容左对齐并且表现为 <code>inline-block</code> 级别的控件。<strong>只适用于视口（viewport）至少在
+									768px 宽度时（视口宽度再小的话就会使表单折叠）。</strong>
+							</p>
+							<form class="form-inline" role="form">
+								<div class="form-group">
+									<label class="sr-only" for="exampleInputEmail2">Email
+										address</label> <input type="email" class="form-control"
+										id="exampleInputEmail2" placeholder="Enter email">
+								</div>
+								<div class="form-group">
+									<div class="input-group">
+										<div class="input-group-addon">@</div>
+										<input class="form-control" type="email"
+											placeholder="Enter email">
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="sr-only" for="exampleInputPassword2">Password</label>
+									<input type="password" class="form-control"
+										id="exampleInputPassword2" placeholder="Password">
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-default">Sign in</button>
+								</div>
+								<div style="margin-bottom: 10px;"></div>
+							</form>
+						</div>
+						<!-- subitem over -->
+
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-form-horizontal"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">水平排列的表单</h5>
+							<p>
+								通过为表单添加 <code>.form-horizontal</code> 类，并联合使用 Bootstrap
+								预置的栅格类，可以将 <code>label</code> 标签和控件组水平并排布局。这样做将改变 <code>.form-group</code>
+								的行为，使其表现为栅格系统中的行（row），因此就无需再额外添加 <code>.row</code> 了。
+							</p>
+							<form class="form-horizontal" role="form">
+								<div class="form-group">
+									<label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+									<div class="col-sm-10">
+										<input type="email" class="form-control" id="inputEmail3"
+											placeholder="Email">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="inputPassword3" class="col-sm-2 control-label">Password</label>
+									<div class="col-sm-10">
+										<input type="password" class="form-control"
+											id="inputPassword3" placeholder="Password">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<div class="checkbox">
+											<label> <input type="checkbox"> Remember me
+											</label>
+										</div>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="col-sm-offset-2 col-sm-10">
+										<button type="submit" class="btn btn-default">Sign in</button>
+									</div>
+								</div>
+							</form>
+						</div>
+						<!-- subitem over -->
+
+						<!-- subitem start -->
+						<a class="offset" id="bootstrap-form-"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">...</h5>
+
+						</div>
+						<!-- subitem over -->
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="bootstrap-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+					</div>
+				</div>
+				<!-- item over -->
+			</div>
+		</div>
+	</div>
+
+	<div class="btn-group-vertical bottom-button">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
+			<span class="caret"></span>
+		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
+	</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="../support/jquery/jquery-3.1.1.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
+	<script src="res/menu.js"></script>
+	<script src="../commons/js/common.js"></script>
+</body>
+</html>
