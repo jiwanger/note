@@ -63,13 +63,34 @@
 		<div class="row">
 			<!-- left-menu start -->
 			<div class="col-md-3">
-				<div class="panel panel-default"
+				<div class="panel panel-primary"
 					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
 					<div class="panel-heading">
 						<h3 class="panel-title">Bootstrap</h3>
 					</div>
 					<div class="list-group">
 						<a href="#" class="list-group-item">Bootstrap 简介</a>
+						<a class="list-group-item active dropdown" data-toggle="collapse"
+							data-parent="#accordion" href="#bootstrap-js-plugin"
+							aria-expanded="true">
+							JavaScript 插件<span class="caret pull-right"
+								style="margin-top: 5px;"></span>
+						</a>
+						<div id="bootstrap-js-plugin" class="panel-collapse collapse"
+							role="tabpanel">
+							<a href="#bootstrap-js-intro" class="list-group-item">概览</a>
+							<a href="#bootstrap-js-modal" class="list-group-item">模态框</a>
+							<a href="#bootstrap-js-dropdown" class="list-group-item">下拉菜单</a>
+							<a href="#bootstrap-js-scrollspy" class="list-group-item">滚动监听</a>
+							<a href="#bootstrap-js-tab" class="list-group-item">标签页</a>
+							<a href="#bootstrap-js-tooltips" class="list-group-item">提示工具</a>
+							<a href="#bootstrap-js-popover" class="list-group-item">弹出框</a>
+							<a href="#bootstrap-js-alert" class="list-group-item">警告框</a>
+							<a href="#bootstrap-js-button" class="list-group-item">按钮</a>
+							<a href="#bootstrap-js-collapse" class="list-group-item">折叠</a>
+							<a href="#bootstrap-js-carousel" class="list-group-item">轮播</a>
+							<a href="#bootstrap-js-affix" class="list-group-item">附加导航</a>
+						</div>
 						<a href="#bootstrap-grid" class="list-group-item">栅格系统</a>
 						<a class="list-group-item active dropdown" data-toggle="collapse"
 							data-parent="#accordion" href="#bootstrap-typography-container"
@@ -127,13 +148,15 @@
 						<a href="#bootstrap-input-group" class="list-group-item">输入框组</a>
 						<a href="#bootstrap-nav" class="list-group-item">导航 &amp; 导航条</a>
 						<a href="#bootstrap-progress" class="list-group-item">进度条</a>
-						<a href="#bootstrap-..." class="list-group-item">...</a>
+						<a href="#bootstrap-widget" class="list-group-item">分页 &amp;
+							翻页 &amp; 标签 &amp; 徽章 &amp; 巨幕 &amp; 页头 &amp; 缩略图 &amp; 警告框 &amp;
+							媒体对象 &amp; Well</a>
 
-						<a href="#bootstrap-..." class="list-group-item">...</a>
-						<a href="#bootstrap-..." class="list-group-item">...</a>
+						<a href="#bootstrap-list-group" class="list-group-item">列表组</a>
+						<a href="#bootstrap-panel" class="list-group-item">面版</a>
 
 
-						<a href="#bootstrap-glyphic导航ons" class="list-group-item">Glyphicon
+						<a href="#bootstrap-glyphicons" class="list-group-item">Glyphicon
 							字体图标</a>
 					</div>
 				</div>
@@ -145,7 +168,8 @@
 
 	<div class="container" style="margin-top: 70px;">
 		<div class="row">
-			<div class="col-md-9 col-md-push-3" style="float: left;">
+			<div class="col-md-9 col-md-push-3" style="float: left;"
+				data-spy="scroll" data-target="#left-menu" data-offset="70">
 				<!-- item start -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -157,6 +181,879 @@
 						<p>Bootstrap是基于HTML5和CSS3开发的，它在jQuery的基础上进行了更为个性化和人性化的完善，形成一套自己独有的网站风格，并兼容大部分jQuery插件。</p>
 
 					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="bootstrap-js-intro" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">JavaScript 插件 -- 概览</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">单个还是全部引入</h5>
+						<p>
+							JavaScript 插件可以单个引入（使用 Bootstrap 提供的单个
+							<code>*.js</code>
+							文件），或者一次性全部引入（使用
+							<code>bootstrap.js</code>
+							或压缩版的
+							<code>bootstrap.min.js</code>
+							）。
+						</p>
+						<p class="alert alert-warning">不要在同一个元素上同时使用多个插件的 data
+							属性。例如，button 组件不能同时支持工具提示和控制模态框。如果需要的话，可以在其外面包裹一个额外的元素。</p>
+
+						<h5 class="text-primary">插件参数配置: 一种为使用data属性设置，一种为 JavaScript
+							代码设置。</h5>
+						<ul>
+							<li>
+								<p>data属性 -- 你可以仅仅通过 data 属性 API 就能使用所有的 Bootstrap 插件，无需写一行
+									JavaScript 代码。这是 Bootstrap 中的一等 API，也应该是你的首选方式。</p>
+								<pre class="brush: xml;">
+<!-- 通过配置 data-toggle 和 data-target 属性来配置模态框 -->
+&lt;button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal" /&gt;
+</pre>
+								<p class="h6 text-primary">在某些情况下可能需要将此功能关闭,因为有可能多个插件冲突</p>
+								<pre class="brush: js;">
+$(document).off('.data-api');// 关闭 data-api 方式
+
+$(document).off('.alert.data-api');// 关闭特定的插件 data-api
+</pre>
+							</li>
+							<li>
+								<p>编程方式的 API -- 所有 Bootstrap 插件提供了纯 JavaScript 方式的 API。所有公开的
+									API 都是支持单独或链式调用方式，并且返回其所操作的元素集合（注：和jQuery的调用形式一致）。</p>
+								<pre class="brush: js;">
+// 配置模态框
+$('#myModal').modal();                      // 以默认值初始化
+$('#myModal').modal({ keyboard: false });   // initialized with no keyboard
+$('#myModal').modal('show');                // 初始化后立即调用 show 方法
+
+// 配置　popover
+$("#bootstrap-popover-btn").on("click", function() {
+	$(this).popover({
+		placement : "bottom",
+		container : "body",
+		title : "标题",
+		content : "我是通过 js 添加的！",
+		delay : {
+			show : 100,
+			hide : 3000,
+		}
+	});
+});
+</pre>
+							</li>
+						</ul>
+						<h5 class="text-primary">自定义事件</h5>
+						<p>Bootstrap
+							为大部分插件所具有的动作提供了自定义事件。一般来说，这些事件都有不定式和过去式两种动词的命名形式，例如，不定式形式的动词（例如
+							show）表示其在事件开始时被触发；而过去式动词（例如 shown ）表示在动作执行完毕之后被触发。</p>
+						<pre class="brush: js;">
+$('#myModal').on('hidden.bs.modal', function (e) {
+    // do something...
+});
+
+$('#my-dropdown').on('hidden.bs.dropdown', function (e) {
+    // do something...
+});
+
+$('#myModal').on('show.bs.modal', function (e) {
+	if (!data) return e.preventDefault() // 阻止模态框的展示
+});
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="bootstrap-js-modal" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">模态框 -- modal.js</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							模态框提供了两个可选尺寸，通过为
+							<code>.modal-dialog</code>
+							增加一个样式
+							<code>.modal-lg</code>
+							或
+							<code>.modal-sm</code>
+							调整类实现。
+						</p>
+						<p>
+							禁止动画效果 -- 删掉
+							<code>.fade</code>
+							类即可。
+						</p>
+						<button type="button" class="btn btn-primary btn-block"
+							data-toggle="modal" data-target="#myModal">通过
+							[.data-target] 属性打开模态框</button>
+						<pre class="brush: xml;">
+&lt;button type="button" data-toggle="modal" data-target="#myModal"&gt;Launch modal&lt;/button&gt;						
+</pre>
+						<button type="button" class="btn btn-primary btn-block"
+							id="bootstrap-modal-btn">通过 js 调用打开模态框</button>
+						<pre class="brush: javascript;">
+$('#myModal').modal(options);
+
+$('#myModal').modal({
+	keyboard: false;	// 不接受键盘上的 esc 键被按下时关闭模态框。
+});
+
+$('#myModal').modal('toggle');	// 手动打开或关闭模态框
+$('#myModal').modal('show');	// 手动打开模态框
+$('#myModal').modal('hide');	// 手动隐藏模态框
+</pre>
+						<p>Bootstrap 的模态框类提供了一些事件用于监听并执行你自己的代码</p>
+						<pre class="brush: javascript;">
+$('#myModal').on('hidden.bs.modal', function (e) {
+	// do something...
+});
+</pre>
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th style="width: 150px;">事件类型</th>
+									<th>描述</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>show.bs.modal</td>
+									<td><code>show</code>
+										方法调用之后立即触发该事件。如果是通过点击某个作为触发器的元素，则此元素可以通过事件的 <code>relatedTarget</code>
+										属性进行访问。</td>
+								</tr>
+								<tr>
+									<td>shown.bs.modal</td>
+									<td>此事件在模态框已经显示出来（并且同时在 CSS
+										过渡效果完成）之后被触发。如果是通过点击某个作为触发器的元素，则此元素可以通过事件的 <code>relatedTarget</code>
+										属性进行访问。
+									</td>
+								</tr>
+								<tr>
+									<td>hide.bs.modal</td>
+									<td><code>hide</code> 方法调用之后立即触发该事件。</td>
+								</tr>
+								<tr>
+									<td>hidden.bs.modal</td>
+									<td>此事件在模态框被隐藏（并且同时在 CSS 过渡效果完成）之后被触发。</td>
+								</tr>
+								<tr>
+									<td>loaded.bs.modal</td>
+									<td>从<code>远端的数据源</code>加载完数据之后触发该事件。
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<!-- Modal -->
+						<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+							aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-dialog"
+								style="z-index: 1050; -webkit-transform: translate(0, 25%);">
+								<div class="modal-content">
+									<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">
+											<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+										</button>
+										<h4 class="modal-title" id="myModalLabel">Modal title</h4>
+									</div>
+									<div class="modal-body">
+										<div class="row">
+											<div class="col-md-4">模态框中的栅格系统</div>
+											<div class="col-md-4 col-md-offset-4">模态框中的栅格系统</div>
+										</div>
+										<div class="row">
+											<div class="col-md-4 col-md-offset-4">模态框中的栅格系统</div>
+										</div>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-default"
+											data-dismiss="modal">Close</button>
+										<button type="button" class="btn btn-primary">Save
+											changes</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="bootstrap-js-dropdown" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">下拉菜单</h3>
+					</div>
+					<div class="panel-body">
+						<div id="my-dropdown" class="dropdown"
+							style="margin-bottom: 10px;">
+							<a href="#null" class="dropdown-toggle" data-toggle="dropdown"
+								aria-haspopup="true" aria-expanded="false">
+								Dropdown <span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu" role="menu">
+								<li role="presentation">
+									<a role="menuitem" tabindex="-1" href="#null">Action</a>
+								</li>
+								<li role="presentation">
+									<a role="menuitem" tabindex="-1" href="#null">Another
+										action</a>
+								</li>
+								<li role="presentation">
+									<a role="menuitem" tabindex="-1" href="#null">Something
+										else here</a>
+								</li>
+								<li role="presentation" class="divider"></li>
+								<li role="presentation">
+									<a role="menuitem" tabindex="-1" href="#null">Separated
+										link</a>
+								</li>
+							</ul>
+						</div>
+						<p>Bootstrap 的下拉菜单类提供了一些事件用于监听并执行你自己的代码</p>
+						<pre class="brush: javascript;">
+$('#my-dropdown').on('hidden.bs.dropdown', function (e) {
+	// do something...
+});
+</pre>
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th style="width: 150px;">事件类型</th>
+									<th>描述</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>show.bs.dropdown</td>
+									<td><code>show</code> 方法调用之后立即触发该事件。</td>
+								</tr>
+								<tr>
+									<td>shown.bs.dropdown</td>
+									<td>此事件在下拉菜单已经显示出来（并且同时在 CSS 过渡效果完成）之后被触发。</td>
+								</tr>
+								<tr>
+									<td>hide.bs.dropdown</td>
+									<td><code>hide</code> 方法调用之后立即触发该事件。</td>
+								</tr>
+								<tr>
+									<td>hidden.bs.dropdown</td>
+									<td>此事件在下拉菜单被隐藏（并且同时在 CSS 过渡效果完成）之后被触发。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="bootstrap-js-scrollspy" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							滚动监听 --
+							<code>affix.js</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							实例参见 --
+							<a href="affix.html" target="_blank">affix.html</a>
+						</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="bootstrap-js-tab" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">标签页</h3>
+					</div>
+					<div class="panel-body">
+
+						<!-- Nav tabs -->
+						<ul class="nav nav-tabs" role="tablist" id="my-tab">
+							<li role="presentation" class="active">
+								<a href="#home" role="tab" data-toggle="tab">Home</a>
+							</li>
+							<li role="presentation">
+								<a href="#profile" role="tab" data-toggle="tab">Profile</a>
+							</li>
+							<li role="presentation">
+								<a href="#messages" role="tab" data-toggle="tab">Messages</a>
+							</li>
+							<li role="presentation">
+								<a href="#settings" role="tab" data-toggle="tab">Settings</a>
+							</li>
+						</ul>
+
+						<!-- Tab panes -->
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane active" id="home">
+								<div class="jumbotron h1">HOME</div>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="profile">
+								<div class="jumbotron h1">PROFILE</div>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="messages">
+								<div class="jumbotron h1">MESSAGES</div>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="settings">
+								<div class="jumbotron h1">SETTINGS</div>
+							</div>
+						</div>
+
+						<p>
+							<button class="btn btn-primary btn-block"
+								id="bootstrap-js-tab-btn">通过 js 控制</button>
+						</p>
+						<pre class="brush: js;">
+var bootstrap_js_tab_index = 0;
+$("#bootstrap-js-tab-btn").on("click", function() {
+	bootstrap_js_tab_index++;
+	if (bootstrap_js_tab_index == 4) {
+		bootstrap_js_tab_index = 0;
+	}
+	$("#my-tab a:eq(" + bootstrap_js_tab_index + ")").tab("show");
+});
+
+// 事件
+$("#my-tab a:eq(0)").on('shown.bs.tab', function(e){
+	e.target		// newly activated tab
+  	e.relatedTarge	// previous active tab
+	// do something
+});
+</pre>
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th style="width: 150px;">事件类型</th>
+									<th>描述</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>show.bs.tab</td>
+									<td><code>show</code> 方法调用之后立即触发该事件。</td>
+								</tr>
+								<tr>
+									<td>shown.bs.tab</td>
+									<td>此事件在标签页已经显示出来（并且同时在 CSS 过渡效果完成）之后被触发。</td>
+								</tr>
+								<tr>
+									<td>hide.bs.tab</td>
+									<td><code>hide</code> 方法调用之后立即触发该事件。</td>
+								</tr>
+								<tr>
+									<td>hidden.bs.tab</td>
+									<td>此事件在标签页被隐藏（并且同时在 CSS 过渡效果完成）之后被触发。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="bootstrap-js-tooltips" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">提示工具</h3>
+					</div>
+					<div class="panel-body">
+						<p class="alert alert-warning">提示工具(tooltip)插件不像之前所讨论的下拉菜单及其他插件那样，它不是纯
+							CSS 插件。如需使用该插件，您必须使用 jquery 激活它（读取
+							javascript）。使用下面的脚本来启用页面中的所有的提示工具（tooltip）：</p>
+						<pre class="brush: js;">
+$(function() {
+	$("[data-toggle='tooltip']").tooltip();
+});
+</pre>
+						<p>
+							提示工具(
+							<a href="#null" data-toggle="tooltip" title=""
+								data-original-title="Default tooltip">tooltip</a>
+							)插件不像之前所讨论的下拉菜单及其他插件那样，它不是纯 <span data-toggle="tooltip" title=""
+								data-original-title="Left tooltip" data-placement="left">CSS</span>
+							插件。如需使用该插件，您必须使用 <span data-toggle="tooltip" title=""
+								data-original-title="Right tooltip" data-placement="right">jquery</span>
+							激活它（读取 <span data-toggle="tooltip" title=""
+								data-original-title="Bottom tooltip" data-placement="bottom">javascript</span>）。
+						</p>
+						<p>
+							<button type="button" class="btn btn-default"
+								data-toggle="tooltip" data-placement="left"
+								title="Tooltip on left">Tooltip on left</button>
+
+							<button type="button" class="btn btn-default"
+								data-toggle="tooltip" data-placement="top"
+								title="Tooltip on top">Tooltip on top</button>
+
+							<button type="button" class="btn btn-default"
+								data-toggle="tooltip" data-placement="bottom"
+								title="Tooltip on bottom">Tooltip on bottom</button>
+
+							<button type="button" class="btn btn-default"
+								data-toggle="tooltip" data-placement="right"
+								title="Tooltip on right">Tooltip on right</button>
+						</p>
+						<button id="bootstrap-tooltip-btn"
+							class="btn btn-primary btn-block">通过 js 控制</button>
+						<pre class="brush: js;">
+// 上面的 button 本没有 tooltip, 通过下面的 js 添加
+$("#bootstrap-tooltip-btn").on("click", function() {
+	$(this).tooltip({
+		placement: "bottom",
+		title: "我是通过 js 添加的！",
+		delay : {
+			show : 100,			// 100 毫秒后显示
+			hide : 3000,	//　3秒后消失
+		}
+	});
+});
+
+$('#element').tooltip('show');			// 显示元素的提示工具
+$('#element').tooltip('destroy');		// 隐藏并销毁元素的提示工具
+$('#element').tooltip('hide');			// 隐藏元素的提示工具
+$('#element').tooltip('toggle');		// 切换显示/隐藏元素的提示工具
+</pre>
+						<table class="table table-bordered table-striped table-responsive">
+							<tbody>
+								<tr>
+									<th>事件</th>
+									<th>描述</th>
+									<th>实例</th>
+								</tr>
+								<tr>
+									<td>show.bs.tooltip</td>
+									<td>当调用 show 实例方法时立即触发该事件。</td>
+									<td><pre class="brush:js;">
+$('#myTooltip').on('show.bs.tooltip', function() {
+	// 执行一些动作...
+});</pre></td>
+								</tr>
+								<tr>
+									<td>shown.bs.tooltip</td>
+									<td>当提示工具对用户可见时触发该事件（将等待 CSS 过渡效果完成）。</td>
+									<td><pre class="brush:js;">
+$('#myTooltip').on('shown.bs.tooltip', function () {
+	// 执行一些动作...
+});
+</pre></td>
+								</tr>
+								<tr>
+									<td>hide.bs.tooltip</td>
+									<td>当调用 hide 实例方法时立即触发该事件。</td>
+									<td><pre class="brush:js;">
+$('#myTooltip').on('hide.bs.tooltip', function () {
+	// 执行一些动作...
+});
+</pre></td>
+								</tr>
+								<tr>
+									<td>hidden.bs.tooltip</td>
+									<td>当提示工具对用户隐藏时触发该事件（将等待 CSS 过渡效果完成）。</td>
+									<td><pre class="brush:js;">
+$('#myTooltip').on('hidden.bs.tooltip', function () {
+	// 执行一些动作...
+});
+</pre></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="bootstrap-js-popover" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							弹出框 --
+							<code>popover.js</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<p class="alert alert-warning">弹出框（Popover）插件依赖于
+							工具提示（Tooltip）插件</p>
+						<p class="alert alert-warning">弹出框（Popover）插件不像之前所讨论的下拉菜单及其他插件那样，它不是纯
+							CSS 插件。如需使用该插件，您必须使用 jquery 激活它（读取
+							javascript）。使用下面的脚本来启用页面中的所有的弹出框（popover）：</p>
+						<pre class="brush: js;">
+$(function() {
+	$("[data-toggle='popover']").popover();
+});
+</pre>
+
+						<p>
+							<button type="button" class="btn btn-default"
+								title="Popover title" data-container="body"
+								data-toggle="popover" data-placement="left"
+								data-content="左侧的 Popover 中的一些内容">左侧的 Popover</button>
+							<button type="button" class="btn btn-primary"
+								title="Popover title" data-container="body"
+								data-toggle="popover" data-placement="top"
+								data-content="顶部的 Popover 中的一些内容">顶部的 Popover</button>
+							<button type="button" class="btn btn-success"
+								title="Popover title" data-container="body"
+								data-toggle="popover" data-placement="bottom"
+								data-content="底部的 Popover 中的一些内容">底部的 Popover</button>
+							<button type="button" class="btn btn-warning"
+								title="Popover title" data-container="body"
+								data-toggle="popover" data-placement="right"
+								data-content="右侧的 Popover 中的一些内容">右侧的 Popover</button>
+						</p>
+
+						<button id="bootstrap-popover-btn"
+							class="btn btn-primary btn-block">通过 js 控制</button>
+						<pre class="brush: js;">
+// 上面的 button 本没有 popover, 通过下面的 js 添加
+$("#bootstrap-popover-btn").on("click", function() {
+	$(this).popover({
+		placement: "bottom",
+		title: "标题",
+		data-content: "我是通过 js 添加的！",
+		delay : {
+			show : 100,			// 100 毫秒后显示
+			hide : 3000,	//　3秒后消失
+		}
+	});
+});
+
+$('#element').popover('show');			// 显示元素的Popover
+$('#element').popover('destroy');		// 隐藏并销毁元素的Popover
+$('#element').popover('hide');			// 隐藏元素的Popover
+$('#element').popover('toggle');		// 切换显示/隐藏元素的Popover
+</pre>
+						<table class="table table-bordered table-striped table-responsive">
+							<tbody>
+								<tr>
+									<th>事件</th>
+									<th>描述</th>
+									<th>实例</th>
+								</tr>
+								<tr>
+									<td>show.bs.tooltip</td>
+									<td>当调用 show 实例方法时立即触发该事件。</td>
+									<td><pre class="brush:js;">
+$('#myPopover').on('show.bs.popover', function() {
+	// 执行一些动作...
+});</pre></td>
+								</tr>
+								<tr>
+									<td>shown.bs.tooltip</td>
+									<td>当Popover对用户可见时触发该事件（将等待 CSS 过渡效果完成）。</td>
+									<td><pre class="brush:js;">
+$('#myPopover').on('shown.bs.popover', function () {
+	// 执行一些动作...
+});
+</pre></td>
+								</tr>
+								<tr>
+									<td>hide.bs.tooltip</td>
+									<td>当调用 hide 实例方法时立即触发该事件。</td>
+									<td><pre class="brush:js;">
+$('#myPopover').on('hide.bs.popover', function () {
+	// 执行一些动作...
+});
+</pre></td>
+								</tr>
+								<tr>
+									<td>hidden.bs.tooltip</td>
+									<td>当Popover对用户隐藏时触发该事件（将等待 CSS 过渡效果完成）。</td>
+									<td><pre class="brush:js;">
+$('#myPopover').on('hidden.bs.popover', function () {
+	// 执行一些动作...
+});
+</pre></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="bootstrap-js-alert" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							警告框 --
+							<code>alert.js</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="alert alert-warning alert-dismissible fade in"
+							role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">×</span>
+							</button>
+							<strong>Holy guacamole!</strong> Best check yo self, you're not
+							looking too good.
+						</div>
+
+						<div id="bootstrap-js-alert-example"
+							class="alert alert-warning alert-dismissible fade in"
+							role="alert">
+							<button type="button" class="close" data-dismiss="alert">
+								<span aria-hidden="true">×</span>
+							</button>
+							<h4>Oh snap! You got an error!</h4>
+							<p>Change this and that and try again. Duis mollis, est non
+								commodo luctus, nisi erat porttitor ligula, eget lacinia odio
+								sem nec elit. Cras mattis consectetur purus sit amet fermentum.</p>
+							<p>
+								<button type="button" class="btn btn-danger">Take this
+									action</button>
+								<button type="button" class="btn btn-default">Or do
+									this</button>
+							</p>
+						</div>
+
+						<button class="btn btn-primary btn-block"
+							id="bootstrap-js-alert-btn">通过 js 关闭警告框</button>
+						<pre class="brush: js;">
+$("#bootstrap-js-alert-btn").on('click', function() {
+	$('#bootstrap-js-alert-example').alert('close');
+});
+
+// 事件监听
+$("#bootstrap-js-alert-btn").on('close.bs.alert', function() {
+	// do something
+});
+
+$("#bootstrap-js-alert-btn").on('closed.bs.alert', function() {
+	// do something
+});
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="bootstrap-js-button" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							按钮 --
+							<code>button.js</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<p class="h6">加载状态</p>
+						<button id="bootstrap-js-button-loading" class="btn btn-primary"
+							data-loading-text="Loading..." type="button">加载状态</button>
+						<pre class="brush: js;">
+$('#bootstrap-js-button-loading').on("click", function() {
+	$(this).button('loading').delay(1000).queue(function() {
+		// do something
+		$(this).button('reset');
+		$(this).dequeue();
+	});
+});</pre>
+						<p>单个切换</p>
+						<button type="button" class="btn btn-primary" data-toggle="button">
+							单个切换</button>
+						<p>复选框</p>
+						<div class="btn-group" data-toggle="buttons">
+							<label class="btn btn-primary"> <input type="checkbox">
+								选项 1
+							</label> <label class="btn btn-primary"> <input type="checkbox">
+								选项 2
+							</label> <label class="btn btn-primary"> <input type="checkbox">
+								选项 3
+							</label>
+						</div>
+						<p>单选按钮</p>
+						<div class="btn-group" data-toggle="buttons">
+							<label class="btn btn-primary"> <input type="radio"
+								name="options" id="option1"> 选项 1
+							</label> <label class="btn btn-primary"> <input type="radio"
+								name="options" id="option2"> 选项 2
+							</label> <label class="btn btn-primary"> <input type="radio"
+								name="options" id="option3"> 选项 3
+							</label>
+						</div>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="bootstrap-js-collapse" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							折叠 --
+							<code>collapse.js</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							对
+							<code>.collapse</code>
+							添加
+							<code>.fade .in</code>
+							可控制动画 是否展开
+						</p>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion"
+										href="#collapseThree"> 点击我进行展开，再次点击我进行折叠。</a>
+								</h4>
+							</div>
+							<div id="collapseThree" class="panel-collapse collapse">
+								<div class="panel-body">Nihil anim keffiyeh helvetica,
+									craft beer labore wes anderson cred nesciunt sapiente ea
+									proident. Ad vegan excepteur butcher vice lomo.</div>
+							</div>
+						</div>
+
+						<p>
+							<button class="btn btn-primary btn-block"
+								id="bootstrap-js-collapse-btn">通过 js 控制</button>
+						</p>
+						<pre class="brush: js;">
+$("#bootstrap-js-collapse-btn").on('click', function() {
+	$('#collapseThree').collapse('toggle');
+});
+
+$('#collapseThree').on('shown.bs.collapse', function(){
+	// do something
+});
+
+$('#collapseThree').collapse('show');
+$('#collapseThree').collapse('hide');
+</pre>
+						<table class="table table-bordered table-striped">
+							<thead>
+								<tr>
+									<th style="width: 150px;">事件类型</th>
+									<th>描述</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>show.bs.collapse</td>
+									<td><code>show</code> 方法调用之后立即触发该事件。</td>
+								</tr>
+								<tr>
+									<td>shown.bs.collapse</td>
+									<td>此事件在折叠内容已经显示出来（并且同时在 CSS 过渡效果完成）之后被触发。</td>
+								</tr>
+								<tr>
+									<td>hide.bs.collapse</td>
+									<td><code>hide</code> 方法调用之后立即触发该事件。</td>
+								</tr>
+								<tr>
+									<td>hidden.bs.collapse</td>
+									<td>此事件在折叠内容被隐藏（并且同时在 CSS 过渡效果完成）之后被触发。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="bootstrap-js-carousel" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							轮播 --
+							<code>carousel.js</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div id="myCarousel" class="carousel slide" data-ride="carousel"
+							data-interval="3000">
+							<!-- 轮播（Carousel）指标 -->
+							<ol class="carousel-indicators">
+								<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+								<li data-target="#myCarousel" data-slide-to="1"></li>
+								<li data-target="#myCarousel" data-slide-to="2"></li>
+							</ol>
+							<!-- 轮播（Carousel）项目 -->
+							<div class="carousel-inner" style="height: 200px;">
+								<div class="item active">
+									<div class="jumbotron"
+										style="background-color: #333; color: #FFF;">
+										<h1>Item One!</h1>
+										<h3>Item One!</h3>
+									</div>
+									<div class="carousel-caption">item 1</div>
+								</div>
+								<div class="item">
+									<div class="jumbotron"
+										style="background-color: #333; color: #FFF;">
+										<h1>Item Two!</h1>
+										<h3>Item Two!</h3>
+									</div>
+									<div class="carousel-caption">item 2</div>
+								</div>
+								<div class="item">
+									<div class="jumbotron"
+										style="background-color: #333; color: #FFF;">
+										<h1>Item Three!</h1>
+										<h3>Item Three!</h3>
+									</div>
+									<div class="carousel-caption">item 3</div>
+								</div>
+							</div>
+							<!-- 轮播（Carousel）导航 -->
+							<a class="carousel-control left" href="#myCarousel"
+								data-slide="prev">&lsaquo;</a>
+							<a class="carousel-control right" href="#myCarousel"
+								data-slide="next">&rsaquo;</a>
+						</div>
+
+						<h6 class="text-primary">通过 js 控制轮播</h6>
+						<div class="btn-group" id="bootstrap-js-carousel-btn-container">
+							<button class="btn btn-primary" value="cycle">初始化轮播</button>
+							<button class="btn btn-primary" value="pause">停止轮播</button>
+							<button class="btn btn-primary" value="prev">上一个</button>
+							<button class="btn btn-primary" value="next">下一个</button>
+							<button class="btn btn-primary" value="0">第一个</button>
+							<button class="btn btn-primary" value="1">第二个</button>
+							<button class="btn btn-primary" value="2">第三个</button>
+						</div>
+						<pre class="brush: js;">
+// 绑定7个按钮
+$("#bootstrap-js-carousel-btn-container > button").on('click', function(){
+	var value = $(this).attr('value');
+	$('#myCarousel').carousel(value);
+});
+
+$('#myCarousel').on('slide.bs.carousel', function() {
+	// do something
+});
+$('#myCarousel').on('slid.bs.carousel',  function() {
+	// do something
+});
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="bootstrap-js-affix" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							附加导航 --
+							<code>affix.js</code>
+						</h3>
+					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 
@@ -385,17 +1282,23 @@
 							<ul>
 								<li>
 									<p class="lead">
-										添加 <code>.lead</code> 类可以让段落突出显示
+										添加
+										<code>.lead</code>
+										类可以让段落突出显示
 								</li>
 								<li>
 									<p>
-										使用 <code>mark</code> 突出单词
+										使用
+										<code>mark</code>
+										突出单词
 									</p>
 								</li>
 								<li>
 									<p>
 										<del>
-											使用 <code>del</code> 显示被删除的文本
+											使用
+											<code>del</code>
+											显示被删除的文本
 										</del>
 									</p>
 								</li>
@@ -408,7 +1311,9 @@
 								<li>
 									<p>
 										<ins>
-											使用 <code>ins</code> 显示插入文本
+											使用
+											<code>ins</code>
+											显示插入文本
 										</ins>
 									</p>
 								</li>
@@ -506,22 +1411,28 @@
 							<h5 class="text-primary">列表</h5>
 							<ul>
 								<li>
-									无序列表 -- <code>ul</code>
+									无序列表 --
+									<code>ul</code>
 								</li>
 								<li>
-									有序列表 -- <code>ol</code>
+									有序列表 --
+									<code>ol</code>
 								</li>
 								<li>
-									无样式列表 -- <code>.list-unstyled</code>
+									无样式列表 --
+									<code>.list-unstyled</code>
 								</li>
 								<li>
-									内联列表 -- <code>.list-inline</code>
+									内联列表 --
+									<code>.list-inline</code>
 								</li>
 								<li>
-									带有描述的短语列表 -- <code>dl > dt</code>
+									带有描述的短语列表 --
+									<code>dl > dt</code>
 								</li>
 								<li>
-									水平排列的描述 -- <code>.dl-horizontal dl > dt</code>
+									水平排列的描述 --
+									<code>.dl-horizontal dl > dt</code>
 								</li>
 							</ul>
 							<dl>
@@ -562,15 +1473,21 @@
 					</div>
 					<div class="panel-body">
 						<p>
-							使用 <code>code</code> 标识代码 -- <code>public static final
-								void main(String[] args)</code>
+							使用
+							<code>code</code>
+							标识代码 --
+							<code>public static final void main(String[] args)</code>
 						</p>
 						<p>
-							使用 <code>kbd</code> 标识用户输入 --
+							使用
+							<code>kbd</code>
+							标识用户输入 --
 							<kbd> ctrl + , </kbd>
 						</p>
 						<p>
-							通过 <code>var</code> 标记变量 --
+							通过
+							<code>var</code>
+							标记变量 --
 							<var>y</var>
 							=
 							<var>m</var>
@@ -579,7 +1496,9 @@
 							<var>b</var>
 						</p>
 						<p>
-							多行代码可以使用 <code>pre</code> 标签 --
+							多行代码可以使用
+							<code>pre</code>
+							标签 --
 						</p>
 						<pre>&lt;p&gt;Sample text here...&lt;/p&gt;</pre>
 
@@ -596,14 +1515,18 @@
 					</div>
 					<div class="panel-body">
 						<p>
-							为任意 <code>table</code> 标签添加 <code>.table</code> 类可以为其赋予基本的样式 —
-							少量的内补（padding）和水平方向的分隔线。
+							为任意
+							<code>table</code>
+							标签添加
+							<code>.table</code>
+							类可以为其赋予基本的样式 — 少量的内补（padding）和水平方向的分隔线。
 						</p>
 						<!-- subitem start -->
 						<a class="offset" id="bootstrap-table-striped"></a>
 						<div class="sub-item">
 							<h5 class="text-primary">
-								条纹状表格 -- <code>.table-striped</code>
+								条纹状表格 --
+								<code>.table-striped</code>
 							</h5>
 							<table class="table table-striped">
 								<colgroup>
@@ -646,7 +1569,8 @@
 						<a class="offset" id="bootstrap-table-bordered"></a>
 						<div class="sub-item">
 							<h5 class="text-primary">
-								带边框的表格 -- <code>.table-bordered</code>
+								带边框的表格 --
+								<code>.table-bordered</code>
 							</h5>
 							<table class="table table-bordered">
 								<colgroup>
@@ -689,7 +1613,8 @@
 						<a class="offset" id="bootstrap-table-hover"></a>
 						<div class="sub-item">
 							<h5 class="text-primary">
-								鼠标悬停 -- <code>.table-hover</code>
+								鼠标悬停 --
+								<code>.table-hover</code>
 							</h5>
 							<table class="table table-hover">
 								<colgroup>
@@ -732,7 +1657,8 @@
 						<a class="offset" id="bootstrap-table-condensed"></a>
 						<div class="sub-item">
 							<h5 class="text-primary">
-								紧缩表格 -- <code>.table-condensed</code>
+								紧缩表格 --
+								<code>.table-condensed</code>
 							</h5>
 							<table class="table table-condensed">
 								<colgroup>
@@ -775,7 +1701,8 @@
 						<a class="offset" id="bootstrap-table-responsive"></a>
 						<div class="sub-item">
 							<h5 class="text-primary">
-								响应式表格(加了状态类) -- <code>.table-responsive</code>
+								响应式表格(加了状态类) --
+								<code>.table-responsive</code>
 							</h5>
 							<table class="table table-responsive">
 								<colgroup>
@@ -825,13 +1752,26 @@
 					</div>
 					<div class="panel-body">
 						<p>
-							单独的表单控件会被自动赋予一些全局样式。所有设置了 <code>.form-control</code> 类的 <code>input</code>
-							、 <code>textarea</code> 和 <code>select</code> 元素都将被默认设置宽度属性为 <code>width:
-								100%;</code> 。 将 <code>label</code> 元素和前面提到的控件包裹在 <code>.form-group</code>
+							单独的表单控件会被自动赋予一些全局样式。所有设置了
+							<code>.form-control</code>
+							类的
+							<code>input</code>
+							、
+							<code>textarea</code>
+							和
+							<code>select</code>
+							元素都将被默认设置宽度属性为
+							<code>width: 100%;</code>
+							。 将
+							<code>label</code>
+							元素和前面提到的控件包裹在
+							<code>.form-group</code>
 							中可以获得最好的排列。
 						</p>
 						<p class="text-warning">
-							不要将表单组直接和输入框组混合使用。建议将输入框组嵌套到表单组( <code>.form-group</code> )中使用。
+							不要将表单组直接和输入框组混合使用。建议将输入框组嵌套到表单组(
+							<code>.form-group</code>
+							)中使用。
 						</p>
 
 						<!-- subitem start -->
@@ -870,9 +1810,14 @@
 						<div class="sub-item">
 							<h5 class="text-primary">内联表单</h5>
 							<p>
-								为 <code>form </code> 元素添加 <code>.form-inline</code>
-								类可使其内容左对齐并且表现为 <code>inline-block</code> 级别的控件。<strong>只适用于视口（viewport）至少在
-									768px 宽度时（视口宽度再小的话就会使表单折叠）。</strong>
+								为
+								<code>form </code>
+								元素添加
+								<code>.form-inline</code>
+								类可使其内容左对齐并且表现为
+								<code>inline-block</code>
+								级别的控件。<strong>只适用于视口（viewport）至少在 768px
+									宽度时（视口宽度再小的话就会使表单折叠）。</strong>
 							</p>
 							<form class="form-inline" role="form">
 								<div class="form-group">
@@ -905,9 +1850,15 @@
 						<div class="sub-item">
 							<h5 class="text-primary">水平排列的表单</h5>
 							<p>
-								通过为表单添加 <code>.form-horizontal</code> 类，并联合使用 Bootstrap
-								预置的栅格类，可以将 <code>label</code> 标签和控件组水平并排布局。这样做将改变 <code>.form-group</code>
-								的行为，使其表现为栅格系统中的行（row），因此就无需再额外添加 <code>.row</code> 了。
+								通过为表单添加
+								<code>.form-horizontal</code>
+								类，并联合使用 Bootstrap 预置的栅格类，可以将
+								<code>label</code>
+								标签和控件组水平并排布局。这样做将改变
+								<code>.form-group</code>
+								的行为，使其表现为栅格系统中的行（row），因此就无需再额外添加
+								<code>.row</code>
+								了。
 							</p>
 							<form class="form-horizontal" role="form">
 								<div class="form-group">
@@ -1170,8 +2121,18 @@
 							<h5 class="text-primary">辅助类</h5>
 							<div>
 								<p>
-									文本颜色： <code>text-muted</code> ， <code>text-primary</code> ， <code>text-success</code>
-									， <code>text-info</code> ， <code>text-warning</code> ， <code>text-danger</code>
+									文本颜色：
+									<code>text-muted</code>
+									，
+									<code>text-primary</code>
+									，
+									<code>text-success</code>
+									，
+									<code>text-info</code>
+									，
+									<code>text-warning</code>
+									，
+									<code>text-danger</code>
 								</p>
 								<p class="text-muted">Fusce dapibus, tellus ac cursus
 									commodo, tortor mauris nibh.</p>
@@ -1188,8 +2149,16 @@
 							</div>
 							<div>
 								<p>
-									背景颜色： <code>bg-primary</code> ， <code>bg-success</code> ， <code>bg-info</code>
-									， <code>bg-warning</code> ， <code>bg-danger</code>
+									背景颜色：
+									<code>bg-primary</code>
+									，
+									<code>bg-success</code>
+									，
+									<code>bg-info</code>
+									，
+									<code>bg-warning</code>
+									，
+									<code>bg-danger</code>
 								</p>
 								<p class="bg-primary">Nullam id dolor id nibh ultricies
 									vehicula ut id elit.</p>
@@ -1287,8 +2256,11 @@
 								</table>
 							</div>
 							<p>
-								从 v3.2.0 版本起，形如 <code>.visible-*-*</code> 的类针对每种屏幕大小都有了三种变体，每个针对
-								CSS 中不同的 <code>display</code> 属性，列表如下：
+								从 v3.2.0 版本起，形如
+								<code>.visible-*-*</code>
+								的类针对每种屏幕大小都有了三种变体，每个针对 CSS 中不同的
+								<code>display</code>
+								属性，列表如下：
 							</p>
 							<div class="table-responsive">
 								<table class="table table-bordered table-striped">
@@ -1328,11 +2300,15 @@
 					</div>
 					<div class="panel-body">
 						<h5 class="text-primary">
-							下拉菜单 -- <code>.dropdown, .dropdown-menu</code>
+							下拉菜单 --
+							<code>.dropdown, .dropdown-menu</code>
 						</h5>
 						<p>
-							将下拉菜单触发器和下拉菜单都包裹在 <code>.dropdown</code> 里，或者另一个声明了 <code>position:
-								relative;</code> 的元素。
+							将下拉菜单触发器和下拉菜单都包裹在
+							<code>.dropdown</code>
+							里，或者另一个声明了
+							<code>position: relative;</code>
+							的元素。
 						</p>
 
 
@@ -1365,7 +2341,8 @@
 						</div>
 
 						<h5 class="text-primary">
-							按钮组 -- <code>.btn-group, .btn-toolbar</code>
+							按钮组 --
+							<code>.btn-group, .btn-toolbar</code>
 						</h5>
 						<div>
 							<div class="btn-group">
@@ -1495,8 +2472,14 @@
 					</div>
 					<div class="panel-body">
 						<p>
-							通过在文本输入框 <code>input</code> 前面、后面或是两边加上文字或按钮，可以实现对表单控件的扩展。为 <code>.input-group</code>
-							赋予 <code>.input-group-addon</code> 类，可以给 <code>.form-control</code>
+							通过在文本输入框
+							<code>input</code>
+							前面、后面或是两边加上文字或按钮，可以实现对表单控件的扩展。为
+							<code>.input-group</code>
+							赋予
+							<code>.input-group-addon</code>
+							类，可以给
+							<code>.form-control</code>
 							的前面或后面添加额外的元素。
 						</p>
 						<div>
@@ -1700,13 +2683,17 @@
 					<div class="panel-body">
 						<div class="sub-item">
 							<h5 class="text-primary">
-								导航 -- <code>.nav</code>
+								导航 --
+								<code>.nav</code>
 							</h5>
 							<p>
-								Bootstrap 中的导航组件都依赖同一个 <code>.nav</code> 类，状态类也是共用的。改变修饰类可以改变样式。
+								Bootstrap 中的导航组件都依赖同一个
+								<code>.nav</code>
+								类，状态类也是共用的。改变修饰类可以改变样式。
 							</p>
 							<h6>
-								标签页 -- <code>.nav-tabs</code>
+								标签页 --
+								<code>.nav-tabs</code>
 							</h6>
 							<ul class="nav nav-tabs" role="tablist">
 								<li role="presentation" class="active">
@@ -1720,7 +2707,8 @@
 								</li>
 							</ul>
 							<h6>
-								胶囊式标签页 -- <code>.nav-pills</code>
+								胶囊式标签页 --
+								<code>.nav-pills</code>
 							</h6>
 							<ul class="nav nav-pills" role="tablist">
 								<li role="presentation" class="active">
@@ -1734,7 +2722,9 @@
 								</li>
 							</ul>
 							<h6>
-								胶囊是标签页也是可以垂直方向堆叠排列的。只需添加 <code>.nav-stacked</code> 类。
+								胶囊是标签页也是可以垂直方向堆叠排列的。只需添加
+								<code>.nav-stacked</code>
+								类。
 							</h6>
 							<ul class="nav nav-pills nav-stacked" role="tablist">
 								<li role="presentation" class="active">
@@ -1748,7 +2738,8 @@
 								</li>
 							</ul>
 							<h6>
-								在大于 768px 的屏幕上，通过 <code>.nav-justified</code>
+								在大于 768px 的屏幕上，通过
+								<code>.nav-justified</code>
 								类可以很容易的让标签页或胶囊式标签呈现出同等宽度。在小屏幕上，导航链接呈现堆叠样式。
 							</h6>
 							<ul class="nav nav-pills nav-justified" role="tablist">
@@ -1795,7 +2786,8 @@
 						</div>
 						<div class="sub-item">
 							<h5 class="text-primary">
-								导航条 -- <code>.nav</code>
+								导航条 --
+								<code>.nav</code>
 							</h5>
 							<p>导航条是在您的应用或网站中作为导航页头的响应式基础组件。它们在移动设备上可以折叠（并且可开可关），且在视口（viewport）宽度增加时逐渐变为水平展开模式。</p>
 							<nav class="navbar navbar-default navbar-inverse"
@@ -1889,29 +2881,46 @@
 
 							<h6 class="text-primary">固定在顶部</h6>
 							<p>
-								添加 <code>.navbar-fixed-top</code> 类可以让导航条固定在顶部，还可包含一个 <code>.container</code>
-								或 <code>.container-fluid</code> 容器，从而让导航条居中，并在两侧添加内部（padding）。
+								添加
+								<code>.navbar-fixed-top</code>
+								类可以让导航条固定在顶部，还可包含一个
+								<code>.container</code>
+								或
+								<code>.container-fluid</code>
+								容器，从而让导航条居中，并在两侧添加内部（padding）。
 							</p>
 							<h6 class="text-primary">固定在底部</h6>
 							<p>
-								添加 <code>.navbar-fixed-bottom</code> 类可以让导航条固定在底部，并且还可以包含一个 <code>.container</code>
-								或 <code>.container-fluid</code> 容器，从而让导航条居中，并在两侧添加内部（padding）。
+								添加
+								<code>.navbar-fixed-bottom</code>
+								类可以让导航条固定在底部，并且还可以包含一个
+								<code>.container</code>
+								或
+								<code>.container-fluid</code>
+								容器，从而让导航条居中，并在两侧添加内部（padding）。
 							</p>
 							<h6 class="text-primary">静止在顶部</h6>
 							<p>
-								通过添加 <code>.navbar-static-top</code>
-								类即可创建一个与页面等宽度的导航条，它会随着页面向下滚动而消失。还可以包含一个 <code>.container</code>
-								或 <code>.container-fluid</code> 容器，用于将导航条居中对齐并在两侧添加内部（padding）。
+								通过添加
+								<code>.navbar-static-top</code>
+								类即可创建一个与页面等宽度的导航条，它会随着页面向下滚动而消失。还可以包含一个
+								<code>.container</code>
+								或
+								<code>.container-fluid</code>
+								容器，用于将导航条居中对齐并在两侧添加内部（padding）。
 							</p>
 							<h6 class="text-primary">反色的导航条</h6>
 							<p>
-								通过添加 <code>.navbar-inverse</code> 类可以改变导航条的外观
+								通过添加
+								<code>.navbar-inverse</code>
+								类可以改变导航条的外观
 							</p>
 						</div>
 
 						<div class="sub-item">
 							<h5 class="text-primary">
-								路径导航 -- <code>.breadcrumb</code>
+								路径导航 --
+								<code>.breadcrumb</code>
 							</h5>
 							<ol class="breadcrumb">
 								<li>
@@ -2044,6 +3053,537 @@
 					</div>
 				</div>
 				<!-- item over -->
+
+
+				<!-- item start -->
+				<a class="offset" id="bootstrap-widget"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">分页 &amp; 翻页 &amp; 标签 &amp; 徽章 &amp;
+							巨幕 &amp; 页头 &amp; 缩略图 &amp; 警告框&amp; 媒体对象 &amp; Well</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">
+								分页 --
+								<code>.pagination</code>
+							</h5>
+							<nav>
+								<ul class="pagination">
+									<li class="disabled">
+										<a href="#null">&laquo;</a>
+									</li>
+									<li class="active">
+										<a href="#null">1</a>
+									</li>
+									<li>
+										<a href="#null">2</a>
+									</li>
+									<li>
+										<a href="#null">3</a>
+									</li>
+									<li>
+										<a href="#null">4</a>
+									</li>
+									<li>
+										<a href="#null">5</a>
+									</li>
+									<li>
+										<a href="#null">&raquo;</a>
+									</li>
+								</ul>
+								<ul class="pagination pagination-lg">
+									<li class="disabled">
+										<a href="#null">&laquo;</a>
+									</li>
+									<li class="active">
+										<a href="#null">1</a>
+									</li>
+									<li>
+										<a href="#null">2</a>
+									</li>
+									<li>
+										<a href="#null">3</a>
+									</li>
+									<li>
+										<a href="#null">4</a>
+									</li>
+									<li>
+										<a href="#null">5</a>
+									</li>
+									<li>
+										<a href="#null">&raquo;</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								翻页 --
+								<code>.pager</code>
+							</h5>
+							<nav>
+								<ul class="pager">
+									<li>
+										<a href="#null">Previous</a>
+									</li>
+									<li>
+										<a href="#null">Next</a>
+									</li>
+								</ul>
+							</nav>
+							<nav>
+								<ul class="pager">
+									<li class="previous disabled">
+										<a href="#null">&larr; Older</a>
+									</li>
+									<li class="next">
+										<a href="#null">Newer &rarr;</a>
+									</li>
+								</ul>
+							</nav>
+
+
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								标签 --
+								<code>.label</code>
+							</h5>
+							<span class="label label-default">Default</span> <span
+								class="label label-primary">Primary</span> <span
+								class="label label-success">Success</span> <span
+								class="label label-info">Info</span> <span
+								class="label label-warning">Warning</span> <span
+								class="label label-danger">Danger</span>
+
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								徽章 --
+								<code>.badge</code>
+							</h5>
+							<a href="#null">
+								Inbox <span class="badge">42</span>
+							</a>
+
+							<button class="btn btn-primary" type="button">
+								Messages <span class="badge">4</span>
+							</button>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								巨幕 --
+								<code>.jumbotron</code>
+							</h5>
+							<p>这是一个轻量、灵活的组件，它能延伸至整个浏览器视口来展示网站上的关键内容。</p>
+							<div class="jumbotron">
+								<h1>Hello, world!</h1>
+								<p>This is a simple hero unit, a simple jumbotron-style
+									component for calling extra attention to featured content or
+									information.</p>
+								<p>
+									<a class="btn btn-primary btn-lg" href="#null" role="button">Learn
+										more</a>
+								</p>
+							</div>
+
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">页头</h5>
+							<p>
+								页头组件能够为
+								<code>h1</code>
+								标签增加适当的空间，并且与页面的其他部分形成一定的分隔。它支持
+								<code>h1</code>
+								标签内内嵌
+								<code>small</code>
+								元素的默认效果，还支持大部分其他组件（需要增加一些额外的样式）。
+							</p>
+							<div class="page-header">
+								<h1>
+									Example page header <small>Subtext for header</small>
+								</h1>
+							</div>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								缩略图 --
+								<code>.thumbnail</code>
+							</h5>
+							<div class="row">
+								<div class="col-xs-6 col-md-3">
+									<a href="#" class="thumbnail">
+										<img src="../index/images/bg.jpg" alt="...">
+									</a>
+								</div>
+								<div class="col-xs-6 col-md-3">
+									<a href="#" class="thumbnail">
+										<img src="../index/images/bg.jpg" alt="...">
+									</a>
+								</div>
+								<div class="col-xs-6 col-md-3">
+									<a href="#" class="thumbnail">
+										<img src="../index/images/bg.jpg" alt="...">
+									</a>
+								</div>
+								<div class="col-xs-6 col-md-3">
+									<a href="#" class="thumbnail">
+										<img src="../index/images/bg.jpg" alt="...">
+									</a>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xs-6 col-md-4">
+									<div class="thumbnail">
+										<img src="../index/images/bg.jpg" alt="...">
+										<div class="caption">
+											<h3>Thumbnail label</h3>
+											<p>添加一点点额外的标签，就可以把任何类型的 HTML 内容，例如标题、段落或按钮，加入缩略图组件内。</p>
+											<p>
+												<a href="#" class="btn btn-primary" role="button">Button</a>
+												<a href="#" class="btn btn-default" role="button">Button</a>
+											</p>
+										</div>
+
+									</div>
+								</div>
+								<div class="col-xs-6 col-md-4">
+									<div class="thumbnail">
+										<img src="../index/images/bg.jpg" alt="...">
+										<div class="caption">
+											<h3>Thumbnail label</h3>
+											<p>添加一点点额外的标签，就可以把任何类型的 HTML 内容，例如标题、段落或按钮，加入缩略图组件内。</p>
+											<p>
+												<a href="#" class="btn btn-primary" role="button">Button</a>
+												<a href="#" class="btn btn-default" role="button">Button</a>
+											</p>
+										</div>
+
+									</div>
+								</div>
+								<div class="col-xs-6 col-md-4">
+									<div class="thumbnail">
+										<img src="../index/images/bg.jpg" alt="...">
+										<div class="caption">
+											<h3>Thumbnail label</h3>
+											<p>添加一点点额外的标签，就可以把任何类型的 HTML 内容，例如标题、段落或按钮，加入缩略图组件内。</p>
+											<p>
+												<a href="#" class="btn btn-primary" role="button">Button</a>
+												<a href="#" class="btn btn-default" role="button">Button</a>
+											</p>
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								警告框 --
+								<code>.alert</code>
+							</h5>
+							<div class="alert alert-success" role="alert">警告框组件通过提供一些灵活的预定义消息，为常见的用户动作提供反馈消息。</div>
+							<div class="alert alert-info" role="alert">警告框组件通过提供一些灵活的预定义消息，为常见的用户动作提供反馈消息。</div>
+							<div class="alert alert-warning" role="alert">警告框组件通过提供一些灵活的预定义消息，为常见的用户动作提供反馈消息。</div>
+							<div class="alert alert-danger" role="alert">警告框组件通过提供一些灵活的预定义消息，为常见的用户动作提供反馈消息。</div>
+							<div class="alert alert-warning alert-dismissible" role="alert">
+								<button type="button" class="close" data-dismiss="alert">
+									<span aria-hidden="true">&times;</span>
+								</button>
+								可关闭的警告框
+							</div>
+							<div class="alert alert-success" role="alert">
+								<a href="#null" class="alert-link">警告框中的链接</a>
+							</div>
+							<div class="alert alert-info" role="alert">
+								<a href="#null" class="alert-link">警告框中的链接</a>
+							</div>
+
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								媒体对象 --
+								<code>.media</code>
+							</h5>
+							<p>这是一个抽象的样式，用以构建不同类型的组件，这些组件都具有在文本内容的左或右侧对齐的图片（就像博客评论或
+								Twitter 消息等）。</p>
+							<div class="media">
+								<a class="media-left" href="#">
+									<img class="media-object" data-src="holder.js/64x64"
+										alt="64x64" style="width: 64px; height: 64px;"
+										src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE0LjUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg=="
+										data-holder-rendered="true">
+								</a>
+								<div class="media-body">
+									<h4 class="media-heading">Media heading</h4>
+									Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+									scelerisque ante sollicitudin commodo. Cras purus odio,
+									vestibulum in vulputate at, tempus viverra turpis. Fusce
+									condimentum nunc ac nisi vulputate fringilla. Donec lacinia
+									congue felis in faucibus.
+								</div>
+							</div>
+							<div class="media">
+								<a class="media-left" href="#">
+									<img class="media-object" data-src="holder.js/64x64"
+										alt="64x64" style="width: 64px; height: 64px;"
+										src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE0LjUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg=="
+										data-holder-rendered="true">
+								</a>
+								<div class="media-body">
+									<h4 class="media-heading">Media heading</h4>
+									Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+									scelerisque ante sollicitudin commodo. Cras purus odio,
+									vestibulum in vulputate at, tempus viverra turpis. Fusce
+									condimentum nunc ac nisi vulputate fringilla. Donec lacinia
+									congue felis in faucibus.
+									<div class="media">
+										<a class="media-left" href="#">
+											<img class="media-object" data-src="holder.js/64x64"
+												alt="64x64" style="width: 64px; height: 64px;"
+												src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE0LjUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg=="
+												data-holder-rendered="true">
+										</a>
+										<div class="media-body">
+											<h4 class="media-heading">Nested media heading</h4>
+											Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+											scelerisque ante sollicitudin commodo. Cras purus odio,
+											vestibulum in vulputate at, tempus viverra turpis. Fusce
+											condimentum nunc ac nisi vulputate fringilla. Donec lacinia
+											congue felis in faucibus.
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="media">
+								<div class="media-body">
+									<h4 class="media-heading">Media heading</h4>
+									Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+									scelerisque ante sollicitudin commodo. Cras purus odio,
+									vestibulum in vulputate at, tempus viverra turpis.
+								</div>
+								<a class="media-right" href="#">
+									<img data-src="holder.js/64x64" alt="64x64"
+										style="width: 64px; height: 64px;"
+										src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE0LjUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg=="
+										data-holder-rendered="true">
+								</a>
+							</div>
+							<div class="media">
+								<a class="pull-right" href="#">
+									<img data-src="holder.js/64x64" alt="64x64"
+										style="width: 64px; height: 64px;"
+										src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE0LjUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg=="
+										data-holder-rendered="true">
+								</a>
+								<a class="pull-left" href="#">
+									<img data-src="holder.js/64x64" alt="64x64"
+										style="width: 64px; height: 64px;"
+										src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE0LjUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg=="
+										data-holder-rendered="true">
+								</a>
+								<div class="media-body">
+									<h4 class="media-heading">Deprecated pull-right pull-left
+										example</h4>
+									Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+									scelerisque ante sollicitudin commodo. Cras purus odio,
+									vestibulum in vulputate at, tempus viverra turpis.
+								</div>
+							</div>
+							<h6 class="text-primary">媒体对象列表</h6>
+							<ul class="media-list">
+								<li class="media">
+									<a class="media-left" href="#">
+										<img data-src="holder.js/64x64" alt="64x64"
+											style="width: 64px; height: 64px;"
+											src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE0LjUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg=="
+											data-holder-rendered="true">
+									</a>
+									<div class="media-body">
+										<h4 class="media-heading">Media heading</h4>
+										<p>Cras sit amet nibh libero, in gravida nulla. Nulla vel
+											metus scelerisque ante sollicitudin commodo. Cras purus odio,
+											vestibulum in vulputate at, tempus viverra turpis.</p>
+										<!-- Nested media object -->
+										<div class="media">
+											<a class="media-left" href="#">
+												<img data-src="holder.js/64x64" alt="64x64"
+													style="width: 64px; height: 64px;"
+													src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE0LjUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg=="
+													data-holder-rendered="true">
+											</a>
+											<div class="media-body">
+												<h4 class="media-heading">Nested media heading</h4>
+												Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+												scelerisque ante sollicitudin commodo. Cras purus odio,
+												vestibulum in vulputate at, tempus viverra turpis.
+												<!-- Nested media object -->
+												<div class="media">
+													<a class="media-left" href="#">
+														<img data-src="holder.js/64x64" alt="64x64"
+															style="width: 64px; height: 64px;"
+															src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE0LjUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg=="
+															data-holder-rendered="true">
+													</a>
+													<div class="media-body">
+														<h4 class="media-heading">Nested media heading</h4>
+														Cras sit amet nibh libero, in gravida nulla. Nulla vel
+														metus scelerisque ante sollicitudin commodo. Cras purus
+														odio, vestibulum in vulputate at, tempus viverra turpis.
+													</div>
+												</div>
+											</div>
+										</div>
+										<!-- Nested media object -->
+										<div class="media">
+											<a class="media-left" href="#">
+												<img data-src="holder.js/64x64" alt="64x64"
+													style="width: 64px; height: 64px;"
+													src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9InllcyI/PjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+PGRlZnMvPjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgZmlsbD0iI0VFRUVFRSIvPjxnPjx0ZXh0IHg9IjE0LjUiIHk9IjMyIiBzdHlsZT0iZmlsbDojQUFBQUFBO2ZvbnQtd2VpZ2h0OmJvbGQ7Zm9udC1mYW1pbHk6QXJpYWwsIEhlbHZldGljYSwgT3BlbiBTYW5zLCBzYW5zLXNlcmlmLCBtb25vc3BhY2U7Zm9udC1zaXplOjEwcHQ7ZG9taW5hbnQtYmFzZWxpbmU6Y2VudHJhbCI+NjR4NjQ8L3RleHQ+PC9nPjwvc3ZnPg=="
+													data-holder-rendered="true">
+											</a>
+											<div class="media-body">
+												<h4 class="media-heading">Nested media heading</h4>
+												Cras sit amet nibh libero, in gravida nulla. Nulla vel metus
+												scelerisque ante sollicitudin commodo. Cras purus odio,
+												vestibulum in vulputate at, tempus viverra turpis.
+											</div>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">
+								Well --
+								<code>.well</code>
+							</h5>
+							<p>
+								把
+								<code>Well</code>
+								用在元素上，能有嵌入（inset）的的简单效果。
+							</p>
+							<div class="well">Look, I'm in a well!</div>
+							<div class="well well-lg">Look, I'm in a well!</div>
+						</div>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+
+				<!-- item start -->
+				<a id="bootstrap-list-group" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							列表组 --
+							<code>.list-group</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<p>列表组是灵活又强大的组件，不仅能用于显示一组简单的元素，还能用于复杂的定制的内容。</p>
+						<ul class="list-group">
+							<li class="list-group-item">Cras justo odio</li>
+							<li class="list-group-item">Dapibus ac facilisis in</li>
+							<li class="list-group-item disabled">Morbi leo risus</li>
+							<li class="list-group-item">
+								<span class="badge">14</span>Porta ac consectetur ac
+							</li>
+							<li class="list-group-item">Vestibulum at eros</li>
+						</ul>
+						<div class="list-group">
+							<a href="#" class="list-group-item active"> Cras justo odio </a>
+							<a href="#" class="list-group-item">
+								<span class="badge">14</span>Dapibus ac facilisis in
+							</a>
+							<a href="#" class="list-group-item disabled">Morbi leo risus</a>
+							<a href="#" class="list-group-item">
+								<span class="badge">14</span>Porta ac consectetur ac
+							</a>
+							<a href="#" class="list-group-item">Vestibulum at eros</a>
+						</div>
+						<ul class="list-group">
+							<li class="list-group-item list-group-item-success">Dapibus
+								ac facilisis in</li>
+							<li class="list-group-item list-group-item-info">Cras sit
+								amet nibh libero</li>
+							<li class="list-group-item list-group-item-warning">Porta ac
+								consectetur ac</li>
+							<li class="list-group-item list-group-item-danger">Vestibulum
+								at eros</li>
+						</ul>
+						<div class="list-group">
+							<a href="#" class="list-group-item list-group-item-success">Dapibus
+								ac facilisis in</a>
+							<a href="#" class="list-group-item list-group-item-info">Cras
+								sit amet nibh libero</a>
+							<a href="#" class="list-group-item list-group-item-warning">Porta
+								ac consectetur ac</a>
+							<a href="#" class="list-group-item list-group-item-danger">Vestibulum
+								at eros</a>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+
+				<!-- item start -->
+				<a id="bootstrap-panel" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">面版</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							默认的
+							<code>.panel</code>
+							组件所做的只是设置基本的边框（border）和内补（padding）来包含内容。
+						</p>
+						<div class="panel panel-default">
+							<div class="panel-body">Basic panel example</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">Panel heading without title</div>
+							<div class="panel-body">Panel content</div>
+							<ul class="list-group">
+								<li class="list-group-item">带列表组的面版</li>
+								<li class="list-group-item">带列表组的面版</li>
+								<li class="list-group-item">带列表组的面版</li>
+								<li class="list-group-item">带列表组的面版</li>
+								<li class="list-group-item">带列表组的面版</li>
+							</ul>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-body">Panel content</div>
+							<div class="panel-footer">Panel footer</div>
+						</div>
+						<div class="panel panel-primary">
+							<div class="panel-heading">Panel heading without title</div>
+							<div class="panel-body">Panel content</div>
+						</div>
+						<div class="panel panel-success">
+							<div class="panel-heading">Panel heading without title</div>
+							<div class="panel-body">Panel content</div>
+						</div>
+						<div class="panel panel-info">
+							<div class="panel-heading">Panel heading without title</div>
+							<div class="panel-body">Panel content</div>
+						</div>
+						<div class="panel panel-warning">
+							<div class="panel-heading">Panel heading without title</div>
+							<div class="panel-body">Panel content</div>
+						</div>
+						<div class="panel panel-danger">
+							<div class="panel-heading">Panel heading without title</div>
+							<div class="panel-body">Panel content</div>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
 
 				<!-- item start -->
 				<a class="offset" id="bootstrap-glyphicons"></a>
@@ -3129,7 +4669,9 @@
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
 	<script src="res/menu.js"></script>
+	<script src="js/demo-bootstrap.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
 </html>
