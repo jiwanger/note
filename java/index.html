@@ -12,7 +12,7 @@
 <link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
 <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
 <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<title>NATE--笔记</title>
+<title>NATE--笔记--JAVA</title>
 <!-- Bootstrap -->
 <link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
 	rel="stylesheet">
@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -66,8 +66,9 @@
 					</div>
 					<div class="list-group">
 						<a href="#" class="list-group-item">Java 文档</a>
-						<a id="tttt" class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
+						<a id="tttt" class="list-group-item active dropup"
+							data-toggle="collapse" data-parent="#accordion"
+							href="#java-tools" aria-expanded="true">
 							Java 工具<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
 						<div id="java-tools" class="panel-collapse collapse in"
@@ -76,6 +77,7 @@
 								style="border-top: 1px solid #DDDDDD;">javac 工具</a>
 							<a href="#java-java" class="list-group-item">java 工具</a>
 							<a href="#java-jar" class="list-group-item">jar 工具</a>
+							<a href="#java-examples" class="list-group-item">examples</a>
 						</div>
 						<a href="#java-class-loader" class="list-group-item">ClassLoader
 							原理</a>
@@ -118,7 +120,185 @@
 						<h3 class="panel-title">javac 工具</h3>
 					</div>
 					<div class="panel-body">
-						<p>docs</p>
+						<p>
+							实例参见: --
+							<a href="#java-examples">examples</a>
+						<pre class="brush: bash;">
+$ javac [ options ] [ sourcefiles ] [ classes] [ @argfiles ]
+
+# options -- 命令行选项
+# sourcefiles -- 一个或多个要编译的源文件
+# classes -- 一个或多个编译使用的注解类文件
+# @argfiles -- 一个或多个对源文件进行列表的文件
+</pre>
+						<h5 class="text-primary">options</h5>
+						<ul>
+							<li>
+								<p>
+									<code>-classpath &lt;path&gt; </code>
+									-- 指定查找用户类文件和注释处理程序的位置
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-cp &lt;path&gt; </code>
+									-- 指定查找用户类文件和注释处理程序的位置
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-sourcepath &lt;path&gt; </code>
+									-- 指定查找输入源文件的位置
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-d &lt;dir&gt; </code>
+									-- 指定放置生成的类文件的位置
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-s &lt;dir&gt; </code>
+									-- 指定放置生成的源文件的位置
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-g</code>
+									-- 生成所有调试信息
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-g:non e</code>
+									-- 不生成任何调试信息
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-g:{lines,vars,source}</code>
+									-- 只生成某些调试信息
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-nowarn</code>
+									-- 不生成任何警告
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-verbose</code>
+									-- 输出有关编译器正在执行的操作的消息
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-deprecation</code>
+									-- 输出使用已过时的 API 的源位置
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-bootclasspath &lt;path&gt; </code>
+									-- 覆盖引导类文件的位置
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-extdirs &lt;dir&gt; </code>
+									-- 覆盖所安装扩展的位置
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-endorseddirs &lt;dir&gt; </code>
+									-- 覆盖签名的标准路径的位置
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-proc:{none,only}</code>
+									-- 控制是否执行注释处理和/或编译。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-processor
+										&lt;class1&gt;[,&lt;class2&gt;,&lt;class3&gt;...] </code>
+									-- 要运行的注释处理程序的名称; 绕过默认的搜索进程
+								</p>
+							</li>
+							<li>
+								<p>
+									<code> -processorpath &lt;path&gt; </code>
+									-- 指定查找注释处理程序的位置
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-implicit:{none,class}</code>
+									-- 指定是否为隐式引用文件生成类文件
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-encoding &lt;encode&gt; </code>
+									-- 指定源文件使用的字符编码
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-source &lt;version&gt; </code>
+									-- 提供与指定发行版的源兼容性
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-target &lt;version&gt; </code>
+									-- 生成特定 VM 版本的类文件
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-version</code>
+									-- 版本信息
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-help</code>
+									-- 输出标准选项的提要
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-Akey[=value]</code>
+									-- 传递给注释处理程序的选项
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-X</code>
+									-- 输出非标准选项的提要
+								</p>
+							</li>
+							<li>
+								<p>
+									<code> -J &lt;tag&gt; </code>
+									-- 直接将 &lt;tag&gt; 传递给运行时系统
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-Werror</code>
+									-- 出现警告时终止编译
+								</p>
+							</li>
+						</ul>
+
+
 					</div>
 				</div>
 				<!-- item over -->
@@ -130,7 +310,201 @@
 						<h3 class="panel-title">java 工具</h3>
 					</div>
 					<div class="panel-body">
-						<p>docs</p>
+						<p>
+							实例参见: --
+							<a href="#java-examples">examples</a>
+						<pre class="brush: bash;">
+$ java [options] classname [args]
+
+$ java [options] -jar filename [args]
+</pre>
+
+						<p>Java启动命令可选项(options)大致可分为标准和非标准两种，非标准的可选项不保证在所有平台上都实现，并且未来的版本中可能会被修改且不告知，总之就是不稳定(Unstable)。不过有的非标准可选项还是非常有用的，后面我们会谈到。</p>
+						<h5 class="text-primary">标准可选项(Standard options)</h5>
+						<ul>
+							<li>
+								<p>
+									<strong>-client</strong> 与 <strong>-server</strong><br>
+									以clien或者server模式启动，二选一，Java运行时环境会依场景来优化自己的配置策略。值得指出的是64位的Java不支持client模式，默认就是server。不同平台的默认配置可以参考
+									<a target="_blank"
+										href="http://docs.oracle.com/javase/6/docs/technotes/guides/vm/server-class.html">Server-Class
+										Machine Detection</a>
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-d32</strong> 与 <strong>-d64</strong> <br>
+									程序运行在32位或者64位环境
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-cp</strong> 和 <strong>-classpath</strong><br>
+									最重要的可选项之一，指定Java运行时环境搜索class的路径。<strong>-cp只是-classpath的简写，做相同的事情</strong>，用其中之一即可。多个路径用<strong>英文里面的分号</strong>分隔。如果-cp和-classpath都没有使用，CLASSPATH环境变量也没用设定，那么就是当前路径(.)。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-Dproperty=value</strong><br>
+									设定系统属性值，比如编码-Dfile.encoding=UTF-8。可以设定一些系统使用的属性，也可以用来向程序传递值，比如程序的根目录。
+									可以通过
+									<code>System.getProperty("keyname")</code>
+									来获取属性。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-help</strong>与<strong>-?</strong><br> 都是要求显示帮助信息
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-disableassertions[:[packagename]...|:classname]</strong>与<strong>-da[:[packagename]...|:classname]</strong><br>
+									禁用断言，可以指定包名(注意包后面的三个点)或者class的名称。默认就是禁用的。da只是disableassertions的缩写，使用方法完全一样。
+									禁用包:
+									<code> da:org.slf4j...</code>
+									<br> 禁用类:
+									<code>da:org.slf4j.LoggerFactory</code>
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>enableassertions[:packagename...|:classname]</strong>与<strong>ea[:packagename...|:classname]</strong><br>
+									启用断言，可以指定包名(注意包后面的三个点)或者class的名称。ea只是enableassertions的缩写，使用方法完全一样。
+									启用包:
+									<code>ea:org.slf4j...</code>
+									<br> 启用类:
+									<code>ea:org.slf4j.LoggerFactory</code>
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>disablesystemassertions</strong>与<strong>dsa</strong><br>
+									禁用系统类(syetem class)断言
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>enablesystemassertions</strong>与<strong>esa</strong><br>
+									启用系统类(syetem class)断言
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-version</strong> 与 <strong>-showversion</strong><br>
+									这两个都显示Java的版本信息，不过后者会把help的信息也显示出来。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>verbose:class</strong>, <strong>verbose:gc</strong>,
+									"verbose:jni"<br>
+									verbose:class显示class加载信息，verbose:gc显示Java垃圾回收的信息。verbose:jni显示JNI(Java
+									Native Interface)信息。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-agentlib:libname[=options]</strong>与<strong>-agentpath:pathname[=options]</strong><br>
+									都是加载本地代理库(Native Agent
+									Library)，-agentlib只需要library的名称，且会根据不同的操作系统转为对应的文件(Windows为DLL)。
+									-agentpath指定library的绝对路径。
+								</p>
+							</li>
+						</ul>
+						<h5 class="text-primary">非标准可选项(Nonstandard Options)</h5>
+						<p>非标准的可选项都以-X开始，其中的部分选项如下:</p>
+						<ul>
+							<li>
+								<p>
+									<strong>-X</strong><br> 显示所有非标准选项的信息。看看都有些什么非标准选项吧。
+									<code>java -X</code>
+									。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-Xms&lt;size&gt;</strong><br> 设置Java堆的初始化大小。例如
+									-Xms1024m，Java堆的初始化大小就设置为1G。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-Xmx&lt;size&gt;</strong><br> 设置Java堆的最大值。例如
+									-Xmx3072m，Java堆的最大值就设置为3G。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-Xss&lt;size&gt;</strong><br> 设置Java线程栈的值。例如
+									-Xss128m，Java线程栈的值就设置为128兆。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-Xnoclassgc</strong><br> 禁用Java垃圾回收器。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-Xincgc</strong><br> 启用Java增量式垃圾回收器。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-Xmixed</strong><br> 解释模式和编译模式混合执行
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-Xint</strong><br> 仅解释模式执行
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-Xshare:on</strong>，<strong>-Xshare:off</strong>，<strong>-Xshare:auto</strong>
+									设定类数据共享CDS(Class data
+									sharing)是否开启。-Xshare:on要求一定要用共享的类数据；-Xshare:auto表示让系统自己判断
+									是否有类共享数据，有就用，没有不用；-Xshare:off禁用共享类数据。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-Xcheck:jni</strong><br> 针对JNI函数做额外的检查
+								</p>
+							</li>
+						</ul>
+						<h5 class="text-primary">不稳定(Unstable)的选项</h5>
+						<p>不稳定的选项当然是非标准的，都以-XX开头。这一类参数有很多，暂时只列其中的几个:</p>
+						<ul>
+							<li>
+								<p>
+									<strong>-XX:PermSize&lt;=size&gt;</strong>和<strong>-XX:MaxPermSize&lt;=size&gt;</strong><br>
+									设置Java永久保存区域(Permanent Generation
+									Space)的大小。PermSize设置初始值，MaxPermSize设置最大值。 <strong>
+										该区域主要存储class的信息，且不会被 垃圾回收器回收</strong>，如果加载的class过多，就会报错:java.lang.OutOfMemoryError:
+									PermGen space。 -XX:PermSize=64m
+									-XX:MaxPermSize=128m，表示Java永久保存区域大小初始化问为64兆，最大为128兆。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-XX:+UseParallelGC</strong><br> 开启并行Java回收器
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-XX:+PrintGCDetails</strong><br> 显示比
+									<code>-verbose:gc</code>
+									更多更准确的垃圾回收信息
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>-XX:+TraceClassLoading</strong><br> 显示类加载以及卸载的信息
+								</p>
+							</li>
+						</ul>
 					</div>
 				</div>
 				<!-- item over -->
@@ -142,7 +516,219 @@
 						<h3 class="panel-title">jar 工具</h3>
 					</div>
 					<div class="panel-body">
-						<p>docs</p>
+						<p>
+							实例参见: --
+							<a href="#java-examples">examples</a>
+						<pre class="brush: bash;">
+# 创建 jar
+$ jar c[efmMnv0] [entrypoint] [jarfile] [manifest] [-C dir] file ... [-Joption ...] [@arg-file ...]
+
+# 更新 jar
+$ jar u[efmMnv0] [entrypoint] [jarfile] [manifest] [-C dir] file ... [-Joption ...] [@arg-file ...]
+
+# 解压 jar
+$ jar x[vf] [jarfile] file ... [-Joption ...] [@arg-file ...]
+
+# 查看 jar 列出 jar 内容
+$ jar t[vf] [jarfile] file ... [-Joption ...] [@arg-file ...]
+
+# 为 jar 创建索引
+$ jar i jarfile [-Joption ...] [@arg-file ...]
+</pre>
+						<h5 class="text-primary">example</h5>
+						<pre class="brush: bash;">
+$ jar [cuxti][efmMnv0] jarfile [-C dir] [@arg-file ...] # 前面5个参数必先其一
+# f 指定jar包路径
+# v 生成详细的报造，并输出至标准设备
+# m 指定MANIFEST.MF配置文件位置
+ -M 不产生所有文件的清单文件(Manifest.mf)
+# 0 产生jar包时不对其中的内容进行压缩处理
+# i 为指定的jar文件创建索引文件
+# -C 表示转到相应的目录下执行jar命令,相当于cd到那个目录，然后不带-C执行jar命令
+
+# 打成jar包
+$ jar cvf build/libs/demo.jar -C build/classes/ cm
+
+# 打成jar包, 在这里指定　MANIFEST.MF 配置文件为：config/manifest-config.txt
+$ jar cvfm build/libs/demo.jar config/manifest-config.txt -C build/classes/ cm
+
+# 列出 jar 内容
+$ jar tvf build/libs/demo.jar
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-examples"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">examples</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-7">
+								<ul>
+									<li>
+										<p>
+											只有源文件，不引用第三方jar，编译运行，打包：(还没有使用
+											<code>libs/commons-lang3-3.5.jar</code>
+											中的
+											<code>StringUtils</code>
+											类)
+										</p>
+										<pre class="brush: bash;">
+# 编译 java 源代码
+$ javac -d build/classes/ \
+	src/cm/nate/model/Person.java \
+	src/cm/nate/Main.java
+# 要编译的源文件太多时，可以写入 res/source-list.txt 文件
+$ javac -d build/classes @config/source-list.txt
+
+# 直接运行class
+$ java -cp "build/classes" cm.nate.Main
+
+# 打成jar包
+$ jar cvf build/libs/demo.jar -C build/classes/ cm
+
+# 运行jar包
+$ java -cp build/libs/demo.jar cm.nate.Main
+</pre>
+									</li>
+									<li>
+										<p>
+											源文件引用第三方jar，编译运行，打包：(使用
+											<code>libs/commons-lang3-3.5.jar</code>
+											中的
+											<code>StringUtils</code>
+											类)
+										</p>
+										<pre class="brush: bash;">
+# 编译 java 源代码
+$ javac -d build/classes \
+	-cp libs/commons-lang3-3.5.jar \
+	@config/source-list.txt
+
+# 直接运行class
+$ java -cp \
+	"build/classes:libs/commons-lang3-3.5.jar" \
+ 	cm.nate.Main
+
+# 打成jar包
+$ jar cvf build/libs/demo.jar -C build/classes/ cm
+
+# 运行jar包
+$ java -cp \
+	build/libs/demo.jar:libs/commons-lang3-3.5.jar \
+	cm.nate.Main
+</pre>
+									</li>
+								</ul>
+							</div>
+							<div class="col-md-5">
+								<p>目录结构如下:</p>
+								<pre class="brush: bash;">
+├── build
+│   ├── classes
+│   │   └── cm
+│   │       └── nate
+│   │           ├── Main.class
+│   │           └── model
+│   │               └── Person.class
+│   ├── docs
+│   └── libs
+│       ├── demo.jar
+│       └── libs
+│           └── commons-lang3-3.5.jar
+├── config
+│   ├── manifest-config.txt
+│   └── source-list.txt
+├── libs
+│   └── commons-lang3-3.5.jar
+└── src
+    └── cm
+        └── nate
+            ├── Main.java
+            └── model
+                └── Person.java
+</pre>
+							</div>
+						</div>
+
+						<ul>
+							<li>
+								<p>
+									打包可运行的jar包(在
+									<code>MANIFEST.MF</code>
+									文件中指定主类),因为这里引用了第三方的jar，可以使用下面的两种方法：
+								</p>
+								<ol>
+									<li>
+										<p>
+											在
+											<code>manifest-config.txt</code>
+											文件中指定
+											<code>Class-Path</code>
+											和
+											<code>Main-Class</code>
+											,<span class="text-danger">注意最后有空行要保留</span>
+										</p>
+										<pre class="brush: bash;">
+Class-Path: libs/commons-lang3-3.5.jar
+Main-Class: cm.nate.Main
+ 
+</pre>
+										<p>
+											要注意的是当前目录下要有
+											<code>libs/commons-lang3-3.5.jar</code>
+										</p>
+										<pre class="brush: bash;">
+# 编译 java 源代码
+$ javac -d build/classes -cp libs/commons-lang3-3.5.jar @config/source-list.txt
+
+# 直接运行class
+$ java -cp "build/classes:libs/commons-lang3-3.5.jar" cm.nate.Main
+
+# 打成jar包, 在这里指定　MANIFEST.MF 配置文件为：config/manifest-config.txt
+$ jar cvfm build/libs/demo.jar config/manifest-config.txt -C build/classes/ cm
+
+# 运行jar包，能运行是因为在当前目录下有 libs/commons-lang3-3.5.jar存在
+$ java -jar build/libs/demo.jar
+</pre>
+									</li>
+									<li>
+										<p>
+											在
+											<code>manifest-config.txt</code>
+											文件中指定
+											<code>Main-Class</code>
+											,<span class="text-danger">注意最后有空行要保留</span>
+										</p>
+										<pre class="brush: bash;">
+Main-Class: cm.nate.Main
+ 
+</pre>
+										<p>要注意的是要解析依赖的jar包，然后打包的时候一起打包进去</p>
+										<pre class="brush: bash;">
+# 编译 java 源代码
+$ javac -d build/classes -cp libs/commons-lang3-3.5.jar @config/source-list.txt
+
+# 直接运行class
+$ java -cp "build/classes:libs/commons-lang3-3.5.jar" cm.nate.Main
+
+# 将依赖的jar 解压到 build/classes　目录下,下一步一起打包成自己的jar
+$ unzip libs/commons-lang3-3.5.jar -d build/classes
+
+# 打成jar包, 在这里指定　MANIFEST.MF 配置文件为：config/manifest-config.txt
+$ jar cvf build/libs/demo.jar config/manifest-config.txt \
+	-C build/classes/ cm -C build/classes org
+
+# 运行jar包，能运行是因为依赖的jar包，所有的class被一起打包到 demo.jar中了
+$ java -jar build/libs/demo.jar
+</pre>
+								</ol>
+							</li>
+						</ul>
 					</div>
 				</div>
 				<!-- item over -->
@@ -151,64 +737,12 @@
 				<a class="offset" id="java-class-loader"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">ClassLoader
-							原理分析</h3>
+						<h3 class="panel-title">ClassLoader 原理分析</h3>
 					</div>
 					<div class="panel-body">
-						<p>docs</p>
-
-						<pre>
-						 程序ls先列出非目录的文件项，然后是每一个目录中的“可显示”文件。如果
-       没有选项之外的参数【译注：即文件名部分为空】出现，缺省为   "."   （当前目录）。  选项“  -d
-       ”使得目录与非目录项同样对待。除非“ -a ” 选项出现，文 件名以“.”开始的文件不属“可显示”文件。
-
-       以当前目录为准，每一组文件（包括非目录文件项，以及每一内含文件的目录）分
-       别按文件名比较顺序排序。如果“             -l            ”选项存在，每组文件前显示一摘要行:
-       给出该组文件长度之和（以 512 字节为单位）。
-
-       输出是到标准输出（       stdout       ）。除非以“       -C       ”选项要求按多列输出，输出
-       将是一行一个。然而，输出到终端时，单列输出或多列输出是不确定的。可以分别  用选项“ -1 ” 或“
-       -C ”来强制按单列或多列输出。
-
-       -C     多列输出，纵向排序。
-
-       -F     每个目录名加“ / ”后缀，每个 FIFO 名加“ | ”后缀， 每个可运行名加“ * ”后缀。
-
-       -R     递归列出遇到的子目录。
-
-       -a     列出所有文件，包括以 "." 开头的隐含文件。
-
-       -c     使用“状态改变时间”代替“文件修改时间”为依据来排序 （使用“ -t  ”选项时）或列出（使用“
-              -l ”选项时）。
-
-       -d     将目录名象其它文件一样列出，而不是列出它们的内容。
-
-       -i     输出文件前先输出文件系列号（即      i      节点号:     i-node     number）。     -l
-              列出（以单列格式）文件模式（           file            mode            ），文件的链
-              接数，所有者名，组名，文件大小（以字节为单位），时间信
-              息，及文件名。缺省时，时间信息显示最近修改时间；可以以    选项“    -c    ”和“    -u
-              ”选择显示其它两种时间信息。对于设
-              备文件，原先显示文件大小的区域通常显示的是主要和次要的  号（majorand  minor  device
-              numbers）。
-
-       -q     将文件名中的非打印字符输出为问号。（对于到终端的输出这是缺省的。）
-
-       -r     逆序排列。
-
-       -t     按时间信息排序。
-
-       -u     使用最近访问时间代替最近修改时间为依据来排序（使用  “  -t ”选项时）或列出（使用“ -l
-              ”选项时）。
-
-       -1 单
-
-GNU 细
-       如果标准输出是终端，将多列输出（纵向排序）。
-
-       dir ( 也被安装为命令 d ) 等同于“ ls -C ”；即，文件
-              缺省是多列输出，纵向排序。vdir  (  也被安装为命令   v   )   等同于“   ls   -l   ”；
-              即，文件缺省是按长格式输出。
-						</pre>
+						<pre class="brush: java;">
+						
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -217,14 +751,13 @@ GNU 细
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -232,6 +765,7 @@ GNU 细
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>

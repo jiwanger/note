@@ -14,11 +14,13 @@
 <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 <title>NATE--笔记</title>
 <!-- Bootstrap -->
+<link href="../support/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+<!-- 
 <link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
 	rel="stylesheet">
-<!-- 
-<link href="../support/bootstrap/css/bootstrap.css" rel="stylesheet">
 -->
+
 
 <link rel="stylesheet"
 	href="../support/syntaxhighlighter/styles/shCoreDefault.css" />
@@ -458,14 +460,54 @@ $('#my-dropdown').on('hidden.bs.dropdown', function (e) {
 					<div class="panel-heading">
 						<h3 class="panel-title">
 							滚动监听 --
-							<code>affix.js</code>
+							<code>scrollspy.js</code>
 						</h3>
 					</div>
 					<div class="panel-body">
 						<p>
-							实例参见 --
-							<a href="affix.html" target="_blank">affix.html</a>
+							滚动监听（Scrollspy）插件，即自动更新导航插件，会根据滚动条的位置自动更新对应的导航目标。其基本的实现是随着您的滚动，基于滚动条的位置向导航栏添加
+							<code>.active</code>
 						</p>
+						<p>
+							一个实例：
+							<a href="scrollspy.html">scrollspy.html</a>
+						</p>
+						<ul>
+							<li>
+								<b>通过 data 属性</b>：向您想要监听的元素（通常是 body）添加 <b>data-spy="scroll"</b>。然后添加带有
+								Bootstrap <b>.nav</b> 组件的父元素的 ID 或 class 的属性 <b>data-target</b>。为了它能正常工作，您必须确保页面主体中有匹配您所要监听链接的
+								ID 的元素存在。
+								<pre class="brush: xml;">
+&lt;body data-spy="scroll" data-target=".navbar-example"&gt;
+...
+&lt;div class="navbar-example"&gt;
+	&lt;ul class="nav nav-tabs"&gt;
+		...
+	&lt;/ul&gt;
+&lt;/div&gt;
+...
+&lt;/body&gt;
+</pre>
+							</li>
+							<li>
+								<b>通过 JavaScript</b>：您可以通过 JavaScript 调用滚动监听，选取要监听的元素，然后调用 <b>.scrollspy()</b>
+								函数：
+								<pre class="brush: js;">
+$('body').scrollspy({ target: '.navbar-example' });
+
+// refresh 方法，当通过 JavaScript 调用 scrollspy 方法时，您需要调用 .refresh 方法来更新 DOM。
+$('[data-spy="scroll"]').each(function () {
+  var $spy = $(this).scrollspy('refresh')
+});
+
+// 事件监听
+$('#myScrollspy').on('activate.bs.scrollspy', function () {
+	var currentItem = $(".nav li.active > a").text();
+	$("#activeitem").html("目前您正在查看 - " + currentItem);
+});
+</pre>
+							</li>
+						</ul>
 					</div>
 				</div>
 				<!-- item over -->
@@ -1053,7 +1095,52 @@ $('#myCarousel').on('slid.bs.carousel',  function() {
 							<code>affix.js</code>
 						</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						实例参见 --
+						<a href="affix.html" target="_blank">affix.html</a>
+						<ul>
+							<li>
+								<p>
+									通过 data方式：只需要向需要监听的元素添加
+									<code>data-spy="affix"</code>
+									即可。请使用偏移来定义何时切换元素的锁定和移动。
+								</p>
+							</li>
+							<li>
+								<p>通过 JavaScript：</p>
+								<pre class="brush:js;">
+$('#myAffix').affix({
+	offset: {
+		top: 100, 
+		bottom: function () {
+			return (
+				this.bottom = $('.bs-footer').outerHeight(true));
+		 }
+	  }
+});
+</pre>
+							</li>
+						</ul>
+						<h2>通过 CSS 定位</h2>
+						<p>
+							在上面两种使用附加导航（Affix）插件的方式中，您都必须通过 CSS 定位内容。附加导航（Affix）插件在三种 class
+							之间切换，每种 class 都呈现了特定的状态：<i> .affix、.affix-top 和 .affix-bottom</i>。请按照下面的步骤，来为这三种状态设置您自己的
+							CSS（不依赖此插件）。
+						</p>
+						<ul class="list">
+							<li>
+								在开始时，插件添加 <b>.affix-top</b> 来指示元素在它的最顶端位置。这个时候不需要任何的 CSS 定位。
+							</li>
+							<li>
+								当滚动经过添加了附加导航（Affix）的元素时，应触发实际的附加导航（Affix）。此时 <b>.affix</b> 会替代 <b>.affix-top</b>，同时设置
+								<b>position: fixed;</b>（由 Bootstrap 的 CSS 代码提供）。
+							</li>
+							<li>
+								如果定义了底部偏移，当滚动到达该位置时，应把 <b>.affix</b> 替换为 <b>.affix-bottom</b>。由于偏移是可选的，假如设置了该偏移，则要求同时设置适当的
+								CSS。在这种情况下，请在必要的时候添加 <b>position: absolute;</b>。
+							</li>
+						</ul>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -3054,7 +3141,6 @@ $('#myCarousel').on('slid.bs.carousel',  function() {
 				</div>
 				<!-- item over -->
 
-
 				<!-- item start -->
 				<a class="offset" id="bootstrap-widget"></a>
 				<div class="panel panel-default">
@@ -3473,7 +3559,6 @@ $('#myCarousel').on('slid.bs.carousel',  function() {
 				</div>
 				<!-- item over -->
 
-
 				<!-- item start -->
 				<a id="bootstrap-list-group" class="offset"></a>
 				<div class="panel panel-default">
@@ -3529,7 +3614,6 @@ $('#myCarousel').on('slid.bs.carousel',  function() {
 				</div>
 				<!-- item over -->
 
-
 				<!-- item start -->
 				<a id="bootstrap-panel" class="offset"></a>
 				<div class="panel panel-default">
@@ -3583,7 +3667,6 @@ $('#myCarousel').on('slid.bs.carousel',  function() {
 					</div>
 				</div>
 				<!-- item over -->
-
 
 				<!-- item start -->
 				<a class="offset" id="bootstrap-glyphicons"></a>

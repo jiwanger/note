@@ -12,16 +12,20 @@
 <link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
 <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
 <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<title>NATE--笔记</title>
+<title>NATE--笔记--jQuery UI</title>
 <!-- Bootstrap -->
 <link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
-	rel="stylesheet">
+	rel="stylesheet" />
 <!-- 
 <link href="../support/bootstrap/css/bootstrap.css" rel="stylesheet">
 -->
+
+<link rel="stylesheet"
+	href="../support/jquery-ui/jquery-ui-1.12.1/jquery-ui.css" />
+
 <link type="text/css" rel="stylesheet"
 	href="../support/syntaxhighlighter/styles/shCoreDefault.css" />
-<link href="../commons/css/common.css" rel="stylesheet">
+<link href="../commons/css/common.css" rel="stylesheet" />
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -34,8 +38,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -62,20 +66,30 @@
 				<div class="panel panel-default"
 					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">jQuery UI</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
+						<a href="#" class="list-group-item">简介</a>
+						<a href="#jquery-ui-how" class="list-group-item">工作原理</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+							data-parent="#accordion" href="#jquery-ui-manual"
+							aria-expanded="true">
+							参考手册<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="jquery-ui-manual" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#" class="list-group-item">特效（Effects）</a>
+							<a href="#jquery-ui-" class="list-group-item">特效核心（Effects
+								Core）</a>
+							<a href="#jquery-ui-" class="list-group-item">交互（Interactions）</a>
+							<a href="#jquery-ui-" class="list-group-item">方法重载（Method
+								Overrides）</a>
+							<a href="#jquery-ui-" class="list-group-item">方法（Methods）</a>
+							<a href="#jquery-ui-" class="list-group-item">选择器（Selectors）</a>
+							<a href="#jquery-ui-" class="list-group-item">主题（Theming）</a>
+							<a href="#jquery-ui-" class="list-group-item">UI 核心（UI Core）</a>
+							<a href="#jquery-ui-" class="list-group-item">实用工具（Utilities）</a>
+							<a href="#jquery-ui-" class="list-group-item">小部件（Widgets）</a>
 						</div>
 						<a href="#java-class-loader" class="list-group-item">...</a>
 					</div>
@@ -88,16 +102,196 @@
 
 	<div class="container" style="margin-top: 70px;">
 		<div class="row">
-			<div class="col-md-3"></div>
-			<div class="col-md-9" style="float: left;">
+			<div class="col-md-9 col-md-push-3">
 				<!-- item start -->
+				<a id="#jquiry-ui-intro" class="offset"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 id="..." class="panel-title">...</h3>
+						<h3 class="panel-title">jQuery UI简介</h3>
 					</div>
 					<div class="panel-body">
-						
+
+						<h5 class="text-primary">jQuery UI简介</h5>
+						<p>jQuery UI包含了许多维持状态的小部件（Widget），因此，它与典型的 jQuery
+							插件使用模式略有不同。所有的 jQuery UI
+							小部件（Widget）使用相同的模式，所以，只要您学会使用其中一个，您就知道如何使用其他的小部件（Widget）。</p>
+						<h5 class="text-primary">jQuery UI组件构成</h5>
+						<p>jQuery UI 主要分为3个部分：交互、微件和效果库。</p>
+						<h6 class="text-primary">交互（Interactions）</h6>
+						<p>交互部件是一些与鼠标交互相关的内容，包括缩放（Resizable） , 拖动（Draggable） ,
+							放置（Droppable） , 选择（Selectable） , 排序（Sortable）等。</p>
+						<h6 class="text-primary">小部件（Widgets）</h6>
+						<p>主要是一些界面的扩展，包括折叠面板（Accordion） , 自动完成（Autocomplete） ,
+							按钮（Button） , 日期选择器（Datepicker） , 对话框（Dialog） , 菜单（Menu） ,
+							进度条（Progressbar） , 滑块（Slider） , 旋转器（Spinner） , 标签页（Tabs） ,
+							工具提示框（Tooltip）等，新版本的UI将包含更多的微件。</p>
+						<h6 class="text-primary">效果库（Effects）</h6>
+						<p>用于提供丰富的动画效果，让动画不再局限于jQuery的animate()方法。包括特效（Effect） ,
+							显示（Show） , 隐藏（Hide） , 切换（Toggle） , 添加 Class（Add Class） , 移除
+							Class（Remove Class） , 切换 Class（Toggle Class） , 转换 Class（Switch
+							Class） , 颜色动画（Color Animation）等。</p>
 					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="#jquiry-ui-how" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">工作原理</h3>
+					</div>
+					<div class="panel-body">
+						<p>jQuery UI 包含了许多维持状态的小部件（Widget），因此，它与典型的 jQuery
+							插件使用模式略有不同。其安装方式与大部分 jQuery 插件的安装方式类似，jQuery UI 的小部件是基于
+							部件库（Widget Factory） 创建的，小部件库提供了通用的
+							API。所以，只要您学会使用其中一个，您就知道如何使用其他的小部件（Widget）。本教程将通过 进度条（progressbar）
+							小部件代码实例介绍常见的功能。</p>
+						<h4 class="text-primary">安装</h4>
+						<p>
+							为了跟踪部件的状态，我们首先介绍一下小部件的全生命周期。当小部件安装时，生命周期开始。我们只需要在一个或多个元素上调用插件，即安装了小部件。
+						</p>
+						<pre class="brush: js;">$("#elem").progressbar();</pre>
+						<p>这将会初始化 jQuery 对象中的每个元素，在本例中，元素 id 为 "elem"。因为我们调用无参数的
+							.progressbar() 方法，小部件则会按照它的默认选项进行初始化。我们可以在安装时传递一组选项，这样既可重写默认选项。</p>
+						<pre class="brush: js;">$("#elem").progressbar({ value: 20 });</pre>
+						<p>安装时传递的选项数目多少可根据我们的需要而定。任何我们未传递的选项则都使用它们的默认值。
+							选项是小部件状态的组成部分，所以我们也可以在安装后再进行设置选项。我们将在后续的 option 方法中介绍这部分内容。</p>
+						<h4 class="text-primary">方法</h4>
+						<p>所有初始化后的动作都以方法调用的形式进行。为了在小部件上调用一个方法，我们可以向 jQuery
+							插件传递方法的名称。例如，为了在进度条（progressbar）小部件上调用 value 方法，我们应该使用：</p>
+						<pre class="brush: js;">$("#elem").progressbar("value");</pre>
+						<p>如果方法接受参数，我们可以在方法名后传递参数。例如，为了传递参数 40 给 value 方法，我们可以使用：</p>
+						<pre class="brush: js;">$("#elem").progressbar("value", 40);</pre>
+						<p>就像 jQuery 中的其他方法一样，大部分的小部件方法为链接返回 jQuery 对象。</p>
+						<pre class="brush: js;">$("#elem").progressbar("value", 90).addClass("almost-done");</pre>
+						<h5 class="text-primary">公共的方法</h5>
+						<p>每个小部件都有它自己的一套基于小部件所提供功能的方法。然而，有一些方法是所有小部件都共同具有的。</p>
+						<h4>
+							<code>option</code>
+						</h4>
+						<p>
+							正如我们前面所提到的，我们可以在初始化之后通过
+							<code>option</code>
+							方法改变选项。例如，我们可以通过调用
+							<code>option</code>
+							方法改变 progressbar（进度条）的 value 为 30。
+						</p>
+						<pre class="brush: js;">$("#elem").progressbar("option", "value", 30);</pre>
+						<p>
+							请注意，这与之前我们调用
+							<code>value</code>
+							方法的实例有所不同。在本实例中，我们调用
+							<code>option</code>
+							方法，改变 value 选项为 30。
+						</p>
+						<p>我们也可以为某个选项获取当前的值。</p>
+						<pre class="brush: js;">$("#elem").progressbar("option", "value");</pre>
+						<p>
+							另外，我们可以通过给
+							<code>option</code>
+							方法传递一个对象，一次更新多个选项。
+						</p>
+						<pre class="brush: js;">$("#elem").progressbar("option", {value: 100, disabled: true});</pre>
+						<p>
+							您也许注意到
+							<code>option</code>
+							方法有着与 jQuery 代码中取值器和设置器相同的标志，就像
+							<code>.css()</code>
+							和
+							<code>.attr()</code>
+							。唯一的不同就是您必须传递字符串 "option" 作为第一个参数。
+						</p>
+						<h4>
+							<code>disable</code>
+						</h4>
+						<p>
+							<code>disable</code>
+							方法禁用小部件。在进度条（progressbar）实例中，这会改变样式让进度条显示为禁用状态。
+						</p>
+						<pre class="brush: js;">$("#elem").progressbar("disable");</pre>
+						<p>
+							调用
+							<code>disable</code>
+							方法等同于设置
+							<code>disabled</code>
+							选项为
+							<code>true</code>
+							。
+						</p>
+						<h4>
+							<code>enable</code>
+						</h4>
+						<p>
+							<code>enable</code>
+							方法是
+							<code>disable</code>
+							方法的对立面。
+						</p>
+						<pre class="brush: js;">$("#elem").progressbar("enable");</pre>
+						<p>
+							调用
+							<code>enable</code>
+							方法等同于设置
+							<code>disabled</code>
+							选项为
+							<code>false</code>
+							。
+						</p>
+						<h4>
+							<code>destroy</code>
+						</h4>
+						<p>如果您不再需要小部件，那么可以销毁它，返回到最初的标记。这意味着小部件生命周期的终止。</p>
+						<pre class="brush: js;">$("#elem").progressbar("destroy");</pre>
+						<p>
+							一旦您销毁了一个小部件，您就不能在该部件上调用任何方法，除非您再次初始化这个小部件。如果您要移除元素，可以直接通过
+							<code>.remove()</code>
+							，也可以通过
+							<code>.html()</code>
+							或
+							<code>.empty()</code>
+							修改祖先，小部件会自动销毁。
+						</p>
+						<h4>
+							<code>widget</code>
+						</h4>
+						<p>
+							一些小部件生成包装器元素，或与原始元素断开连接的元素。在下面的实例中，
+							<code>widget</code>
+							将返回生成的元素。在进度条（progressbar）实例中，没有生成的包装器，
+							<code>widget</code>
+							方法返回原始的元素。
+						</p>
+						<pre class="brush: js;">$("#elem").progressbar("widget");</pre>
+						<h4 class="text-primary">事件</h4>
+						<p>所有的小部件都有跟他们各种行为相关的事件，用于在状态改变时通知您。对于大多数的小部件，当事件被触发时，名称以小部件名称为前缀。例如，我们可以绑定进度条（）的
+							change 事件，一旦值发生变化时就触发。</p>
+						<pre class="brush: js;">
+$("#elem").bind("progressbarchange", function() {
+	alert("The value has changed!");
+});
+</pre>
+						<p>每个事件都有一个相对应的回调，作为选项进行呈现。我们可以使用进度条（progressbar）的 change
+							回调，这等同于绑定 progressbarchange 事件。</p>
+						<pre class="brush: js;">
+$("#elem").progressbar({
+    change: function() {
+        alert("The value has changed!");
+    }
+});
+</pre>
+						<h5 class="text-primary">公共的事件</h5>
+						<p>大多数事件是针对特定的小部件，所有的小部件都有一个公共的 create 事件。该事件在小部件被创建时即被触发。</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="#jquiry-ui-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 			</div>
@@ -105,14 +299,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -121,7 +314,9 @@
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/jquery-ui/jquery-ui-1.12.1/jquery-ui.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
+	<script src="js/demo-jquery-ui.js"></script>
 </body>
 </html>
