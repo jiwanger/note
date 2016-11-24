@@ -91,8 +91,7 @@
 
 	<div class="container" style="margin-top: 70px;">
 		<div class="row">
-			<div class="col-md-3"></div>
-			<div class="col-md-9" style="float: left;">
+			<div class="col-md-9 col-md-push-3" style="float: left;">
 				<!-- item start -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -740,9 +739,113 @@ $ java -jar build/libs/demo.jar
 						<h3 class="panel-title">ClassLoader 原理分析</h3>
 					</div>
 					<div class="panel-body">
-						<pre class="brush: java;">
-						
-</pre>
+						<p>类的加载过程指通过一个类的全限定名来获取描述此类的二进制字节流，并将其转化为方法区的数据结构，进而生成一个java.lang.Class对象作为方法区这个类各种数据访问的入口。这个过程通过Java中的类加载器(ClassLoader)来完成。</p>
+						<p>
+							类装载器是用来把类(class)装载进JVM的<strong>。</strong>JVM规范定义了两种类型的类装载器：<strong>启动内装载器</strong><strong>(bootstrap)</strong><strong>和用户自定义装载器</strong><strong>(user-defined
+								class loader)</strong>。
+						</p>
+						<p class="h5 text-primary">一、Java默认提供的三个ClassLoader</p>
+						<p>
+							JVM在运行时会产生三个ClassLoader:Bootstrap&nbsp;ClassLoader、Extension&nbsp;ClassLoader和AppClassLoader（System
+							ClassLoader）。</p>
+						<p>
+							1、&nbsp;<strong>Bootstrap ClassLoader</strong>（启动类加载器）负责将%JAVA_HOME%/lib目录中或-Xbootclasspath中参数指定的路径中的，并且是虚拟机识别的（按名称）类库加载到JVM中。
+						</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;
+							也可以通过-Xbootclasspath参数定义。该ClassLoader不能被Java代码实例化，因为它是JVM本身的一部分。</p>
+						<p>
+							2、<strong>Extension ClassLoader</strong>（扩展类加载器）负责加载%JAVA_HOME%/lib/ext中的所有类库;
+						</p>
+						<p>&nbsp;&nbsp;
+							只要jar包放置这个位置，就会被虚拟机加载。一个常见的、类似的问题是，你将mysql的低版本驱动不小心放置在这儿，但你的Web应用程序的lib下有一个新的jdbc驱动，但怎么都报错，譬如不支持JDBC2.0的
+							DataSource，这时你就要当心你的新jdbc可能并没有被加载。这就是ClassLoader的delegate现象。常见的有log4j、
+							common-log、dbcp会出现问题，因为它们很容易被人塞到这个ext目录，或是Tomcat下的common/lib目录</p>
+						<p>3、<strong>Application ClassLoader</strong>：也称为System
+							ClassLoaer（加载%CLASSPATH%路径的类库）以及其它自定义的ClassLoader。缺省情况下，它是用户创建的任何ClassLoader的父ClassLoader。</p>
+						<p>&nbsp;&nbsp;&nbsp; 我们创建的standalone应用的main
+							class缺省情况下也是由它加载(通过Thread.currentThread().getContextClassLoader()查看)。实际开发中用ClassLoader更多时候是用其加载classpath下的资源，特别是配置文件，如ClassLoader.getResource()，比FileInputStream直接。</p>
+						<p>类加载器 classloader 是具有层次结构的，也就是父子关系。其中，Bootstrap
+							是所有类加载器的父亲。如下图所示：</p>
+						<p>
+							<img class="img-responsive center-block"
+								src="images/java-class-loader-p1.png" alt="">
+						</p>
+						<p>
+							<span style="font-size: 14px;"><span
+								style="color: #ff0000;"><strong>注意：</strong></span>&nbsp;除了Java默认提供的三个ClassLoader之外，用户还可以根据需要定义自已的ClassLoader，而这些自定义的ClassLoader都必须继承自java.lang.ClassLoader类，也包括Java提供的另外二个ClassLoader（Extension
+								ClassLoader和App ClassLoader）在内，但是Bootstrap
+								ClassLoader不继承自ClassLoader，因为它不是一个普通的Java类，底层由C++编写，已嵌入到了JVM内核当中，当JVM启动后，Bootstrap
+								ClassLoader也随着启动，负责加载完核心类库后，并构造Extension ClassLoader和App
+								ClassLoader类加载器。</span>
+						</p>
+						<p class="h5 text-primary">二、双亲委托模型</p>
+						<p>Java中ClassLoader的加载采用了双亲委托机制，采用双亲委托机制加载类的时候采用如下的几个步骤：</p>
+						<p>1、当前ClassLoader首先从自己已经加载的类中查询是否此类已经加载，如果已经加载则直接返回原来已经加载的类；</p>
+						<p class="alert alert-success">每个类加载器都有自己的加载缓存，当一个类被加载后就放入缓存，当下次加载时就可以直接返回了。</p>
+						<p>2、当前classLoader的缓存中没有找到被加载的类的时候，委托父类加载器去加载，父类加载器采用同样的策略，首先查看自己的缓存，然后委托父类的父类去加载，一直到bootstrp
+							ClassLoader.</p>
+						<p>3、当所有的父类加载器都没有加载的时候，再由当前的类加载器加载，并将其放入它自己的缓存中，以便下次有加载请求的时候直接返回。</p>
+						<p>
+							&nbsp;&nbsp;&nbsp; <strong>JVM中类加载的机制——双亲委派模型。这个模型要求除了Bootstrap
+								ClassLoader外，其余的类加载器都要有自己的父加载器。子加载器通过组合来复用父加载器的代码，而不是使用继承。在某个类加载器加载class文件时，它首先委托父加载器去加载这个类，依次传递到顶层类加载器(Bootstrap)。如果顶层加载不了（它的搜索范围中找不到此类），子加载器才会尝试加载这个类。</strong>
+						</p>
+						<p>
+							<strong>&nbsp;&nbsp;</strong>&nbsp;&nbsp;
+							当JVM请求某个ClassLoader实例使用这种模型来加载某个类时，首先检查该类是否已经被当前类加载器加载，如果没有被加载，则先委托给她的父类加载器即调用parent.loadClass()方法，这样一直请求调用到请求顶层类加载ClassLoader#findBootStrapClassOrNull,如果这个方法依然加载不了，则会调用ClassLoader#findClass()方法，这个方法再找不到则会抛出ClassNotFoundException异常，但是这里的异常会被捕获，然后返回给委托发起者，最后由当前类加载器的findClass()方法类加载类，如果找不到则抛出ClassNotFoundException异常。
+						</p>
+						<p>
+							<strong>&nbsp;&nbsp; <span style="color: #ff0000;">Class查找的位置和顺序依次是：Cache、parent、self</span></strong>
+						</p>
+
+						<p class="h5 text-primary">三、ClassLoader加载类的原理</p>
+
+						<h6 class="text-primary">1、原理介绍</h6>
+						<p>
+							ClassLoader使用的是双亲委托模型来搜索类的，每个ClassLoader实例都有一个父类加载器的引用（不是继承的关系，是一个包含的关系），虚拟机内置的类加载器（Bootstrap
+							ClassLoader）本身没有父类加载器，但可以用作其它ClassLoader实例的的父类加载器。当一个ClassLoader实例需要加载某个类时，它会试图亲自搜索某个类之前，先把这个任务委托给它的父类加载器，这个过程是由上至下依次检查的，首先由最顶层的类加载器Bootstrap
+							ClassLoader试图加载，如果没加载到，则把任务转交给Extension
+							ClassLoader试图加载，如果也没加载到，则转交给App ClassLoader
+							进行加载，如果它也没有加载得到的话，则返回给委托的发起者，由它到指定的文件系统或网络等URL中加载该类。如果它们都没有加载到这个类时，则抛出ClassNotFoundException异常。否则将这个找到的类生成一个类的定义，并将它加载到内存当中，最后返回这个类在内存中的Class实例对象。
+						</p>
+
+						<h6 class="text-primary">2、为什么要使用双亲委托这种模型呢？</h6>
+						<p>
+							因为这样可以避免重复加载，当父亲已经加载了该类的时候，就没有必要子ClassLoader再加载一次。考虑到安全因素，我们试想一下，如果不使用这种委托模式，那我们就可以随时使用自定义的String来动态替代java核心api中定义的类型，这样会存在非常大的安全隐患，而双亲委托的方式，就可以避免这种情况，因为String已经在启动时就被引导类加载器（Bootstrcp
+							ClassLoader）加载，所以用户自定义的ClassLoader永远也无法加载一个自己写的String，除非你改变JDK中ClassLoader搜索类的默认算法。
+						</p>
+						<h6 class="text-primary">3、JVM在搜索类的时候，如何判断两个class相同呢？</h6>
+						<p>
+							JVM在判定两个class是否相同时，不仅要判断两个类名是否相同，而且要判断是否由同一个类加载器实例加载的。只有两者同时满足的情况下，JVM才认为这两个class是相同的。就算两个class是同一份class字节码，如果被两个不同的ClassLoader实例所加载，JVM也会认为它们是两个不同class。
+						</p>
+						<p>
+							比如网络上的一个Java类org.classloader.simple.NetClassLoaderSimple，javac编译之后生成字节码文件NetClassLoaderSimple.class，ClassLoaderA和ClassLoaderB这两个类加载器并读取了NetClassLoaderSimple.class文件，并分别定义出了java.lang.Class实例来表示这个类，对于JVM来说，它们是两个不同的实例对象，但它们确实是同一份字节码文件，如果试图将这个Class实例生成具体的对象进行转换时，就会抛运行时异常java.lang.ClassCaseException，提示这是两个不同的类型。
+						</p>
+						<p>
+							<strong>在一个单虚拟机环境下，标识一个类有两个因素：class的全路径名、该类的ClassLoader。</strong>
+						</p>
+						<h6 class="text-primary">4、ClassLoader 体系架构</h6>
+						<p>
+							<img class="img-responsive center-block"
+								src="images/java-class-loader-p2.png" alt="">
+						</p>
+						<p class="h5 text-primary">四、自定义ClassLoader</p>
+						<p class="h5 text-primary">为什么我们需要自定义类加载？</p>
+						<p>
+							<span class="text-danger">主要原因：</span>1、需要加载外部的Class,JVM提供的默认ClassLoader只能加载指定目录下的.jar和.class,如果我们想加载其它位置的class或者jar时，这些默认的类加载器是加载不到的（如果是文件格式必须配置到classpath）。例如：我们需要加载网络上的一个class字节流；
+						</p>
+						<p>
+							2、需要实现Class的隔离性。目前我们常用的Web服务器，如tomcat、jetty都实现了自己定义的类加载，这些类加载主要完成以下三个功能：</p>
+						<ul>
+							<li>A.实现加载Web应用指定目录下的jar和class</li>
+							<li>B.实现部署在容器中的Web应用程共同使用的类库的共享</li>
+							<li>C.实现部署在容器中各个Web应用程序自己私有类库的相互隔离</li>
+						</ul>
+						<p class="h5 text-primary">如何自定义类加载？</p>
+						<ul>
+							<li>继承java.lang.ClassLoader</li>
+							<li>覆写父类的findClass()方法</li>
+						</ul>
+
 					</div>
 				</div>
 				<!-- item over -->
