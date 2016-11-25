@@ -1,3 +1,16 @@
+/** theme 切换 */
+function themeSwither(){
+	$(".theme a").on("click", function(){
+		var title = $(this).attr("title");
+		if("default" == title){
+			$("#styles").attr("href", "../support/bootstrap/css/bootstrap.css");
+		} else {
+			$("#styles").attr("href", "../support/bootstrap/theme/"+ title + "-bootstrap.min.css");						
+		}
+	});
+}
+
+
 $(function() {
 	$("[data-toggle='tooltip']").tooltip();
 	$("[data-toggle='popover']").popover();
@@ -60,4 +73,6 @@ $(function() {
 		var value = $(this).attr('value');
 		$('#myCarousel').carousel(value);
 	});
+	
+	themeSwither();
 });
