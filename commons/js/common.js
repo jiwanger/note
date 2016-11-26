@@ -1,4 +1,6 @@
-SyntaxHighlighter.all();
+if ('undefined' != typeof SyntaxHighlighter) {
+	SyntaxHighlighter.all();
+}
 
 function init_menu(arr) {
 	var pathname = window.location.pathname;
