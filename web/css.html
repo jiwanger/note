@@ -145,7 +145,13 @@
 						<p>CSS -- 层叠样式表(英文全称：Cascading Style
 							Sheets)是一种用来表现HTML（标准通用标记语言的一个应用）或XML（标准通用标记语言的一个子集）等文件样式的计算机语言。CSS不仅可以静态地修饰网页，还可以配合各种脚本语言动态地对网页各元素进行格式化</p>
 						<p>CSS 能够对网页中元素位置的排版进行像素级精确控制，支持几乎所有的字体字号样式，拥有对网页对象和模型样式编辑的能力。</p>
-
+						<p>CSS 样式优先级:</p>
+						<ul>
+							<li>浏览器缺省设置</li>
+							<li>外部样式表</li>
+							<li>内部样式表</li>
+							<li>内联样式</li>
+						</ul>
 					</div>
 				</div>
 				<!-- item over -->
@@ -206,10 +212,10 @@
 										<div class="col-md-9 col-md-push-3" style="margin-top: 19px;">&nbsp;</div>
 									</div>
 									<div class="row">
-										<div class="col-md-8 col-md-push-4" style="margin-top: 9px;">&nbsp;</div>
+										<div class="col-md-12" style="margin-top: 9px;">&nbsp;</div>
 									</div>
 									<div class="row">
-										<div class="col-md-8 col-md-push-4" style="margin-top: 12px;">&nbsp;</div>
+										<div class="col-md-12" style="margin-top: 12px;">&nbsp;</div>
 									</div>
 									<div class="row">
 										<div class="col-md-9 col-md-push-3" style="margin-top: 9px;">&nbsp;</div>
@@ -336,14 +342,442 @@
 				<!-- item over -->
 
 				<!-- item start -->
-				<a id="css-selector" class="offset"></a>
+				<a id="css-media" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">媒体查询</h3>
+					</div>
+					<div class="panel-body">
+						<p>使用 @media 查询，你可以针对不同的媒体类型定义不同的样式。</p>
+						<p>@media 可以针对不同的屏幕尺寸设置不同的样式，特别是如果你需要设置设计响应式的页面，@media 是非常有用的。</p>
+						<p>当你重置浏览器大小的过程中，页面也会根据浏览器的宽度和高度重新渲染页面。</p>
+						<pre class="brush: css;">
+/*  不同媒体类型使用不同的css代码 */
+@media mediatype and|not|only (media feature) {
+    CSS-Code;
+}
 
+/* 不同媒体类型使用不同的css文件 */
+&lt;link rel="stylesheet" media="mediatype and|not|only (media feature)" href="mystylesheet.css"&gt;
+</pre>
+						<h5 class="text-primary">媒体类型</h5>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th style="width: 25%">值</th>
+									<th>描述</th>
+								</tr>
+								<tr>
+									<td>all</td>
+									<td>用于所有设备</td>
+								</tr>
+								<tr>
+									<td>print</td>
+									<td>用于打印机和打印预览</td>
+								</tr>
+								<tr>
+									<td>screen</td>
+									<td>用于电脑屏幕，平板电脑，智能手机等。</td>
+								</tr>
+								<tr>
+									<td>speech</td>
+									<td>应用于屏幕阅读器等发声设备</td>
+								</tr>
+							</tbody>
+						</table>
+						<h5 class="text-primary">媒体功能</h5>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th style="width: 25%">值</th>
+									<th>描述</th>
+								</tr>
+								<tr>
+									<td style="height: 31px">aspect-ratio</td>
+									<td style="height: 31px">定义输出设备中的页面可见区域宽度与高度的比率</td>
+								</tr>
+								<tr>
+									<td>color</td>
+									<td>定义输出设备每一组彩色原件的个数。如果不是彩色设备，则值等于0</td>
+								</tr>
+								<tr>
+									<td>color-index</td>
+									<td>定义在输出设备的彩色查询表中的条目数。如果没有使用彩色查询表，则值等于0</td>
+								</tr>
+								<tr>
+									<td>device-aspect-ratio</td>
+									<td>定义输出设备的屏幕可见宽度与高度的比率。</td>
+								</tr>
+								<tr>
+									<td>device-height</td>
+									<td>定义输出设备的屏幕可见高度。</td>
+								</tr>
+								<tr>
+									<td>device-width</td>
+									<td>定义输出设备的屏幕可见宽度。</td>
+								</tr>
+								<tr>
+									<td>grid</td>
+									<td>用来查询输出设备是否使用栅格或点阵。</td>
+								</tr>
+								<tr>
+									<td>height</td>
+									<td>定义输出设备中的页面可见区域高度。</td>
+								</tr>
+								<tr>
+									<td>max-aspect-ratio</td>
+									<td>定义输出设备的屏幕可见宽度与高度的最大比率。</td>
+								</tr>
+								<tr>
+									<td>max-color</td>
+									<td>定义输出设备每一组彩色原件的最大个数。</td>
+								</tr>
+								<tr>
+									<td>max-color-index</td>
+									<td>定义在输出设备的彩色查询表中的最大条目数。</td>
+								</tr>
+								<tr>
+									<td>max-device-aspect-ratio</td>
+									<td>定义输出设备的屏幕可见宽度与高度的最大比率。</td>
+								</tr>
+								<tr>
+									<td>max-device-height</td>
+									<td>定义输出设备的屏幕可见的最大高度。</td>
+								</tr>
+								<tr>
+									<td>max-device-width</td>
+									<td>定义输出设备的屏幕最大可见宽度。</td>
+								</tr>
+								<tr>
+									<td>max-height</td>
+									<td>定义输出设备中的页面最大可见区域高度。</td>
+								</tr>
+								<tr>
+									<td>max-monochrome</td>
+									<td>定义在一个单色框架缓冲区中每像素包含的最大单色原件个数。</td>
+								</tr>
+								<tr>
+									<td>max-resolution</td>
+									<td>定义设备的最大分辨率。</td>
+								</tr>
+								<tr>
+									<td>max-width</td>
+									<td>定义输出设备中的页面最大可见区域宽度。</td>
+								</tr>
+								<tr>
+									<td>min-aspect-ratio</td>
+									<td>定义输出设备中的页面可见区域宽度与高度的最小比率。</td>
+								</tr>
+								<tr>
+									<td>min-color</td>
+									<td>定义输出设备每一组彩色原件的最小个数。</td>
+								</tr>
+								<tr>
+									<td>min-color-index</td>
+									<td>定义在输出设备的彩色查询表中的最小条目数。</td>
+								</tr>
+								<tr>
+									<td>min-device-aspect-ratio</td>
+									<td>定义输出设备的屏幕可见宽度与高度的最小比率。</td>
+								</tr>
+								<tr>
+									<td>min-device-width</td>
+									<td>定义输出设备的屏幕最小可见宽度。</td>
+								</tr>
+								<tr>
+									<td>min-device-height</td>
+									<td>定义输出设备的屏幕的最小可见高度。</td>
+								</tr>
+								<tr>
+									<td>min-height</td>
+									<td>定义输出设备中的页面最小可见区域高度。</td>
+								</tr>
+								<tr>
+									<td>min-monochrome</td>
+									<td>定义在一个单色框架缓冲区中每像素包含的最小单色原件个数</td>
+								</tr>
+								<tr>
+									<td>min-resolution</td>
+									<td>定义设备的最小分辨率。</td>
+								</tr>
+								<tr>
+									<td>min-width</td>
+									<td>定义输出设备中的页面最小可见区域宽度。</td>
+								</tr>
+								<tr>
+									<td>monochrome</td>
+									<td>定义在一个单色框架缓冲区中每像素包含的单色原件个数。如果不是单色设备，则值等于0</td>
+								</tr>
+								<tr>
+									<td>orientation</td>
+									<td>定义输出设备中的页面可见区域高度是否大于或等于宽度。</td>
+								</tr>
+								<tr>
+									<td>resolution</td>
+									<td>定义设备的分辨率。如：96dpi, 300dpi, 118dpcm</td>
+								</tr>
+								<tr>
+									<td>scan</td>
+									<td>定义电视类设备的扫描工序。</td>
+								</tr>
+								<tr>
+									<td>width</td>
+									<td>定义输出设备中的页面可见区域宽度。</td>
+								</tr>
+							</tbody>
+						</table>
+						<p class="text-primary">example</p>
+						<p>
+							当
+							<code>宽度 &gt; 960px</code>
+							时为一个样式，
+							<code>768px &lt; 宽度 &lt; 960px</code>
+							时是一个样式，
+							<code>768px &gt; 宽度</code>
+							时，又是一个样式
+						</p>
+						<pre class="brush: css;">
+.my-grid [class*="col-"] {
+    width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+    /* For tablets: */
+    .my-grid .col-m-12 {width: 8.33%;}
+    .my-grid .col-m-2 {width: 16.66%;}
+    .my-grid .col-m-3 {width: 25%;}
+    .my-grid .col-m-4 {width: 33.33%;}
+    .my-grid .col-m-5 {width: 41.66%;}
+    .my-grid .col-m-6 {width: 50%;}
+    .my-grid .col-m-7 {width: 58.33%;}
+    .my-grid .col-m-8 {width: 66.66%;}
+    .my-grid .col-m-9 {width: 75%;}
+    .my-grid .col-m-10 {width: 83.33%;}
+    .my-grid .col-m-11 {width: 91.66%;}
+    .my-grid .col-m-12 {width: 100%;}
+}
+@media only screen and (min-width: 960px) {
+    /* For desktop: */
+	.my-grid .col-1 {width: 8.33%;}
+    .my-grid .col-2 {width: 16.66%;}
+    .my-grid .col-3 {width: 25%;}
+    .my-grid .col-4 {width: 33.33%;}
+    .my-grid .col-5 {width: 41.66%;}
+    .my-grid .col-6 {width: 50%;}
+    .my-grid .col-7 {width: 58.33%;}
+    .my-grid .col-8 {width: 66.66%;}
+    .my-grid .col-9 {width: 75%;}
+    .my-grid .col-10 {width: 83.33%;}
+    .my-grid .col-11 {width: 91.66%;}
+    .my-grid .col-12 {width: 100%;}
+}						
+</pre>
+						<div class="my-grid">
+							<div class="header">
+								<h1>Chania</h1>
+							</div>
+
+							<div class="row">
+								<div class="col-3 col-m-3 menu">
+									<ul>
+										<li>The Flight</li>
+										<li>The City</li>
+										<li>The Island</li>
+										<li>The Food</li>
+									</ul>
+								</div>
+
+								<div class="col-6 col-m-9">
+									<h1>The City</h1>
+									<p>Chania is the capital of the Chania region on the island
+										of Crete. The city can be divided in two parts, the old town
+										and the modern city.</p>
+								</div>
+
+								<div class="col-3 col-m-12">
+									<div class="aside">
+										<h2>What?</h2>
+										<p>Chania is a city on the island of Crete.</p>
+										<h2>Where?</h2>
+										<p>Crete is a Greek island in the Mediterranean Sea.</p>
+									</div>
+								</div>
+
+							</div>
+
+							<div class="footer">
+								<p>Resize the browser window to see how the content respond
+									to the resizing.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="css-selector" class="offset"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">选择器</h3>
 					</div>
 					<div class="panel-body">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<a data-toggle="collapse" data-parent="#accordion"
+									href="#css-selector-examples" aria-expanded="true"
+									class="code-header">
+									<span class="glyphicon glyphicon-plus"></span> View Example
+								</a>
+							</div>
+							<div id="css-selector-examples"
+								class="panel-body panel-collapse collapse in" style=""
+								aria-expanded="true">
+								<div class="row">
+									<div class="col-md-8" style="padding-right: 0px;">
+										<p class="text-primary">css code:</p>
+										<pre class="brush: css;">
+/* 1.设置所有元素文字颜色 */
+#css-selector-examples * {
+	color: #993333;
+}
+/* 2.设置指定class元素文字颜色  */
+#css-selector-examples .css-seletor-class>p {
+	color: #009e00;
+}
+/* 3.设置指定id元素文字颜色  */
+#css-selector-examples #css-seletor-id>p {
+	color: #0a1a73;
+}
+/* 4.设置所有p元素文字大小 */
+#css-selector-examples p {
+	font-size: 12px;
+}
+/* 5.同时设置多个元素 */
+#css-selector-examples .first, #css-selector-examples .end {
+	color: #333333;
+	font-size: 16px;
+}
+/* 6.指定元素的子元素  */
+#css-selector-examples #css-seletor-child p {
+	color: #05d0b8;
+}
+/* 7.同级的下一个指定元素文字颜色 */
+#css-selector-examples #css-seletor-next+li>p {
+	color: #0a1a73;
+}
+/* 8.指定元素的直接子元素文字大小 */
+#css-selector-examples #css-seletor-derect-child>p {
+	font-size: 14px;
+}
+/* 9.所有带有指定属性元素 */
+#css-selector-examples [title] p {
+	color: #008f1c;
+}
+/* 10.所有带有指定属性和属性值的元素 */
+#css-selector-examples [title="value"] p {
+	color: #a66902;
+}
+/* 11.所有带有指定属性,属性值包括指定单词的元素 */
+#css-selector-examples [title~="test"] p {
+	color: #4f0038;
+}
+/* 12.选择一个指定属性的起始值为指定值的所有元素 */
+#css-selector-examples [title|="my"] p {
+	color: #331ebb;
+}
+/* 12. */
 
+/* 13. */
+
+/* 14. */
+
+/* 15. */
+
+/* 16. */
+
+/* 17. */
+</pre>
+									</div>
+									<div class="col-md-4" style="padding-left: 0px;">
+										<p class="text-primary">examples:</p>
+										<ol style="padding-left: 15px;">
+											<li>
+												<p>
+													<code>*</code>
+													-- 设置所有元素文字颜色
+												</p>
+											</li>
+											<li class="css-seletor-class">
+												<p>
+													<code>.class</code>
+													-- 设置指定class元素文字颜色
+												</p>
+											</li>
+											<li id="css-seletor-id">
+												<p>
+													<code>#id</code>
+													-- 设置指定id元素文字颜色
+												</p>
+											</li>
+											<li>
+												<p>
+													<code>element</code>
+													-- 设置所有p元素文字大小
+												</p>
+											</li>
+											<li>
+												<p>
+													<code>element,element</code>
+													-- <span class="first">同</span>时设置多个元<span class="end">素</span>
+												</p>
+											</li>
+											<li id="css-seletor-child">
+												<p>
+													<code>element element</code>
+													-- 指定元素的子元素
+												</p>
+											</li>
+											<li id="css-seletor-next">
+												<p>
+													<code>element + element</code>
+													-- 同级的下一个指定元素文字颜色
+												</p>
+											</li>
+											<li id="css-seletor-derect-child">
+												<p>
+													<code>element > element</code>
+													-- 指定元素的直接子元素文字大小
+												</p>
+											</li>
+											<li title="attribute">
+												<p>
+													<code>[attribute]</code>
+													-- 带有指定属性元素
+												</p>
+											</li>
+											<li title="value">
+												<p>
+													<code>[attribute=value]</code>
+													-- 所有带有指定属性和属性值的元素
+												</p>
+											</li>
+											<li title="value test">
+												<p>
+													<code>[attribute~=word]</code>
+													-- 所有带有指定属性,属性值包括指定单词的元素
+												</p>
+											</li>
+											<li title="my-title">
+												<p>
+													<code>[attribute|=value]</code>
+													-- 选择一个指定属性的起始值为指定值的所有元素
+												</p>
+											</li>
+										</ol>
+									</div>
+								</div>
+							</div>
+						</div>
 						<table
 							class="table table-bordered table-responsive table-striped runoob"
 							data-base="http://www.runoob.com/cssref/">
@@ -715,19 +1149,6 @@
 
 						</table>
 					</div>
-				</div>
-				<!-- item over -->
-
-
-
-				<!-- item start -->
-				<a id="css-media" class="offset"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">媒体查询</h3>
-					</div>
-					<div class="panel-body"></div>
-
 				</div>
 				<!-- item over -->
 

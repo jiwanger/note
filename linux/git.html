@@ -12,7 +12,7 @@
 <link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
 <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
 <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<title>NATE--笔记</title>
+<title>NATE--笔记--GIT</title>
 <!-- Bootstrap -->
 <link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
 	rel="stylesheet">
@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -62,20 +62,20 @@
 				<div class="panel panel-default"
 					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">GIT</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
+						<a href="#git-intro" class="list-group-item">简介</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
 							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+							Git 基础<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
 						<div id="java-tools" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#git-init" class="list-group-item">初始化一个git仓库</a>
+							<a href="#git-gitignore" class="list-group-item">gitignore
+								文件配置</a>
+							<a href="#git-command" class="list-group-item">常用命令</a>
 						</div>
 						<a href="#java-class-loader" class="list-group-item">...</a>
 					</div>
@@ -88,17 +88,165 @@
 
 	<div class="container" style="margin-top: 70px;">
 		<div class="row">
-			<div class="col-md-3"></div>
-			<div class="col-md-9" style="float: left;">
+			<div class="col-md-9 col-md-push-3" style="float: left;">
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="git-intro"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">简介</h3>
+					</div>
+					<div class="panel-body">
+
+						<p>对于任何一个文件,在 Git 内都只有三种状态:</p>
+						<ul>
+							<li>已提交(committed) -- 已提交表示该文件已经被安全地保存在本地数据库中了</li>
+							<li>已修改(modified) -- 已修改表示修改了某个文件,但还没有提交保存</li>
+							<li>已暂存(staged) -- 已暂存表示把已修改的文件放在下次提交时要保存的清单中</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="git-init"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">初始化一个git仓库</h3>
+					</div>
+					<div class="panel-body">
+						<ul>
+							<li>
+								<p>第一种是在现存的目录下,通过导入所有文件来创建新的 Git 仓库。</p>
+								<pre class="brush: bash;">
+$ git init
+$ git add .
+$ git commit -m "initlize"
+</pre>
+							</li>
+							<li>
+								<p>第二种是从已有的 Git 仓库克隆出一个新的镜像仓库来。</p>
+								<pre class="brush: bash;">
+$ git clone https://www.github.com/jiwanger/note.git
+</pre>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="git-gitignore"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">gitignore 文件配置</h3>
+					</div>
+					<div class="panel-body">
+						<p>文件 .gitignore 的格式规范如下:</p>
+						<ul>
+							<li>所有空行或者以注释符号 # 开头的行都会被 Git 忽略。</li>
+							<li>可以使用标准的 glob 模式匹配。</li>
+							<li>匹配模式最后跟反斜杠( / )说明要忽略的是目录。</li>
+							<li>要忽略指定模式以外的文件或目录,可以在模式前加上惊叹号( ! )取反。
+						</ul>
+						<pre class="brush:bash; ">
+# 此为注释 – 将被 Git 忽略
+*~			# 忽略所有 ~ 结尾的文件, 如 vim 的副本文件就是这样
+.settings/	# eclipse 的项目配置目录
+.project	# eclipse .project文件
+*.a			# 忽略所有 .a 结尾的文件
+!lib.a		# 但 lib.a 除外
+/TODO		# 仅仅忽略项目根目录下的 TODO 文件,不包括 subdir/TODO
+build/		# 忽略 build/ 目录下的所有文件
+doc/*.txt	# 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="git-command"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">常用命令</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: bash;">
+$ git status							# 检查当前文件状态
+$ git add file/path						# 跟踪新文件/目录, 暂存已修改文件
+$ git commit -m "更改说明"
+$ git commit -am "更改说明"
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="git-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">...</h3>
 					</div>
-					<div class="panel-body">
-						
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="git-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
 					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="git-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="git-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="git-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="git-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="git-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 			</div>
@@ -106,14 +254,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -121,7 +268,7 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

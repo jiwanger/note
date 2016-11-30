@@ -12,7 +12,7 @@
 <link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
 <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
 <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<title>NATE--笔记</title>
+<title>NATE--笔记--JAVASCRIPT</title>
 <!-- Bootstrap -->
 <link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
 	rel="stylesheet">
@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -62,22 +62,60 @@
 				<div class="panel panel-default"
 					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">JAVASCRIPT</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
+						<a href="#" class="list-group-item">简介</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+							data-parent="#accordion" href="#js-object-manual"
+							aria-expanded="true">
+							JavaScript 对象参考手册<span class="caret pull-right"
+								style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="js-object-manual" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#js-array" class="list-group-item">Array 对象</a>
+							<a href="#js-boolean" class="list-group-item">Boolean 对象</a>
+							<a href="#js-date" class="list-group-item">Date 对象</a>
+							<a href="#js-math" class="list-group-item">Math 对象</a>
+							<a href="#js-number" class="list-group-item">Number 对象</a>
+							<a href="#js-string" class="list-group-item">String 对象</a>
+							<a href="#js-regexp" class="list-group-item">RegExp 对象</a>
+							<a href="#js-global" class="list-group-item">全局属性和函数</a>
 						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+
+						<a class="list-group-item active dropdown" data-toggle="collapse"
+							data-parent="#accordion" href="#js-browser-manual"
+							aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+							Browser 对象参考手册<span class="caret pull-right"
+								style="margin-top: 5px;"></span>
+						</a>
+						<div id="js-browser-manual" class="panel-collapse collapse"
+							role="tabpanel">
+							<a href="#js-window" class="list-group-item">Window 对象</a>
+							<a href="#js-navigator" class="list-group-item">Navigator 对象</a>
+							<a href="#js-screen" class="list-group-item">Screen 对象</a>
+							<a href="#js-history" class="list-group-item">History 对象</a>
+							<a href="#js-location" class="list-group-item">Location 对象</a>
+						</div>
+						<a class="list-group-item active dropdown" data-toggle="collapse"
+							data-parent="#accordion" href="#js-dom-manual"
+							aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+							HTML DOM 对象参考手册<span class="caret pull-right"
+								style="margin-top: 5px;"></span>
+						</a>
+						<div id="js-dom-manual" class="panel-collapse collapse"
+							role="tabpanel">
+							<a href="#js-document" class="list-group-item">HTML Document
+								对象</a>
+							<a href="#js-element" class="list-group-item">HTML Element 对象</a>
+							<a href="#js-attributes" class="list-group-item">HTML
+								Attributes 对象</a>
+							<a href="#js-events" class="list-group-item">HTML Events 对象</a>
+						</div>
+						<a href="#js-dom-element" class="list-group-item">HTML DOM
+							元素对象</a>
+						<a href="#js-" class="list-group-item">...</a>
 					</div>
 				</div>
 			</div>
@@ -88,16 +126,3395 @@
 
 	<div class="container" style="margin-top: 70px;">
 		<div class="row">
-			<div class="col-md-3"></div>
-			<div class="col-md-9" style="float: left;">
+			<div class="col-md-9 col-md-push-3" style="float: left;">
 				<!-- item start -->
+				<a id="js-intro" class="offset"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 id="..." class="panel-title">...</h3>
+						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-						
+						<p>JavaScript一种直译式脚本语言，是一种动态类型、弱类型、基于原型的语言，内置支持类型。它的解释器被称为JavaScript引擎，为浏览器的一部分，广泛用于客户端的脚本语言，最早是在HTML（标准通用标记语言下的一个应用）网页上使用，用来给HTML网页增加动态功能。</p>
+						<p>JavaScript组成部分:</p>
+						<ul>
+							<li>ECMAScript，描述了该语言的语法和基本对象。</li>
+							<li>文档对象模型（DOM），描述处理网页内容的方法和接口。</li>
+							<li>浏览器对象模型（BOM），描述与浏览器进行交互的方法和接口。</li>
+						</ul>
 					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-array" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Array 对象</h3>
+					</div>
+					<div class="panel-body">
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th style="width: 20%">方法</th>
+									<th>描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-concat-array.html">concat()</a></td>
+									<td>连接两个或更多的数组，并返回结果。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-every.html">every()</a></td>
+									<td>检测数值元素的每个元素是否都符合条件。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-filter.html">filter()</a></td>
+									<td>检测数值元素，并返回符合条件所有元素的数组。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-indexof-array.html">indexOf()</a></td>
+									<td>搜索数组中的元素，并返回它所在的位置。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-join.html">join()</a></td>
+									<td>把数组的所有元素放入一个字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-lastindexof-array.html">lastIndexOf()</a></td>
+									<td>返回一个指定的字符串值最后出现的位置，在一个字符串中的指定位置从后向前搜索。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-map.html">map()</a></td>
+									<td>通过指定函数处理数组的每个元素，并返回处理后的数组。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-pop.html">pop()</a></td>
+									<td>删除数组的最后一个元素并返回删除的元素。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-push.html">push()</a></td>
+									<td>向数组的末尾添加一个或更多元素，并返回新的长度。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-reverse.html">reverse()</a></td>
+									<td>反转数组的元素顺序。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-shift.html">shift()</a></td>
+									<td>删除并返回数组的第一个元素。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-slice-array.html">slice()</a></td>
+									<td>选取数组的的一部分，并返回一个新数组。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-some.html">some()</a></td>
+									<td>检测数组元素中是否有元素符合指定条件。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-sort.html">sort()</a></td>
+									<td>对数组的元素进行排序。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-splice.html">splice()</a></td>
+									<td>从数组中添加或删除元素。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-tostring-array.html">toString()</a></td>
+									<td>把数组转换为字符串，并返回结果。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-unshift.html">unshift()</a></td>
+									<td>向数组的开头添加一个或更多元素，并返回新的长度。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-valueof-array.html">valueOf()</a></td>
+									<td>返回数组对象的原始值。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-boolean" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Boolean 对象</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">Boolean 对象属性</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">属性</th>
+									<th width="80%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-constructor-boolean.html">constructor</a></td>
+									<td>返回对创建此对象的 Boolean 函数的引用</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-prototype-boolean.html">prototype</a></td>
+									<td>使您有能力向对象添加属性和方法。</td>
+								</tr>
+							</tbody>
+						</table>
+						<h5 class="text-primary">Boolean 对象方法</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">方法</th>
+									<th width="80%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-tostring-boolean.html">toString()</a></td>
+									<td>把布尔值转换为字符串，并返回结果。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-valueof-boolean.html">valueOf()</a></td>
+									<td>返回 Boolean 对象的原始值。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-date" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Date 对象</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">Date 对象属性</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="25%" align="left">属性</th>
+									<th width="75%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-constructor-date.html">constructor</a></td>
+									<td>返回对创建此对象的 Date 函数的引用。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-prototype-date.html">prototype</a></td>
+									<td>使您有能力向对象添加属性和方法。</td>
+								</tr>
+							</tbody>
+						</table>
+						<h5 class="text-primary">Date 对象方法</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="25%" align="left">方法</th>
+									<th width="75%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-getdate.html">getDate()</a></td>
+									<td>从 Date 对象返回一个月中的某一天 (1 ~ 31)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getday.html">getDay()</a></td>
+									<td>从 Date 对象返回一周中的某一天 (0 ~ 6)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getfullyear.html">getFullYear()</a></td>
+									<td>从 Date 对象以四位数字返回年份。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-gethours.html">getHours()</a></td>
+									<td>返回 Date 对象的小时 (0 ~ 23)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getmilliseconds.html">getMilliseconds()</a></td>
+									<td>返回 Date 对象的毫秒(0 ~ 999)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getminutes.html">getMinutes()</a></td>
+									<td>返回 Date 对象的分钟 (0 ~ 59)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getmonth.html">getMonth()</a></td>
+									<td>从 Date 对象返回月份 (0 ~ 11)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getseconds.html">getSeconds()</a></td>
+									<td>返回 Date 对象的秒数 (0 ~ 59)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-gettime.html">getTime()</a></td>
+									<td>返回 1970 年 1 月 1 日至今的毫秒数。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-gettimezoneoffset.html">getTimezoneOffset()</a></td>
+									<td>返回本地时间与格林威治标准时间 (GMT) 的分钟差。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getutcdate.html">getUTCDate()</a></td>
+									<td>根据世界时从 Date 对象返回月中的一天 (1 ~ 31)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getutcday.html">getUTCDay()</a></td>
+									<td>根据世界时从 Date 对象返回周中的一天 (0 ~ 6)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getutcfullyear.html">getUTCFullYear()</a></td>
+									<td>根据世界时从 Date 对象返回四位数的年份。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getutchours.html">getUTCHours()</a></td>
+									<td>根据世界时返回 Date 对象的小时 (0 ~ 23)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getutcmilliseconds.html">getUTCMilliseconds()</a></td>
+									<td>根据世界时返回 Date 对象的毫秒(0 ~ 999)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getutcminutes.html">getUTCMinutes()</a></td>
+									<td>根据世界时返回 Date 对象的分钟 (0 ~ 59)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getutcmonth.html">getUTCMonth()</a></td>
+									<td>根据世界时从 Date 对象返回月份 (0 ~ 11)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-getutcseconds.html">getUTCSeconds()</a></td>
+									<td>根据世界时返回 Date 对象的秒钟 (0 ~ 59)。</td>
+								</tr>
+								<tr>
+									<td>getYear()</td>
+									<td><span class="text-danger">已废弃。</span> 请使用
+										getFullYear() 方法代替。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-parse.html">parse()</a></td>
+									<td>返回1970年1月1日午夜到指定日期（字符串）的毫秒数。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setdate.html">setDate()</a></td>
+									<td>设置 Date 对象中月的某一天 (1 ~ 31)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setfullyear.html">setFullYear()</a></td>
+									<td>设置 Date 对象中的年份（四位数字）。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-sethours.html">setHours()</a></td>
+									<td>设置 Date 对象中的小时 (0 ~ 23)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setmilliseconds.html">setMilliseconds()</a></td>
+									<td>设置 Date 对象中的毫秒 (0 ~ 999)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setminutes.html">setMinutes()</a></td>
+									<td>设置 Date 对象中的分钟 (0 ~ 59)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setmonth.html">setMonth()</a></td>
+									<td>设置 Date 对象中月份 (0 ~ 11)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setseconds.html">setSeconds()</a></td>
+									<td>设置 Date 对象中的秒钟 (0 ~ 59)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-settime.html">setTime()</a></td>
+									<td>setTime() 方法以毫秒设置 Date 对象。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setutcdate.html">setUTCDate()</a></td>
+									<td>根据世界时设置 Date 对象中月份的一天 (1 ~ 31)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setutcfullyear.html">setUTCFullYear()</a></td>
+									<td>根据世界时设置 Date 对象中的年份（四位数字）。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setutchours.html">setUTCHours()</a></td>
+									<td>根据世界时设置 Date 对象中的小时 (0 ~ 23)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setutcmilliseconds.html">setUTCMilliseconds()</a></td>
+									<td>根据世界时设置 Date 对象中的毫秒 (0 ~ 999)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setutcminutes.html">setUTCMinutes()</a></td>
+									<td>根据世界时设置 Date 对象中的分钟 (0 ~ 59)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setutcmonth.html">setUTCMonth()</a></td>
+									<td>根据世界时设置 Date 对象中的月份 (0 ~ 11)。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-setutcseconds.html">setUTCSeconds()</a></td>
+									<td>setUTCSeconds() 方法用于根据世界时 (UTC) 设置指定时间的秒字段。</td>
+								</tr>
+								<tr>
+									<td>setYear()</td>
+									<td><span class="text-danger">已废弃。</span>请使用 setFullYear()
+										方法代替。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-todatestring.html">toDateString()</a></td>
+									<td>把 Date 对象的日期部分转换为字符串。</td>
+								</tr>
+								<tr>
+									<td>toGMTString()</td>
+									<td><span class="text-danger">已废弃。</span>请使用 toUTCString()
+										方法代替。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-toisostring.html">toISOString()</a></td>
+									<td>使用 ISO 标准返回字符串的日期格式。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-tojson.html">toJSON()</a></td>
+									<td>以 JSON 数据格式返回日期字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-tolocaledatestring.html">toLocaleDateString()</a></td>
+									<td>根据本地时间格式，把 Date 对象的日期部分转换为字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-tolocaletimestring.html">toLocaleTimeString()</a></td>
+									<td>根据本地时间格式，把 Date 对象的时间部分转换为字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-tolocalestring.html">toLocaleString()</a></td>
+									<td>据本地时间格式，把 Date 对象转换为字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-tostring-date.html">toString()</a></td>
+									<td>把 Date 对象转换为字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-totimestring.html">toTimeString()</a></td>
+									<td>把 Date 对象的时间部分转换为字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-toutcstring.html">toUTCString()</a></td>
+									<td>根据世界时，把 Date 对象转换为字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-utc.html">UTC()</a></td>
+									<td>根据世界时返回 1970 年 1 月 1 日 到指定日期的毫秒数。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-valueof-date.html">valueOf()</a></td>
+									<td>返回 Date 对象的原始值。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-math" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Math 对象</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">Math 对象属性</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">属性</th>
+									<th width="80%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-e.html">E</a></td>
+									<td>返回算术常量 e，即自然对数的底数（约等于2.718）。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-ln2.html">LN2</a></td>
+									<td>返回 2 的自然对数（约等于0.693）。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-ln10.html">LN10</a></td>
+									<td>返回 10 的自然对数（约等于2.302）。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-log2e.html">LOG2E</a></td>
+									<td>返回以 2 为底的 e 的对数（约等于 1.414）。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-log10e.html">LOG10E</a></td>
+									<td>返回以 10 为底的 e 的对数（约等于0.434）。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-pi.html">PI</a></td>
+									<td>返回圆周率（约等于3.14159）。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-sqrt1-2.html">SQRT1_2</a></td>
+									<td>返回返回 2 的平方根的倒数（约等于 0.707）。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-sqrt2.html">SQRT2</a></td>
+									<td>返回 2 的平方根（约等于 1.414）。</td>
+								</tr>
+							</tbody>
+						</table>
+						<h5 class="text-primary">Math 对象方法</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">方法</th>
+									<th width="80%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-abs.html">abs(x)</a></td>
+									<td>返回 x 的绝对值。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-acos.html">acos(x)</a></td>
+									<td>返回 x 的反余弦值。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-asin.html">asin(x)</a></td>
+									<td>返回 x 的反正弦值。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-atan.html">atan(x)</a></td>
+									<td>以介于 -PI/2 与 PI/2 弧度之间的数值来返回 x 的反正切值。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-atan2.html">atan2(y,x)</a></td>
+									<td>返回从 x 轴到点 (x,y) 的角度（介于 -PI/2 与 PI/2 弧度之间）。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-ceil.html">ceil(x)</a></td>
+									<td>对数进行上舍入。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-cos.html">cos(x)</a></td>
+									<td>返回数的余弦。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-exp.html">exp(x)</a></td>
+									<td>返回 E<sup>x</sup> 的指数。
+									</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-floor.html">floor(x)</a></td>
+									<td>对 x 进行下舍入。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-log.html">log(x)</a></td>
+									<td>返回数的自然对数（底为e）。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-max.html">max(x,y,z,...,n)</a></td>
+									<td>返回 x,y,z,...,n 中的最高值。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-min.html">min(x,y,z,...,n)</a></td>
+									<td>返回 x,y,z,...,n中的最低值。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-pow.html">pow(x,y)</a></td>
+									<td>返回 x 的 y 次幂。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-random.html">random()</a></td>
+									<td>返回 0 ~ 1 之间的随机数。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-round.html">round(x)</a></td>
+									<td>把数四舍五入为最接近的整数。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-sin.html">sin(x)</a></td>
+									<td>返回数的正弦。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-sqrt.html">sqrt(x)</a></td>
+									<td>返回数的平方根。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-tan.html">tan(x)</a></td>
+									<td>返回角的正切。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-number" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Number 对象</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">Number 对象属性</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="25%" align="left">属性</th>
+									<th width="75%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-constructor-number.html">constructor</a></td>
+									<td>返回对创建此对象的 Number 函数的引用。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-max-value.html">MAX_VALUE</a></td>
+									<td>可表示的最大的数。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-min-value.html">MIN_VALUE</a></td>
+									<td>可表示的最小的数。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-negative-infinity.html">NEGATIVE_INFINITY</a></td>
+									<td>负无穷大，溢出时返回该值。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-number-nan.html">NaN</a></td>
+									<td>非数字值。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-positive-infinity.html">POSITIVE_INFINITY</a></td>
+									<td>正无穷大，溢出时返回该值。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-prototype-num.html">prototype</a></td>
+									<td>允许您有能力向对象添加属性和方法。</td>
+								</tr>
+							</tbody>
+						</table>
+						<h5 class="text-primary">Number 对象方法</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="25%" align="left">方法</th>
+									<th width="75%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-toexponential.html">toExponential(x)</a></td>
+									<td>把对象的值转换为指数计数法。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-tofixed.html">toFixed(x)</a></td>
+									<td>把数字转换为字符串，结果的小数点后有指定位数的数字。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-toprecision.html">toPrecision(x)</a></td>
+									<td>把数字格式化为指定的长度。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-tostring-number.html">toString()</a></td>
+									<td>把数字转换为字符串，使用指定的基数。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-valueof-number.html">valueOf()</a></td>
+									<td>返回一个 Number 对象的基本数字值。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-string" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">String 对象</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">String 对象属性</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">属性</th>
+									<th width="80%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-constructor-string.html">constructor</a></td>
+									<td>对创建该对象的函数的引用</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-length-string.html">length</a></td>
+									<td>字符串的长度</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-prototype-string.html">prototype</a></td>
+									<td>允许您向对象添加属性和方法</td>
+								</tr>
+							</tbody>
+						</table>
+						<h5 class="text-primary">String 对象方法</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">方法</th>
+									<th width="80%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-charat.html">charAt()</a></td>
+									<td>返回在指定位置的字符。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-charcodeat.html">charCodeAt()</a></td>
+									<td>返回在指定的位置的字符的 Unicode 编码。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-concat-string.html">concat()</a></td>
+									<td>连接两个或更多字符串，并返回新的字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-fromcharcode.html">fromCharCode()</a></td>
+									<td>将 Unicode 编码转为字符。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-indexof.html">indexOf()</a></td>
+									<td>返回某个指定的字符串值在字符串中首次出现的位置。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-lastindexof.html">lastIndexOf()</a></td>
+									<td>从后向前搜索字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-match.html">match()</a></td>
+									<td>查找找到一个或多个正则表达式的匹配。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-replace.html">replace()</a></td>
+									<td>在字符串中查找匹配的子串， 并替换与正则表达式匹配的子串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-search.html">search()</a></td>
+									<td>查找与正则表达式相匹配的值。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-slice-string.html">slice()</a></td>
+									<td>提取字符串的片断，并在新的字符串中返回被提取的部分。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-split.html">split()</a></td>
+									<td>把字符串分割为字符串数组。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-substr.html">substr()</a></td>
+									<td>从起始索引号提取字符串中指定数目的字符。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-substring.html">substring()</a></td>
+									<td>提取字符串中两个指定的索引号之间的字符。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-tolowercase.html">toLowerCase()</a></td>
+									<td>把字符串转换为小写。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-touppercase.html">toUpperCase()</a></td>
+									<td>把字符串转换为大写。</td>
+								</tr>
+								<tr>
+									<td>trim()</td>
+									<td>去除字符串两边的空白</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-valueof-string.html">valueOf()</a></td>
+									<td>返回某个字符串对象的原始值。</td>
+								</tr>
+							</tbody>
+						</table>
+						<h5 class="text-primary">String HTML 包装方法</h5>
+						<p>HTML 包装方法返回加入了适当HTML标签的字符串。</p>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">方法</th>
+									<th width="80%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-anchor.html">anchor()</a></td>
+									<td>创建 HTML 锚。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-big.html">big()</a></td>
+									<td>用大号字体显示字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-blink.html">blink()</a></td>
+									<td>显示闪动字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-bold.html">bold()</a></td>
+									<td>使用粗体显示字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-fixed.html">fixed()</a></td>
+									<td>以打字机文本显示字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-fontcolor.html">fontcolor()</a></td>
+									<td>使用指定的颜色来显示字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-fontsize.html">fontsize()</a></td>
+									<td>使用指定的尺寸来显示字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-italics.html">italics()</a></td>
+									<td>使用斜体显示字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-link.html">link()</a></td>
+									<td>将字符串显示为链接。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-small.html">small()</a></td>
+									<td>使用小字号来显示字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-strike.html">strike()</a></td>
+									<td>用于显示加删除线的字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-sub.html">sub()</a></td>
+									<td>把字符串显示为下标。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-sup.html">sup()</a></td>
+									<td>把字符串显示为上标。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-regexp" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">RegExp 对象</h3>
+					</div>
+					<div class="panel-body">
+
+						<h5 class="text-primary">RegExp 对象方法</h5>
+
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th style="width: 20%">方法</th>
+									<th style="width: 66%">描述</th>
+									<th style="width: 7%">FF</th>
+									<th style="width: 7%">IE</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-regexp-compile.html">compile</a></td>
+									<td>编译正则表达式。</td>
+									<td>1</td>
+									<td>4</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-exec-regexp.html">exec</a></td>
+									<td>检索字符串中指定的值。返回找到的值，并确定其位置。</td>
+									<td>1</td>
+									<td>4</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-test-regexp.html">test</a></td>
+									<td>检索字符串中指定的值。返回 true 或 false。</td>
+									<td>1</td>
+									<td>4</td>
+								</tr>
+							</tbody>
+						</table>
+						<h5 class="text-primary">支持正则表达式的 String 对象的方法</h5>
+
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th style="width: 20%">方法</th>
+									<th style="width: 66%">描述</th>
+									<th style="width: 7%">FF</th>
+									<th style="width: 7%">IE</th>
+								</tr>
+								<tr>
+									<td><a href="/js/jsref-search.html">search</a></td>
+									<td>检索与正则表达式相匹配的值。</td>
+									<td>1</td>
+									<td>4</td>
+								</tr>
+								<tr>
+									<td><a href="/js/jsref-match.html">match</a></td>
+									<td>找到一个或多个正则表达式的匹配。</td>
+									<td>1</td>
+									<td>4</td>
+								</tr>
+								<tr>
+									<td><a href="/js/jsref-replace.html">replace</a></td>
+									<td>替换与正则表达式匹配的子串。</td>
+									<td>1</td>
+									<td>4</td>
+								</tr>
+								<tr>
+									<td><a href="/js/jsref-split.html">split</a></td>
+									<td>把字符串分割为字符串数组。</td>
+									<td>1</td>
+									<td>4</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-global" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">JavaScript 全局属性</h3>
+					</div>
+					<div class="panel-body">
+
+						<h5 class="text-primary">JavaScript 全局属性</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="32%" align="left">属性</th>
+									<th width="68%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-infinity.html">Infinity</a></td>
+									<td>代表正的无穷大的数值。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-nan.html">NaN</a></td>
+									<td>指示某个值是不是数字值。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-undefined.html">undefined</a></td>
+									<td>指示未定义的值。</td>
+								</tr>
+							</tbody>
+						</table>
+						<h5 class="text-primary">JavaScript 全局函数</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="32%" align="left">函数</th>
+									<th width="68%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="jsref-decodeuri.html">decodeURI()</a></td>
+									<td>解码某个编码的 URI。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-decodeuricomponent.html">decodeURIComponent()</a></td>
+									<td>解码一个编码的 URI 组件。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-encodeuri.html">encodeURI()</a></td>
+									<td>把字符串编码为 URI。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-encodeuricomponent.html">encodeURIComponent()</a></td>
+									<td>把字符串编码为 URI 组件。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-escape.html">escape()</a></td>
+									<td>对字符串进行编码。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-eval.html">eval()</a></td>
+									<td>计算 JavaScript 字符串，并把它作为脚本代码来执行。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-isfinite.html">isFinite()</a></td>
+									<td>检查某个值是否为有穷大的数。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-isnan.html">isNaN()</a></td>
+									<td>检查某个值是否是数字。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-number.html">Number()</a></td>
+									<td>把对象的值转换为数字。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-parsefloat.html">parseFloat()</a></td>
+									<td>解析一个字符串并返回一个浮点数。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-parseint.html">parseInt()</a></td>
+									<td>解析一个字符串并返回一个整数。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-string.html">String()</a></td>
+									<td>把对象的值转换为字符串。</td>
+								</tr>
+								<tr>
+									<td><a href="jsref-unescape.html">unescape()</a></td>
+									<td>对由 escape() 编码的字符串进行解码。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-window" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Window 对象</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">Window 对象属性</h5>
+
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">属性</th>
+									<th width="80%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="prop-win-closed.html">closed</a></td>
+									<td>返回窗口是否已被关闭。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-defaultstatus.html">defaultStatus</a></td>
+									<td>设置或返回窗口状态栏中的默认文本。</td>
+								</tr>
+								<tr>
+									<td><a href="dom-obj-document.html">document</a></td>
+									<td>对 Document 对象的只读引用。(请参阅<a href="dom-obj-document.html">对象</a>)
+									</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-frames.html">frames</a></td>
+									<td>返回窗口中所有命名的框架。该集合是 Window 对象的数组，每个 Window 对象在窗口中含有一个框架。</td>
+								</tr>
+								<tr>
+									<td><a href="obj-history.html">history</a></td>
+									<td>对 History 对象的只读引用。请参数 <a href="obj-history.html">History
+											对象</a>。
+									</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-innerheight.html">innerHeight</a></td>
+									<td>返回窗口的文档显示区的高度。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-innerheight.html">innerWidth</a></td>
+									<td>返回窗口的文档显示区的宽度。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-length.html">length</a></td>
+									<td>设置或返回窗口中的框架数量。</td>
+								</tr>
+								<tr>
+									<td><a href="obj-location.html">location</a></td>
+									<td>用于窗口或框架的 Location 对象。请参阅 <a href="obj-location.html">Location
+											对象</a>。
+									</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-name.html">name</a></td>
+									<td>设置或返回窗口的名称。</td>
+								</tr>
+								<tr>
+									<td><a href="obj-navigator.html">navigator</a></td>
+									<td>对 Navigator 对象的只读引用。请参数 <a href="obj-navigator.html">Navigator
+											对象</a>。
+									</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-opener.html">opener</a></td>
+									<td>返回对创建此窗口的窗口的引用。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-outerheight.html">outerHeight</a></td>
+									<td>返回窗口的外部高度，包含工具条与滚动条。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-outerheight.html">outerWidth</a></td>
+									<td>返回窗口的外部宽度，包含工具条与滚动条。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-pagexoffset.html">pageXOffset</a></td>
+									<td>设置或返回当前页面相对于窗口显示区左上角的 X 位置。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-pagexoffset.html">pageYOffset</a></td>
+									<td>设置或返回当前页面相对于窗口显示区左上角的 Y 位置。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-parent.html">parent</a></td>
+									<td>返回父窗口。</td>
+								</tr>
+								<tr>
+									<td><a href="obj-screen.html">screen</a></td>
+									<td>对 Screen 对象的只读引用。请参数 <a href="obj-screen.html">Screen
+											对象</a>。
+									</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-screenleft.html">screenLeft</a></td>
+									<td>返回相对于屏幕窗口的x坐标</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-screenleft.html">screenTop</a></td>
+									<td>返回相对于屏幕窗口的y坐标</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-screenx.html">screenX</a></td>
+									<td>返回相对于屏幕窗口的x坐标</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-screenx.html">screenY</a></td>
+									<td>返回相对于屏幕窗口的y坐标</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-self.html">self</a></td>
+									<td>返回对当前窗口的引用。等价于 Window 属性。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-status.html">status</a></td>
+									<td>设置窗口状态栏的文本。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-win-top.html">top</a></td>
+									<td>返回最顶层的父窗口。</td>
+								</tr>
+							</tbody>
+						</table>
+						<h5 class="text-primary">Window 对象方法</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">方法</th>
+									<th width="80%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="met-win-alert.html">alert()</a></td>
+									<td>显示带有一段消息和一个确认按钮的警告框。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-blur.html">blur()</a></td>
+									<td>把键盘焦点从顶层窗口移开。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-clearinterval.html">clearInterval()</a></td>
+									<td>取消由 setInterval() 设置的 timeout。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-cleartimeout.html">clearTimeout()</a></td>
+									<td>取消由 setTimeout() 方法设置的 timeout。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-close.html">close()</a></td>
+									<td>关闭浏览器窗口。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-confirm.html">confirm()</a></td>
+									<td>显示带有一段消息以及确认按钮和取消按钮的对话框。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-createpopup.html">createPopup()</a></td>
+									<td>创建一个 pop-up 窗口。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-focus.html">focus()</a></td>
+									<td>把键盘焦点给予一个窗口。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-moveby.html">moveBy()</a></td>
+									<td>可相对窗口的当前坐标把它移动指定的像素。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-moveto.html">moveTo()</a></td>
+									<td>把窗口的左上角移动到一个指定的坐标。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-open.html">open()</a></td>
+									<td>打开一个新的浏览器窗口或查找一个已命名的窗口。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-print.html">print()</a></td>
+									<td>打印当前窗口的内容。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-prompt.html">prompt()</a></td>
+									<td>显示可提示用户输入的对话框。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-resizeby.html">resizeBy()</a></td>
+									<td>按照指定的像素调整窗口的大小。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-resizeto.html">resizeTo()</a></td>
+									<td>把窗口的大小调整到指定的宽度和高度。</td>
+								</tr>
+								<tr>
+									<td>scroll()</td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-scrollby.html">scrollBy()</a></td>
+									<td>按照指定的像素值来滚动内容。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-scrollto.html">scrollTo()</a></td>
+									<td>把内容滚动到指定的坐标。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-setinterval.html">setInterval()</a></td>
+									<td>按照指定的周期（以毫秒计）来调用函数或计算表达式。</td>
+								</tr>
+								<tr>
+									<td><a href="met-win-settimeout.html">setTimeout()</a></td>
+									<td>在指定的毫秒数后调用函数或计算表达式。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-navigator" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Navigator 对象</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">Navigator 对象属性</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="25%" align="left">属性</th>
+									<th width="75%" align="left">说明</th>
+								</tr>
+								<tr>
+									<td><a href="prop-nav-appcodename.html">appCodeName</a></td>
+									<td>返回浏览器的代码名</td>
+								</tr>
+								<tr>
+									<td><a href="prop-nav-appname.html">appName</a></td>
+									<td>返回浏览器的名称</td>
+								</tr>
+								<tr>
+									<td><a href="prop-nav-appversion.html">appVersion</a></td>
+									<td>返回浏览器的平台和版本信息</td>
+								</tr>
+								<tr>
+									<td><a href="prop-nav-cookieenabled.html">cookieEnabled</a></td>
+									<td>返回指明浏览器中是否启用 cookie 的布尔值</td>
+								</tr>
+								<tr>
+									<td><a href="prop-nav-platform.html">platform</a></td>
+									<td>返回运行浏览器的操作系统平台</td>
+								</tr>
+								<tr>
+									<td><a href="prop-nav-useragent.html">userAgent</a></td>
+									<td>返回由客户机发送服务器的user-agent 头部的值</td>
+								</tr>
+							</tbody>
+						</table>
+						<h5 class="text-primary">Navigator 对象方法</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="25%" align="left">方法</th>
+									<th width="75%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="met-nav-javaenabled.html">javaEnabled()</a></td>
+									<td>指定是否在浏览器中启用Java</td>
+								</tr>
+								<tr>
+									<td><a href="met-nav-taintenabled.html">taintEnabled()</a></td>
+									<td>规定浏览器是否启用数据污点(data tainting)</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-screen" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Screen 对象</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">Screen 对象属性</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">属性</th>
+									<th width="80%" align="left">说明</th>
+								</tr>
+								<tr>
+									<td><a href="prop-screen-availheight.html">availHeight</a></td>
+									<td>返回屏幕的高度（不包括Windows任务栏）</td>
+								</tr>
+								<tr>
+									<td><a href="prop-screen-availwidth.html">availWidth</a></td>
+									<td>返回屏幕的宽度（不包括Windows任务栏）</td>
+								</tr>
+								<tr>
+									<td><a href="prop-screen-colordepth.html">colorDepth</a></td>
+									<td>返回目标设备或缓冲器上的调色板的比特深度</td>
+								</tr>
+								<tr>
+									<td><a href="prop-screen-height.html">height</a></td>
+									<td>返回屏幕的总高度</td>
+								</tr>
+								<tr>
+									<td><a href="prop-screen-pixeldepth.html">pixelDepth</a></td>
+									<td>返回屏幕的颜色分辨率（每象素的位数）</td>
+								</tr>
+								<tr>
+									<td><a href="prop-screen-width.html">width</a></td>
+									<td>返回屏幕的总宽度</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-history" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">History 对象</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">History 对象属性</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">属性</th>
+									<th width="80%" align="left">说明</th>
+								</tr>
+								<tr>
+									<td><a href="prop-his-length.html">length</a></td>
+									<td>返回历史列表中的网址数</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<h5 class="text-primary">History 对象方法</h5>
+
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">方法</th>
+									<th width="80%" align="left">说明</th>
+								</tr>
+								<tr>
+									<td><a href="met-his-back.html">back()</a></td>
+									<td>加载 history 列表中的前一个 URL</td>
+								</tr>
+								<tr>
+									<td><a href="met-his-forward.html">forward()</a></td>
+									<td>加载 history 列表中的下一个 URL</td>
+								</tr>
+								<tr>
+									<td><a href="met-his-go.html">go()</a></td>
+									<td>加载 history 列表中的某个具体页面</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-location" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Location 对象</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">Location 对象属性</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">属性</th>
+									<th width="80%" align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="prop-loc-hash.html">hash</a></td>
+									<td>返回一个URL的锚部分</td>
+								</tr>
+								<tr>
+									<td><a href="prop-loc-host.html">host</a></td>
+									<td>返回一个URL的主机名和端口</td>
+								</tr>
+								<tr>
+									<td><a href="prop-loc-hostname.html">hostname</a></td>
+									<td>返回URL的主机名</td>
+								</tr>
+								<tr>
+									<td><a href="prop-loc-href.html">href</a></td>
+									<td>返回完整的URL</td>
+								</tr>
+								<tr>
+									<td><a href="prop-loc-pathname.html">pathname</a></td>
+									<td>返回的URL路径名。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-loc-port.html">port</a></td>
+									<td>返回一个URL服务器使用的端口号</td>
+								</tr>
+								<tr>
+									<td><a href="prop-loc-protocol.html">protocol</a></td>
+									<td>返回一个URL协议</td>
+								</tr>
+								<tr>
+									<td><a href="prop-loc-search.html">search</a></td>
+									<td>返回一个URL的查询部分</td>
+								</tr>
+							</tbody>
+						</table>
+						<h5 class="text-primary">Location 对象方法</h5>
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="20%" align="left">方法</th>
+									<th width="80%" align="left">说明</th>
+								</tr>
+								<tr>
+									<td><a href="met-loc-assign.html">assign()</a></td>
+									<td>载入一个新的文档</td>
+								</tr>
+								<tr>
+									<td><a href="met-loc-reload.html">reload()</a></td>
+									<td>重新载入当前文档</td>
+								</tr>
+								<tr>
+									<td><a href="met-loc-replace.html">replace()</a></td>
+									<td>用新的文档替换当前文档</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-document" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">HTML DOM DOCUMENT 对象</h3>
+					</div>
+					<div class="panel-body">
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="35%" align="left">属性 / 方法</th>
+									<th align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="prop-document-activeelement.html">document.activeElement</a></td>
+									<td>返回当前获取焦点元素</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-addeventlistener.html">document.addEventListener()</a></td>
+									<td>向文档添加句柄</td>
+								</tr>
+
+								<tr>
+									<td>document.adoptNode(node)</td>
+									<td>从另外一个文档返回 adapded 节点到当前文档。</td>
+								</tr>
+								<tr>
+									<td><a href="coll-doc-anchors.html">document.anchors</a></td>
+									<td>返回对文档中所有 Anchor 对象的引用。</td>
+								</tr>
+								<tr>
+									<td>document.applets</td>
+									<td>返回对文档中所有 Applet 对象的引用。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-doc-baseuri.html">document.baseURI</a></td>
+									<td>返回文档的绝对基础 URI</td>
+								</tr>
+								<tr>
+									<td>document.body</td>
+									<td>返回文档的body元素</td>
+								</tr>
+								<tr>
+									<td><a href="met-doc-close.html">document.close()</a></td>
+									<td>关闭用 document.open() 方法打开的输出流，并显示选定的数据。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-doc-cookie.html">document.cookie</a></td>
+									<td>设置或返回与当前文档有关的所有 cookie。</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-createattribute.html">document.createAttribute()</a></td>
+									<td>创建一个属性节点</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-createcomment.html">document.createComment()</a></td>
+									<td>createComment() 方法可创建注释节点。</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-createdocumentfragment.html">document.createDocumentFragment()</a></td>
+									<td>创建空的 DocumentFragment 对象，并返回此对象。</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-createelement.html">document.createElement()</a></td>
+									<td>创建元素节点。</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-createtextnode.html">document.createTextNode()</a></td>
+									<td>创建文本节点。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-document-doctype.html">document.doctype</a></td>
+									<td>返回与文档相关的文档类型声明 (DTD)。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-document-documentelement.html">document.documentElement</a></td>
+									<td>返回文档的根节点</td>
+								</tr>
+								<tr>
+									<td><a href="prop-doc-documentmode.html">document.documentMode</a></td>
+									<td>返回用于通过浏览器渲染文档的模式</td>
+								</tr>
+								<tr>
+									<td><a href="prop-document-documenturi.html">document.documentURI</a></td>
+									<td>设置或返回文档的位置</td>
+								</tr>
+								<tr>
+									<td><a href="prop-doc-domain.html">document.domain</a></td>
+									<td>返回当前文档的域名。</td>
+								</tr>
+								<tr>
+									<td>document.domConfig</td>
+									<td>返回normalizeDocument()被调用时所使用的配置</td>
+								</tr>
+								<tr>
+									<td>document.embeds</td>
+									<td>返回文档中所有嵌入的内容（embed）集合</td>
+								</tr>
+								<tr>
+									<td><a href="coll-doc-forms.html">document.forms</a></td>
+									<td>返回对文档中所有 Form 对象引用。</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-getelementsbyclassname.html">document.
+											getElementsByClassName()</a></td>
+									<td>返回文档中所有指定类名的元素集合，作为 NodeList 对象。</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-getelementbyid.html">document.getElementById()</a></td>
+									<td>返回对拥有指定 id 的第一个对象的引用。</td>
+								</tr>
+								<tr>
+									<td><a href="met-doc-getelementsbyname.html">document.getElementsByName()</a></td>
+									<td>返回带有指定名称的对象集合。</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-getelementsbytagname.html">document.getElementsByTagName()</a></td>
+									<td>返回带有指定标签名的对象集合。</td>
+								</tr>
+								<tr>
+									<td><a href="coll-doc-images.html">document.images</a></td>
+									<td>返回对文档中所有 Image 对象引用。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-document-implementation.html">document.implementation</a></td>
+									<td>返回处理该文档的 DOMImplementation 对象。</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-importnode.html">document.importNode()</a></td>
+									<td>把一个节点从另一个文档复制到该文档以便应用。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-document-inputencoding.html">document.inputEncoding</a></td>
+									<td>返回用于文档的编码方式（在解析时）。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-doc-lastmodified.html">document.lastModified</a></td>
+									<td>返回文档被最后修改的日期和时间。</td>
+								</tr>
+								<tr>
+									<td><a href="coll-doc-links.html">document.links</a></td>
+									<td>返回对文档中所有 Area 和 Link 对象引用。</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-normalize.html">document.normalize()</a></td>
+									<td>删除空文本节点，并连接相邻节点</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-normalizedocument.html">document.normalizeDocument()</a></td>
+									<td>删除空文本节点，并连接相邻节点的</td>
+								</tr>
+								<tr>
+									<td><a href="met-doc-open.html">document.open()</a></td>
+									<td>打开一个流，以收集来自任何 document.write() 或 document.writeln()
+										方法的输出。</td>
+								</tr>
+
+								<tr>
+									<td><a href="met-document-queryselector.html">document.querySelector()</a></td>
+									<td>返回文档中匹配指定的CSS选择器的第一元素</td>
+								</tr>
+								<tr>
+									<td>document.querySelectorAll()</td>
+									<td>document.querySelectorAll() 是
+										HTML5中引入的新方法，返回文档中匹配的CSS选择器的所有元素节点列表</td>
+								</tr>
+								<tr>
+									<td><a href="prop-doc-readystate.html">document.readyState</a></td>
+									<td>返回文档状态 (载入中……)</td>
+								</tr>
+								<tr>
+									<td><a href="prop-doc-referrer.html">document.referrer</a></td>
+									<td>返回载入当前文档的文档的 URL。</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-removeeventlistener.html">document.removeEventListener()</a></td>
+									<td>移除文档中的事件句柄(由 addEventListener() 方法添加)</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-renamenode.html">document.renameNode()</a></td>
+									<td>重命名元素或者属性节点。</td>
+								</tr>
+
+								<tr>
+									<td>document.scripts</td>
+									<td>返回页面中所有脚本的集合。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-document-stricterrorchecking.html">document.strictErrorChecking</a></td>
+									<td>设置或返回是否强制进行错误检查。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-doc-title.html">document.title</a></td>
+									<td>返回当前文档的标题。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-doc-url.html">document.URL</a></td>
+									<td>返回文档完整的URL</td>
+								</tr>
+								<tr>
+									<td><a href="met-doc-write.html">document.write()</a></td>
+									<td>向文档写 HTML 表达式 或 JavaScript 代码。</td>
+								</tr>
+								<tr>
+									<td><a href="met-doc-writeln.html">document.writeln()</a></td>
+									<td>等同于 write() 方法，不同的是在每个表达式之后写一个换行符。</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="alert alert-danger">
+							<h5>警告 !!!</h5>
+							<p>在 W3C DOM核心，文档对象 继承节点对象的所有属性和方法。</p>
+							<p>很多属性和方法在文档中是没有意义的。</p>
+							<p>
+								<strong>HTML 文档对象可以避免使用这些节点对象和属性：</strong>
+							</p>
+						</div>
+
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="30%" align="left">&nbsp;属性 / 方法</th>
+									<th align="left">避免的原因</th>
+								</tr>
+								<tr>
+									<td>document.attributes</td>
+									<td>文档没有该属性</td>
+								</tr>
+								<tr>
+									<td>document.hasAttributes()</td>
+									<td>文档没有该属性</td>
+								</tr>
+								<tr>
+									<td>document.nextSibling</td>
+									<td>文档没有下一节点</td>
+								</tr>
+								<tr>
+									<td>document.nodeName</td>
+									<td>这个通常是 #document</td>
+								</tr>
+								<tr>
+									<td>document.nodeType</td>
+									<td>这个通常是 9(DOCUMENT_NODE)</td>
+								</tr>
+								<tr>
+									<td>document.nodeValue</td>
+									<td>文档没有一个节点值</td>
+								</tr>
+								<tr>
+									<td>document.ownerDocument</td>
+									<td>文档没有主文档</td>
+								</tr>
+								<tr>
+									<td>document.ownerElement</td>
+									<td>文档没有自己的节点</td>
+								</tr>
+								<tr>
+									<td>document.parentNode</td>
+									<td>文档没有父节点</td>
+								</tr>
+								<tr>
+									<td>document.previousSibling</td>
+									<td>文档没有兄弟节点</td>
+								</tr>
+								<tr>
+									<td>document.textContent</td>
+									<td>文档没有文本节点</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-element" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">HTML DOM ELEMENT 对象</h3>
+					</div>
+					<div class="panel-body">
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="35%" align="left">属性 / 方法</th>
+									<th align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="prop-html-accesskey.html">
+											<i>element</i>.accessKey
+										</a></td>
+									<td>设置或返回accesskey一个元素</td>
+								</tr>
+
+								<tr>
+									<td><a href="met-element-addeventlistener.html">
+											<i>element</i>.addEventListener()
+										</a></td>
+									<td>向指定元素添加事件句柄</td>
+								</tr>
+								<tr>
+									<td><a href="met-node-appendchild.html">
+											<i>element</i>.appendChild()
+										</a></td>
+									<td>为元素添加一个新的子元素</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-attributes.html">
+											<i>element</i>.attributes
+										</a></td>
+									<td>返回一个元素的属性数组</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-childnodes.html">
+											<i>element</i>.childNodes
+										</a></td>
+									<td>返回元素的一个子节点的数组</td>
+								</tr>
+								<tr>
+									<td><a href="prop-element-classlist.html">
+											<i>element</i>.classlist
+										</a></td>
+									<td>返回元素的类名，作为 DOMTokenList 对象。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-html-classname.html">
+											<i>element</i>.className
+										</a></td>
+									<td>设置或返回元素的class属性</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.clientHeight</td>
+									<td>在页面上返回内容的可视高度（不包括边框，边距或滚动条）</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.clientWidth</td>
+									<td>在页面上返回内容的可视宽度（不包括边框，边距或滚动条）</td>
+								</tr>
+								<tr>
+									<td><a href="met-node-clonenode.html">
+											<i>element</i>.cloneNode()
+										</a></td>
+									<td>克隆某个元素</td>
+								</tr>
+								<tr>
+									<td><a href="met-node-comparedocumentposition.html">
+											<i>element</i>.compareDocumentPosition()
+										</a></td>
+									<td>比较两个元素的文档位置。</td>
+								</tr>
+
+								<tr>
+									<td><a href="prop-html-contenteditable.html">
+											<i>element</i>.contentEditable
+										</a></td>
+									<td>设置或返回元素的内容是否可编辑</td>
+								</tr>
+								<tr>
+									<td><a href="prop-html-dir.html">
+											<i>element</i>.dir
+										</a></td>
+									<td>设置或返回一个元素中的文本方向</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-firstchild.html">
+											<i>element</i>.firstChild
+										</a></td>
+									<td>返回元素的第一个子节点</td>
+								</tr>
+								<tr>
+									<td><a href="met-html-focus.html">
+											<i>element</i>.focus()
+										</a></td>
+									<td>设置文档或元素获取焦点</td>
+								</tr>
+								<tr>
+									<td><a href="met-element-getattribute.html">
+											<i>element</i>.getAttribute()
+										</a></td>
+									<td>返回指定元素的属性值</td>
+								</tr>
+								<tr>
+									<td><a href="met-element-getattributenode.html">
+											<i>element</i>.getAttributeNode()
+										</a></td>
+									<td>返回指定属性节点</td>
+								</tr>
+								<tr>
+									<td><a href="met-element-getelementsbytagname.html">
+											<i>element</i>.getElementsByTagName()
+										</a></td>
+									<td>返回指定标签名的所有子元素集合。</td>
+								</tr>
+								<tr>
+									<td><a href="met-element-getelementsbyclassname.html">
+											<i>element</i>. getElementsByClassName()
+										</a></td>
+									<td>返回文档中所有指定类名的元素集合，作为 NodeList 对象。</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.getFeature()</td>
+									<td>返回指定特征的执行APIs对象。</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.getUserData()</td>
+									<td>返回一个元素中关联键值的对象。</td>
+								</tr>
+								<tr>
+									<td><a href="met-element-hasattribute.html">
+											<i>element</i>.hasAttribute()
+										</a></td>
+									<td>如果元素中存在指定的属性返回 true，否则返回false。</td>
+								</tr>
+								<tr>
+									<td><a href="met-node-hasattributes.html">
+											<i>element</i>.hasAttributes()
+										</a></td>
+									<td>如果元素有任何属性返回true，否则返回false。</td>
+								</tr>
+								<tr>
+									<td><a href="met-node-haschildnodes.html">
+											<i>element</i>.hasChildNodes()
+										</a></td>
+									<td>返回一个元素是否具有任何子元素</td>
+								</tr>
+								<tr>
+									<td><a href="met-document-hasfocus.html">
+											<i>element</i>.hasfocus()
+										</a></td>
+									<td>返回布尔值，检测文档或元素是否获取焦点</td>
+								</tr>
+								<tr>
+									<td><a href="prop-html-id.html">
+											<i>element</i>.id
+										</a></td>
+									<td>设置或者返回元素的 id。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-html-innerhtml.html">
+											<i>element</i>.innerHTML
+										</a></td>
+									<td>设置或者返回元素的内容。</td>
+								</tr>
+								<tr>
+									<td><a href="met-node-insertbefore.html">
+											<i>element</i>.insertBefore()
+										</a></td>
+									<td>现有的子元素之前插入一个新的子元素</td>
+								</tr>
+								<tr>
+									<td><a href="prop-html-iscontenteditable.html">
+											<i>element</i>.isContentEditable
+										</a></td>
+									<td>如果元素内容可编辑返回 true，否则返回false</td>
+								</tr>
+
+								<tr>
+									<td><a href="met-node-isdefaultnamespace.html">
+											<i>element</i>.isDefaultNamespace()
+										</a></td>
+									<td>如果指定了namespaceURI 返回 true，否则返回 false。</td>
+								</tr>
+								<tr>
+									<td><a href="met-node-isequalnode.html">
+											<i>element</i>.isEqualNode()
+										</a></td>
+									<td>检查两个元素是否相等</td>
+								</tr>
+								<tr>
+									<td><a href="met-node-issamenode.html">
+											<i>element</i>.isSameNode()
+										</a></td>
+									<td>检查两个元素所有有相同节点。</td>
+								</tr>
+								<tr>
+									<td><a href="met-node-issupported.html">
+											<i>element</i>.isSupported()
+										</a></td>
+									<td>如果在元素中支持指定特征返回 true。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-html-lang.html">
+											<i>element</i>.lang
+										</a></td>
+									<td>设置或者返回一个元素的语言。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-lastchild.html">
+											<i>element</i>.lastChild
+										</a></td>
+									<td>返回的最后一个子元素</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-namespaceuri.html">
+											<i>element</i>.namespaceURI
+										</a></td>
+									<td>返回命名空间的 URI。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-nextsibling.html">
+											<i>element</i>.nextSibling
+										</a></td>
+									<td>返回该元素紧跟的一个元素</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-nodename.html">
+											<i>element</i>.nodeName
+										</a></td>
+									<td>返回元素的标记名（大写）</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-nodetype.html">
+											<i>element</i>.nodeType
+										</a></td>
+									<td>返回元素的节点类型</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-nodevalue.html">
+											<i>element</i>.nodeValue
+										</a></td>
+									<td>返回元素的节点值</td>
+								</tr>
+								<tr>
+									<td><a href="met-node-normalize.html">
+											<i>element</i>.normalize()
+										</a></td>
+									<td>使得此成为一个"normal"的形式，其中只有结构（如元素，注释，处理指令，CDATA节和实体引用）隔开Text节点，即元素（包括属性）下面的所有文本节点，既没有相邻的文本节点也没有空的文本节点</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.offsetHeight</td>
+									<td>返回，任何一个元素的高度包括边框和填充，但不是边距</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.offsetWidth</td>
+									<td>返回元素的宽度，包括边框和填充，但不是边距</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.offsetLeft</td>
+									<td>返回当前元素的相对水平偏移位置的偏移容器</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.offsetParent</td>
+									<td>返回元素的偏移容器</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.offsetTop</td>
+									<td>返回当前元素的相对垂直偏移位置的偏移容器</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-ownerdocument.html">
+											<i>element</i>.ownerDocument
+										</a></td>
+									<td>返回元素的根元素（文档对象）</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-parentnode.html">
+											<i>element</i>.parentNode
+										</a></td>
+									<td>返回元素的父节点</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-previoussibling.html">
+											<i>element</i>.previousSibling
+										</a></td>
+									<td>返回某个元素紧接之前元素</td>
+								</tr>
+								<tr>
+									<td><a href="met-element-queryselector.html">
+											<i>element</i>.querySelector()
+										</a></td>
+									<td>返回匹配指定 CSS 选择器元素的第一个子元素</td>
+								</tr>
+								<tr>
+									<td>document.querySelectorAll()</td>
+									<td>返回匹配指定 CSS 选择器元素的所有子元素节点列表</td>
+								</tr>
+								<tr>
+									<td><a href="met-element-removeattribute.html">
+											<i>element</i>.removeAttribute()
+										</a></td>
+									<td>从元素中删除指定的属性</td>
+								</tr>
+								<tr>
+									<td><a href="met-element-removeattributenode.html">
+											<i>element</i>.removeAttributeNode()
+										</a></td>
+									<td>删除指定属性节点并返回移除后的节点。</td>
+								</tr>
+								<tr>
+									<td><a href="met-node-removechild.html">
+											<i>element</i>.removeChild()
+										</a></td>
+									<td>删除一个子元素</td>
+								</tr>
+								<tr>
+									<td><a href="met-element-removeeventlistener.html">
+											<i>element</i>.removeEventListener()
+										</a></td>
+									<td>移除由 addEventListener() 方法添加的事件句柄</td>
+								</tr>
+								<tr>
+									<td><a href="met-node-replacechild.html">
+											<i>element</i>.replaceChild()
+										</a></td>
+									<td>替换一个子元素</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.scrollHeight</td>
+									<td>返回整个元素的高度（包括带滚动条的隐蔽的地方）</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.scrollLeft</td>
+									<td>返回当前视图中的实际元素的左边缘和左边缘之间的距离</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.scrollTop</td>
+									<td>返回当前视图中的实际元素的顶部边缘和顶部边缘之间的距离</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.scrollWidth</td>
+									<td>返回元素的整个宽度（包括带滚动条的隐蔽的地方）</td>
+								</tr>
+								<tr>
+									<td><a href="met-element-setattribute.html">
+											<i>element</i>.setAttribute()
+										</a></td>
+									<td>设置或者改变指定属性并指定值。</td>
+								</tr>
+								<tr>
+									<td><a href="met-element-setattributenode.html">
+											<i>element</i>.setAttributeNode()
+										</a></td>
+									<td>设置或者改变指定属性节点。</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.setIdAttribute()</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td><i>element</i>.setIdAttributeNode()</td>
+									<td></td>
+								</tr>
+								<tr>
+									<td><i>element</i>.setUserData()</td>
+									<td>在元素中为指定键值关联对象。</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.style</td>
+									<td>设置或返回元素的样式属性</td>
+								</tr>
+								<tr>
+									<td><a href="prop-html-tabindex.html">
+											<i>element</i>.tabIndex
+										</a></td>
+									<td>设置或返回元素的标签顺序。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-element-tagname.html">
+											<i>element</i>.tagName
+										</a></td>
+									<td>作为一个字符串返回某个元素的标记名（大写）</td>
+								</tr>
+								<tr>
+									<td><a href="prop-node-textcontent.html">
+											<i>element</i>.textContent
+										</a></td>
+									<td>设置或返回一个节点和它的文本内容</td>
+								</tr>
+								<tr>
+									<td><a href="prop-html-title.html">
+											<i>element</i>.title
+										</a></td>
+									<td>设置或返回元素的title属性</td>
+								</tr>
+								<tr>
+									<td><i>element</i>.toString()</td>
+									<td>一个元素转换成字符串</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td><a href="met-nodelist-item.html">
+											<em>nodelist</em>.item()
+										</a></td>
+									<td>返回某个元素基于文档树的索引</td>
+								</tr>
+								<tr>
+									<td><a href="prop-nodelist-length.html">
+											<em>nodelist</em>.length
+										</a></td>
+									<td>返回节点列表的节点数目。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-attributes" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">HTML DOM ATTRIBUTES 对象</h3>
+					</div>
+					<div class="panel-body">
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="30%" align="left">属性 / 方法</th>
+									<th align="left">描述</th>
+								</tr>
+								<tr>
+									<td><a href="prop-attr-isid.html">
+											<em>attr</em>.isId
+										</a></td>
+									<td>如果属性是 ID 类型，则 isId 属性返回 true，否则返回 false。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-attr-name.html">
+											<em>attr</em>.name
+										</a></td>
+									<td>返回属性名称</td>
+								</tr>
+								<tr>
+									<td><a href="prop-attr-value.html">
+											<em>attr</em>.value
+										</a></td>
+									<td>设置或者返回属性值</td>
+								</tr>
+								<tr>
+									<td><a href="prop-attr-specified.html">
+											<em>attr</em>.specified
+										</a></td>
+									<td>如果属性被指定返回 true ，否则返回 false</td>
+								</tr>
+								<tr>
+									<td>&nbsp;</td>
+									<td>&nbsp;</td>
+								</tr>
+								<tr>
+									<td><a href="met-namednodemap-getnameditem.html">
+											<em>nodemap</em>.getNamedItem()
+										</a></td>
+									<td>从节点列表中返回的指定属性节点。</td>
+								</tr>
+								<tr>
+									<td><a href="met-namednodemap-item.html">
+											<em>nodemap</em>.item()
+										</a></td>
+									<td>返回节点列表中处于指定索引号的节点。</td>
+								</tr>
+								<tr>
+									<td><a href="prop-namednodemap-length.html">
+											<em>nodemap</em>.length
+										</a></td>
+									<td>返回节点列表的节点数目。</td>
+								</tr>
+								<tr>
+									<td><a href="met-namednodemap-removenameditem.html">
+											<em>nodemap</em>.removeNamedItem()
+										</a></td>
+									<td>删除指定属性节点</td>
+								</tr>
+								<tr>
+									<td><a href="met-namednodemap-setnameditem.html">
+											<em>nodemap</em>.setNamedItem()
+										</a></td>
+									<td>设置指定属性节点(通过名称)</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<div class="alert alert-danger">
+							<h5>DOM 4 警告 !!!</h5>
+							<p>在 W3C DOM 内核中, Attr (属性) 对象继承节点对象的所有属性和方法 。</p>
+							<p>在 DOM 4 中, Attr (属性) 对象不再从节点对象中继承。</p>
+							<p>
+								<strong>从长远的代码质量来考虑，在属性对象中你需要避免使用节点对象属性和方法:</strong>
+							</p>
+						</div>
+
+						<table
+							class="table table-responsive table-striped table-bordered runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tbody>
+								<tr>
+									<th width="30%" align="left">属性 / 方法</th>
+									<th align="left">避免原因</th>
+								</tr>
+								<tr>
+									<td><i>attr</i>.appendChild()</td>
+									<td>属性没有子节点</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.attributes</td>
+									<td>属性没有属性</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.baseURI</td>
+									<td>使用 document.baseURI 替代</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.childNodes</td>
+									<td>属性没有子节点</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.cloneNode()</td>
+									<td>使用 attr.value 替代</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.firstChild</td>
+									<td>属性没有子节点</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.hasAttributes()</td>
+									<td>属性没有属性</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.hasChildNodes</td>
+									<td>属性没有子节点</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.insertBefore()</td>
+									<td>属性没有子节点</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.isEqualNode()</td>
+									<td>没有意义</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.isSameNode()</td>
+									<td>没有意义</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.isSupported()</td>
+									<td>通常为 true</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.lastChild</td>
+									<td>属性没有子节点</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.nextSibling</td>
+									<td>属性没有兄弟节点</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.nodeName</td>
+									<td>使用 <em>attr</em>.name 替代
+									</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.nodeType</td>
+									<td>通常为 2 (ATTRIBUTE-NODE)</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.nodeValue</td>
+									<td>使用 <em>attr</em>.value 替代
+									</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.normalize()</td>
+									<td>属性没有规范</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.ownerDocument</td>
+									<td>通常为你的 HTML 文档</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.ownerElement</td>
+									<td>你用来访问属性的 HTML 元素</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.parentNode</td>
+									<td>你用来访问属性的 HTML 元素</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.previousSibling</td>
+									<td>属性没有兄弟节点</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.removeChild</td>
+									<td>属性没有子节点</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.replaceChild</td>
+									<td>属性没有子节点</td>
+								</tr>
+								<tr>
+									<td><i>attr</i>.textContent</td>
+									<td>使用 <i>attr</i>.value 替代
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-events" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">HTML DOM EVENTS 对象</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">HTML DOM 事件</h5>
+						<p>
+							<b>DOM：</b> 指明使用的 DOM 属性级别。
+						</p>
+
+						<div class="sub-item">
+							<h5 class="text-primary">鼠标事件</h5>
+
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th width="20%" align="left">属性</th>
+										<th width="74%" align="left">描述</th>
+										<th width="6%" align="left">DOM</th>
+									</tr>
+									<tr>
+										<td><a href="event-onclick.html">onclick</a></td>
+										<td>当用户点击某个对象时调用的事件句柄。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-oncontextmenu.html">oncontextmenu</a></td>
+										<td>在用户点击鼠标右键打开上下文菜单时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-ondblclick.html">ondblclick</a></td>
+										<td>当用户双击某个对象时调用的事件句柄。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onmousedown.html">onmousedown</a></td>
+										<td>鼠标按钮被按下。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onmouseenter.html">onmouseenter</a></td>
+										<td>当鼠标指针移动到元素上时触发。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onmouseleave.html">onmouseleave</a></td>
+										<td>当鼠标指针移出元素时触发</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onmousemove.html">onmousemove</a></td>
+										<td>鼠标被移动。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onmouseover.html">onmouseover</a></td>
+										<td>鼠标移到某元素之上。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onmouseout.html">onmouseout</a></td>
+										<td>鼠标从某元素移开。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onmouseup.html">onmouseup</a></td>
+										<td>鼠标按键被松开。</td>
+										<td>2</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">键盘事件</h5>
+
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th width="20%" align="left">属性</th>
+										<th width="74%" align="left">描述</th>
+										<th width="6%" align="left">DOM</th>
+									</tr>
+									<tr>
+										<td><a href="event-onkeydown.html">onkeydown</a></td>
+										<td>某个键盘按键被按下。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onkeypress.html">onkeypress</a></td>
+										<td>某个键盘按键被按下并松开。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onkeyup.html">onkeyup</a></td>
+										<td>某个键盘按键被松开。</td>
+										<td>2</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">框架/对象（Frame/Object）事件</h5>
+
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th width="20%" align="left">属性</th>
+										<th width="74%" align="left">描述</th>
+										<th width="6%" align="left">DOM</th>
+									</tr>
+									<tr>
+										<td><a href="event-onabort.html">onabort</a></td>
+										<td>图像的加载被中断。 ( &lt;object&gt;)</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onbeforeunload.html">onbeforeunload</a></td>
+										<td>该事件在即将离开页面（刷新或关闭）时触发</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onerror.html">onerror</a></td>
+										<td>在加载文档或图像时发生错误。 ( &lt;object&gt;, &lt;body&gt;和
+											&lt;frameset&gt;)</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onhashchange.html">onhashchange</a></td>
+										<td>该事件在当前 URL 的锚部分发生修改时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onload.html">onload</a></td>
+										<td>一张页面或一幅图像完成加载。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onpageshow.html">onpageshow</a></td>
+										<td>该事件在用户访问页面时触发</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td><a href="event-onpagehide.html">onpagehide</a></td>
+										<td>该事件在用户离开当前网页跳转到另外一个页面时触发</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td><a href="event-onresize.html">onresize</a></td>
+										<td>窗口或框架被重新调整大小。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onscroll.html">onscroll</a></td>
+										<td>当文档被滚动时发生的事件。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onunload.html">onunload</a></td>
+										<td>用户退出页面。 ( &lt;body&gt; 和 &lt;frameset&gt;)</td>
+										<td>2</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">表单事件</h5>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th style="width: 20%">属性</th>
+										<th>描述</th>
+										<th style="width: 6%">DOM</th>
+									</tr>
+									<tr>
+										<td><a href="event-onblur.html">onblur</a></td>
+										<td>元素失去焦点时触发</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onchange.html">onchange</a></td>
+										<td>该事件在表单元素的内容改变时触发( &lt;input&gt;, &lt;keygen&gt;,
+											&lt;select&gt;, 和 &lt;textarea&gt;)</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onfocus.html">onfocus</a></td>
+										<td>元素获取焦点时触发</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onfocusin.html">onfocusin</a></td>
+										<td>元素即将获取焦点时触发</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onfocusout.html">onfocusout</a></td>
+										<td>元素即将失去焦点时触发</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-oninput.html">oninput</a></td>
+										<td>元素获取用户输入时触发</td>
+										<td>3</td>
+									</tr>
+									<tr>
+										<td><a href="event-onreset.html">onreset</a></td>
+										<td>表单重置时触发</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onsearch.html">onsearch</a></td>
+										<td>用户向搜索域输入文本时触发 ( &lt;input="search"&gt;)</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onselect.html">onselect</a></td>
+										<td>用户选取文本时触发 ( &lt;input&gt; 和 &lt;textarea&gt;)</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-onsubmit.html">onsubmit</a></td>
+										<td>表单提交时触发</td>
+										<td>2</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">剪贴板事件</h5>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th style="width: 20%">属性</th>
+										<th>描述</th>
+										<th style="width: 6%">DOM</th>
+									</tr>
+									<tr>
+										<td><a href="event-oncopy.html">oncopy</a></td>
+										<td>该事件在用户拷贝元素内容时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-oncut.html">oncut</a></td>
+										<td>该事件在用户剪切元素内容时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onpaste.html">onpaste</a></td>
+										<td>该事件在用户粘贴元素内容时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">打印事件</h5>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th style="width: 20%">属性</th>
+										<th>描述</th>
+										<th style="width: 6%">DOM</th>
+									</tr>
+									<tr>
+										<td><a href="event-onafterprint.html">onafterprint</a></td>
+										<td>该事件在页面已经开始打印，或者打印窗口已经关闭时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onbeforeprint.html">onbeforeprint</a></td>
+										<td>该事件在页面即将开始打印时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">拖动事件</h5>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th style="width: 20%">事件</th>
+										<th>描述</th>
+										<th style="width: 6%">DOM</th>
+									</tr>
+									<tr>
+										<td><a href="event-ondrag.html">ondrag</a></td>
+										<td>该事件在元素正在拖动时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-ondragend.html">ondragend</a></td>
+										<td>该事件在用户完成元素的拖动时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-ondragenter.html">ondragenter</a></td>
+										<td>该事件在拖动的元素进入放置目标时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-ondragleave.html">ondragleave</a></td>
+										<td>该事件在拖动元素离开放置目标时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-ondragover.html">ondragover</a></td>
+										<td>该事件在拖动元素在放置目标上时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-ondragstart.html">ondragstart</a></td>
+										<td>该事件在用户开始拖动元素时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-ondrop.html">ondrop</a></td>
+										<td>该事件在拖动元素放置在目标区域时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">多媒体（Media）事件</h5>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th style="width: 20%">事件</th>
+										<th>描述</th>
+										<th style="width: 6%">DOM</th>
+									</tr>
+									<tr>
+										<td><a href="event-onabort-media.html">onabort</a></td>
+										<td>事件在视频/音频（audio/video）终止加载时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-oncanplay.html">oncanplay</a></td>
+										<td>事件在用户可以开始播放视频/音频（audio/video）时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-oncanplaythrough.html">oncanplaythrough</a></td>
+										<td>事件在视频/音频（audio/video）可以正常播放且无需停顿和缓冲时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-ondurationchange.html">ondurationchange</a></td>
+										<td>事件在视频/音频（audio/video）的时长发生变化时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td>onemptied</td>
+										<td>当期播放列表为空时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onended.html">onended</a></td>
+										<td>事件在视频/音频（audio/video）播放结束时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onerror-media.html">onerror</a></td>
+										<td>事件在视频/音频（audio/video）数据加载期间发生错误时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onloadeddata.html">onloadeddata</a></td>
+										<td>事件在浏览器加载视频/音频（audio/video）当前帧时触发触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onloadedmetadata.html">onloadedmetadata</a></td>
+										<td>事件在指定视频/音频（audio/video）的元数据加载后触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onloadstart.html">onloadstart</a></td>
+										<td>事件在浏览器开始寻找指定视频/音频（audio/video）触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onpause.html">onpause</a></td>
+										<td>事件在视频/音频（audio/video）暂停时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onplay.html">onplay</a></td>
+										<td>事件在视频/音频（audio/video）开始播放时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onplaying.html">onplaying</a></td>
+										<td>事件在视频/音频（audio/video）暂停或者在缓冲后准备重新开始播放时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onprogress.html">onprogress</a></td>
+										<td>事件在浏览器下载指定的视频/音频（audio/video）时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onratechange.html">onratechange</a></td>
+										<td>事件在视频/音频（audio/video）的播放速度发送改变时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onseeked.html">onseeked</a></td>
+										<td>事件在用户重新定位视频/音频（audio/video）的播放位置后触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onseeking.html">onseeking</a></td>
+										<td>事件在用户开始重新定位视频/音频（audio/video）时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onstalled.html">onstalled</a></td>
+										<td>事件在浏览器获取媒体数据，但媒体数据不可用时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onsuspend.html">onsuspend</a></td>
+										<td>事件在浏览器读取媒体数据中止时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-ontimeupdate.html">ontimeupdate</a></td>
+										<td>事件在当前的播放位置发送改变时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onvolumechange.html">onvolumechange</a></td>
+										<td>事件在音量发生改变时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onwaiting.html">onwaiting</a></td>
+										<td>事件在视频由于要播放下一帧而需要缓冲时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">动画事件</h5>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th style="width: 20%">事件</th>
+										<th>描述</th>
+										<th style="width: 6%">DOM</th>
+									</tr>
+									<tr>
+										<td><a href="event-animationend.html">animationend</a></td>
+										<td>该事件在 CSS 动画结束播放时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-animationiteration.html">animationiteration</a></td>
+										<td>该事件在 CSS 动画重复播放时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-animationstart.html">animationstart</a></td>
+										<td>该事件在 CSS 动画开始播放时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">过渡事件</h5>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th style="width: 20%">事件</th>
+										<th>描述</th>
+										<th style="width: 6%">DOM</th>
+									</tr>
+									<tr>
+										<td><a href="event-transitionend.html">transitionend</a></td>
+										<td>该事件在 CSS 完成过渡后触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">其他事件</h5>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th style="width: 20%">事件</th>
+										<th>描述</th>
+										<th style="width: 6%">DOM</th>
+									</tr>
+									<tr>
+										<td>onmessage</td>
+										<td>该事件通过或者从对象(WebSocket, Web Worker, Event Source 或者子
+											frame 或父窗口)接收到消息时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td>onmousewheel</td>
+										<td><span class="text-danger">已废弃。</span> 使用 <a
+												href="event-onwheel.html">onwheel</a> 事件替代</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-ononline.html">ononline</a></td>
+										<td>该事件在浏览器开始在线工作时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onoffline.html">onoffline</a></td>
+										<td>该事件在浏览器开始离线工作时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td>onpopstate</td>
+										<td>该事件在窗口的浏览历史（history 对象）发生改变时触发。</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onshow.html">onshow</a></td>
+										<td>该事件当 &lt;menu&gt; 元素在上下文菜单显示时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td>onstorage</td>
+										<td>该事件在 Web Storage(HTML 5 Web 存储)更新时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-ontoggle.html">ontoggle</a></td>
+										<td>该事件在用户打开或关闭 &lt;details&gt; 元素时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+									<tr>
+										<td><a href="event-onwheel.html">onwheel</a></td>
+										<td>该事件在鼠标滚轮在元素上下滚动时触发</td>
+										<td>&nbsp;</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">事件对象</h5>
+
+							<h6 class="text-primary">常量</h6>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th width="20%" align="left">静态变量</th>
+										<th width="74%" align="left">描述</th>
+										<th width="6%" align="left">DOM</th>
+									</tr>
+									<tr>
+										<td>CAPTURING-PHASE</td>
+										<td>当前事件阶段为捕获阶段(3)</td>
+										<td>1</td>
+									</tr>
+									<tr>
+										<td>AT-TARGET</td>
+										<td>当前事件是目标阶段,在评估目标事件(1)</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td>BUBBLING-PHASE</td>
+										<td>当前的事件为冒泡阶段 (2)</td>
+										<td>3</td>
+									</tr>
+								</tbody>
+							</table>
+							<h6 class="text-primary">属性</h6>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th width="20%" align="left">属性</th>
+										<th width="74%" align="left">描述</th>
+										<th width="6%" align="left">DOM</th>
+									</tr>
+									<tr>
+										<td><a href="event-bubbles.html">bubbles</a></td>
+										<td>返回布尔值，指示事件是否是起泡事件类型。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-cancelable.html">cancelable</a></td>
+										<td>返回布尔值，指示事件是否可拥可取消的默认动作。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-currenttarget.html">currentTarget</a></td>
+										<td>返回其事件监听器触发该事件的元素。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td>eventPhase</td>
+										<td>返回事件传播的当前阶段。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-target.html">target</a></td>
+										<td>返回触发此事件的元素（事件的目标节点）。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-timestamp.html">timeStamp</a></td>
+										<td>返回事件生成的日期和时间。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-type.html">type</a></td>
+										<td>返回当前 Event 对象表示的事件的名称。</td>
+										<td>2</td>
+									</tr>
+								</tbody>
+							</table>
+							<h6 class="text-primary">方法</h6>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th width="20%" align="left">方法</th>
+										<th width="74%" align="left">描述</th>
+										<th width="6%" align="left">DOM</th>
+									</tr>
+									<tr>
+										<td>initEvent()</td>
+										<td>初始化新创建的 Event 对象的属性。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td>preventDefault()</td>
+										<td>通知浏览器不要执行与事件关联的默认动作。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td>stopPropagation()</td>
+										<td>不再派发事件。</td>
+										<td>2</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">目标事件对象</h5>
+							<h6 class="text-primary">方法</h6>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th width="20%" align="left">方法</th>
+										<th width="74%" align="left">描述</th>
+										<th width="6%" align="left">DOM</th>
+									</tr>
+									<tr>
+										<td>addEventListener()</td>
+										<td>允许在目标事件中注册监听事件(IE8 = attachEvent())</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td>dispatchEvent()</td>
+										<td>允许发送事件到监听器上 (IE8 = fireEvent())</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td>removeEventListener()</td>
+										<td>运行一次注册在事件目标上的监听事件(IE8 = detachEvent())</td>
+										<td>2</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">事件监听对象</h5>
+							<h6 class="text-primary">方法</h6>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th width="20%" align="left">方法</th>
+										<th width="74%" align="left">描述</th>
+										<th width="6%" align="left">DOM</th>
+									</tr>
+									<tr>
+										<td>handleEvent()</td>
+										<td>把任意对象注册为事件处理程序</td>
+										<td>2</td>
+									</tr>
+								</tbody>
+							</table>
+							<h5 class="text-primary">文档事件对象</h5>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th width="20%" align="left">方法</th>
+										<th width="74%" align="left">描述</th>
+										<th width="6%" align="left">DOM</th>
+									</tr>
+									<tr>
+										<td>createEvent()</td>
+										<td>&nbsp;</td>
+										<td>2</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">鼠标/键盘事件对象</h5>
+							<h6 class="text-primary">属性</h6>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th width="20%" align="left">属性</th>
+										<th width="74%" align="left">描述</th>
+										<th width="6%" align="left">DOM</th>
+									</tr>
+									<tr>
+										<td><a href="event-altkey.html">altKey</a></td>
+										<td>返回当事件被触发时，"ALT" 是否被按下。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-button.html">button</a></td>
+										<td>返回当事件被触发时，哪个鼠标按钮被点击。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-clientx.html">clientX</a></td>
+										<td>返回当事件被触发时，鼠标指针的水平坐标。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-clienty.html">clientY</a></td>
+										<td>返回当事件被触发时，鼠标指针的垂直坐标。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-ctrlkey.html">ctrlKey</a></td>
+										<td>返回当事件被触发时，"CTRL" 键是否被按下。</td>
+										<td>2</td>
+									</tr>
+
+									<tr>
+										<td><a href="event-key-location.html">Location</a></td>
+										<td>返回按键在设备上的位置</td>
+										<td>3</td>
+									</tr>
+									<tr>
+										<td><a href="event-key-charcode.html">charCode</a></td>
+										<td>返回onkeypress事件触发键值的字母代码。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-key-key.html">key</a></td>
+										<td>在按下按键时返回按键的标识符。</td>
+										<td>3</td>
+									</tr>
+									<tr>
+										<td><a href="event-key-keycode.html">keyCode</a></td>
+										<td>返回onkeypress事件触发的键的值的字符代码，或者 onkeydown 或 onkeyup
+											事件的键的代码。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-key-which.html">which</a></td>
+										<td>返回onkeypress事件触发的键的值的字符代码，或者 onkeydown 或 onkeyup
+											事件的键的代码。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-metakey.html">metaKey</a></td>
+										<td>返回当事件被触发时，"meta" 键是否被按下。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-relatedtarget.html">relatedTarget</a></td>
+										<td>返回与事件的目标节点相关的节点。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-screenx.html">screenX</a></td>
+										<td>返回当某个事件被触发时，鼠标指针的水平坐标。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-screeny.html">screenY</a></td>
+										<td>返回当某个事件被触发时，鼠标指针的垂直坐标。</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td><a href="event-shiftkey.html">shiftKey</a></td>
+										<td>返回当事件被触发时，"SHIFT" 键是否被按下。</td>
+										<td>2</td>
+									</tr>
+								</tbody>
+							</table>
+							<h6 class="text-primary">方法</h6>
+							<table
+								class="table table-responsive table-striped table-bordered runoob"
+								data-base="http://www.runoob.com/jsref/">
+								<tbody>
+									<tr>
+										<th width="20%" align="left">方法</th>
+										<th width="74%" align="left">描述</th>
+										<th width="6%" align="left">W3C</th>
+									</tr>
+									<tr>
+										<td>initMouseEvent()</td>
+										<td>初始化鼠标事件对象的值</td>
+										<td>2</td>
+									</tr>
+									<tr>
+										<td>initKeyboardEvent()</td>
+										<td>初始化键盘事件对象的值</td>
+										<td>3</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-dom-element" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">HTML DOM 元素对象</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/jsref/">
+							<tr>
+								<td><a href="dom-obj-anchor.html">Anchor 对象</a></td>
+								<td></td>
+							</tr>
+
+							<tr>
+								<td><a href="dom-obj-area.html">Area 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-base.html">Base 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-body.html">Body 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-pushbutton.html">Button 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-form.html">Form 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-frame.html">Frame/IFrame 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-frameset.html">Frameset 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-image.html">Image 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-button.html">Input Button 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-checkbox.html">Input Checkbox 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-fileupload.html">Input File 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-hidden.html">Input Hidden 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-password.html">Input Password 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-radio.html">Input Radio 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-reset.html">Input Reset 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-submit.html">Input Submit 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-text.html">Input Text 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-link.html">Link 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-meta.html">Meta 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-object.html">Object 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-option.html">Option 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-select.html">Select 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-style.html">Style 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-table.html">Table 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-tabledata.html">td / th 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-tablerow.html">tr 对象</a></td>
+								<td></td>
+							</tr>
+							<tr>
+
+								<td><a href="dom-obj-textarea.html">Textarea 对象</a></td>
+								<td></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+
+
+				<!-- item start -->
+				<a id="js-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"></h3>
+					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 			</div>
@@ -105,14 +3522,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
