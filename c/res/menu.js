@@ -1,1 +1,1 @@
-var arr = [ "index.html", "C" ];
+var arr = [ "index.html", "C", "gcc.html", "GCC" ];

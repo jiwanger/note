@@ -96,7 +96,10 @@
 						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-
+						<p>Git 是用于 Linux内核开发的版本控制工具。与常用的版本控制工具 CVS, Subversion
+							等不同，它采用了分布式版本库的方式，不必服务器端软件支持（wingeddevil注：这得分是用什么样的服务端，使用http协议或者git协议等不太一样。并且在push和pull的时候和服务器端还是有交互的。），使源代码的发布和交流极其方便。
+							Git 的速度很快，这对于诸如 Linux kernel 这样的大项目来说自然很重要。 Git
+							最为出色的是它的合并跟踪（merge tracing）能力。</p>
 						<p>对于任何一个文件,在 Git 内都只有三种状态:</p>
 						<ul>
 							<li>已提交(committed) -- 已提交表示该文件已经被安全地保存在本地数据库中了</li>
@@ -170,12 +173,85 @@ doc/*.txt	# 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
 						<h3 class="panel-title">常用命令</h3>
 					</div>
 					<div class="panel-body">
-						<pre class="brush: bash;">
-$ git status							# 检查当前文件状态
-$ git add file/path						# 跟踪新文件/目录, 暂存已修改文件
-$ git commit -m "更改说明"
-$ git commit -am "更改说明"
+						<div class="sub-item">
+							<p>记录每次更新到仓库</p>
+							<pre class="brush: bash;">
+$ git status					# 检查当前文件状态
+$ git add file/path				# 跟踪新文件/目录, 暂存已修改文件
+$ git commit -m "更改说明"			# 提交更新
+$ git commit -am "更改说明"			# 跳过暂存，提交更新;已经跟踪过的文件暂存起来一并提交
+$ git rm file					# 删除文件，提交的时候,该文件就不再纳入版本管理
+$ git rm -f file				# 强制删除，如果删除之前修改过并且已经放到暂存区域的话,则必须要用强制删除选项
+$ git rm --cached file			# 不删除文件，仅是从跟踪清单中删除（如果不小心暂存了不必要暂存的文件）
+$ git mv file rename_file		# 移动文件
 </pre>
+						</div>
+						<div class="sub-item">
+							<p>查看提交历史</p>
+							<pre class="brush: bash;">
+$ gitk							# 图形化界面查看提交历史
+$ git log						# 查看提交历史
+	# -p 按补丁格式显示每个更新之间的差异。
+	# --stat 显示每次更新的文件修改统计信息。
+	# --shortstat 只显示 --stat 中最后的行数修改添加移除统计。
+	# --name-only 仅在提交信息后显示已修改的文件清单。
+	# --name-status 显示新增、修改、删除的文件清单。
+	# --abbrev-commit 仅显示 SHA-1 的前几个字符,而非所有的 40 个字符。
+	# --relative-date 使用较短的相对时间显示(比如,“2 weeks ago”)。
+	# --graph 显示 ASCII 图形表示的分支合并历史。
+	# --pretty 使用其他格式显示历史提交信息。可用的选项包括 oneline,short,full,fuller 和 format(后跟指定格式)。
+$ git log -2					# 查看最近两次提交
+$ git log -p -2					# 查看最近两次提交差异 -p 选项展开显示每次提交的内容差异
+$ git log -stat					# 查看提交差异摘要，仅显示简要的增改行数统计
+$ git log --pretty=format:"%h - %an, %ar : %s"		# 指定格式显示每次提交日志
+	# %H 提交对象(commit)的完整哈希字串
+	# %h 提交对象的简短哈希字串
+	# %T 树对象(tree)的完整哈希字串
+	# %t 树对象的简短哈希字串
+	# %P 父对象(parent)的完整哈希字串
+	# %p 父对象的简短哈希字串
+	# %an 作者(author)的名字
+	# %ae 作者的电子邮件地址
+	# %ad 作者修订日期(可以用 -date= 选项定制格式)
+	# %ar 作者修订日期,按多久以前的方式显示
+	# %cn 提交者(committer)的名字
+	# %ce 提交者的电子邮件地址
+	# %cd 提交日期
+	# %cr 提交日期,按多久以前的方式显示
+	# %s 提交说明
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>撤消操作</p>
+							<pre class="brush: bash;">
+# 启动文本编辑器后,会看到上次提交时的说明,编辑它确认没问题后保存退出,就会使用新的提交说明覆盖刚才失误的提交
+$ git commit --amend
+
+# 如果有文件没有提交，先提交，再运行　--amend,三条命令最终得到一个提交,第二个提交命令修正了第一个的提交内容
+$ git commit -m 'initial commit'
+$ git add forgotten_file
+$ git commit --amend
+
+$ git reset HEAD file			# 取消已经暂存的文件
+$ git checkout -- file			# 取消对文件的修改
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>远程仓库的使用</p>
+							<pre class="brush: bash;">
+$ git remote -v					# 查看当前的远程库
+$ git remote add my-name git@github.com/jiwanger/note	# 添加仓库
+$ git fetch pb my-name			# 从刚添加的远程仓库抓取数据
+$ git push origin master		# 推送数据到远程仓库
+$ git remote show origin		# 查看过程仓库信息
+
+$ git remote rename my-name paul		# 重命名过程仓库
+$ git remote rm paul					# 删除远程仓库
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>打标签: 轻量级标签 和 含附注的标签</p>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->

@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -66,18 +66,35 @@
 					</div>
 					<div class="list-group">
 						<a href="#linux-intro" class="list-group-item">简介</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+						<a href="#linux-file-system" class="list-group-item">文件系统</a>
+						<a href="#linux-user" class="list-group-item">用户管理</a>
+						<a href="#linux-limit" class="list-group-item">权限管理</a>
+						<a class="list-group-item active dropdown" data-toggle="collapse"
+							data-parent="#accordion" href="#linux-command"
+							aria-expanded="true">
+							常用命令<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="linux-command" class="panel-collapse collapse"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#linux-man" class="list-group-item">MAN 手册</a>
+							<a href="#linux-tree" class="list-group-item">TREE 命令</a>
+							<a href="#linux-find" class="list-group-item">FIND 命令</a>
+							<a href="#linux-history" class="list-group-item">HISTORY 命令</a>
+							<a href="#linux-grep" class="list-group-item">GREP 命令</a>
+							<a href="#linux-text" class="list-group-item">文本查看 命令集</a>
+							<a href="#linux-file" class="list-group-item">文件操作 命令集</a>
+							<a href="#linux-tar" class="list-group-item">TAR 命令</a>
+							<a href="#linux-zip" class="list-group-item">ZIP 命令</a>
+							<a href="#linux-wget" class="list-group-item">WGET 命令</a>
+							<a href="#linux-apt" class="list-group-item">APT 命令集</a>
+							<a href="#linux-system" class="list-group-item">监控系统和性能 命令集</a>
+							<a href="#linux-xargs" class="list-group-item">XARGS 命令</a>
+							<a href="#linux-chmod" class="list-group-item">CHMOD 命令</a>
+							<a href="#linux-chown" class="list-group-item">CHOWN 命令</a>
+							<a href="#linux-kill" class="list-group-item">KILL 命令</a>
+							<a href="#linux-" class="list-group-item"> 命令</a>
 						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#linux-" class="list-group-item">...</a>
 					</div>
 				</div>
 			</div>
@@ -88,8 +105,11 @@
 
 	<div class="container" style="margin-top: 70px;">
 		<div class="row">
-			<div class="col-md-3"></div>
-			<div class="col-md-9" style="float: left;">
+			<div class="col-md-9 col-md-push-3" style="float: left;">
+				<div class="alert alert-danger">
+					<h4 style="margin: 0 auto;">本文所有实例使用 Linux Mint 32位系统下测试，不同的
+						Linux 发行版可能略有不同</h4>
+				</div>
 				<!-- item start -->
 				<a class="offset" id="linux-intro"></a>
 				<div class="panel panel-default">
@@ -97,116 +117,828 @@
 						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
+						<p>Linux是一套免费使用和自由传播的类Unix操作系统，是一个基于POSIX和UNIX的多用户、多任务、支持多线程和多CPU的操作系统。它能运行主要的UNIX工具软件、应用程序和网络协议。它支持32位和64位硬件。Linux继承了Unix以网络为核心的设计思想，是一个性能稳定的多用户网络操作系统。</p>
+						<p>Linux 操作系统的诞生、发展和成长过程始终依赖着五个重要支柱：UNIX 操作系统、MINIX
+							操作系统、GNU计划、POSIX 标准和Internet 网络。</p>
+						<p>Linux的基本思想有两点：第一，一切都是文件；第二，每个软件都有确定的用途。其中第一条详细来讲就是系统中的所有都归结为一个文件，包括命令、硬件和软件设备、操作系统、进程等等对于操作系统内核而言，都被视为拥有各自特性或类型的文件。至于说Linux是基于Unix的，很大程度上也是因为这两者的基本思想十分相近。</p>
+						<p>Linux同时具有字符界面和图形界面。</p>
+						<p>在图形计算中，一个桌面环境（Desktop
+							environment，有时称为桌面管理器）为计算机提供一个图形用户界面（GUI）。现今主流的桌面环境有KDE, gnome,
+							Xfce, LXDE等，除此之外还有Ambient, EDE, IRIX Interactive Desktop, Mezzo,
+							Sugar, CDE等。</p>
+						<p>常见的 Linux 发行版服务器和桌面:</p>
+						<ul>
+							<li>
+								<p>
+									<code>RHEL</code>
+									-- Red Hat Enterprise Linux, 是Red
+									Hat公司的Linux发行版，面向商业市场，很多软件要收费。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>CentOS</code>
+									-- CentOS 是一个基于Red Hat Linux 提供的可自由使用源代码的企业级Linux发行版本。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>Fedora</code>
+									-- RedHat 旗下桌面版本。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>Ubuntu</code>
+									-- Server 和 桌面都有不错的体验，许多其它的发行版本基于Ubuntu。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>Mint</code>
+									--
+									基于Debian和Ubuntu的Linux发行版。它诞生的目的是为家庭用户和企业提供一个免费的，易用的，舒适而优雅的桌面操作系统。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>OpenSUSE</code>
+									-- OpenSUSE稳定，使用起来通常非常简单。OpenSUSE可能缺乏一些像Mint和Ubuntu那样的手把手指南
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>Debian</code>
+									-- Debian是一系列其他Linux发行版的基础，包括Ubuntu和Mint。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>Elementary OS</code>
+									-- 一个基于Ubuntu的Linux发行版，号称 “最美的 Linux”。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>Arch Linux</code>
+									-- 前提是你真的愿意亲手管理系统，但大多数人都习惯于自动化。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>Kali linux</code>
+									-- Kali Linux是基于Debian的Linux发行版， 设计用于数字取证和渗透测试。Kali
+									Linux预装了许多渗透测试软件。
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-file-system"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">文件系统</h3>
+					</div>
+					<div class="panel-body">
+						<p>Linux的基本思想有两点：第一，一切都是文件；第二，每个软件都有确定的用途。其中第一条详细来讲就是系统中的所有都归结为一个文件，包括命令、硬件和软件设备、操作系统、进程等等对于操作系统内核而言，都被视为拥有各自特性或类型的文件。</p>
+						<p>Linux 文件类别</p>
+						<ul>
+							<li>
+								普通文件 -- 就是一般存取的文件，由ls -al显示出来的属性中，第一个属性为 [-]，例如
+								[-rwxrwxrwx]。另外，依照文件的内容，又大致可以分为：
+								<ul>
+									<li>纯文本文件 -- 可直接读取的文件</li>
+									<li>二进制文件 -- 可执行文件</li>
+									<li>数据格式的文件 -- 自定义格式的文件</li>
+								</ul>
+							</li>
+							<li>目录文件 -- 目录，第一个属性为 [d]，例如 [drwxrwxrwx]</li>
+							<li>连接文件 -- 指向别的文件的文件，第一个属性为 [l]，例如 [lrwxrwxrwx]。</li>
+							<li>
+								设备文件 -- 与系统外设及存储等相关的一些文件，通常都集中在 /dev目录。通常又分为两种：
+								<ul>
+									<li>块设备文件 -- 就是存储数据以供系统存取的接口设备，简单而言就是硬盘。例如一号硬盘的代码是
+										/dev/hda1等文件。第一个属性为 [b]。</li>
+									<li>字符设备文件 -- 即串行端口的接口设备，例如键盘、鼠标等等。第一个属性为 [c]。</li>
+								</ul>
+							</li>
+							<li>套接字文件 --
+								类文件通常用在网络数据连接。可以启动一个程序来监听客户端的要求，客户端就可以通过套接字来进行数据通信。第一个属性为
+								[s]，最常在 /var/run目录中看到这种文件类型。</li>
+							<li>管道文件 --
+								FIFO也是一种特殊的文件类型，它主要的目的是，解决多个程序同时存取一个文件所造成的错误。FIFO是first-in-first-out（先进先出）的缩写。第一个属性为
+								[p]。</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-user"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">用户管理</h3>
+					</div>
+					<div class="panel-body">
+						<p>Linux 中用户分为三类:</p>
+						<ul>
+							<li>ROOT -- 可以操作系统任何文件 和命令,拥有最高权限;</li>
+							<li>普通用户 -- 操作自己家目录的内容和管理员允许有权限的目录;</li>
+							<li>虚拟用户 --
+								这类用户也被称之为伪用户或假用户,与真实用户区分开来,这类用户不具有登录系统的能力,但却是系统运行不可缺少的用户,比如
+								bin、daemon、adm、ftp、mail 等</li>
+						</ul>
+						<p>值得注意的是用户的角色是通过 UID 来识别的,每个帐号都有一个唯 一的数字编号,这就是 UID,root 帐号的
+							UID 号对应 0,所以 root 帐号可以 改为其它名称,但只要 UID 不变,它还是超级用户。</p>
+						<h6 class="text-primary">
+							以下是
+							<code>/etc/passwd</code>
+							文件内容：
+						</h6>
+						<pre class="brush: bash;">
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+libuuid:x:100:101::/var/lib/libuuid:
+syslog:x:101:104::/home/syslog:/bin/false
+messagebus:x:102:106::/var/run/dbus:/bin/false
+usbmux:x:103:46:usbmux daemon,,,:/home/usbmux:/bin/false
+dnsmasq:x:104:65534:dnsmasq,,,:/var/lib/misc:/bin/false
+avahi-autoipd:x:105:114:Avahi autoip daemon,,,:/var/lib/avahi-autoipd:/bin/false
+kernoops:x:106:65534:Kernel Oops Tracking Daemon,,,:/:/bin/false
+rtkit:x:107:115:RealtimeKit,,,:/proc:/bin/false
+saned:x:108:116::/home/saned:/bin/false
+speech-dispatcher:x:109:29:Speech Dispatcher,,,:/var/run/speech-dispatcher:/bin/sh
+avahi:x:110:117:Avahi mDNS daemon,,,:/var/run/avahi-daemon:/bin/false
+pulse:x:111:119:PulseAudio daemon,,,:/var/run/pulse:/bin/false
+colord:x:112:121:colord colour management daemon,,,:/var/lib/colord:/bin/false
+hplip:x:113:7:HPLIP system user,,,:/var/run/hplip:/bin/false
+mdm:x:114:122:MDM Display Manager:/var/lib/mdm:/bin/false
+nate:x:1000:1000:nate,,,:/home/nate:/bin/bash
+nvidia-persistenced:x:115:124:NVIDIA Persistence Daemon,,,:/:/sbin/nologin
+mysql:x:116:125:MySQL Server,,,:/nonexistent:/bin/false
+libvirt-qemu:x:117:127:Libvirt Qemu,,,:/var/lib/libvirt:/bin/false
+libvirt-dnsmasq:x:118:128:Libvirt Dnsmasq,,,:/var/lib/libvirt/dnsmasq:/bin/false
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-limit"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">权限管理</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-man"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">man -- 格式化手册页的宏</h3>
+					</div>
+					<div class="panel-body">
+						<p>开发者可以使用这个宏包来为 linux 书写或移植手册文档。
+							它与其他版本的这个宏包一般是兼容的，因此移植不是一个大问题。</p>
+						<p>中文 man 手册安装:</p>
+						<p>man 手册格式如下:</p>
+						<div class="sub-item">
+							<pre class="brush: bash;">
+.\"				# 注解行
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>一篇手册页的第一个命令(注释行之后) 应当是它:</p>
+							<pre class="brush: bash;">
+.TH title section date source manual		# 标题　章节　日期　来源　手册
+</pre>
+							<p>手册章节(section)传统上如下定义：</p>
+
+							<ul>
+								<li>1 Commands -- 用户可从 shell 运行的命令</li>
+								<li>2 System calls -- 必须由内核完成的功能</li>
+								<li>3 Library calls -- 大多数 libc 函数，例如 qsort(3))</li>
+								<li>4 Special files -- /dev) 目录中的文件</li>
+								<li>File formats and conventions -- /etc/passwd
+									等人类可读的文件的格式说明</li>
+								<li>6 Games</li>
+								<li>7 Macro packages and conventions --
+									文件系统标准描述,网络协议,ASCII和其他字符集,还有你眼前这份文档以及其他东西</li>
+								<li>8 System management commands -- 类似 mount(8) 等命令，大部分只能由
+									root 执行</li>
+							</ul>
+						</div>
+						<div class="sub-item">
+							<p>段以 .SH 开始，后跟标题名。如果标题包含空格并且和 .SH
+								在同一行，则需在标题上加双引号。传统的或建议的标题包括如下：唯一必须的标题是 NAME,
+								他应是手册页的第一段，后面应紧跟对该命令的简单描述。</p>
+							<pre class="brush: bash;">.SH NAME</pre>
+							<ul>
+								<li>名字 NAME -- 命令名字</li>
+								<li>总览 SYNOPSIS -- 简要描述命令或函数接口。</li>
+								<li>描述 DESCRIPTION -- 解释命令、函数或格式的用途。</li>
+								<li>返回值 RETURN VALUE -- 列出程序或函数会返回的值，指出引发返回值的条件或原因。</li>
+								<li>退出状态 EXIT STATUS -- 列出可能的退出状态的值，指出引起返回的程序或原因。</li>
+								<li>选项 OPTIONS -- 指出程序可用的选项，及其作用。</li>
+								<li>用法 USAGE -- 描述程序的较高级的使用方法。</li>
+								<li>示例 EXAMPLES -- 使用实例。</li>
+								<li>文件 FILES -- 列出程序或函数使用到的文件， 比如配置文件、启动文件和程序直接操作的文件。</li>
+								<li>环境 ENVIRONMENT -- 列出影响你的程序的所有环境变量，并说明影响的原因。</li>
+								<li>诊断 DIAGNOSTICS -- 写出常会出现的错误概述，并说明解决的办法。</li>
+								<li>安全 SECURITY -- 讨论安全问题和相关话题。</li>
+								<li>遵循 CONFORMING TO -- 描述它实现的任何标准或约定。</li>
+								<li>注意 NOTES -- 提供杂项注意事项。</li>
+								<li>BUGS -- 列出局限、已知的缺点或不便之处，还有其他可能存在的问题。</li>
+								<li>作者 AUTHOR -- 列出程序或文件作者，联系办法等。</li>
+								<li>参见 SEE ALSO -- 以字母顺序列出相关的手册页（man pages)。</li>
+							</ul>
+						</div>
+						<div class="sub-item">
+							<p>字体选项</p>
+							<ul>
+								<li>.B -- 黑体</li>
+								<li>.BI -- 黑体和下划线（或斜体）交替（描述函数时非常有用）</li>
+								<li>.BR -- 黑体和普通体交替（描述引用时非常有用）</li>
+								<li>.I -- 下划线（或斜体）</li>
+								<li>.IB -- 下划线（或斜体）和黑体交替</li>
+								<li>.IR -- 普通体和下划线（或斜体）交替</li>
+								<li>.RB -- 普通体和下划线（或斜体）交替</li>
+								<li>.RI -- 小号字和黑体交替</li>
+								<li>.SB -- 小号字和黑体交替</li>
+								<li>.SM -- 小号字（用于缩写）
+							</ul>
+						</div>
+						<p>
+							自己写的man手册:
+							<code>xcode.1</code>
+							这里使用.1的man手册, 位置要在
+							<code>/usr/share/man/man1/</code>
+							目录下(Mint系统):
+						</p>
+						<pre class="brush: bash;">
+.\" xcode 的 man 手册
+.TH xcode 1 "2016-12-01" "xcode 1.0"
+
+.SH NAME
+xcode \- 创建生成二维码图片
+
+.SH 摘要
+xcode url
+
+.SH 描述
+.B 使用xcode生成对应url的对应的信息,本程序使用java实现，运行信赖JVM
+
+.SH 作者
+.B jiwanger@126.com
+</pre>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<a data-toggle="collapse" data-parent="#accordion"
+									href="#linux-man-example" aria-expanded="true"
+									class="code-header">
+									<span class="glyphicon glyphicon-plus"></span> 以下是 ls 命令的中文 man
+									手册
+								</a>
+							</div>
+							<div id="linux-man-example" class="panel-collapse collapse"
+								style="" aria-expanded="true">
+								<pre class="brush: bash;">
+.\" Copyright Andries Brouwer, Ragnar Hojland Espinosa and A. Wik, 1998.
+.\"
+.\" This file may be copied under the conditions described
+.\" in the LDP GENERAL PUBLIC LICENSE, Version 1, September 1998
+.\" that should have been distributed together with this file.
+.\"
+.TH LS 1 "November 1998" "GNU fileutils 4.0"
+.SH NAME
+ls, dir, vdir \- 列目录内容
+
+.SH 提要
+ls [选项] [文件名...]
+.sp
+POSIX 标准选项:
+.B "[-CFRacdilqrtu1]"
+.SH GNU 选项 (短格式):
+.B [-1abcdfgiklmnopqrstuxABCDFGLNQRSUX] 
+.B [-w cols] [-T cols] [-I pattern] 
+.B [--full-time]
+.B [--format={long,verbose,commas,across,vertical,single-column}] 
+.B [--sort={none,time,size,extension}]
+.B [--time={atime,access,use,ctime,status}]
+.B [--color[={none,auto,always}]] 
+.B [--help] 
+.B [--version] 
+.B [--]
+.SH 描述（ DESCRIPTION ）
+程序ls先列出非目录的文件项，然后是每一个目录中的\(lq可显示\(rq文件。如果
+没有选项之外的参数【译注：即文件名部分为空】出现，缺省为 "." （当前目录）。
+选项\(lq -d \(rq使得目录与非目录项同样对待。除非\(lq -a \(rq 选项出现，文
+件名以\(lq.\(rq开始的文件不属\(lq可显示\(rq文件。
+
+以当前目录为准，每一组文件（包括非目录文件项，以及每一内含文件的目录）分
+别按文件名比较顺序排序。如果\(lq -l \(rq选项存在，每组文件前显示一摘要行:
+给出该组文件长度之和（以 512 字节为单位）。
+
+输出是到标准输出（ stdout ）。除非以\(lq -C \(rq选项要求按多列输出，输出
+将是一行一个。然而，输出到终端时，单列输出或多列输出是不确定的。可以分别
+用选项\(lq -1 \(rq 或\(lq -C \(rq来强制按单列或多列输出。
+.PP POSIX 选项
+.TP
+.B "\-C"
+多列输出，纵向排序。
+.TP
+.B "\-F"
+每个目录名加\(lq / \(rq后缀，每个 FIFO 名加\(lq | \(rq后缀，
+每个可运行名加\(lq * \(rq后缀。
+.TP
+.B "\-R"
+递归列出遇到的子目录。
+.TP
+.B "\-a"
+列出所有文件，包括以 "." 开头的隐含文件。
+.TP
+.B "\-c"
+使用\(lq状态改变时间\(rq代替\(lq文件修改时间\(rq为依据来排序
+（使用\(lq -t \(rq选项时）或列出（使用\(lq -l \(rq选项时）。
+.TP
+.B "\-d"
+将目录名象其它文件一样列出，而不是列出它们的内容。
+.TP
+.B "\-i"
+输出文件前先输出文件系列号（即 i 节点号: i-node number）。
+-l 列出（以单列格式）文件模式（ file mode ），文件的链
+接数，所有者名，组名，文件大小（以字节为单位），时间信
+息，及文件名。缺省时，时间信息显示最近修改时间；可以以
+选项\(lq -c \(rq和\(lq -u \(rq选择显示其它两种时间信息。对于设
+备文件，原先显示文件大小的区域通常显示的是主要和次要的
+号（majorand minor device numbers）。
+.TP
+.B "\-q"
+将文件名中的非打印字符输出为问号。（对于到终端的输出这是缺省的。）
+.TP
+.B "\-r"
+逆序排列。
+.TP
+.B "\-t"
+按时间信息排序。
+.TP
+.B "\-u"
+使用最近访问时间代替最近修改时间为依据来排序（使用
+\(lq -t \(rq选项时）或列出（使用\(lq -l \(rq选项时）。
+.TP
+.B "\-1" 单列输出。
+.SH GNU 细节
+如果标准输出是终端，将多列输出（纵向排序）。
+.TP
+dir ( 也被安装为命令 d ) 等同于\(lq ls -C \(rq；即，文件
+缺省是多列输出，纵向排序。vdir ( 也被安装为命令 v )
+等同于\(lq ls -l \(rq； 即，文件缺省是按长格式输出。
+.SH GNU 选项
+.B "-1, --format=single-column"
+一行输出一个文件（单列输出）。如标准输出不是到终端，
+此选项就是缺省选项。
+.TP
+.B "-a, --all"
+列出目录中所有文件，包括以\(lq.\(rq开头的文件。
+.TP
+.B "-b, --escape"
+把文件名中不可输出的字符用反斜杠加字符编号(就象在 C
+语言里一样)的形式列出。
+.TP
+.B "-c, --time=ctime, --time=status"
+按文件状态改变时间（i节点中的ctime）排序并输出目录内
+容。如采用长格式输出（选项\(lq-l\(rq），使用文件的状态改
+变时间取代文件修改时间。【译注：所谓文件状态改变（i节
+点中以ctime标志），既包括文件被修改，又包括文件属性（
+如所有者、组、链接数等等）的变化】
+.TP
+.B "-d, --directory"
+将目录名象其它文件一样列出，而不是列出它们的内容。
+.TP
+.B "-f"
+不排序目录内容；按它们在磁盘上存储的顺序列出。同时启
+动\(lq -a \(rq选项，如果在\(lq -f \(rq之前存在\(lq -l \(rq、\(lq -
+-color \(rq或\(lq -s \(rq，则禁止它们。
+.TP
+.B "-g" 忽略，为兼容UNIX用。
+.TP
+.B "-i, --inode"
+在每个文件左边打印 i 节点号（也叫文件序列号和索引号: file serial number
+and index number）。i节点号在每个特定的文件系统中是唯一的。
+.TP
+.B "-k, --kilobytes"
+如列出文件大小，则以千字节KB为单位。
+.TP
+.B "-l, --format=long, --format=verbose"
+除每个文件名外，增加显示文件类型、权限、硬链接数、所
+有者名、组名、大小（ byte ）、及时间信息（如未指明是
+其它时间即指修改时间）。对于6个月以上的文件或超出未来
+1 小时的文件，时间信息中的时分将被年代取代。
+
+每个目录列出前，有一行\(lq总块数\(rq显示目录下全部文件所
+占的磁盘空间。块默认是 1024 字节；如果设置了 POSIXLY_CORRECT
+的环境变量，除非用\(lq -k \(rq选项，则默认块大小是 512 字
+节。每一个硬链接都计入总块数（因此可能重复计数），这无
+疑是个缺点。
+.TP
+列出的权限类似于以符号表示（文件）模式的规范。但是 ls
+在每套权限的第三个字符中结合了多位（ multiple bits ）
+的信息，如下：
+s 如果设置了 setuid 位或 setgid 位，而且也设置了相应的可执行位。
+S 如果设置了 setuid 位或 setgid 位，但是没有设置相应的可执行位。
+t 如果设置了 sticky 位，而且也设置了相应的可执行位。
+T 如果设置了 sticky 位，但是没有设置相应的可执行位。
+x 如果仅仅设置了可执行位而非以上四种情况。
+- 其它情况（即可执行位未设置）。
+.TP
+.B "-m, --format=commas"
+水平列出文件，每行尽可能多，相互用逗号和一个空格分隔。
+.TP
+.B "-n, --numeric-uid-gid"
+列出数字化的 UID 和 GID 而不是用户名和组名。
+.TP
+.B "-o"
+以长格式列出目录内容，但是不显示组信息。等于使用\(lq --format=long 
+--no-group \(rq选项。提供此选项是为了与其它版本的 ls 兼容。
+.TP
+.B "-p"
+在每个文件名后附上一个字符以说明该文件的类型。类似\(lq -F \(rq选项但是不
+标示可执行文件。
+.TP
+.B "-q, --hide-control-chars"
+用问号代替文件名中非打印的字符。这是缺省选项。
+.TP
+.B "-r, --reverse"
+逆序排列目录内容。
+.TP
+.B "-s, --size"
+在每个文件名左侧输出该文件的大小，以 1024 字节的块为单位。如果设置了
+POSIXLY_CORRECT 的环境变量，除非用\(lq -k \(rq选项，块大小是 512 字节。
+.TP
+.B "-t, --sort=time"
+按文件最近修改时间（ i 节点中的 mtime ）而不是按文件名字典序排序，新文件
+靠前。
+.TP
+.B "-u, --time=atime, --time=access, --time=use"
+类似选项\(lq -t \(rq，但是用文件最近访问时间（ i 节点中的 atime ）取代文件修
+改时间。如果使用长格式列出，打印的时间是最近访问时间。
+.TP
+.B "-w, --width cols"
+假定屏幕宽度是 cols （ cols 以实际数字取代）列。如未用此选项，缺省值是这
+样获得的：如可能先尝试取自终端驱动，否则尝试取自环境变量 COLUMNS （如果设
+置了的话），都不行则取 80 。
+.TP
+.B "-x, --format=across, --format=horizontal"
+多列输出，横向排序。
+.TP
+.B "-A, --almost-all"
+显示除 "." 和 ".." 外的所有文件。
+.TP
+.B "-B, --ignore-backups"
+不输出以\(lq ~ \(rq结尾的备份文件，除非已经在命令行中给出。
+.TP
+.B "-C, --format=vertical"
+多列输出，纵向排序。当标准输出是终端时这是缺省项。使用命令名 dir 和 d 时，
+则总是缺省的。
+.TP
+.B "-D, --dired"
+当采用长格式（\(lq -l \(rq选项）输出时，在主要输出后，额外打印一行：
+//DIRED// BEG1 END1 BEG2 END2 ...
+.TP
+BEGn 和 ENDn 是无符号整数，记录每个文件名的起始、结束位置在输出中的位置（
+字节偏移量）。这使得 Emacs 易于找到文件名，即使文件名包含空格或换行等非正
+常字符也无需特异的搜索。
+.TP
+如果目录是递归列出的（\(lq -R \(rq选项），每个子目录后列出类似一行：
+//SUBDIRED// BEG1 END1 ...
+【译注：我测试了 TurboLinux4.0 和 RedHat6.1 ，发现它们都是在
+\(lq //DIRED// BEG1... \(rq之后列出\(lq //SUBDIRED// BEG1 ... \(rq，也即只有一个
+而不是在每个子目录后都有。而且\(lq //SUBDIRED// BEG1 ... \(rq列出的是各个子目
+录名的偏移。】
+.TP
+.B "-F, --classify, --file-type"
+在每个文件名后附上一个字符以说明该文件的类型。\(lq * \(rq表示普通的可执行文件；
+\(lq / \(rq表示目录；\(lq @ \(rq表示符号链接；\(lq | \(rq表示FIFOs；\(lq = \(rq表示套接字
+(sockets) ；什么也没有则表示普通文件。
+.TP
+.B "-G, --no-group"
+以长格式列目录时不显示组信息。
+.TP
+.B "-I, --ignorepattern"
+除非在命令行中给定，不要列出匹配 shell 文件名匹配式（ pattern ，不是指一般
+表达式）的文件。在 shell 中，文件名以 "." 起始的不与在文件名匹配式 (pattern)
+开头的通配符匹配。
+.TP
+.B "-L, --dereference"
+列出符号链接指向的文件的信息，而不是符号链接本身。
+.TP
+.B "-N, --literal"
+不要用引号引起文件名。
+.TP
+.B "-Q, --quote-name"
+用双引号引起文件名，非打印字符以 C 语言的方法表示。
+.TP
+.B "-R, --recursive"
+递归列出全部目录的内容。
+.TP
+.B "-S, --sort=size"
+按文件大小而不是字典序排序目录内容，大文件靠前。
+.TP
+.B "-T, --tabsize cols"
+假定每个制表符宽度是 cols 。缺省为 8。为求效率， ls 可能在输出中使用制表符。
+若 cols 为 0，则不使用制表符。
+.TP
+.B "-U, --sort=none"
+不排序目录内容；按它们在磁盘上存储的顺序列出。（选项\(lq -U \(rq和\(lq -f \(rq的不
+同是前者不启动或禁止相关的选项。）这在列很大的目录时特别有用，因为不加排序
+能显著的加快速度。
+.TP
+.B "-X, --sort=extension"
+按文件扩展名（由最后的 "." 之后的字符组成）的字典序排序。没有扩展名的先列
+出。
+.TP
+.B "--color[=when]"
+指定是否使用颜色区别文件类别。环境变量 LS_COLORS 指定使用的颜色。如何设置
+这个变量见 dircolors(1) 。 when 可以被省略，或是以下几项之一：
+.TP
+none 不使用颜色，这是缺省项。
+auto 仅当标准输出是终端时使用。
+always 总是使用颜色。指定 --color 而且省略 when 时就等同于 --color=always 。
+.TP
+.B "--full-time"
+列出完整的时间，而不是使用标准的缩写。格式如同 date(1) 的缺省格式；此格式
+是不能改变的，但是你可以用 cut(1) 取出其中的日期字串并将结果送至命令
+\(lq date -d \(rq。
+.TP
+输出的时间包括秒是非常有用的。（ Unix 文件系统储存文件的时间信息精确到秒，
+因此这个选项已经给出了系统所知的全部信息。）例如，当你有一个 Makefile 文件
+不能恰当的生成文件时，这个选项会提供帮助。
+.SH GNU 标准选项
+.TP
+.B "--help"
+打印用法信息到标准输出并顺利退出。
+.TP
+.B "--version"
+打印版本信息到标准输出并顺利退出。
+.TP
+.B "--"
+结束选项表。
+.SH 环境
+变量 POSIXLY_CORRECT 可以决定一组选择。如果没有设置此变量，每个制表符的字
+符数由变量 TABSIZE 决定。变量 COLUMNS （当它由一个十进制整数表示时）决定输
+出的列宽度（同\(lq -C \(rq选项一起用时）。文件名不得为适应多列输出而被截断。变
+量 LANG, LC_ALL, LC_COLLATE, LC_CTYPE, LC_MESSAGES 及 LC_TIME 仍保持原义。
+变量 TZ 给出时区供 ls 输出相应的时间字串。变量 LS_COLORS 用以决定是否使用
+颜色。 
+.SH 已知错误
+在 BSD 系统上，对于从 HP-UX 系统上通过 NFS mount 而来的文件，\(lq -s \(rq选项报
+告的大小只有正确值的一半；在 HP-UX 系统上，对于从 BSD 系统上通过 NFS mount 
+而来的文件， ls 报告的大小则有正确值的两倍。这是 HP-UX 的一个缺陷造成的，它
+也影响 HP-UX 上的 ls 程序。
+.SH 适合到
+POSIX 1003.2
+.SH 参见
+dircolors(1)
+.SH 注意
+本页描述的是 fileutils-3.16 文件包中的 ls ，其它版本的可能略有不同。纠错或添
+加（功能）请 mailto: aeb@cwi.nl 和 aw@mail1.bet1.puv.fi 及 
+ragnar@lightside.ddns.org 。本程序的错误报告请 mailto:
+fileutils-bugs@gnu.ai.mit.edu 。 
+
+.SH "[中文版维护人]"
+.B wangdong &lt;wangdong @163.net&gt;
+.SH "[中文版最新更新]"
+.B 2003.11.22
+.SH "《中国linux论坛man手册翻译计划》:"
+.BI http://cmpp.linuxforum.net 
+</pre>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-tree"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">TREE 命令</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: bash;">
+$ tree				# 无参数的tree递归列出所有子目录的内容
+$ tree -L 2			# 只列出向下二级目录内容	
+$ tree -dL 2		# 只显示目录
+$ tree -aL 2		# 包括隐藏文件
+$ tree -DL 2		# 列出文件或目录的更改时间
+$ tree -iL 2		# 不以阶梯状列出文件或目录名称
+$ tree -tL 2		# 用文件和目录的更改时间排序
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-find"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">FIND 命令</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: bash;">
+$ find ~ -name linux				# 递归地在层次目录中处理文件
+$ find ~ -iname *.APK				# 和  -name  类似，但是匹配时是不区分大小写的
+$ find . -name *.apk				# .apk 结尾的文件
+$ find . -name *.apk -o -name *.sql	# 或运算，更多运算符查看man手册；name 为 .apk 结尾　或　.sql 结尾
+$ find . -empty						# 空文件或目录
+$ find . -name *.apk -size +100K	# 大于100k的apk，b:512字节的块(默认) c:字节 M:MB G:GB
+$ find . -name *.apk -size -100k	# 小于100k的文件
+$ find . -maxdepth 2 -name *.apk -size +30M		# 目录深度限定为2, 本目录和子目录
+$ find . -mindepth 3 -name *.apk -size +30M		# 目录深度限定为3, 不包括本目录和子目录
+
+#### 时间 ####
+$ find . -amin 2		# 对文件的最近一次访问是在 n 分钟之前
+$ find . -cmin 2		# 对文件的最近一次修改是在 n 分钟之前
+$ find . -mmin 2		# 对文件数据的最近一次修改是在 n 分钟之前
+$ find . -atime 2		# 对文件的最近一次访问是在 n*24 小时之前
+$ find . -ctime 2		# 对文件状态的最近一次修改是在 n*24 小时之前
+$ find . -mtime 2		# 对文件数据的最近一次修改是在 n*24 小时之前
+$ find . -anewer file	# 对文件的最近一次访问比 file 修改时间要晚
+$ find . -cnewer file	# 对文件状态的最近一次修改比 file 修改时间要晚
+$ find . -newer file	# 对文件的最近一次修改比 file 修改时间要晚
+
+#### 动作 ACTIONS ####
+$ find apk/ -type f -exec ls -l {} \;			# 查当前目录下的所有普通文件，并在-exec选项中使用ls -l命令将它们列出
+$ find . -name todo.txt -exec cat {} \;			# 查找 todo.txt 并列出其内容
+$ find logs -type f -mtime +5 -exec -ok rm {} \;	# -ok 为直接执行，不确认，使用要注意
+$ find apk/ -name *.apk -size +30M -exec cp {} . \;	# 查找 apk 目录下 apk 结尾的大于 30M 文件, 复制到当前目录
+
+#### 类型 ####
+$ find . -type c		# 特殊字符文件
+	# b	-- 特殊块文件(缓冲的)
+	# c -- 特殊字符文件(不缓冲)
+	# d -- 目录
+	# p -- 命名管道 (FIFO)
+	# f -- 普通文件
+	# l -- 符号链接
+	# s -- 套接字
+	# D -- 门 (Solaris 特有)
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-history"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">HISTORY 命令</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: bash;">
+$ export HISTTIMEFORMAT='%F%T '			# 使 history 显示命令执行时间
+$ history								# 执行上条命令后，显示的 history 会显示时间
+$ export HISTSIZE=10					# 指定 history 保存数目
+$ echo $HISTFILE						# 可修改 $HISTFILE 改变 history 保存位置
+$ export HISTCONTROL=erasedups			# 清除 history 中保存的重复显示
+$ !!			# 快速重复执行上一条命令
+$ !id			# 执行指定id的命令
+$ vim !!:$		# 使用上一条命令参数
+$ vim !cp:2		# 从命令历史中搜索以 cp 开头的命令，并获取它的第二项参数
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-grep"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">GREP, EGREP, FGREP 命令</h3>
+					</div>
+					<div class="panel-body">
+						<p>Linux系统中grep命令是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹
+							配的行打印出来。grep全称是Global Regular Expression
+							Print，表示全局正则表达式版本，它的使用权限是所有用户。</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-file"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">文件操作 命令集</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>MKDIR 用指定的名字建立目录。缺省时，新建立的目录模式为0777，即不加保护地对所有人 都可读、可写、可执行。</p>
+							<pre class="brush: bash;">
+$ mkdir menu			# 创建目录
+$ mkdir parent/menu		# 如 parent 不存在，一同创建
+$ mkdir -m 755 menu		# 有权限的menu
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>CD 命令</p>
+							<pre class="brush: bash;">
+$ cd ~							# 回到用户主目录
+$ cd -							# 在两个最近工作的目录切换
+$ alias ..="cd .."				# 通过 .. 回到上级目录, 可加入 ~/.profile 或 ~/.bashrc
+$ alias ...="cd ../.."			# 通过 ... 回到上级目录的上级目录, 可加入 ~/.profile 或 ~/.bashrc
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>CP / MV / RM 命令</p>
+							<pre class="brush: bash;">
+$ cp file path					# 复制文件到指定目录
+$ cp -f file path				# 覆盖存在的文件
+$ cp -i file path				# 提示是否覆盖存在的文件
+$ cp -r path dist_path			# 复制目录
+
+$ mv file path					# 移动文件到指定目录
+$ mv -f file path				# 覆盖存在的文件
+$ mv -i file path				# 提示是否覆盖存在的文件
+$ mv -r path dist_path			# 移动目录
+
+$ rm file						# 移动文件到指定目录
+$ rm -f file					# 覆盖存在的文件
+$ rm -i files	 				# 提示是否移除每个文件。如果回答是否定的，文件将被跳过
+$ rm -r path					# 删除目录
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>LS, DIR, VDIR 都是来自 GNU coreUtils 的工具，列出目录内容</p>
+							<pre class="brush: bash;">
+$ ls 						# 列出目录内容
+$ ls -a						# 显示所有文件，包括 .开头的隐藏文件
+$ ls -l	|| ll				# 显示详细信息
+$ ls -al 					# 显示所有文件详细信息
+$ ls -R 					# 递归列出遇到的子目录
+$ ls -r						# 逆序排列
+$ ls -c						# 使用“状态改变时间”代替“文件修改时间”为依据来排序
+$ ls -u						# 使用最近访问时间代替最近修改时间为依据来排序
+$ ls -t						# 按时间信息排序
+$ ls -S						# 按文件大小排序
+$ ls -X						# 按文件扩展名的字典序排序,没有扩展名的先列出
+</pre>
+						</div>
+						<div class="sub-item">
+						
+						</div>
 						
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="linux-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title"></h3>
 					</div>
-					<div class="panel-body">
-						
-					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="linux-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title"></h3>
 					</div>
-					<div class="panel-body">
-						
-					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="linux-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title"></h3>
 					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="linux-"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="linux-"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="linux-"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="linux-"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="linux-"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="linux-"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 			</div>
@@ -214,14 +946,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -229,7 +960,7 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

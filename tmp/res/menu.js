@@ -1,1 +1,1 @@
-var arr = [ "template.html", "TEMPLATE"];
+var arr = [ "index.html", "INDEX"];
