@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -66,6 +66,9 @@
 					</div>
 					<div class="list-group">
 						<a href="#spring-intro" class="list-group-item">简介</a>
+						<a href="#spring-docs" class="list-group-item">文档和 JAR 包</a>
+						<a href="#spring-example" class="list-group-item">松耦合实例</a>
+						<a href="#spring-mvc" class="list-group-item">MVC 实例</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
 							data-parent="#accordion" href="#java-tools" aria-expanded="true">
 							...<span class="caret pull-right" style="margin-top: 5px;"></span>
@@ -96,104 +99,316 @@
 						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-						
+						<h5 class="text-primary">框架特征</h5>
+						<p>
+							<b>轻量</b>——从大小与开销两方面而言Spring都是轻量的。完整的Spring框架可以在一个大小只有1MB多的JAR文件里发布。并且Spring所需的处理开销也是微不足道的。此外，Spring是非侵入式的：典型地，Spring应用中的对象不依赖于Spring的特定类。
+						</p>
+						<p>
+							<b>控制反转</b>——Spring通过一种称作控制反转(IoC)的技术促进了低耦合。当应用了IoC，一个对象依赖的其它对象会通过被动的方式传递进来，而不是这个对象自己创建或者查找依赖对象。你可以认为IoC与JNDI相反——不是对象从容器中查找依赖，而是容器在对象初始化时不等对象请求就主动将依赖传递给它。
+						</p>
+						<p>
+							<b>面向切面</b>——Spring提供了面向切面编程的丰富支持，允许通过分离应用的业务逻辑与系统级服务（例如审计（auditing）和事务（transaction）管理）进行内聚性的开发。应用对象只实现它们应该做的——完成业务逻辑——仅此而已。它们并不负责（甚至是意识）其它的系统级关注点，例如日志或事务支持。
+						</p>
+						<p>
+							<b>容器</b>——Spring包含并管理应用对象的配置和生命周期，在这个意义上它是一种容器，你可以配置你的每个bean如何被创建——基于一个可配置原型（prototype），你的bean可以创建一个单独的实例或者每次需要时都生成一个新的实例——以及它们是如何相互关联的。然而，Spring不应该被混同于传统的重量级的EJB容器，它们经常是庞大与笨重的，难以使用。
+						</p>
+						<p>
+							<b>框架</b>——Spring可以将简单的组件配置、组合成为复杂的应用。在Spring中，应用对象被声明式地组合，典型地是在一个XML文件里。Spring也提供了很多基础功能（事务管理、持久化框架集成等等），将应用逻辑的开发留给了你。
+						</p>
+						<p>
+							<b>MVCM</b>——Spring的作用是整合，但不仅仅限于整合，Spring
+							框架可以被看做是一个企业解决方案级别的框架。客户端发送请求，服务器控制器（由DispatcherServlet实现的)完成请求的转发，控制器调用一个用于映射的类HandlerMapping，该类用于将请求映射到对应的处理器来处理请求。HandlerMapping
+							将请求映射到对应的处理器Controller（相当于Action）在Spring
+							当中如果写一些处理器组件，一般实现Controller 接口，在Controller 中就可以调用一些Service 或DAO
+							来进行数据操作 ModelAndView 用于存放从DAO 中取出的数据，还可以存放响应视图的一些数据。
+							如果想将处理结果返回给用户，那么在Spring 框架中还提供一个视图组件ViewResolver，该组件根据Controller
+							返回的标示，找到对应的视图，将响应response 返回给用户。
+						</p>
+						<p>所有Spring的这些特征使你能够编写更干净、更可管理、并且更易于测试的代码。它们也为Spring中的各种模块提供了基础支持。</p>
+						<h5 class="text-primary">基本框架</h5>
+						<p>Spring 框架是一个分层架构，由 7
+							个定义良好的模块组成。Spring模块构建在核心容器之上，核心容器定义了创建、配置和管理 bean 的方式，如图所示：</p>
+						<div class="width: 100%;">
+							<img src="images/spring.jpg" class="img-responsive center-block">
+						</div>
+						<p>组成Spring框架的每个模块（或组件）都可以单独存在，或者与其他一个或多个模块联合实现。每个模块的功能如下：</p>
+						<ol>
+							<li>
+								<p>
+									<b>spring-core</b> -- 核心容器提供 Spring 框架的基本功能(Spring
+									Core)。核心容器的主要组件是 BeanFactory，它是工厂模式的实现。BeanFactory 使用控制反转（IOC）
+									模式将应用程序的配置和依赖性规范与实际的应用程序代码分开。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-context</b> -- Spring 上下文是一个配置文件，向
+									Spring框架提供上下文信息。Spring 上下文包括企业服务，例如JNDI、EJB、电子邮件、国际化、校验和调度功能。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-aop</b> -- 通过配置管理特性，Spring AOP 模块直接将面向切面的编程功能集成到了
+									Spring 框架中。所以，可以很容易地使 Spring 框架管理的任何对象支持AOP。Spring AOP 模块为基于
+									Spring 的应用程序中的对象提供了事务管理服务。通过使用 Spring AOP，不用依赖 EJB
+									组件，就可以将声明性事务管理集成到应用程序中。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-dao</b> --
+									JDBCDAO抽象层提供了有意义的异常层次结构，可用该结构来管理异常处理和不同数据库供应商抛出的错误消息。异常层次结构简化了错误处理，并且极大地降低了需要编写的异常代码数量（例如打开和关闭连接）。Spring
+									DAO 的面向 JDBC 的异常遵从通用的 DAO 异常层次结构。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-orm</b> -- Spring 框架插入了若干个ORM框架，从而提供了 ORM
+									的对象关系工具，其中包括JDO、Hibernate和iBatisSQL Map。所有这些都遵从 Spring 的通用事务和
+									DAO 异常层次结构。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-web</b> -- Web 上下文模块建立在应用程序上下文模块之上，为基于
+									Web的应用程序提供了上下文。所以,Spring 框架支持与 Jakarta Struts 的集成。Web
+									模块还简化了处理多部分请求以及将请求参数绑定到域对象的工作。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-mvc</b> -- MVC框架是一个全功能的构建 Web应用程序的 MVC
+									实现。通过策略接口，MVC框架变成为高度可配置的，MVC 容纳了大量视图技术，其中包括
+									JSP、Velocity、Tiles、iText 和
+									POI。模型由javabean构成，存放于Map；视图是一个接口，负责显示模型；控制器表示逻辑代码，是Controller的实现。Spring框架的功能可以用在任何J2EE服务器中，大多数功能也适用于不受管理的环境。Spring
+									的核心要点是：支持不绑定到特定 J2EE服务的可重用业务和数据访问对象。毫无疑问，这样的对象可以在不同J2EE 环境（Web
+									或EJB）、独立应用程序、测试环境之间重用。
+								</p>
+							</li>
+						</ol>
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
-				<a class="offset" id="spring-"></a>
+				<a class="offset" id="spring-docs"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">文档</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<a href="docs/docs-spring/javadoc-api/index.html" target="_blank">spring-javadoc</a>
+						<p>
+							<a href="docs/docs-spring/html/index.html" target="_blank">Spring
+								Framework Reference Documentation</a>
+						</p>
+						<p>jar 包下载:</p>
+						<div class="container-fluid">
+							<a href="libs/spring-4.3.4/spring-aop-4.3.4.RELEASE.jar">spring-aop-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-aspects-4.3.4.RELEASE.jar">spring-aspects-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-beans-4.3.4.RELEASE.jar">spring-beans-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-context-4.3.4.RELEASE.jar">spring-context-4.3.4.RELEASE.jar</a>
+							<a
+								href="libs/spring-4.3.4/spring-context-support-4.3.4.RELEASE.jar">spring-context-support-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-core-4.3.4.RELEASE.jar">spring-core-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-expression-4.3.4.RELEASE.jar">spring-expression-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-instrument-4.3.4.RELEASE.jar">spring-instrument-4.3.4.RELEASE.jar</a>
+							<a
+								href="libs/spring-4.3.4/spring-instrument-tomcat-4.3.4.RELEASE.jar">spring-instrument-tomcat-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-jdbc-4.3.4.RELEASE.jar">spring-jdbc-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-jms-4.3.4.RELEASE.jar">spring-jms-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-messaging-4.3.4.RELEASE.jar">spring-messaging-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-orm-4.3.4.RELEASE.jar">spring-orm-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-oxm-4.3.4.RELEASE.jar">spring-oxm-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-test-4.3.4.RELEASE.jar">spring-test-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-tx-4.3.4.RELEASE.jar">spring-tx-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-web-4.3.4.RELEASE.jar">spring-web-4.3.4.RELEASE.jar</a>
+							<a href="libs/spring-4.3.4/spring-webmvc-4.3.4.RELEASE.jar">spring-webmvc-4.3.4.RELEASE.jar</a>
+							<a
+								href="libs/spring-4.3.4/spring-webmvc-portlet-4.3.4.RELEASE-javadoc.jar">spring-webmvc-portlet-4.3.4.RELEASE-javadoc.jar</a>
+							<a
+								href="libs/spring-4.3.4/spring-websocket-4.3.4.RELEASE-javadoc.jar">spring-websocket-4.3.4.RELEASE-javadoc.jar</a>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="spring-example"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">一个松耦合实例</h3>
+					</div>
+					<div class="panel-body">
+						<p>applicationContext.xml</p>
+						<pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"&gt;
+
+
+	&lt;bean id="OutputHelper" class="cm.nate.spring.OutputHelper"&gt;
+		&lt;!-- 此处配置 OutputGenerator --&gt;
+		&lt;property name="outputGenerator" ref="JsonOutputGenerator" /&gt;
+	&lt;/bean&gt;
+
+	&lt;bean id="Person" class="cm.nate.spring.model.Person"&gt;
+		&lt;property name="id" value="1001" /&gt;
+		&lt;property name="name" value="jiwanger" /&gt;
+		&lt;property name="sex" value="男" /&gt;
+	&lt;/bean&gt;
+
+	&lt;bean id="XmlOutputGenerator" class="cm.nate.spring.impl.XmlOutputGererator" /&gt;
+	&lt;bean id="JsonOutputGenerator" class="cm.nate.spring.impl.JsonOutputGererator" /&gt;
+&lt;/beans&gt;
+</pre>
+						<p>java 代码</p>
+						<pre class="brush: java;">
+/** IOutputGenerator.java */
+public interface IOutputGenerator {
+	void generateOutput(Person obj);
+}
+
+/** JsonOutputGererator.java */
+public class JsonOutputGererator implements IOutputGenerator {
+	@Override
+	public void generateOutput(Person obj) {
+		System.out.println("{\"id\":" + obj.getId() + ", \"name\":\""
+				+ obj.getName() + "\", \"sex\":" + obj.getSex() + "}");
+	}
+}
+
+/** XmlOutputGererator.java */
+public class XmlOutputGererator implements IOutputGenerator {
+	@Override
+	public void generateOutput(Person obj) {
+		System.out
+				.println("<id>" + obj.getId() + "</id>" + "<name>"
+						+ obj.getName() + "</name>" + "<sex>" + obj.getSex()
+						+ "</sex>");
+	}
+}
+
+/** OutputHelper.java */
+public class OutputHelper {
+	private IOutputGenerator outputGenerator = new JsonOutputGererator();
+	
+	public void setOutputGenerator(IOutputGenerator outputGenerator){
+		this.outputGenerator = outputGenerator;
+	}
+	
+	public void generateOutput(Person obj){
+		outputGenerator.generateOutput(obj);
+	}
+}
+
+/** Person.java */
+public class Person implements Serializable {
+	private String id;
+	private String name;
+	private char sex;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public char getSex() {
+		return sex;
+	}
+
+	public void setSex(char sex) {
+		this.sex = sex;
+	}
+}
+
+/** 测试 */
+public static void main(String[] args) {
+	ApplicationContext context = new ClassPathXmlApplicationContext(
+			"applicationContext.xml");
+	Person person = (Person) context.getBean("Person");
+	
+	OutputHelper output = (OutputHelper) context.getBean("OutputHelper");
+	output.generateOutput(person);
+}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="spring-mvc"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">MVC 实例</h3>
 					</div>
 					<div class="panel-body">
 						
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="spring-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title"></h3>
 					</div>
-					<div class="panel-body">
-						
-					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="spring-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title"></h3>
 					</div>
-					<div class="panel-body">
-						
-					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="spring-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title"></h3>
 					</div>
-					<div class="panel-body">
-						
-					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="spring-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title"></h3>
 					</div>
-					<div class="panel-body">
-						
-					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="spring-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title"></h3>
 					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="spring-"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="spring-"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 			</div>
@@ -201,14 +416,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -216,7 +430,8 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

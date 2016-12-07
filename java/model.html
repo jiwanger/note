@@ -88,9 +88,9 @@
 							role="tabpanel">
 							<a href="#model-adapter" class="list-group-item">适配器模式</a>
 							<a href="#model-bridge" class="list-group-item">桥接模式</a>
-							<a href="#model-group" class="list-group-item">组合模式</a>
-							<a href="#model-embellish" class="list-group-item">装饰模式</a>
-							<a href="#model-surface" class="list-group-item">外观模式</a>
+							<a href="#model-composite " class="list-group-item">组合模式</a>
+							<a href="#model-decorator" class="list-group-item">装饰模式</a>
+							<a href="#model-facade " class="list-group-item">外观模式</a>
 							<a href="#model-flyweight" class="list-group-item">享元模式</a>
 							<a href="#model-proxy" class="list-group-item">代理模式</a>
 						</div>
@@ -103,14 +103,14 @@
 							role="tabpanel">
 							<a href="#model-duty-link" class="list-group-item">责任链模式</a>
 							<a href="#model-command" class="list-group-item">命令模式</a>
-							<a href="#model-explain" class="list-group-item">解释器模式</a>
-							<a href="#model-itoractor" class="list-group-item">迭代器模式</a>
-							<a href="#model-medium" class="list-group-item">中介者模式</a>
-							<a href="#model-memoir" class="list-group-item">备忘录模式</a>
-							<a href="#model-observe" class="list-group-item">观察者模式</a>
+							<a href="#model-interpreter " class="list-group-item">解释器模式</a>
+							<a href="#model-iterator" class="list-group-item">迭代器模式</a>
+							<a href="#model-mediator" class="list-group-item">中介者模式</a>
+							<a href="#model-memento" class="list-group-item">备忘录模式</a>
+							<a href="#model-observer" class="list-group-item">观察者模式</a>
 							<a href="#model-state" class="list-group-item">状态模式</a>
 							<a href="#model-strategy" class="list-group-item">策略模式</a>
-							<a href="#model-model-method" class="list-group-item">模板方法模式</a>
+							<a href="#model-template-method" class="list-group-item">模板方法模式</a>
 							<a href="#model-visitor" class="list-group-item">访问者模式</a>
 						</div>
 					</div>
@@ -581,10 +581,84 @@ public class MyPrototype {
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="model-"></a>
+				<a class="offset" id="model-adapter"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">模式</h3>
+						<h3 class="panel-title">适配器模式</h3>
+					</div>
+					<div class="panel-body">
+						<p>将一个类的接口转换成客户希望的另外一个接口。Adapter模式使得原本由于接口的兼容而不能一起工作的那些类可以一起工作。</p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li>你想使用一个已经存在的类，而它的接口不符合你的需求。</li>
+							<li>你想创建一个可以复用的类，该类可以与其他不相关的类或不可预见的类（即那些接口可能不一定兼容的类）协同工作。</li>
+							<li>（仅适用于对象Adapter）你想使用一些已经存在的子类，但是不可能对每一个都进行子类化以匹配它们的接口。对象适配器可以适配它的父类接口。</li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li>Target -- 定义Client使用的与特定领域相关的接口。</li>
+							<li>Client -- 与符合Target接口的对象协同。</li>
+							<li>Adaptee -- 定义一个已经存在的接口，这个接口需要适配。</li>
+							<li>Adapter -- 对Adaptee的接口与Target接口进行适配。</li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+public class MyAdapter {
+	public static void main(String[] args) {
+		MyAdapter context = new MyAdapter();
+		Target target = context.new Adapter(context.new Adaptee());
+		target.adapteeMethod();
+
+		target.adapterMethod();
+	}
+
+	/** Target */
+	public interface Target {
+		void adapteeMethod();
+
+		void adapterMethod();
+	}
+
+	/** Adaptee */
+	public class Adaptee {
+		public void adapteeMethod() {
+			System.out.println("Adaptee method!");
+		}
+	}
+
+	/** Adapter */
+	public class Adapter implements Target {
+		private Adaptee adaptee;
+
+		public Adapter(Adaptee adaptee) {
+			this.adaptee = adaptee;
+		}
+
+		public void adapteeMethod() {
+			adaptee.adapteeMethod();
+		}
+
+		public void adapterMethod() {
+			System.out.println("Adapter method!");
+		}
+	}
+}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-bridge"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">桥接模式</h3>
 					</div>
 					<div class="panel-body">
 						<p></p>
@@ -612,10 +686,10 @@ public class MyPrototype {
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="model-"></a>
+				<a class="offset" id="model-composite"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">模式</h3>
+						<h3 class="panel-title">组合模式</h3>
 					</div>
 					<div class="panel-body">
 						<p></p>
@@ -643,10 +717,10 @@ public class MyPrototype {
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="model-"></a>
+				<a class="offset" id="model-decorator"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">模式</h3>
+						<h3 class="panel-title">装饰模式</h3>
 					</div>
 					<div class="panel-body">
 						<p></p>
@@ -674,10 +748,417 @@ public class MyPrototype {
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="model-"></a>
+				<a class="offset" id="model-facade"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">模式</h3>
+						<h3 class="panel-title">外观模式</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li></li>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-flyweight"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">享元模式</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li></li>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-proxy"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">代理模式</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li></li>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-duty-link"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">责任链模式</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li></li>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-command"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">命令模式</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li></li>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-interpreter"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">解释器模式</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li></li>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-iterator"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">迭代器模式</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li></li>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-mediator"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">中介者模式</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li></li>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-memento"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">备忘录模式</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li></li>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-observer"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">观察者模式</h3>
+					</div>
+					<div class="panel-body">
+						<p> 定义对象间的一种一对多的依赖关系,当一个对象的状态发生改变时,所有依赖于它的对象都得到通知并被自动更新。</p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li>当一个抽象模型有两个方面,其中一个方面依赖于另一方面。将这二者封装为独立的对象中以使它们可以各自独立地改变和复用。</li>
+							<li>当对一个对象的改变需要同时改变其它对象,而不知道具体有多少对象有待改变。</li>
+							<li>当一个对象必须通知其它对象，而它又不能假定其它对象是谁。</li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li>Subject -- 目标知道它的观察者。可以有任意多个观察者观察同一个目标。提供注册和删除观察者对象的接口。</li>
+							<li>Obserser -- 为那些在目标发生改变时需获得通知的对象定义一个更新接口。</li>
+							<li>ConcreteSubject -- 将有关状态存入各ConcreteObserver对象。当它的状态发生改变时,向它的各个观察者发出通知。</li>
+							<li>ConcreteObserver -- 维护一个指向ConcreteSubject对象的引用。存储有关状态，这些状态应与目标的状态保持一致。实现Observer的更新接口，使自身状态与目标的状态保持一致。</li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-state"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">状态模式</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li></li>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-strategy"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">策略模式</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li></li>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-template-method"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">模板方法模式</h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+						<h5>
+							<span class="glyphicon glyphicon-th-list"></span>适用性:
+						</h5>
+						<ol>
+							<li></li>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-user"></span>参与者:
+						</h5>
+						<ol>
+							<li></li>
+						</ol>
+						<h5>
+							<span class="glyphicon glyphicon-fire"></span>实例:
+						</h5>
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="model-visitor"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">访问者模式</h3>
 					</div>
 					<div class="panel-body">
 						<p></p>
