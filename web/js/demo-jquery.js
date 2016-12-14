@@ -24,7 +24,7 @@ function ajaxAjaxExecute() {
 function ajaxAjax() {
 	$.ajax({
 		url : "res/students.json",
-		async : false,
+		async : true,
 		data : {
 			name : "jiwanger",
 			type : "1"
