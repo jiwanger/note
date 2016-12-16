@@ -12,7 +12,7 @@
 <link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
 <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
 <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<title>NATE--笔记</title>
+<title>NATE--笔记--NODE-JS</title>
 <!-- Bootstrap -->
 <link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
 	rel="stylesheet">
@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -62,10 +62,16 @@
 				<div class="panel panel-default"
 					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">NODE-JS</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
+						<a href="#node-js-intro" class="list-group-item">简介</a>
+						<a href="#node-js-npm" class="list-group-item">NPM 使用介绍</a>
+						<a href="#node-js-package" class="list-group-item">package.json</a>
+						<a href="#node-js-EventEmitter" class="list-group-item">EventEmitter</a>
+						<a href="#node-js-Buffer" class="list-group-item">Buffer</a>
+						<a href="#node-js-Stream" class="list-group-item">Stream</a>
+						<a href="#node-js-" class="list-group-item"></a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
 							data-parent="#accordion" href="#java-tools" aria-expanded="true">
 							...<span class="caret pull-right" style="margin-top: 5px;"></span>
@@ -77,7 +83,6 @@
 							<a href="#" class="list-group-item">...</a>
 							<a href="#" class="list-group-item">...</a>
 						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
 					</div>
 				</div>
 			</div>
@@ -88,16 +93,807 @@
 
 	<div class="container" style="margin-top: 70px;">
 		<div class="row">
-			<div class="col-md-3"></div>
-			<div class="col-md-9" style="float: left;">
+			<div class="col-md-9 col-md-push-3" style="float: left;">
 				<!-- item start -->
+				<a id="node-js-intro" class="offset"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 id="..." class="panel-title">...</h3>
+						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-						
+						<p>简单的说 Node.js 就是运行在服务端的 JavaScript。</p>
+						<p>Node.js 是一个基于Chrome JavaScript 运行时建立的一个平台。</p>
+						<p>Node.js是一个事件驱动I/O服务端JavaScript环境，基于Google的V8引擎，V8引擎执行Javascript的速度非常快，性能非常好。</p>
 					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="node-js-npm" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">NPM 介绍</h3>
+					</div>
+					<div class="panel-body">
+						<p>NPM是随同NodeJS一起安装的包管理工具，能解决NodeJS代码部署上的很多问题，常见的使用场景有以下几种：</p>
+						<ul>
+							<li>允许用户从NPM服务器下载别人编写的第三方包到本地使用。</li>
+							<li>允许用户从NPM服务器下载并安装别人编写的命令行程序到本地使用。</li>
+							<li>允许用户将自己编写的包或命令行程序上传到NPM服务器供别人使用。</li>
+						</ul>
+						<p>npm 常用命令</p>
+						<pre class="brush: bash;">
+$ npm -v					# 显示版本号
+$ npm ls -g					# 查看所有全局安装的模块
+$ npm uninstall express		# 卸载模块
+$ npm ls					# 查看模块
+$ npm update express		# 更新模块
+$ npm search express		# 搜索模块
+$ npm init					# 创建模块
+$ npm publish				# 发布模块
+</pre>
+						<p>使用 npm 命令安装模块</p>
+						<pre class="brush: bash;">
+# 安装 express 模块, 安装完成 express 包就放在了工程目录下的 node_modules 目录中,
+$ npm install express		# 使用: var express = require('express');
+$ npm install express		# 本地安装
+$ npm install express -g	# 全局安装
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="node-js-package" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">package.json 属性说明</h3>
+					</div>
+					<div class="panel-body">
+						<ul>
+							<li>
+								<p>
+									<b>name</b> - 包名。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>version</b> - 包的版本号。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>description</b> - 包的描述。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>homepage</b> - 包的官网 url 。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>author</b> - 包的作者姓名。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>contributors</b> - 包的其他贡献者姓名。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>dependencies</b> - 依赖包列表。如果依赖包没有安装，npm 会自动将依赖包安装在
+									node_module 目录下。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>repository</b> - 包代码存放的地方的类型，可以是 git 或 svn，git 可在 Github 上。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>main</b> - main 字段是一个模块ID，它是一个指向你程序的主要项目。就是说，如果你包的名字叫
+									express，然后用户安装它，然后require("express")。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>keywords</b> - 关键字
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="node-js-EventEmitter" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">EventEmitter -- 事件发射器</h3>
+					</div>
+					<div class="panel-body">
+						<p>Node.js 所有的异步 I/O 操作在完成时都会发送一个事件到事件队列。</p>
+						<p>Node.js里面的许多对象都会分发事件：一个net.Server对象会在每次有新连接时分发一个事件，
+							一个fs.readStream对象会在文件被打开的时候发出一个事件。 所有这些产生事件的对象都是
+							events.EventEmitter 的实例。</p>
+						<p>events 模块只提供了一个对象： events.EventEmitter。EventEmitter
+							的核心就是事件触发与事件监听器功能的封装。</p>
+						<p>
+						<pre class="brush: js;">
+// 引入 events 模块
+var events = require('events');
+// 创建 eventEmitter 对象
+var eventEmitter = new events.EventEmitter();
+
+eventEmitter.on("some-event", function(){
+    console.log("some-event 事件触发");
+});
+
+eventEmitter.emit("some-event");
+</pre>
+						<p class="h5 text-primary">继承 EventEmitter</p>
+						<p>大多数时候我们不会直接使用 EventEmitter，而是在对象中继承它。包括 fs、net、 http
+							在内的，只要是支持事件响应的核心模块都是 EventEmitter 的子类。</p>
+						<p>为什么要这样做呢？原因有两点：</p>
+						<p>首先，具有某个实体功能的对象实现事件符合语义， 事件的监听和发射应该是一个对象的方法。</p>
+						<p>其次 JavaScript 的对象机制是基于原型的，支持 部分多重继承，继承 EventEmitter
+							不会打乱对象原有的继承关系。</p>
+
+						<p class="h5 text-primary">EventEmitter 参考</p>
+						<p class="h6 text-primary">方法
+						</h6>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th>序号</th>
+									<th>方法 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>addListener(event, listener)</b><br>
+										为指定事件添加一个监听器到监听器数组的尾部。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>on(event, listener)</b><br>为指定事件注册一个监听器，接受一个字符串
+										event 和一个回调函数。 <pre class="brush: js;" style="">
+server.on('connection', function (stream) {
+	console.log('someone connected!');
+});
+</pre></td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><b>once(event, listener)</b><br>为指定事件注册一个单次监听器，即
+										监听器最多只会触发一次，触发后立刻解除该监听器。 <pre class="brush: js;">
+server.once('connection', function (stream) {
+  console.log('Ah, we have our first user!');
+});
+</pre></td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><b>removeListener(event, listener)</b><br>移除指定事件的某个监听器，监听器
+										必须是该事件已经注册过的监听器。 <pre class="brush: js;" style="">
+var callback = function(stream) {
+	console.log('someone connected!');
+};
+server.on('connection', callback);
+// ...
+server.removeListener('connection', callback);
+</pre></td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td><b>removeAllListeners([event])</b><br>移除所有事件的所有监听器，
+										如果指定事件，则移除指定事件的所有监听器。</td>
+								</tr>
+								<tr>
+									<td>6</td>
+									<td><b>setMaxListeners(n)</b><br>默认情况下， EventEmitters
+										如果你添加的监听器超过 10 个就会输出警告信息。 setMaxListeners 函数用于提高监听器的默认限制的数量。</td>
+								</tr>
+								<tr>
+									<td>7</td>
+									<td><b>listeners(event)</b><br>返回指定事件的监听器数组。</td>
+								</tr>
+								<tr>
+									<td>8</td>
+									<td><b>emit(event, [arg1], [arg2], [...])</b><br>按参数的顺序执行每个监听器，如果事件有注册监听返回
+										true，否则返回 false。</td>
+								</tr>
+							</tbody>
+						</table>
+						<p class="h6 text-primary">类方法
+						</h6>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th>序号</th>
+									<th>方法 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>listenerCount(emitter, event)</b> -- 返回指定事件的监听器数量。</td>
+								</tr>
+							</tbody>
+						</table>
+						<p class="h6 text-primary">事件
+						</h6>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th>序号</th>
+									<th>事件 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>newListener</b><br>
+										<ul>
+											<li>
+												<p>
+													<b>event</b> - 字符串，事件名称
+												</p>
+											</li>
+											<li>
+												<p>
+													<b>listener</b> - 处理事件函数
+												</p>
+											</li>
+										</ul>
+										<p>该事件在添加新监听器时被触发。</p></td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>removeListener</b><br>
+										<ul>
+											<li>
+												<p>
+													<b>event</b> - 字符串，事件名称
+												</p>
+											</li>
+											<li>
+												<p>
+													<b>listener</b> - 处理事件函数
+												</p>
+											</li>
+										</ul>
+										<p>从指定监听器数组中删除一个监听器。需要注意的是，此操作将会改变处于被删监听器之后的那些监听器的索引。</p></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="node-js-Buffer" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Buffer</h3>
+					</div>
+					<div class="panel-body">
+						<p>JavaScript 语言自身只有字符串数据类型，没有二进制数据类型。</p>
+						<p>但在处理像TCP流或文件流时，必须使用到二进制数据。因此在 Node.js中，定义了一个 Buffer
+							类，该类用来创建一个专门存放二进制数据的缓存区。</p>
+						<p>在 Node.js 中，Buffer 类是随 Node 内核一起发布的核心库。Buffer 库为 Node.js
+							带来了一种存储原始数据的方法，可以让 Node.js 处理二进制数据，每当需要在 Node.js
+							中处理I/O操作中移动的数据时，就有可能使用 Buffer 库。原始数据存储在 Buffer 类的实例中。一个 Buffer
+							类似于一个整数数组，但它对应于 V8 堆内存之外的一块原始内存。</p>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th width="50px">序号</th>
+									<th>方法 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>new Buffer(size)</b> <br>分配一个新的 size
+										大小单位为8位字节的 buffer。 注意, size 必须小于 kMaxLength，否则，将会抛出异常
+										RangeError。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>new Buffer(buffer)</b> <br>拷贝参数 buffer 的数据到
+										Buffer 实例。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><b>new Buffer(str[, encoding])</b><br> 分配一个新的
+										buffer ，其中包含着传入的 str 字符串。 encoding 编码方式默认为 'utf8'。</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><b>buf.length</b><br> 返回这个 buffer 的 bytes
+										数。注意这未必是 buffer 里面内容的大小。length 是 buffer 对象所分配的内存数，它不会随着这个
+										buffer 对象内容的改变而改变。</td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td><b>buf.write(string[, offset[, length]][,
+											encoding])</b><br>根据参数 offset 偏移量和指定的 encoding 编码方式，将参数
+										string 数据写入buffer。 offset 偏移量默认值是 0, encoding 编码方式默认是 utf8。
+										length 长度是将要写入的字符串的 bytes 大小。 返回 number 类型，表示写入了多少 8 位字节流。如果
+										buffer 没有足够的空间来放整个 string，它将只会只写入部分字符串。 length 默认是
+										buffer.length - offset。 这个方法不会出现写入部分字符。</td>
+								</tr>
+								<tr>
+									<td>6</td>
+									<td><b>buf.writeUIntLE(value, offset, byteLength[,
+											noAssert])</b><br>将value 写入到 buffer 里， 它由offset 和 byteLength
+										决定，支持 48 位计算，例如：<br> <pre class="brush: js;" style="">
+var b = new Buffer(6);
+b.writeUIntBE(0x1234567890ab, 0, 6);
+// &lt;Buffer 12 34 56 78 90 ab&gt;
+</pre> noAssert 值为 true 时，不再验证 value 和 offset 的有效性。 默认是 false。</td>
+								</tr>
+								<tr>
+									<td>7</td>
+									<td><b>buf.writeUIntBE(value, offset, byteLength[,
+											noAssert])</b><br>将value 写入到 buffer 里， 它由offset 和 byteLength
+										决定，支持 48 位计算。noAssert 值为 true 时，不再验证 value 和 offset 的有效性。 默认是
+										false。</td>
+								</tr>
+								<tr>
+									<td>8</td>
+									<td><b>buf.writeIntLE(value, offset, byteLength[,
+											noAssert])</b><br>将value 写入到 buffer 里， 它由offset 和 byteLength
+										决定，支持 48 位计算。noAssert 值为 true 时，不再验证 value 和 offset 的有效性。 默认是
+										false。</td>
+								</tr>
+								<tr>
+									<td>9</td>
+									<td><b>buf.writeIntBE(value, offset, byteLength[,
+											noAssert])</b><br>将value 写入到 buffer 里， 它由offset 和 byteLength
+										决定，支持 48 位计算。noAssert 值为 true 时，不再验证 value 和 offset 的有效性。 默认是
+										false。</td>
+								</tr>
+								<tr>
+									<td>10</td>
+									<td><b>buf.readUIntLE(offset, byteLength[, noAssert])</b><br>支持读取
+										48 位以下的数字。noAssert 值为 true 时， offset 不再验证是否超过 buffer 的长度，默认为
+										false。</td>
+								</tr>
+								<tr>
+									<td>11</td>
+									<td><b>buf.readUIntBE(offset, byteLength[, noAssert])</b><br>支持读取
+										48 位以下的数字。noAssert 值为 true 时， offset 不再验证是否超过 buffer 的长度，默认为
+										false。</td>
+								</tr>
+								<tr>
+									<td>12</td>
+									<td><b>buf.readIntLE(offset, byteLength[, noAssert])</b><br>支持读取
+										48 位以下的数字。noAssert 值为 true 时， offset 不再验证是否超过 buffer 的长度，默认为
+										false。</td>
+								</tr>
+								<tr>
+									<td>13</td>
+									<td><b>buf.readIntBE(offset, byteLength[, noAssert])</b><br>支持读取
+										48 位以下的数字。noAssert 值为 true 时， offset 不再验证是否超过 buffer 的长度，默认为
+										false。</td>
+								</tr>
+								<tr>
+									<td>14</td>
+									<td><b>buf.toString([encoding[, start[, end]]])</b><br>根据
+										encoding 参数（默认是 'utf8'）返回一个解码过的 string 类型。还会根据传入的参数 start (默认是
+										0) 和 end (默认是 buffer.length)作为取值范围。</td>
+								</tr>
+								<tr>
+									<td>15</td>
+									<td><b>buf.toJSON()</b><br>将 Buffer 实例转换为 JSON 对象。</td>
+								</tr>
+								<tr>
+									<td>16</td>
+									<td><b>buf[index]</b><br>获取或设置指定的字节。返回值代表一个字节，所以返回值的合法范围是十六进制0x00到0xFF
+										或者十进制0至 255。</td>
+								</tr>
+								<tr>
+									<td>17</td>
+									<td><b>buf.equals(otherBuffer)</b><br>比较两个缓冲区是否相等，如果是返回
+										true，否则返回 false。</td>
+								</tr>
+								<tr>
+									<td>18</td>
+									<td><b>buf.compare(otherBuffer)</b><br>比较两个 Buffer
+										对象，返回一个数字，表示 buf 在 otherBuffer 之前，之后或相同。</td>
+								</tr>
+								<tr>
+									<td>19</td>
+									<td><b>buf.copy(targetBuffer[, targetStart[,
+											sourceStart[, sourceEnd]]])</b><br>buffer 拷贝，源和目标可以相同。
+										targetStart 目标开始偏移和 sourceStart 源开始偏移默认都是 0。 sourceEnd
+										源结束位置偏移默认是源的长度 buffer.length 。</td>
+								</tr>
+								<tr>
+									<td>20</td>
+									<td><b>buf.slice([start[, end]])</b><br>剪切 Buffer
+										对象，根据 start(默认是 0 ) 和 end (默认是 buffer.length ) 偏移和裁剪了索引。
+										负的索引是从 buffer 尾部开始计算的。</td>
+								</tr>
+								<tr>
+									<td>21</td>
+									<td><b>buf.readUInt8(offset[, noAssert])</b><br>根据指定的偏移量，读取一个有符号
+										8 位整数。若参数 noAssert 为 true 将不会验证 offset 偏移量参数。 如果这样 offset
+										可能会超出buffer 的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>22</td>
+									<td><b>buf.readUInt16LE(offset[, noAssert])</b><br>根据指定的偏移量，使用特殊的
+										endian 字节序格式读取一个有符号 16 位整数。若参数 noAssert 为 true 将不会验证 offset
+										偏移量参数。 这意味着 offset 可能会超出 buffer 的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>23</td>
+									<td><b>buf.readUInt16BE(offset[, noAssert])</b><br>根据指定的偏移量，使用特殊的
+										endian 字节序格式读取一个有符号 16 位整数。若参数 noAssert 为 true 将不会验证 offset
+										偏移量参数。 这意味着 offset 可能会超出 buffer 的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>24</td>
+									<td><b>buf.readUInt32LE(offset[, noAssert])</b><br>根据指定的偏移量，使用指定的
+										endian 字节序格式读取一个有符号 32 位整数。 若参数 noAssert 为 true 将不会验证 offset
+										偏移量参数。 这意味着 offset 可能会超出buffer 的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>25</td>
+									<td><b>buf.readUInt32BE(offset[, noAssert])</b><br>根据指定的偏移量，使用指定的
+										endian 字节序格式读取一个有符号 32 位整数。 若参数 noAssert 为 true 将不会验证 offset
+										偏移量参数。 这意味着 offset 可能会超出buffer 的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>26</td>
+									<td><b>buf.readInt8(offset[, noAssert])</b><br>根据指定的偏移量，读取一个
+										signed 8 位整数。 若参数 noAssert 为 true 将不会验证 offset 偏移量参数。 这意味着
+										offset 可能会超出 buffer 的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>27</td>
+									<td><b>buf.readInt16LE(offset[, noAssert])</b><br>根据指定的偏移量，使用特殊的
+										endian 格式读取一个 signed 16 位整数。 若参数 noAssert 为 true 将不会验证 offset
+										偏移量参数。 这意味着 offset 可能会超出 buffer 的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>28</td>
+									<td><b>buf.readInt16BE(offset[, noAssert])</b><br>根据指定的偏移量，使用特殊的
+										endian 格式读取一个 signed 16 位整数。 若参数 noAssert 为 true 将不会验证 offset
+										偏移量参数。 这意味着 offset 可能会超出 buffer 的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>29</td>
+									<td><b>buf.readInt32LE(offset[, noAssert])</b><br>根据指定的偏移量，使用指定的
+										endian 字节序格式读取一个 signed 32 位整数。 若参数 noAssert 为 true 将不会验证
+										offset 偏移量参数。 这意味着 offset 可能会超出buffer 的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>30</td>
+									<td><b>buf.readInt32BE(offset[, noAssert])</b><br>根据指定的偏移量，使用指定的
+										endian 字节序格式读取一个 signed 32 位整数。 若参数 noAssert 为 true 将不会验证
+										offset 偏移量参数。 这意味着 offset 可能会超出buffer 的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>31</td>
+									<td><b>buf.readFloatLE(offset[, noAssert])</b><br>根据指定的偏移量，使用指定的
+										endian 字节序格式读取一个 32 位浮点数。 若参数 noAssert 为 true 将不会验证 offset
+										偏移量参数。 这意味着 offset 可能会超出buffer的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>32</td>
+									<td><b>buf.readFloatBE(offset[, noAssert])</b><br>根据指定的偏移量，使用指定的
+										endian 字节序格式读取一个 32 位浮点数。 若参数 noAssert 为 true 将不会验证 offset
+										偏移量参数。 这意味着 offset 可能会超出buffer的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>33</td>
+									<td><b>buf.readDoubleLE(offset[, noAssert])</b><br>根据指定的偏移量，使用指定的
+										endian字节序格式读取一个 64 位double。 若参数 noAssert 为 true 将不会验证 offset
+										偏移量参数。 这意味着 offset 可能会超出buffer 的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>34</td>
+									<td><b>buf.readDoubleBE(offset[, noAssert])</b><br>根据指定的偏移量，使用指定的
+										endian字节序格式读取一个 64 位double。 若参数 noAssert 为 true 将不会验证 offset
+										偏移量参数。 这意味着 offset 可能会超出buffer 的末尾。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>35</td>
+									<td><b>buf.writeUInt8(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量将 value 写入 buffer。注意：value 必须是一个合法的有符号 8 位整数。 若参数
+										noAssert 为 true 将不会验证 offset 偏移量参数。 这意味着 value 可能过大，或者 offset
+										可能会超出 buffer 的末尾从而造成 value 被丢弃。 除非你对这个参数非常有把握，否则不要使用。默认是
+										false。</td>
+								</tr>
+								<tr>
+									<td>36</td>
+									<td><b>buf.writeUInt16LE(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量和指定的 endian 格式将 value 写入 buffer。注意：value 必须是一个合法的有符号
+										16 位整数。 若参数 noAssert 为 true 将不会验证 value 和 offset 偏移量参数。 这意味着
+										value 可能过大，或者 offset 可能会超出buffer的末尾从而造成 value 被丢弃。
+										除非你对这个参数非常有把握，否则尽量不要使用。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>37</td>
+									<td><b>buf.writeUInt16BE(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量和指定的 endian 格式将 value 写入 buffer。注意：value 必须是一个合法的有符号
+										16 位整数。 若参数 noAssert 为 true 将不会验证 value 和 offset 偏移量参数。 这意味着
+										value 可能过大，或者 offset 可能会超出buffer的末尾从而造成 value 被丢弃。
+										除非你对这个参数非常有把握，否则尽量不要使用。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>38</td>
+									<td><b>buf.writeUInt32LE(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量和指定的 endian 格式(LITTLE-ENDIAN:小字节序)将 value
+										写入buffer。注意：value 必须是一个合法的有符号 32 位整数。 若参数 noAssert 为 true
+										将不会验证 value 和 offset 偏移量参数。 这意味着value
+										可能过大，或者offset可能会超出buffer的末尾从而造成 value 被丢弃。
+										除非你对这个参数非常有把握，否则尽量不要使用。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>39</td>
+									<td><b>buf.writeUInt32BE(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量和指定的 endian 格式(Big-Endian:大字节序)将 value
+										写入buffer。注意：value 必须是一个合法的有符号 32 位整数。 若参数 noAssert 为 true
+										将不会验证 value 和 offset 偏移量参数。 这意味着 value
+										可能过大，或者offset可能会超出buffer的末尾从而造成 value 被丢弃。
+										除非你对这个参数非常有把握，否则尽量不要使用。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>40</td>
+									<td><b>buf.writeInt8(value, offset[, noAssert])</b> <br根据传入的
+											offset="" 偏移量将="" value="" 写入="" buffer="" 。注意：value=""
+											必须是一个合法的="" signed="" 8="" 位整数。="" 若参数="" noassert="" 为=""
+											true="" 将不会验证="" 和="" 偏移量参数。="" 这意味着="" 可能过大，或者="" 可能会超出=""
+											的末尾从而造成="" 被丢弃。="" 除非你对这个参数非常有把握，否则尽量不要使用。默认是=""false。<=""
+										td=""></br根据传入的></td>
+								</tr>
+								<tr>
+									<td>41</td>
+									<td><b>buf.writeInt16LE(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量和指定的 endian 格式将 value 写入 buffer。注意：value 必须是一个合法的
+										signed 16 位整数。 若参数 noAssert 为 true 将不会验证 value 和 offset 偏移量参数。
+										这意味着 value 可能过大，或者 offset 可能会超出 buffer 的末尾从而造成 value 被丢弃。
+										除非你对这个参数非常有把握，否则尽量不要使用。默认是 false 。</td>
+								</tr>
+								<tr>
+									<td>42</td>
+									<td><b>buf.writeInt16BE(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量和指定的 endian 格式将 value 写入 buffer。注意：value 必须是一个合法的
+										signed 16 位整数。 若参数 noAssert 为 true 将不会验证 value 和 offset 偏移量参数。
+										这意味着 value 可能过大，或者 offset 可能会超出 buffer 的末尾从而造成 value 被丢弃。
+										除非你对这个参数非常有把握，否则尽量不要使用。默认是 false 。</td>
+								</tr>
+								<tr>
+									<td>43</td>
+									<td><b>buf.writeInt32LE(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量和指定的 endian 格式将 value 写入 buffer。注意：value 必须是一个合法的
+										signed 32 位整数。 若参数 noAssert 为 true 将不会验证 value 和 offset 偏移量参数。
+										这意味着 value 可能过大，或者 offset 可能会超出 buffer 的末尾从而造成 value 被丢弃。
+										除非你对这个参数非常有把握，否则尽量不要使用。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>44</td>
+									<td><b>buf.writeInt32BE(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量和指定的 endian 格式将 value 写入 buffer。注意：value 必须是一个合法的
+										signed 32 位整数。 若参数 noAssert 为 true 将不会验证 value 和 offset 偏移量参数。
+										这意味着 value 可能过大，或者 offset 可能会超出 buffer 的末尾从而造成 value 被丢弃。
+										除非你对这个参数非常有把握，否则尽量不要使用。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>45</td>
+									<td><b>buf.writeFloatLE(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量和指定的 endian 格式将 value 写入 buffer 。注意：当 value 不是一个 32
+										位浮点数类型的值时，结果将是不确定的。 若参数 noAssert 为 true 将不会验证 value 和 offset
+										偏移量参数。 这意味着 value可能过大，或者 offset 可能会超出 buffer 的末尾从而造成 value
+										被丢弃。 除非你对这个参数非常有把握，否则尽量不要使用。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>46</td>
+									<td><b>buf.writeFloatBE(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量和指定的 endian 格式将 value 写入 buffer 。注意：当 value 不是一个 32
+										位浮点数类型的值时，结果将是不确定的。 若参数 noAssert 为 true 将不会验证 value 和 offset
+										偏移量参数。 这意味着 value可能过大，或者 offset 可能会超出 buffer 的末尾从而造成 value
+										被丢弃。 除非你对这个参数非常有把握，否则尽量不要使用。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>47</td>
+									<td><b>buf.writeDoubleLE(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量和指定的 endian 格式将 value 写入 buffer。注意：value 必须是一个有效的 64
+										位double 类型的值。 若参数 noAssert 为 true 将不会验证 value 和 offset 偏移量参数。
+										这意味着 value 可能过大，或者 offset 可能会超出 buffer 的末尾从而造成value被丢弃。
+										除非你对这个参数非常有把握，否则尽量不要使用。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>48</td>
+									<td><b>buf.writeDoubleBE(value, offset[, noAssert])</b><br>根据传入的
+										offset 偏移量和指定的 endian 格式将 value 写入 buffer。注意：value 必须是一个有效的 64
+										位double 类型的值。 若参数 noAssert 为 true 将不会验证 value 和 offset 偏移量参数。
+										这意味着 value 可能过大，或者 offset 可能会超出 buffer 的末尾从而造成value被丢弃。
+										除非你对这个参数非常有把握，否则尽量不要使用。默认是 false。</td>
+								</tr>
+								<tr>
+									<td>49</td>
+									<td><b>buf.fill(value[, offset][, end])</b><br>使用指定的
+										value 来填充这个 buffer。如果没有指定 offset (默认是 0) 并且 end (默认是
+										buffer.length) ，将会填充整个buffer。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="node-js-Stream" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Stream</h3>
+					</div>
+					<div class="panel-body">
+						<p>Stream 是一个抽象接口，Node 中有很多对象实现了这个接口。例如，对http 服务器发起请求的request
+							对象就是一个 Stream，还有stdout（标准输出）。</p>
+						<p>Node.js，Stream 有四种流类型：</p>
+						<ul>
+							<li>
+								<p>
+									<b>Readable</b> - 可读操作。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>Writable</b> - 可写操作。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>Duplex</b> - 可读可写操作.
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>Transform</b> - 操作被写入数据，然后读出结果。
+								</p>
+							</li>
+						</ul>
+						<p>所有的 Stream 对象都是 EventEmitter 的实例。常用的事件有：</p>
+						<ul>
+							<li>
+								<p>
+									<b>data</b> - 当有数据可读时触发。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>end</b> - 没有更多的数据可读时触发。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>error</b> - 在接收和写入过程中发生错误时触发。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>finish</b> - 所有数据已被写入到底层系统时触发。
+								</p>
+							</li>
+						</ul>
+						<p>读取和写入文件实例:</p>
+						<pre class="brush: js;">
+var fs = require("fs");
+
+/** 写入数据 */
+var writeStream = fs.createWriteStream("res/output.txt");
+
+writeStream.write("This is write test!");
+writeStream.write("Stream 写入测试!");
+
+writeStream.end();
+
+writeStream.on('finish', function() {
+    console.log("写入完成。");
+});
+
+writeStream.on('error', function(err){
+   console.log(err.stack);
+});
+
+/** 读取数据 */
+var readerStream = fs.createReadStream("res/input.txt");
+var data = '';
+
+readerStream.on("data", function(trunk){
+    data += trunk;
+});
+
+readerStream.on("end", function(){
+    console.log(data);
+});
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="node-js-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="node-js-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="node-js-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="node-js-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="node-js-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="node-js-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="node-js-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+
+				<!-- item start -->
+				<a id="node-js-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 			</div>
@@ -105,14 +901,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -120,8 +915,9 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
-	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
+	<script src="res/menu.js"></script>
 </body>
 </html>
