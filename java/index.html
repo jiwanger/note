@@ -107,6 +107,9 @@
 						<p>
 							<a target="_blank" href="./docs/docs-java/api/index.html">Java
 								SE API</a>
+							--
+							<a target="_blank" href="./docs/docs-java/api-zh/index.html">JAVA
+								SE 1.6中文版本 API</a>
 						</p>
 
 						<img src="images/java-construct.png" class="img img-responsive">
@@ -870,6 +873,130 @@ $ java -jar build/libs/demo.jar
 							<li>在运行时调用任意一个对象的方法；</li>
 							<li>生成动态代理。</li>
 						</ul>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<a data-toggle="collapse" data-parent="#accordion"
+									href="#java-example-reflect" aria-expanded="true"
+									class="code-header">
+									<span class="glyphicon glyphicon-plus"></span> View Code
+								</a>
+							</div>
+							<div id="java-example-reflect" class="panel-collapse collapse"
+								style="" aria-expanded="true">
+								<pre class="brush: java;">
+public class MyReflect {
+	public static void main(String[] args) {
+		MyReflect testReflect = new MyReflect();
+		Class&lt;?> clazz = testReflect.getClass();
+		
+		System.out.println("完整类名: " + clazz.getName());
+		System.out.println("类名: " + clazz.getSimpleName());
+		System.out.println("类型名: " + clazz.getTypeName());
+		System.out.println("ClassLoader名: "
+				+ clazz.getClassLoader().getClass().getName());
+		System.out.println("父类: " + clazz.getSuperclass().getName());
+		
+		/** 实例化一个对象，并操作这个对象 */
+		try {
+			// 第一种方法，实例化默认构造方法，调用set赋值
+			Class&lt;?> myClass = Class.forName("cm.nate.reflect.MyReflect");
+			MyReflect mr = (MyReflect) myClass.newInstance();
+			mr.setName("hello");
+			System.out.println(mr.getName());
+			
+			// 取得指定的构造函数 使用构造函数赋值
+			@SuppressWarnings("unchecked")
+			Constructor&lt;MyReflect> constructor = 
+				(Constructor&lt;MyReflect>) myClass.getConstructor(String.class);
+			MyReflect mr2 = constructor.newInstance("jiwanger");
+			System.out.println(mr2.getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		/** 取得本类的全部属性 */
+		Field[] field = clazz.getDeclaredFields();
+        for (int i = 0; i &lt; field.length; i++) {
+            // 权限修饰符
+            int mo = field[i].getModifiers();
+            String priv = Modifier.toString(mo);
+            // 属性类型
+            Class&lt;?> type = field[i].getType();
+            System.out.println(priv + " " + type.getName() + " " + field[i].getName() + ";");
+        }
+        
+        /** 获取某个类的全部方法 */
+        Method method[] = clazz.getMethods();
+        for (int i = 0; i &lt; method.length; ++i) {
+            Class&lt;?> returnType = method[i].getReturnType();
+            Class&lt;?> para[] = method[i].getParameterTypes();
+            int temp = method[i].getModifiers();
+            System.out.print(Modifier.toString(temp) + " ");
+            System.out.print(returnType.getName() + "  ");
+            System.out.print(method[i].getName() + " ");
+            System.out.print("(");
+            for (int j = 0; j &lt; para.length; ++j) {
+                System.out.print(para[j].getName() + " " + "arg" + j);
+                if (j &lt; para.length - 1) {
+                    System.out.print(",");
+                }
+            }
+            Class&lt;?> exce[] = method[i].getExceptionTypes();
+            if (exce.length > 0) {
+                System.out.print(") throws ");
+                for (int k = 0; k &lt; exce.length; ++k) {
+                    System.out.print(exce[k].getName() + " ");
+                    if (k &lt; exce.length - 1) {
+                        System.out.print(",");
+                    }
+                }
+            } else {
+                System.out.print(")");
+            }
+            System.out.println();
+        }
+        
+        /** 反射机制调用某个类的方法 */
+        try {
+			Class&lt;?> myClass = Class.forName("cm.nate.reflect.MyReflect");
+			// 调用TestReflect类中的reflect1方法
+			
+			// Java 反射机制 - 调用某个类的方法1.
+			// 调用TestReflect的reflect2方法
+			MyReflect mr3 = (MyReflect) myClass.newInstance();
+			Method method2 = myClass.getMethod("setName", String.class);
+			method2.invoke(mr3, "张三");
+			
+			Method method3 = myClass.getMethod("getName");
+			String name = (String) method3.invoke(mr3);
+			System.out.println(name);
+			
+		}  catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public MyReflect(){}
+	
+	public MyReflect(String name){
+		this.name = name;
+	}
+
+	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+}
+</pre>
+							</div>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
@@ -953,6 +1080,135 @@ $ java -jar build/libs/demo.jar
 								</tr>
 							</tbody>
 						</table>
+						<p class="text-primary">example</p>
+						<ol>
+							<li>
+								<p>定义: FruitColor, FruitName, FruitProvider 三个注解类</p>
+								<pre class="brush: java;">
+/** 水果颜色注解 */
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface FruitColor {
+	/** 颜色枚举 */
+	public enum Color {
+		BULE, RED, GREEN
+	};
+
+	/** 颜色属性 */
+	Color fruitColor() default Color.GREEN;
+}
+
+/** 水果名称注解 */
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface FruitName {
+    String value() default "";
+}
+
+/** 水果供应者注解 */
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+public @interface FruitProvider {
+    /** 供应商编号 */
+    public int id() default -1;
+    
+    /** 供应商名称 */
+    public String name() default "";
+    
+    /** 供应商地址 */
+    public String address() default "";
+}
+</pre>
+							</li>
+							<li>
+								<p>注解使用: Apple</p>
+								<pre class="brush: java;">
+public class Apple {
+
+	@FruitName("Apple")
+	private String appleName;
+
+	@FruitColor(fruitColor = Color.RED)
+	private String appleColor;
+
+	@FruitProvider(id = 1, name = "陕西红富士集团", address = "陕西省西安市延安路89号红富士大厦")
+	private String appleProvider;
+
+	public void setAppleColor(String appleColor) {
+		this.appleColor = appleColor;
+	}
+
+	public String getAppleColor() {
+		return appleColor;
+	}
+
+	public void setAppleName(String appleName) {
+		this.appleName = appleName;
+	}
+
+	public String getAppleName() {
+		return appleName;
+	}
+
+	public void setAppleProvider(String appleProvider) {
+		this.appleProvider = appleProvider;
+	}
+
+	public String getAppleProvider() {
+		return appleProvider;
+	}
+
+	public void displayName() {
+		System.out.println("水果的名字是：苹果");
+	}
+}
+</pre>
+							</li>
+							<li>
+								<p>注解处理器: FruitInfoUtil</p>
+								<pre class="brush: java;">
+public class FruitInfoUtil {
+	public static void getFruitInfo(Class<?> clazz) {
+
+		String strFruitName = " 水果名称：";
+		String strFruitColor = " 水果颜色：";
+		String strFruitProvicer = "供应商信息：";
+
+		Field[] fields = clazz.getDeclaredFields();
+
+		for (Field field : fields) {
+			if (field.isAnnotationPresent(FruitName.class)) {
+				FruitName fruitName = (FruitName) field
+						.getAnnotation(FruitName.class);
+				strFruitName = strFruitName + fruitName.value();
+				System.out.println(strFruitName);
+			} else if (field.isAnnotationPresent(FruitColor.class)) {
+				FruitColor fruitColor = (FruitColor) field
+						.getAnnotation(FruitColor.class);
+				strFruitColor = strFruitColor
+						+ fruitColor.fruitColor().toString();
+				System.out.println(strFruitColor);
+			} else if (field.isAnnotationPresent(FruitProvider.class)) {
+				FruitProvider fruitProvider = (FruitProvider) field
+						.getAnnotation(FruitProvider.class);
+				strFruitProvicer = " 供应商编号：" + fruitProvider.id() + " 供应商名称："
+						+ fruitProvider.name() + " 供应商地址："
+						+ fruitProvider.address();
+				System.out.println(strFruitProvicer);
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		getFruitInfo(Apple.class);
+	}
+}
+</pre>
+							</li>
+						</ol>
 					</div>
 				</div>
 				<!-- item over -->

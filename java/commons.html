@@ -72,6 +72,7 @@
 							-- 非commons组件</a>
 						<a href="#commons-collections" class="list-group-item">commons-collections4-4.1</a>
 						<a href="#commons-compress" class="list-group-item">commons-compress-1.12</a>
+						<a href="#commons-compress" class="list-group-item">commons-io-2.5</a>
 						<a href="#" class="list-group-item">...</a>
 
 					</div>
@@ -1036,7 +1037,7 @@ log4j.appender.release.File=./logs/release.log4j
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="commons-collections"></a>
 				<div class="panel panel-default">
@@ -1045,22 +1046,681 @@ log4j.appender.release.File=./logs/release.log4j
 					</div>
 					<div class="panel-body">
 						<p>
-							<span class="text-primary">说明：</span>
+							<span class="text-primary">说明：</span>Apache Commons
+							Collections是一个用来处理集合Collection的开源工具包，比如你可以用来将一个对象拷贝多份并存放到一个Bag对象中（这个看来没有多大用处），得到两个集合里相同的元素，删除一个集合里的元素并返回删除的元素，还有除了通过一个集合里的key得到value外，还可以通过value
+							得到key，也就是说这个集合里的value是唯一的，另外还可以将一个集合里的key和value值对调，得到一个集合里的某一key之后的另一个
+							key值等等。
 						</p>
 						<p>
 							jar包 --
-							<a href="commons/commons-collections4-4.1/commons-collections4-4.1.jar">commons-collections4-4.1.jar</a>
+							<a
+								href="commons/commons-collections4-4.1/commons-collections4-4.1.jar">commons-collections4-4.1.jar</a>
 						</p>
 						<p>
 							文档 --
 							<a target="_blank"
 								href="commons/commons-collections4-4.1/apidocs/index.html">apidocs</a>
 						</p>
-					
+						<p>根据集合类型，大致将此包的类归纳为9类：</p>
+						<ol>
+							<li>
+								<p>
+									<u><strong>Bag</strong></u> --
+									在org.apache.commons.collections包中定义的接口，它extends
+									java.util.Collection，而它的<strong>实现类</strong>都被放在下面的bag包中。<strong>HashBag</strong>是Bag接口的一个标准实现。而<strong>BagUtils</strong>提供一组static的方法让调用者获取经过不同装饰后的Bag实例.具体用法见代码样例
+								</p>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="#commons-collections-bag" aria-expanded="true"
+											class="code-header">
+											<span class="glyphicon glyphicon-plus"></span> View Code
+										</a>
+									</div>
+									<div id="commons-collections-bag"
+										class="panel-collapse collapse" style="" aria-expanded="true">
+										<pre class="brush: java;">
+public class Book {  
+    private String name;  
+    private String isbn;  
+    private double retailPrice;  
+     
+    public Book() {}  
+    public Book(String name, String isbn, double retailPrice) {  
+        this.name = name;  
+        this.isbn = isbn;  
+        this.retailPrice = retailPrice;  
+    }  
+    public String toString() {  
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)  
+        .append("name", name)  
+        .append("ISBN", isbn)  
+        .append("retailPrice", retailPrice)  
+        .toString();  
+    }  
+    public String getIsbn() {  
+        return isbn;  
+    }  
+    public void setIsbn(String isbn) {  
+        this.isbn = isbn;  
+    }  
+    public String getName() {  
+        return name;  
+    }  
+    public void setName(String name) {  
+        this.name = name;  
+    }  
+    public double getRetailPrice() {  
+        return retailPrice;  
+    }  
+    public void setRetailPrice(double retailPrice) {  
+        this.retailPrice = retailPrice;  
+    }  
+}  
+// data setup  
+Book book1 = new Book("Refactoring Workbook", "7-5083-2208-8", 29.8);  
+Book book2 = new Book("J2EE Design Patterns", "7-5083-3099-4", 45);  
+Book book3 = new Book("Agile Software Development", "7-5083-1503-0", 59);  
+
+// create a bag  
+Bag myBag = BagUtils.typedBag(new HashBag(), Book.class);  
+myBag.add(book1, 360); //Bag, add 360 book1s into myBag  
+myBag.add(book2, 500); //Bag,add function  
+myBag.add(book3, 170); //Bag,add function  
+
+// calculations for a bag  
+double price1 = book1.getRetailPrice();  
+double price2 = book2.getRetailPrice();  
+double price3 = book3.getRetailPrice();  
+int book1Count = myBag.getCount(book1);//the count should be 360  
+int book2Count = myBag.getCount(book2);//the count should be 500  
+int book3Count = myBag.getCount(book3);//the count should be 170  
+double totalValue = (price1 * book1Count) + (price2 * book2Count) + (price3 * book3Count);  
+
+// dispaly results  
+System.out.println("There are " + book1Count + " copies of " + book1.getName() + ".");  
+System.out.println("There are " + book2Count + " copies of " + book2.getName() + ".");  
+System.out.println("There are " + book3Count + " copies of " + book3.getName() + ".");  
+System.out.println("The total value of these books is: " + totalValue);
+</pre>
+									</div>
+								</div>
+							</li>
+							<li>
+								<p>
+									<u><strong>Buffer</strong></u> --
+									定义在org.apache.commons.collections包下面的接口，用于表示按一定顺序除去成员对象的collection如队列等。具体的
+									<strong>实现类</strong>在org.apache.commons.collections.buffer
+									包下可以找到。最简单直接的Buffer实现类是 <strong>UnboundedFifoBuffer</strong>，提供先进先出的大小可变的队列。而
+									<strong>BoundedFifoBuffer</strong>则是对其大小进行了限制，是固定大小的先进先出队列。 <strong>BlockingBuffer</strong>要在多线程的环境中才能体现出它的价值，尤其是当我们需要实现某种流水线时这个BlockingBuffer很有用：每个流水线上的组件从上游的BlockingBuffer获取数据，处理后放到下一个BlockingBuffer中依次传递。BlockingBuffer的核心特色通俗点说就是如果你向它要东西，而它暂时还没有的话，你可以一直等待直至拿到为止。
+									<strong>PriorityBuffer</strong>则提供比一般的先进先出Buffer更强的控制力：我们可以自定义Comparator给它，告诉它怎么判定它的成员的先后顺序，优先级最高的最先走。此外还有执行类型检查的
+									<strong>TypedBuffer</strong>、或者不可改变的 <strong>UnmodifiableBuffer</strong>等等
+								</p>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="#commons-collections-buffer" aria-expanded="true"
+											class="code-header">
+											<span class="glyphicon glyphicon-plus"></span> View Code
+										</a>
+									</div>
+									<div id="commons-collections-buffer"
+										class="panel-collapse collapse" style="" aria-expanded="true">
+										<pre class="brush: java;">
+// data setup  
+Book book1 = new Book("Refactoring Workbook", "7-5083-2208-8", 29.8);  
+Book book2 = new Book("J2EE Design Patterns", "7-5083-3099-4", 45);  
+Book book3 = new Book("Agile Software Development", "7-5083-1503-0", 59);  
+Book book4 = new Book("Professional JSP", "7-5053-8005-2", 100);  
+
+// create a Buffer  
+Buffer buffer =  
+    BufferUtils.typedBuffer(new BoundedFifoBuffer(3), Book.class); //key line1  
+buffer.add(book1);  
+buffer.add(book2);  
+buffer.add(book3);  
+Book removed = (Book) buffer.remove();//key line2  
+System.out.println("Removed:");  
+System.out.println(removed);  
+buffer.add(book4);//key line3  
+ 
+// get items in buffer  
+for (int i = 0; i < 3; i++) {  
+    System.out.println(buffer.get());  
+    buffer.remove();  
+}  
+</pre>
+									</div>
+								</div>
+							</li>
+							<li>
+								<p>
+									<u><strong>Map</strong></u> -- 在java.util.Map的基础上扩展的接口和类。 <strong>BidiMap</strong>，直译就是双向Map，可以通过key找到value，也可以通过value找到key，这在我们日常的代码-名称匹配的时候很方便：因为我们除了需要通过代码找到名称之外，往往也需要处理用户输入的名称，然后获取其代码。需要注意的是BidiMap当中不光key不能重复，value也不可以。
+									<strong>MultiMap</strong>，就是说一个key不在是简单的指向一个对象，而是一组对象，add()和remove()的时候跟普通的Map无异，只是在get()时返回一个Collection，利用MultiMap，我们就可以很方便的往一个key上放数量不定的对象，也就实现了一对多。
+									<strong>LazyMap</strong>，意思就是这个Map中的键/值对一开始并不存在，当被调用到时才创建。
+								</p>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="#commons-collections-map" aria-expanded="true"
+											class="code-header">
+											<span class="glyphicon glyphicon-plus"></span> View Code
+										</a>
+									</div>
+									<div id="commons-collections-map"
+										class="panel-collapse collapse" style="" aria-expanded="true">
+										<pre class="brush: java;">
+public static void demoBidiMap() {  
+    System.out.println(StringUtils.center(" demoBidiMap ", 40, "="));  
+    BidiMap bidiMap = new DualHashBidiMap();  
+    bidiMap.put("BJ", "Beijing");  
+    bidiMap.put("SH", "Shanghai");  
+    bidiMap.put("GZ", "Guangzhou");  
+    bidiMap.put("CD", "Chengdu");  
+    System.out.println("Key-Value: BJ = " + bidiMap.get("BJ"));  
+    System.out.println("Value-Key: Chengdu = " + bidiMap.getKey("Chengdu"));  
+    System.out.println(StringUtils.repeat("=", 40));  
+}  
+public static void demoMultiMap() {  
+    System.out.println(StringUtils.center(" demoMultiMap ", 40, "="));  
+    MultiMap multiMap = new MultiHashMap();  
+    multiMap.put("Sean", "C/C++");  
+    multiMap.put("Sean", "OO");  
+    multiMap.put("Sean", "Java");  
+    multiMap.put("Sean", ".NET");  
+    multiMap.remove("Sean", "C/C++");  
+    System.out.println("Sean's skill set: " + multiMap.get("Sean"));  
+    System.out.println(StringUtils.repeat("=", 40));  
+}  
+public static void demoLazyMap() {  
+    System.out.println(StringUtils.center(" demoLazyMap ", 40, "="));  
+    // borrowed from Commons Collection's Javadoc  
+    Factory factory = new Factory() {  
+        public Object create() {  
+            return new Date();  
+        }  
+    };  
+    Map lazy = LazyMap.decorate(new HashMap(), factory);  
+    System.out.println(lazy.get("NOW"));  
+    System.out.println(StringUtils.repeat("=", 40));  
+}
+</pre>
+									</div>
+								</div>
+							</li>
+
+							<li>
+								<p>
+									<u><strong>Collection</strong></u> -- 用也各collection之间的类型转换。典型的是
+									<strong>TypedCollection</strong>，它实际上的作用就是提供一个decorate方法，我们传进去一个Collection和需要的类型甄别信息java.lang.Class，它给我们创建一个全新的强类型的Collection
+								</p>
+							</li>
+
+							<li>
+								<p>
+									<u><strong>Comparator</strong></u> --
+									提供了一些Comparator的实现类（都在org.apache.commons.collections.comparators包下面）<br>
+									<strong>BooleanComparator</strong> –
+									用于排序一组Boolean对象，指明先true还是先false；<br> <strong>ComparableComparator</strong>
+									–
+									用于排序实现了java.lang.Comparable接口的对象（我们常用的Java类如String、Integer、Date、Double、File、Character等等都实现了Comparable接口）；<br>
+									<strong>ComparatorChain</strong> –
+									定义一组Comparator链，链中的Comparator对象会被依次执行；<br> <strong>FixedOrderComparator</strong>
+									– 用于定义一个特殊的顺序，对一组对象按照这样的自定义顺序进行排序；<br> <strong>NullComparator</strong>
+									– 让null值也可参与比较，可以设定为先null或者后null；<br> <strong>ReverseComparator</strong>
+									– 将原有的Comparator效果反转；<br> <strong>TransformingComparator</strong>
+									– 将一个Comparator装饰为具有Transformer效果的Comparator。
+								</p>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="#commons-collections-Comparator" aria-expanded="true"
+											class="code-header">
+											<span class="glyphicon glyphicon-plus"></span> View Code
+										</a>
+									</div>
+									<div id="commons-collections-Comparator"
+										class="panel-collapse collapse" style="" aria-expanded="true">
+										<pre class="brush: java;">
+public class Issue {  
+    private long id;  
+    private String severity;  
+    private String owner;  
+     
+    public Issue() {}  
+    public Issue(long id, String severity, String owner) {  
+        this.id = id;  
+        this.severity = severity;  
+        this.owner = owner;  
+    }  
+    public String toString() {  
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)  
+                .append("id", id)  
+                .append("severity", severity)  
+                .append("owner", owner)  
+                .toString();  
+    }  
+    public long getId() {  
+        return id;  
+    }  
+    public void setId(long id) {  
+        this.id = id;  
+    }  
+    public String getOwner() {  
+        return owner;  
+    }  
+    public void setOwner(String owner) {  
+        this.owner = owner;  
+    }  
+    public String getSeverity() {  
+        return severity;  
+    }  
+    public void setSeverity(String severity) {  
+        this.severity = severity;  
+    }  
+}  
+ // data setup  
+Issue[] issues = new Issue[] {  
+        new Issue(15102, "Major", "John"),  
+        new Issue(15103, "Minor", "Agnes"),  
+        new Issue(15104, "Critical", "Bill"),  
+        new Issue(15105, "Major", "John"),  
+        new Issue(15106, "Major", "John"),  
+        new Issue(15107, "Critical", "John"),  
+        new Issue(15108, "Major", "Agnes"),  
+        new Issue(15109, "Minor", "Julie"),  
+        new Issue(15110, "Major", "Mary"),  
+        new Issue(15111, "Enhancement", "Bill"),  
+        new Issue(15112, "Minor", "Julie"),  
+        new Issue(15113, "Major", "Julie")  
+};  
+// comparators setup  
+String[] severityOrder = {"Critical", "Major", "Minor", "Enhancement"};  
+Comparator severityComparator = new FixedOrderComparator(severityOrder);//key line1  
+ComparatorChain compChain = new ComparatorChain();//key line2  
+compChain.addComparator(new BeanComparator("owner"));  
+compChain.addComparator(new BeanComparator("severity", severityComparator));  
+compChain.addComparator(new BeanComparator("id"));  
+// sort and display  
+Arrays.sort(issues, compChain);//key line3  
+for (int i = 0; i < issues.length; i++) {  
+    System.out.println(issues[i]);  
+}  
+</pre>
+									</div>
+								</div>
+							</li>
+
+							<li>
+								<p>
+									<u><strong>Predicate</strong></u> --
+									它以一个Object对象为参数，处理后返回一个boolean值，检验某个对象是否满足某个条件。Commons
+									Collections也提供了一组定义好的Predicate类供我们使用，这些类都放在org.apache.commons.collections.functors包中。当然，我们也可以自定义Predicate，只要实现这个Predicate接口即可。
+								</p>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="#commons-collections-Predicate" aria-expanded="true"
+											class="code-header">
+											<span class="glyphicon glyphicon-plus"></span> View Code
+										</a>
+									</div>
+									<div id="commons-collections-Predicate"
+										class="panel-collapse collapse" style="" aria-expanded="true">
+										<pre class="brush: java;">
+Predicate p1 = new InstanceofPredicate(String.class); //key line1  
+Predicate p2 = NotNullPredicate.getInstance(); //key line2  
+Predicate p3 = new Predicate() { //key line3  
+    public boolean evaluate(Object obj) {  
+        String str = (String) obj;  
+        return StringUtils.isAlphanumeric(str)  
+            && str.length() >= 6  
+            && str.length() <= 10;  
+    }  
+};  
+Predicate p4 = PredicateUtils.allPredicate(new Predicate[]{p1, p2, p3}); //key line4                 
+String input = "ABCD1234";  
+Object[] raw = new Object[] {  
+    "Is '",  
+    input,  
+    "' a valid input? ",  
+    BooleanUtils.toStringYesNo(p4.evaluate(input)),  
+    "."  
+};  
+System.out.println(StringUtils.join(raw));
+</pre>
+									</div>
+								</div>
+							</li>
+
+							<li>
+								<p>
+									<u><strong>Transformer</strong></u> --
+									我们有时候需要将某个对象转换成另一个对象供另一组方法调用，而这两类对象的类型有可能并不是出于同一个继承体系的，或者说出了很基本的Object之外没有共同的父类，或者我们根本不关心他们是不是有其他继承关系，甚至就是同一个类的实例只是对我们而言无所谓，我们为了它能够被后续的调用者有意义的识别和处理，在这样的情形，我们就可以利用Transformer。除了基本的转型Transformer之外，Commons
+									Collections还提供了Transformer链和带条件的Transformer，使得我们很方便的组装出有意义的转型逻辑。
+								</p>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="#commons-collections-Transformer" aria-expanded="true"
+											class="code-header">
+											<span class="glyphicon glyphicon-plus"></span> View Code
+										</a>
+									</div>
+									<div id="commons-collections-Transformer"
+										class="panel-collapse collapse" style="" aria-expanded="true">
+										<pre class="brush: java;">
+public class Applicant {  
+    private String name;  
+    private int age;  
+    private String applyFor;  
+     
+    public Applicant() {}  
+    public Applicant(String name, int age, String applyFor) {  
+        this.name = name;  
+        this.age = age;  
+        this.applyFor = applyFor;  
+    }  
+    public String toString() {  
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)  
+                .append("name", name)  
+                .append("age", age)  
+                .append("applyFor", applyFor)  
+                .toString();  
+    }  
+    public int getAge() {  
+        return age;  
+    }  
+    public void setAge(int age) {  
+        this.age = age;  
+    }  
+    public String getApplyFor() {  
+        return applyFor;  
+    }  
+    public void setApplyFor(String applyFor) {  
+        this.applyFor = applyFor;  
+    }  
+    public String getName() {  
+        return name;  
+    }  
+    public void setName(String name) {  
+        this.name = name;  
+    }  
+} 
+public class Employee {  
+    private String name;  
+    private int age;  
+    private Date dateJoined;  
+    private String grade;  
+    private double salary;  
+     
+    public Employee() {}  
+    public Employee(String name, int age, Date dateJoined, String grade, double salary) {  
+        this.name = name;  
+        this.age = age;  
+        this.dateJoined = dateJoined;  
+        this.grade = grade;  
+        this.salary = salary;  
+    }  
+    public String toString() {  
+        return new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE)  
+                .append("name", name)  
+                .append("age", age)  
+                .append("dateJoined", DateFormatUtils.format(dateJoined, "yyyy-MM-dd"))  
+                .append("grade", grade)  
+                .append("salary", salary)  
+                .toString();  
+    }  
+    public int getAge() {  
+        return age;  
+    }  
+    public void setAge(int age) {  
+        this.age = age;  
+    }  
+    public Date getDateJoined() {  
+        return dateJoined;  
+    }  
+    public void setDateJoined(Date dateJoined) {  
+        this.dateJoined = dateJoined;  
+    }  
+    public String getGrade() {  
+        return grade;  
+    }  
+    public void setGrade(String grade) {  
+        this.grade = grade;  
+    }  
+    public String getName() {  
+        return name;  
+    }  
+    public void setName(String name) {  
+        this.name = name;  
+    }  
+    public double getSalary() {  
+        return salary;  
+    }  
+    public void setSalary(double salary) {  
+        this.salary = salary;  
+    }  
+}
+
+// data setup  
+Applicant[] applicants = new Applicant[] {  
+    new Applicant("Tony", 26, "Developer"),  
+    new Applicant("Michelle", 24, "Tester"),  
+    new Applicant("Jack", 28, "Project Manager")  
+};  
+List appList = Arrays.asList(applicants);  
+ 
+// predicate setup  
+Predicate isDeveloper = new Predicate() {  
+    public boolean evaluate(Object obj) {  
+        Applicant app = (Applicant) obj;  
+        return "Developer".equalsIgnoreCase(app.getApplyFor());  
+    }  
+};  
+Predicate isTester = new Predicate() {  
+    public boolean evaluate(Object obj) {  
+        Applicant app = (Applicant) obj;  
+        return "Tester".equalsIgnoreCase(app.getApplyFor());  
+    }  
+};  
+Predicate isPM = new Predicate() {  
+    public boolean evaluate(Object obj) {  
+        Applicant app = (Applicant) obj;  
+        return "Project Manager".equalsIgnoreCase(app.getApplyFor());  
+    }  
+};  
+Predicate[] checkApplyFor = new Predicate[] {  
+    isDeveloper,  
+    isTester,  
+    isPM  
+};  
+ 
+// transformer setup  
+Transformer developerTransformer = new Transformer() {  
+    public Object transform(Object obj) {  
+        Applicant app = (Applicant) obj;  
+        return new Employee(  
+            app.getName(), app.getAge(), new Date(), "E4", 2000  
+        );  
+    }  
+};  
+Transformer testerTransformer = new Transformer() {  
+    public Object transform(Object obj) {  
+        Applicant app = (Applicant) obj;  
+        return new Employee(  
+            app.getName(), app.getAge(), new Date(), "E4", 2000  
+        );  
+    }  
+};  
+Transformer pmTransformer = new Transformer() {  
+    public Object transform(Object obj) {  
+        Applicant app = (Applicant) obj;  
+        return new Employee(  
+            app.getName(), app.getAge(), new Date(), "E5", 3000  
+        );  
+    }  
+};  
+Transformer[] transformers = new Transformer[] {  
+    developerTransformer,  
+    testerTransformer,  
+    pmTransformer  
+};  
+ 
+// transform  
+Transformer employTransformer = new SwitchTransformer(  
+    checkApplyFor, transformers, null  
+);  
+Collection employed = CollectionUtils.collect(appList, employTransformer);  
+ 
+// output  
+System.out.println("Applicants: ");  
+Iterator iter1 = appList.iterator();  
+while (iter1.hasNext()) {  
+    System.out.println(iter1.next());  
+}  
+System.out.println("Employed: ");  
+Iterator iter2 = employed.iterator();  
+while (iter2.hasNext()) {  
+    System.out.println(iter2.next());  
+}
+</pre>
+									</div>
+								</div>
+							</li>
+
+							<li>
+								<p>
+									<u><strong>Closure</strong></u> --
+									这一组接口和类提供一个操作对象的execute方法，为我们在处理一系列对象时可以将处理逻辑分离出来。 <strong>ChainedClosure</strong>可以包装一组Closure作为整体执行；IfClosure在创建时需要提供给它一个Predicate和两个Closure，执行时先做Predicate判定再决定执行哪一个Closure；
+									<strong>SwitchClosure</strong>跟SwitchTransformer类似，根据创建时传入的Predicate组和Closure组对应执行；
+									<strong>WhileClosure</strong>则根据创建时传入的Predicate做判断，如果为true则执行Closure，直到Predicate返回false；等等。
+								</p>
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="#commons-collections-Closure" aria-expanded="true"
+											class="code-header">
+											<span class="glyphicon glyphicon-plus"></span> View Code
+										</a>
+									</div>
+									<div id="commons-collections-Closure"
+										class="panel-collapse collapse" style="" aria-expanded="true">
+										<pre class="brush: java;">
+public static void demoClosureUsage() {  
+    // data setup  
+    Employee[] employees = new Employee[] {  
+        new Employee("Tony", 26, new Date(), "E4", 2000),  
+        new Employee("Michelle", 24, new Date(), "E4", 2000),  
+        new Employee("Jack", 28, new Date(), "E5", 3000)  
+    };  
+    Collection empColl = Arrays.asList(employees);  
+    printColl("Before salary increase:", empColl);  
+     
+    // closure setup  
+    Closure salaryIncreaseClosure = new Closure() {//key line1  
+        public void execute(Object obj) {  
+            Employee emp = (Employee) obj;  
+            emp.setSalary(emp.getSalary() * 1.20);  
+        }  
+    };  
+     
+    // salary increase  
+    CollectionUtils.forAllDo(empColl, salaryIncreaseClosure);//key line2  
+    printColl("After salary increase:", empColl);  
+
+    System.out.println(StringUtils.repeat("=", 40));  
+}  
+ 
+public static void printColl(String label, Collection c) {  
+    if (StringUtils.isNotBlank(label)) {  
+        System.out.println(label);  
+    }  
+    Iterator iter = c.iterator();  
+    while (iter.hasNext()) {  
+        System.out.println(iter.next());  
+    }  
+}
+</pre>
+									</div>
+								</div>
+							</li>
+
+							<li>
+								<p>
+									<u><strong>Iterator</strong></u> --
+									java.util.Iterator接口定义了标准的Collection遍历方法，但是如果不做改变的使用它，我们得到的是从头到尾一次性的遍历。假如我们需要循环遍历，假如我们需要遍历某一段，假如我们需要遍历满足某些条件的元素，等等等等，我们就不能完全依赖于这个Iterator的标准实现了。除非我们宁可在此基础上在调用的代码中多加一些判断，不过这样的话代码就会显得混乱，时间长了就容易变得难以维护。Commons
+									Collections的这一组Iterator为我们带来了便利。
+								</p><div class="panel panel-default">
+									<div class="panel-heading">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="#commons-collections-Iterator" aria-expanded="true"
+											class="code-header">
+											<span class="glyphicon glyphicon-plus"></span> View Code
+										</a>
+									</div>
+									<div id="commons-collections-Iterator"
+										class="panel-collapse collapse" style="" aria-expanded="true">
+										<pre class="brush: java;">
+public static void demoIteratorUsage() {  
+    // data setup  
+    String[] weekDays = {  
+        "Monday", "Tuesday", "Wednesday",  
+        "Thursday", "Friday", "Saturday", "Sunday"  
+    };  
+    List weekDayList = Arrays.asList(weekDays);  
+     
+    // workdays  
+    Iterator iter1 = new ArrayListIterator(weekDays, 0, 5);//key line1  
+    printColl("Partial:", iter1, 5);  
+     
+    // loop  
+    Iterator iter2 = new LoopingIterator(weekDayList);//key line2  
+    printColl("Loop:", iter2, 10);  
+     
+    // looping workdays  
+    Predicate notWeekendPredicate = new Predicate() {  
+        public boolean evaluate(Object obj) {  
+            String str = (String) obj;  
+            if ("Saturday".equalsIgnoreCase(str)) {  
+                return false;  
+            }  
+            if ("Sunday".equalsIgnoreCase(str)) {  
+                return false;  
+            }  
+            return true;  
+        }  
+    };  
+    Iterator iter3 = new FilterIterator(//key line3  
+        new LoopingIterator(weekDayList),  
+        notWeekendPredicate  
+    );  
+    printColl("No Weekends loop:", iter3, 12);  
+     
+    System.out.println(StringUtils.repeat("=", 40));  
+
+}  
+ 
+public static void printColl(String label, Iterator iter, int maxCount) {  
+    if (StringUtils.isNotBlank(label)) {  
+        System.out.println(label);  
+    }  
+    int i = 0;  
+    while (iter.hasNext() && i < maxCount) {  
+        System.out.println("# " + iter.next() + " #");  
+        i++;  
+    }  
+}  
+</pre>
+									</div>
+								</div>
+							</li>
+						</ol>
+
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="commons-compress"></a>
 				<div class="panel panel-default">
@@ -1069,7 +1729,8 @@ log4j.appender.release.File=./logs/release.log4j
 					</div>
 					<div class="panel-body">
 						<p>
-							<span class="text-primary">说明：</span>
+							<span class="text-primary">说明：</span>Apache Commons Compress是一个压缩、解压缩文件的类库。
+							定义一套 API 与 ar, cpio, Unix dump, tar, zip, gzip, XZ, Pack200, bzip2, 7z, arj, lzma, snappy, DEFLATE 和 Z files一起工作。
 						</p>
 						<p>
 							jar包 --
@@ -1080,18 +1741,54 @@ log4j.appender.release.File=./logs/release.log4j
 							<a target="_blank"
 								href="commons/commons-compress-1.12/apidocs/index.html">apidocs</a>
 						</p>
-					
+
 					</div>
 				</div>
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="commons-io"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">commons-io-2.5</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							<span class="text-primary">说明：</span>
+						</p>
+						<p>
+							jar包 --
+							<a href="commons/commons-io-2.5/commons-io-2.5.jar">commons-io-2.5.jar</a>
+						</p>
+						<p>
+							文档 --
+							<a target="_blank"
+								href="commons/commons-io-2.5/docs/index.html">apidocs</a>
+						</p>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="commons-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">commons-</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<span class="text-primary">说明：</span>
+						</p>
+						<p>
+							jar包 --
+							<a href="commons/commons-io-2.5/commons-io-2.5.jar">commons-io-2.5.jar</a>
+						</p>
+						<p>
+							文档 --
+							<a target="_blank"
+								href="commons/commons-io-2.5/docs/index.html">apidocs</a>
+						</p>
+					</div>
 				</div>
 				<!-- item over -->
 			</div>
