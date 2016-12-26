@@ -22,6 +22,7 @@
 <link type="text/css" rel="stylesheet"
 	href="../support/syntaxhighlighter/styles/shCoreDefault.css" />
 <link href="../commons/css/common.css" rel="stylesheet">
+<link href="css/index.css" rel="stylesheet">
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 <!--[if lt IE 9]>
@@ -34,8 +35,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -60,24 +61,16 @@
 			<!-- left-menu start -->
 			<div class="col-md-3">
 				<div class="panel panel-default"
-					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
+					style="position: fixed; top: 70px; width: 260px; overflow: auto; float: left;">
 					<div class="panel-heading">
 						<h3 class="panel-title">REGEXP</h3>
 					</div>
 					<div class="list-group">
 						<a href="#regexp-intro" class="list-group-item">简介</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
-						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
-							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
-						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#regexp-mata" class="list-group-item">元字符</a>
+						<a href="#regexp-mata-class" class="list-group-item">元字符分类</a>
+						<a href="#regexp-operator" class="list-group-item">运算符优先级</a>
+						<a href="#regexp-examples" class="list-group-item">实例</a>
 					</div>
 				</div>
 			</div>
@@ -89,7 +82,7 @@
 	<div class="container" style="margin-top: 70px;">
 		<div class="row">
 			<div class="col-md-9 col-md-push-3" style="float: left;">
-			
+
 				<!-- item start -->
 				<a class="offset" id="regexp-intro"></a>
 				<div class="panel panel-default">
@@ -97,43 +90,862 @@
 						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-						
+						<p>正则表达式，又称规则表达式。（英语：Regular
+							Expression，在代码中常简写为regex、regexp或RE），计算机科学的一个概念。正则表通常被用来检索、替换那些符合某个模式(规则)的文本。</p>
+						<p>正则引擎主要可以分为两大类：一种是DFA，一种是NFA。这两种引擎都有了很久的历史(至今二十多年)，当中也由这两种引擎产生了很多变体！于是POSIX的出台规避了不必要变体的继续产生。这样一来，主流的正则引擎又分为3类：一、DFA，二、传统型NFA，三、POSIX
+							NFA。</p>
+						<p>DFA 引擎在线性时状态下执行，因为它们不要求回溯（并因此它们永远不测试相同的字符两次）。DFA
+							引擎还可以确保匹配最长的可能的字符串。但是，因为 DFA
+							引擎只包含有限的状态，所以它不能匹配具有反向引用的模式；并且因为它不构造显示扩展，所以它不可以捕获子表达式。</p>
+						<p>传统的 NFA 引擎运行所谓的“贪婪的”匹配 回溯算法
+							，以指定顺序测试正则表达式的所有可能的扩展并接受第一个匹配项。因为传统的 NFA
+							构造正则表达式的特定扩展以获得成功的匹配，所以它可以捕获子表达式匹配和匹配的反向引用。但是，因为传统的 NFA
+							回溯，所以它可以访问完全相同的状态多次（如果通过不同的路径到达该状态）。因此，在最坏情况下，它的执行速度可能非常慢。因为传统的
+							NFA 接受它找到的第一个匹配，所以它还可能会导致其他（可能更长）匹配未被发现。</p>
+						<p>POSIX NFA 引擎与传统的 NFA
+							引擎类似，不同的一点在于：在它们可以确保已找到了可能的最长的匹配之前，它们将继续回溯。因此，POSIX NFA
+							引擎的速度慢于传统的 NFA 引擎；并且在使用 POSIX NFA
+							时，您恐怕不会愿意在更改回溯搜索的顺序的情况下来支持较短的匹配搜索，而非较长的匹配搜索。</p>
+						<p>使用DFA引擎的程序主要有：awk,egrep,flex,lex,MySQL,Procmail等；</p>
+						<p>使用传统型NFA引擎的程序主要有：GNU Emacs,Java,ergp,less,more,.NET语言,PCRE
+							library,Perl,PHP,Python,Ruby,sed,vi；</p>
+						<p>使用POSIX NFA引擎的程序主要有：mawk,Mortice Kern Systems’
+							utilities,GNU Emacs(使用时可以明确指定)；</p>
+						<p>也有使用DFA/NFA混合的引擎：GNU awk,GNU grep/egrep,Tcl。</p>
+						<p>举例简单说明NFA与DFA工作的区别：</p>
+						<p>比如有字符串this is yansen’s blog，正则表达式为 /ya(msen|nsen|nsem)/
+							(不要在乎表达式怎么样，这里只是为了说明引擎间的工作区别)。 NFA工作方式如下，先在字符串中查找 y 然后匹配其后是否为 a
+							，如果是 a 则继续，查找其后是否为 m 如果不是则匹配其后是否为 n (此时淘汰msen选择支)。然后继续看其后是否依次为
+							s,e，接着测试是否为 n ，是 n 则匹配成功，不是则测试是否为 m 。为什么是 m ？因为 NFA
+							工作方式是以正则表达式为标准，反复测试字符串，这样同样一个字符串有可能被反复测试了很多次！</p>
+						<p>而DFA则不是如此，DFA会从 this 中 t 开始依次查找 y，定位到 y ，已知其后为 a ，则查看表达式是否有
+							a ，此处正好有 a 。然后字符串 a 后为 n ，DFA依次测试表达式，此时 msen 不符合要求淘汰。nsen 和 nsem
+							符合要求，然后DFA依次检查字符串，检测到sen 中的 n 时只有nsen 分支符合，则匹配成功！</p>
+						<p>由此可以看出来，两种引擎的工作方式完全不同，一个(NFA)以表达式为主导，一个(DFA)以文本为主导！一般而论，DFA引擎则搜索更快一些！但是NFA以表达式为主导，反而更容易操纵，因此一般程序员更偏爱NFA引擎！
+							两种引擎各有所长，而真正的引用则取决与你的需要以及所使用的语言！</p>
+
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="regexp-mata"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">元字符</h3>
 					</div>
 					<div class="panel-body">
-						
+						<table class="table table-responsive table-striped table-bordered">
+							<tbody>
+								<tr>
+									<th width="20%">字符</th>
+									<th width="80%">描述</th>
+								</tr>
+								<tr>
+									<td>\</td>
+									<td><p>将下一个字符标记为一个特殊字符、或一个原义字符、或一个
+											向后引用、或一个八进制转义符。例如，'n' 匹配字符 "n"。'\n' 匹配一个换行符。序列 '\\' 匹配 "\" 而
+											"\(" 则匹配 "("。</p></td>
+								</tr>
+								<tr>
+									<td>^</td>
+									<td><p>匹配输入字符串的开始位置。如果设置了 RegExp 对象的 Multiline 属性，^
+											也匹配 '\n' 或 '\r' 之后的位置。</p></td>
+								</tr>
+								<tr>
+									<td>$</td>
+									<td><p>匹配输入字符串的结束位置。如果设置了RegExp 对象的 Multiline 属性，$ 也匹配
+											'\n' 或 '\r' 之前的位置。</p></td>
+								</tr>
+								<tr>
+									<td>*</td>
+									<td><p>匹配前面的子表达式零次或多次。例如，zo* 能匹配 "z" 以及 "zoo"。*
+											等价于{0,}。</p></td>
+								</tr>
+								<tr>
+									<td>+</td>
+									<td><p>匹配前面的子表达式一次或多次。例如，'zo+' 能匹配 "zo" 以及 "zoo"，但不能匹配
+											"z"。+ 等价于 {1,}。</p></td>
+								</tr>
+								<tr>
+									<td>?</td>
+									<td><p>匹配前面的子表达式零次或一次。例如，"do(es)?" 可以匹配 "do" 或 "does"
+											中的"do" 。? 等价于 {0,1}。</p></td>
+								</tr>
+								<tr>
+									<td>{n}</td>
+									<td><p>n 是一个非负整数。匹配确定的 n 次。例如，'o{2}' 不能匹配 "Bob" 中的
+											'o'，但是能匹配 "food" 中的两个 o。</p></td>
+								</tr>
+								<tr>
+									<td>{n,}</td>
+									<td><p>n 是一个非负整数。至少匹配n 次。例如，'o{2,}' 不能匹配 "Bob" 中的
+											'o'，但能匹配 "foooood" 中的所有 o。'o{1,}' 等价于 'o+'。'o{0,}' 则等价于 'o*'。</p></td>
+								</tr>
+								<tr>
+									<td>{n,m}</td>
+									<td><p>m 和 n 均为非负整数，其中n &lt;= m。最少匹配 n 次且最多匹配 m
+											次。例如，"o{1,3}" 将匹配 "fooooood" 中的前三个 o。'o{0,1}' 等价于
+											'o?'。请注意在逗号和两个数之间不能有空格。</p></td>
+								</tr>
+								<tr>
+									<td>?</td>
+									<td><p>当该字符紧跟在任何一个其他限制符 (*, +, ?, {n}, {n,}, {n,m})
+											后面时，匹配模式是非贪婪的。非贪婪模式尽可能少的匹配所搜索的字符串，而默认的贪婪模式则尽可能多的匹配所搜索的字符串。例如，对于字符串
+											"oooo"，'o+?' 将匹配单个 "o"，而 'o+' 将匹配所有 'o'。</p></td>
+								</tr>
+								<tr>
+									<td>.</td>
+									<td><p>
+											匹配除 "\n" 之外的任何单个字符。要匹配包括 '\n' 在内的任何字符，请使用像"<strong>(.|\n)</strong>"的模式。
+										</p></td>
+								</tr>
+								<tr>
+									<td>(pattern)</td>
+									<td><p>匹配 pattern 并获取这一匹配。所获取的匹配可以从产生的 Matches
+											集合得到，在VBScript 中使用 SubMatches 集合，在JScript 中则使用 $0…$9
+											属性。要匹配圆括号字符，请使用 '\(' 或 '\)'。</p></td>
+								</tr>
+								<tr>
+									<td>(?:pattern)</td>
+									<td><p>匹配 pattern
+											但不获取匹配结果，也就是说这是一个非获取匹配，不进行存储供以后使用。这在使用 "或" 字符 (|)
+											来组合一个模式的各个部分是很有用。例如， 'industr(?:y|ies) 就是一个比
+											'industry|industries' 更简略的表达式。</p></td>
+								</tr>
+								<tr>
+									<td>(?=pattern)</td>
+									<td><p>正向预查，在任何匹配 pattern
+											的字符串开始处匹配查找字符串。这是一个非获取匹配，也就是说，该匹配不需要获取供以后使用。例如，'Windows
+											(?=95|98|NT|2000)' 能匹配 "Windows 2000" 中的 "Windows" ，但不能匹配
+											"Windows 3.1" 中的
+											"Windows"。预查不消耗字符，也就是说，在一个匹配发生后，在最后一次匹配之后立即开始下一次匹配的搜索，而不是从包含预查的字符之后开始。</p></td>
+								</tr>
+								<tr>
+									<td>(?!pattern)</td>
+									<td><p>负向预查，在任何不匹配 pattern
+											的字符串开始处匹配查找字符串。这是一个非获取匹配，也就是说，该匹配不需要获取供以后使用。例如'Windows
+											(?!95|98|NT|2000)' 能匹配 "Windows 3.1" 中的 "Windows"，但不能匹配
+											"Windows 2000" 中的
+											"Windows"。预查不消耗字符，也就是说，在一个匹配发生后，在最后一次匹配之后立即开始下一次匹配的搜索，而不是从包含预查的字符之后开始。</p></td>
+								</tr>
+								<tr>
+									<td>x|y</td>
+									<td><p>匹配 x 或 y。例如，'z|food' 能匹配 "z" 或
+											"food"。'(z|f)ood' 则匹配 "zood" 或 "food"。</p></td>
+								</tr>
+								<tr>
+									<td>[xyz]</td>
+									<td><p>字符集合。匹配所包含的任意一个字符。例如， '[abc]' 可以匹配 "plain" 中的
+											'a'。</p></td>
+								</tr>
+								<tr>
+									<td>[^xyz]</td>
+									<td><p>负值字符集合。匹配未包含的任意字符。例如， '[^abc]' 可以匹配 "plain"
+											中的'p'、'l'、'i'、'n'。</p></td>
+								</tr>
+								<tr>
+									<td>[a-z]</td>
+									<td><p>字符范围。匹配指定范围内的任意字符。例如，'[a-z]' 可以匹配 'a' 到 'z'
+											范围内的任意小写字母字符。</p></td>
+								</tr>
+								<tr>
+									<td>[^a-z]</td>
+									<td><p>负值字符范围。匹配任何不在指定范围内的任意字符。例如，'[^a-z]' 可以匹配任何不在
+											'a' 到 'z' 范围内的任意字符。</p></td>
+								</tr>
+								<tr>
+									<td>\b</td>
+									<td><p>匹配一个单词边界，也就是指单词和空格间的位置。例如， 'er\b' 可以匹配"never"
+											中的 'er'，但不能匹配 "verb" 中的 'er'。</p></td>
+								</tr>
+								<tr>
+									<td>\B</td>
+									<td><p>匹配非单词边界。'er\B' 能匹配 "verb" 中的 'er'，但不能匹配 "never"
+											中的 'er'。</p></td>
+								</tr>
+								<tr>
+									<td>\cx</td>
+									<td><p>匹配由 x 指明的控制字符。例如， \cM 匹配一个 Control-M 或回车符。x
+											的值必须为 A-Z 或 a-z 之一。否则，将 c 视为一个原义的 'c' 字符。</p></td>
+								</tr>
+								<tr>
+									<td>\d</td>
+									<td><p>匹配一个数字字符。等价于 [0-9]。</p></td>
+								</tr>
+								<tr>
+									<td>\D</td>
+									<td><p>匹配一个非数字字符。等价于 [^0-9]。</p></td>
+								</tr>
+								<tr>
+									<td>\f</td>
+									<td><p>匹配一个换页符。等价于 \x0c 和 \cL。</p></td>
+								</tr>
+								<tr>
+									<td>\n</td>
+									<td><p>匹配一个换行符。等价于 \x0a 和 \cJ。</p></td>
+								</tr>
+								<tr>
+									<td>\r</td>
+									<td><p>匹配一个回车符。等价于 \x0d 和 \cM。</p></td>
+								</tr>
+								<tr>
+									<td>\s</td>
+									<td><p>匹配任何空白字符，包括空格、制表符、换页符等等。等价于 [ \f\n\r\t\v]。</p></td>
+								</tr>
+								<tr>
+									<td>\S</td>
+									<td><p>匹配任何非空白字符。等价于 [^ \f\n\r\t\v]。</p></td>
+								</tr>
+								<tr>
+									<td>\t</td>
+									<td><p>匹配一个制表符。等价于 \x09 和 \cI。</p></td>
+								</tr>
+								<tr>
+									<td>\v</td>
+									<td><p>匹配一个垂直制表符。等价于 \x0b 和 \cK。</p></td>
+								</tr>
+								<tr>
+									<td>\w</td>
+									<td><p>匹配包括下划线的任何单词字符。等价于'[A-Za-z0-9_]'。</p></td>
+								</tr>
+								<tr>
+									<td>\W</td>
+									<td><p>匹配任何非单词字符。等价于 '[^A-Za-z0-9_]'。</p></td>
+								</tr>
+								<tr>
+									<td>\xn</td>
+									<td><p>匹配 n，其中 n 为十六进制转义值。十六进制转义值必须为确定的两个数字长。例如，'\x41'
+											匹配 "A"。'\x041' 则等价于 '\x04' &amp; "1"。正则表达式中可以使用 ASCII 编码。</p></td>
+								</tr>
+								<tr>
+									<td>\num</td>
+									<td><p>匹配 num，其中 num 是一个正整数。对所获取的匹配的引用。例如，'(.)\1'
+											匹配两个连续的相同字符。</p></td>
+								</tr>
+								<tr>
+									<td>\n</td>
+									<td><p>标识一个八进制转义值或一个向后引用。如果 \n 之前至少 n 个获取的子表达式，则 n
+											为向后引用。否则，如果 n 为八进制数字 (0-7)，则 n 为一个八进制转义值。</p></td>
+								</tr>
+								<tr>
+									<td>\nm</td>
+									<td><p>标识一个八进制转义值或一个向后引用。如果 \nm 之前至少有 nm 个获得子表达式，则 nm
+											为向后引用。如果 \nm 之前至少有 n 个获取，则 n 为一个后跟文字 m 的向后引用。如果前面的条件都不满足，若 n
+											和 m 均为八进制数字 (0-7)，则 \nm 将匹配八进制转义值 nm。</p></td>
+								</tr>
+								<tr>
+									<td>\nml</td>
+									<td><p>如果 n 为八进制数字 (0-3)，且 m 和 l 均为八进制数字
+											(0-7)，则匹配八进制转义值 nml。</p></td>
+								</tr>
+								<tr>
+									<td>\un</td>
+									<td><p>匹配 n，其中 n 是一个用四个十六进制数字表示的 Unicode 字符。例如， \u00A9
+											匹配版权符号 (?)。</p></td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="regexp-mata-class"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">元字符分类</h3>
 					</div>
 					<div class="panel-body">
-						
+						<div class="sub-item">
+							<h5 class="text-primary">非打印字符</h5>
+							<table
+								class="table table-responsive table-striped table-bordered">
+								<tbody>
+									<tr>
+										<th width="20%">字符</th>
+										<th width="80%">描述</th>
+									</tr>
+									<tr>
+										<td>\cx</td>
+										<td>匹配由x指明的控制字符。例如， \cM 匹配一个 Control-M 或回车符。x 的值必须为 A-Z 或
+											a-z 之一。否则，将 c 视为一个原义的 'c' 字符。</td>
+									</tr>
+									<tr>
+										<td>\f</td>
+										<td>匹配一个换页符。等价于 \x0c 和 \cL。</td>
+									</tr>
+									<tr>
+										<td>\n</td>
+										<td>匹配一个换行符。等价于 \x0a 和 \cJ。</td>
+									</tr>
+									<tr>
+										<td>\r</td>
+										<td>匹配一个回车符。等价于 \x0d 和 \cM。</td>
+									</tr>
+									<tr>
+										<td>\s</td>
+										<td>匹配任何空白字符，包括空格、制表符、换页符等等。等价于 [ \f\n\r\t\v]。</td>
+									</tr>
+									<tr>
+										<td>\S</td>
+										<td>匹配任何非空白字符。等价于 [^ \f\n\r\t\v]。</td>
+									</tr>
+									<tr>
+										<td>\t</td>
+										<td>匹配一个制表符。等价于 \x09 和 \cI。</td>
+									</tr>
+									<tr>
+										<td>\v</td>
+										<td>匹配一个垂直制表符。等价于 \x0b 和 \cK。</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">特殊字符</h5>
+							<table
+								class="table table-responsive table-striped table-bordered">
+								<tbody>
+									<tr>
+										<th width="20%">特别字符</th>
+										<th width="80%">描述</th>
+									</tr>
+									<tr>
+										<td>$</td>
+										<td>匹配输入字符串的结尾位置。如果设置了 RegExp 对象的 Multiline 属性，则 $ 也匹配
+											'\n' 或 '\r'。要匹配 $ 字符本身，请使用 \$。</td>
+									</tr>
+									<tr>
+										<td>( )</td>
+										<td>标记一个子表达式的开始和结束位置。子表达式可以获取供以后使用。要匹配这些字符，请使用 \( 和 \)。</td>
+									</tr>
+									<tr>
+										<td>*</td>
+										<td>匹配前面的子表达式零次或多次。要匹配 * 字符，请使用 \*。</td>
+									</tr>
+									<tr>
+										<td>+</td>
+										<td>匹配前面的子表达式一次或多次。要匹配 + 字符，请使用 \+。</td>
+									</tr>
+									<tr>
+										<td>.</td>
+										<td>匹配除换行符 \n 之外的任何单字符。要匹配 . ，请使用 \. 。</td>
+									</tr>
+									<tr>
+										<td>[</td>
+										<td>标记一个中括号表达式的开始。要匹配 [，请使用 \[。</td>
+									</tr>
+									<tr>
+										<td>?</td>
+										<td>匹配前面的子表达式零次或一次，或指明一个非贪婪限定符。要匹配 ? 字符，请使用 \?。</td>
+									</tr>
+									<tr>
+										<td>\</td>
+										<td>将下一个字符标记为或特殊字符、或原义字符、或向后引用、或八进制转义符。例如， 'n' 匹配字符
+											'n'。'\n' 匹配换行符。序列 '\\' 匹配 "\"，而 '\(' 则匹配 "("。</td>
+									</tr>
+									<tr>
+										<td>^</td>
+										<td>匹配输入字符串的开始位置，除非在方括号表达式中使用，此时它表示不接受该字符集合。要匹配 ^
+											字符本身，请使用 \^。</td>
+									</tr>
+									<tr>
+										<td>{</td>
+										<td>标记限定符表达式的开始。要匹配 {，请使用 \{。</td>
+									</tr>
+									<tr>
+										<td>|</td>
+										<td>指明两项之间的一个选择。要匹配 |，请使用 \|。</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">限定符 --
+								限定符用来指定正则表达式的一个给定组件必须要出现多少次才能满足匹配</h5>
+							<table
+								class="table table-responsive table-striped table-bordered">
+								<tbody>
+									<tr>
+										<th width="20%">字符</th>
+										<th width="80%">描述</th>
+									</tr>
+									<tr>
+										<td>*</td>
+										<td>匹配前面的子表达式零次或多次。例如，zo* 能匹配 "z" 以及 "zoo"。* 等价于{0,}。</td>
+									</tr>
+									<tr>
+										<td>+</td>
+										<td>匹配前面的子表达式一次或多次。例如，'zo+' 能匹配 "zo" 以及 "zoo"，但不能匹配 "z"。+
+											等价于 {1,}。</td>
+									</tr>
+									<tr>
+										<td>?</td>
+										<td>匹配前面的子表达式零次或一次。例如，"do(es)?" 可以匹配 "do" 或 "does" 中的"do"
+											。? 等价于 {0,1}。</td>
+									</tr>
+									<tr>
+										<td>{n}</td>
+										<td>n 是一个非负整数。匹配确定的 n 次。例如，'o{2}' 不能匹配 "Bob" 中的 'o'，但是能匹配
+											"food" 中的两个 o。</td>
+									</tr>
+									<tr>
+										<td>{n,}</td>
+										<td>n 是一个非负整数。至少匹配n 次。例如，'o{2,}' 不能匹配 "Bob" 中的 'o'，但能匹配
+											"foooood" 中的所有 o。'o{1,}' 等价于 'o+'。'o{0,}' 则等价于 'o*'。</td>
+									</tr>
+									<tr>
+										<td>{n,m}</td>
+										<td>m 和 n 均为非负整数，其中n &lt;= m。最少匹配 n 次且最多匹配 m
+											次。例如，"o{1,3}" 将匹配 "fooooood" 中的前三个 o。'o{0,1}' 等价于
+											'o?'。请注意在逗号和两个数之间不能有空格。</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">定位符 -- 定位符使您能够将正则表达式固定到行首或行尾</h5>
+							<table
+								class="table table-responsive table-striped table-bordered">
+								<tbody>
+									<tr>
+										<th width="20%">字符</th>
+										<th width="80%">描述</th>
+									</tr>
+									<tr>
+										<td>^</td>
+										<td>匹配输入字符串开始的位置。如果设置了 RegExp 对象的 Multiline 属性，^ 还会与 \n 或
+											\r 之后的位置匹配。</td>
+									</tr>
+									<tr>
+										<td>$</td>
+										<td>匹配输入字符串结尾的位置。如果设置了 RegExp 对象的 Multiline 属性，$ 还会与 \n 或
+											\r 之前的位置匹配。</td>
+									</tr>
+									<tr>
+										<td>\b</td>
+										<td>匹配一个字边界，即字与空格间的位置。</td>
+									</tr>
+									<tr>
+										<td>\B</td>
+										<td>非字边界匹配。</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="regexp-operator"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">运算符优先级</h3>
 					</div>
 					<div class="panel-body">
-						
+						<p>正则表达式从左到右进行计算，并遵循优先级顺序，这与算术表达式非常类似。</p>
+						<p>相同优先级的从左到右进行运算，不同优先级的运算先高后低。</p>
+						<table class="table table-responsive table-striped table-bordered">
+							<tbody>
+								<tr>
+									<th width="20%">运算符</th>
+									<th width="80%">描述</th>
+								</tr>
+								<tr>
+									<td>\</td>
+									<td>转义符</td>
+								</tr>
+								<tr>
+									<td>(), (?:), (?=), []</td>
+									<td>圆括号和方括号</td>
+								</tr>
+								<tr>
+									<td>*, +, ?, {n}, {n,}, {n,m}</td>
+									<td>限定符</td>
+								</tr>
+								<tr>
+									<td>^, $, \任何元字符、任何字符</td>
+									<td>定位点和序列（即：位置和顺序）</td>
+								</tr>
+								<tr>
+									<td>|</td>
+									<td>替换，"或"操作<br>
+										字符具有高于替换运算符的优先级，使得"m|food"匹配"m"或"food"。若要匹配"mood"或"food"，请使用括号创建子表达式，从而产生"(m|f)ood"。
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="regexp-examples"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">实例</h3>
+					</div>
+					<div class="panel-body">
+
+						<table
+							class="table table-responsive table-striped table-bordered rexexp-table">
+							<thead>
+								<tr>
+									<th>模式</th>
+									<th>描述</th>
+									<th>样例</th>
+								</tr>
+							</thead>
+							<thead>
+								<tr>
+									<th colspan="3">数字</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>^[0-9]$ 或 ^\d$</td>
+									<td>只能输入1个数字</td>
+									<td>0, 1, 2 ...</td>
+								</tr>
+								<tr>
+									<td>^[0-9]{3}$ 或 ^\d{3}$</td>
+									<td>只能输入n个数字</td>
+									<td>012, 123, 232 ...</td>
+								</tr>
+								<tr>
+									<td>^[0-9]{3,}$ 或 ^\d{3,}$</td>
+									<td>只能输入至少n个数字</td>
+									<td>012, 1234, 2323 ...</td>
+								</tr>
+								<tr>
+									<td>^[0-9]{3,8}$ 或 ^\d{3,8}$</td>
+									<td>只能输入m到n个数字</td>
+									<td>012, 1234, 2323 ...</td>
+								</tr>
+								<tr>
+									<td>^[0-9]*$ 或 ^\d*$</td>
+									<td>匹配任意个数字</td>
+									<td>012, 1234, 2323 ...</td>
+								</tr>
+								<tr>
+									<td>^[1-9][0-9]*$</td>
+									<td>所有的正整数</td>
+									<td>1234, 100 ...</td>
+								</tr>
+								<tr>
+									<td>^(0|[1-9][0-9]*)$</td>
+									<td>只能输入0和非0打头的数字</td>
+									<td>0, 1234, 100 ..., 不能有 012这样的</td>
+								</tr>
+								<tr>
+									<td>^[-+]?\d+(\.\d+)?$</td>
+									<td>只能输入实数</td>
+									<td>18,+3.14,-9.90</td>
+								</tr>
+								<tr>
+									<td>^[0-9]+(.[0-9]{2})?$</td>
+									<td>只能输入n位小数的正实数</td>
+									<td>2.22, 0.24 ...</td>
+								</tr>
+								<tr>
+									<td>^[0-9]+(.[0-9]{1,2})?$</td>
+									<td>只能输入m-n位小数的正实数</td>
+									<td>2.22, 0.2 ...</td>
+								</tr>
+								<tr>
+									<td>^\-[1-9][0-9]*$</td>
+									<td>只能输入非0的负整数</td>
+									<td>-1, -2 ...</td>
+								</tr>
+								<tr>
+									<td colspan="3"><div id="regexp-text-container"
+											class="input-group">
+											<input id="regexp-pattern-input" class="form-control"
+												placeholder="模式" type="text"><span
+												class="input-group-btn"><button id="regexp-btn"
+													class="btn btn-primary" type="button">matcher ?</button></span><input
+												id="regexp-text-input" class="form-control" placeholder="文本"
+												type="text">
+										</div></td>
+								</tr>
+							<thead>
+								<tr>
+									<th colspan="3">字符</th>
+								</tr>
+								<tr>
+									<td>^.{4}$</td>
+									<td>只能输入n个字符</td>
+									<td>1234, 23a3 你好吗？...</td>
+								</tr>
+								<tr>
+									<td>^[A-Za-z]+$</td>
+									<td>只能输入英文字符+数字</td>
+									<td>a, abc123, 123 ...</td>
+								</tr>
+								<tr>
+									<td>^[A-Za-z0-9]+$</td>
+									<td>只能输入英文字符</td>
+									<td>a, abc, hello ...</td>
+								</tr>
+								<tr>
+									<td>^[A-Za-z_]+[A-Za-z_0-9]*$</td>
+									<td>字母或下划线打头，后面可以是字母，数字，下划线</td>
+									<td>a, A, _abc, a32 ...</td>
+								</tr>
+								<tr>
+									<td>^[A-Z]+[A-Za-z_0-9]*$</td>
+									<td>验证首字母大写，后面可以是字母，数字，下划线</td>
+									<td>ASP, Java, Hello ...</td>
+								</tr>
+								<tr>
+									<td>^[\u4e00-\u9fa5]{1,}$</td>
+									<td>只能汉字</td>
+									<td>ASP, Java, Hello ...</td>
+								</tr>
+								<tr>
+									<td>^#?([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$</td>
+									<td>验证Html颜色值</td>
+									<td>#DDD, #333, #F3F3F3 ...</td>
+								</tr>
+								<tr>
+									<td>^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$</td>
+									<td>Email地址</td>
+									<td>jiwanger@126.com ...</td>
+								</tr>
+
+							</thead>
+							</tbody>
+						</table>
+						<h2>一、校验数字的表达式</h2>
+						<ul>
+							<li>
+								数字：<strong>^[0-9]*$</strong>
+							</li>
+							<li>
+
+								n位的数字：<strong>^\d{n}$</strong>
+							</li>
+							<li>
+								至少n位的数字<strong>：^\d{n,}$</strong>
+							</li>
+							<li>
+								m-n位的数字：<strong>^\d{m,n}$</strong>
+							</li>
+							<li>
+								零和非零开头的数字：<strong>^(0|[1-9][0-9]*)$</strong>
+							</li>
+							<li>
+								非零开头的最多带两位小数的数字：<strong>^([1-9][0-9]*)+(.[0-9]{1,2})?$</strong>
+							</li>
+							<li>
+								带1-2位小数的正数或负数：<strong>^(\-)?\d+(\.\d{1,2})?$</strong>
+							</li>
+							<li>
+								正数、负数、和小数：<strong>^(\-|\+)?\d+(\.\d+)?$</strong>
+							</li>
+							<li>
+								有两位小数的正实数：<strong>^[0-9]+(.[0-9]{2})?$</strong>
+							</li>
+							<li>
+								有1~3位小数的正实数：<strong>^[0-9]+(.[0-9]{1,3})?$</strong>
+							</li>
+							<li>
+								非零的正整数：<strong>^[1-9]\d*$ 或 ^([1-9][0-9]*){1,3}$ 或
+									^\+?[1-9][0-9]*$</strong>
+							</li>
+							<li>
+								非零的负整数：<strong>^\-[1-9][]0-9"*$ 或 ^-[1-9]\d*$</strong>
+							</li>
+							<li>
+								非负整数：<strong>^\d+$ 或 ^[1-9]\d*|0$</strong>
+							</li>
+							<li>
+								非正整数：<strong>^-[1-9]\d*|0$ 或 ^((-\d+)|(0+))$</strong>
+							</li>
+							<li>
+								非负浮点数：<strong>^\d+(\.\d+)?$ 或
+									^[1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0$</strong>
+							</li>
+							<li>
+								非正浮点数：<strong>^((-\d+(\.\d+)?)|(0+(\.0+)?))$ 或
+									^(-([1-9]\d*\.\d*|0\.\d*[1-9]\d*))|0?\.0+|0$</strong>
+							</li>
+							<li>
+								正浮点数：<strong>^[1-9]\d*\.\d*|0\.\d*[1-9]\d*$ 或
+									^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$</strong>
+							</li>
+							<li>
+								负浮点数：<strong>^-([1-9]\d*\.\d*|0\.\d*[1-9]\d*)$ 或
+									^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$</strong>
+							</li>
+							<li>
+								浮点数：<strong>^(-?\d+)(\.\d+)?$ 或
+									^-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)$</strong>
+							</li>
+						</ul>
+
+						<hr>
+						<h2>校验字符的表达式</h2>
+						<ul>
+							<li>
+								汉字：<strong>^[\u4e00-\u9fa5]{0,}$</strong>
+							</li>
+							<li>
+								英文和数字：<strong>^[A-Za-z0-9]+$ 或 ^[A-Za-z0-9]{4,40}$</strong>
+							</li>
+							<li>
+								长度为3-20的所有字符：<strong>^.{3,20}$</strong>
+							</li>
+							<li>
+								由26个英文字母组成的字符串：<strong>^[A-Za-z]+$</strong>
+							</li>
+							<li>
+								由26个大写英文字母组成的字符串：<strong>^[A-Z]+$</strong>
+							</li>
+							<li>
+								由26个小写英文字母组成的字符串：<strong>^[a-z]+$</strong>
+							</li>
+							<li>
+								由数字和26个英文字母组成的字符串：<strong>^[A-Za-z0-9]+$</strong>
+							</li>
+							<li>
+								由数字、26个英文字母或者下划线组成的字符串：<strong>^\w+$ 或 ^\w{3,20}$</strong>
+							</li>
+							<li>
+								中文、英文、数字包括下划线：<strong>^[\u4E00-\u9FA5A-Za-z0-9_]+$</strong>
+							</li>
+							<li>
+								中文、英文、数字但不包括下划线等符号：<strong>^[\u4E00-\u9FA5A-Za-z0-9]+$
+									或 ^[\u4E00-\u9FA5A-Za-z0-9]{2,20}$</strong>
+							</li>
+							<li>
+								可以输入含有^%&amp;',;=?$\"等字符：<strong>[^%&amp;',;=?$\x22]+</strong>
+							</li>
+							<li>
+								禁止输入含有~的字符：<strong>[^~\x22]+</strong>
+							</li>
+						</ul>
+						<hr>
+						<h2>三、特殊需求表达式</h2>
+						<ul>
+							<li>
+								Email地址：<strong>^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$</strong>
+							</li>
+							<li>
+								域名：<strong>[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(/.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+/.?</strong>
+							</li>
+							<li>
+								InternetURL：<strong>[a-zA-z]+://[^\s]* 或
+									^http://([\w-]+\.)+[\w-]+(/[\w-./?%&amp;=]*)?$</strong>
+							</li>
+							<li>
+								手机号码：<strong>^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\d{8}$</strong>
+							</li>
+							<li>
+								电话号码("XXX-XXXXXXX"、"XXXX-XXXXXXXX"、"XXX-XXXXXXX"、"XXX-XXXXXXXX"、"XXXXXXX"和"XXXXXXXX)：<strong>^(\(\d{3,4}-)|\d{3.4}-)?\d{7,8}$
+								</strong>
+							</li>
+							<li>
+								国内电话号码(0511-4405222、021-87888822)：<strong>\d{3}-\d{8}|\d{4}-\d{7}</strong>
+							</li>
+							<li>
+								电话号码正则表达式（支持手机号码，3-4位区号，7-8位直播号码，1－4位分机号）: <strong>((\d{11})|^((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1}))$)</strong>
+							</li>
+
+							<li>
+								身份证号(15位、18位数字)，最后一位是校验位，可能为数字或字符X：<strong>(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)</strong>
+							</li>
+							<li>
+								帐号是否合法(字母开头，允许5-16字节，允许字母数字下划线)：<strong>^[a-zA-Z][a-zA-Z0-9_]{4,15}$</strong>
+							</li>
+							<li>
+								密码(以字母开头，长度在6~18之间，只能包含字母、数字和下划线)：<strong>^[a-zA-Z]\w{5,17}$</strong>
+							</li>
+							<li>
+								强密码(必须包含大小写字母和数字的组合，不能使用特殊字符，长度在8-10之间)：<strong>^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,10}$
+								</strong>
+							</li>
+							<li>
+								日期格式：<strong>^\d{4}-\d{1,2}-\d{1,2}</strong>
+							</li>
+							<li>
+								一年的12个月(01～09和1～12)：<strong>^(0?[1-9]|1[0-2])$</strong>
+							</li>
+							<li>
+								一个月的31天(01～09和1～31)：<strong>^((0?[1-9])|((1|2)[0-9])|30|31)$
+								</strong>
+							</li>
+							<li>
+								钱的输入格式：
+								<ol>
+									<li>
+										有四种钱的表示形式我们可以接受:"10000.00" 和 "10,000.00", 和没有 "分" 的 "10000" 和
+										"10,000"：<strong>^[1-9][0-9]*$ </strong>
+									</li>
+									<li>
+										这表示任意一个不以0开头的数字,但是,这也意味着一个字符"0"不通过,所以我们采用下面的形式：<strong>^(0|[1-9][0-9]*)$
+										</strong>
+									</li>
+									<li>
+										一个0或者一个不以0开头的数字.我们还可以允许开头有一个负号：<strong>^(0|-?[1-9][0-9]*)$
+										</strong>
+									</li>
+									<li>
+										这表示一个0或者一个可能为负的开头不为0的数字.让用户以0开头好了.把负号的也去掉,因为钱总不能是负的吧。下面我们要加的是说明可能的小数部分：<strong>^[0-9]+(.[0-9]+)?$
+										</strong>
+									</li>
+									<li>
+										必须说明的是,小数点后面至少应该有1位数,所以"10."是不通过的,但是 "10" 和 "10.2" 是通过的：<strong>^[0-9]+(.[0-9]{2})?$
+										</strong>
+									</li>
+									<li>
+										这样我们规定小数点后面必须有两位,如果你认为太苛刻了,可以这样：<strong>^[0-9]+(.[0-9]{1,2})?$
+										</strong>
+									</li>
+									<li>
+										这样就允许用户只写一位小数.下面我们该考虑数字中的逗号了,我们可以这样：<strong>^[0-9]{1,3}(,[0-9]{3})*(.[0-9]{1,2})?$
+										</strong>
+									</li>
+									<li>
+										1到3个数字,后面跟着任意个 逗号+3个数字,逗号成为可选,而不是必须：<strong>^([0-9]+|[0-9]{1,3}(,[0-9]{3})*)(.[0-9]{1,2})?$
+										</strong>
+									</li>
+									<li>
+										备注：这就是最终结果了,别忘了"+"可以用"*"替代如果你觉得空字符串也可以接受的话(奇怪,为什么?)最后,别忘了在用函数时去掉去掉那个反斜杠,一般的错误都在这里</li>
+								</ol>
+							</li>
+							<li>
+								xml文件：<strong>^([a-zA-Z]+-?)+[a-zA-Z0-9]+\\.[x|X][m|M][l|L]$</strong>
+							</li>
+							<li>
+								中文字符的正则表达式：<strong>[\u4e00-\u9fa5]</strong>
+							</li>
+							<li>
+								双字节字符：<strong>[^\x00-\xff]
+									(包括汉字在内，可以用来计算字符串的长度(一个双字节字符长度计2，ASCII字符计1))</strong>
+							</li>
+							<li>
+								空白行的正则表达式：<strong>\n\s*\r (可以用来删除空白行)</strong>
+							</li>
+							<li>
+								HTML标记的正则表达式：<strong>&lt;(\S*?)[^&gt;]*&gt;.*?<!--\1-->|&lt;.*?
+									/&gt; ( 首尾空白字符的正则表达式：^\s*|\s*$或(^\s*)|(\s*$)
+									(可以用来删除行首行尾的空白字符(包括空格、制表符、换页符等等)，非常有用的表达式)
+								</strong>
+							</li>
+							<li>
+								腾讯QQ号：<strong>[1-9][0-9]{4,} (腾讯QQ号从10000开始)</strong>
+							</li>
+							<li>
+								中国邮政编码：<strong>[1-9]\d{5}(?!\d) (中国邮政编码为6位数字)</strong>
+							</li>
+							<li>
+								IP地址：<strong>((?:(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d))
+								</strong>
+							</li>
+						</ul>
 					</div>
 				</div>
 				<!-- item over -->
@@ -142,14 +954,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -160,5 +971,6 @@
 	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
+	<script src="js/regex.js"></script>
 </body>
 </html>

@@ -68,6 +68,8 @@
 						<a href="#spring-intro" class="list-group-item">简介</a>
 						<a href="#spring-docs" class="list-group-item">文档和 JAR 包</a>
 						<a href="#spring-example" class="list-group-item">松耦合实例</a>
+						<a href="#spring-bean" class="list-group-item">Bean</a>
+						<a href="#spring-deplain" class="list-group-item">依赖注入</a>
 						<a href="#spring-mvc" class="list-group-item">MVC 实例</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
 							data-parent="#accordion" href="#java-tools" aria-expanded="true">
@@ -126,66 +128,123 @@
 						</p>
 						<p>所有Spring的这些特征使你能够编写更干净、更可管理、并且更易于测试的代码。它们也为Spring中的各种模块提供了基础支持。</p>
 						<h5 class="text-primary">基本框架</h5>
-						<p>Spring 框架是一个分层架构，由 7
-							个定义良好的模块组成。Spring模块构建在核心容器之上，核心容器定义了创建、配置和管理 bean 的方式，如图所示：</p>
-						<div class="width: 100%;">
-							<img src="images/spring.jpg" class="img-responsive center-block">
-						</div>
-						<p>组成Spring框架的每个模块（或组件）都可以单独存在，或者与其他一个或多个模块联合实现。每个模块的功能如下：</p>
-						<ol>
+						<p>Spring 有可能成为所有企业应用程序的一站式服务点，然而，Spring
+							是模块化的，允许你挑选和选择适用于你的模块，不必要把剩余部分也引入。下面的部分对在 Spring
+							框架中所有可用的模块给出了详细的介绍。</p>
+						<p>Spring 框架提供约 20 个模块，可以根据应用程序的要求来使用。</p>
+						<p width="100%">
+							<img src="images/spring.png" class="center-block">
+						</p>
+						<h5 class="text-primary">核心容器</h5>
+						<p>核心容器由核心，Bean，上下文和表达式语言模块组成，它们的细节如下：</p>
+						<ul>
 							<li>
 								<p>
-									<b>spring-core</b> -- 核心容器提供 Spring 框架的基本功能(Spring
-									Core)。核心容器的主要组件是 BeanFactory，它是工厂模式的实现。BeanFactory 使用控制反转（IOC）
-									模式将应用程序的配置和依赖性规范与实际的应用程序代码分开。
+									<strong>核心</strong>模块提供了框架的基本组成部分，包括 IoC 和依赖注入功能。
 								</p>
 							</li>
 							<li>
 								<p>
-									<b>spring-context</b> -- Spring 上下文是一个配置文件，向
-									Spring框架提供上下文信息。Spring 上下文包括企业服务，例如JNDI、EJB、电子邮件、国际化、校验和调度功能。
+									<strong>Bean</strong> 模块提供 BeanFactory，它是一个工厂模式的复杂实现。
 								</p>
 							</li>
 							<li>
 								<p>
-									<b>spring-aop</b> -- 通过配置管理特性，Spring AOP 模块直接将面向切面的编程功能集成到了
-									Spring 框架中。所以，可以很容易地使 Spring 框架管理的任何对象支持AOP。Spring AOP 模块为基于
-									Spring 的应用程序中的对象提供了事务管理服务。通过使用 Spring AOP，不用依赖 EJB
-									组件，就可以将声明性事务管理集成到应用程序中。
+									<strong>上下文</strong>模块建立在由核心和 Bean
+									模块提供的坚实基础上，它是访问定义和配置的任何对象的媒介。ApplicationContext 接口是上下文模块的重点。
+								</p>
+							</li>
+							<li>
+								<strong>表达式语言</strong>模块在运行时提供了查询和操作一个对象图的强大的表达式语言。
+							</li>
+						</ul>
+						<h5 class="text-primary">数据访问/集成</h5>
+						<p>数据访问/集成层包括 JDBC，ORM，OXM，JMS 和事务处理模块，它们的细节如下：</p>
+						<ul>
+							<li>
+								<p>
+									<strong>JDBC</strong> 模块提供了删除冗余的 JDBC 相关编码的 JDBC 抽象层。
 								</p>
 							</li>
 							<li>
 								<p>
-									<b>spring-dao</b> --
-									JDBCDAO抽象层提供了有意义的异常层次结构，可用该结构来管理异常处理和不同数据库供应商抛出的错误消息。异常层次结构简化了错误处理，并且极大地降低了需要编写的异常代码数量（例如打开和关闭连接）。Spring
-									DAO 的面向 JDBC 的异常遵从通用的 DAO 异常层次结构。
+									<strong>ORM</strong> 模块为流行的对象关系映射 API，包括 JPA，JDO，Hibernate 和
+									iBatis，提供了集成层。
 								</p>
 							</li>
 							<li>
 								<p>
-									<b>spring-orm</b> -- Spring 框架插入了若干个ORM框架，从而提供了 ORM
-									的对象关系工具，其中包括JDO、Hibernate和iBatisSQL Map。所有这些都遵从 Spring 的通用事务和
-									DAO 异常层次结构。
+									<strong>OXM</strong> 模块提供了抽象层，它支持对 JAXB，Castor，XMLBeans，JiBX 和
+									XStream 的对象/XML 映射实现。
 								</p>
 							</li>
 							<li>
 								<p>
-									<b>spring-web</b> -- Web 上下文模块建立在应用程序上下文模块之上，为基于
-									Web的应用程序提供了上下文。所以,Spring 框架支持与 Jakarta Struts 的集成。Web
-									模块还简化了处理多部分请求以及将请求参数绑定到域对象的工作。
+									Java 消息服务 <strong>JMS</strong> 模块包含生产和消费的信息的功能。
+								</p>
+							</li>
+							<li>
+								<strong>事务</strong>模块为实现特殊接口的类及所有的 POJO 支持编程式和声明式事务管理。
+							</li>
+						</ul>
+						<h5 class="text-primary">Web</h5>
+						<p>Web 层由 Web，Web-MVC，Web-Socket 和 Web-Portlet 组成，它们的细节如下：</p>
+						<ul>
+							<li>
+								<p>
+									<strong>Web</strong> 模块提供了基本的面向 web 的集成功能，例如多个文件上传的功能和使用
+									servlet 监听器和面向 web 应用程序的上下文来初始化 IoC 容器。
 								</p>
 							</li>
 							<li>
 								<p>
-									<b>spring-mvc</b> -- MVC框架是一个全功能的构建 Web应用程序的 MVC
-									实现。通过策略接口，MVC框架变成为高度可配置的，MVC 容纳了大量视图技术，其中包括
-									JSP、Velocity、Tiles、iText 和
-									POI。模型由javabean构成，存放于Map；视图是一个接口，负责显示模型；控制器表示逻辑代码，是Controller的实现。Spring框架的功能可以用在任何J2EE服务器中，大多数功能也适用于不受管理的环境。Spring
-									的核心要点是：支持不绑定到特定 J2EE服务的可重用业务和数据访问对象。毫无疑问，这样的对象可以在不同J2EE 环境（Web
-									或EJB）、独立应用程序、测试环境之间重用。
+									<strong>Web-MVC</strong> 模块包含 Spring 的模型-视图-控制器（MVC），实现了 web
+									应用程序。
 								</p>
 							</li>
-						</ol>
+							<li>
+								<p>
+									<strong>Web-Socket</strong> 模块为 WebSocket-based 提供了支持，而且在 web
+									应用程序中提供了客户端和服务器端之间通信的两种方式。
+								</p>
+							</li>
+							<li>
+								<strong>Web-Portlet</strong> 模块提供了在 portlet 环境中实现 MVC，并且反映了
+								Web-Servlet 模块的功能。
+							</li>
+						</ul>
+						<h5 class="text-primary">其他</h5>
+						<p>还有其他一些重要的模块，像 AOP，Aspects，Instrumentation，Web
+							和测试模块，它们的细节如下：</p>
+						<ul>
+							<li>
+								<p>
+									<strong>AOP</strong>
+									模块提供了面向方面的编程实现，允许你定义方法拦截器和切入点对代码进行干净地解耦，它实现了应该分离的功能。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>Aspects</strong> 模块提供了与 <strong>AspectJ</strong>
+									的集成，这是一个功能强大且成熟的面向切面编程（AOP）框架。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>Instrumentation</strong> 模块在一定的应用服务器中提供了类
+									instrumentation 的支持和类加载器的实现。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>Messaging</strong> 模块为 STOMP 提供了支持作为在应用程序中 WebSocket
+									子协议的使用。它也支持一个注解编程模型，它是为了选路和处理来自 WebSocket 客户端的 STOMP 信息。
+								</p>
+							</li>
+							<li>
+								<strong>测试</strong>模块支持对具有 JUnit 或 TestNG 框架的 Spring 组件的测试。
+							</li>
+						</ul>
 					</div>
 				</div>
 				<!-- item over -->
@@ -199,7 +258,8 @@
 					<div class="panel-body">
 						<p>
 							<a href="docs/docs-spring/javadoc-api/index.html" target="_blank">spring-javadoc</a>
-						<p>
+							&lt;property name="message3" value="Namaste India!" />
+							<p>
 							<a href="docs/docs-spring/html/index.html" target="_blank">Spring
 								Framework Reference Documentation</a>
 						</p>
@@ -351,14 +411,266 @@ public static void main(String[] args) {
 				<!-- item over -->
 
 				<!-- item start -->
+				<a class="offset" id="spring-bean"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Bean</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<pre class="brush: xml;">
+<?xml version="1.0" encoding="UTF-8"?>
+
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    
+    <bean id="helloWorld" class="cm.nate.spring.modal.HelloWorld">
+		&lt;property name="message" value="Hello World!" />
+	</bean>
+	
+&lt;/beans>
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Bean 定义</h5>
+							<table class="table table-bordered table-striped">
+								<tbody>
+									<tr>
+										<th class="thirtypct">属性</th>
+										<th>描述</th>
+									</tr>
+									<tr>
+										<td>class</td>
+										<td>这个属性是强制性的，并且指定用来创建 bean 的 bean 类。</td>
+									</tr>
+									<tr>
+										<td>name</td>
+										<td>这个属性指定唯一的 bean 标识符。在基于 XML 的配置元数据中，你可以使用 ID 和/或 name
+											属性来指定 bean 标识符。</td>
+									</tr>
+									<tr>
+										<td>scope</td>
+										<td>这个属性指定由特定的 bean 定义创建的对象的作用域，它将会在 bean 作用域的章节中进行讨论。</td>
+									</tr>
+									<tr>
+										<td style="width: 28%;">constructor-arg</td>
+										<td>它是用来注入依赖关系的，并会在接下来的章节中进行讨论。</td>
+									</tr>
+									<tr>
+										<td>properties</td>
+										<td>它是用来注入依赖关系的，并会在接下来的章节中进行讨论。</td>
+									</tr>
+									<tr>
+										<td>autowiring mode</td>
+										<td>它是用来注入依赖关系的，并会在接下来的章节中进行讨论。</td>
+									</tr>
+									<tr>
+										<td>lazy-initialization mode</td>
+										<td>延迟初始化的 bean 告诉 IoC 容器在它第一次被请求时，而不是在启动时去创建一个 bean 实例。</td>
+									</tr>
+									<tr>
+										<td>initialization 方法</td>
+										<td>在 bean 的所有必需的属性被容器设置之后，调用回调方法。它将会在 bean 的生命周期章节中进行讨论。</td>
+									</tr>
+									<tr>
+										<td>destruction 方法</td>
+										<td>当包含该 bean 的容器被销毁时，使用回调方法。它将会在 bean 的生命周期章节中进行讨论。</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Bean 作用域</h5>
+							<p>当在 Spring 中定义一个 Bean 时，你必须声明该 bean 的作用域的选项。例如，为了强制 Spring
+								在每次需要时都产生一个新的 bean 实例，你应该声明 bean 的作用域的属性为 prototype。同理，如果你想让
+								Spring 在每次需要时都返回同一个bean实例，你应该声明 bean 的作用域的属性为 singleton。</p>
+							<table class="table table-bordered table-striped">
+								<tbody>
+									<tr>
+										<th class="thirtypct">作用域</th>
+										<th>描述</th>
+									</tr>
+									<tr>
+										<td>singleton</td>
+										<td>该作用域将 bean 的定义的限制在每一个 Spring IoC 容器中的一个单一实例(默认)。</td>
+									</tr>
+									<tr>
+										<td>prototype</td>
+										<td>该作用域将单一 bean 的定义限制在任意数量的对象实例。</td>
+									</tr>
+									<tr>
+										<td>request</td>
+										<td>该作用域将 bean 的定义限制为 HTTP 请求。只在 web-aware Spring
+											ApplicationContext 的上下文中有效。</td>
+									</tr>
+									<tr>
+										<td>session</td>
+										<td>该作用域将 bean 的定义限制为 HTTP 会话。 只在web-aware Spring
+											ApplicationContext的上下文中有效。</td>
+									</tr>
+									<tr>
+										<td style="width: 19%;">global-session</td>
+										<td>该作用域将 bean 的定义限制为全局 HTTP 会话。只在 web-aware Spring
+											ApplicationContext 的上下文中有效。</td>
+									</tr>
+								</tbody>
+							</table>
+							<pre class="brush: xml;">
+<bean id="helloWorld" class="cm.nate.spring.modal.HelloWorld"
+									scope="singleton">
+	&lt;property name="message" value="Hello World!" />
+</bean>							
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Bean 生命周期</h5>
+							<p>理解 Spring bean 的生命周期很容易。当一个 bean
+								被实例化时，它可能需要执行一些初始化使它转换成可用状态。同样，当 bean
+								不再需要，并且从容器中移除时，可能需要做一些清除工作。</p>
+							<p>有两种方法实现初始化和销毁方法:</p>
+							<ul>
+								<li>
+									<p>实现 InitializingBean 接口和 DisposableBean 接口</p>
+									<pre class="brush: java;">
+public class HelloWorld implements InitializingBean, DisposableBean {
+	private String message;
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
+	public void getMessage() {
+		System.out.println("Your Message : " + message);
+	}
+
+	@Override
+	public void destroy() throws Exception {
+		
+	}
+
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		
+	}
+}
+</pre>
+								</li>
+								<li>
+									<p>在基于 XML 的配置元数据的情况下，你可以使用 init-method="init" 或
+										destroy-method="destroy" 来指定方法</p>
+									<pre class="brush: xml;">
+&lt;bean id="helloWorld" class="cm.nate.spring.modal.HelloWorld" 
+	init-method="init" destroy-method="destroy">
+		<!-- HelloWorld类中应该有 init() 和 destroy() 方法 -->
+		&lt;property name="message" value="Hello World!" />
+&lt;/bean>
+</pre>
+								</li>
+							</ul>
+							<p class="alert alert-warning">建议你不要使用 InitializingBean 或者
+								DisposableBean 的回调方法，因为 XML 配置在命名方法上提供了极大的灵活性。</p>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Bean 后置处理器</h5>
+							<p>BeanPostProcessor
+								接口定义回调方法，你可以实现该方法来提供自己的实例化逻辑，依赖解析逻辑等。你也可以在 Spring 容器通过插入一个或多个
+								BeanPostProcessor 的实现来完成实例化，配置和初始化一个bean之后实现一些自定义逻辑回调方法。</p>
+							<p>这是实现 BeanPostProcessor 的非常简单的例子，它在任何 bean 的初始化的之前和之后输入该
+								bean 的名称。你可以在初始化 bean 的之前和之后实现更复杂的逻辑，因为你有两个访问内置 bean
+								对象的后置处理程序的方法。</p>
+							<pre class="brush: java;">
+public class InitHellowWorld implements BeanPostProcessor {
+	public Object postProcessBeforeInitialization(Object bean, String beanName)
+			throws BeansException {
+		System.out.println("BeforeInitialization : " + beanName);
+		return bean; // you can return any other object as well
+	}
+
+	public Object postProcessAfterInitialization(Object bean, String beanName)
+			throws BeansException {
+		System.out.println("AfterInitialization : " + beanName);
+		return bean; // you can return any other object as well
+	}
+}
+
+/** 主类的 main 方法中调用 */
+AbstractApplicationContext context = new ClassPathXmlApplicationContext(
+				"Beans.xml");
+HelloWorld obj = (HelloWorld) context.getBean("helloWorld");
+obj.getMessage();
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Bean 定义继承</h5>
+							<p>bean
+								定义可以包含很多的配置信息，包括构造函数的参数，属性值，容器的具体信息例如初始化方法，静态工厂方法名，等等。</p>
+
+							<p>子 bean 的定义继承父定义的配置数据。子定义可以根据需要重写一些值，或者添加其他值。 Spring Bean
+								定义的继承与 Java 类的继承无关，但是继承的概念是一样的。你可以定义一个父 bean 的定义作为模板和其他子 bean
+								就可以从父 bean 中继承所需的配置。</p>
+							<pre class="brush: xml;">
+<bean id="helloWorld" class="com.tutorialspoint.HelloWorld">
+   &lt;property name="message1" value="Hello World!" />
+   &lt;property name="message2" value="Hello Second World!" />
+</bean>
+
+<bean id="helloIndia" class="com.tutorialspoint.HelloIndia"
+									parent="helloWorld">
+   &lt;property name="message1" value="Hello India!" />
+   
+							</bean></pre>
+	
+											</div>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="spring-deplain"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">依赖注入</h3>
+					</div>
+					<div class="panel-body">
+						<p>每个基于应用程序的 java 都有几个对象，这些对象一起工作来呈现出终端用户所看到的工作的应用程序。当编写一个复杂的 Java 应用程序时，应用程序类应该尽可能独立于其他 Java 类来增加这些类重用的可能性，并且在做单元测试时，测试独立于其他类的独立性。依赖注入（或有时称为布线）有助于把这些类粘合在一起，同时保持他们独立。 </p>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="spring-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"></h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="spring-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"></h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
 				<a class="offset" id="spring-mvc"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">MVC 实例</h3>
 					</div>
-					<div class="panel-body">
-						
-					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 

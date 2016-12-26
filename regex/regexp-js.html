@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -60,24 +60,16 @@
 			<!-- left-menu start -->
 			<div class="col-md-3">
 				<div class="panel panel-default"
-					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
+					style="position: fixed; top: 70px; width: 260px; overflow: auto; float: left;">
 					<div class="panel-heading">
 						<h3 class="panel-title">REGEXP-JAVASCRIPT</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
-						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
-							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
-						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#" class="list-group-item">RegExp 对象</a>
+						<a href="#regexp-js-method" class="list-group-item">RegExp
+							对象方法</a>
+						<a href="#regexp-js-string" class="list-group-item">支持正则表达式的
+							String 对象的方法</a>
 					</div>
 				</div>
 			</div>
@@ -91,13 +83,135 @@
 			<div class="col-md-3"></div>
 			<div class="col-md-9" style="float: left;">
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="regexp-js-RegExp"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">RegExp 对象</h3>
 					</div>
 					<div class="panel-body">
-						
+						<p>JavaScript提供了一个RegExp对象来完成有关正则表达式的操作和功能，每一条正则表达式模式对应一个RegExp实例。有两种方式可以创建RegExp对象的实例。</p>
+						<pre class="brush: js;">
+var pattern = new RegExp(pattern, modifiers);
+// 或者更简单的方式:
+var pattern = /pattern/modifiers;
+	// i 	执行对大小写不敏感的匹配。
+	// g 	执行全局匹配（查找所有匹配而非在找到第一个匹配后停止）。
+	// m 	执行多行匹配。
+</pre>
+						<ul>
+							<li>
+								pattern（模式） 描述了表达式的模式 --
+								<a href="index.html#regexp-mata">模式参考: 正则表达式元数据</a>
+							</li>
+							<li>modifiers(修饰符) 用于指定全局匹配、区分大小写的匹配和多行匹配</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="regexp-js-method"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">RegExp 对象方法</h3>
+					</div>
+					<div class="panel-body">
+						<ul>
+							<li>
+								<p>
+									<span class="text-primary">test()</span> -- 检索字符串中指定的值。返回 true
+									或 false
+								</p>
+								<pre class="brush: js;">
+var pattern = /hello/g;	// 在字符串中全局搜索 "hello" 
+var str = "hello world!";
+alert(pattern.test(str));
+</pre>
+							</li>
+							<li>
+								<p>
+									<span class="text-primary">exec()</span> --
+									检索字符串中指定的值。返回找到的值，并确定其位置
+								</p>
+								<pre class="brush: js;">
+var pattern = /is/g;
+var str = "Age is 27, Year is 2012!";
+var result = "";
+while((result = pattern.exec(str)) != null) {
+	console.log("匹配的数据: " + result + ", 位置: " + pattern.lastIndex);
+}
+</pre>
+							</li>
+							<li>
+								<p>
+									<span class="text-primary">compile()</span> -- 编译正则表达式,
+									改变正则表达式模式
+								</p>
+								<pre class="brush: js;">
+var pattern = /IS/g;
+var str = "Age is 27, Year is 2012!";
+console.log(pattern.test(str));
+pattern.compile("is", "gi");// 改变模式
+console.log(pattern.test(str));
+</pre>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="regexp-js-string"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">支持正则表达式的 String 对象的方法</h3>
+					</div>
+					<div class="panel-body">
+						<ul>
+							<li>
+								<p>
+									<span class="text-primary">search()</span> -- 检索与正则表达式相匹配的值。
+								</p>
+								<pre class="brush: js;">
+var str = "Visit W3Cshool!";
+// 找不到返回 -1; 找到返回起始位置
+console.log(str.search("W3Cshool"));
+</pre>
+							</li>
+							<li>
+								<p>
+									<span class="text-primary">match</span> -- 找到一个或多个正则表达式的匹配。
+								</p>
+								<pre class="brush: js;">
+var pattern = /IS/gi;
+var str = "Age is 27, Year is 2012!";
+var results = str.match(pattern);
+for (var i = 0; i < results.length; i++) {
+	console.log(i + ": " + results[i]);
+}
+</pre>
+							</li>
+							<li>
+								<p>
+									<span class="text-primary">replace</span> -- 替换与正则表达式匹配的子串。
+								</p>
+								<pre class="brush: js;">
+var str="Mr Blue has a blue house and a blue car";
+str = str.replace(/blue/gi, "red");
+console.log(str);
+</pre>
+							</li>
+							<li>
+								<p>
+									<span class="text-primary">split</span> -- 把字符串分割为字符串数组。
+								</p>
+								<pre class="brush: js;">
+var str="Mr Blue has 27 blue house 28 a blue car";
+var result = str.split(/[0-9]{2}/);
+console.log(result);
+</pre>
+							</li>
+						</ul>
 					</div>
 				</div>
 				<!-- item over -->
@@ -106,14 +220,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
