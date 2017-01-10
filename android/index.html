@@ -66,19 +66,22 @@
 					</div>
 					<div class="list-group">
 						<a href="#android-intro" class="list-group-item">简介</a>
-						<a href="#android-" class="list-group-item">...</a>
+						<a href="#android-create" class="list-group-item">创建一个应用 --
+							不使用IDE</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#android-base" aria-expanded="true">
+							data-parent="#accordion" href="#android-base"
+							aria-expanded="true">
 							四大组件<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
 						<div id="android-base" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#android-activity" class="list-group-item">ACTIVITY</a>
-							<a href="#android-service" class="list-group-item">SERVICE</a>
-							<a href="#android-broadcast" class="list-group-item">BROADCAST</a>
-							<a href="#android-provider" class="list-group-item">CONTENT PROVIDER</a>
+							<a href="#android-activity" class="list-group-item">Activity</a>
+							<a href="#android-service" class="list-group-item">Service</a>
+							<a href="#android-broadcast" class="list-group-item">Broadcast</a>
+							<a href="#android-provider" class="list-group-item">Content
+								Provider</a>
 						</div>
-						<a href="#android-handler" class="list-group-item">Handler</a>
+						<a href="#android-handler" class="list-group-item">Handler 机制</a>
 						<a href="#android-" class="list-group-item"></a>
 					</div>
 				</div>
@@ -97,7 +100,272 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">简介</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">Android 架构</h5>
+							<p>Android 操作系统是一个软件组件的栈，在架构图中它大致可以分为五个部分和四个主要层。</p>
+							<div width="100%">
+								<img src="images/android_architecture.jpg"
+									class="img-responsive center-block">
+							</div>
+
+							<ul>
+								<li>
+									<h5>Linux内核</h5>
+									<div class="alert alert-warning">不同的 Android 版本可能使用不同的
+										Linux 内核版本。</div>
+									<p>Linux内核提供了基本的系统功能，比如进程管理，内存管理，设备管理（如摄像头，键盘，显示器）。同时，内核处理所有
+										Linux 所擅长的工作，如网络和大量的设备驱动，从而避免兼容大量外围硬件接口带来的不便。</p>
+								</li>
+								<li>
+									<h5>Android 程序库</h5>
+									<p>Android 开发者可用的 Android 核心程序库总结如下：</p>
+									<ul>
+										<li>android.app -- 提供应用程序模型的访问，是所有 Android 应用程序的基石。</li>
+										<li>android.content -- 方便应用程序之间，应用程序组件之间的内容访问，发布，消息传递。</li>
+										<li>android.database -- 用于访问内容提供者发布的数据，包含 SQLite 数据库管理类。</li>
+										<li>android.opengl -- OpenGL ES 3D 图片渲染 API 的 Java 接口。</li>
+										<li>android.os -- 提供应用程序访问标注操作系统服务的能力，包括消息，系统服务和进程间通信。</li>
+										<li>android.text -- 在设备显示上渲染和操作文本。</li>
+										<li>android.view -- 应用程序用户界面的基础构建块。</li>
+										<li>android.widget --
+											丰富的预置用户界面组件集合，包括按钮，标签，列表，布局管理，单选按钮等。</li>
+										<li>android.webkit -- 一系列类的集合，允许为应用程序提供内建的 Web 浏览能力。</li>
+									</ul>
+								</li>
+								<li>
+									<h5>Android 运行时</h5>
+									<p>Dalvik 虚拟机使得可以在 Java 中使用 Linux 核心功能，如内存管理和多线程。Dalvik
+										虚拟机使得每一个 Android 应用程序运行在自己独立的虚拟机进程。</p>
+									<p>Android 运行时同时提供一系列核心的库来为 Android 应用程序开发者使用标准的 Java 语言来编写
+										Android 应用程序。</p>
+								</li>
+								<li>
+									<h5>应用框架</h5>
+									<p>应用框架层以 Java 类的形式为应用程序提供许多高级的服务。应用程序开发者被允许在应用中使用这些服务。</p>
+									<ul>
+										<li>活动管理者 -- 控制应用程序生命周期和活动栈的所有方面。</li>
+										<li>内容提供者 -- 允许应用程序之间发布和分享数据。</li>
+										<li>资源管理器 -- 提供对非代码嵌入资源的访问，如字符串，颜色设置和用户界面布局。</li>
+										<li>通知管理器 -- 允许应用程序显示对话框或者通知给用户。</li>
+										<li>视图系统 -- 一个可扩展的视图集合，用于创建应用程序用户界面。</li>
+									</ul>
+								</li>
+								<li>
+									<h5>应用程序</h5>
+									<p>顶层中有所有的 Android
+										应用程序。你写的应用程序也将被安装在这层。这些应用程序包括通讯录，浏览器，游戏等。</p>
+								</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Android开发组件</h5>
+							<p>
+								Android 使用Java语言开发。Android SDK 工具编译代码—以及任意数据并连同相关资源打包进一个<i>Android
+									包</i>内,它是一个以
+								<code>.apk</code>
+								为后缀的压缩文件。 一个
+								<code>.apk</code>
+								文件中的 所有代码就是一个程序。这个.apk文件就用于在Android设备上安装这个程序。
+							</p>
+
+							<p>一旦安装成功，这个Android程序就拥有了自己独立的运行沙盒（沙盒是在受限的安全环境中运行应用程序的一种做法，这种做法是要限制授予应用程序的代码访问权限。）:
+							</p>
+
+							<ul>
+								<li>Android操作系统是一个多用户的Linux系统，其中的每一个应用程序都是一个独立的用户。</li>
+
+								<li>默认地，系统会为每一个应用程序分配一个唯一的Linux用户ID（这个ID只能被系统使用，并且对于应用程序来说，这个ID是未知的）。系统为一个应用程序的所有文件
+									设置了权限，所以，只有分配给这个应用程序的用户ID可以访问它们。</li>
+
+								<li>每一个进程有它主机的虚拟机 (VM), 所以一个应用程序的代码会独立与其它的应用程序运行。</li>
+
+								<li>默认地，每一个应用程序在它自己的Linux进程中运行。Android会在一个应用程序的任何一个组件需要被调用的时候启动这个进程。然后，当没有任何组件被调用或者系统需要为其它应用程序回收内存的时候，就会
+									关闭这个进程。</li>
+							</ul>
+
+							<p>
+								通过这种方式，Android 系统实现了 <em>最少特权原则</em>。就是说，每一个应用程序，默认地，都只能调用它所需要的工作组件。
+								这就创造了这样一种非常安全的环境，在这个环境中，一个应用程序不能访问没有被授予其权限的系统部分。
+							</p>
+
+							<p>尽管如此，也有很多途径可以让一个应用程序和其它的应用程序共享数据，也可以让一个应用程序去调用系统服务:</p>
+
+							<ul>
+								<li>为两个应用程序分配同一个Linux用户ID是可行的，这样它们就能访问对方的文件。为了节约系统资源，拥有相同用户ID的应用程序也可以被运行于相同的Linux进程
+									并且共享VM（它们必须用相同的证书签名）。</li>
+								<li>应用程序可以通过请求权限来访问设备数据，例如联系人，SMS信息，可插拔存储（SD卡），相机，蓝牙，等等。所有的应用程序权限必须在安装的时候由用户授予。</li>
+							</ul>
+
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">应用程序组件</h5>
+							<p>组件是一个Android程序至关重要的构建模块。每一个组件都是系统进入你的应用的不同途径。但并不是所有的组件都是用户进入程序的真实入口，其中一些要依赖于其它组件,
+								但是每一个组件都以自己独有的形式存在，并发挥特殊的作用；每一个组件都是一个唯一的模块，帮助你实现程序的各种行为。</p>
+
+							<p>有四种不同的应用程序组件。每一种组件都有其唯一的目的并且有独有的生命周期，这个生命周期定义了附件被创建和销毁的方式。</p>
+
+							<p>下面介绍四种类型的应用程序组件:</p>
+
+							<dl>
+
+								<dt>
+									<b>Activity</b>
+								</dt>
+
+								<dd>
+									一个 <i>activity</i>
+									为一个用户交互提供一个单独的界面。例如，一个邮件程序可能有一个activity,它展现了一个新邮件的列表。
+									另一个activity用来编辑邮件，还有一个是用来阅读邮件。
+									虽然这些activity组合在一起构成一个紧密的用户体验，但每一个都是相对独立的。
+									同样，其它程序也可以启动这些activity(如果这个邮件程序允许)。
+									例如，一个相机程序可以启动这个邮件程序的编辑邮件activity,如果用户想分享一张照片。
+
+									<p>
+										一个activity作为
+										<code>
+											<a href="#android-activity">Activity</a>
+										</code>
+										的一个子类被实现。
+								</dd>
+
+
+								<dt>
+									<b>Service</b>
+								</dt>
+
+								<dd>
+									一个 <i>service</i>是一个运行在后台的组件。它用于执行耗时操作或者远程进程。
+									一个service并不提供用户交互界面。例如，当用户在使用另外一个程序的时候，一个服务可能在播放音乐或者在
+									通过网络获取数据，这样不会阻塞住用户与activity的交互。其它的组件，例如一个activity,可以启动一个service并让其运行或者与其绑定，绑定后可以与其交互。
+
+									<p>
+										一个service作为一个
+										<code>
+											<a href="#android-service">Service</a>
+										</code>
+										的子类被实现。
+									</p>
+								</dd>
+
+
+								<dt>
+									<b>Content provider</b>
+								</dt>
+
+								<dd>
+									一个<i>content provider</i>负责管理应用程序的数据共享集。
+									你可以通过文件系、SQLite数据库、网站，或者其它的你的应用程序可以访问的持久化存储位置来存储数据。 通过content
+									provider,其它的应用程序可以查询甚至修改你的数据（如果这个content provider允许它们这么做）。
+									例如，Android系统提供了一个content provider来管理联系人信息。
+									同样地，任何程序拥有了适当权限都可以查询这个content provider去读写某人的信息。
+
+									<p>Content provider在读写程序的私有数据时也很有用。</p>
+
+									<p>
+										一个content provider是作为
+										<code>
+											<a href="#android-provider">ContentProvider</a>
+										</code>
+										的一个子类被实现的。 并且必须实现一些标准的API集，这样其它的应用程序才能执行事务。
+									</p>
+								</dd>
+
+
+								<dt>
+									<b>Broadcast receiver</b>
+								</dt>
+
+								<dd>
+									<i>broadcast receiver</i> 是一个用来响应系统范围内的广播的组件。 很多广播发自于系统本身。—例如,
+									通知屏幕已经被关闭、电池低电量、照片被拍下的广播。 应用程序也可以发起广播。—例如,
+									通知其它程序，一些数据被下载到了设备，且可供它们使用。 虽然广播并不提供用户交互界面，它们也可以 创建一个状态栏通知
+									来提醒用户一个广播事件发生了。尽管如此，更多的情形是，一个广播只是进入其它组件的一个“门路”，并试图做一些少量的工作。
+									例如，它可能发起一个服务，并通过服务执行与这个广播事件相关的工作。
+									<p>
+										broadcast receiver是
+										<code>
+											<a href="#android-broadcast">BroadcastReceiver</a>
+										</code>
+										的子类实现，而且每一个广播通过
+										<code> Intent </code>
+										对象来传递。
+									</p>
+								</dd>
+
+							</dl>
+
+
+
+							<p>Android系统设计的一个独特方面是，任何程序都可以启动其它程序的组件。
+								例如，如果你想让用户使用设备相机捕捉一个相片，有另外一个程序做这件事，那么你的程序将可以调用它，
+								而不是你自己开发一个拍照的activity。你不必从相机程序中嵌入代码或者连链接代码也不需要。取而代之地，你可以简单地启动相机程序中拍照的activity。
+								当拍照完成，相片就会返回给你的程序供你使用。从用户的角度，就好像相机就是你程序的一部分。</p>
+
+							<p>当系统启动一个组件，它其实就启动了这个程序的进程（如果这个进程还未被启动的话）并实例化这个组件所需要的类。
+								例如，如果你的程序启动了相机程序里的activity去拍照，这个activity实际上是运行在相机程序的进程里，而不是你自己的进程。
+								因此，不像其它系统里的程序，Android程序并不是单入口的（例如它没有main方法）。</p>
+
+							<p>
+								由于系统把程序运行在一个个独立的进程中，并使用文件权限来限制对其它程序的访问，所以你的程序不能从其它程序中直接激活组件。
+								尽管如此，Android系统可以做到！激活一个其它程序的组件，你必须向系统发送一个信息，这个信息需要指定你的<em>intent</em>
+								来启动一个指定的组件。 然后系统就会为你激活这个组件。
+							</p>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="android-create"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">创建一个应用 -- 不使用IDE</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-md-8">
+								<p class="h5 text-primary">使用 android-sdk 命令创建</p>
+								<ol>
+									<li>
+										列出 Android 平台列表 -- 下一步要使用 TARGET-ID 为此处平台 ID
+										<pre class="brush: bash;">$ android list targets</pre>
+									</li>
+									<li>
+										使用 android 命令创建应用
+										<pre class="brush: bash;">
+$ android create project --target TARGET-ID --name MyApp \
+--path PATH-TO-WORKSPACE/MyApp --activity MyActivity \
+--package com.example.myapp
+# TARGET-ID 为上一步列出的 ID
+# PATH-TO-WORKSPACE 为项目要保存的路径
+</pre>
+									</li>
+									<li>
+										使用
+										<code>ant</code>
+										生成
+										<code>debug</code>
+										版本
+										<code>apk</code>
+										<pre class="brush: bash;">$ ant debug</pre>
+									</li>
+									<li>
+										安装应用 -- 项目路径下
+										<code>bin</code>
+										目录会生成
+										<code>apk</code>
+										<pre class="brush: bash;">$ adb install bin/MyApp-debug.apk</pre>
+									</li>
+								</ol>
+							</div>
+							<div class="col-md-4">
+								<img src="images/android-create.png">
+							</div>
+						</div>
+
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -105,9 +373,162 @@
 				<a class="offset" id="android-activity"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">ACTIVITY</h3>
+						<h3 class="panel-title">Activity</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">Activity生命周期</h5>
+							<p>一个应用程序通常由多个activity组成，它们彼此保持弱的绑定状态。典型的，当一个activity在一个应用程序内被指定为主activity,
+								那么当程序第一次启动时，它将第一个展现在用户面前。为了展现不同的内容，每一个activity可以启动另外一个。
+								每当一个新的activity被启动，那么之前的将被停止。但系统将会把它压入一个栈（“back
+								stack”即后退栈）,当一个新的activity启动，它将被
+								放到栈顶并获得用户焦点。后台栈遵循后进先出的栈机制。所以当用户完成当前页面并按下返回按钮时，它将被pop出栈（并销毁），之前的activity将被恢复。
+							</p>
+							<div width="100%">
+								<img src="images/activity_lifecycle.png"
+									class="img-responsive center-block">
+							</div>
+							<p>Activity生命周期回调方法汇总</p>
+							<table cellspacing="0" cellpadding="5" border="1" align="center">
+								<tbody>
+									<tr>
+										<th>方法</th>
+										<th>描述</th>
+										<th>之后可否被杀死?</th>
+										<th>下一个方法</th>
+									</tr>
+									<tr>
+										<td>onCreate()</td>
+										<td>activity第一次被创建时调用。在这里你应该完成所有常见的静态设置工作——创建view、绑定list数据等等。
+											本方法传入一个包含了该activity前一个状态的Bundle对象（如果之前已捕获了状态的话，详见后面的保存Activity状态）。
+											<p>下一个回调方法总是onStart()。</p>
+										</td>
+										<td>否</td>
+										<td>onStart()</td>
+									</tr>
+									<tr>
+										<td>onRestart()</td>
+										<td>activity被停止后、又再次被启动之前调用。
+											<p>下一个回调方法总是onStart()</p>
+										</td>
+										<td>否</td>
+										<td>onStart()</td>
+									</tr>
+									<tr>
+										<td>onStart()</td>
+										<td>activity要显示给用户之前调用。
+											<p>如果activity进入前台，则下一个回调方法是onResume()；如果进入隐藏状态，则下一个回调方法是onStop()。
+											</p>
+										</td>
+										<td>否</td>
+										<td>onResume() 或 onStop()</td>
+									</tr>
+									<tr>
+										<td>onResume()</td>
+										<td>activity开始与用户交互之前调用。这时activity是在activity栈的顶端，用户可以向其中输入。
+											<p>下一个回调方法总是onPause()。</p>
+										</td>
+										<td>否</td>
+										<td>onPause()</td>
+									</tr>
+									<tr>
+										<td>onPause()</td>
+										<td>当系统准备启动另一个正在恢复的activity时调用。这个方法通常用于把未保存的改动提交为永久数据、停止动画播放、以及其它可能消耗CPU的工作等等。
+											它应该非常迅速地完成工作，因为下一个activity在本方法返回前是不会被恢复运行的。
+											<p>如果activity返回前台，则下一个回调方法是onResume()；如果进入用户不可见状态，则下一个是onStop()
+											</p>
+										</td>
+										<td>可以</td>
+										<td>onResume() 或 onStop()</td>
+									</tr>
+									<tr>
+										<td>onStop()</td>
+										<td>当activity不再对用户可见时调用。原因可能是它即将被销毁、或者其它activity（已有或新建的）被恢复运行并要覆盖本activity。
+											<p>如果activity还会回来与用户交互，则下一个回调方法是onRestart()；如果这个activity即将消失，则下一个回调方法是onDestroy()
+											</p>
+										</td>
+										<td>可以</td>
+										<td>onRestart() 或 onDestroy()</td>
+									</tr>
+									<tr>
+										<td>onDestroy()</td>
+										<td>在本activity被销毁前调用。这是activity收到的最后一个调用。
+											可能是因为activity完成了工作（有些人在这里调用finish()），
+											也可能是因为系统为了腾出空间而临时销毁activity的本实例。 可以利用isFinishing()
+											方法来区分这两种情况。</td>
+										<td>可以</td>
+										<td>无</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">任务(Task)和回收栈(Back Stack)</h5>
+							<p>Task 是多个 activity 的集合，用户进行操作时将与这些 activity 进行交互。 这些
+								activity 按照启动顺序排队存入一个栈（即“back stack”）。</p>
+							<p>大部分 task 都启动自 Home 屏幕。当用户触摸 application launcher 中的图标（或
+								Home 屏幕上的快捷图标）时，应用程序的 task 就进入前台。 如果该应用不存在
+								task（最近没有使用过此应用），则会新建一个 task，该应用的“main”activity 作为栈的根 activity
+								被打开。</p>
+							<img src="images/android-activity-task.jpg"
+								class="img-responsive">
+							<h5 class="text-primary">任务管理</h5>
+							<p>
+								Activity在manifest可配置的属性有：(参见
+								<a href="manifest.html" target="_blank">manifest</a>
+								)
+							</p>
+							<ul>
+								<li>taskAffinity -- affinity 表示 activity 预期所处的 task 。
+									缺省情况下，同一个应用中的所有 activity 都拥有同一个 affinity 值。 因此，同一个应用中的所有
+									activity 默认都期望位于同一个 task 中。 不过，你可以修改 activity 默认的 affinity 值。
+									不同应用中的 activity 可以共享同一个 affinity 值，同一个应用中的 activity 也可以赋予不同的
+									task affinity 值。</li>
+								<li>
+									launchMode
+									<ol>
+										<li>
+											<b>standard</b> -- 标准默认模式, 一个Task可以拥有多个Activity实例
+										</li>
+										<li>
+											<b>singleTop</b> --
+											在这种模式下，如果一个Activity实例已经存在于当前Task的最顶部，那么系统将调用onNewIntent()方法路由到这个实例，而不是创建一个新的Activity实例。
+										</li>
+										<li>
+											<b>singTask</b> --
+											这种模式下，系统创建一个新的Task，并在Task的底部实例化Activities。然而，当一个实例存在于一个独立的Task时，系统不是去创建一个新的实例，而是调用onNewIntent()路由到其他任务的实例。
+										</li>
+										<li>
+											<b>singInstance</b> -- 除了系统不会把其它 activity 放入当前实例所在的 task
+											之外，其它均与"singleTask"相同。activity 总是它所在 task 的唯一成员；它所启动的任何
+											activity 都会放入其它 task 中。
+										</li>
+									</ol>
+								</li>
+								<li>allowTaskReparenting -- 这种情况下，当某个 task 进入前台时，activity 的
+									affinity 值又与其相同，则它可以从启动时的 task 移入这个 task 中。</li>
+								<li>clearTaskOnLaunch -- 如果 task 中根 activity 的此属性设为
+									"true"，则只要用户离开并再次返回该 task，栈就会被清理至根
+									activity。也就是说，正好与alwaysRetainTaskState相反。用户每次返回 task
+									时看到的都是初始状态，即使只是离开一会儿。</li>
+								<li>alwaysRetainTaskState -- 如果 task 中根 activity 的此属性设为
+									"true" ，则默认的清理方式不会进行。即使过了很长时间，task 中所有的 activity 也都会保留在栈中。</li>
+								<li>finishOnTaskLaunch -- 此属性类似于clearTaskOnLaunch，只是它只对一个
+									activity 有效，不是整个 task。这能让任何一个 activity 消失，包括 根 activity。如果
+									activity 的此属性设为 "true"，则只会保留 task 中当前 session 所涉及的内容。如果用户离开后再返回
+									task，它就不存在了。</li>
+							</ul>
+							<p>Intents 标识有：</p>
+							<ul>
+								<li>FLAG_ACTIVITY_NEW_TASK -- 和 singleTask 一样</li>
+								<li>FLAG_ACTIVITY_CLEAR_TOP -- 和singleTop一样</li>
+								<li>FLAG_ACTIVITY_SINGLE_TOP --
+									在这种模式下，如果启动一个已经存在于当前Task任务的Activity，那么Task顶部所有的Activity将被销毁，并且为将要启动的Activity新建一个Activity实例，存放在task的back
+									stack的顶部。</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -115,9 +536,546 @@
 				<a class="offset" id="android-service"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">SERVICE</h3>
+						<h3 class="panel-title">Service</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">Service 概述</h5>
+							<p>Service是一个应用程序组件，它能够在后台执行一些耗时较长的操作，并且不提供用户界面。服务能被其它应用程序的组件启动，即使用户切换到另外的应用时还能保持后台运行。此外，应用程序组件还能与服务绑定，并与服务进行交互，甚至能进行进程间通信（IPC）。
+								比如，服务可以处理网络传输、音乐播放、执行文件I/O、或者与content provider进行交互，所有这些都是后台进行的。
+							</p>
+							<p>服务有以下两种基本类型：</p>
+							<dl>
+								<dt>Started&nbsp;</dt>
+								<dd>
+									如果一个应用程序组件（比如一个activity）通过调用
+									<code>startService()</code>
+									来启动服务，则该服务就是被“started”了。一旦被启动，服务就能在后台一直运行下去，即使启动它的组件已经被销毁了。
+									通常，started的服务执行单一的操作并且不会向调用者返回结果。比如，它可以通过网络下载或上传文件。当操作完成后，服务应该自行终止。
+								</dd>
+							</dl>
+							<dl>
+								<dt>Bound&nbsp;</dt>
+								<dd>
+									如果一个应用程序组件通过调用
+									<code>bindService()</code>
+									绑定到服务上，则该服务就是被“bound”了。bound服务提供了一个客户端/服务器接口，允许组件与服务进行交互、发送请求、获取结果，甚至可以利用进程间通信（IPC）跨进程执行这些操作。绑定服务的生存期和被绑定的应用程序组件一致。
+									多个组件可以同时与一个服务绑定，不过所有的组件解除绑定后，服务也就会被销毁。
+								</dd>
+							</dl>
+							<p>
+								虽然本文对这两种类型的服务是分别进行简要描述的，但是你的服务仍可以同时用两种方式工作——可以是started（一直运行下去），同时也能被绑定。
+								只会存在一点麻烦，是否两个回调方法都要实现：实现
+								<code>onStartCommand()</code>
+								以允许组件启动服务、实现
+								<code>onBind()</code>
+								以允许绑定。
+							</p>
+							<p>
+								无论你的应用程序是started、bound、还是两者都支持，任何应用程序组件都可以使用此服务（即使是从另一个独立的应用程序中），
+								同样，任何组件都可以用这种方式使用一个activity——通过一个
+								<code>Intent</code>
+								启动。不过，也可以在manifest文件中把服务声明为私有private的，以便阻止其它应用程序的访问。
+							</p>
+							<div class="alert alert-warning">
+								<b>警告</b>：服务运行于宿主进程的主线程中——不创建自己的线程并且不是运行在单独的进程中（除非你明确指定）。
+								这意味着，如果你的服务要执行一些很耗CPU的工作或者阻塞的操作（比如播放MP3或网络操作），你应该在服务中创建一个新的线程来执行这些工作。
+								利用单独的线程，将减少你的activity发生应用程序停止响应（ANR）错误的风险。
+							</div>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Service 生命周期</h5>
+							<p>服务的生命周期与activity的非常类似。不过，更重要的是你需密切关注服务的创建和销毁环节，因为后台运行的服务是不会引起用户注意的。
+							</p>
+							<p>服务的生命周期——从创建到销毁——可以有两种路径：</p>
+							<ul>
+								<li>一个started服务</li>
+							</ul>
+							<dl>
+								<dd>
+									这类服务由其它组件调用
+									<code>startService()</code>
+									来创建。然后保持运行，且必须通过调用
+									<code>stopSelf()</code>
+									自行终止。其它组件也可通过调用
+									<code>stopService()</code>
+									终止这类服务。服务终止后，系统会把它销毁。
+								</dd>
+							</dl>
+							<ul>
+								<li>一个bound服务</li>
+							</ul>
+							<dl>
+								<dd>
+									服务由其它组件（客户端）调用
+									<code>bindService()</code>
+									来创建。然后客户端通过一个
+									<code>IBinder</code>
+									接口与服务进行通信。客户端可以通过调用
+									<code>unbindService()</code>
+									来关闭联接。多个客户端可以绑定到同一个服务上，当所有的客户端都解除绑定后，系统会销毁服务。（服务不需要自行终止。）
+								</dd>
+							</dl>
+							<p>
+								这两条路径并不是完全隔离的。也就是说，你可以绑定到一个已经用
+								<code>startService()</code>
+								启动的服务上。例如，一个后台音乐服务可以通过调用
+								<code>startService()</code>
+								来启动，传入一个指明所需播放音乐的 Intent。
+								之后，用户也许需要用播放器进行一些控制，或者需要查看当前歌曲的信息，这时一个activity可以通过调用
+								<code>bindService()</code>
+								与此服务绑定。在类似这种情况下，
+								<code>stopService()</code>
+								或
+								<code>stopSelf()</code>
+								不会真的终止服务，除非所有的客户端都解除了绑定。
+							</p>
+							<p width="100%">
+								<img src="images/service_lifecycle.png" class="center-block">
+							</p>
+							<p>Service 生命周期实例:</p>
+							<ol>
+								<li>
+									<p>
+										<code>startService</code>
+										和
+										<code>stopService</code>
+									</p>
+									<ul>
+										<li>
+											第一次调用
+											<code>startService</code>
+											, Service 依次调用:
+											<code>onCreate</code>
+											->
+											<code>onStartCommand</code>
+											->
+											<code>onStart</code>
+										</li>
+										<li>
+											多次调用
+											<code>startService</code>
+											, Service 调用:
+											<code>onStartCommand</code>
+											->
+											<code>onStart</code>
+										</li>
+										<li>
+											调用
+											<code>stopService</code>
+											, Service 调用:
+											<code>onDestroy</code>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<p>
+										<code>bindService</code>
+										和
+										<code>unbindService</code>
+									</p>
+									<p>Service 和调用方运行在同一个进程:</p>
+									<ul>
+										<li>
+											第一次调用
+											<code>bindService</code>
+											, Service 依次调用:
+											<code>onCreate</code>
+											->
+											<code>onBind</code>
+											->
+											<code>onServiceConnected</code>
+										</li>
+										<li>
+											多次调用
+											<code>bindService</code>
+											, Service 无方法调用
+										</li>
+										<li>
+											如果调用
+											<code>bindeService</code>
+											的 Activity 销毁, Service 依次调用:
+											<code>onUnbind</code>
+											->
+											<code>onDestroy</code>
+										</li>
+										<li>
+											调用
+											<code>unbindService</code>
+											, Service 调用:
+											<code>onUnbind</code>
+											->
+											<code>onDestroy</code>
+											; 如果 Service 没有 bind 或 已销毁, unbindService 会引发错误
+										</li>
+									</ul>
+									<div class="alert alert-warning"
+										style="font-size: 14px; font-weight: 600;">
+										<p>
+											Service 运行在远程进程中,此时要实现与Service通信，直接 bindService 转换报错(就算
+											Service 和 调用方在同一个app中)，要使用
+											<code>Messenger</code>
+											,参见下面的
+											<a href="#android-ipc">IPC -- 进程间通信</a>
+										</p>
+									</div>
+								</li>
+								<li>
+									<p>
+										综合使用
+										<code>startService</code>
+										和
+										<code>bindService</code>
+									</p>
+									<ul>
+										<li>
+											先
+											<code>startService</code>
+											，再
+											<code>bindService</code>
+											, Service 依次调用
+											<code>onCreate</code>
+											->
+											<code>onStartCommand</code>
+											->
+											<code>onStart</code>
+											->
+											<code>onBind</code>
+											->
+											<code>onServiceConnected</code>
+											<ol>
+												<li>
+													此时调用
+													<code>unbindService</code>
+													, Service 调用
+													<code>onUnbind</code>
+													, 不会调用
+													<code>onDestroy</code>
+												</li>
+												<li>
+													此时在
+													<code>unbindService</code>
+													后, 如果再调用
+													<code>bindService</code>
+													, Service 调用
+													<code>onServiceConnected</code>
+													, 不会调用
+													<code>onBind</code>
+												</li>
+											</ol>
+										</li>
+
+										<li>
+											先
+											<code>bindService</code>
+											，再
+											<code>startService</code>
+											, Service 依次调用
+											<code>onCreate</code>
+											->
+											<code>onBind</code>
+											->
+											<code>onServiceConnected</code>
+											->
+											<code>onStartCommand</code>
+											->
+											<code>onStart</code>
+											, 其它和上面类似
+										</li>
+										<li>
+											<div class="alert alert-success">
+												<div style="font-size: 14px; font-weight: 600;">
+													<p>总结：如果 Service 已经 started (调用了 startService 或
+														bindService, 还没有 destroy)</p>
+													<p>只有 stopService 和 unbindService 都调用了才会调用 Service 的
+														onDestroy</p>
+													<p>第一次调用 bindService 时, Service 才会调用
+														onBind(就是说如果startService后, 第一次调用 bindService 时, Service
+														才会调用 onBind，哪怕是先unbindService,再次 bindService, Service
+														都只会调用 onServiceConnected)</p>
+												</div>
+											</div>
+										</li>
+									</ul>
+								</li>
+							</ol>
+						</div>
+
+						<a id="android-ipc" class="offset"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">IPC -- 进程间通信</h5>
+							<p>
+								这里主要介绍
+								<code>Messenger</code>
+								(内部也使用aidl实现) 和
+								<code>AIDL</code>
+								方式
+							</p>
+							<p>当你需要进行IPC时，使用 Messenger 要比用AIDL实现接口要容易些，因为 Messenger
+								会把所有调用服务的请求放入一个队列。而纯粹的AIDL接口会把这些请求同时发送给服务，这样服务就必须要能够多线程运行。</p>
+							<p class="h5">
+								<code>android:process=":remote"</code>
+								和
+								<code>android:process="remote"</code>
+								的区别:
+							</p>
+							<ul>
+								<li>
+									<code>android:process=":remote"</code>
+									，代表在应用程序里，当需要该service时，会自动创建新的进程。
+								</li>
+								<li>
+									而如果是
+									<code>android:process="remote"</code>
+									，没有“:”分号的，则创建全局进程，不同的应用程序共享该进程。
+								</li>
+							</ul>
+							<h6 class="text-primary">使用 Messenger:</h6>
+							<ul>
+								<li>
+									Server 端代码(服务提供方 APP-A 或 同一个APP):
+									<ol>
+										<li>
+											AndroidManifest.xml 配置:
+											<pre class="brush: xml;">
+&lt;service android:name=".MyService"
+    android:process=":remote">
+    &lt;intent-filter>
+        &lt;action android:name="action.myservice" />
+
+        &lt;category android:name="android.intent.category.DEFAULT" />
+    &lt;/intent-filter>
+&lt;/service>
+</pre>
+										</li>
+										<li>
+											MyService 代码(实现从请求方接收: x 和 y 两个参数, Service中实现求和,返回 sum 给请求方):
+											<pre class="brush: java;">
+public class MyService extends Service {
+	private final Messenger mMessenger = new Messenger(new MessengerHandler());
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		return mMessenger.getBinder();
+	}
+
+	private static class MessengerHandler extends Handler {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				Messenger client = msg.replyTo;
+				
+				int x = msg.getData().getInt("x", 0);
+				int y = msg.getData().getInt("y", 0);
+				
+				Message replyMsg = Message.obtain(null, 2);
+				Bundle bundle = new Bundle();
+				bundle.putString("sum", "计算结果: x + y =" + (x + y));
+				replyMsg.setData(bundle);
+				try {
+					client.send(replyMsg);
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+
+				break;
+			default:
+				super.handleMessage(msg);
+				break;
+			}
+		}
+	}
+}
+</pre>
+										</li>
+									</ol>
+								</li>
+								<li>
+									Client 端代码(服务请求方 APP-B 或 同一个APP):
+									<pre class="brush: java;">
+/** 适当时机绑定　Service */
+Intent intent = new Intent("action.myservice");
+bindService(intent, remote_conn, BIND_AUTO_CREATE);
+
+ServiceConnection remote_conn = new ServiceConnection() {
+
+	@Override
+	public void onServiceDisconnected(ComponentName name) {
+
+	}
+
+	@Override
+	public void onServiceConnected(ComponentName name, IBinder service) {
+		Messenger mService = new Messenger(service);
+		Message msg = Message.obtain(null, 1);
+		Bundle bundle = new Bundle();
+		int x = Integer.parseInt(input_x.getText().toString());
+		int y = Integer.parseInt(input_y.getText().toString());
+		bundle.putInt("x", x);
+		bundle.putInt("y", y);
+		msg.setData(bundle);
+		/**
+		 * 增加回传关联
+		 */
+		msg.replyTo = mGetRepltMessenger;
+		try {
+			mService.send(msg);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
+};
+
+/**
+ * 增加接收回传的消息(接收Service端返回的消息)
+ */
+private Messenger mGetRepltMessenger = new Messenger(new MessengerHandler());
+
+private class MessengerHandler extends Handler {
+	@Override
+	public void handleMessage(Message msg) {
+		switch (msg.what) {
+		case 2:
+			// 接受跨进程回传的数据
+			String result = msg.getData().getString("sum");
+			// 显示返回的计算结果
+			remote_resultView.setText(result);
+			
+			unbindService(remote_conn);// 不使用时解除服务的绑定
+			break;
+		default:
+			super.handleMessage(msg);
+			break;
+		}
+	}
+}
+</pre>
+								</li>
+							</ul>
+							<h6 class="text-primary">使用 AIDL:</h6>
+							<p class="alert alert-warning">注意：使用AIDL只有在你允许来自不同应用的客户端跨进程通信访问你的service，并且想要在你的service种处理多线程的时候才是必要的。
+								如果你不需要执行不同应用之间的IPC并发，你应该通过实现Binder建立你的接口，或者如果你想执行IPC，但是不需要处理多线程。那么使用Messenger实现你的接口</p>
+							<ul>
+								<li>
+									Server 端代码(服务提供方 APP-A):
+									<ol>
+										<li>
+											AndroidManifest.xml 配置:
+											<pre class="brush: xml;">
+&lt;service android:name=".AidlService" 
+	android:exported="true"
+	android:process=":remote">
+    &lt;intent-filter>
+        &lt;action android:name="action.aidl.myservice" />
+
+        &lt;category android:name="android.intent.category.DEFAULT" />
+    &lt;/intent-filter>
+&lt;/service>
+</pre>
+										</li>
+										<li>
+											创建 aidl 文件
+											<code>IAidlService.aidl</code>
+											<pre class="brush: java;">
+package com.example.ipc_messenger;
+
+interface IAidlService {
+	// 这里定义一个 execute 方法用于测试
+	boolean execute(String arg);
+}
+</pre>
+										</li>
+										<li>
+											创建一个Service, 并实现 IAidlService.aidl 文件中定义的接口
+											<pre class="brush: java;">
+package com.example.ipc_messenger;
+
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
+import android.os.RemoteException;
+
+public class AidlService extends Service {
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public class AidlServiceImpl extends IAidlService.Stub {
+
+		@Override
+		public boolean execute(String arg) throws RemoteException {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		
+	}
+
+}
+</pre>
+										</li>
+									</ol>
+								</li>
+								<li>
+									Client 端代码(服务提供方 APP-B):
+									<ol>
+										<li>
+											复制Server 端项目目录下
+											<code>gen/IAidlService.java</code>
+											(此文件为Android SDK工具自动生成) 到
+											<code>src/com/example/ipc_messenger</code>
+											目录下(<span class="text-warning">包名与Server端创建aidl文件时相同</span>)
+										</li>
+										<li>
+											绑定到远程 Service
+											<pre class="brush: java;">
+/** 这里通过 Action 调用,如果不在在，可能绑定异常 */
+boolean state = false;
+try {
+	Intent intent = new Intent();
+	intent.setPackage("com.example.ipc_messenger");
+	intent.setAction("action.aidl.myservice");
+	state = bindService(intent, serviceConnection, BIND_AUTO_CREATE);
+} catch (Exception e) {
+	state = false;
+	e.printStackTrace();
+}
+</pre>
+										</li>
+										<li>
+											调用远程 Service 中方法
+											<pre class="brush: java;">
+private IAidlService myService = null;
+
+private ServiceConnection serviceConnection = new ServiceConnection() {
+
+	@Override
+	public void onServiceDisconnected(ComponentName name) {
+	}
+
+	@Override
+	public void onServiceConnected(ComponentName name, IBinder service) {
+		myService = IAidlService.Stub.asInterface(service);
+		try {
+			// 执行远程 Service 中的 execute 方法
+			boolean state = myService.execute("test");
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+	}
+};
+</pre>
+										</li>
+									</ol>
+								</li>
+
+							</ul>
+						</div>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -125,32 +1083,286 @@
 				<a class="offset" id="android-broadcast"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">BROADCAST</h3>
+						<h3 class="panel-title">Broadcast</h3>
 					</div>
 					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="android-provider"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">CONTENT PROVIDER</h3>
+						<h3 class="panel-title">Content Provider</h3>
 					</div>
 					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="android-handler"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">Handler</h3>
+						<h3 class="panel-title">Handler 机制</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p class="alert alert-success">
+								<b>异步消息处理</b>: 线程启动后会进入一个无限的循环体之中，每循环一次，从其内部的消息队列中取出一个消息，然后回调相应的消息处理函数，执行完成一个消息后则继续循环。若消息队列为空，线程则会阻塞等待。
+							</p>
+							<p class="alert alert-success">
+								<b>Looer.loop()方法可能会引起主线程的阻塞，但只要它的消息循环没有被阻塞，能一直处理事件就不会产生ANR异常。
+								</b>
+							</p>
+
+							<p>
+								<b>Looper</b>: 能够确保线程持续存活并且可以不断的从任务队列中获取任务并进行执行。
+							</p>
+							<p>
+								<b>Handler</b>:
+								能够帮助实现队列任务的管理，不仅仅能够把任务插入到队列的头部，尾部，还可以按照一定的时间延迟来确保任务从队列中能够来得及被取消掉。
+							</p>
+							<p>
+								<b>MessageQueue</b>: 使用 Intent，Message，Runnable
+								作为任务的载体在不同的线程之间进行传递。
+							</p>
+							<p>
+								<b>HandlerThread</b> : 把上面三个组件打包到一起进行协作。
+							</p>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Java 模拟 Android Handler 机制</h5>
+							<ul>
+								<li>
+									<b>Message</b> -- 绑定 Handler 对象，包装消息
+									<pre class="brush: java;">
+public class Message {
+	Handler target;
+	public Object obj;
+	public int what;
+
+	@Override
+	public String toString() {
+		return "what=" + what + " obj=" + obj.toString();
+	}
+}
+</pre>
+								</li>
+								<li>
+									<b>Handler</b> -- 处理消息
+									<pre class="brush: java;">
+public class Handler {
+	private MessageQueue messageQueue;
+
+	public Handler() {
+		Looper looper = Looper.myLooper();
+
+		if (looper == null) {
+			throw new RuntimeException(
+					"Can't create handler inside thread that has not called Looper.prepare()");
+
+		}
+
+		this.messageQueue = looper.messageQueue;
+	}
+
+	public void sendMessage(Message msg) {
+		// Looper循环中发现message后，调用message.targer就得到了当前handler，使用taget.handleMessage
+		// 就把消息转发给了发送message时的handler的handleMessage函数
+		msg.target = this;
+
+		messageQueue.enqueueMessage(msg);
+	}
+
+	public void handleMessage(Message msg) {}
+}
+</pre>
+								</li>
+								<li>
+									<b>ThreadLocal</b> -- 提供线程和Looper的关联, 保证每一个线程只创建唯一一个Looper
+									<pre class="brush: java;">
+public class ThreadLocal&lt;T> {
+	private Map&lt;Thread , T> map;
+
+	public ThreadLocal() {
+		map = new HashMap&lt;>();
+	}
+
+	public void set(T obj) {
+		map.put(Thread.currentThread(), obj);
+	}
+
+	public T get() {
+		return map.get(Thread.currentThread());
+	}
+}
+</pre>
+								</li>
+								<li>
+									<b>MessageQueue</b> -- 阻塞式消息队列, 主要是 LinkedBlockingQueue 的 take
+									方法
+									<pre class="brush: java;">
+public class MessageQueue {
+	private BlockingQueue&lt;Message> blockingQueue = new LinkedBlockingQueue&lt;>();
+
+	/**
+	 * 阻塞式，没有消息则一直等待 
+	 * 关键代码在这里，LinkedBlockingQueue，若blockingQueue为空，等到basket有苹果为止
+	 * (等到后获取并移除此队列的头部)
+	 */
+	public Message next() {
+		try {
+			return blockingQueue.take();
+		} catch (InterruptedException e) {
+			throw new RuntimeException();
+		}
+	}
+
+	/**
+	 * 插入到消息队列尾部
+	 */
+	void enqueueMessage(Message message) {
+		try {
+			blockingQueue.put(message);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+}
+</pre>
+								</li>
+								<li>
+									<b>Looper</b> -- 不断从MessageQueue中取消息
+									<pre class="brush: java;">
+public class Looper {
+	private static final ThreadLocal&lt;Looper> threadLocal = new ThreadLocal&lt;>();
+	/**
+	 * 存储Message的队列，阻塞式，没有消息则一直等待
+	 */
+	final MessageQueue messageQueue;
+
+	private Looper() {
+		messageQueue = new MessageQueue();
+	}
+
+	/**
+	 * 为该线程创建Looper， 若该线程已经有Looper了则不需要再次调用prepare
+	 */
+	public static void prepare() {
+		if (threadLocal.get() != null) {
+			throw new RuntimeException(
+					"Only one Looper may be created per thread");
+		}
+		threadLocal.set(new Looper());
+	}
+
+	public static void loop() {
+		Looper looper = myLooper();
+		if (looper == null) {
+			throw new RuntimeException(
+					"No Looper; Looper.prepare() wasn't called on this thread.");
+		}
+		MessageQueue messageQueue = looper.messageQueue;
+
+		while(true) {
+			Message message = messageQueue.next();
+			message.target.handleMessage(message);
+		}
+	}
+
+	/**
+	 * 获取当先线程的Looper
+	 */
+	public static Looper myLooper() {
+		return threadLocal.get();
+	}
+}
+</pre>
+								</li>
+								<li>
+									<b>Main</b> -- 测试
+									<pre class="brush: java;">
+public class Main {
+
+	public static void main(String[] args) {
+		new Main().start();
+	}
+
+	private void start() {
+		Looper.prepare();
+
+		onCreate();
+
+		// 死循环，阻塞式
+		Looper.loop();
+	}
+
+	private void onCreate() {
+		// ////////////////////////////////////////////////////////
+		// //// 下面的操作相当于运行在android的UI线程中 ////////////
+		// ////////////////////////////////////////////////////////
+
+		final Thread thread = Thread.currentThread();
+		System.out.println("main thread=" + thread);
+
+		Handler handler = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				// 若thread == Thread.currentThread()，则证明已经运行在主线程中了
+				System.out.println("current thread is main thread? "
+						+ (thread == Thread.currentThread()));
+				System.out.println(msg);
+				System.out.println();
+			}
+		};
+		// 测试1 主线程创建handler，子线程使用该handler发送消息
+		new Thread() {
+			public void run() {
+				try {// 模拟耗时操作
+					Thread.sleep(1000 * 2);
+				} catch (InterruptedException e) {
+				}
+				Message message = new Message();
+				message.obj = "new Thread" + Thread.currentThread();
+				message.what = (int) System.currentTimeMillis();
+				// 在子线程中发送消息
+				handler.sendMessage(message);
+
+				try {
+					Thread.sleep(1000 * 2);
+				} catch (InterruptedException e) {
+				}
+
+				message = new Message();
+				message.obj = "hanler...waht==1";
+				message.what = 1;
+				// 在子线程中发送消息
+				handler.sendMessage(message);
+
+				message = new Message();
+				message.obj = "hanler...waht==2";
+				message.what = 2;
+				// 在子线程中发送消息
+				handler.sendMessage(message);
+
+				message = new Message();
+				message.obj = "hanler...waht==3";
+				message.what = 3;
+				// 在子线程中发送消息
+				handler.sendMessage(message);
+			};
+		}.start();
+	}
+}
+</pre>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="android-"></a>
 				<div class="panel panel-default">
@@ -180,6 +1392,9 @@
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

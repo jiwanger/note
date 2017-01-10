@@ -83,6 +83,8 @@
 							原理</a>
 						<a href="#java-reflect" class="list-group-item">Java 反射</a>
 						<a href="#java-annotation" class="list-group-item">Java 注解</a>
+						<a href="#java-thread" class="list-group-item">多线程</a>
+						<a href="#java-thread-pool" class="list-group-item">线程池</a>
 					</div>
 				</div>
 			</div>
@@ -1171,7 +1173,7 @@ public class Apple {
 								<p>注解处理器: FruitInfoUtil</p>
 								<pre class="brush: java;">
 public class FruitInfoUtil {
-	public static void getFruitInfo(Class<?> clazz) {
+	public static void getFruitInfo(Class&lt;?> clazz) {
 
 		String strFruitName = " 水果名称：";
 		String strFruitColor = " 水果颜色：";
@@ -1214,12 +1216,741 @@ public class FruitInfoUtil {
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="java-"></a>
+				<a class="offset" id="java-thread"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 id="java-docs" class="panel-title">Java</h3>
+						<h3 id="java-docs" class="panel-title">多线程</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p width="100%">
+								<img src="images/java-thread.png" class="center-block">
+							</p>
+							<h5 class="text-primary">线程的状态</h5>
+							<ul>
+								<li>
+									<b>新建状态(New)</b> -- 新创建了一个线程对象。
+								</li>
+								<li>
+									<b>就绪状态(Runnable)</b> --
+									线程对象创建后，其他线程调用了该对象的start()方法。该状态的线程位于可运行线程池中，变得可运行，等待获取CPU的使用权。
+								</li>
+								<li>
+									<b>运行状态(Running)</b> -- 就绪状态的线程获取了CPU，执行程序代码。
+								</li>
+								<li>
+									<b>阻塞状态(Bolcked)</b> --
+									阻塞状态是线程因为某种原因放弃CPU使用权，暂时停止运行。直到线程进入就绪状态，才有机会转到运行状态。阻塞的情况分三种：
+									<ol>
+										<li>
+											<b>等待阻塞</b> -- 运行的线程执行wait()方法，JVM会把该线程放入等待池中。
+										</li>
+										<li>
+											<b>同步阻塞</b> -- 运行的线程在获取对象的同步锁时，若该同步锁被别的线程占用，则JVM会把该线程放入锁池中。
+										</li>
+										<li>
+											<b>其他阻塞</b> --
+											运行的线程执行sleep()或join()方法，或者发出了I/O请求时，JVM会把该线程置为阻塞状态。当sleep()状态超时、join()等待线程终止或者超时、或者I/O处理完毕时，线程重新转入就绪状态。
+										</li>
+									</ol>
+								</li>
+								<li>
+									<b>死亡状态(Dead)</b> -- 线程执行完了或者因异常退出了run()方法，该线程结束生命周期。
+								</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">关键字: synchronized</h5>
+							<ul>
+								<li>
+									<p>无论 synchronized 关键字加在方法上还是对象上，如果它作用的对象是非静态的，则它取得的锁是对象；如果
+										synchronized 作用的对象是一个静态方法或一个类，则它取得的锁是对类，该类所有的对象同一把锁。</p>
+								</li>
+								<li>
+									<p>每个对象只有一个锁（lock）与之相关联，谁拿到这个锁谁就可以运行它所控制的那段代码。</p>
+								</li>
+								<li>
+									<p>实现同步是要很大的系统开销作为代价的，甚至可能造成死锁，所以尽量避免无谓的同步控制。</p>
+								</li>
+							</ul>
+							<p>
+								<b>修饰一个代码块</b>
+							</p>
+							<ul>
+								<li>
+									一个线程访问一个对象中的 synchronized(this) 同步代码块时，其他试图访问该对象(<span
+										class="text-danger">同一个对象实例</span>)的线程将被阻塞。
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#java-thread-e1" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="java-thread-e1" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: java;">
+public static void main(String[] args) {
+	Main context = new Main();
+
+	SynThread mSynThread = context.new SynThread();
+
+	new Thread(mSynThread).start();
+	new Thread(mSynThread).start();
+}
+
+class SynThread implements Runnable {
+	int count = 0;
+
+	public void run() {
+		synchronized (this) {
+			try {
+				for (int i = 0; i < 5; i++) {
+					System.out.println(Thread.currentThread().getId() + "===run===" + count++);
+					Thread.sleep(500);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									当一个线程访问对象的一个 synchronized(this) 同步代码块时，另一个线程仍然可以访问该对象中的非
+									synchronized(this) 同步代码块。
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#java-thread-e2" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="java-thread-e2" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: java;">
+public static void main(String[] args) {
+	Main context = new Main();
+
+	SynThread mSynThread = context.new SynThread();
+
+	new Thread(mSynThread).start();
+	new Thread(mSynThread).start();
+	
+	for (int i = 0; i < 5; i++) {
+		mSynThread.showCount();
+	}
+}
+
+class SynThread implements Runnable {
+	int count = 0;
+
+	public void run() {
+		synchronized (this) {
+			try {
+				for (int i = 0; i < 5; i++) {
+					System.out.println(Thread.currentThread().getId() + "===run===" + count++);
+					Thread.sleep(500);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void showCount(){
+		try {
+			Thread.sleep(500);
+			System.out.println(Thread.currentThread().getId() + "==================count===" + count);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+}
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									当没有明确的对象作为锁，只是想让一段代码同步时，可以创建一个特殊的对象来充当锁：
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#java-thread-e3" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="java-thread-e3" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: java;">
+public static void main(String[] args) {
+	Main context = new Main();
+
+	SynThread mSynThread = context.new SynThread();
+
+	new Thread(mSynThread).start();
+	new Thread(mSynThread).start();
+}
+
+class SynThread implements Runnable {
+	int count = 0;
+	// 零长度的byte数组对象创建起来将比任何对象都经济
+	private byte[] lock = new byte[0];
+	
+	public void run() {
+		synchronized (lock) {
+			try {
+				for (int i = 0; i < 5; i++) {
+					System.out.println(Thread.currentThread().getId() + "===run===" + count++);
+					Thread.sleep(500);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+</pre>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<p>
+								<b>修饰一个方法</b>
+							</p>
+							<p>synchronized 关键字不能继承。方法上的 synchronized 关键字和如下代码等价:</p>
+							<pre class="brush: java;">
+public void method() {
+	synchronized(this) {
+	   // todo
+	}
+}
+</pre>
+							<p>
+								<b>修饰一个静态的方法</b>
+							</p>
+							<p>静态方法是属于类的而不属于对象的。同样的，synchronized修饰的静态方法锁定的是这个类的所有对象。</p>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<a data-toggle="collapse" data-parent="#accordion"
+										href="#java-thread-e4" aria-expanded="true"
+										class="code-header">
+										<span class="glyphicon glyphicon-plus"></span> View Code
+									</a>
+								</div>
+								<div id="java-thread-e4" class="panel-collapse collapse"
+									style="" aria-expanded="true">
+									<pre class="brush: java;">
+public class Main {
+	public static void main(String[] args) {
+		// 和前面不一样, 两个不同的 SynThread 对象实例
+		new Thread(new SynThread()).start();
+		new Thread(new SynThread()).start();
+	}
+}
+
+class SynThread implements Runnable {
+	static int count = 0;
+
+	public void run() {
+		test();
+	}
+
+	public synchronized static void test() {
+		try {
+			for (int i = 0; i < 5; i++) {
+				System.out.println(Thread.currentThread().getId() + "===run===" + count++);
+				Thread.sleep(500);
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+}
+</pre>
+								</div>
+							</div>
+							<p>
+								<b>修饰一个类</b>
+							</p>
+							<p>synchronized 作用于一个类T时，是给这个类T加锁，T的所有对象用的是同一把锁。</p>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<a data-toggle="collapse" data-parent="#accordion"
+										href="#java-thread-e4" aria-expanded="true"
+										class="code-header">
+										<span class="glyphicon glyphicon-plus"></span> View Code
+									</a>
+								</div>
+								<div id="java-thread-e4" class="panel-collapse collapse"
+									style="" aria-expanded="true">
+									<pre class="brush: java;">
+public static void main(String[] args) {
+	Main context = new Main();
+
+	new Thread(context.new SynThread()).start();
+	new Thread(context.new SynThread()).start();
+}
+
+class SynThread implements Runnable {
+	int count = 0;
+
+	public void run() {
+		synchronized (SynThread.class) {
+			try {
+				for (int i = 0; i < 5; i++) {
+					System.out.println(Thread.currentThread().getId() + "===run===" + count++);
+					Thread.sleep(500);
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+}
+</pre>
+								</div>
+							</div>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">线程调度</h5>
+							<ul>
+								<li>
+									<b>线程优先级</b> --
+									Java线程有优先级，优先级高的线程会获得较多的运行机会。推荐使用Thread类有以下三个静态常量:
+									<pre class="brush: java;">
+// Thread类的 setPriority() 和 getPriority() 方法分别用来设置和获取线程的优先级。
+static int MAX_PRIORITY;	// 线程可以具有的最高优先级，取值为10。 
+static int MIN_PRIORITY;	// 线程可以具有的最低优先级，取值为1。
+static int NORM_PRIORITY;	// 分配给线程的默认优先级，取值为5。 
+</pre>
+								</li>
+								<li>
+									<b>Thread.sleep(long millis)</b> --
+									使线程转到阻塞状态。millis参数设定睡眠的时间，以毫秒为单位。当睡眠结束后，就转为就绪（Runnable）状态。
+									<pre class="brush: java;">
+class SleepThread extends Thread {
+	@Override
+	public void run() {
+		try {
+			System.out.println("sleep 2000 毫秒");
+			sleep(1000);
+			System.out.println("sleep 结束");
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		super.run();
+	}
+	
+}
+</pre>
+								</li>
+								<li>
+									<b>Thread.yield()</b> -- 暂停当前正在执行的线程对象，把执行机会让给相同或者更高优先级的线程。
+									<pre class="brush: java;">
+
+</pre>
+								</li>
+								<li>
+									<b>Object的wait(), notify() 和 notifyAll()</b> --
+									导致当前的线程等待，直到其他线程调用此对象的 notify() 方法或 notifyAll() 唤醒方法。
+									<div class="alert alert-success"
+										style="font-size: 14px; font-weight: bold;">
+										<ul>
+											<li>永远在synchronized的函数或对象里使用wait、notify和notifyAll，不然Java虚拟机会生成
+												IllegalMonitorStateException。</li>
+											<li>永远在while循环里而不是if语句下使用wait。这样，循环会在线程睡眠前后都检查wait的条件，并在条件实际上并未改变的情况下处理唤醒通知。
+											</li>
+											<li>永远在多线程间共享的对象（在生产者消费者模型里即缓冲区队列）上使用wait。</li>
+											<li>基于前文提及的理由，更倾向用 notifyAll()，而不是 notify()。</li>
+										</ul>
+									</div>
+									<p><b>生产者-消费者模型</b>: 生产者生产到 10 个产品就停下来等消费者消费；消费者没有产品就通知并等待生产者生产。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#java-thread-e5" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="java-thread-e5" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: java;">
+public class ProducerConsumerInJava {
+	public static void main(String args[]) {
+		Queue&lt;Integer> buffer = new LinkedList&lt;>();
+		int maxSize = 10;
+		Thread producer = new Producer(buffer, maxSize, "生产者");
+		Thread consumer = new Consumer(buffer, "消费者");
+		producer.start();
+		consumer.start();
+	}
+}
+
+// 生产产品，当有10 个产品的时候就停下来等消费者消费
+class Producer extends Thread {
+	private Queue&lt;Integer> queue;
+	private int maxSize;
+
+	public Producer(Queue&lt;Integer> queue, int maxSize, String name) {
+		super(name);
+		this.queue = queue;
+		this.maxSize = maxSize;
+	}
+
+	@Override
+	public void run() {
+		while (true) {
+			synchronized (queue) {
+				while (queue.size() == maxSize) {
+					try {
+						System.out.println(getName() + ", 产品太多了，等消费者消费后再生产。");
+						queue.wait();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+				Random random = new Random();
+				int i = random.nextInt();
+				try {
+					// 生产一个产品要 1000 毫秒
+					sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				System.out.println(getName() + "生成的产品: " + i);
+				queue.add(i);
+				queue.notifyAll();
+			}
+		}
+	}
+}
+
+// 消费产品，无产品时就停下来，并通知生产者生产
+class Consumer extends Thread {
+	private Queue&lt;Integer> queue;
+
+	public Consumer(Queue&lt;Integer> queue, String name) {
+		super(name);
+		this.queue = queue;
+	}
+
+	@Override
+	public void run() {
+		while (true) {
+			synchronized (queue) {
+				while (queue.isEmpty()) {
+					System.out.println(getName() + ", 没有产品了，我等你生产!");
+					try {
+						queue.wait();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+				}
+				try {
+					// 消费一个产品要 200 毫秒
+					sleep(200);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				System.out.println(getName() + "消费的产品 : " + queue.remove());
+				queue.notifyAll();
+			}
+		}
+	}
+}
+</pre>
+										</div>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-thread-pool"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 id="java-docs" class="panel-title">Java 线程池</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>线程池是一种多线程处理形式，处理过程中将任务添加到队列，然后在创建线程后自动启动这些任务。线程池线程都是后台线程。每个线程都使用默认的堆栈大小，以默认的优先级运行，并处于多线程单元中。如果某个线程在托管代码中空闲（如正在等待某个事件）,则线程池将插入另一个辅助线程来使所有处理器保持繁忙。如果所有线程池线程都始终保持繁忙，但队列中包含挂起的工作，则线程池将在一段时间后创建另一个辅助线程但线程的数目永远不会超过最大值。超过最大值的线程可以排队，但他们要等到其他线程完成后才启动。</p>
+							<ul>
+								<li>减少了创建和销毁线程的次数，每个工作线程都可以被重复利用，可执行多个任务。</li>
+								<li>可以根据系统的承受能力，调整线程池中工作线线程的数目，防止因为消耗过多的内存，而把服务器累趴下</li>
+								<li>提供定时执行、定期执行、单线程、并发数控制等功能。</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">ThreadPoolExecutor 类</h5>
+							<p>ThreadPoolExecutor
+								类是线程池中最核心的一个类，因此如果要透彻地了解Java中的线程池，必须先了解这个类。</p>
+							<p>ThreadPoolExecutor, AbstractExecutorService,
+								ExecutorService 和 Executor 几个之间的关系:</p>
+							<ul>
+								<li>
+									<b>Executor</b> 是一个顶层接口，在它里面只声明了一个方法execute(Runnable)
+								</li>
+								<li>
+									<b>ExecutorService</b>
+									接口继承了Executor接口，并声明了一些方法：submit、invokeAll、invokeAny以及shutDown等
+								</li>
+								<li>
+									<b>AbstractExecutorService</b> 实现了 ExecutorService 接口，基本实现了
+									ExecutorService</b> 中声明的所有方法
+								</li>
+								<li>
+									<b>ThreadPoolExecutor</b> 继承了类 AbstractExecutorService
+								</li>
+							</ul>
+							<p class="alert alert-success">
+								<b>不推荐直接使用 ThreadPoolExecutor，而是使用 Executors
+									类中提供的几个静态方法来创建线程池(见下面: <a href="#java-thread-pool-executors"
+										class="text-danger">几种常用线程池</a>):
+								</b>
+							</p>
+							<pre class="brush: java;">
+// 创建一个缓冲池，缓冲池容量大小为Integer.MAX_VALUE
+Executors.newCachedThreadPool();
+// 创建容量为1的缓冲池
+Executors.newSingleThreadExecutor();
+// 创建固定容量大小的缓冲池
+Executors.newFixedThreadPool(int);
+// 创建一个定长线程池，支持定时及周期性任务执行
+Executors.newScheduledThreadPool(int)
+</pre>
+							<p>
+								<b>构造方法</b>: (前面三个构造器都是调用的第四个构造器进行的初始化工作)
+							</p>
+							<pre class="brush: java;">
+public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, 
+	TimeUnit unit, BlockingQueue&lt;Runnable> workQueue)
+
+public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize,long keepAliveTime, TimeUnit unit,
+	BlockingQueue&lt;Runnable> workQueue, ThreadFactory threadFactory)
+	
+public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
+    BlockingQueue&lt;Runnable> workQueue, RejectedExecutionHandler handler)
+
+/**
+ * corePoolSize: 核心池的大小，在创建了线程池后，默认情况下，线程池中并没有任何线程，而是等待有任务到来才创建线程去执行任务
+ * 		除非调用了prestartAllCoreThreads()或者prestartCoreThread()方法，从这2个方法的名字就可以看出，是预创建线程的
+ *		意思，即在没有任务到来之前就创建corePoolSize个线程或者一个线程。
+ * maximumPoolSize: 线程池最大线程数，表示在线程池中最多能创建多少个线程
+ * keepAliveTime: 表示线程没有任务执行时最多保持多久时间会终止，默认情况下，只有当线程池中的线程数大于corePoolSize时，
+ * 		keepAliveTime才会起作用，直到线程池中的线程数不大于corePoolSize，即当线程池中的线程数大于corePoolSize时，
+ * 		如果一个线程空闲的时间达到keepAliveTime，则会终止，直到线程池中的线程数不超过corePoolSize。但是如果调用了
+ * 		allowCoreThreadTimeOut(boolean)方法，在线程池中的线程数不大于corePoolSize时，keepAliveTime参数也会起作用，
+ * 		直到线程池中的线程数为0；
+ * unit: 参数keepAliveTime的时间单位, java.util.concurrent.TimeUnit 类中定义
+ * workQueue: 一个阻塞队列，用来存储等待执行的任务。LinkedBlockingQueue, SynchronousQueue 等
+ * threadFactory: 线程工厂，主要用来创建线程
+ * handler: 表示当拒绝处理任务时的策略，有以下四种取值：
+ * 		ThreadPoolExecutor.AbortPolicy: 丢弃任务并抛出RejectedExecutionException异常。 
+ * 		ThreadPoolExecutor.DiscardPolicy：也是丢弃任务，但是不抛出异常。 
+ * 		ThreadPoolExecutor.DiscardOldestPolicy：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）
+ * 		ThreadPoolExecutor.CallerRunsPolicy：由调用线程处理该任务 
+ */
+public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
+	BlockingQueue&lt;Runnable> workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler)
+</pre>
+							<p>
+								<b>线程池状态</b>:
+							</p>
+							<pre class="brush: java;">
+volatile int runState;// runState表示当前线程池的状态
+// 当创建线程池后，初始时，线程池处于RUNNING状态
+static final int RUNNING    = 0;
+// 如果调用了shutdown()方法，则线程池处于SHUTDOWN状态，此时线程池不能够接受新的任务，它会等待所有任务执行完毕
+static final int SHUTDOWN   = 1;
+// 如果调用了shutdownNow()方法，则线程池处于STOP状态，此时线程池不能接受新的任务，并且会去尝试终止正在执行的任务
+static final int STOP       = 2;
+// 当线程池处于SHUTDOWN或STOP状态,并且所有工作线程已经销毁,任务缓存队列已经清空或执行结束后,线程池被设置为TERMINATED状态
+static final int TERMINATED = 3;
+</pre>
+							<p>
+								<b>任务的执行</b>:
+							</p>
+							<ul>
+								<li>如果当前线程池中的线程数目小于corePoolSize，则每来一个任务，就会创建一个线程去执行这个任务；</li>
+								<li>如果当前线程池中的线程数目>=corePoolSize，则每来一个任务，会尝试将其添加到任务缓存队列当中，若添加成功，则该任务会等待空闲线程将其取出去执行；若添加失败（一般来说是任务缓存队列已满），则会尝试创建新的线程去执行这个任务；</li>
+								<li>如果当前线程池中的线程数目达到maximumPoolSize，则会采取任务拒绝策略进行处理；</li>
+								<li>如果线程池中的线程数量大于
+									corePoolSize时，如果某线程空闲时间超过keepAliveTime，线程将被终止，直至线程池中的线程数目不大于corePoolSize；如果允许为核心池中的线程设置存活时间，那么核心池中的线程空闲时间超过keepAliveTime，线程也会被终止。</li>
+							</ul>
+							<p>
+								<b>任务缓存队列及排队策略</b>:
+							</p>
+							<p>workQueue的类型为BlockingQueue&lt;Runnable>，通常可以取下面三种类型：
+							<ol>
+								<li>
+									<b>ArrayBlockingQueue</b>：基于数组的先进先出队列，此队列创建时必须指定大小；
+								</li>
+								<li>
+									<b>LinkedBlockingQueue</b>：基于链表的先进先出队列，如果创建时没有指定此队列大小，则默认为Integer.MAX_VALUE；
+								</li>
+								<li>
+									<b>SynchronousQueue</b>：这个队列比较特殊，它不会保存提交的任务，而是将直接新建一个线程来执行新来的任务。
+								</li>
+							</ol>
+							<p>
+								<b>任务拒绝策略:</b>
+							</p>
+							<p>当线程池的任务缓存队列已满并且线程池中的线程数目达到maximumPoolSize，如果还有任务到来就会采取任务拒绝策略，通常有以下四种策略：</p>
+							<pre class="brush: java;">
+ThreadPoolExecutor.AbortPolicy: 丢弃任务并抛出RejectedExecutionException异常。
+ThreadPoolExecutor.DiscardPolicy: 也是丢弃任务，但是不抛出异常。
+ThreadPoolExecutor.DiscardOldestPolicy: 丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）
+ThreadPoolExecutor.CallerRunsPolicy: 由调用线程处理该任务 
+</pre>
+							<p>
+								<b>线程池的关闭:</b>
+							</p>
+							<p>ThreadPoolExecutor 提供了两个方法，用于线程池的关闭，分别是 shutdown() 和
+								shutdownNow()，其中：</p>
+							<ul>
+								<li>
+									<code>shutdown()</code>
+									: 不会立即终止线程池，而是要等所有任务缓存队列中的任务都执行完后才终止，但再也不会接受新的任务
+								</li>
+								<li>
+									<code>shutdownNow()</code>
+									: 立即终止线程池，并尝试打断正在执行的任务，并且清空任务缓存队列，返回尚未执行的任务
+								</li>
+							</ul>
+							<p>
+								<b>线程池容量的动态调整:</b>
+							</p>
+							<p>ThreadPoolExecutor 提供了动态调整线程池容量大小的方法：setCorePoolSize() 和
+								setMaximumPoolSize()</p>
+							<ul>
+								<li>
+									<code>setCorePoolSize()</code>
+									: 设置核心池大小
+								</li>
+								<li>
+									<code>setMaximumPoolSize()</code>
+									: 设置线程池最大能创建的线程数目大小
+								</li>
+							</ul>
+						</div>
+
+						<a id="java-thread-pool-executors" class="offset"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">JDK 的几种常用线程池:</h5>
+							<ul>
+								<li>
+									<b>newCachedThreadPool</b> --
+									创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程。
+									<pre class="brush: java;">
+ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+for (int i = 0; i < 10; i++) {
+	final int index = i;
+	try {
+		Thread.sleep(300);
+	} catch (InterruptedException e) {
+		e.printStackTrace();
+	}
+	cachedThreadPool.execute(new Runnable() {
+		@Override
+		public void run() {
+			// 每次线程id都相同,当执行第二个任务时第一个任务已经完成,会复用执行第一个任务的线程,而不用每次新建线程。
+			System.out.println("索引:" + index + "线程ID:" + Thread.currentThread().getId());
+		}
+	});
+}
+// 执行完后关闭, 这里的代码会先执行，但是关闭操作要队列中的线程执行完才会退出
+cachedThreadPool.shutdown();
+</pre>
+								</li>
+								<li>
+									<b>newFixedThreadPool</b> -- 创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。
+									<pre class="brush: java;">
+ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
+for (int i = 0; i < 10; i++) {
+	final int index = i;
+	fixedThreadPool.execute(new Runnable() {
+
+		@Override
+		public void run() {
+			try {
+				// 因为线程池大小为3，每个任务输出index后sleep 1秒，所以每两秒打印3个数字。
+				System.out.println("索引:" + index + "线程ID:" + Thread.currentThread().getId());
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	});
+}
+// 执行完后关闭, 这里的代码会先执行，但是关闭操作要队列中的线程执行完才会退出
+fixedThreadPool.shutdown();
+</pre>
+								</li>
+								<li>
+									<b>newScheduledThreadPool</b> -- 创建一个定长线程池，支持定时及周期性任务执行。
+									<pre class="brush: java;">
+ScheduledExecutorService scheduledThreadPool = Executors.newScheduledThreadPool(5);
+// 延迟3秒执行,
+scheduledThreadPool.schedule(new Runnable() {
+
+	@Override
+	public void run() {
+		System.out.println("线程ID:" + Thread.currentThread().getId());
+	}
+}, 3, TimeUnit.SECONDS);
+
+// 延迟1秒后每300毫秒执行一次
+scheduledThreadPool.scheduleAtFixedRate(new Runnable() {
+
+	@Override
+	public void run() {
+		System.out.println("线程ID:" + Thread.currentThread().getId());
+	}
+}, 1, 300, TimeUnit.MILLISECONDS);
+</pre>
+								</li>
+								<li>
+									<b>newSingleThreadExecutor</b> --
+									创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行。
+									<pre class="brush: java;">
+ExecutorService singleThreadExecutor = Executors.newSingleThreadExecutor();
+for (int i = 0; i < 10; i++) {
+	final int index = i;
+	singleThreadExecutor.execute(new Runnable() {
+
+		@Override
+		public void run() {
+			try {
+				System.out.println("索引:" + index + "线程ID:" + Thread.currentThread().getId());
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	});
+}
+// 执行完后关闭, 这里的代码会先执行，但是关闭操作要队列中的线程执行完才会退出
+singleThreadExecutor.shutdown();
+</pre>
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 				<!-- item over -->
 
