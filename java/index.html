@@ -66,12 +66,12 @@
 					</div>
 					<div class="list-group">
 						<a href="#" class="list-group-item">Java 文档</a>
-						<a id="tttt" class="list-group-item active dropup"
+						<a id="tttt" class="list-group-item active dropdown"
 							data-toggle="collapse" data-parent="#accordion"
 							href="#java-tools" aria-expanded="true">
 							Java 工具<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="java-tools" class="panel-collapse collapse"
 							role="tabpanel">
 							<a href="#java-javac" class="list-group-item"
 								style="border-top: 1px solid #DDDDDD;">javac 工具</a>
@@ -85,6 +85,8 @@
 						<a href="#java-annotation" class="list-group-item">Java 注解</a>
 						<a href="#java-thread" class="list-group-item">多线程</a>
 						<a href="#java-thread-pool" class="list-group-item">线程池</a>
+						<a href="#java-memory" class="list-group-item">内存管理</a>
+						<a href="#java-" class="list-group-item"></a>
 					</div>
 				</div>
 			</div>
@@ -1484,12 +1486,12 @@ class SynThread implements Runnable {
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<a data-toggle="collapse" data-parent="#accordion"
-										href="#java-thread-e4" aria-expanded="true"
+										href="#java-thread-e5" aria-expanded="true"
 										class="code-header">
 										<span class="glyphicon glyphicon-plus"></span> View Code
 									</a>
 								</div>
-								<div id="java-thread-e4" class="panel-collapse collapse"
+								<div id="java-thread-e5" class="panel-collapse collapse"
 									style="" aria-expanded="true">
 									<pre class="brush: java;">
 public static void main(String[] args) {
@@ -1555,9 +1557,55 @@ class SleepThread extends Thread {
 </pre>
 								</li>
 								<li>
-									<b>Thread.yield()</b> -- 暂停当前正在执行的线程对象，把执行机会让给相同或者更高优先级的线程。
+									<p>
+										<b>wait 和 sleep 区别</b>
+									</p>
+									<ul>
+										<li>他们都是在多线程的环境下，都可以在程序的调用处阻塞指定的毫秒数，并返回。</li>
+										<li>wait()和sleep()都可以通过interrupt()方法 打断线程的暂停状态
+											，从而使线程立刻抛出InterruptedException。</li>
+										<li>每个对象都有一个锁来控制同步访问。Synchronized关键字可以和对象的锁交互，来实现线程的同步。
+											sleep方法没有释放锁，而wait方法释放了锁，使得其他线程可以使用同步控制块或者方法。</li>
+										<li>wait，notify和notifyAll只能在同步控制方法或者同步控制块里面使用，而sleep可以在任何地方使用
+										</li>
+										<li>在sleep()休眠时间期满后，该线程不一定会立即执行，这是因为其它线程可能正在运行而且没有被调度为放弃执行，除非此线程具有更高的优先级。
+										</li>
+									</ul>
+									<p class="alert alert-danger">
+										<b>综上所述: wait 和 sleep 最大区别:
+											sleep()睡眠时，保持对象锁，仍然占有该锁；而wait()睡眠时，释放对象锁。</b>
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>Thread.yield()</b> --
+										暂停当前正在执行的线程对象，把执行机会让给相同或者更高优先级的线程。yield()使当前线程重新回到可执行状态，所以执行yield()的线程有可能在进入到可执行状态后马上又被执行。但
+										yield() 方法执行时，当前线程仍处在可运行状态，所以，不可能让出较低优先级的线程些时获得 CPU 占有权。
+									</p>
+								</li>
+								<li>
+									<b>Thread.join()</b> -- 调用 join() 方法的线程等待T线程终止再执行。
 									<pre class="brush: java;">
+Thread t = new Thread(new Runnable() {
+	@Override
+	public void run() {
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+});
 
+t.start();
+try {
+	System.out.println("=====我在等待======");
+	t.join();
+	// 线程 t 执行完后都会执行此处代码
+	System.out.println("=====我现在执行======");
+} catch (InterruptedException e) {
+	e.printStackTrace();
+}
 </pre>
 								</li>
 								<li>
@@ -1574,7 +1622,10 @@ class SleepThread extends Thread {
 											<li>基于前文提及的理由，更倾向用 notifyAll()，而不是 notify()。</li>
 										</ul>
 									</div>
-									<p><b>生产者-消费者模型</b>: 生产者生产到 10 个产品就停下来等消费者消费；消费者没有产品就通知并等待生产者生产。</p>
+									<p>
+										<b>生产者-消费者模型</b>: 生产者生产到 10 个产品就停下来等消费者消费；消费者没有产品就通知并等待生产者生产。
+										wait() 和 nofity() 方法只能用于 queue, 因为 synchronized (queue).
+									</p>
 									<div class="panel panel-default">
 										<div class="panel-heading">
 											<a data-toggle="collapse" data-parent="#accordion"
@@ -1947,6 +1998,327 @@ for (int i = 0; i < 10; i++) {
 // 执行完后关闭, 这里的代码会先执行，但是关闭操作要队列中的线程执行完才会退出
 singleThreadExecutor.shutdown();
 </pre>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-memory"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 id="java-docs" class="panel-title">内存管理</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">Java运行时内存区</h5>
+							<p>Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则是依赖用户线程的启动和结束而建立和销毁。根据《Java虚拟机规范（第2版）》的规
+								定，Java虚拟机所管理的内存将会包括以下几个运行时数据区域，如下图所示：</p>
+							<p class="100%">
+								<img src="images/java-memory.gif" class="center-block">
+							</p>
+							<p>
+								<b>程序计数器</b>
+							</p>
+							<p>程序计数器，可以看做是当前线程所执行的字节码的行号指示器。在虚拟机的概念模型里，字节码解释器工作就是通过改变程序计数器的值来选择下一条需要执行的字节码指令，分支、循环、跳转、异常处理、线程恢复等基础功能都要依赖这个计数器来完成。</p>
+							<p>多线程中，为了让线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各条线程之间互不影响、独立存储，因此这块内存是
+								线程私有 的。</p>
+							<p>
+								当线程正在执行的是一个Java方法，这个计数器记录的是在正在执行的虚拟机字节码指令的地址；当执行的是Native方法，这个计数器值为空。
+							</p>
+							<p>此内存区域是唯一一个没有规定任何OutOfMemoryError情况的区域 。</p>
+
+							<p>
+								<b>Java虚拟机栈</b>
+							</p>
+							<p>Java虚拟机栈也是线程私有的
+								，它的生命周期与线程相同。虚拟机栈描述的是Java方法执行的内存模型：每个方法在执行的同时都会创建一个栈帧用于存储局部变量表、操作数栈、动态链表、方法出口信息等。每一个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。</p>
+							<p>局部变量表中存放了编译器可知的各种基本数据类型(boolean、byte、char、short、int、float、long、double)、对象引用和returnAddress类型(指向了一条字节码指令的地址)。</p>
+							<p>如果扩展时无法申请到足够的内存，就会抛出OutOfMemoryError异常。</p>
+							<p>
+								<b>本地方法栈</b>
+							</p>
+							<p>本地方法栈与虚拟机的作用相似，不同之处在于虚拟机栈为虚拟机执行的Java方法服务，而本地方法栈则为虚拟机使用到的Native方法服务。有的虚拟机直接把本地方法栈和虚拟机栈合二为一。</p>
+							<p>会抛出stackOverflowError和OutOfMemoryError异常。</p>
+							<p>
+								<b>Java堆</b>
+							</p>
+							<p>Java堆是所有线程共享的一块内存区域，在虚拟机启动时创建，此内存区域的唯一目的就是存放对象实例 。</p>
+							<p>Java堆是垃圾收集器管理的主要区域。由于现在收集器基本采用分代回收算法，所以Java堆还可细分为：新生代和老年代。从内存分配的角度来看，线程共享的Java堆中可能划分出多个线程私有的分配缓冲区(TLAB)。</p>
+							<p>Java堆可以处于物理上不连续的内存空间，只要逻辑上连续的即可。在实现上，既可以实现固定大小的，也可以是扩展的。</p>
+							<p>如果堆中没有内存完成实例分配，并且堆也无法完成扩展时，将会抛出OutOfMemoryError异常。</p>
+							<p>
+								<b>方法区</b>
+							</p>
+							<p>方法区是各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据 。</p>
+							<p>相对而言，垃圾收集行为在这个区域比较少出现，但并非数据进了方法区就永久的存在了，这个区域的内存回收目标主要是针对常量池的回收和对类型的卸载，</p>
+							<p>当方法区无法满足内存分配需要时，将抛出OutOfMemoryError异常。</p>
+							<p>运行时常量池：是方法区的一部分，它用于存放编译期生成的各种字面量和符号引用。</p>
+							<p>
+								<b>直接内存</b>
+							</p>
+							<p>直接内存不是虚拟机运行时数据区的一部分，在NIO类中引入一种基于通道与缓冲区的IO方式，它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用进行操作。</p>
+							<p>直接内存的分配不会受到Java堆大小的限制，但是会受到本机内存大小的限制，所有也可能会抛OutOfMemoryError异常。</p>
+
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">内存溢出</h5>
+							<p>在JVM申请内存的过程中，会遇到无法申请到足够内存，从而导致内存溢出的情况。一般有以下几种情况：</p>
+							<ul>
+								<li>
+									虚拟机栈和本地方法栈溢出
+									<ul>
+										<li>
+											<p>StackOverflowError: 线程请求的栈深度大于虚拟机所允许的最大深度(循环递归)</p>
+											<p>
+												VM 参数:
+												<code>-Xss128k</code>
+											</p>
+											<pre class="brush: java;">
+public class JavaVMStackSOF {
+	private int stackLength = 1;
+
+	public void stackLeak() {
+		stackLength++;
+		stackLeak();
+	}
+
+	public static void main(String[] args) throws Throwable {
+		JavaVMStackSOF oom = new JavaVMStackSOF();
+		try {
+			oom.stackLeak();
+		} catch (Throwable e) {
+			System.out.println("stack length:" + oom.stackLength);
+			throw e;
+		}
+	}
+}
+</pre>
+										</li>
+										<li>
+											<p>
+												OutOfMemoryError: 虚拟机在扩展栈是无法申请到足够的内存空间，一般可以通过不停地创建线程引起此种情况,
+												<span class="text-danger">此代码执行时有很大令操作系统卡死的风险，可能要强制关机。</span>
+											</p>
+											<p>
+												VM 参数:
+												<code>-Xss2M</code>
+											</p>
+											<pre class="brush: java;">
+public class JavaVMStackOOM {
+	private void dontStop() {
+		while (true) {
+		}
+	}
+
+	public void stackLeakByThread() {
+		while (true) {
+			Thread thread = new Thread(new Runnable() {
+				@Override
+				public void run() {
+					dontStop();
+				}
+			});
+			thread.start();
+		}
+	}
+
+	public static void main(String[] args) throws Throwable {
+		JavaVMStackOOM oom = new JavaVMStackOOM();
+		// 此代码执行时有很大令操作系统卡死的风险
+		// oom.stackLeakByThread();
+	}
+}
+</pre>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<p>Java堆溢出: 当创建大量对象并且对象生命周期都很长的情况下，会引发OutOfMemoryError。</p>
+									<p>Java堆存放的是对象实例，因此只要不断建立对象，并且保证GC
+										Roots到对象之间有可达路径即可产生OOM异常。</p>
+									<p>
+										VM 参数:
+										<code>-Xms20m -Xmx20m -XX:+HeapDumpOnOutOfMemoryError</code>
+										(限制Java堆大小为20M，不可扩展, 参数
+										<code>-XX:+HeapDumpOnOutOfMemoryError</code>
+										让虚拟机在出现OOM异常的时候Dump出内存映像以便分析(生成.hprof文件，可使用 MAT 工具查看))
+									</p>
+									<pre class="brush: java;">
+public class HeapOOM {
+	public static void main(String[] args) {
+		List&lt;Object> list = new ArrayList&lt;Object>();
+
+		while (true) {
+			list.add(new Object());
+		}
+	}
+}
+</pre>
+								</li>
+								<li>
+									<p>运行时常量区溢出：OutOfMemoryError:PermGen
+										space，这里一个典型的例子就是String的intern方法，当大量字符串使用intern时，会触发此内存溢出</p>
+									<p>
+										VM 参数:
+										<code>-XX:PermSize=10M -XX:MaxPermSize=10M</code>
+										(-XX:PermSize和-XX:MaxPermSize限制方法区大小即可限制常量池容量, <span
+											class="text-danger">但Java8 移除了对这两个参数的支持, 此实例无法得到想要的结果</span>)
+									</p>
+									<pre class="brush: java;">
+public class RuntimeConstantPoolOOM {
+	public static void main(String[] args) {
+		// 使用List保持着常量池引用，压制Full GC回收常量池行为
+		List&lt;String> list = new ArrayList&lt;String>();
+		// 10M的PermSize在integer范围内足够产生OOM了
+		int i = 0;
+		while (true) {
+			list.add(String.valueOf(i++).intern());
+		}
+	}
+}
+</pre>
+								</li>
+								<li>
+									<p>方法区溢出：方法区存放Class等元数据信息，如果产生大量的类(使用cglib)，那么就会引发此内存溢出，OutOfMemoryError:PermGen
+										space，在使用Hibernate等框架时会容易引起此种情况。</p>
+									<p>
+										VM 参数:
+										<code> -XX:PermSize=10M -XX:MaxPermSize=10M</code>
+										(<span class="text-danger">Java8
+											移除了对这两个参数的支持,此实例无法得到想要的结果</span>)
+									</p>
+									<pre class="brush: java;">
+public class RuntimeConstantPoolOOM {
+	public static void main(String[] args) {
+		// 使用List保持着常量池引用，压制Full GC回收常量池行为
+		List&lt;String> list = new ArrayList&lt;String>();
+		// 10M的PermSize在integer范围内足够产生OOM了
+		int i = 0;
+		while (true) {
+			list.add(String.valueOf(i++).intern());
+		}
+	}
+}
+</pre>
+								</li>
+								<li>
+									<p>本机直接内存溢出:
+										DirectByteBuffer也会抛OOM异常，但抛出异常时实际上并没有真正向操作系统申请分配内存，而是通过计算得知无法分配既会抛出
+									</p>
+									<p>
+										VM 参数:
+										<code>-Xmx20M -XX:MaxDirectMemorySize=10M</code>
+										(<span class="text-danger">此实例无法运行</span>)
+									</p>
+									<pre class="brush: java;">
+public class DirectMemoryOOM {
+	private static final int _1MB = 1024 * 1024;
+	
+	public static void main(String[] args) throws Exception {
+		Field unsafeField = Unsafe.class.getDeclaredFields()[0];
+		unsafeField.setAccessible(true);
+		Unsafe unsafe = (Unsafe) unsafeField.get(null);
+		while (true) {
+			unsafe.allocateMemory(_1MB);
+		}
+	}
+}
+</pre>
+								</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Eclipse MAT 工具</h5>
+							<p>Eclipse Memory Analyzer（MAT）一个功能丰富的 JAVA
+								堆转储文件分析工具，可以用于发现内存漏洞和减少内存消耗。</p>
+								
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">VisualVM 工具</h5>
+							<p>VisualVM 是一款免费的\集成了多个JDK 命令行工具的可视化工具，它能为您提供强大的分析能力，对 Java
+								应用程序做性能分析和调优。这些功能包括生成和分析海量数据、跟踪内存泄漏、监控垃圾回收器、执行内存和 CPU 分析，同时它还支持在
+								MBeans 上进行浏览和操作。</p>
+							<p>
+								VisualVM 是 JDK 自带的工具，位于
+								<code>$JAVA_HOME/bin</code>
+								目录下,命令行下直接运行
+								<code>$ jvisualvm</code>
+								就可启动，Visual GC 插件要手动安装。
+							</p>
+							<p>在内存分析上，Java VisualVM的最大好处是可通过安装Visual GC插件来分析GC（Gabage
+								Collection）趋势、内存消耗详细状况。</p>
+							<p width="100%">
+								<img src="images/java-memory-gc.png"
+									class="center-block img-responsive">
+							</p>
+							<p>
+								<b>Visual GC 插件使用: (使用代码测试,下面的代码最终会引发 OOM异常。 VM 参数: <code>-Xms20m
+										-Xmx20m</code>)
+								</b>
+							</p>
+							<pre class="brush: java;">
+public class HeapOOM {
+	static class Test {}
+	
+	static List&lt;Object> list = new ArrayList&lt;Object>();
+	
+	public static void main(String[] args) {
+		while (true) {
+			try {
+				Thread.sleep(1);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			list.add(new Test());
+		}
+	}
+}
+</pre>
+							<p>根据对象的生命周期长短，把堆分为3个代：Young(年轻代)，Old(年老代)和
+								Permanent(持久代)，根据不同代的特点采用不同的收集算法。</p>
+							<ul>
+								<li>
+									<b>Young(年轻代)</b> -- 如图所示(最右侧三个框)年轻代分三个区。一个 Eden 区，两个 Survivor
+									区(S0 和 S1)。大部分对象在 Eden 区中生成。当 Eden 区满时，新对象生成，并且在Eden申请空间失败时，引发
+									GC 操作, 还存活的对象将被复制到 Survivor 区（两个中的一个），当这个 Survivor
+									区满时，此区的存活对象将被复制到另外一个 Survivor 区，当这个 Survivor 去也满了的时候，从第一个
+									Survivor 区复制过来的并且此时还存活的对象，将被复到 Old(年老区(如图中间块))。
+								</li>
+								<li>
+									<b>Tenured / Old(年老代)</b> -- 年老代存放从年轻代复制过来的存活对象。一般来说年老代存放的都是生命期较长的对象。
+								</li>
+								<li>
+									<b>Permanent(持久代)</b> --
+									持久代用于存放静态文件，如今Java类、方法等。持久代对垃圾回收没有显著影响，但是有些应用可能动态生成或者调用一些class，例如Hibernate等，在这种时候需要设置一个比较大的持久代空间来存放这些运行过程中新增的类。持久代大小通过
+									VM 参数:
+									<code>-XX:MaxPermSize=SIZE</code>
+									进行设置。
+								</li>
+							</ul>
+							<p>GC 操作分类:</p>
+							<ul>
+								<li>
+									<b>Minor GC</b> -- 从年轻代空间（包括 Eden 和 Survivor 区域）回收内存被称为 Minor
+									GC。
+								</li>
+								<li>
+									<b>Major GC</b> -- 清理永久代。许多 Major GC 是由 Minor GC
+									触发的，所以很多情况下将这两种 GC 分离是不太可能的。
+								</li>
+								<li>
+									<b>FULL GC</b> -- 是清理整个堆空间—包括年轻代和永久代。引发 FULL GC 一般有如下几种情况:
+									<ul>
+										<li>上一次 GC 之后 Heap 的各域分配策略动态变化</li>
+										<li>System.gc()被显示调用</li>
+										<li>Perm(持久代) 域被写满</li>
+										<li>Tenured / Old(年老代) 被写满</li>
+									</ul>
 								</li>
 							</ul>
 						</div>

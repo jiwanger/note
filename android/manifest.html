@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -65,19 +65,77 @@
 						<h3 class="panel-title">MANIFEST</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+						<a href="#manifest-intro" class="list-group-item"">简介</a>
+						<a href="#manifest-structure" class="list-group-item">结构</a>
+						<a href="#manifest-manifest" class="list-group-item">
+							manifest 标签<span class="badge pull-right">1</span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
-							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
-						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#manifest-permission" class="list-group-item">
+							permission 相关标签<span class="badge pull-right">2</span>
+						</a>
+						<a href="#manifest-instrumentation" class="list-group-item">
+							instrumentation 标签<span class="badge pull-right">2</span>
+						</a>
+						<a href="#manifest-uses-sdk" class="list-group-item">
+							uses-sdk 标签<span class="badge pull-right">2</span>
+						</a>
+						<a href="#manifest-uses-configuration" class="list-group-item">
+							uses-configuration 标签<span class="badge pull-right">2</span>
+						</a>
+						<a href="#manifest-uses-feature" class="list-group-item">
+							uses-feature 标签<span class="badge pull-right">2</span>
+						</a>
+						<a href="#manifest-supports-screens" class="list-group-item">
+							supports-screens 标签<span class="badge pull-right">2</span>
+						</a>
+						<a href="#manifest-compatible-screens" class="list-group-item">
+							compatible-screens 标签<span class="badge pull-right">2</span>
+						</a>
+						<a href="#manifest-supports-gl-texture" class="list-group-item">
+							supports-gl-texture 标签<span class="badge pull-right">2</span>
+						</a>
+						<a href="#manifest-application" class="list-group-item">
+							application 标签<span class="badge pull-right">2</span>
+						</a>
+
+						<a href="#manifest-activity" class="list-group-item">
+							activity 标签<span class="badge pull-right">3</span>
+						</a>
+						<a href="#manifest-service" class="list-group-item">
+							service 标签<span class="badge pull-right">3</span>
+						</a>
+						<a href="#manifest-receiver" class="list-group-item">
+							receiver 标签<span class="badge pull-right">3</span>
+						</a>
+						<a href="#manifest-provider" class="list-group-item">
+							provider 标签<span class="badge pull-right">3</span>
+						</a>
+						<a href="#manifest-activity-alias" class="list-group-item">
+							activity-alias 标签<span class="badge pull-right">3</span>
+						</a>
+						<a href="#manifest-uses-library" class="list-group-item">
+							uses-library 标签<span class="badge pull-right">3</span>
+						</a>
+						<a href="#manifest-intent-filter" class="list-group-item">
+							intent-filter 标签<span class="badge pull-right">4</span>
+						</a>
+						<a href="#manifest-meta-data" class="list-group-item">
+							meta-data 标签<span class="badge pull-right">4</span>
+						</a>
+						<a href="#manifest-grant-uri-permission" class="list-group-item">
+							grant-uri-permission 标签<span class="badge pull-right">4</span>
+						</a>
+
+						<a href="#manifest-action" class="list-group-item">
+							action 标签<span class="badge pull-right">5</span>
+						</a>
+						<a href="#manifest-category" class="list-group-item">
+							category 标签<span class="badge pull-right">5</span>
+						</a>
+						<a href="#manifest-data" class="list-group-item">
+							data 标签<span class="badge pull-right">5</span>
+						</a>
+
 					</div>
 				</div>
 			</div>
@@ -90,13 +148,700 @@
 		<div class="row">
 			<div class="col-md-9 col-md-push-3" style="float: left;">
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="manifest-intro"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
+						<p>AndroidManifest.xml
+							是每个android程序中必须的文件。它位于整个项目的根目录，描述了package中暴露的组件（activities,
+							services, 等等），他们各自的实现类，各种能被处理的数据和启动位置。 除了能声明程序中的Activities,
+							ContentProviders, Services, 和Intent
+							Receivers,还能指定permissions和instrumentation（安全控制和测试）。</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-structure"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">结构</h3>
+					</div>
+					<div class="panel-body">
+						<div class="text-primary">
+							&lt;?xml version="1.0" encoding="utf-8"?&gt;<br />
+							<a href="#manifest-manifest">&lt;manifest&gt;</a>
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-permission">&lt;uses-permission /&gt;</a>
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-permission">&lt;permission /&gt;</a>
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-permission">&lt;permission-tree /&gt;</a>
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-permission">&lt;permission-group /&gt;</a>
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-instrumentation">&lt;instrumentation /&gt;</a>
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-uses-sdk">&lt;uses-sdk /&gt;</a>
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-uses-configuration">&lt;uses-configuration
+								/&gt;</a>
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-uses-feature">&lt;uses-feature /&gt;</a>
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-supports-screens">&lt;supports-screens
+								/&gt;</a>
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-compatible-screens">&lt;compatible-screens
+								/&gt;</a>
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-supports-gl-texture">&lt;supports-gl-texture
+								/&gt;</a>
+							<br /> <br /> &nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-application">&lt;application&gt;</a>
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-activity">&lt;activity&gt;</a>
+							<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;
+							<a href="#manifest-intent-filter">intent-filter&gt;</a>
+							<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-action">&lt;action /&gt;</a>
+							<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-category">&lt;category /&gt;</a>
+							<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-data">&lt;data /&gt;</a>
+							<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/intent-filter&gt;<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-meta-data">&lt;meta-data /&gt;</a>
+							<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/activity&gt;<br />
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-activity-alias">&lt;activity-alias&gt;</a>
+							<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;intent-filter&gt;
+							. . . &lt;/intent-filter&gt;<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;meta-data
+							/&gt;<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/activity-alias&gt;<br />
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-service">&lt;service&gt;</a>
+							<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;intent-filter&gt;
+							. . . &lt;/intent-filter&gt;<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;meta-data/&gt;<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/service&gt;<br />
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-receiver">&lt;receiver&gt;</a>
+							<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;intent-filter&gt;
+							. . . &lt;/intent-filter&gt;<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;meta-data
+							/&gt;<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/receiver&gt;<br />
+							<br /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-provider">&lt;provider&gt;</a>
+							<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-grant-uri-permission">&lt;grant-uri-permission
+								/&gt;</a>
+							<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;meta-data
+							/&gt;<br />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/provider&gt;<br />
+							<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							<a href="#manifest-uses-library">&lt;uses-library /&gt;</a>
+							<br /> <br /> &nbsp;&nbsp;&nbsp;&nbsp;&lt;/application&gt;<br />
+
+							&lt;/manifest&gt;
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-manifest"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">manifest 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+&lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="string"
+          android:sharedUserId="string"
+          android:sharedUserLabel="string resource" 
+          android:versionCode="integer"
+          android:versionName="string"
+          android:installLocation=["auto" | "internalOnly" | "preferExternal"] >
+    . . .
+&lt;/manifest>						
+</pre>
+						<ul>
+							<li>
+								<p>
+									<code>xmlns:android</code>
+									--
+									定义android命名空间，一般为http://schemas.android.com/apk/res/android，这样使得Android中各种标准属性能在文件中使用，提供了大部分元素中的数据。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>package</code>
+									-- 指定本应用内java主程序包的包名，它也是一个应用进程的默认名称。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>android:sharedUserId</code>
+									--
+									表明数据权限，因为默认情况下，Android给每个APK分配一个唯一的UserID，所以是默认禁止不同APK访问共享数据的。如果两个应用的UserId相同，那么应用间访问数据库和文件，就像访问本程序的数据一样。
+								</p>
+								<pre class="brush: java;">
+// 如果两个应用的 android:sharedUserId 相同, 那么app B 可以通过下面方法拿到 app A 的 Context, 
+// 通过这个 Context 就可以访问 app A 的数据
+Context friendContext = this.createPackageContext("com.app.a", Context.CONTEXT_IGNORE_SECURITY);
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>android:sharedUserLabel</code>
+									-- 一个共享的用户名，它只有在设置了sharedUserId属性的前提下才会有意义。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>android:versionCode</code>
+									--
+									是给设备程序识别版本(升级)用的必须是一个interger值代表app更新过多少次，比如第一版一般为1，之后若要更新版本就设置为2，3等等。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>android:versionName</code>
+									-- 这个名称是给用户看的，你可以将你的APP版本号设置为1.1版，后续更新版本设置为1.2、2.0版本等等。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>android:installLocation</code>
+									-- 应用安装位置，注：需要进行后台类监控的APP最好安装在内部，而一些较大的游戏APP最好安装在SD卡上。
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-permission"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">permission 相关标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+&lt;uses-permission android:name="string" />
+
+&lt;permission android:description="string resource"
+            android:icon="drawable resource"
+            android:label="string resource"
+            android:name="string"
+            android:permissionGroup="string"
+            android:protectionLevel=["normal" | "dangerous" | 
+                                     "signature" | "signatureOrSystem"] />
+                                     
+&lt;permission-group android:description="string resource"
+                  android:icon="drawable resource"
+                  android:label="string resource"
+                  android:name="string" />
+                  
+&lt;permission-tree android:icon="drawable resource"
+                 android:label="string resource" ]
+                 android:name="string" />
+</pre>
+						<ul>
+							<li>
+								<p>
+									<code>uses-permission</code>
+									-- 获取应用要使用的某个权限的时候就必须在我们的manifest文件中声明。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>permission</code>
+									-- 声明权限，供其他应用程序调用代码或者数据，其他应用程序获取这个权限才能访问代码或数据。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>permission-group</code>
+									-- 作用也只有显示应用程序权限给用户看的，声明一个标签，该标签代表了一组permissions。
+								</p>
+								<pre class="brush: xml;">
+&lt;permission-group android:name="android.permission-group.COST_MONEY"  
+    android:label="@string/permgrouplab_costMoney"  
+    android:description="@string/permgroupdesc_costMoney" />  
+
+<!-- android:permissionGroup 属性指定此权限属于上面定义的分组 -->
+&lt;permission android:name="android.permission.SEND_SMS"  
+    android:permissionGroup="android.permission-group.COST_MONEY"  
+    android:protectionLevel="dangerous"  
+    android:label="@string/permlab_sendSms"  
+    android:description="@string/permdesc_sendSms" />
+
+<!-- android:permissionGroup 属性指定此权限属于上面定义的分组 -->
+&lt;permission android:name="android.permission.CALL_PHONE"  
+    android:permissionGroup="android.permission-group.COST_MONEY"  
+    android:protectionLevel="dangerous"  
+    android:label="@string/permlab_callPhone"  
+    android:description="@string/permdesc_callPhone" />  
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>permission-tree</code>
+									--
+									为一组permissions声明了一个namespace。注意本元素并不声明权限本身，而只是为后续要加入的权限定义一个命名空间。可以通过调用
+									PackageManager.addPermission() 在权限树中动态添加新的权限。
+								</p>
+							</li>
+						</ul>
+
+						<div>
+							<p>
+								<code>android:protectionLevel</code>
+								-- 自定义权限时的级别设定。
+							</p>
+							<ol>
+								<li>如果定义的是前面两种normal或者dangerous,
+									我们自己的应用需要去访问其对应受保护的资源时只需要在androidManifest.xml中添加相同的uses-permission就行了
+								</li>
+								<li>如果是signature, 我们仅仅添加对权限的使用还不行， 必须同时具有相同的签名。</li>
+								<li>如果是signatureOrSystem（这种权限的应用第三方的应用无法单独访问）,
+									不仅要有相同的签名，而且签名必须是系统签名，此外可能还需要android :
+									sharedUserId=”android.uid.system”。</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-instrumentation"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">instrumentation 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+&lt;instrumentation android:functionalTest=["true" | "false"]
+                 android:handleProfiling=["true" | "false"]
+                 android:icon="drawable resource"
+                 android:label="string resource"
+                 android:name="string"
+                 android:targetPackage="string" />
+</pre>
+						<p>定义一些用于探测和分析应用性能等等相关的类，可以监控程序。在各个应用程序的组件之前instrumentation类被实例化。</p>
+						<p class="text-primary h5">example</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-uses-sdk"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">uses-sdk 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+&lt;uses-sdk android:minSdkVersion="integer" 
+          android:targetSdkVersion="integer"
+          android:maxSdkVersion="integer" />
+</pre>
+						<ul>
+							<li>
+								<p>
+									<code>minSdkVersion</code>
+									-- 指定运行应用程序所需的最低 API 级别。 如果系统 API 级别低于本属性设定的值， Android
+									系统将阻止用户安装此应用程序。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>targetSdkVersion</code>
+									-- 指定应用程序的目标 API 级别。如果不设置本属性，缺省值等于已给定的 minSdkVersion。通过把
+									targetSdkVersion 设定为所需的平台版本，你可以禁用兼容特性。 比如，将本值设置为大于等于“11”，当运行于
+									Android 3.0 以上版本时， 系统就能在应用程序上使用新加入的默认主题（Holo），并且在大屏幕设备上时还会禁用
+									屏幕兼容模式 （因为 API 级别 11 隐含了对大屏幕的支持）。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>maxSdkVersion</code>
+									-- 指定应用程序设计可运行的最高 API 级别。如果应用程序的 maxSdkVersion 属性小于系统的 API
+									级别，系统就会阻止该程序的安装。当系统更新后对应用程序进行重校验时，系统将会从设备上删除该应用程序。
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-uses-configuration"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">uses-configuration 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+&lt;uses-configuration android:reqFiveWayNav=["true" | "false"] 
+		android:reqHardKeyboard=["true" | "false"]
+		android:reqKeyboardType=["undefined" | "nokeys" | "qwerty" |  
+		                         "twelvekey"]
+		android:reqNavigation=["undefined" | "nonav" | "dpad" | 
+		                       "trackball" | "wheel"]
+		android:reqTouchScreen=["undefined" | "notouch" | "stylus" | 
+		                        "finger"] />
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-uses-feature"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">uses-feature 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+&lt;uses-feature android:name="string"
+              android:required=["true" | "false"]
+              android:glEsVersion="integer" />
+
+<!-- 一个程序要蓝牙功能,如果你的设备没有蓝牙功能，你设备上的 google play 不会显示此使用 -->
+&lt;uses-feature android:name="android.hardware.bluetooth" />
+
+<!-- 如果写明 android:required="false", 将不过滤蓝牙功能 -->
+&lt;uses-feature android:name="android.hardware.bluetooth" android:required="false" />
+
+<!-- 如果不写 uses-feature, 写明了权限，也同样会过滤 -->
+&lt;uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+</pre>
+						<p>
+							Android
+							Market会根据uses-feature过滤所有你设备不支持的应用。一般只对你的APP发布在GooglePlay的时候其作用.通过使用
+							<code>&lt;uses-feature></code>
+							元素，一个应用可以指定它所支持的硬件型号，举个例子，有些设备不支持多点触控或者OpenGL ES
+							2.0，那么过滤器就会过滤需要这些硬件支持（多点触控或者OpenGL ES 2.0）的应用，用户就不会在android
+							market上看到这些应用。
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-supports-screens"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">supports-screens 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+&lt;supports-screens android:resizeable=["true"| "false"]
+                  android:smallScreens=["true" | "false"]
+                  android:normalScreens=["true" | "false"]
+                  android:largeScreens=["true" | "false"]
+                  android:xlargeScreens=["true" | "false"]
+                  android:anyDensity=["true" | "false"]
+                  android:requiresSmallestWidthDp="integer"
+                  android:compatibleWidthLimitDp="integer"
+                  android:largestWidthLimitDp="integer"/>
+</pre>
+						<p>定义应用程序支持的屏幕尺寸，并针对更大的屏幕启用 屏幕兼容模式。
+							请确保用本元素来指定应用程序支持的屏幕尺寸，这是非常重要的。</p>
+						<p>所谓应用程序“支持”的屏幕尺寸，是指程序能够自动改变尺寸来填充整个屏幕。
+							通常系统提供的自动调整功能可以适用于大多数应用程序，不必做什么额外的工作就能让程序在更大屏幕的手持设备上正常运行。
+							不过，这常要利用 替代 Layout 资源 来优化各种尺寸屏幕中的用户界面。 比如，为了区别对待平板设备和手持设备，就可能需要修改
+							Activity 的布局。</p>
+						<p>然而，如果针对不同的屏幕尺寸进行自动调整后，应用程序还是不能正常运行，那么就可以利用 <
+							supports-screens > 元素内的各个属性来进行限制，使得程序只能在小屏幕上运行，或者通过系统的 屏幕兼容模式
+							缩放用户界面来适应较大的屏幕。 如果没有针对较大屏幕进行专门的设计，并且常用的自动调整尺寸功能也不能获得理想的效果，
+							屏幕兼容模式将会通过模拟 normal 尺寸的屏幕和 medium 屏幕密度来确定用户界面的缩放比例，然后进行缩放来填充整个屏幕。
+							注意这会导致用户界面的像素化和模糊化，因此最好还是针对大屏幕定制优化的用户界面。</p>
+						<ul>
+							<li>
+								<p>
+									<code>resizeable</code>
+									-- <span class="text-danger">本属性已过时。</span>指明应用程序是否根据不同的屏幕尺寸改变大小。
+									默认值是 true。 如果设为否，则在较大屏幕上系统将以 屏幕兼容模式运行应用程序。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>smallScreens</code>
+									-- 指明应用程序是否支持 small 尺寸的屏幕。 默认值是“true”。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>normalScreens</code>
+									-- 指明应用程序是否支持“normal”尺寸的屏幕。默认属性是“true”。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>largeScreens</code>
+									-- 指明应用程序是否支持 larger 尺寸的屏幕。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>xlargeScreens</code>
+									-- 指明应用程序是否支持 xlarge 尺寸的屏幕。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>anyDensity</code>
+									-- 指明应用程序是否包含适应所有屏幕密度的资源。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>requiresSmallestWidthDp</code>
+									-- 指定应用程序所需的 smallestWidth 最小值。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>compatibleWidthLimitDp</code>
+									-- 通过指定程序支持的“最小屏幕宽度”的最大值，本属性可启用 屏幕兼容模式 为用户提供可选项。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>largestWidthLimitDp</code>
+									-- 通过指定程序支持的“最小屏幕宽度”的最大值，本属性可强制开启 屏幕兼容模式。
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-compatible-screens"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">compatible-screens 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
 						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-supports-gl-texture"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">supports-gl-texture 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-application"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">application 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-activity"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">activity 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-service"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">service 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-receiver"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">receiver 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-provider"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">provider 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-activity-alias"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">activity-alias 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-uses-library"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">uses-library 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-intent-filter"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">intent-filter 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-meta-data"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">meta-data 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-grant-uri-permission"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">grant-uri-permission 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-action"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">action 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-category"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">category 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="manifest-data"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">data 标签</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: xml;">
+						
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -105,14 +850,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -120,7 +864,8 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

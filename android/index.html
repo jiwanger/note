@@ -68,12 +68,12 @@
 						<a href="#android-intro" class="list-group-item">简介</a>
 						<a href="#android-create" class="list-group-item">创建一个应用 --
 							不使用IDE</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
+						<a class="list-group-item active dropdown" data-toggle="collapse"
 							data-parent="#accordion" href="#android-base"
 							aria-expanded="true">
 							四大组件<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="android-base" class="panel-collapse collapse in"
+						<div id="android-base" class="panel-collapse collapse"
 							role="tabpanel">
 							<a href="#android-activity" class="list-group-item">Activity</a>
 							<a href="#android-service" class="list-group-item">Service</a>
@@ -82,6 +82,10 @@
 								Provider</a>
 						</div>
 						<a href="#android-handler" class="list-group-item">Handler 机制</a>
+						<a href="#android-image" class="list-group-item">图片加载</a>
+						<a href="#android-memory" class="list-group-item">内存管理和分析</a>
+						<a href="#android-fragment" class="list-group-item">Fragment
+							使用</a>
 						<a href="#android-" class="list-group-item"></a>
 					</div>
 				</div>
@@ -1108,7 +1112,8 @@ private ServiceConnection serviceConnection = new ServiceConnection() {
 					<div class="panel-body">
 						<div class="sub-item">
 							<p class="alert alert-success">
-								<b>异步消息处理</b>: 线程启动后会进入一个无限的循环体之中，每循环一次，从其内部的消息队列中取出一个消息，然后回调相应的消息处理函数，执行完成一个消息后则继续循环。若消息队列为空，线程则会阻塞等待。
+								<b>异步消息处理</b>:
+								线程启动后会进入一个无限的循环体之中，每循环一次，从其内部的消息队列中取出一个消息，然后回调相应的消息处理函数，执行完成一个消息后则继续循环。若消息队列为空，线程则会阻塞等待。
 							</p>
 							<p class="alert alert-success">
 								<b>Looer.loop()方法可能会引起主线程的阻塞，但只要它的消息循环没有被阻塞，能一直处理事件就不会产生ANR异常。
@@ -1356,6 +1361,290 @@ public class Main {
 	}
 }
 </pre>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="android-image"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">图片加载</h3>
+					</div>
+					<div class="panel-body">
+						<p>大量图片的加载和高精度图片的加载，这两种操作都是会导致应用程序OOM(OutOfMemory)的问题发生，合理的图片加载和图片内存管理就是必须解决的问题，以下将提供一个比较完善的技术方案，解决这两个问题。</p>
+						<p>首先，我们必须明确为什么会发生OOM(OutOfMemory)的问题，其原因就是因为在APP运行过程中，所使用的系统内存超出了当前APP的最大可用内存，就发生了OOM的问题。</p>
+
+						<p class="alert alert-success" style="line-height: 1.5;">
+							<b>Android 应用可使用最大内存：</b> 这个值的定义一般在
+							<code>/system/build.prop</code>
+							文件中, 最大内存限制:
+							<code>dalvik.vm.heapsize=512m</code>
+							, 普通内存限制
+							<code>dalvik.vm.heapgrowthlimit=192m</code>
+							, 就是说应用最大可使用内存为 192 M(这是在 nexus 5 设备中), 通过在应用
+							<code>AndroidManifest.xml</code>
+							中的 application 节点配置
+							<code>android:largeHeap="true"</code>
+							时，应用可使用的最大内存就为 512 M。在应用中也可以拿到这个数值：
+							<code>Runtime.getRuntime().maxMemory() / 1024 / 1024 </code>
+							, 此时的单位为 MB。
+						</p>
+						<p class="alert alert-success">
+							<b>图片占用内存计算：</b>Android中Bitmap的默认加载使用ARGB_8888，每个像素会占用4byte，因为每个像素有两个Chanel，因此一个512*512的图片，无论什么格式，加载进入内存都占用512*512*4*2=2MB，所以，Android图片占用内存大小，只与图片的分辨率（像素）以及加载使用的色彩模式有关
+						</p>
+						<p>要解决OOM的问题，从两方面进行优化：</p>
+						<ol>
+							<li>
+								<b>合理加载资源</b>
+							</li>
+							<li>
+								<b>合理回收资源</b>
+							</li>
+						</ol>
+						<p>
+							<b>合理加载资源: </b>如果展示图片的ImageView只有128*96的像素大小，这时候把一张1024*768的图片完全加载到内存中，很明显是错误的行为。这个时候，就需要把要加载的图片进行压缩加载，就是合理地加载资源。
+						</p>
+						<p>图片的压缩讲解，设置BitmapFactory.Options中inSampleSize的值就可以实现等比例压缩。比如我们有一张2048*1536像素的图片，将inSampleSize的值设置为4，就可以把这张图片压缩成512*384像素。原本加载这张图片需要占用26M的内存，压缩后就只需要占用1.5M了。下面的方法可以根据传入的宽和高，计算出合适的inSampleSize值：</p>
+						<ol>
+							<li>
+								根据传入的宽和高，计算出合适的inSampleSize值：
+								<pre class="brush: java;">
+public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+	// 源图片的高度和宽度
+	final int height = options.outHeight;
+	final int width = options.outWidth;
+	int inSampleSize = 1;
+	if (height > reqHeight || width > reqWidth) {
+		// 计算出实际宽高和目标宽高的比率
+		final int heightRatio = Math.round((float) height / (float) reqHeight);
+		final int widthRatio = Math.round((float) width / (float) reqWidth);
+		// 选择宽和高中最小的比率作为inSampleSize的值，这样可以保证最终图片的宽和高
+		// 一定都会大于等于目标的宽和高。
+		inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
+	}
+	return inSampleSize;
+}
+</pre>
+							</li>
+							<li>
+								计算出合适的缩放比例后，接着进行图片的实际压缩操作：
+								<pre class="brush: java;">
+public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, 
+			int reqWidth, int reqHeight) {
+	// 第一次解析将inJustDecodeBounds设置为true，来获取图片大小
+    final BitmapFactory.Options options = new BitmapFactory.Options();
+    options.inJustDecodeBounds = true;
+    BitmapFactory.decodeResource(res, resId, options);
+    // 调用上面定义的方法计算inSampleSize值
+    options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+    // 使用获取到的inSampleSize值再次解析图片
+    options.inJustDecodeBounds = false;
+    return BitmapFactory.decodeResource(res, resId, options);
+}
+</pre>
+							</li>
+						</ol>
+
+						<p>
+							<b>合理回收资源: </b>
+							既对加载在内存中的图片资源进行合理的回收，避免因为不再使用的图片资源还留存在内存中的情况出现。而要实现合理回收资源，最核心的一个类就是：LruCache，这个类非常适用于保存图片内存，它的主要算法原理是把最近使用的对象用强引用存储在
+							LinkedHashMap 中，并且把最近最少使用的对象在缓存值达到预设定值之前从内存中移除。
+						</p>
+						<pre class="brush: java;">
+// 初始化 LruCache, 设置 LruCache 的最大存储为 可用内存的 1 / 8
+public void initMemoryCache() {
+	int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
+	// 使用最大可用内存值的1/8作为缓存的大小。
+	int cacheSize = maxMemory / 8;
+	mMemoryCache = new LruCache(cacheSize) {
+
+		@Override
+		protected int sizeOf(Object key, Object bitmap) {
+			// 重写此方法来衡量每张图片的大小，默认返回图片数量。
+			int size = ((Bitmap) bitmap).getByteCount() / 1024;
+			return size;
+		}
+		
+	};
+}
+	
+public void addBitmapToMemoryCache(String key, Bitmap bitmap) {
+	if (getBitmapFromMemCache(key) == null) {
+		mMemoryCache.put(key, bitmap);
+	}
+}
+
+public Bitmap getBitmapFromMemCache(String key) {
+	return (Bitmap) mMemoryCache.get(key);
+}
+</pre>
+						<p class="alert alert-success">
+							<b>只要确保整个APP的图片资源的使用，都是通过 addBitmapToMemoryCache 和
+								getBitmapFromMemCache 来进行，即可避免图片问题引发的OOM的问题。</b>
+						</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="android-memory"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">内存管理和分析</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="android-fragment"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Fragment 使用</h3>
+					</div>
+					<div class="panel-body">
+						<p>Android在3.0中引入了fragments的概念,主要目的是用在大屏幕设备上--例如平板电脑上,支持更加动态和灵活的UI设计.
+							平板电脑的屏幕要比手机的大得多,有更多的空间来放更多的UI组件,并且这些组件之间会产生更多的交互.Fragment允许这样的一种设计,而不需要你亲自来管理view
+							hierarchy的复杂变化. 通过将activity的布局分散到fragment中, 你可以在运行时修改activity的外观,
+							并在由activity管理的back stack中保存那些变化.</p>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Fragment生命周期</h5>
+							<div class="row center-block">
+								<div class="col-md-6">
+									<p style="text-align: center;">
+										<i>Fragment 生命周期图</i>
+									</p>
+									<img src="images/android-fragment-lifecircle.png">
+								</div>
+								<div class="col-md-6">
+									<p style="text-align: center;">
+										<i>Fragment 与 Activity 对比图</i>
+									</p>
+									<img src="images/android-fragment-activity.png">
+								</div>
+							</div>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Fragment 的几个子类</h5>
+							<dl>
+								<dt style="margin: 24px 0px 12px">
+									<code>DialogFragment</code>
+								</dt>
+								<dd style="margin: 0px 0px 10px 40px">
+									显示浮动对话框。使用此类创建对话框可有效地替代使用&nbsp;
+									<code>Activity</code>
+									&nbsp;类中的对话框帮助程序方法，因为您可以将片段对话框纳入由 Activity
+									管理的片段返回栈，从而使用户能够返回清除的片段。
+								</dd>
+								<dt style="margin: 24px 0px 12px">
+									<code> ListFragment </code>
+								</dt>
+								<dd style="margin: 0px 0px 10px 40px">
+									显示由适配器（如&nbsp;
+									<code> SimpleCursorAdapter </code>
+									）管理的一系列项目，类似于&nbsp;
+									<code style=""> ListActivity </code>
+									。它提供了几种管理列表视图的方法，如用于处理点击事件的&nbsp;
+									<code style=""> onListItemClick() </code>
+									&nbsp;回调。
+								</dd>
+								<dt style="margin: 24px 0px 12px">
+									<code>PreferenceFragment </code>
+								</dt>
+								<dd style="margin: 0px 0px 10px 40px">
+									以列表形式显示&nbsp;
+									<code> Preference </code>
+									&nbsp;对象的层次结构，类似于&nbsp;
+									<code> PreferenceActivity </code>
+									。这在为您的应用创建“设置” Activity 时很有用处。
+								</dd>
+							</dl>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">向 Activity 添加片段</h5>
+							<ul>
+								<li>
+									在 Activity 的布局文件内声明片段
+									<pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    &lt;fragment android:name="com.example.news.ArticleListFragment"
+            android:id="@+id/list"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    &lt;fragment android:name="com.example.news.ArticleReaderFragment"
+            android:id="@+id/viewer"
+            android:layout_weight="2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+&lt;/LinearLayout>
+</pre>
+								</li>
+								<li>
+									通过编程方式将片段添加到某个现有 ViewGroup
+									<pre class="brush: java;">
+FragmentManager fragmentManager = getFragmentManager();
+FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+ExampleFragment fragment = new ExampleFragment();
+fragmentTransaction.add(R.id.fragment_container, fragment);
+fragmentTransaction.commit();
+</pre>
+								</li>
+								<li>添加没有 UI 的片段</li>
+								<pre class="brush: java;">
+FragmentManager fragmentManager = getFragmentManager();
+FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+/** 
+ * 无UI的 Fragment, 不会调用　Fragment 的 onCreateView() 方法,
+ * 从 Activity 中获取片段，则需要使用 findFragmentByTag()。
+ */
+fragmentTransaction.add(fragment, tag);
+</pre>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">管理片段</h5>
+							<p style="margin-top: 0px; margin-bottom: 12px">
+								您可以使用&nbsp;
+								<code style=""> FragmentManager </code>
+								&nbsp;执行的操作包括：
+							</p>
+							<ul>
+								<li style="margin: 0px 0px 12px">
+									通过&nbsp;
+									<code style=""> findFragmentById() </code>
+									（对于在 Activity 布局中提供 UI 的片段）或&nbsp;
+									<code style=""> findFragmentByTag() </code>
+									（对于提供或不提供 UI 的片段）获取 Activity 中存在的片段
+								</li>
+								<li style="margin: 0px 0px 12px">
+									通过&nbsp;
+									<code style=""> popBackStack() </code>
+									（模拟用户发出的&nbsp;<em>Back</em>&nbsp;命令）将片段从返回栈中弹出
+								</li>
+								<li style="margin: 0px 0px 12px">
+									通过&nbsp;
+									<code> addToBackStack() </code>
+									将 Fragment 添加到回退栈, 该返回栈由 Activity 管理，允许用户通过按“返回” 按钮返回上一片段状态。
+								</li>
+								<li style="margin: 0px 0px 12px">
+									通过&nbsp;
+									<code style="">addOnBackStackChangedListener() </code>
+									&nbsp;注册一个侦听返回栈变化的侦听器
 								</li>
 							</ul>
 						</div>
