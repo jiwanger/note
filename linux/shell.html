@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -67,16 +67,22 @@
 					<div class="list-group">
 						<a href="#shell-intro" class="list-group-item">简介</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#shell-" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+							data-parent="#accordion" href="#shell-syntax"
+							aria-expanded="true">
+							Shell 语法<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="shell-" class="panel-collapse collapse in"
+						<div id="shell-syntax" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#shell-" class="list-group-item">...</a>
-							<a href="#shell-" class="list-group-item">...</a>
-							<a href="#shell-" class="list-group-item">...</a>
+							<a href="#shell-variable" class="list-group-item">变量</a>
+							<a href="#shell-string" class="list-group-item">字符串</a>
+							<a href="#shell-bracket" class="list-group-item">Shell 中的各种括号</a>
+							<a href="#shell-printf" class="list-group-item">格式化输出</a>
+							<a href="#shell-array" class="list-group-item">数组</a>
+							<a href="#shell-arg" class="list-group-item">参数传递</a>
+							<a href="#shell-cal" class="list-group-item">运算符</a>
+							<a href="#shell-flow" class="list-group-item">流程控制</a>
+							<a href="#shell-function" class="list-group-item">函数</a>
 						</div>
-						<a href="#shell-" class="list-group-item">...</a>
 					</div>
 				</div>
 			</div>
@@ -96,20 +102,1123 @@
 						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
+						<p>Shell 同时是一个命令解释器和一门编程语言。作为命令解释器(command interpreter) ,
+							shell 为用户提供 UNIX/Linux 系统内核(kernel)的接口,使其能使用其多种工具集,而其编程
+							语言功能使得这些工具能够连接起来。</p>
+						<p>UNIX/Linux shell 有很多种, 本文环境使用Linux Mint 17 下 Bash 进行测试。</p>
+						<p>
+							Bash 配置文件启动顺序：
+							<code>/etc/profile(系统启动)</code>
+							->
+							<code>~/.profile(用户登陆(如果存在 ~/.bash_profile 或 ~/.bash_login
+								就不执行此文件))</code>
+							->
+							<code>~/.bash_rc(用户打开 bash)</code>
+							->
+							<code>~/.bash_logout(用户关闭 bash)</code>
+						</p>
 						
+						<p>和其他语言一样，Shell 也可以包含外部脚本。这样可以很方便的封装一些公用的代码作为一个独立的文件。</p>
+						<pre class="brush: bash;">
+# Shell 文件包含有两种方式: 
+. path/filename			# 注意点号(.)和文件名中间有一空格
+
+source path/filename				
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
-				
+
+				<!-- item start -->
+				<a class="offset" id="shell-variable"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Shell 变量</h3>
+					</div>
+					<div class="panel-body">
+						<ul>
+							<li>首个字符必须为字母（a-z，A-Z）。</li>
+							<li>中间不能有空格，可以使用数字和下划线（_）</li>
+							<li>变量赋值时等号两边不能有空格</li>
+						</ul>
+						<p>运行shell时，会同时存在三种变量：</p>
+						<ol>
+							<li>
+								<strong>局部变量</strong>
+								局部变量在脚本或命令中定义，仅在当前shell实例中有效，其他shell启动的程序不能访问局部变量。
+							</li>
+							<li>
+								<strong>环境变量</strong>
+								所有的程序，包括shell启动的程序，都能访问环境变量，有些程序需要环境变量来保证其正常运行。必要的时候shell脚本也可以定义环境变量。
+							</li>
+							<li>
+								<strong>shell变量</strong>
+								shell变量是由shell程序设置的特殊变量。shell变量中有一部分是环境变量，有一部分是局部变量，这些变量保证了shell的正常运行
+							</li>
+						</ol>
+						<pre class="brush: bash;">
+hello='Hello, Everyone!'
+
+echo $hello				# 使用 $ 引用变量，也可以在变量加大括号: ${hello}
+
+readonly hello			# 设置变量为只读
+
+# echo '$hello \''		# 此句报错，单引号原样输出，不能再出现单引号，转义字符也无效
+
+echo "$hello"			# 双引号可以使用变量和转义字符
+
+echo `date`				# 反引号是执行命令,并将结果插入到此位置
+
+echo "$hello, Today is Monday!"		# 字符串拼接
+
+unset hello				# 删除变量
+</pre>
+					</div>
+				</div>
+
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="shell-string"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">字符串</h3>
+					</div>
+					<div class="panel-body">
+						<p>字符串是shell编程中最常用最有用的数据类型，字符串可以用单引号，也可以用双引号，也可以不用引号。单双引号的区别跟PHP类似。
+						</p>
+						<pre class="brush: bash;">
+name="Nate"
+age=28
+tag="Hello, Everyone!"
+
+# 1.字符串拼接
+echo "$name, Age is $age, $tag"
+echo "${name}, Age is ${age}, ${tag}"
+echo $name, Age is $age, $tag
+
+# 2.获取字符串长度
+echo "字符串长度：${#name}"
+
+# 3.查找子字符串
+
+
+# 4.字符串提取
+# # 是去掉左边(在键盘上#在$之左边)
+# % 是去掉右边(在键盘上%在$之右边)
+echo ${url#*//}         # 删除左边字符, # 是运算符， *// 表示从左边开始删除第一个 // 号及左边的所有字符
+echo ${url##*/}         # 删除左边字符, ## 是运算符, 从左边开始删除最后一个 / 号及左边的所有字符
+echo ${url%/*}          # 删除右边字符, % 是运算符, 从右边开始，删除第一个 / 号及右边的字符
+echo ${url%%/*}         # 删除右边字符, %% 是运算符, 从右边开始，删除最后（最左边）一个 / 号及右边的字符
+
+echo ${url:0:5}			# 从左边第０位开始，长度为５
+echo ${url:7}           # 从左边第7个字符开始，一直到结束
+echo ${url:0-7:5}       # 从右边第7个字符开始，长度为５
+echo ${url:0-7}         # 从右边第7个字符开始，一直到结束。
+
+# 5.字符串替换
+# ${var/pattern/pattern}		# 替换第一个匹配的
+# ${var//pattern/pattern}		# 替换所有匹配的
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="shell-bracket"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Shell 中的各种括号</h3>
+					</div>
+					<div class="panel-body">
+						<p>Shell 中有这几种括号: { } 、( )、(( ))、[ ]、[[ ]], 下面是各种括号的常用方法:</p>
+						<ol>
+							<li>
+								大括号、花括号 { }
+								<pre class="brush: bash;">
+# 1.变量引用原型
+name="Nate"
+echo $nameAge is 28         # 省略大括号有歧义,变成的 $nameAge
+echo ${name}Age is 28       # 在不引起歧义的情况下可以省略大括号
+
+# 2.大括号拓展
+touch {a..d}.txt
+ls -l *.{txt,sh}
+
+# 3.几种特殊的替换结构
+# ${var:-string}, ${var:+string}, ${var:=string}, ${var:?string}
+echo ${str:-"Hi, Nate!"}        # 如果 str 为空，使用 Hi, Nate! 替换此表达式
+echo ${str:="Hi, Nate!"}        # 同上
+str="Hi, Everyone!"
+echo ${str:+"Hi, Jiwanger!"}    # 如果 str 不为空，使用 Hi, Jiwanger! 替换此表达式
+unset str
+echo ${str:+"Hi, Jiwanger!"}    # 此处输出为空
+
+str="Hi, Everyone!"
+# 若 str 不为空，则用变量 str 的值来替换${var:?string}；若为空，则把 Hi, Kim! 输出到标准错误中，并从脚本中退出
+echo ${str:?"str is null!"}
+
+# 4.四种模式匹配替换结构
+# ${var%pattern}, ${var%%pattern}, ${var#pattern}, ${var##pattern}
+# 用法实例在 string 使用中
+
+# 5.字符串提取和替换
+# ${var:num}, ${var:num1:num2} 用法实例在 string 使用中
+# ${var/pattern/pattern}, ${var//pattern/pattern}
+var=/home/centos
+echo ${var/o/h}             # 第一个 o 替换为 h
+echo ${var//o/h}            # 所有 o 替换为 h
+</pre>
+							</li>
+							<li>
+								单小括号 ( )
+								<pre class="brush: bash;">
+# 1.用于初始化数组
+arr=(1 2 3 4 5)
+
+# 2.在子 shell 中执行命令,多个命令之间用分号隔开
+(ls;ls -l)
+
+# 3.命令替换,将$(cmd)中的cmd执行一次，得到其标准输出，再将此输出放到原来命令, 等同于: `cmd`
+echo $(ls)
+</pre>
+							</li>
+							<li>
+								双小括号 (( ))
+								<pre class="brush: bash;">
+# 整数扩展,双括号中的变量可以不使用$符号前缀,不支持浮点型
+echo $((3+4))
+
+# 只要括号中的运算符、表达式符合C语言运算规则，都可用在$((exp))中，甚至是三目运算符。
+for((i=0; i<4; i++))
+do 
+    echo $i
+done
+
+# 不使用双括号，可以这样写：
+for i in {0..3}
+do 
+    echo $i
+done
+</pre>
+							</li>
+							<li>
+								中括号，方括号 [ ]
+								<pre class="brush: bash;">
+# 1.bash 的内部命令，[] 和 test是等同的
+x=10
+y=20
+if [ $x -lt $y ]; then
+    echo "x < y"
+fi
+# 等价于
+if test $x -lt $y; then
+    echo "x < y"
+fi
+
+# 2.字符范围,用作正则表达式的一部分
+patter=/^[ab]{3}$/
+
+# 3.在一个 array 结构的上下文中,引用索引
+arr=("hello" "nate")
+echo ${arr[0]}
+</pre>
+							</li>
+							<li>
+								双中括号 [[ ]]
+								<pre class="brush: bash;">
+# [[ 是 bash 程序语言的关键字。并不是一个命令，[[ ]] 结构比[ ]结构更加通用。
+# 在[[和]]之间所有的字符都不会发生文件名扩展或者单词分割，但是会发生参数扩展和命令替换。
+# 支持字符串的模式匹配, 使用=~操作符时甚至支持shell的正则表达式。
+if [[ hello == hell? ]]; then
+    echo "true"
+fi
+
+# 使用[[ ... ]]条件判断结构，而不是[ ... ]，能够防止脚本中的许多逻辑错误。
+a=0
+if [[ $a != 1 && $a != 2 ]]; then
+    echo "a != 1 && a != 2"
+fi
+# 如果不使用 [[]] ===>
+if [ $a -ne 1 ] && [ $a != 2 ]; then
+    echo "a != 1 && a != 2"
+fi
+# ===>
+if [ $a -ne 1 -a $a != 2 ]; then
+    echo "a != 1 && a != 2"
+fi
+
+# bash 把双中括号中的表达式看作一个单独的元素，并返回一个退出状态码
+</pre>
+							</li>
+						</ol>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="shell-printf"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">格式化输出</h3>
+					</div>
+					<div class="panel-body">
+						<p>printf 命令模仿 C 程序库（library）里的 printf() 程序。</p>
+						<pre class="brush: bash;">
+$ printf  format-string  [arguments...]
+
+printf "%-10s %-8s %-4s\n" 姓名 性别 体重kg  
+printf "%-10s %-8s %-4.2f\n" 郭靖 男 66.1234 
+printf "%-10s %-8s %-4.2f\n" 杨过 男 48.6543 
+printf "%-10s %-8s %-4.2f\n" 郭芙 女 47.9876
+
+# %s %c %d %f都是格式替代符
+# %-10s 指一个宽度为10个字符（-表示左对齐，没有则表示右对齐），
+#	任何字符都会被显示在10个字符宽的字符内，如果不足则自动以空格填充，超过也会将内容全部显示出来。
+# %-4.2f 指格式化为小数，其中.2指保留2位小数。
+</pre>
+						<h5 class="text-primary">printf的转义序列</h5>
+						<table class="table table-bordered table-striped">
+							<tbody>
+								<tr>
+									<th>序列</th>
+									<th>说明</th>
+								</tr>
+								<tr>
+									<td>\a</td>
+									<td>警告字符，通常为ASCII的BEL字符</td>
+								</tr>
+								<tr>
+									<td>\b</td>
+									<td>后退</td>
+								</tr>
+								<tr>
+									<td>\c</td>
+									<td>抑制（不显示）输出结果中任何结尾的换行字符（只在%b格式指示符控制下的参数字符串中有效），而且，任何留在参数里的字符、任何接下来的参数以及任何留在格式字符串中的字符，都被忽略</td>
+								</tr>
+								<tr>
+									<td>\f</td>
+									<td>换页（formfeed）</td>
+								</tr>
+								<tr>
+									<td>\n</td>
+									<td>换行</td>
+								</tr>
+								<tr>
+									<td>\r</td>
+									<td>回车（Carriage return）</td>
+								</tr>
+								<tr>
+									<td>\t</td>
+									<td>水平制表符</td>
+								</tr>
+								<tr>
+									<td>\v</td>
+									<td>垂直制表符</td>
+								</tr>
+								<tr>
+									<td>\\</td>
+									<td>一个字面上的反斜杠字符</td>
+								</tr>
+								<tr>
+									<td>\ddd</td>
+									<td>表示1到3位数八进制值的字符。仅在格式字符串中有效</td>
+								</tr>
+								<tr>
+									<td>\0ddd</td>
+									<td>表示1到3位的八进制值字符</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="shell-array"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">数组</h3>
+					</div>
+					<div class="panel-body">
+						<p>数组中可以存放多个值。Bash Shell 只支持一维数组（不支持多维数组），初始化时不需要定义数组大小（与 PHP
+							类似）。</p>
+						<p>Shell 数组用括号来表示，元素用"空格"符号分割开，语法格式如下：</p>
+						<pre class="brush: bash;">
+# 数组定义
+array_name=(value1 ... valuen)
+# 数组读取
+${array_name[index]}
+
+my_array=(A B "C" D)
+echo "第一个元素为: ${my_array[0]}"
+
+# 获取数组中的所有元素
+echo "数组的元素为: ${my_array[*]}"
+echo "数组的元素为: ${my_array[@]}"
+
+# 获取数组的长度
+echo "数组元素个数为: ${#my_array[*]}"
+echo "数组元素个数为: ${#my_array[@]}"
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="shell-arg"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">参数传递</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table table-striped table-bordered">
+							<tbody>
+								<tr>
+									<th>参数处理</th>
+									<th>说明</th>
+								</tr>
+								<tr>
+									<td>$#</td>
+									<td>传递到脚本的参数个数</td>
+								</tr>
+								<tr>
+									<td>$*</td>
+									<td>以一个单字符串显示所有向脚本传递的参数</td>
+								</tr>
+								<tr>
+									<td>$$</td>
+									<td>脚本运行的当前进程ID号</td>
+								</tr>
+								<tr>
+									<td>$!</td>
+									<td>后台运行的最后一个进程的ID号</td>
+								</tr>
+								<tr>
+									<td>$@</td>
+									<td>与$*相同，但是使用时加引号，并在引号中返回每个参数。</td>
+								</tr>
+								<tr>
+									<td>$-</td>
+									<td>显示Shell使用的当前选项，与set命令功能相同。</td>
+								</tr>
+								<tr>
+									<td>$?</td>
+									<td>显示最后命令的退出状态。0表示没有错误，其他任何值表明有错误。</td>
+								</tr>
+							</tbody>
+						</table>
+						<pre class="brush: bash;">
+#!/bin/bash
+
+# ./test.sh xx yy
+echo "参数个数:" $#
+echo "参数为:" $*
+echo "第0,1,2个参数：" $0 $1 $2
+echo "第10个参数："　${10}			# 当 arg >= 10 时，大括号不能省略
+echo "参数为:" $@
+echo "当前进程ID:" $$
+echo "最后一个进程的ID:" $!
+echo "当前选项:" $-
+echo "执行壮态:" $?
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="shell-cal"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">运算符</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>Shell 和其他编程语言一样，支持多种运算符，包括：</p>
+							<ul>
+								<li>算数运算符</li>
+								<li>关系运算符</li>
+								<li>布尔运算符</li>
+								<li>字符串运算符</li>
+								<li>文件测试运算符</li>
+							</ul>
+							<p>
+								原生bash不支持简单的数学运算，但整数可通过括号来运算，如:
+								<code>echo $((3+4))</code>
+								，最好通过其他命令来实现，例如 awk 和 expr，expr 最常用。
+							</p>
+						</div>
+						<div class="sub-item">
+							<p>
+								<b>算术运算符</b> -- 完整的表达式要被 ` ` 包含, 表达式和运算符之间要有空格，例如 2+2 是不对的，必须写成
+								2 + 2
+							</p>
+
+							<table
+								class="table table-bordered table-responsive table-striped">
+								<tbody>
+									<tr>
+										<th>运算符</th>
+										<th>说明</th>
+										<th>举例</th>
+									</tr>
+									<tr>
+										<td>+</td>
+										<td>加法</td>
+										<td>`expr $a + $b` 结果为&nbsp;30。</td>
+									</tr>
+									<tr>
+										<td>-</td>
+										<td>减法</td>
+										<td>`expr $a - $b` 结果为 -10。</td>
+									</tr>
+									<tr>
+										<td>*</td>
+										<td>乘法</td>
+										<td>`expr $a \* $b` 结果为 &nbsp;200。</td>
+									</tr>
+									<tr>
+										<td>/</td>
+										<td>除法</td>
+										<td>`expr $b / $a` 结果为&nbsp;2。</td>
+									</tr>
+									<tr>
+										<td>%</td>
+										<td>取余</td>
+										<td>`expr $b % $a` 结果为&nbsp;0。</td>
+									</tr>
+									<tr>
+										<td>=</td>
+										<td>赋值</td>
+										<td>a=$b 将把变量 b 的值赋给 a。</td>
+									</tr>
+									<tr>
+										<td>==</td>
+										<td>相等。用于比较两个数字，相同则返回 true。</td>
+										<td>[ $a == $b ] 返回&nbsp;false。</td>
+									</tr>
+									<tr>
+										<td>!=</td>
+										<td>不相等。用于比较两个数字，不相同则返回 true。</td>
+										<td>[ $a != $b ] 返回 true。</td>
+									</tr>
+								</tbody>
+							</table>
+							<pre class="brush: bash;">
+#~/bin/bash
+a=10
+b=20
+
+val=`expr $a + $b`
+echo "a + b : $val"
+
+val=`expr $a - $b`
+echo "a - b : $val"
+
+# 乘号(*)前边必须加反斜杠(\)才能实现乘法运算；
+val=`expr $a \* $b`
+echo "a * b : $val"
+
+val=`expr $b / $a`
+echo "b / a : $val"
+
+val=`expr $b % $a`
+echo "b % a : $val"
+
+if [ $a == $b ]
+then
+   echo "a 等于 b"
+fi
+if [ $a != $b ]
+then
+   echo "a 不等于 b"
+fi
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>
+								<b>关系运算符</b> -- 关系运算符只支持数字，不支持字符串，除非字符串的值是数字。
+							</p>
+							<table
+								class="table table-bordered table-responsive table-striped">
+								<tbody>
+									<tr>
+										<th>运算符</th>
+										<th>说明</th>
+										<th>举例</th>
+									</tr>
+									<tr>
+										<td>-eq</td>
+										<td>检测两个数是否相等，相等返回 true。</td>
+										<td>[ $a -eq $b ] 返回&nbsp;false。</td>
+									</tr>
+									<tr>
+										<td>-ne</td>
+										<td>检测两个数是否相等，不相等返回 true。</td>
+										<td>[ $a -ne $b ] 返回 true。</td>
+									</tr>
+									<tr>
+										<td>-gt</td>
+										<td>检测左边的数是否大于右边的，如果是，则返回 true。</td>
+										<td>[ $a -gt $b ] 返回 false。</td>
+									</tr>
+									<tr>
+										<td>-lt</td>
+										<td>检测左边的数是否小于右边的，如果是，则返回 true。</td>
+										<td>[ $a -lt $b ] 返回 true。</td>
+									</tr>
+									<tr>
+										<td>-ge</td>
+										<td>检测左边的数是否大于等于右边的，如果是，则返回 true。</td>
+										<td>[ $a -ge $b ] 返回 false。</td>
+									</tr>
+									<tr>
+										<td>-le</td>
+										<td>检测左边的数是否小于等于右边的，如果是，则返回 true。</td>
+										<td>[ $a -le $b ] 返回 true。</td>
+									</tr>
+								</tbody>
+							</table>
+							<pre class="brush: bash;">
+#!/bin/bash
+
+a=10
+b=20
+
+if [ $a -eq $b ]
+then
+   echo "$a -eq $b : a 等于 b"
+else
+   echo "$a -eq $b: a 不等于 b"
+fi
+if [ $a -ne $b ]
+then
+   echo "$a -ne $b: a 不等于 b"
+else
+   echo "$a -ne $b : a 等于 b"
+fi
+if [ $a -gt $b ]
+then
+   echo "$a -gt $b: a 大于 b"
+else
+   echo "$a -gt $b: a 不大于 b"
+fi
+if [ $a -lt $b ]
+then
+   echo "$a -lt $b: a 小于 b"
+else
+   echo "$a -lt $b: a 不小于 b"
+fi
+if [ $a -ge $b ]
+then
+   echo "$a -ge $b: a 大于或等于 b"
+else
+   echo "$a -ge $b: a 小于 b"
+fi
+if [ $a -le $b ]
+then
+   echo "$a -le $b: a 小于或等于 b"
+else
+   echo "$a -le $b: a 大于 b"
+fi
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>
+								<b>布尔运算符</b> -- 关系运算符只支持数字，不支持字符串，除非字符串的值是数字。
+							</p>
+							<table
+								class="table table-bordered table-responsive table-striped">
+								<tbody>
+									<tr>
+										<th>运算符</th>
+										<th>说明</th>
+										<th>举例</th>
+									</tr>
+									<tr>
+										<td>!</td>
+										<td>非运算，表达式为 true 则返回 false，否则返回 true。</td>
+										<td>[ ! false ] 返回 true。</td>
+									</tr>
+									<tr>
+										<td>-o</td>
+										<td>或运算，有一个表达式为 true 则返回 true。</td>
+										<td>[ $a -lt 20 -o $b -gt 100 ] 返回&nbsp;true。</td>
+									</tr>
+									<tr>
+										<td>-a</td>
+										<td>与运算，两个表达式都为 true 才返回 true。</td>
+										<td>[ $a -lt 20 -a $b -gt 100 ] 返回&nbsp;false。</td>
+									</tr>
+								</tbody>
+
+							</table>
+							<pre class="brush: bash;">
+#!/bin/bash
+
+a=10
+b=20
+
+if [ $a != $b ]
+then
+   echo "$a != $b : a 不等于 b"
+else
+   echo "$a != $b: a 等于 b"
+fi
+if [ $a -lt 100 -a $b -gt 15 ]
+then
+   echo "$a -lt 100 -a $b -gt 15 : 返回 true"
+else
+   echo "$a -lt 100 -a $b -gt 15 : 返回 false"
+fi
+if [ $a -lt 100 -o $b -gt 100 ]
+then
+   echo "$a -lt 100 -o $b -gt 100 : 返回 true"
+else
+   echo "$a -lt 100 -o $b -gt 100 : 返回 false"
+fi
+if [ $a -lt 5 -o $b -gt 100 ]
+then
+   echo "$a -lt 100 -o $b -gt 100 : 返回 true"
+else
+   echo "$a -lt 100 -o $b -gt 100 : 返回 false"
+fi
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>
+								<b>逻辑运算符</b>
+							</p>
+							<table
+								class="table table-bordered table-responsive table-striped">
+								<tbody>
+									<tr>
+										<th>运算符</th>
+										<th>说明</th>
+										<th>举例</th>
+									</tr>
+									<tr>
+										<td>&amp;&amp;</td>
+										<td>逻辑的 AND</td>
+										<td>[[ $a -lt 100 &amp;&amp; $b -gt 100 ]] 返回 false</td>
+									</tr>
+									<tr>
+										<td>||</td>
+										<td>逻辑的 OR</td>
+										<td>[[ $a -lt 100 || $b -gt 100 ]] 返回 true</td>
+									</tr>
+
+								</tbody>
+							</table>
+							<pre class="brush: bash;">
+#!/bin/bash
+
+a=10
+b=20
+
+if [[ $a -lt 100 && $b -gt 100 ]]
+then
+   echo "返回 true"
+else
+   echo "返回 false"
+fi
+
+if [[ $a -lt 100 || $b -gt 100 ]]
+then
+   echo "返回 true"
+else
+   echo "返回 false"
+fi
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>
+								<b>字符串运算符</b>
+							</p>
+							<table
+								class="table table-bordered table-responsive table-striped">
+								<tbody>
+									<tr>
+										<th>运算符</th>
+										<th>说明</th>
+										<th>举例</th>
+									</tr>
+									<tr>
+										<td>=</td>
+										<td>检测两个字符串是否相等，相等返回 true。</td>
+										<td>[ $a = $b ] 返回 false。</td>
+									</tr>
+									<tr>
+										<td>!=</td>
+										<td>检测两个字符串是否相等，不相等返回 true。</td>
+										<td>[ $a != $b ] 返回&nbsp;true。</td>
+									</tr>
+									<tr>
+										<td>-z</td>
+										<td>检测字符串长度是否为0，为0返回 true。</td>
+										<td>[ -z $a ] 返回 false。</td>
+									</tr>
+									<tr>
+										<td>-n</td>
+										<td>检测字符串长度是否为0，不为0返回 true。</td>
+										<td>[ -n $a ] 返回 true。</td>
+									</tr>
+									<tr>
+										<td>str</td>
+										<td>检测字符串是否为空，不为空返回 true。</td>
+										<td>[ $a ] 返回&nbsp;true。</td>
+									</tr>
+								</tbody>
+							</table>
+							<pre class="brush: bash;">
+#!/bin/bash
+
+a="abc"
+b="efg"
+
+if [ $a = $b ]
+then
+   echo "$a = $b : a 等于 b"
+else
+   echo "$a = $b: a 不等于 b"
+fi
+if [ $a != $b ]
+then
+   echo "$a != $b : a 不等于 b"
+else
+   echo "$a != $b: a 等于 b"
+fi
+if [ -z $a ]
+then
+   echo "-z $a : 字符串长度为 0"
+else
+   echo "-z $a : 字符串长度不为 0"
+fi
+if [ -n $a ]
+then
+   echo "-n $a : 字符串长度不为 0"
+else
+   echo "-n $a : 字符串长度为 0"
+fi
+if [ $a ]
+then
+   echo "$a : 字符串不为空"
+else
+   echo "$a : 字符串为空"
+fi
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>
+								<b>文件测试运算符</b>
+							</p>
+							<table
+								class="table table-bordered table-responsive table-striped">
+								<tbody>
+									<tr>
+										<th>操作符</th>
+										<th>说明</th>
+										<th>举例</th>
+									</tr>
+									<tr>
+										<td>-b file</td>
+										<td>检测文件是否是块设备文件，如果是，则返回 true。</td>
+										<td>[ -b $file ] 返回 false。</td>
+									</tr>
+									<tr>
+										<td>-c file</td>
+										<td>检测文件是否是字符设备文件，如果是，则返回 true。</td>
+										<td>[ -c $file ] 返回&nbsp;false。</td>
+									</tr>
+									<tr>
+										<td>-d file</td>
+										<td>检测文件是否是目录，如果是，则返回 true。</td>
+										<td>[ -d $file ] 返回 false。</td>
+									</tr>
+									<tr>
+										<td>-f file</td>
+										<td>检测文件是否是普通文件（既不是目录，也不是设备文件），如果是，则返回 true。</td>
+										<td>[ -f $file ] 返回&nbsp;true。</td>
+									</tr>
+									<tr>
+										<td>-g file</td>
+										<td>检测文件是否设置了 SGID 位，如果是，则返回 true。</td>
+										<td>[ -g $file ] 返回&nbsp;false。</td>
+									</tr>
+									<tr>
+										<td>-k file</td>
+										<td>检测文件是否设置了粘着位(Sticky Bit)，如果是，则返回 true。</td>
+										<td>[ -k $file ] 返回&nbsp;false。</td>
+									</tr>
+									<tr>
+										<td>-p file</td>
+										<td>检测文件是否是有名管道，如果是，则返回 true。</td>
+										<td>[ -p $file ] 返回&nbsp;false。</td>
+									</tr>
+									<tr>
+										<td>-u file</td>
+										<td>检测文件是否设置了 SUID 位，如果是，则返回 true。</td>
+										<td>[ -u $file ] 返回&nbsp;false。</td>
+									</tr>
+									<tr>
+										<td>-r file</td>
+										<td>检测文件是否可读，如果是，则返回 true。</td>
+										<td>[ -r $file ] 返回&nbsp;true。</td>
+									</tr>
+									<tr>
+										<td>-w file</td>
+										<td>检测文件是否可写，如果是，则返回 true。</td>
+										<td>[ -w $file ] 返回&nbsp;true。</td>
+									</tr>
+									<tr>
+										<td>-x file</td>
+										<td>检测文件是否可执行，如果是，则返回 true。</td>
+										<td>[ -x $file ] 返回&nbsp;true。</td>
+									</tr>
+									<tr>
+										<td>-s file</td>
+										<td>检测文件是否为空（文件大小是否大于0），不为空返回 true。</td>
+										<td>[ -s $file ] 返回&nbsp;true。</td>
+									</tr>
+									<tr>
+										<td>-e file</td>
+										<td>检测文件（包括目录）是否存在，如果是，则返回 true。</td>
+										<td>[ -e $file ] 返回&nbsp;true。</td>
+									</tr>
+								</tbody>
+							</table>
+							<pre class="brush: bash;">
+#!/bin/bash
+
+file="/var/www/runoob/test.sh"
+if [ -r $file ]
+then
+   echo "文件可读"
+else
+   echo "文件不可读"
+fi
+if [ -w $file ]
+then
+   echo "文件可写"
+else
+   echo "文件不可写"
+fi
+if [ -x $file ]
+then
+   echo "文件可执行"
+else
+   echo "文件不可执行"
+fi
+if [ -f $file ]
+then
+   echo "文件为普通文件"
+else
+   echo "文件为特殊文件"
+fi
+if [ -d $file ]
+then
+   echo "文件是个目录"
+else
+   echo "文件不是个目录"
+fi
+if [ -s $file ]
+then
+   echo "文件不为空"
+else
+   echo "文件为空"
+fi
+if [ -e $file ]
+then
+   echo "文件存在"
+else
+   echo "文件不存在"
+fi
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="shell-flow"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">流程控制</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">if else</h5>
+							<pre class="brush: bash;">
+if [ $(ps -ef | grep -c "ssh") -gt 1 ]; then echo "true"; fi
+
+if condition
+then
+    command1 
+    command2
+    ...
+    commandN 
+fi
+
+if condition1
+then
+    command1
+elif condition2 
+then 
+    command2
+else
+    commandN
+fi
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">for 循环</h5>
+							<pre class="brush: bash;">
+for var in item1 item2 ... itemN; do command1; command2… done;
+
+for var in item1 item2 ... itemN
+do
+    command1
+    command2
+    ...
+    commandN
+done
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">while 语句</h5>
+							<pre class="brush: bash;">
+while condition
+do
+    command
+done
+
+# 无限循环
+while :
+do
+    command
+done
+
+# 无限循环
+while true
+do
+    command
+done
+
+# 无限循环
+for (( ; ; ))
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">until 循环</h5>
+							<pre class="brush: bash;">
+until condition
+do
+    command
+done
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">case</h5>
+							<pre class="brush: bash;">
+case 值 in
+模式1)
+    command1
+    command2
+    ...
+    commandN
+    ;;
+模式2）
+    command1
+    command2
+    ...
+    commandN
+    ;;
+esac
+</pre>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">跳出循环</h5>
+							<pre class="brush: bash;">
+# break
+while :
+do
+    echo -n "输入 1 到 5 之间的数字:"
+    read aNum
+    case $aNum in
+        1|2|3|4|5) echo "你输入的数字为 $aNum!"
+        ;;
+        *) echo "你输入的数字不是 1 到 5 之间的! 游戏结束"
+            break
+        ;;
+    esac
+done
+
+# continue
+while :
+do
+    echo -n "输入 1 到 5 之间的数字: "
+    read aNum
+    case $aNum in
+        1|2|3|4|5) echo "你输入的数字为 $aNum!"
+        ;;
+        *) echo "你输入的数字不是 1 到 5 之间的!"
+            continue
+            echo "游戏结束"
+        ;;
+    esac
+done
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="shell-function"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">函数</h3>
+					</div>
+					<div class="panel-body">
+						<p>linux shell 可以用户定义函数，然后在shell脚本中可以随便调用。</p>
+						<pre class="brush: bash;">
+[ function ] funname [()]
+{
+    action;
+    [return int;]
+}
+
+# return 语句不加，使用最后一条语句执行结果为返回值
+
+function show(){
+	echo "I' in function!"
+	echo "arg-0: " $0
+    echo "arg-1: " $1
+    read anotherNum					# 用户输入
+    echo "你的输入为： " $anotherNum
+}
+
+show		# 函数调用不能加括号
+
+show "Arg test!"	# 传递参数，其它参数用法见：　参数传递
+
+</pre>
+
+					</div>
+				</div>
+				<!-- item over -->
+
 				<!-- item start -->
 				<a class="offset" id="shell-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title"></h3>
 					</div>
-					<div class="panel-body">
-						
-					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 			</div>
@@ -117,14 +1226,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -133,6 +1241,7 @@
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

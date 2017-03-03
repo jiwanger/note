@@ -66,16 +66,19 @@
 					</div>
 					<div class="list-group">
 						<a href="#" class="list-group-item">简介</a>
+						<a href="#src-dir" class="list-group-item">Android 源码目录结构</a>
+						<a href="#src-kernel-dir" class="list-group-item">Linux
+							内核源码目录结构</a>
 						<a href="#src-compile" class="list-group-item">
 							Android 源代码编译<span class="badge">1</span>
 						</a>
 						<a href="#src-hardware-abstract-layer" class="list-group-item">
 							硬件抽象层<span class="badge">2</span>
 						</a>
-						<a href="#src-" class="list-group-item">
+						<a href="#src-poiter" class="list-group-item">
 							智能指针<span class="badge">3</span>
 						</a>
-						<a href="#src-" class="list-group-item">
+						<a href="#src-logger" class="list-group-item">
 							Logger 日志系统<span class="badge">4</span>
 						</a>
 						<a href="#src-" class="list-group-item">
@@ -135,12 +138,902 @@
 							<p class="h4">本文是罗升阳的《Android 系统源代码情景分析(修订版)》学习笔记，源代码使用的是
 								android-2.3.1_r1 的版本, 内核源码使用的是 android-goldfish-2.6.29 版本。
 							<p>
-							<p>本文的測試环境:</p>
+							<p>本文的实际測試环境:</p>
 							<ul>
 								<li>OS: Linux Mint 17 (32位)</li>
 								<li>JAVA: 1.6.0_45(本人常用jdk1.8.0_65版本，要换成1.6的java版本)</li>
-								<li>gcc/g++: 4.4(系统的gcc/g++ 的版本太高，要换成4.4的版本)</li>
+								<li>GCC/G++: 4.4(系统的 gcc/g++ 的版本太高，要换成4.4的版本)</li>
+								<li>MAKE: GNU Make 3.81</li>
+								<li>GIT: 1.9.1</li>
 							</ul>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="src-dir"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Android 源码目录结构</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: bash;">
+android-2.3.1_r1
+	├── bionic			# bionic C库(android 系统的libc库)
+	├── bootable		# 启动引导相关代码
+	├── build			# 存放系统编译规则及generic等基础开发包配置
+	├── cts				# Android兼容性测试套件标准
+	├── dalvik			# dalvik JAVA虚拟机
+	├── development		# 开发者需要的一些例程及工具
+	├── device			# 设备相关代码
+	├── external		# android使用的一些开源的模组
+	├── frameworks		# 核心框架——java及C++语言
+	├── hardware		# 部分厂家开源的硬解适配层HAL代码
+	├── libcore			# 核心库相关
+	├── Makefile		# 编译使用的 make 文件
+	├── ndk				# ndk 相关代码
+	├── out				# 编译完成后的代码输出与此目录
+	├── packages		# 应用程序包
+	├── prebuilt		# x86和arm架构下预编译的一些资源
+	├── sdk				# sdk及模拟器
+	└── system			# 底层文件系统库、应用及组件——C语言
+</pre>
+
+						<ul>
+							<li>
+								<p>
+									<code>bionic</code>
+									-- Bionic是Android的C/C++ library,
+									libc是GNU/Linux以及其他类Unix系统的基础函数库，
+									最常用的就是GNU的libc，也叫glibc。Android之所以采用bionic而不是glibc，有几个原因：
+								</p>
+								<ul>
+									<li>版权问题，因为glibc是LGPL;</li>
+									<li>库的体积和速度，bionic要比glibc小很多;</li>
+									<li>提供了一些Android特定的函数，getprop LOGI等。</li>
+								</ul>
+								<pre class="brush: bash;">
+bionic
+	├── Android.mk
+	├── CleanSpec.mk
+	├── libc					# c 库
+	│   ├── Android.mk
+	│   ├── arch-arm					# ARM架构，包含系统调用汇编实现
+	│   ├── arch-sh
+	│   ├── arch-x86					# x86架构，包含系统调用汇编实现
+	│   ├── bionic					# 由C实现的功能，架构无关
+	│   ├── CAVEATS
+	│   ├── docs						# 文档
+	│   ├── include					# 头文件
+	│   ├── inet						# inet相关，具体作用不明
+	│   ├── Jamfile
+	│   ├── kernel					# Linux内核中的一些头文件
+	│   ├── MODULE_LICENSE_BSD
+	│   ├── netbsd					# nesbsd系统相关，具体作用不明
+	│   ├── NOTICE
+	│   ├── private					# 一些私有的头文件
+	│   ├── README
+	│   ├── regex
+	│   ├── stdio						# stdio实现
+	│   ├── stdlib					# stdlib实现
+	│   ├── string					# string函数实现
+	│   ├── SYSCALLS.TXT
+	│   ├── tools						# 几个工具
+	│   ├── tzcode					# 时区相关代码
+	│   ├── unistd					# unistd实现
+	│   ├── wchar
+	│   └── zoneinfo					# 时区信息
+	├── libdl					# libdl实现，dl是动态链接，提供访问动态链接库的功能
+	├── libm					# libm数学库的实现
+	│   ├── alpha						# alaha架构
+	│   ├── amd64						# amd64架构
+	│   ├── Android.mk
+	│   ├── arm						# arm架构
+	│   ├── bsdsrc					# bsd的源码
+	│   ├── fpclassify.c
+	│   ├── i386						# i386架构
+	│   ├── i387						# i387架构
+	│   ├── ia64						# ia64架构
+	│   ├── include					# 头文件
+	│   ├── isinf.c
+	│   ├── Makefile-orig
+	│   ├── man						# 数学函数，后缀名为.3，一些为freeBSD的库文件
+	│   ├── MODULE_LICENSE_BSD_LIKE
+	│   ├── NOTICE
+	│   ├── powerpc					# powerpc架构
+	│   ├── sh
+	│   ├── sincos.c
+	│   ├── sparc64					# sparc64架构
+	│   └── src						# 源代码
+	├── libstdc++				# libstdc++ C++实现库
+	│   ├── Android.mk
+	│   ├── include					# 头文件
+	│   ├── MODULE_LICENSE_BSD
+	│   ├── NOTICE
+	│   └── src						# 源码
+	├── libthread_db			# 多线程程序的调试器库
+	│   ├── Android.mk
+	│   ├── include					# 头文件
+	│   ├── libthread_db.c
+	│   ├── MODULE_LICENSE_BSD
+	│   └── NOTICE
+	├── linker					# 动态链接器
+	├── MAINTAINERS
+	└── ThirdPartyProject.prop
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>bootable</code>
+									-- Android 系统的启动引导，OTA 升级，系统恢复等。
+								</p>
+								<pre class="brush: bash;">
+bootable
+	├── bootloader					# 适合各种bootloader的通用代码
+	│   └── legacy					  # 估计不能直接使用，可以参考
+	│		├── Android.mk
+	│	    ├── arch_armv6					# V6架构，几个简单的汇编文件
+	│	    ├── arch_msm7k					# 高通7k处理器架构的几个基本驱动
+	│	    ├── CleanSpec.mk
+	│	    ├── fastboot_protocol.txt
+	│	    ├── include						# 通用头文件和高通7k架构头文件
+	│	    ├── libboot						# 启动库，都写得很简单
+	│	    ├── libc						# 一些常用的c函数
+	│	    ├── nandwrite					# nandwirte函数实现
+	│	    ├── README
+	│	    └── usbloader					# usbloader实现
+	├── diskinstaller				# android镜像打包器，x86可生产iso
+	└── recovery					# 系统恢复相关
+	    ├── edify						# 升级脚本使用的edify脚本语言
+	    ├── encryptedfs_provisioning.c
+	    ├── encryptedfs_provisioning.h
+	    ├── etc							# init.rc恢复脚本
+	    ├── install.c
+	    ├── install.h
+	    ├── minui						# 一个简单的UI
+	    ├── minzip						# 一个简单的压缩工具
+	    ├── mtdutils					# mtd工具
+	    ├── res							# 资源文件（包括一些图片）
+	    ├── tools						# 工具(OTA Over The Air Updates升级工具)
+	    ├── ui.c
+	    ├── updater						# 升级器
+	    └── ...								
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>build</code>
+									-- 存放系统编译规则及generic等基础开发包配置。比如我们编译Android源代码时就修改了:
+									<code>build/core/main.mk</code>
+									, 编译内核代码时初始化mmm命令:
+									<code>source ./build/envsetup.sh</code>
+								</p>
+								<pre class="brush: bash;">
+build
+	├── buildspec.mk.default
+	├── CleanSpec.mk
+	├── core						# 核心编译规则
+	├── envsetup.sh
+	├── libs
+	│   └── host						# 主机端库，有android “cp”功能替换
+	├── target						# 目标机编译对象
+	│   ├── board						# 开发平台
+	│	│	├── Android.mk
+	│	│	├── emulator					# 模拟器
+	│	│	├── generic						# 通用
+	│	│	├── generic_x86					# x86 通用
+	│	│	└── sim							# 简单的
+	│   └── product					# 开发平台对应的编译规则
+	└── tools						# 编译中主机使用的工具及脚本
+	    ├── acp							# Android "acp" Command
+	    ├── apicheck					# api检查工具
+	    ├── apriori						# 预链接工具
+	    ├── atree						# tree工具
+	    ├── bin2asm						# bin转换为asm工具
+	    ├── buildinfo.sh
+	    ├── check_builds.sh
+	    ├── check_prereq				# 检查编译时间戳工具
+	    ├── fs_config					# This program takes a list of files and directories
+	    ├── fs_get_stats				# 获取文件系统状态
+	    ├── iself						# 判断是否ELF格式
+	    ├── isprelinked					# 判断是否prelinked
+	    ├── kcm							# 按键相关
+	    ├── lsd							# List symbol dependencies
+	    ├── releasetools				# 生成镜像的工具及脚本
+	    ├── rgb2565						# rgb转换为565
+	    ├── signapk						# apk签名工具
+	    ├── soslim						# strip工具
+	    ├── zipalign					# zip archive alignment tool
+	    └── ...
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>dalvik</code>
+									-- Dalvik 虚拟机实现(Android 5.0 以后删除了 Dalvik 虚拟机，使用新的 ART模式)
+								</p>
+								<pre class="brush: bash;">
+dalvik
+	├── Android.mk
+	├── CleanSpec.mk
+	├── dalvikvm					# main.c的目录
+	├── dexdump						# dex反汇编
+	├── dexlist						# List all methods in all concrete classes in a DEX file.
+	├── dexopt						# 预验证与优化
+	├── docs						# 文档
+	├── dvz							# 和zygote相关的一个命令
+	├── dx							# dx工具，将多个java转换为dex
+	├── hit							# 
+	├── libdex						# dex的库
+	├── libnativehelper				# Support functions for Android's class libraries
+	├── MODULE_LICENSE_APACHE2		
+	├── NOTICE
+	├── README.txt
+	├── tests						# 测试代码
+	├── tools						# 工具
+	└── vm							# 虚拟机实现
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>development</code>
+									-- 开发者需要的一些例程及工具, Monkey 工具，集成开发环境，演示程序等。
+								</p>
+								<pre class="brush: bash;">
+development
+	├── apps						# 一些核心应用程序
+	│   ├── BluetoothDebug				# 蓝牙调试程序
+	│   ├── BuildWidget					# 
+	│   ├── CustomLocale				# 自定义区域设置
+	│   ├── Development					# 开发
+	│   ├── Fallback					# 和语言相关的一个程序
+	│   ├── FontLab						# 字库
+	│   ├── GestureBuilder				# 手势动作
+	│   ├── GraphicsLab					# 手势动作库
+	│   ├── launchperf					#　
+	│   ├── NinePatchLab				# 9.png库
+	│   ├── OBJViewer					# OBJ查看器
+	│   ├── SdkSetup					# SDK安装器
+	│   ├── SpareParts					# 高级设置
+	│   └── Term						# 远程登录
+	├── build						# 编译脚本模板
+	├── CleanSpec.mk
+	├── cmds						# 有个monkey工具
+	│   └── monkey
+	├── data						# 配置数据
+	│   └── etc
+	├── docs						# 文档
+	├── host						# 主机端USB驱动等
+	├── ide							# 集成开发环境
+	│   ├── eclipse
+	│   ├── emacs
+	│   ├── intellij
+	│   └── xcode
+	├── ndk							# 本地开发套件——c语言开发套件
+	├── pdk							# Plug Development Kit
+	├── samples						# 例程实例
+	│   ├── AccelerometerPlay			# 
+	│   ├── AccessibilityService
+	│   ├── Alarm
+	│   ├── AliasActivity
+	│   ├── ApiDemos					# API演示程序
+	│   ├── BackupRestore				# 备份/还原
+	│   ├── BluetoothChat				# 蓝牙聊天
+	│   ├── BrowserPlugin				# 浏览器插件
+	│   ├── BusinessCard				# 商业卡
+	│   ├── Compass						# 指南针
+	│   ├── ContactManager				# 联系人管理器
+	│   ├── CrossCompatibility
+	│   ├── CubeLiveWallpaper			# 动态壁纸的一个简单例程
+	│   ├── FixedGridLayout				# FixedGridLayout
+	│   ├── GlobalTime					# 全球时间
+	│   ├── HeavyWeight
+	│   ├── HelloActivity
+	│   ├── Home						# Home
+	│   ├── JetBoy						# jetBoy游戏
+	│   ├── LunarLander
+	│   ├── MailSync					# 邮件同步
+	│   ├── MultiResolution				# 多分辨率
+	│   ├── MySampleRss
+	│   ├── NFCDemo						# MFC demo
+	│   ├── NotePad						# 记事本
+	│   ├── RSSReader					# RSS阅读器
+	│   ├── SampleSyncAdapter
+	│   ├── SearchableDictionary		# 目录搜索
+	│   ├── SimpleJNI					# JNI例程
+	│   ├── Snake						# snake程序
+	│   ├── SoftKeyboard				# 软键盘
+	│   └── ...
+	├── scripts						# 脚本
+	├── sdk							# sdk配置
+	├── sdk_overlay
+	│   ├── frameworks
+	│   └── packages
+	├── simulator
+	│   ├── app
+	│   └── wrapsim
+	├── testrunner					# testrunner
+	├── tools						# 一些工具
+	│   ├── apkcheck
+	│   ├── axl
+	│   ├── etc1tool
+	│   ├── findunused
+	│   ├── hosttestlib
+	│   ├── idegen
+	│   ├── jdwpspy
+	│   ├── line_endings
+	│   ├── makedict
+	│   ├── make_key
+	│   ├── mkstubs
+	│   ├── monkeyrunner
+	│   ├── yuv420sp2rgb
+	│   └── zoneinfo
+	└── tutorials
+	    └── NotepadCodeLab
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>device</code>
+									-- 设备相关代码，设备制造商的代码。
+								</p>
+								<pre class="brush: bash;">
+device
+	├── common
+	│   ├── CleanSpec.mk
+	│   ├── generate-blob-scripts.sh
+	│   └── gps
+	├── htc							# HTC 
+	│   ├── common						# 通用配置
+	│   ├── passion
+	│   └── passion-common
+	├── sample
+	│   ├── Android.mk
+	│   ├── apps
+	│   ├── CleanSpec.mk
+	│   ├── frameworks
+	│   ├── MODULE_LICENSE_APACHE2
+	│   ├── overlays
+	│   ├── products
+	│   ├── README.txt
+	│   ├── sdk_addon
+	│   └── skins
+	└── samsung						# SAMSUNG
+	    └── crespo								
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>external</code>
+									--
+									Android使用的一些开源的模组，做Android移植时，例如要进行蓝牙模块、wifi模块移植时，external目录下的源代码对你就很重要了。
+								</p>
+								<pre class="brush: bash;">
+external
+	├── apache-http				# 网页服务器
+	├── astl					# STL (Android STL) is a slimmed-down version of the regular C++ STL.
+	├── bison					# 自动生成语法分析器，将无关文法转换成C、C++
+	├── blktrace				# blktrace is a block layer IO tracing mechanism
+	├── bluetooth				# 蓝牙相关、协议栈
+	├── bouncycastle			# 
+	├── bsdiff					# diff工具
+	├── bzip2					# 压缩工具
+	├── chromium				# 
+	├── clearsilver				# html模板系统
+	├── dbus					# 低延时、低开销、高可用性的IPC机制
+	├── dhcpcd					# DHCP服务
+	├── dnsmasq					# 
+	├── dropbear				# SSH2的server
+	├── e2fsprogs				# EXT2文件系统工具
+	├── easymock				# 
+	├── elfcopy					# 复制ELF的工具
+	├── elfutils				# ELF工具
+	├── embunit					# Embedded Unit Project
+	├── emma					# java代码覆盖率统计工具
+	├── esd						# Enlightened Sound Daemon，将多种音频流混合在一个设备上播放
+	├── expat					# Expat is a stream-oriented XML parser.
+	├── fdlibm					# FDLIBM (Freely Distributable LIBM)
+	├── freetype				# 字体
+	├── freg					# 
+	├── fsck_msdos				# dos文件系统检查工具
+	├── genext2fs				# genext2fs generates an ext2 filesystem as a normal (non-root) user
+	├── giflib					# gif库
+	├── grub					# this is GNU GRUB, the GRand Unified Bootloader.
+	├── gtest					# Google C++ Testing Framework
+	├── guava					# 
+	├── icu4c					# ICU(International Component for Unicode)在C/C++下的版本
+	├── iproute2				# 
+	├── ipsec-tools				# This package provides a way to use the native IPsec functionality
+	├── iptables				# 防火墙
+	├── jdiff			# generate a report describing the difference between two public Java APIs.
+	├── jhead					# jpeg头部信息工具
+	├── jpeg					# jpeg库
+	├── jsr305					# 
+	├── junit					# JUnit是一个Java语言的单元测试框架
+	├── kernel-headers			# 内核的一些头文件
+	├── libffi					# libffi is a foreign function interface library.
+	├── libgsm					# 
+	├── libnfc-nxp				# 
+	├── libpcap					# 网络数据包捕获函数
+	├── libpng					# png库
+	├── libvpx					# 
+	├── libxml2					# xml解析库
+	├── mtpd					# 一个命令
+	├── netcat			# simple Unix utility which reads and writes dataacross network connections
+	├── netperf					# 网络性能测量工具
+	├── neven					# 看代码和JNI相关
+	├── nist-sip				# 
+	├── oauth					# 
+	├── openssl					# SSL加密相关
+	├── oprofile				# OProfile是Linux内核支持的一种性能分析机制。
+	├── ping					# ping命令
+	├── ppp						# pppd拨号命令，好像还没有chat
+	├── proguard				# Java class file shrinker, optimizer, obfuscator, and preverifier
+	├── protobuf		# a flexible, efficient, automated mechanism for serializing structured data
+	├── qemu					# arm模拟器
+	├── quake					# 
+	├── safe-iop				# functions for performing safe integer operations
+	├── skia					# skia图形引擎
+	├── sonivox					# sole MIDI solution for Google Android Mobile Phone Platform
+	├── speex					# Speex编/解码API的使用(libspeex)
+	├── sqlite					# 数据库
+	├── srec					# Nuance 公司提供的开源连续非特定人语音识别
+	├── stlport					# 
+	├── strace					# trace工具
+	├── svox					# Embedded Text-to-Speech
+	├── tagsoup					# TagSoup是一个Java开发符合SAX的HTML解析器
+	├── tcpdump					# 抓TCP包的软件
+	├── tinyxml					# TinyXml is a simple, small, C++ XML parser
+	├── tremolo			# A stream and file decoder provides an embeddable,integer-only library
+	├── v8						# 
+	├── webkit					# 浏览器核心
+	├── wpa_supplicant			# 无线网卡管理
+	├── wpa_supplicant_6		# 
+	├── xmlwriter				# XML 编辑工具
+	├── yaffs2					# yaffs文件系统
+	└── zlib					# a general purpose data compression library
+</pre>
+							</li>
+
+							<li>
+								<p>
+									<code>frameworks</code>
+									--
+									核心框架——java及C++语言。在frameworks目录下，集中放置了Android框架层的代码。其中大部分功能模块是通过Java语言进行编写的，而对执行效率有很高要求
+									的模块则是通过C/C++来实现的。在base目录中，放置了框架层的基本内容，包含用到的Java文件、相关资源文件和jni类库的实现。
+									其中最为核心的是base中的core目录，在其中放置了大部分的框架层实现。
+								</p>
+								<pre class="brush: bash;">
+frameworks
+	├── base					# 基本内容
+	│   ├── Android.mk
+	│   ├── api					# 都是xml文件，定义了java的api
+	│   ├── build					# 
+	│   ├── CleanSpec.mk
+	│   ├── cmds					# 重要命令：am、app_proce等
+	│   ├── core					# 核心库
+	│   ├── data					# 字体和声音等数据文件
+	│   ├── docs					# 文档
+	│   ├── graphics				# 图形相关
+	│   ├── include				# 头文件
+	│   ├── keystore				# 和数据签名证书相关
+	│   ├── libs					# 库
+	│   ├── location				# 地区库
+	│   ├── media					# 媒体相关库
+	│   ├── MODULE_LICENSE_APACHE2
+	│   ├── native
+	│   ├── NOTICE
+	│   ├── obex					# 蓝牙传输库
+	│   ├── opengl				# 2D-3D加速库
+	│   ├── packages				# 设置、TTS、VPN程序
+	│   ├── policy
+	│   ├── preloaded-classes
+	│   ├── sax					# XML解析器
+	│   ├── services				# 各种服务程序
+	│   ├── telephony				# 电话通讯管理
+	│   ├── test-runner			# 测试工具相关
+	│   ├── tests					# 各种测试
+	│   ├── tools					# 一些工具
+	│   ├── voip					# voip
+	│   ├── vpn					# VPN
+	│   └── wifi					# 无线网络
+	├── ex
+	└── opt						# 放置了框架层一些附加功能的模块
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>hardware</code>
+									--
+									硬件抽象层模块。Android系统的硬件抽象层以模块的形式来管理各个硬件访问接口。每一个硬件模块都对应有一个动态链接库文件，这些动态链接库文件的命令需要符合一定的规范。同时，在系统内部，每一个硬件抽象层模块都使用结构体hw_module_t来描述，而硬件设备则使用结构体hw_device_t来描述。结构体hw_module_t和hw_device_t及其相关的其他结构体定义在文件
+									<code>hardware/libhardware/include/hardware/hardware.h</code>
+									中。
+								</p>
+								<pre class="brush: bash;">
+hardware
+	├── broadcom					# 博通公司
+	│   └── wlan						# 无线网卡
+	├── libhardware					# 硬件库
+	├── libhardware_legacy			# 旧的硬件库
+	│   ├── Android.mk
+	│   ├── CleanSpec.mk
+	│   ├── include
+	│   ├── MODULE_LICENSE_APACHE2
+	│   ├── NOTICE
+	│   ├── power						# 电源
+	│   ├── qemu						# 模拟器
+	│   ├── qemu.h
+	│   ├── qemu_tracing				# 模拟器跟踪
+	│   ├── uevent						# uevent
+	│   ├── vibrator					# 震动
+	│   └── wifi						# 无线
+	├── msm7k						# 高通7k处理器开源抽象层
+	│   ├── Android.mk
+	│   ├── boot						# 启动
+	│   ├── CleanSpec.mk
+	│   ├── dspcrashd
+	│   ├── libaudio					# 声音库
+	│   ├── libaudio-qdsp5v2
+	│   ├── libaudio-qsd8k			# qsd8k的声音相关库
+	│   ├── libcamera					# 摄像头库
+	│   ├── libcopybit				# copybit库
+	│   ├── libgralloc				# gralloc库
+	│   ├── libgralloc-qsd8k			# qsd8k的gralloc库
+	│   ├── liblights					# 背光库
+	│   ├── librpc					# RPC库
+	│   └── libstagefrighthw
+	├── qcom
+	├── ril							# 无线电抽象层
+	│   ├── CleanSpec.mk
+	│   ├── include
+	│   ├── libril
+	│   ├── mock-ril
+	│   ├── reference-cdma-sms		# cdma短信参考
+	│   ├── reference-ril				# ril参考
+	│   └── rild						# ril后台服务程序
+	└── ti							# ti公司开源HAL
+	    ├── omap3
+	    └── wlan
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>out</code>
+									-- 用来存放编译产生的中间件和最后编译好的文件。make 成功后，最后生成的
+									<code>sytem.img</code>
+									,
+									<code>ramdisk.img</code>
+									,
+									<code>userdata.img</code>
+									等存放于
+									<code>~/Android/android-2.3.1_r1/out/target/product/generic</code>
+									目录下。
+								</p>
+								<pre class="brush: bash;">
+   out
+	├── host						# 构建源码需要的工具和库文件
+	│   ├── common
+	│   └── linux-x86
+	└── target/product/generic		# 生成最后产品的目录
+	    ├── data						# 这个目录是用来生成[数据文件系统镜像]userdata.img 
+	    │   └── app
+	    ├── installed-files.txt
+	    ├── obj					# 生成的中间文件,最后都要拷贝到root或system文件夹中，最后生成镜像img文件
+	    │   ├── APPS						# android应用
+	    │   ├── DATA
+	    │   ├── ETC
+	    │   ├── EXECUTABLES				# 所有本地运行工具 ping toolbox
+	    │   ├── include
+	    │   ├── JAVA_LIBRARIES
+	    │   ├── KEYCHARS
+	    │   ├── lib						# 从SHARED_LIBRARIES拷贝，各种.so共享库 
+	    │   ├── NOTICE_FILES
+	    │   ├── NOTICE.html
+	    │   ├── NOTICE.html.gz
+	    │   ├── PACKAGING
+	    │   ├── SHARED_LIBRARIES			# 共享库 
+	    │   └── STATIC_LIBRARIES			# 静态库  
+	    ├── previous_build_config.mk
+	    ├── ramdisk.img
+	    ├── root				# 这个目录用来创建[root文件系统], 生成的ramdisk.img是用这个文件夹生成的镜像
+	    ├── symbols
+	    ├── system						# 用来创建system.img, 大部分的应用程序和库都在system中
+		│   ├── app							# /system/app, 生成的apk文件
+		│	├── bin							# /system/bin, 生成的可执行文件
+		│	├── build.prop
+		│	├── etc							# /system/etc
+		│	├── fonts						# /system/fonts, 系统内置 ttf 文件
+		│	├── framework					# /system/framework, framework层 java 库，都是 jar 文件
+		│	├── lib							# /system/lib, 动态链接库, so 文件
+		│	├── usr							# /system/usr
+		│	└── xbin						# /system/xbin
+	    ├── system.img
+	    ├── userdata.img
+	    └── userdata-qemu.img
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>packages</code>
+									-- 应用程序源码目录。
+								</p>
+								<pre class="brush: bash;">
+packages
+	├── apps						# 系统app目录
+	│   ├── AccountsAndSyncSettings
+	│   ├── Bluetooth
+	│   ├── Browser
+	│   ├── Calculator
+	│   ├── Calendar
+	│   ├── Camera
+	│   ├── CertInstaller
+	│   ├── Contacts
+	│   ├── DeskClock
+	│   ├── Email
+	│   ├── Gallery
+	│   ├── Gallery3D
+	│   ├── HTMLViewer
+	│   ├── Launcher2
+	│   ├── Mms
+	│   ├── Music
+	│   ├── Nfc
+	│   ├── PackageInstaller
+	│   ├── Phone
+	│   ├── Protips
+	│   ├── Provision
+	│   ├── QuickSearchBox
+	│   ├── Settings
+	│   ├── SoundRecorder
+	│   ├── SpeechRecorder
+	│   ├── Stk
+	│   ├── Tag
+	│   └── VoiceDialer
+	├── experimental				# 扩展程序
+	│   ├── Android.mk
+	│   ├── BugReportSender
+	│   ├── CleanSpec.mk
+	│   ├── HelloAndroid				# 自己写的程序
+	│   ├── procstatlog
+	│   ├── README
+	│   ├── RpcPerformance
+	│   └── StrictModeTest
+	├── inputmethods				# 输入法
+	│   ├── LatinIME					# 拉丁文输入法
+	│   ├── OpenWnn					# OpenWnn输入法
+	│   └── PinyinIME					# 拼音输入法
+	├── providers					# 提供器，提供应用程序、界面所需的数据
+	│   ├── ApplicationsProvider
+	│   ├── CalendarProvider
+	│   ├── ContactsProvider
+	│   ├── DownloadProvider
+	│   ├── DrmProvider
+	│   ├── GoogleContactsProvider
+	│   ├── MediaProvider
+	│   ├── TelephonyProvider
+	│   └── UserDictionaryProvider
+	└── wallpapers					# 墙纸
+	    ├── Basic						# 基本墙纸，系统内置墙纸
+	    ├── LivePicker					# 选择动态壁纸
+	    ├── MagicSmoke					# 壁纸特殊效果
+	    └── MusicVisualization			# 音乐可视化，图形随音乐而变化
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>prebuilt</code>
+									-- 各种架构下预编译的一些资源。
+								</p>
+								<pre class="brush: bash;">
+prebuilt
+	├── android-arm				# arm-android相关
+	│   ├── gdbserver				# gdb调试器
+	│   └── kernel					# 模拟的arm内核
+	├── Android.mk
+	├── android-sh
+	├── android-x86				# x86-android相关
+	│   └── kernel
+	├── CleanSpec.mk
+	├── common					# 通用编译好的代码，java 库
+	│   ├── ant
+	│   ├── asm
+	│   ├── commons-compress
+	│   ├── ddmlib
+	│   ├── ecj
+	│   ├── eclipse
+	│   ├── groovy
+	│   ├── jarjar
+	│   ├── jfreechart
+	│   ├── jython
+	│   ├── kxml2
+	│   ├── netbeans-visual
+	│   ├── osgi
+	│   ├── swing-worker
+	│   └── tradefed
+	├── darwin-x86				# drawin x86平台
+	├── darwin-x86_64			# darwin-x86_64平台
+	├── linux-x86				# linux-x86平台
+	├── linux-x86_64			# linux-x86_64平台
+	├── ndk
+	├── sdk
+	├── windows					# windows平台
+	└── windows-x86_64			# windows-x86_64平台
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>system</code>
+									-- 底层文件系统库、应用及组件——C语言。
+								</p>
+								<pre class="brush: bash;">
+system
+	├── bluetooth				# 蓝牙相关
+	├── core					# 系统核心工具盒接口
+	│   ├── adb					# adb调试工具
+	│   ├── Android.mk
+	│   ├── CleanSpec.mk
+	│   ├── cpio					# cpio工具，创建img
+	│   ├── debuggerd				# 调试工具
+	│   ├── fastboot				# 快速启动相关
+	│   ├── include				# 系统接口头文件
+	│   ├── init					# init程序源代码
+	│   ├── libacc				# 轻量级C编译器
+	│   ├── libctest				# libc测试相关
+	│   ├── libcutils				# libc工具
+	│   ├── libdiskconfig
+	│   ├── liblinenoise
+	│   ├── liblog				# log库
+	│   ├── libmincrypt			# 加密库
+	│   ├── libnetutils			# 网络工具库
+	│   ├── libpixelflinger		# 图形处理库
+	│   ├── libsysutils			# 系统工具库
+	│   ├── libzipfile			# zip库
+	│   ├── logcat				# Logcat 工具
+	│   ├── logwrapper			# log封装工具
+	│   ├── mkbootimg				# 制作启动boot.img的工具盒脚本
+	│   ├── netcfg				# 网络配置netcfg源码
+	│   ├── nexus					# nexus 手机的代码
+	│   ├── README
+	│   ├── rootdir				# rootfs，包含一些etc下的脚本和配置
+	│   ├── run-as
+	│   ├── sdcard
+	│   ├── sh					# shell代码
+	│   ├── ThirdPartyProject.prop
+	│   └── toolbox				# toolbox，类似busybox的工具集
+	├── extras					# 额外工具
+	├── media
+	├── netd
+	├── vold
+	└── wlan					# 无线相关
+	    └── ti						# ti网卡相关工具及库
+</pre>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="src-kernel-dir"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Linux 内核源码目录结构</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">Android系统和linux内核的关系</h5>
+							<p>Android是基于Linux内核的操作系统，虽然Android基于Linux内核，但是它与Linux之间还是有很大的差别，比如Android在Linux内核的基础上添加了
+								自己所特有的驱动程序。</p>
+							<p>Android对linux系统的改动主要有以下几个方面：</p>
+							<ul>
+								<li>它没有glibc支持;</li>
+								<li>它并不包括一整套标准的Linux使用程序;</li>
+								<li>它没有本地基于X服务的窗口系统;</li>
+								<li>Android专有的驱动程序。</li>
+							</ul>
+							<p>Android专有的驱动程序主要修改如下:</p>
+							<ol>
+								<li>
+									Android Binder 基于OpenBinder框架的一个驱动，用于提供
+									Android平台的进程间通信功能。源代码位于:
+									<code>drivers/staging/android/binder.c</code>
+								</li>
+								<li>
+									Android电源管理(PM) 一个基于标准Linux电源管理系统的轻量级Android电源管理驱动，针对嵌入式设备做
+									了很多优化。源代码位于:
+									<code>kernel/power/...</code>
+								</li>
+								<li>
+									低内存管理器(Low Memory Killer) 比Linux的标准的OOM(Out Of
+									Memory)机制更加灵活，它可以根据需要 杀死进程以释放需要的内存。源代码位于:
+									<code>drivers/staging/android/lowmemorykiller.c</code>
+								</li>
+								<li>
+									匿名共享内存(Ashmem) 为进程间提供大块共享内存，同时为内核提供回收和管理这个内存的机制。源代码位于:
+									<code>mm/ashmem.c</code>
+								</li>
+								<li>
+									Android PMEM(Physical) PMEM用于向用户空间提供连续的物理内存区域，DSP和某些设备只能工作在连续的物
+									理内存上。源代码位于:
+									<code>drivers/misc/pmem.c</code>
+								</li>
+								<li>
+									Android Logger 一个轻量级的日志设备，用于抓取Android系统的各种日志。源代码位于:
+									<code> drivers/staging/android/logger.c</code>
+								</li>
+								<li>
+									Android Alarm 提供了一个定时器，用于把设备从睡眠状态唤醒，同时它还提供了一个即使在设备睡眠时也会
+									运行的时钟基准。源代码位于:
+									<code>drivers/rtc/alarm.c</code>
+								</li>
+								<li>
+									USB Gadget驱动 一个基于标准 Linux USB
+									gadget驱动框架的设备驱动，Android的USB驱动是基于gaeget框 架的。源代码位于:
+									<code>drivers/usb/gadget/</code>
+								</li>
+								<li>
+									Android Ram Console 为了提供调试功能，Android允许将调试日志信息写入一个被称为RAM
+									Console的设备 里，它是一个基于RAM的Buffer。源代码位于:
+									<code>drivers/staging/android/ram_console.c</code>
+								</li>
+								<li>
+									Android timed device 提供了对设备进行定时控制的功能，目前支持vibrator和LED设备。源代码位于:
+									<code>
+										drivers/staging/android/timed_output.c(timed_gpio.c)</code>
+								</li>
+								<li>
+									Yaffs2 文件系统 Android采用Yaffs2作为MTD nand flash文件系统，源代码位于:
+									<code>fs/yaffs2/</code>
+									目录下。Yaffs2是一个快速稳定的应用于NAND和NOR
+									Flash的跨平台的嵌入式设备文件系统，同其他Flash文件系统相比，
+									Yaffs2能使用更小的内存来保存其运行状态，因此它占用内存小。Yaffs2的垃圾回收非常简单而且快速，因此能表
+									现出更好的性能。Yaffs2在大容量的NAND Flash上的性能表现尤为突出，非常适合大容量的Flash存储。
+								</li>
+							</ol>
+						</div>
+						<div class="sub-item">
+							<p>
+								因为我们主要研究 Android 源代码，使用 android-2.3.1_r1 版本的 Android 源代码，内核使用
+								<code>android-goldfish-2.6.29</code>
+								的源代码。
+							</p>
+							<p>Goldfish是一种虚拟的ARM处理器，在Android的仿真环境中使用。Android模拟器通过运行它来运行arm926t指令集（arm926t属于armv5构架，goldfish处理器有ARMv5和ARMv7两个版本，在一般情况下，使用ARMv5的版本即可）编译生成的linux内核镜像在android的模拟器中使用。启动模拟器时，Linux
+								Kernel镜像默认使用：prebuilt/android-arm/kernel目录下的kernel-qemu文件。</p>
+							<pre class="brush: bash;">
+android-goldfish-2.6.29
+	├── arch						# architecture的缩写。所有与体系结构相关的代码都在这个目录
+	├── block						# 部分块设备驱动程序
+	├── COPYING
+	├── CREDITS
+	├── crypto						# 加密、压缩、CRC校验算法
+	├── Documentation				# 内核的文档
+	├── drivers						# 设备驱动程序
+	├── firmware					# 包含了让计算机读取和理解从设备发来的信号的代码
+	├── fs							# 存放各种文件系统的实现代码
+	├── include						# 内核所需要的头文件
+	├── init						# 内核初始化代码
+	├── ipc							# 进程间通信的实现代码
+	├── Kbuild
+	├── kernel						# Linux大多数关键的核心功能都是在这个目录实现。（调度程序，进程控制，模块化）
+	├── lib							# 库文件代码
+	├── MAINTAINERS
+	├── Makefile
+	├── mm							# mm目录中的文件用于实现内存管理中与体系结构无关的部分
+	├── modules.order
+	├── Module.symvers
+	├── net							# 网络协议的实现代码
+	├── README
+	├── REPORTING-BUGS
+	├── samples						# 一些内核编程的范例
+	├── scripts						# 配置内核的脚本
+	├── security					# 包含了不同的Linux安全模型的代码
+	├── sound						# 音频设备的驱动程序
+	├── System.map
+	├── usr							# cpio命令实现
+	├── virt						# 内核虚拟机
+	├── vmlinux
+	└── vmlinux.o
+</pre>
 						</div>
 					</div>
 				</div>
@@ -153,18 +1046,24 @@
 						<h3 class="panel-title">第一章 Android 源代码编译</h3>
 					</div>
 					<div class="panel-body">
-						<p>
-							<a href="#src-code">Android 源代码</a>
-							和
-							<a href="#src-kernel-code">Android 内核源代码</a>
-							的下载, 编译，和运行。
-							<a href="#src-first-app">第一个 Android 应用程序的开发</a>
+						<div class="sub-item">
+							<ul>
+								<li>
+									<a href="#src-code">1.1 Android 源代码 的下载, 编译，和运行</a>
+								</li>
+								<li>
+									<a href="#src-kernel-code">1.2 Android 内核源代码 的下载，编译，和运行</a>
+								</li>
+								<li>
+									<a href="#src-first-app">1.3 第一个 Android 应用程序的开发</a>
+								</li>
 
-						</p>
+							</ul>
+						</div>
 
 						<a class="offset" id="src-code"></a>
 						<div class="sub-item">
-							<h5 class="text-primary">Android 源代码下载，编译，运行</h5>
+							<h5 class="text-primary">1.1 Android 源代码下载，编译，运行</h5>
 							<ol>
 								<li>
 									<p>下载编译要使用的工具和依赖包: git , jdk6 和其它信赖包。</p>
@@ -272,7 +1171,7 @@ $ myemulator -kernel ./prebuilt/android-arm/kernel/kernel-qemu \
 
 						<a class="offset" id="src-kernel-code"></a>
 						<div class="sub-item">
-							<h5 class="text-primary">Android 内核源代码下载，编译，运行</h5>
+							<h5 class="text-primary">1.2 Android 内核源代码下载，编译，运行</h5>
 							<ol>
 								<li>
 									下载 Android 内核源代码，这些文件应该从 google 下载，但是基于国内环境，这里使用清华大学源下载
@@ -321,7 +1220,7 @@ $ cat version
 
 						<a class="offset" id="src-first-app"></a>
 						<div class="sub-item">
-							<h5 class="text-primary">开发第一个 Android 应用程序</h5>
+							<h5 class="text-primary">1.3 开发第一个 Android 应用程序</h5>
 							<pre class="brush: bash;">
 # mmm 命令是 Android 源代码工程提供用来单独编译某一个模块的工具，
 # 并提供 make snod 命令来纯粹执行打包 Android 系统镜像文件　system.img 的操作。
@@ -350,10 +1249,875 @@ $ myemulator
 						<h3 class="panel-title">第二章 硬件抽象层</h3>
 					</div>
 					<div class="panel-body">
-						<p>Android系统的硬件抽象层（Hardware Abstract
-							Layer，HAL）运行在用户空间中，它向下屏蔽硬件驱动模块的实现细节，向上提供硬件访问服务。通过硬件抽象层，Android系统分两层来支持硬件设备，其中一层实现在用户空间中，另一层实现在内核空间中。</p>
-						<p>介绍Android系统的硬件抽象层的目的在于认识Android系统的体系结构，因为它的实现和使用依次涉及Android系统的硬件驱动模块、硬件抽象层、外部库和运行时库层、应用程序框架层和应用程序层等。将通过一个实例来介绍硬件抽象层：</p>
-						<p class="alert alert-success">首先在Android系统的内核空间中为一个硬件开发驱动程序，接着在用户空间中为该硬件添加一个硬件抽象层模块，并且在应用程序框架层中添加一个硬件访问服务，最后开发一个应用程序来访问该硬件服务。</p>
+						<div class="sub-item">
+							<p>Android系统的硬件抽象层（Hardware Abstract
+								Layer，HAL）运行在用户空间中，它向下屏蔽硬件驱动模块的实现细节，向上提供硬件访问服务。通过硬件抽象层，Android系统分两层来支持硬件设备，其中一层实现在用户空间中，另一层实现在内核空间中。</p>
+							<p>介绍Android系统的硬件抽象层的目的在于认识Android系统的体系结构，因为它的实现和使用依次涉及Android系统的硬件驱动模块、硬件抽象层、外部库和运行时库层、应用程序框架层和应用程序层等。将通过一个实例来介绍硬件抽象层：</p>
+							<p class="alert alert-success">首先在Android系统的内核空间中为一个硬件开发驱动程序，接着在用户空间中为该硬件添加一个硬件抽象层模块，并且在应用程序框架层中添加一个硬件访问服务，最后开发一个应用程序来访问该硬件服务。</p>
+							<ul>
+								<li>
+									<a href="#src-hardware-driver">2.1 开发 Android 硬件驱动程序</a>
+								</li>
+								<li>
+									<a href="#src-hardware-c">2.2 开发 C 可执行程序验证 Android 硬件驱动程序 
+								</li>
+								<li>
+									<a href="#src-hardware-model">2.3 开发 Android 硬件抽象层模块 
+								</li>
+								<li>
+									<a href="#src-hardware-service">2.4 开发 Android 硬件访问服务 
+								</li>
+								<li>
+									<a href="#src-hardware-app">2.5 开发 Android 应用程序来使用硬件访问服务 
+								</li>
+							</ul>
+						</div>
+
+						<a class="offset" id="src-hardware-driver"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">2.1 开发 Android 硬件驱动程序</h5>
+							<p>为了方便描述，我们将为一个虚拟的字符硬件设备开发驱动程序。这个虚拟的字符硬件设备只有一个寄存器，它的大小为4字节，可读可写。由于这个字符设备是虚拟的，且只有一个寄存器，因此，我们将它称为“fake
+								register”，并且将对应的驱动程序命名为freg。</p>
+							<p>驱动程序freg的目录结构如下：</p>
+							<div class="row">
+								<div class="col-md-12">~/Android/kernel/goldfish</div>
+								<div class="col-md-11 col-md-push-1">└──── drivers</div>
+								<div class="col-md-10 col-md-push-2">└──── freg</div>
+								<div class="col-md-9 col-md-push-3">
+									├────
+									<a href="#src-freg.h">freg.h</a>
+								</div>
+								<div class="col-md-9 col-md-push-3">
+									├────
+									<a href="#src-freg.c">freg.c</a>
+								</div>
+								<div class="col-md-9 col-md-push-3">
+									├────
+									<a href="#src-Kconfig">Kconfig</a>
+								</div>
+								<div class="col-md-9 col-md-push-3">
+									└────
+									<a href="#src-Makefile">Makefile</a>
+								</div>
+							</div>
+							<ul>
+								<li>
+									<p>
+										<a class="offset" id="src-freg.h"></a>
+										<code>freg.h</code>
+										文件定义了四个字符串常量，分别用来描述虚拟硬件设备freg在设备文件系统中的名称。此外，此文件还定义了一个结构体fake_reg_dev，用来描述虚拟硬件设备freg。在结构体fake_reg_dev中，成员变量val用来描述一个虚拟寄存器，它的类型为int;成员变量sem是一个信号量，用来同步访问虚拟寄存器val;成员变量dev是一个标准的Linux字符设备结构体变量，用来标志该虚拟硬件设备freg的类型为字符设备。
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#src-code-freg-h" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="src-code-freg-h" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: c;">
+#ifndef _FAKE_REG_H_
+#define _FAKE_REG_H_
+ 
+#include &lt;linux/cdev.h>
+#include &lt;linux/semaphore.h>
+ 
+#define FREG_DEVICE_NODE_NAME  "freg"
+#define FREG_DEVICE_FILE_NAME  "freg"
+#define FREG_DEVICE_PROC_NAME  "freg"
+#define FREG_DEVICE_CLASS_NAME "freg"
+ 
+struct fake_reg_dev {
+    int val;
+    struct semaphore sem;
+    struct cdev dev;
+};
+ 
+#endif
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p>
+										<a class="offset" id="src-freg.c"></a>
+										<code>freg.c</code>
+										是驱动程序freg的实现文件，它向用户空间提供了三个接口来访问虚拟硬件设备freg中的寄存器val。第一个是proc文件系统接口，第二个是传统的设备文件系统接口，第三个是devfs文件系统接口。
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#src-code-freg-c" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="src-code-freg-c" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: c;">
+#include &lt;linux/init.h>
+#include &lt;linux/module.h>
+#include &lt;linux/types.h>
+#include &lt;linux/fs.h>
+#include &lt;linux/proc_fs.h>
+#include &lt;linux/device.h>
+#include &lt;asm/uaccess.h>
+
+#include "freg.h"
+
+/*主设备号和从设备号变量*/
+static int freg_major = 0;
+static int freg_minor = 0;
+
+/*设备类别和设备变量*/
+static struct class* freg_class = NULL;
+static struct fake_reg_dev* freg_dev = NULL;
+
+/*传统的设备文件操作方法*/
+static int freg_open(struct inode* inode, struct file* filp);
+static int freg_release(struct inode* inode, struct file* filp);
+static ssize_t freg_read(struct file* filp, char __user *buf, size_t count, loff_t* f_pos);
+static ssize_t freg_write(struct file* filp, const char __user *buf, size_t count, loff_t* f_pos);
+
+/*传统的设备文件操作方法表*/
+static struct file_operations freg_fops = {
+        .owner = THIS_MODULE,
+        .open = freg_open,
+        .release = freg_release,
+        .read = freg_read,
+        .write = freg_write,
+};
+
+/*devfs文件系统的设备属性操作方法*/
+static ssize_t freg_val_show(struct device* dev, struct device_attribute* attr,  char* buf);
+static ssize_t freg_val_store(struct device* dev, struct device_attribute* attr, const char* buf, size_t count);
+
+/*devfs文件系统的设备属性*/
+static DEVICE_ATTR(val, S_IRUGO | S_IWUSR, freg_val_show, freg_val_store);
+
+/*打开设备方法*/
+static int freg_open(struct inode* inode, struct file* filp) {
+	struct fake_reg_dev* dev;
+	
+	/*将自定义设备结构体保存在文件指针的私有数据域中，以便访问设备时可以直接拿来用*/
+	dev = container_of(inode->i_cdev, struct fake_reg_dev, dev);
+	filp->private_data = dev;
+
+	return 0;
+}
+
+/*设备文件释放时调用，空实现*/
+static int freg_release(struct inode* inode, struct file* filp) {
+	return 0;
+}
+
+/*读取设备的寄存器val的值*/
+static ssize_t freg_read(struct file* filp, char __user *buf, size_t count, loff_t* f_pos) {
+	ssize_t err = 0;
+	struct fake_reg_dev* dev = filp->private_data;
+	
+	/*同步访问*/
+	if(down_interruptible(&(dev->sem))) {	
+		return -ERESTARTSYS;
+	}
+
+	if(count < sizeof(dev->val)) {
+		goto out;
+	}
+
+	/*将寄存器val的值拷贝到用户提供的缓冲区中*/
+	if(copy_to_user(buf, &(dev->val), sizeof(dev->val))) {
+		err = -EFAULT;
+		goto out;
+	}
+
+	err = sizeof(dev->val);
+
+out:
+	up(&(dev->sem));
+	return err;
+}
+
+/*写设备的寄存器val的值*/
+static ssize_t freg_write(struct file* filp, const char __user *buf, size_t count, loff_t* f_pos) {
+	struct fake_reg_dev* dev = filp->private_data;
+	ssize_t err = 0;
+
+	/*同步访问*/
+	if(down_interruptible(&(dev->sem))) {
+                return -ERESTARTSYS;
+        }
+
+        if(count != sizeof(dev->val)) {
+                goto out;
+        }
+
+	/*将用户提供的缓冲区的值写到设备寄存器中*/
+	if(copy_from_user(&(dev->val), buf, count)) {
+		err = -EFAULT;
+		goto out;
+	}
+
+	err = sizeof(dev->val);
+
+out:
+	up(&(dev->sem));
+	return err;
+}
+
+/*将寄存器val的值读取到缓冲区buf中，内部使用*/
+static ssize_t __freg_get_val(struct fake_reg_dev* dev, char* buf) {
+	int val = 0;
+	
+	/*同步访问*/
+	if(down_interruptible(&(dev->sem))) {
+                return -ERESTARTSYS;
+        }
+
+        val = dev->val;
+        up(&(dev->sem));
+
+        return snprintf(buf, PAGE_SIZE, "%d\n", val);
+}
+
+/*把缓冲区buf的值写到设备寄存器val中，内部使用*/
+static ssize_t __freg_set_val(struct fake_reg_dev* dev, const char* buf, size_t count) {
+	int val = 0;
+
+		/*将字符串转换成数字*/
+        val = simple_strtol(buf, NULL, 10);
+
+		/*同步访问*/
+        if(down_interruptible(&(dev->sem))) {
+                return -ERESTARTSYS;
+        }
+
+        dev->val = val;
+        up(&(dev->sem));
+
+	return count;
+}
+
+/*读设备属性val的值*/
+static ssize_t freg_val_show(struct device* dev, struct device_attribute* attr, char* buf) {
+	struct fake_reg_dev* hdev = (struct fake_reg_dev*)dev_get_drvdata(dev);
+	
+        return __freg_get_val(hdev, buf);
+}
+
+/*写设备属性val的值*/
+static ssize_t freg_val_store(struct device* dev, struct device_attribute* attr, const char* buf, size_t count) {
+	 struct fake_reg_dev* hdev = (struct fake_reg_dev*)dev_get_drvdata(dev);
+
+        return __freg_set_val(hdev, buf, count);
+}
+
+/*读取设备寄存器val的值，保存到page缓冲区中*/
+static ssize_t freg_proc_read(char* page, char** start, off_t off, int count, int* eof, void* data) {
+	if(off > 0) {
+		*eof = 1;
+		return 0;
+	}
+
+	return __freg_get_val(freg_dev, page);	
+}
+
+/*把缓冲区的值buff保存到设备寄存器val中*/
+static ssize_t freg_proc_write(struct file* filp, const char __user *buff, unsigned long len, void* data) {	
+	int err = 0;
+	char* page = NULL;
+
+	if(len > PAGE_SIZE) {
+		printk(KERN_ALERT"The buff is too large: %lu.\n", len);
+		return -EFAULT;
+	}
+
+	page = (char*)__get_free_page(GFP_KERNEL);
+	if(!page) {
+                printk(KERN_ALERT"Failed to alloc page.\n");
+		return -ENOMEM;
+	}
+	
+	/*先把用户提供的缓冲区的值拷贝到内核缓冲区中*/
+	if(copy_from_user(page, buff, len)) {
+		printk(KERN_ALERT"Failed to copy buff from user.\n");
+                err = -EFAULT;
+		goto out;
+	}
+
+	err = __freg_set_val(freg_dev, page, len);
+
+out:
+	free_page((unsigned long)page);
+	return err;	
+}
+
+/*创建/proc/freg文件*/
+static void freg_create_proc(void) {
+	struct proc_dir_entry* entry;
+	
+	entry = create_proc_entry(FREG_DEVICE_PROC_NAME, 0, NULL);
+	if(entry) {
+		entry->owner = THIS_MODULE;
+		entry->read_proc = freg_proc_read;
+		entry->write_proc = freg_proc_write;
+	}
+}
+
+/*删除/proc/freg文件*/
+static void freg_remove_proc(void) {
+	remove_proc_entry(FREG_DEVICE_PROC_NAME, NULL);
+}
+
+/*初始化设备*/
+static int  __freg_setup_dev(struct fake_reg_dev* dev) {
+	int err;
+	dev_t devno = MKDEV(freg_major, freg_minor);
+
+	memset(dev, 0, sizeof(struct fake_reg_dev));
+
+	/*初始化字符设备*/
+	cdev_init(&(dev->dev), &freg_fops);
+	dev->dev.owner = THIS_MODULE;
+	dev->dev.ops = &freg_fops;
+
+	/*注册字符设备*/
+	err = cdev_add(&(dev->dev),devno, 1);
+	if(err) {
+		return err;
+	}	
+
+	/*初始化信号量和寄存器val的值*/
+	init_MUTEX(&(dev->sem));
+	dev->val = 0;
+
+	return 0;
+}
+
+/*模块加载方法*/
+static int __init freg_init(void) { 
+	int err = -1;
+	dev_t dev = 0;
+	struct device* temp = NULL;
+
+	printk(KERN_ALERT"Initializing freg device.\n");
+
+	/*动态分配主设备号和从设备号*/
+	err = alloc_chrdev_region(&dev, 0, 1, FREG_DEVICE_NODE_NAME);
+	if(err < 0) {
+		printk(KERN_ALERT"Failed to alloc char dev region.\n");
+		goto fail;
+	}
+
+	freg_major = MAJOR(dev);
+	freg_minor = MINOR(dev);
+
+	/*分配freg设备结构体*/
+	freg_dev = kmalloc(sizeof(struct fake_reg_dev), GFP_KERNEL);
+	if(!freg_dev) {
+		err = -ENOMEM;
+		printk(KERN_ALERT"Failed to alloc freg device.\n");
+		goto unregister;
+	}
+
+	/*初始化设备*/
+	err = __freg_setup_dev(freg_dev);
+	if(err) {
+		printk(KERN_ALERT"Failed to setup freg device: %d.\n", err);
+		goto cleanup;
+	}
+
+	/*在/sys/class/目录下创建设备类别目录freg*/
+	freg_class = class_create(THIS_MODULE, FREG_DEVICE_CLASS_NAME);
+	if(IS_ERR(freg_class)) {
+		err = PTR_ERR(freg_class);
+		printk(KERN_ALERT"Failed to create freg device class.\n");
+		goto destroy_cdev;
+	}
+
+	/*在/dev/目录和/sys/class/freg目录下分别创建设备文件freg*/
+	temp = device_create(freg_class, NULL, dev, "%s", FREG_DEVICE_FILE_NAME);
+	if(IS_ERR(temp)) {
+		err = PTR_ERR(temp);
+		printk(KERN_ALERT"Failed to create freg device.\n");
+		goto destroy_class;
+	}
+
+	/*在/sys/class/freg/freg目录下创建属性文件val*/
+	err = device_create_file(temp, &dev_attr_val);
+	if(err < 0) {
+		printk(KERN_ALERT"Failed to create attribute val of freg device.\n");
+                goto destroy_device;
+	}
+
+	dev_set_drvdata(temp, freg_dev);
+
+	/*创建/proc/freg文件*/
+	freg_create_proc();
+
+	printk(KERN_ALERT"Succedded to initialize freg device.\n");
+
+	return 0;
+
+destroy_device:
+	device_destroy(freg_class, dev);
+destroy_class:
+	class_destroy(freg_class);
+destroy_cdev:
+	cdev_del(&(freg_dev->dev));	
+cleanup:
+	kfree(freg_dev);
+unregister:
+	unregister_chrdev_region(MKDEV(freg_major, freg_minor), 1);	
+fail:
+	return err;
+}
+
+/*模块卸载方法*/
+static void __exit freg_exit(void) {
+	dev_t devno = MKDEV(freg_major, freg_minor);
+
+	printk(KERN_ALERT"Destroy freg device.\n");
+	
+	/*删除/proc/freg文件*/
+	freg_remove_proc();
+
+	/*销毁设备类别和设备*/
+	if(freg_class) {
+		device_destroy(freg_class, MKDEV(freg_major, freg_minor));
+		class_destroy(freg_class);
+	}
+
+	/*删除字符设备和释放设备内存*/
+	if(freg_dev) {
+		cdev_del(&(freg_dev->dev));
+		kfree(freg_dev);
+	}
+
+	/*释放设备号资源*/
+	unregister_chrdev_region(devno, 1);
+}
+
+MODULE_LICENSE("GPL");
+MODULE_DESCRIPTION("Fake Register Driver");
+
+module_init(freg_init);
+module_exit(freg_exit);
+</pre>
+										</div>
+									</div>
+								<li>
+									<p>
+										<a class="offset" id="src-Kconfig"></a>
+										<code>Kconfig</code>
+										定义了驱动程序freg的编译选项。在编译驱动程序freg之前，我们可以通过执行make
+										menuconfig命令来设置这些编译选项，以便可以指定驱动程序freg的编译方式。从这个配置文件就可以看出，驱动程序freg可以以三种方式来编译。第一种方式是直接内建在内核中；第二种方式是编译成内核模块;第三种方式是不编译到内核中。默认的编译方式为n，即不编译到内核中，因此，在编译驱动程序freg之前，我们需要执行make
+										menuconfig命令来修改它的编译选项，以便可以将驱动程序freg内建到内核中或者以模块的方式来编译。
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#src-code-Kconfig" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="src-code-Kconfig" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: c;">
+config FREG
+    tristate "Fake Register Driver"
+    default n
+    help
+    This is the freg driver for android system.
+</pre>
+										</div>
+									</div>
+								<li>
+									<p>
+										<a class="offset" id="src-Makefile"></a>
+										<code>Makefile</code>
+										是驱动程序freg的编译脚本文件，其中，$(CONFIG_FREG)是一个变量，它的值与驱动程序freg的编译选项有关。如果选择将驱动程序freg内建到内核中，那么变量$(CONFIG_FREG)的值为y；如果选择以模块的方式来编译驱动程序freg，那么变量$(CONFIG_FREG)的值为m；如果变量$(CONFIG_FREG)的值既不为y，也不为m，那么驱动程序freg就不会被编译。
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#src-code-Makefile" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="src-code-Makefile" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: c;">
+obj-$(CONFIG_FREG) += freg.o
+</pre>
+										</div>
+									</div>
+							</ul>
+							<p>我们为驱动程序freg编写了一个Kconfig文件，但是在默认情况下，在执行make
+								menuconfig命令配置内核编译选项时，编译系统是无法找到这个Kconfig文件的。这时候，我们需要修改内核的根Kconfig文件，使得编译系统能够找到驱动程序freg的Kconfig文件。</p>
+							<p>
+								当执行make
+								menuconfig命令时，编译系统会读取arch/$(ARCH)目录下的Kconfig文件，其中，$(ARCH)指向编译的目标CPU体系架构。在前面的1.4.2小节中，我们将$(ARCH)的值设置为arm，因此，就需要修改arch/arm目录下的Kconfig文件，使得编译系统可以找到驱动程序freg的Kconfig文件。打开
+								<code>~/Android/kernel/goldfish/arch/arm/Kconfig</code>
+								文件，找到以下两行内容:
+							</p>
+							<pre class="brush: cpp;">
+menu "Device Drivers"
+......
+endmenu
+
+// 添加一行 source "drivers/freg/Kconfig"
+menu "Device Drivers"
+source "drivers/freg/Kconfig"
+......
+endmenu
+</pre>
+
+							<p>
+								Kconfig文件相似，虽然我们为驱动程序freg编写了一个编译脚本文件Makefile，但是在默认情况下，在执行make命令编译内核时，编译系统是无法找到这个Makefile文件的。这时候，我们需要修改drivers目录下的Makefile文件，使得编译系统能够找到驱动程序freg的Makefile文件。打开
+								<code>~/Android/kernel/goldfish/drivers/Makefile</code>
+								文件，在里面添加以下一行内容：
+							</p>
+							<pre class="brush: cpp;">
+......
+obj-$(CONFIG_FREG)+= freg/
+</pre>
+
+							<p>经过上面的步骤，就可以开始重新编译 Android 内核源代码了:</p>
+							<pre class="brush: bash;">
+$ cd ~/Android/kernel/goldfish
+
+# 在编译驱动程序freg之前，我们需要执行make menuconfig命令来配置它的编译方式。
+#	执行 make menuconfig 后，在弹出来的第一个配置界面中用上下箭头键选择“Device Drivers”项，按Enter键；
+#	接着在弹出来的第二个配置界面中继续用上下箭头键选择“Fake Register Driver”项，按Y键或者M键，
+#	就可以看到选项前面方括号中的字符变成“*”或者“M”符号，它们分别表示将驱动程序freg编译到内核中或者以模块的方式来编译。
+# 注意：如果我们要以模块的方式来编译驱动程序freg，那么就必须先在第一个配置界面中选择“Enable loadable module support”
+#	选项，并且按Y键将它的值设置为true，即使得内核可以支持动态加载模块，这样才能在第二个配置界面中按M键来配置
+#	“Fake Register Driver”选项。同样，如果要使得内核支持动态卸载模块，那么就要在第一个配置界面中选择
+#	“Enable loadable module support”选项中的子选项“Module unloading”，并且按Y键将它的值设置为true。
+$ make menuconfig
+
+$ make -j2
+
+# make 碰到的问题:
+# 1.make: arm-eabi-gcc: Command not found
+# 解决方法:
+$ export PATH=$PATH:~/Android/android-2.3.1_r1/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/
+
+# 2.ERROR: Can't access ANDROID_PRODUCT_OUT as ......
+# 解决方法:
+$ export ANDROID_PRODUCT_OUT=~/Android/android-2.3.1_r1/out/target/product/generic
+</pre>
+
+							<p>编译完成后，启动模拟器验证这个驱动程序正确性。</p>
+							<p>
+								使用cat和echo命令来读写
+								<code>/proc/freg</code>
+								文件或者
+								<code>/sys/class/freg/freg/val</code>
+								文件的内容了，即读写虚拟硬件设备freg的寄存器val的内容。如果读出来的内容与上次写入的内容相同，就说明我们为虚拟硬件设备freg所编写的驱动程序freg是正确的。
+							</p>
+							<pre class="brush: bash;">
+## 指定我们编译好的 kernel 来启动模拟器
+$ myemulator -kernel ~/Android/kernel/goldfish/arch/arm/boot/zImage &
+
+$ adb shell
+
+## 下面的操作是在 adb 连接的模拟器中
+##	在读写虚拟硬件设备freg的寄存器val的内容之前，我们需要检查设备上的/dev目录下是否存在一个设备文件freg。
+##	如果存在，就说明驱动程序freg成功地将虚拟硬件设备freg注册到设备文件系统中了。
+# cd /dev
+# ls freg
+
+## 读 /proc/freg 文件的内容
+# cat /proc/freg		## 显示: 0
+
+## 写入一个新值
+# echo '5' > freg
+# cat /proc/freg		## 显示: 5
+
+## 如果能看到上面的输出，就说明我们能够使用 proc 文件系统接口来访问虚拟硬件设备freg的寄存器val的内容
+
+# cd /sys/class/freg/freg
+# echo '0' > val
+# cat val		## 显示: 0
+
+## 如果能看到上面的输出，就说明我们能够使用 devfs 文件系统接口来访问虚拟硬件设备freg的寄存器val的内容
+</pre>
+							<p>
+								以上两种方法只验证了驱动程序freg所提供的
+								<code>proc</code>
+								和
+								<code>devfs</code>
+								文件系统访问接口是正确的，我们还需要进一步验证它所提供的
+								<code>dev</code>
+								文件系统访问接口也是正确的，即能正常读写设备文件
+								<code>/dev/freg</code>
+								的内容。由于设备文件
+								<code>/dev/freg</code>
+								的内容是二进制格式的，因此，使用cat和echo命令来读写它的内容不够直观，在接下来，我们将通过编写一个C可执行程序来直观地验证它的
+								<code>dev</code>
+								文件系统访问接口的正确性。
+							</p>
+						</div>
+
+						<a class="offset" id="src-hardware-c"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">2.2 开发 C 可执行程序验证 Android 硬件驱动程序</h5>
+							<div class="row">
+								<div class="col-md-12">~/Android</div>
+								<div class="col-md-11 col-md-push-1">└──── external</div>
+								<div class="col-md-10 col-md-push-2">└──── freg</div>
+								<div class="col-md-9 col-md-push-3">
+									├────
+									<a href="#src-c-freg.c">freg.c</a>
+								</div>
+								<div class="col-md-9 col-md-push-3">
+									└────
+									<a href="#src-Android.mk">Android.mk</a>
+								</div>
+							</div>
+							<ul>
+								<li>
+									<p>
+										<a class="offset" id="src-c-freg.c"></a>
+										<code>freg.c</code>
+										第11行通过调用open函数，并且以读写方式打开设备文件/dev/freg;接着第18行调用read函数读取它的内容，即读取虚拟硬件设备freg的寄存器val的内容，并且将它的内容打印出来。第23行调用write函数将一个整数5写入到虚拟硬件设备freg的寄存器val中;接着第26行和第27行再调用read和print函数将这个整数5读取并且打印出来。假设虚拟硬件设备freg的寄存器val是第一次被访问，那么如果一切正常的话，两次打印出来的内容就应该分别为0和5
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#src-code-c-freg-c" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="src-code-c-freg-c" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: c;">
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;fcntl.h>
+
+#define FREG_DEVICE_NAME "/dev/freg"
+
+int main(int argc， char** argv) {
+    int fd = -1;
+    int val = 0;
+
+    fd = open(FREG_DEVICE_NAME， O_RDWR);
+    if(fd == -1) {
+        printf("Failed to open device %s.\n"， FREG_DEVICE_NAME);
+        return -1;
+    }
+
+    printf("Read original value:\n");
+    read(fd， &val， sizeof(val));
+    printf("%d.\n\n"， val);
+
+    val = 5;
+    printf("Write value %d to %s.\n\n"， val， FREG_DEVICE_NAME);
+    write(fd， &val， sizeof(val));
+
+    printf("Read the value again:\n");
+    read(fd， &val， sizeof(val));
+    printf("%d.\n\n"， val);
+
+    close(fd);
+
+    return 0
+}
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p>
+										<a class="offset" id="src-Android.mk"></a>
+										<code>Android.mk</code>
+										这是源文件freg.c的编译脚本文件，它与使用Java语言开发的Android应用程序的编译脚本的不同之处在于include命令后面所带的参数。对于C可执行程序来说，它的编译脚本中的include命令后面跟的参数的值为$(BUILD_EXECUTABLE)，表示当前要编译的是一个可执行应用程序模块，并且将编译结果保存在
+										<code>~/Android/android-2.3.1_r1/out/target/product/gerneric/system/bin</code>
+										目录中。
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#src-Android-mk" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="src-Android-mk" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: c;">
+LOCAL_PATH := $(call my-dir)
+include $(CLEAR_VARS)
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE := freg
+LOCAL_SRC_FILES := $(call all-subdir-c-files)
+include $(BUILD_EXECUTABLE)
+</pre>
+										</div>
+									</div>
+								</li>
+							</ul>
+							<p>准备好这两个文件之后，我们就可以通过mmm和make snod命令来编译和打包这个C可执行程序了。</p>
+							<pre class="brush: bash;">
+$ cd ~/Android/android-2.3.1_r1
+
+# 初始化 mmm 环境
+$ source ./build/envsetup.sh
+
+$ mmm ./external/freg/
+
+$ make snod
+</pre>
+							<p>
+								编译成功后，就可以在
+								<code>~/Android/android-2.3.1_r1/out/target/product/gerneric/system/bin</code>
+								目录下看到一个freg文件;而当打包成功后，这个文件就会包含在
+								<code>~/Android/android-2.3.1_r1/out/target/product/gerneric</code>
+								目录下的Android系统镜像文件system.img中。
+							</p>
+							<pre class="brush: bash;">
+$ myemulator -kernel ~/Android/kernel/goldfish/arch/arm/boot/zImage &
+
+$ adb shell
+
+# ./system/bin/freg
+## Read original value: 0.
+## Write value 5 to /dev/freg.
+## Read the value again: 5.
+
+## 如果能够看到上面的输出，就说明驱动程序freg所提供的dev文件系统访问接口是正确的。
+</pre>
+						</div>
+
+						<a class="offset" id="src-hardware-model"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">2.3 开发 Android 硬件抽象层模块</h5>
+							<p>Android系统为硬件抽象层中的模块接口定义了编写规范，我们必须按照这个规范来编写自己的硬件模块接口，否则就会导致无法正常访问硬件。下面我们首先介绍硬件抽象层模块接口的编写规范，然后再按照这个规范为虚拟硬件设备freg开发硬件抽象层模块接口，并且分析硬件抽象层模块的加载过程，最后讨论硬件设备的访问权限问题。</p>
+							<p>Android系统的硬件抽象层以模块的形式来管理各个硬件访问接口。每一个硬件模块都对应有一个动态链接库文件，这些动态链接库文件的命令需要符合一定的规范。同时，在系统内部，每一个硬件抽象层模块都使用结构体hw_module_t来描述，而硬件设备则使用结构体hw_device_t来描述。接下来，我们就分别描述硬件抽象层模块文件的命名规范以及结构体hw_module_t和hw_device_t的定义。</p>
+							<p>
+								结构体hw_module_t和hw_device_t及其相关的其他结构体定义在文件
+								<code>~/Android/android-2.3.1_r1/hardware/libhardware/include/hardware/hardware.h</code>
+								中。
+							</p>
+						</div>
+
+						<a class="offset" id="src-hardware-service"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">2.4 开发 Android 硬件访问服务</h5>
+						</div>
+
+						<a class="offset" id="src-hardware-app"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">2.5 开发 Android 应用程序来使用硬件访问服务</h5>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="src-poiter"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">第三章 智能指针</h3>
+					</div>
+					<div class="panel-body">
+					
+					</div>
+				</div>
+				<!-- item over -->
+
+				<a class="offset" id="src-logger"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">第四章 Logger日志系统</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>Android提供的Logger日志系统是基于内核中的Logger日志驱动程序实现的，它将日志记录保存在内核空间中。为了有效地利用内存空间，Logger日志驱动程序在内部使用一个环形缓冲区来保存日志。因此，当Logger日志驱动程序中的环形缓冲区满了之后，新的日志就会覆盖旧的日志。
+							</p>
+							<p>
+								日志的类型一共有四种，它们分别是
+								<code>main</code>
+								、
+								<code>system</code>
+								、
+								<code>radio</code>
+								和
+								<code>events</code>
+								。在Logger日志驱动程序中，这四种类型的日志分别通过
+								<code>/dev/log/main</code>
+								、
+								<code>/dev/log/system</code>
+								、
+								<code>/dev/log/radio</code>
+								和
+								<code>/dev/log/events</code>
+								四个设备文件来访问。
+							</p>
+							<p>类型为main的日志是应用程序级别的，类型为system的日志是系统级别的,类型为radio的日志是与无线设备相关的,类型为events的日志是专门用来诊断系统问题的，应用程序开发者不应该使用此种类型的日志。Android系统在应用程序框架层中提供了android.util.Log、android.util.Slog和android.util.EventLog三个Java接口来往Logger日志驱动程序中写入日志，它们写入的日志类型分别为main、system和events。</p>
+							<p>无论是Java日志写入接口还是C/C++日志写入接口，它们最终都是通过运行时库层的日志库liblog来往Logger日志驱动程序中写入日志的。此外，系统还提供了一个Logcat工具来读取和显示Logger日志驱动程序中的日志。</p>
+							<div width="100%">
+								<img src="images/android-src-logger.jpg" class="center-block">
+							</div>
+							<ul>
+								<li>
+									<a href="#src-logger-format">4.1 Logger 日志格式</a>
+								</li>
+								<li>
+									<a href="#src-logger-driver">4.2 Logger 日志驱动程序</a>
+								</li>
+								<li>
+									<a href="#src-logger-runtime">4.3 运行时库日志库</a>
+								</li>
+								<li>
+									<a href="#src-logger-c">4.4 C/C++ 日志写入接口</a>
+								</li>
+								<li>
+									<a href="#src-logger-java">4.5 Java 日志写入接口</a>
+								</li>
+								<li>
+									<a href="#src-logger-logcat">4.6 Logcat 工具分析</a>
+								</li>
+							</ul>
+						</div>
+
+						<a class="offset" id="src-logger-format"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">4.1 Logger 日志格式</h5>
+						</div>
+
+						<a class="offset" id="src-logger-driver"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">4.2 Logger 日志驱动程序</h5>
+						</div>
+
+						<a class="offset" id="src-logger-runtime"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">4.3 运行时库日志库</h5>
+						</div>
+
+						<a class="offset" id="src-logger-c"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">4.4 C/C++ 日志写入接口</h5>
+						</div>
+
+						<a class="offset" id="src-logger-java"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">4.5 Java 日志写入接口</h5>
+						</div>
+
+						<a class="offset" id="src-logger-logcat"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">4.6 Logcat 工具分析</h5>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
@@ -389,6 +2153,7 @@ $ myemulator
 	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushCpp.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

@@ -67,17 +67,17 @@
 					<div class="list-group">
 						<a href="#git-intro" class="list-group-item">简介</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
+							data-parent="#accordion" href="#git-base" aria-expanded="true">
 							Git 基础<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="git-base" class="panel-collapse collapse in"
 							role="tabpanel">
 							<a href="#git-init" class="list-group-item">初始化一个git仓库</a>
 							<a href="#git-gitignore" class="list-group-item">gitignore
 								文件配置</a>
 							<a href="#git-command" class="list-group-item">常用命令</a>
 						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#git-checkout-folder" class="list-group-item">检出指定文件或者文件夹</a>
 					</div>
 				</div>
 			</div>
@@ -257,12 +257,31 @@ $ git remote rm paul					# 删除远程仓库
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="git-"></a>
+				<a class="offset" id="git-checkout-folder"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">检出指定文件或者文件夹</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>在进行项目开发的时候，有时候会有这样的需求那就是：我们只希望从Git仓库里取指定的文件或者文件夹出来。在SVN里面，这非常容易实现，因为SVN基于文件方式存储，而Git却是基于元数据方式分布式存储文件信息的，它会在每一次Clone的时候将所有信息都取回到本地，即相当于在你的机器上生成一个克隆版的版本库。因此在Git1.7.0以前，这无法实现，但是幸运的是在Git1.7.0以后加入了Sparse
+							Checkout模式，这使得Check Out指定文件或者文件夹成为可能。</p>
+						<pre class="brush: bash;">
+$ mkdir project_folder
+$ cd project_folder
+$ git init
+$ git remote add -f origin &lt;https://github.com/jiwanger/note.git>
+
+# 在 Config 中配置允许使用 Sparse Checkout 模式
+$ git config core.sparsecheckout true
+
+# 添加要 check out的文件和文件夹, 作为一个列表保存在.git/info/sparse-checkout
+$ echo “android/adb.html” >> .git/info/sparse-checkout
+$ echo “android/images” >> .git/info/sparse-checkout
+
+# 检出你的文件
+$ git pull origin master
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 

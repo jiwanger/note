@@ -68,7 +68,6 @@
 						<a href="#linux-intro" class="list-group-item">简介</a>
 						<a href="#linux-file-system" class="list-group-item">文件系统</a>
 						<a href="#linux-user" class="list-group-item">用户管理</a>
-						<a href="#linux-limit" class="list-group-item">权限管理</a>
 						<a class="list-group-item active dropdown" data-toggle="collapse"
 							data-parent="#accordion" href="#linux-command"
 							aria-expanded="true">
@@ -83,8 +82,7 @@
 							<a href="#linux-grep" class="list-group-item">GREP 命令</a>
 							<a href="#linux-text" class="list-group-item">文本查看 命令集</a>
 							<a href="#linux-file" class="list-group-item">文件操作 命令集</a>
-							<a href="#linux-tar" class="list-group-item">TAR 命令</a>
-							<a href="#linux-zip" class="list-group-item">ZIP 命令</a>
+							<a href="#linux-tar" class="list-group-item">TAR／ZIP 命令</a>
 							<a href="#linux-wget" class="list-group-item">WGET 命令</a>
 							<a href="#linux-apt" class="list-group-item">APT 命令集</a>
 							<a href="#linux-system" class="list-group-item">监控系统和性能 命令集</a>
@@ -92,7 +90,9 @@
 							<a href="#linux-chmod" class="list-group-item">CHMOD 命令</a>
 							<a href="#linux-chown" class="list-group-item">CHOWN 命令</a>
 							<a href="#linux-kill" class="list-group-item">KILL 命令</a>
-							<a href="#linux-" class="list-group-item"> 命令</a>
+							<a href="#linux-ping" class="list-group-item">PING 命令</a>
+							<a href="#linux-awk" class="list-group-item">AWK 命令</a>
+							<a href="#linux-expr" class="list-group-item">EXPR 命令</a>
 						</div>
 						<a href="#linux-" class="list-group-item">...</a>
 					</div>
@@ -110,6 +110,7 @@
 					<h4 style="margin: 0 auto;">本文所有实例使用 Linux Mint 32位系统下测试，不同的
 						Linux 发行版可能略有不同</h4>
 				</div>
+
 				<!-- item start -->
 				<a class="offset" id="linux-intro"></a>
 				<div class="panel panel-default">
@@ -203,35 +204,207 @@
 						<h3 class="panel-title">文件系统</h3>
 					</div>
 					<div class="panel-body">
-						<p>Linux的基本思想有两点：第一，一切都是文件；第二，每个软件都有确定的用途。其中第一条详细来讲就是系统中的所有都归结为一个文件，包括命令、硬件和软件设备、操作系统、进程等等对于操作系统内核而言，都被视为拥有各自特性或类型的文件。</p>
-						<p>Linux 文件类别</p>
-						<ul>
-							<li>
-								普通文件 -- 就是一般存取的文件，由ls -al显示出来的属性中，第一个属性为 [-]，例如
-								[-rwxrwxrwx]。另外，依照文件的内容，又大致可以分为：
-								<ul>
-									<li>纯文本文件 -- 可直接读取的文件</li>
-									<li>二进制文件 -- 可执行文件</li>
-									<li>数据格式的文件 -- 自定义格式的文件</li>
-								</ul>
-							</li>
-							<li>目录文件 -- 目录，第一个属性为 [d]，例如 [drwxrwxrwx]</li>
-							<li>连接文件 -- 指向别的文件的文件，第一个属性为 [l]，例如 [lrwxrwxrwx]。</li>
-							<li>
-								设备文件 -- 与系统外设及存储等相关的一些文件，通常都集中在 /dev目录。通常又分为两种：
-								<ul>
-									<li>块设备文件 -- 就是存储数据以供系统存取的接口设备，简单而言就是硬盘。例如一号硬盘的代码是
-										/dev/hda1等文件。第一个属性为 [b]。</li>
-									<li>字符设备文件 -- 即串行端口的接口设备，例如键盘、鼠标等等。第一个属性为 [c]。</li>
-								</ul>
-							</li>
-							<li>套接字文件 --
-								类文件通常用在网络数据连接。可以启动一个程序来监听客户端的要求，客户端就可以通过套接字来进行数据通信。第一个属性为
-								[s]，最常在 /var/run目录中看到这种文件类型。</li>
-							<li>管道文件 --
-								FIFO也是一种特殊的文件类型，它主要的目的是，解决多个程序同时存取一个文件所造成的错误。FIFO是first-in-first-out（先进先出）的缩写。第一个属性为
-								[p]。</li>
-						</ul>
+						<div class="sub-item">
+							<h5 class="text-primary">文件类型</h5>
+							<p>Linux的基本思想有两点：第一，一切都是文件；第二，每个软件都有确定的用途。其中第一条详细来讲就是系统中的所有都归结为一个文件，包括命令、硬件和软件设备、操作系统、进程等等对于操作系统内核而言，都被视为拥有各自特性或类型的文件。</p>
+							<p>Linux 文件类别</p>
+							<ul>
+								<li>
+									普通文件 -- 就是一般存取的文件，由ls -al显示出来的属性中，第一个属性为 [-]，例如
+									[-rwxrwxrwx]。另外，依照文件的内容，又大致可以分为：
+									<ul>
+										<li>纯文本文件 -- 可直接读取的文件</li>
+										<li>二进制文件 -- 可执行文件</li>
+										<li>数据格式的文件 -- 自定义格式的文件</li>
+									</ul>
+								</li>
+								<li>目录文件 -- 目录，第一个属性为 [d]，例如 [drwxrwxrwx]</li>
+								<li>连接文件 -- 指向别的文件的文件，第一个属性为 [l]，例如 [lrwxrwxrwx]。</li>
+								<li>
+									设备文件 -- 与系统外设及存储等相关的一些文件，通常都集中在 /dev目录。通常又分为两种：
+									<ul>
+										<li>块设备文件 -- 就是存储数据以供系统存取的接口设备，简单而言就是硬盘。例如一号硬盘的代码是
+											/dev/hda1等文件。第一个属性为 [b]。</li>
+										<li>字符设备文件 -- 即串行端口的接口设备，例如键盘、鼠标等等。第一个属性为 [c]。</li>
+									</ul>
+								</li>
+								<li>套接字文件 --
+									类文件通常用在网络数据连接。可以启动一个程序来监听客户端的要求，客户端就可以通过套接字来进行数据通信。第一个属性为
+									[s]，最常在 /var/run目录中看到这种文件类型。</li>
+								<li>管道文件 --
+									FIFO也是一种特殊的文件类型，它主要的目的是，解决多个程序同时存取一个文件所造成的错误。FIFO是first-in-first-out（先进先出）的缩写。第一个属性为
+									[p]。</li>
+							</ul>
+						</div>
+						<div class="sub-item">
+							<h5 class="text-primary">
+								文件属性分析(
+								<code>ls -l</code>
+								)
+							</h5>
+							<pre class="brush: bash;">
+  drwxr-xr-x       6         nate     nate    4096       Feb  9 11:17      Android
+|文件类型和权限|  |文件个数|    |所有者| |所属组| |文件大小|  |最后一次修改时间|   |文件名|
+# 文件类型和权限 -- 第一位是文件类型(参见前面)，后面三位为一组，分别表示所有者，所有组，其它用户权限的可读，可写，可执行权限
+# 文件个数 -- 如果是文件，就是１;此数字表示目录下的文件个数(不包括隐藏文件)
+
+############## 文件权限对 root 用户无效 ###################
+# 更改文件属组，属主和权限
+$ chgrp [-R] group file			# 更改文件属组，-R 代表递归子目录
+
+$ chown [–R] group file			# 更改文件属主，-R 代表递归子目录
+$ chown [-R] group:user file	# 更改文件属主，也可以同时更改文件属组
+
+$ chmod u=rwx,g=rx,o=r file 	# 所有者: rwx, 组: rx, 其它: r, 还有 a:全部的身份
+# 使用数字最简单,r,w,x为分别用4,2,1表示;那么 rwx=4+2+1, rx=4+1, r=4;上面的命令可替换：
+$ chmod 754 file
+
+$ chmod a+x file		# 全部的身份都加可执行权限
+$ chmod a-x file		# 全部的身份都去掉可执行权限
+$ chmod u+x file		# 所有者加可执行权限
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Linux 系统目录结构</h5>
+							<ul>
+								<li>
+									<p>
+										<code>/bin</code>
+										-- bin是Binary的缩写, 这个目录存放着最经常使用的命令。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/boot</code>
+										-- 这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/dev</code>
+										-- dev是Device(设备)的缩写,
+										该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/etc</code>
+										-- 这个目录用来存放所有的系统管理所需要的配置文件和子目录。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/home</code>
+										-- 用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/lib</code>
+										-- 这个目录里存放着系统最基本的动态连接共享库，几乎所有的应用程序都需要用到这些共享库。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/lost+found</code>
+										-- 这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/media</code>
+										-- linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/mnt</code>
+										--
+										系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/opt</code>
+										-- 这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/proc</code>
+										-- 这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/root</code>
+										-- 该目录为系统管理员，也称作超级权限者的用户主目录。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/sbin</code>
+										-- s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/selinux</code>
+										-- 这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/srv</code>
+										-- 该目录存放一些服务启动之后需要提取的数据。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/sys</code>
+										-- 这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/tmp</code>
+										-- 这个目录是用来存放一些临时文件的。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/usr</code>
+										-- 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似与windows下的program
+										files目录。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/usr/bin</code>
+										-- 系统用户使用的应用程序。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/usr/sbin</code>
+										-- 超级用户使用的比较高级的管理程序和系统守护程序。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/usr/src</code>
+										-- 内核源代码默认的放置目录。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>/var</code>
+										-- 这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。
+									</p>
+								</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
@@ -299,16 +472,6 @@ libvirt-qemu:x:117:127:Libvirt Qemu,,,:/var/lib/libvirt:/bin/false
 libvirt-dnsmasq:x:118:128:Libvirt Dnsmasq,,,:/var/lib/libvirt/dnsmasq:/bin/false
 </pre>
 					</div>
-				</div>
-				<!-- item over -->
-
-				<!-- item start -->
-				<a class="offset" id="linux-limit"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">权限管理</h3>
-					</div>
-					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 
@@ -838,13 +1001,248 @@ $ vim !cp:2		# 从命令历史中搜索以 cp 开头的命令，并获取它的�
 						<h3 class="panel-title">GREP, EGREP, FGREP 命令</h3>
 					</div>
 					<div class="panel-body">
-						<p>Linux系统中grep命令是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹
-							配的行打印出来。grep全称是Global Regular Expression
-							Print，表示全局正则表达式版本，它的使用权限是所有用户。</p>
+						<p>Linux系统中grep命令是一种强大的文本搜索工具，它能使用正则表达式搜索文本，并把匹配的行打印出来。grep全称是Global
+							Regular Expression Print，表示全局正则表达式打印，它的使用权限是所有用户。</p>
+						<pre class="brush: bash;">
+$ grep [options] PATTERN [FILE...]
+$ grep [options] [-e PATTERN | -f FILE] [FILE...]
+</pre>
+						<p>Grep 搜索以 FILE 命名的文件输入 (或者是标准输入，如果没有指定文件名，或者给出的文件名是 -
+							的话)，寻找含有与给定的模式 PATTERN 相匹配的内容的行。 默认情况下， grep 将把含有匹配内容的行打印出来。</p>
+						<p>两个变种程序 egrep 和 fgrep 。 Egrep 与 grep -E 相同。 Fgrep 与 grep -F
+							相同。常用参数：</p>
+						<ul>
+							<li>
+								<p>
+									<code>-v</code>
+									-- 和常规相反,打印的是不包含指定模式的行
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-c</code>
+									-- 统计包含指定模式的行数
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-i</code>
+									-- 忽略大小写
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-r</code>
+									-- 指定目录下所有文件内容查找
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-A NUM</code>
+									-- 打印出紧随匹配的行之后的下文 NUM 行
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-l</code>
+									-- 查询多文件时只输出包含匹配字符的文件名
+								</p>
+							</li>
+						</ul>
+
+						<pre class="brush: bash;">
+# 1.在 /etc/passwd 文件中，查找包含 nate 的行,并打印
+$ grep nate /etc/passwd
+
+# 2.指定目录下所有文件内容查找,目录下所有包含 android 的文件，列出文件名和所在行内容
+$ grep -ir android ~/work/code/manual/andriod/		# i 为忽略大小写
+
+# 3.打印出紧随匹配的行之后的下文 NUM 行，找到所在行，并将其(后面/前面)2行也打印出来
+$ grep -A 2 nate /etc/passwd
+$ grep -B 2 nate /etc/passwd
+$ grep -C 2 nate /etc/passwd		# 前后都打印,上面两个命令综合体
+
+# 4.显示所在文件中的行号
+$ grep -n nate /etc/passwd
+
+# 5.不是显示行，只显示匹配的部分
+$ grep -no nate /etc/passwd
+</pre>
+						<h5 class="text-primary">Grep 中的正则表达式</h5>
+						<p>
+							<b>特殊字符</b>
+						</p>
+						<table class="table table-striped table-bordered">
+							<tbody>
+								<tr>
+									<td>符号</td>
+									<td>含义</td>
+									<td>举例</td>
+								</tr>
+								<tr>
+									<td>^</td>
+									<td>开始标记</td>
+									<td>"^abc"满足的例子abc、abcd</td>
+								</tr>
+								<tr>
+									<td>^</td>
+									<td>非（在[]内）</td>
+									<td>"[^abc]"满足的例子：ddd、mpd</td>
+								</tr>
+								<tr>
+									<td>$</td>
+									<td>结束标记</td>
+									<td>”abc$”满足的例子abc、mmabc</td>
+								</tr>
+								<tr>
+									<td>.</td>
+									<td>任意字符</td>
+									<td>"a.c"满足的例子abc、fapcc</td>
+								</tr>
+								<tr>
+									<td>\&lt;</td>
+									<td>匹配单词开始</td>
+									<td>"\&lt;abc"满足的例子abc、abcd</td>
+								</tr>
+								<tr>
+									<td>\&gt;</td>
+									<td>匹配单词结束</td>
+									<td>"abc\&gt;"满足的例子abc、pmrabc</td>
+								</tr>
+								<tr>
+									<td>|</td>
+									<td>或</td>
+									<td>"AAA|BBB"满足的例子AAA、BBBpp</td>
+								</tr>
+							</tbody>
+						</table>
+						<p>
+							<b>范围</b>
+						</p>
+						<table class="table table-striped table-bordered">
+							<tbody>
+								<tr>
+									<td>符号</td>
+									<td>含义</td>
+									<td>举例</td>
+								</tr>
+								<tr>
+									<td>?</td>
+									<td>匹配前一个字符0或1次</td>
+									<td>"abc?"满足的例子ab、mabcd</td>
+								</tr>
+								<tr>
+									<td>*</td>
+									<td>匹配前一个字符≥0次</td>
+									<td>"abc*"满足的例子abbb、abcdk</td>
+								</tr>
+								<tr>
+									<td>+</td>
+									<td>匹配前一个字符≥1次</td>
+									<td>"abc+"满足的例子abcd、abcccdd</td>
+								</tr>
+								<tr>
+									<td>{}</td>
+									<td>{m}、{m,n}、{m,}、{,n}分别为匹配前一个字符m次、m到n次、≥m次、≤n次</td>
+									<td>"abc\{3,5\}"满足的例子abcccc、abcccccc</td>
+								</tr>
+								<tr>
+									<td>[]</td>
+									<td>[]内如果不是范围，选其一；是范围的话，范围内选其一</td>
+									<td>"m[abc]p"满足的例子acpd；m[1-9]p满足的例子m8pp</td>
+								</tr>
+								<tr>
+									<td>()</td>
+									<td>将候选的所有元素放在()内，用|隔开</td>
+									<td>"a(1|2|3)bc"满足的例子a1bc、mba3bcd</td>
+								</tr>
+							</tbody>
+						</table>
+						<p>
+							<b>标准字符类</b>
+						</p>
+						<table class="table table-striped table-bordered">
+							<tbody>
+								<tr>
+									<td>字符类</td>
+									<td>释义</td>
+								</tr>
+								<tr>
+									<td>[:alnum:]</td>
+									<td>字母和数字，与[A-Za-z0-9]等价</td>
+								</tr>
+								<tr>
+									<td>[:word:]</td>
+									<td>[:alnum:]加上下划线_</td>
+								</tr>
+								<tr>
+									<td>[:alpa:]</td>
+									<td>字母，与[A-Za-z]等价</td>
+								</tr>
+								<tr>
+									<td>[:digit:]</td>
+									<td>数字，与[0-9]等价</td>
+								</tr>
+								<tr>
+									<td>[:xdigit:]</td>
+									<td>十六进制字符，与[0-9A-Fa-f等价]</td>
+								</tr>
+								<tr>
+									<td>[:blank:]</td>
+									<td>空格和制表符</td>
+								</tr>
+								<tr>
+									<td>[:graph:]</td>
+									<td>可见字符，靠扩33~126</td>
+								</tr>
+								<tr>
+									<td>[:lower:]</td>
+									<td>小写字母</td>
+								</tr>
+								<tr>
+									<td>[:upper:]</td>
+									<td>大写字母</td>
+								</tr>
+								<tr>
+									<td>[:print:]</td>
+									<td>可打印字符</td>
+								</tr>
+								<tr>
+									<td>[:space:]</td>
+									<td>空白字符，等价于[\t\r\n\v\f]</td>
+								</tr>
+								<tr>
+									<td>[:punct:]</td>
+									<td>标点符号</td>
+								</tr>
+								<tr>
+									<td>[:cntrl:]</td>
+									<td>ASCII控制码，包括字符0~31以及127</td>
+								</tr>
+							</tbody>
+						</table>
+						<pre class="brush: bash;">
+# 1.特殊字符
+$ echo 'Hello, Everyone' | grep '^He'			# He 开头
+$ echo 'Hello, Everyone' | grep 'one$'			# one 结尾
+$ echo 'Grep Tools' | grep '[^A-FH-Z]rep'		# 不包含A-R和T-Z的一个字母开头，紧跟rep的行
+$ echo 'Hello, Everyone' | grep 'He..o'			# .表示任意字符，两个.则必须为两位, Hello, Hemmo 都行
+$ echo 'abce, bcd, abbc' | grep '\&lt;bc'	   	   # 单词开头, 只能匹配 bcd,因为单词是 bc　开头
+$ echo 'abcc, bcd, abbc' | grep 'bc\&gt;'	   	   # 单词结尾, 只能匹配 abbc,因为单词是 bc　结尾
+$ echo 'grep is tools' | grep 'grep\|tools'		# 包含 grep 或 tools的行
+$ echo 'Hello, Everyone' | grep '\&lt;He\|\&lt;Ev'    # 单词是 He 或 Ev 开头
+
+# 2.范围
+$ echo 'bc, bcbc, bcbcbc' | grep '\(bc\)\{2\}'	# bc 出现2-次
+$ echo 'a grep' | grep '\(grep\)\{1,3\}'		# 括号的作用是 grep 出现１-3次，不是p
+
+# 3.标准字符类
+$ grep '[[:digit:]]' /etc/passwd		# 所有有数字的行
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="linux-text"></a>
 				<div class="panel panel-default">
@@ -863,7 +1261,8 @@ $ cat -s todo.txt			# 将所有的连续的多个空行替换为一个空行
 </pre>
 						</div>
 						<div class="sub-item">
-							<p>LESS / MORE 命令 -- LESS 提供了 MORE 的模拟, 并且做了增强。LESS　基于 MORE 和 VI　。</p>
+							<p>LESS / MORE 命令 -- LESS 提供了 MORE 的模拟, 并且做了增强。LESS 基于 MORE 和
+								VI 。</p>
 							<pre class="brush: bash;">
 $ more / less todo.txt
 $ more -d todo.txt			# 让 more 给 用户 显示 提示信息
@@ -905,6 +1304,7 @@ $ cd ~							# 回到用户主目录
 $ cd -							# 在两个最近工作的目录切换
 $ alias ..="cd .."				# 通过 .. 回到上级目录, 可加入 ~/.profile 或 ~/.bashrc
 $ alias ...="cd ../.."			# 通过 ... 回到上级目录的上级目录, 可加入 ~/.profile 或 ~/.bashrc
+$ cd !$							# 把上个命令参数作为当前命令参数
 </pre>
 						</div>
 						<div class="sub-item">
@@ -942,10 +1342,86 @@ $ ls -S						# 按文件大小排序
 $ ls -X						# 按文件扩展名的字典序排序,没有扩展名的先列出
 </pre>
 						</div>
+						<div class="sub-item"></div>
+
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="linux-tar"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">TAR／ZIP 命令</h3>
+					</div>
+					<div class="panel-body">
+						<p>Linux 下打包，压缩，解压有一大批命令可用，如: <code>tar</code>, <code>zip</code>, <code>gzip</code>, <code>bzip2</code>, <code>rar</code> 等。</p>
 						<div class="sub-item">
-						
+							<h5 class="text-primary">tar 命令</h5>
+							<pre class="brush: bash;">
+# 主要参数介绍:
+# 	-c 创建新的档案文件
+# 	-C dir 指定目录
+# 	-v 显示处理详细信息
+# 	-f file　指定创建文件的文件名
+# 	-x 解压缩档案文件
+# 	-t 列出档案文件的内容
+# 	-z 使用 gzip 压缩
+# 	-j 使用 bzip2 压缩
+#	-u 仅将较新的文件附加到存档中
+#	--delete 从归档文件中删除文件
+#	-k 保存现有文件；从存档中展开时不进行覆盖
+
+# 1.创建一个归档文件,不压缩
+$ tar -cvf demo.tar demo-shell/
+$ tar -cvf ~/Desktop/demo.tar demo-shell/		# 指定归档文件位置
+
+# 2.创建一个 gzip/bzip2 压缩的归档文件
+$ tar -cvzf demo.tar.gz demo-shell/
+$ tar -cvjf demo.tar.bz2 demo-shell/
+
+# 3.查看归档文件内容
+$ tar -tvf demo.tar
+$ tar -ztvf demo.tar.gz
+$ tar -jtvf demo.tar.bz2
+
+# 4.解包归档文件
+$ tar -xvf demo.tar
+$ tar -zxvf demo.tar.gz
+$ tar -jxvf demo.tar.bz2
+$ tar -jkxvf demo.tar.bz2						# 不覆盖原有文件
+
+# 5.解包归档文件到指定目录
+$ tar -xvf demo.tar -C ~/Desktop
+$ tar -ztvf demo.tar.gz -C ~/Desktop
+$ tar -jxvf demo.tar.bz2 -C ~/Desktop
+
+# 6.更新/添加/删除 归档文件中的文件
+$ tar -uvf demo.tar demo-shell/a.txt			# 更新 a.txt 这个文件
+$ tar -rvf demo.tar x.txt						# 添加文件到归档文件
+$ tar -f demo.tar --delete demo-shell/a.txt		# 从归档文件中删除 a.txt
+</pre>
 						</div>
 						
+						<div class="sub-item">
+							<h5 class="text-primary">zip 命令</h5>
+							<pre class="brush: bash;">
+# 
+$ 
+</pre>
+						</div>
+						
+						<div class="sub-item">
+							<h5 class="text-primary">gzip 命令</h5>
+						</div>
+						
+						<div class="sub-item">
+							<h5 class="text-primary">bzip2 命令</h5>
+						</div>
+						
+						<div class="sub-item">
+							<h5 class="text-primary">rar 命令</h5>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
@@ -965,6 +1441,153 @@ $ wget -r -p -np -k https://nodejs.org/api/index.html
 	# -p,  --page-requisites（下载所有的图片等页面显示所需的内容）
 	# -np, --no-parent（不追溯至父级）
 </pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"></h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-system"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">系统性能查看</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">Top 命令</h5>
+							<p>Top命令提供了实时的对系统处理器的状态监视.它将显示系统中CPU最“敏感”的任务列表.该命令可以按CPU使用.内存使用和执行时间对任务进行排序；而且该命令的很多特性都可以通过交互式命令或者在个人定制文件中进行设定.
+							</p>
+							<p>Top是一个动态显示过程,即可以通过用户按键来不断刷新当前状态.如果在前台执行该命令,它将独占前台,直到用户终止该程序为止(按下
+								q 键)。</p>
+							<p width="100%">
+								<img src="images/linux-top-display.png" class="center-block">
+							</p>
+							<ul>
+								<li>
+									第一行是任务队列信息, 同
+									<code>uptime</code>
+									命令输入相同。
+									<pre class="brush: bash;">
+top: 17:23:48 up 23 days,  1:41,  1 user,  load average: 0.04, 0.06, 0.01
+     |当前时间|   |  系统启动时间 || 登录用户数 |  | 系统负载，即任务队列的平均长度 |
+load average”为当前系统负载的平均值，后面的三个值分别为1分钟前、5分钟前、15分钟前进程的平均数，
+	一般的可以认为这个数值超过 CPU 数目时，CPU 将比较吃力的负载当前系统所包含的进程；	
+</pre>
+								</li>
+								<li>
+									第二行为进程使用情况
+									<pre class="brush: bash;">
+Tasks:  132 total,   1 running,     131 sleeping,      0 stopped,       0 zombie
+      |  进程总数  | |运行中的进程数|	 |等待状态中的进程数| |被停止的系统进程数| |被复原的进程数|
+</pre>
+								</li>
+								<li>
+									第三行为 cpu 使用情况
+									<pre class="brush: bash;">
+Cpu(s):  0.3%us,  0.3%sy,  0.0%ni, 99.1%id,  0.3%wa,  0.0%hi,  0.1%si,  0.0%st
+0.3%us -- 用户空间占用CPU百分比
+0.3%sy -- 内核空间占用CPU百分比|
+0.0%ni -- 用户进程空间内改变过优先级的进程占用CPU百分比
+99.1%id -- 空闲CPU百分比
+0.3%wa -- 等待输入输出的CPU时间百分比
+</pre>
+								</li>
+								<li>
+									第四行为内存使用情况
+									<pre class="brush: bash;">
+Mem:   8007840k total,  7238256k used,   769584k free,    46820k buffers
+       |  内存总量  |    |  使用的内存  |   |  空闲内存  |    |缓冲使用中的内存量|
+</pre>
+								</li>
+								<li>
+									第五行为交换分区（Swap）使用的情况,交换分区被频繁使用的情况，将被视作物理内存不足而造成的。
+									<pre class="brush: bash;">
+Swap: 16777208k total,   106636k used, 16670572k free,  5543012k cached
+	   |  swap 总量  |   |  使用的swap  |  |  空闲swap  | |缓冲使用中的swap|
+</pre>
+								</li>
+								<li>
+									后面列出为每个进程信息
+									<pre class="brush: bash;">
+PID		进程ID
+USER	进程所有者的用户名
+PR		优先级
+NI		NICE值。负值表示高优先级，正值表示低优先级
+VIRT	进程使用的虚拟内存总量，单位kb。VIRT=SWAP+RES
+RES		进程使用的、未被换出的物理内存大小，单位kb。RES=CODE+DATA
+SHR		共享内存大小，单位kb
+S		进程状态
+			D	不可中断的睡眠状态
+            R	运行
+            S	睡眠
+            T	跟踪/停止
+            Z	僵尸进程
+%CPU	上次更新到现在的CPU时间占用百分比
+%MEM	进程使用的物理内存百分比
+TIME+	进程使用的CPU时间总计，单位1/100秒
+COMMAND	命令名/命令行
+</pre>
+								</li>
+							</ul>
+							<p>Top 命令常用参数和交互操作:</p>
+							<pre class="brush: bash;">
+# top 命令行参数：
+# -d 指定每两次屏幕信息刷新之间的时间间隔。当然用户可以使用s交互命令来改变之。
+# -p &lt;pid> 通过指定监控进程ID来仅仅监控某个进程的状态。
+# -q 该选项将使top没有任何延迟的进行刷新。如果调用程序有超级用户权限，那么top将以尽可能高的优先级运行。
+# -s 使top命令在安全模式中运行。这将去除交互命令所带来的潜在危险。
+# -i 使top不显示任何闲置或者僵死进程。
+# -c 显示整个命令行而不只是显示命令名
+
+# top 交互操作(进入top命令后，按下相应命令)：
+# h/?	显示帮助画面
+# k		终止一个进程。系统将提示用户输入需要终止的进程PID，以及需要发送给该进程什么样的信号。
+#		  一般的终止进程可以使用15信号；如果不能正常结束那就使用信号9强制结束该进程
+# i		忽略闲置和僵死进程。
+# q 	退出程序
+# s 	改变两次刷新之间的延迟时间
+# c		切换显示命令名称和完整命令行
+# M		根据驻留内存大小进行排序
+# P		根据CPU使用百分比大小进行排序
+# T		根据时间/累计时间进行排序
+# W		将当前设置写入~/.toprc文件中。这是写top配置文件的推荐方法。
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-sed"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">SED 命令</h3>
+					</div>
+					<div class="panel-body">
+						<p>SED
+							是一个很好的文件处理工具，本身是一个管道命令，主要是以行为单位进行处理，可以将数据行进行替换、删除、新增、选取等特定工作。</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="linux-awk"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">AWK 命令</h3>
+					</div>
+					<div class="panel-body">
+						<p>AWK
+							是一个强大的文本分析工具，相对于grep的查找，sed的编辑，awk在其对数据分析并生成报告时，显得尤为强大。简单来说awk就是把文件逐行的读入，以空格为默认分隔符将每行切片，切开的部分再进行各种分析处理。</p>
 					</div>
 				</div>
 				<!-- item over -->

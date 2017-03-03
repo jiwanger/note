@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -65,19 +65,51 @@
 						<h3 class="panel-title">VIEW</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+						<a href="#" class="list-group-item">概述</a>
+						<a href="#view-measure" class="list-group-item">View框架的measure机制</a>
+						<a href="#view-layout" class="list-group-item">View框架的layout机制</a>
+						<a href="#view-draw" class="list-group-item">View框架的draw机制</a>
+						<a href="#view-event" class="list-group-item">View框架的事件分发机制</a>
+						<a href="#view-View" class="list-group-item">View 类</a>
+						<a class="list-group-item active dropdown" data-toggle="collapse"
+							data-parent="#accordion" href="#view-view" aria-expanded="true">
+							常用的View<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="view-view" class="panel-collapse collapse"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#view-TextView" class="list-group-item">TextView</a>
+							<a href="#view-" class="list-group-item">ImageView</a>
+							<a href="#view-" class="list-group-item">EditText</a>
+							<a href="#view-" class="list-group-item">Button</a>
+							<a href="#view-" class="list-group-item">RadioButton</a>
+							<a href="#view-" class="list-group-item">CheckBox</a>
+							<a href="#view-" class="list-group-item">ProgressBar</a>
+							<a href="#view-" class="list-group-item">ListView</a>
+							<a href="#view-" class="list-group-item">Spinner</a>
+							<a href="#view-" class="list-group-item">SeekBar</a>
+							<a href="#view-" class="list-group-item">AutoCompleteTextView</a>
+							<a href="#view-" class="list-group-item">ViewPager</a>
+							<a href="#view-" class="list-group-item">ActionBar</a>
+							<a href="#view-" class="list-group-item">GridView</a>
+							<a href="#view-" class="list-group-item">ScrollView</a>
+							<a href="#view-" class="list-group-item">Toast</a>
 						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#view-ViewGroup" class="list-group-item">ViewGroup 类</a>
+						<a class="list-group-item active dropup" data-toggle="collapse"
+							data-parent="#accordion" href="#view-viewgroup"
+							aria-expanded="true">
+							常用的ViewGroup<span class="caret pull-right"
+								style="margin-top: 5px;"></span>
+						</a>
+						<div id="view-viewgroup" class="panel-collapse collapse in"
+							role="tabpanel">
+							<a href="#view-layout-LinearLayout" class="list-group-item">LinearLayout</a>
+							<a href="#view-layout-FrameLayout" class="list-group-item">FrameLayout</a>
+							<a href="#view-layout-RelativeLayout" class="list-group-item">RelativeLayout</a>
+							<a href="#view-layout-AbsoluteLayout" class="list-group-item">AbsoluteLayout</a>
+							<a href="#view-layout-TableLayout" class="list-group-item">TableLayout</a>
+						</div>
+
 					</div>
 				</div>
 			</div>
@@ -90,13 +122,423 @@
 		<div class="row">
 			<div class="col-md-9 col-md-push-3" style="float: left;">
 				<!-- item start -->
-				<a class="offset" id="..."></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">概述</h3>
 					</div>
 					<div class="panel-body">
-						
+						<p>Android中View框架的工作机制中，主要有三个过程：</p>
+						<ol>
+							<li>
+								<a href="#view-measure">View树的测量（measure）机制</a>
+							</li>
+							<li>
+								<a href="#view-layout">View树的布局（layout）机制</a>
+							</li>
+							<li>
+								<a href="#view-draw">View树的绘制（draw）机制</a>
+							</li>
+						</ol>
+						<p>View 类是用户接口的基础构件。 View 表示屏幕上的一块矩形区域，负责绘制这个区域和事件处理。</p>
+						<p>View 是所有widget类的基类，Widget 类用于创建交互式UI构件（按钮，输入框等）。</p>
+						<p>View 类的ViewGroup子类是layout
+							的基类，Layout是一个不可见的容器，它保存着View（或ViewGroup）并定义这些View的layout 属性。</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="view-measure"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">View框架的measure机制</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							开发人员在绘制UI的时候，基本都是通过XML布局文件的方式来配置UI，而每个View必须要设置的两个群属性就是layout_width和layout_height，这两个属性代表着当前View的尺寸。</p>
+						<h5 class="text-primary">1、系统为什么要有measure过程？</h5>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果layout_width和layout_height这两个属性只允许设置固定的大小，那么每个View的尺寸在绘制的时候就已经确定了，所以可能都不需要measure过程。但是由于需要满足自适应尺寸的机制，所以需要一个measure过程。</p>
+						<h5 class="text-primary">2、measure 过程都干了点什么事？</h5>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;由于前面提到的自适应尺寸的机制，所以在用自适应尺寸来定义View大小的时候，View的真实尺寸还不能确定。但是View尺寸最终需要映射到屏幕上的像素大小，所以measure过程就是干这件事，把各种尺寸值，经过计算，得到具体的像素值。measure过程会遍历整棵View树，然后依次测量每个View真实的尺寸。具体是每个ViewGroup会向它内部的每个子View发送measure命令，然后由具体子View的onMeasure()来测量自己的尺寸。最后测量的结果保存在View的mMeasuredWidth和mMeasuredHeight中，保存的数据单位是像素。</p>
+						<h5 class="text-primary">3、对于自适应的尺寸机制，如何合理的测量一颗View树？</h5>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;系统在遍历完布局文件后，针对布局文件，在内存中生成对应的View树结构，这个时候，整棵View树种的所有View对象，都还没有具体的尺寸，因为measure过程最终是要确定每个View打的准确尺寸，也就是准确的像素值。但是刚开始的时候，View中layout_width和layout_height两个属性的值，都只是自适应的尺寸，也就是match_parent和wrap_content，这两个值在系统中为负数，所以系统不会把它们当成具体的尺寸值。所以当一个View需要把它内部的match_parent或者wrap_content转换成具体的像素值的时候，他需要知道两个信息。</p>
+						<ol>
+							<li>针对于match_parent，父布局当前具体像素值是多少，因为match_parent就是子View想要和父布局一样大。</li>
+							<li>针对wrap_content，子View需要根据当前自己内部的content，算出一个合理的能包裹所有内容的最小值。但是如果这个最小值比当前父布局还大，那不行，父布局会告诉你，我只有这么大，你也不应该超过这个尺寸。</li>
+						</ol>
+						<h5 class="text-primary">4、那么ViewGroup是如何向子View传递限制信息的？</h5>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;谈到传递限制信息，那就是MeasureSpec类了，该类贯穿于整个measure过程，用来传递父布局对子View尺寸测量的约束信息。简单来说，该类就保存两类数据。</p>
+						<ol>
+							<li>子View当前所在父布局的具体尺寸。</li>
+							<li>父布局对子View的限制类型。</li>
+						</ol>
+						<p>那么限制类型又分为三种类型：</p>
+						<ol>
+							<li>
+								UNSPECIFIED，不限定。意思就是，子View想要多大，我就可以给你多大，你放心大胆的measure吧，不用管其他的。也不用管我传递给你的尺寸值。（其实Android高版本中推荐，只要是这个模式，尺寸设置为0）
+							</li>
+							<li>
+								EXACTLY，精确的。意思就是，根据我当前的状况，结合你指定的尺寸参数来考虑，你就应该是这个尺寸，具体大小在MeasureSpec的尺寸属性中，自己去查看吧，你也不要管你的content有多大了，就用这个尺寸吧。
+							</li>
+							<li>
+								AT_MOST，最多的。意思就是，根据我当前的情况，结合你指定的尺寸参数来考虑，在不超过我给你限定的尺寸的前提下，你测量一个恰好能包裹你内容的尺寸就可以了。
+							</li>
+						</ol>
+						<h5 class="text-primary">MeasureSpec 类:</h5>
+						<ul>
+							<li>
+								<p>
+									<code>static int getMode(int measureSpec)</code>
+									-- 根据提供的测量值(格式)提取模式(上述三个模式之一)
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>static int getSize(int measureSpec)</code>
+									-- 根据提供的测量值(格式)提取大小值(这个大小就是尺寸)
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>static int makeMeasureSpec(int size, int mode)</code>
+									-- 根据提供的大小值和模式创建一个测量值(格式)
+								</p>
+							</li>
+						</ul>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="view-layout"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">View框架的layout机制</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">1、系统为什么要有layout过程？</h5>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							View框架在经过第一步的measure过程后，成功计算了每一个View的尺寸。但是要成功的把View绘制到屏幕上，只有View的尺寸还不行，还需要准确的知道该View应该被绘制到什么位置。除此之外，对一个ViewGroup而言，还需要根据自己特定的layout规则，来正确的计算出子View的绘制位置，已达到正确的layout目的。这也就是layout过程的职责。</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							该位置是View相对于父布局坐标系的相对位置，而不是以屏幕坐标系为准的绝对位置。这样更容易保持树型结构的递归性和内部自治性。而View的位置，可以无限大，超出当前ViewGroup的可视范围，这也是通过改变View位置而实现滑动效果的原理。</p>
+						<p>&nbsp;</p>
+						<h5 class="text-primary">2、layout过程都干了点什么事？</h5>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							由于View是以树结构进行存储，所以典型的数据操作就是递归操作，所以，View框架中，采用了内部自治的layout过程。</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							每个叶子节点根据父节点传递过来的位置信息，设置自己的位置数据，每个非叶子节点，除了负责根据父节点传递过来的位置信息，设置自己的位置数据外（如果有父节点的话），还需要根据自己内部的layout规则（比如垂直排布等），计算出每一个子节点的位置信息，然后向子节点传递layout过程。</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							对于ViewGroup，除了根据自己的parent传递的位置信息，来设置自己的位置之外，还需要根据自己的layout规则，为每一个子View计算出准确的位置（相对于子View的父布局的位置）。</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							对于View，根据自己的parent传递的位置信息，来设置自己的位置。</p>
+						<p>
+							<img src="images/view-layout-1.png" alt="">
+						</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							View对象的位置信息，在内部是以4个成员变量的保存的，分别是mLeft、mRight、mTop、mBottom。他们的含义如图所示。</p>
+						<p>
+							<img src="images/view-layout-2.png" alt="">
+						</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="view-draw"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">View框架的draw机制</h3>
+					</div>
+					<div class="panel-body">
+						<h5 class="text-primary">1、系统为什么要有draw过程？</h5>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							View框架在经过了measure过程和layout过程之后，就已经确定了每一个View的尺寸和位置。那么接下来，也是一个重要的过程，就是draw过程，draw过程是用来绘制View的过程，它的作用就是使用graphic框架提供的各种绘制功能，绘制出当前View想要的样子。</p>
+						<h5 class="text-primary">2、draw过程都干了点什么事？</h5>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							View框架中，draw过程主要是绘制View的外观。ViewGroup除了负责绘制自己之外，还需要负责绘制所有的子View。而不含子View的View对象，就负责绘制自己就可以了。</p>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; draw过程的主要流程如下：</p>
+						<p>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1、绘制
+							backgroud（drawBackground）&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							2、如果需要的话，保存canvas的layer，来准备fading（不是必要的步骤）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							3、绘制view的content（onDraw方法）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							4、绘制children（dispatchDraw方法）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							5、如果需要的话，绘制fading edges，然后还原layer（不是必要的步骤）<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							6、绘制装饰器、比如scrollBar（onDrawForeground）
+						</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="view-event"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">View框架的事件分发机制</h3>
+					</div>
+					<div class="panel-body">
+						<p>Android事件传递机制也是Android系统中比较重要的一块，事件类型有很多种，这里主要讨论TouchEvent的事件在framework层的传递处理机制。</p>
+						<h5 class="text-primary">1、为什么要有事件分发过程？</h5>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							当Android设备的屏幕，接收到触摸的动作时，屏幕驱动把压力信号（包括压力大小，压力位置等）传递给系统底层，然后操作系统经过一系列的处理，然后把触摸事件一层一层的向上传递，最终事件会被准确的传递到产生事件的对象上，系统会遍历每一个View对象，然后计算触摸点在哪一个View中。比如A和B两个View，是兄弟View，AView产生的触摸事件，是不会被分发到B上面的。</p>
+						<h5 class="text-primary">2、怎么看待事件序列？</h5>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							在Android系统中，一个单独的事件基本上是没什么作用的，只有一个事件序列，才有意义。一个事件序列正常情况下，定义为
+							DOWN、MOVE（0或者多个）、UP/CANCEL。事件序列以DOWN事件开始，中间会有0或者多个MOVE事件，最后以UP事件或者CANCEL事件结束。</p>
+						<p>DOWN事件作为序列的开始，有一个很重要的职责，就是寻找事件序列的接受者，怎么理解呢？framework
+							在DOWN事件的传递过程中，需要根据View事件处理方法（onTouchEvent）的返回值来确定事件序列的接受者。如果一个View的onTouchEvent事件，在处理DOWN事件的时候返回true，说明它愿意接受并处理该事件序列。</p>
+						<h5 class="text-primary">3、Android的framework层如何处理事件的分发过程？</h5>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							触摸事件到了framework层之后，首先会被传递到Activity，然后Activity会把事件委托给它内部的Window对象进行分发处理，而Window对象又会委托它内部的DecorView进行事件分发处理。我们都知道，DecorView是整棵View树的根节点，所以整个事件传递过程的复杂度就是事件在View树种分发传递的复杂度。
+							Android View框架提供了3个对事件的主要操作概念。</p>
+						<p>
+							&nbsp;&nbsp;&nbsp; <strong>1、事件的分发机制，dispatchTouchEvent。</strong>主要是parent根据触摸事件的产生位置，以及child是否愿意负责处理该系列事件等状态，向其child分发事件的机制。
+						</p>
+						<p>
+							&nbsp;&nbsp;&nbsp; <strong>2、事件的拦截机制，onInterceptTouchEvent。</strong>主要是parent根据它内部的状态、或者child的状态，来把事件拦截下来，阻止其进一步传递到child的机制。
+						</p>
+						<p>
+							&nbsp;&nbsp;&nbsp; <strong>3、事件的处理机制，onTouchEvent。</strong>主要是事件序列的接受者（可以是一个View或者ViewGroup），对事件作出处理，并且向其parent传递处理结果的机制。
+						</p>
+						<h5 class="text-primary">4、上述三个机制，是怎么向其调用者传递处理结果的？</h5>
+						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							在Java中，传递计算结果，有很多种途径，这里采用的是一种适用于同步调用的方法，返回值的方法。每个机制都使用boolean类型作为其返回值，那么每个机制的每个返回值是什么含义呢。</p>
+						<p>
+							&nbsp;&nbsp;&nbsp; <strong>1、事件的分发机制，dispatchTouchEvent。</strong>
+						</p>
+						<p>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>true</strong>-事件被以该节点为根节点的View树成功处理，此时该事件就算是处理完成了，事件不会再向上返还给View的父节点（把事件分发过来的那个节点）。
+						</p>
+						<p>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>false</strong>-以该节点为根节点的View树种，没有一个View（包括该View）成功处理了此事件，所以事件会向上返还给View的父节点（把事件分发过来的那个节点）。
+						</p>
+						<p>
+							&nbsp;&nbsp;&nbsp; <strong>2、事件的拦截机制，onInterceptTouchEvent。</strong>主要是parent根据它内部的状态、或者child的状态，来把事件拦截下来，阻止其进一步传递到child的机制。
+						</p>
+						<p>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>true</strong>-当前ViewGroup（<span
+								style="color: #ff0000;">因为View中没有该方法，而没有child的VIew也不需要有拦截机制</span>）希望该事件不再传递给其child，而是希望自己处理。
+						</p>
+						<p>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>false</strong>-当前ViewGroup不准备拦截该事件，事件正常向下分发给其child。
+						</p>
+						<p>
+							&nbsp;&nbsp;&nbsp;<strong> 3、事件的处理机制，onTouchEvent。</strong>主要是事件序列的接受者（可以是一个View或者ViewGroup），对事件作出处理，并且向其parent传递处理结果的机制。
+						</p>
+						<p>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>true</strong>-表示该View成功处理了该事件，该处理结果会向上通知给其parent。
+						</p>
+						<p>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <strong>false</strong>-表示该View没有成功处理该事件，那么它的parent会有机会来处理该事件（parent标记为事件序列接受者，parent
+							的 onTouchEvent 在 Down 事件时返回true）。
+						</p>
+
+						<h5 class="text-primary">下面提供几个实例：</h5>
+						<ul>
+							<li>
+								ViewPager 中嵌套子 ViewPager 冲突问题解决(子 ViewPager 不可滑动)
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="#view-example-viewpager" aria-expanded="true"
+											class="code-header">
+											<span class="glyphicon glyphicon-plus"></span> View Code
+										</a>
+									</div>
+									<div id="view-example-viewpager"
+										class="panel-collapse collapse" style="" aria-expanded="true">
+										<pre class="brush: java;">
+public class ChildViewPager extends ViewPager {
+    /** 触摸时按下的点 **/
+    PointF downP = new PointF();
+    /** 触摸时当前的点 **/
+    PointF curP = new PointF();
+    OnSingleTouchListener onSingleTouchListener;
+
+    public ChildViewPager(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public ChildViewPager(Context context) {
+        super(context);
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent arg0) {
+        // 当拦截触摸事件到达此位置的时候，返回true，
+        // 说明将onTouch拦截在此控件，进而执行此控件的onTouchEvent
+        return true;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent arg0) {
+        // 每次进行onTouch事件都记录当前的按下的坐标
+        curP.x = arg0.getX();
+        curP.y = arg0.getY();
+
+        if (arg0.getAction() == MotionEvent.ACTION_DOWN) {
+            // 记录按下时候的坐标
+            // 切记不可用 downP = curP ，这样在改变curP的时候，downP也会改变
+            downP.x = arg0.getX();
+            downP.y = arg0.getY();
+            // 此句代码是为了通知他的父ViewPager现在进行的是本控件的操作，不要对我的操作进行干扰
+            getParent().requestDisallowInterceptTouchEvent(true);
+        }
+
+        if (arg0.getAction() == MotionEvent.ACTION_MOVE) {
+            // 此句代码是为了通知他的父ViewPager现在进行的是本控件的操作，不要对我的操作进行干扰
+            getParent().requestDisallowInterceptTouchEvent(true);
+        }
+
+        if (arg0.getAction() == MotionEvent.ACTION_UP) {
+            // 在up时判断是否按下和松手的坐标为一个点
+            // 如果是一个点，将执行点击事件，这是我自己写的点击事件，而不是onclick
+            if (downP.x == curP.x && downP.y == curP.y) {
+                onSingleTouch();
+                return true;
+            }
+        }
+
+        return super.onTouchEvent(arg0);
+    }
+
+    /**
+     * 单击
+     */
+    public void onSingleTouch() {
+        if (onSingleTouchListener != null) {
+
+            onSingleTouchListener.onSingleTouch();
+        }
+    }
+
+    /**
+     * 创建点击事件接口
+     */
+    public interface OnSingleTouchListener {
+        public void onSingleTouch();
+    }
+
+    public void setOnSingleTouchListener(OnSingleTouchListener onSingleTouchListener) {
+        this.onSingleTouchListener = onSingleTouchListener;
+    }
+
+}
+</pre>
+									</div>
+								</div>
+							</li>
+							<li>
+								ViewPager 中嵌套 ListView 冲突问题解决
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="#view-example-viewpager-listview" aria-expanded="true"
+											class="code-header">
+											<span class="glyphicon glyphicon-plus"></span> View Code
+										</a>
+									</div>
+									<div id="view-example-viewpager-listview"
+										class="panel-collapse collapse" style="" aria-expanded="true">
+										<pre class="brush: java;">
+public class MyViewPager extends ViewPager {
+	private int startX;
+	private int startY;
+
+	public MyViewPager(Context context) {
+		super(context);
+	}
+
+	@Override
+	public boolean onInterceptTouchEvent(MotionEvent ev) {
+		switch (ev.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			startX = (int) ev.getX();
+			startY = (int) ev.getY();
+			break;
+		case MotionEvent.ACTION_MOVE:
+
+			int dX = (int) (ev.getX() - startX);
+			int dY = (int) (ev.getY() - startX);
+			if (Math.abs(dX) > Math.abs(dY)) {// 左右滑动
+				return true;
+			} else {// 上下滑动
+				return false;
+			}
+		case MotionEvent.ACTION_UP:
+			break;
+		}
+		return super.onInterceptTouchEvent(ev);
+	}
+}
+</pre>
+									</div>
+								</div>
+							</li>
+							<li>
+								ScrollView 中嵌套 ListView 冲突问题解决(ListView 不可滑动)
+								<div class="panel panel-default">
+									<div class="panel-heading">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="#view-example-listview" aria-expanded="true"
+											class="code-header">
+											<span class="glyphicon glyphicon-plus"></span> View Code
+										</a>
+									</div>
+									<div id="view-example-listview" class="panel-collapse collapse"
+										style="" aria-expanded="true">
+										<pre class="brush: java;">
+public class MyListView exdents ListView {
+	public MyListView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public MyListView(Context context) {
+        super(context);
+    }
+    
+	@Override
+	public boolean onTouchEvent(MotionEvent ev) {
+	    super.onTouchEvent(ev);
+	    switch (ev.getAction()) {
+	        case MotionEvent.ACTION_DOWN:
+	        	// 通知parent，是否拦截后续事件，如果设置为true，parent就不会拦截该事件，不管什么状态。
+	            getParent().requestDisallowInterceptTouchEvent(true);
+	            break;
+	        case MotionEvent.ACTION_MOVE:
+	            break;
+	        case MotionEvent.ACTION_UP:
+	        	// 设置为false，parent走正常的拦截流程
+	            getParent().requestDisallowInterceptTouchEvent(false);
+	            break;
+	        default:
+	            break;
+	    }
+	    return  true;
+	}
+}
+</pre>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="view-View"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">View 类</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+package android.view;
+
+public class View implements Drawable.Callback, KeyEvent.Callback, AccessibilityEventSource {}
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -105,14 +547,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -121,6 +562,7 @@
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

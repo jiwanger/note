@@ -79,6 +79,7 @@
 							<a href="#java-jar" class="list-group-item">jar 工具</a>
 							<a href="#java-examples" class="list-group-item">examples</a>
 						</div>
+						<a href="#java-syntax" class="list-group-item">Java 中的几个关键字</a>
 						<a href="#java-class-loader" class="list-group-item">ClassLoader
 							原理</a>
 						<a href="#java-reflect" class="list-group-item">Java 反射</a>
@@ -737,6 +738,107 @@ $ java -jar build/libs/demo.jar
 								</ol>
 							</li>
 						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-syntax"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Java 中的几个关键字</h3>
+					</div>
+					<div class="panel-body">
+						<ul>
+							<li>
+								<a href="#java-syntax-static">static 关键字</a>
+							</li>
+							<li>
+								<a href="#java-syntax-final">final 关键字</a>
+							</li>
+							<li>
+								transient 关键字 -- 在成员变量前加此关键字，此成员变量不会被序列化
+							</li>
+							<li>
+								synchronized 关键字 -- 参见: <a href="#java-thread">Java 多线程</a>
+							</li>
+						</ul>
+
+						<a class="offset" id="java-syntax-static"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">static 关键字</h5>
+							<pre class="brush: java;">
+// 静态导入指定成员
+import static java.lang.System.out;
+// 导入所有静态成员和静态方法
+import static java.lang.System.*;
+
+public class StaticDemo {
+	// 静态成员
+	public static final String TAG = "StaticDemo";
+
+	// 静态代码块
+	static {
+		System.out.println("===静态代码块===");
+	}
+	
+	// 静态内部类
+	public static class Inner {
+		public static void show(){
+			System.out.println("===静态内部类===");
+		}
+	}
+	
+	// 静态方法
+	public static void main(String[] args) {
+		// 因为静态导入了 java.lang.System.out 这个成员，才能这样用
+		out.println("===静态导包===");
+		
+		getenv();
+		
+		StaticDemo.Inner.show();
+	}
+}
+</pre>
+						</div>
+
+						<a class="offset" id="java-syntax-final"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">final 关键字</h5>
+							<pre class="brush: java;">
+// final 类, 不能被继承，没有子类
+public final class FinalDemo {
+	// final 成员, 不能修改
+	public static final String TAG = "FinalDemo";
+
+	// final 方法, 不能 Override
+	public final void show() {
+		System.out.println("===成员方法===");
+	}
+
+	// final 内部类
+	public final class Inner {
+		public void log() {
+			System.out.println("===final 内部类===");
+		}
+	}
+
+	// final 参数, jdk 1.6 中必须加 final, 才能在方法中的内部类中访问　arg 这个参数
+	public void argument(final String arg) {
+		Runnable thread = new Runnable() {
+			public void run() {
+				System.out.println("=== final 参数才能传入到方法的内部类中 ===" + arg);
+			}
+		};
+		new Thread(thread).start();
+	}
+
+	public static void main(String[] args) {
+		new FinalDemo().argument("xxxxxxxx");
+	}
+}
+</pre>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
@@ -2236,7 +2338,7 @@ public class DirectMemoryOOM {
 							<h5 class="text-primary">Eclipse MAT 工具</h5>
 							<p>Eclipse Memory Analyzer（MAT）一个功能丰富的 JAVA
 								堆转储文件分析工具，可以用于发现内存漏洞和减少内存消耗。</p>
-								
+
 						</div>
 
 						<div class="sub-item">
@@ -2291,7 +2393,8 @@ public class HeapOOM {
 									Survivor 区复制过来的并且此时还存活的对象，将被复到 Old(年老区(如图中间块))。
 								</li>
 								<li>
-									<b>Tenured / Old(年老代)</b> -- 年老代存放从年轻代复制过来的存活对象。一般来说年老代存放的都是生命期较长的对象。
+									<b>Tenured / Old(年老代)</b> --
+									年老代存放从年轻代复制过来的存活对象。一般来说年老代存放的都是生命期较长的对象。
 								</li>
 								<li>
 									<b>Permanent(持久代)</b> --

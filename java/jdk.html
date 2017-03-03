@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="keywords" content="key1, key2" />
+<meta name="description" content=””>
+<meta name="author" content="nate">
+<meta name="author" content="nate &lt;jiwanger@126.com&gt;">
+<link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
+<link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<title>NATE--笔记--JDK</title>
+<!-- Bootstrap -->
+<link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
+	rel="stylesheet">
+<!-- 
+<link href="../support/bootstrap/css/bootstrap.css" rel="stylesheet">
+-->
+<link type="text/css" rel="stylesheet"
+	href="../support/syntaxhighlighter/styles/shCoreDefault.css" />
+<link href="../commons/css/common.css" rel="stylesheet">
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<!-- nav start -->
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="../index.html">
+					<img src="../commons/images/icon.png">
+				</a>
+			</div>
+
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul id="my-nav" class="nav navbar-nav">
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- nav end -->
+
+	<div class="container">
+		<div class="row">
+			<!-- left-menu start -->
+			<div class="col-md-3">
+				<div class="panel panel-default"
+					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
+					<div class="panel-heading">
+						<h3 class="panel-title">JDK</h3>
+					</div>
+					<div class="list-group">
+						<a href="#jdk-intro" class="list-group-item">简介</a>
+						<a href="#jdk-java.lang" class="list-group-item">java.lang 包</a>
+						<a href="#jdk-java.io" class="list-group-item">java.io 包</a>
+						<a href="#jdk-java.nio" class="list-group-item">java.nio 包</a>
+						<a href="#jdk-java.util" class="list-group-item">java.util 包</a>
+						<a href="#jdk-java.beans" class="list-group-item">java.beans 包</a>
+						<a href="#jdk-java.sql" class="list-group-item">java.sql 包</a>
+						<a href="#jdk-java.security" class="list-group-item">java.security
+							包</a>
+					</div>
+				</div>
+			</div>
+			<!-- left-menu over -->
+		</div>
+	</div>
+
+
+	<div class="container" style="margin-top: 70px;">
+		<div class="row">
+			<div class="col-md-9 col-md-push-3" style="float: left;">
+				<!-- item start -->
+				<a class="offset" id="jdk-intro"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">简介</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="jdk-java.lang"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">java.lang 包</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<code>java.lang</code>
+							包在使用的时候无需显示导入，编译时由编译器自动导入。
+						</p>
+						<div class="panel panel-success h4">
+							<div class="panel-heading">
+								<a href="#jdk-lang-Object">
+									<span class="label label-danger">Object</span>
+								</a>
+
+								<a href="#jdk-lang-Class">
+									<span class="label label-danger">Class</span>
+								</a>
+
+								<a href="#jdk-lang-System">
+									<span class="label label-danger">System</span>
+								</a>
+
+								<a href="#jdk-lang-Runtime">
+									<span class="label label-danger">Runtime</span>
+								</a>
+
+								<a href="#jdk-lang-Process">
+									<span class="label label-danger">Process</span>
+								</a>
+							</div>
+						</div>
+
+						<a class="offset" id="jdk-lang-Object"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">Object 类</h5>
+							<p>Object 类是类层次结构的根，Java中所有的类从根本上都继承自这个类。</p>
+							<p>Object 类是Java中唯一没有父类的类。Java中的每个类都具有定义在Object类中的这些方法。</p>
+							<ul>
+								<li>
+									<p>
+										<code>protected native Object clone()</code>
+										-- 对象复制(浅层复制)。1.要实现 Cloneable; 2.覆写此方法要修改为 public
+										修饰,才能让类外部的代码调用。
+									</p>
+									<p>
+										<strong>浅层复制：&nbsp;</strong>被复制的对象的所有成员属性都有与原来的对象相同的值，而所有的对其他对象的引用仍然指向原来的对象。换言之，浅层复制仅仅复制所考虑的对象，而不复制它所引用的对象。
+									</p>
+									<p>
+										<strong>深层复制：</strong>被复制对象的所有变量都含有与原来的对象相同的值，除去那些引用其他对象的变量。那些引用其他对象的变量将指向被复制过的新对象，而不是原有的那些被引用的对象。换言之，深层复制要复制的对象引用的对象都复制一遍。
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#jdk-Object-clone" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="jdk-Object-clone" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: java;">
+/**
+ * 要实现 Cloneable
+ */
+public class Person implements Cloneable {
+	private String name;
+	private Student student;
+	
+	public Person() {
+	}
+
+	public Person(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * 覆写此方法修改为 public, 才能让类外部的代码调用
+	 */
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		// TODO Auto-generated method stub
+		return super.clone();
+	}
+	
+	private void testClone() throws CloneNotSupportedException {
+		Person p1 = new Person();
+		p1.setName("aaa");
+		Person p2 = (Person) p1.clone();	// p2 也有 name=aaa属性
+		p1.setName("bbb");
+		System.out.println(p1.getName() + "==" + p2.getName());
+		
+		Student s1 = new Student();
+		p1.setStudent(s1);
+		
+		Person p3 = (Person) p1.clone();
+		Student s2 = p3.getStudent();
+		System.out.println(s1 == s2);		// s1==s2, 说明p1和p3引用了同一个Student对象
+	}
+}
+</pre>
+										</div>
+									</div>
+
+									<p>
+										<b>使用序列化实现深层复制:</b>
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#jdk-Object-deepClone" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="jdk-Object-deepClone" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: java;">
+public class DeepClone {
+	public static void main(String[] args) throws Exception {
+		Teacher t = new Teacher();
+		t.setName("Teacher Wang");
+		t.setAge(50);
+
+		Student s1 = new Student();
+		s1.setAge(20);
+		s1.setName("ZhangSan");
+		s1.setTeacher(t);
+
+		Student s2 = (Student) s1.deepClone();
+
+		System.out.println("拷贝得到的信息:");
+		System.out.println(s2.getName());
+		System.out.println(s2.getAge());
+		System.out.println(s2.getTeacher().getName());
+		System.out.println(s2.getTeacher().getAge());
+		System.out.println("---------------------------");
+
+		// 将复制后的对象的老师信息修改一下：
+		s2.getTeacher().setName("New Teacher Wang");
+		s2.getTeacher().setAge(28);
+
+		System.out.println("修改了拷贝对象的教师后：");
+		System.out.println("拷贝对象的教师：");
+		System.out.println(s2.getTeacher().getName());
+		System.out.println(s2.getTeacher().getAge());
+		System.out.println("原来对象的教师：");
+		System.out.println(s1.getTeacher().getName());
+		System.out.println(s1.getTeacher().getAge());
+
+		// 由此证明序列化的方式实现了对象的深拷贝
+	}
+
+}
+
+class Teacher implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private String name;
+	private int age;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+}
+
+class Student implements Serializable {
+	private static final long serialVersionUID = 1L;
+	private String name;
+	private int age;
+	private Teacher teacher;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public Teacher getTeacher() {
+		return teacher;
+	}
+
+	public void setTeacher(Teacher teacher) {
+		this.teacher = teacher;
+	}
+
+	/**
+	 * 使用序列化实现深层复制
+	 */ 
+	public Object deepClone() throws Exception {
+		// 序列化
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutputStream oos = new ObjectOutputStream(bos);
+
+		oos.writeObject(this);
+
+		// 反序列化
+		ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+		ObjectInputStream ois = new ObjectInputStream(bis);
+
+		return ois.readObject();
+	}
+
+}
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p>
+										<code>public boolean equals(Object obj)</code>
+										-- 两个对象是否相等。如果不覆写此方法，使用
+										<code>return (this == obj);</code>
+										,就是说同一个对象才返回 true。并且覆写equals()方法时，应该同时覆写hashCode()方法，反之亦然。
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#jdk-Object-equals" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="jdk-Object-equals" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: java;">
+/**
+ * 两个对象的 name 属性相等，返回　true
+ */
+@Override
+public boolean equals(Object obj) {
+	return this.name.equals(((Person) obj).getName());
+}
+
+public void testEquals() {
+	Person p1 = new Person("aa");
+	Person p2 = new Person("aa");
+	System.out.println(p1.equals(p2));
+}
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p>
+										<code>public native int hashCode()</code>
+										--
+										Object类的hashCode()方法为不同的对象返回不同的值，Object类的hashCode值表示的是对象的地址。两个不相等的对象产生两个不同的hashCode可以改善哈希表的性能。
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#jdk-Object-hashCode" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="jdk-Object-hashCode" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: java;">
+/**
+ * 直接使用 name 的 hashCode 返回
+ */
+@Override
+public int hashCode() {
+	return this.name.hashCode();
+}
+
+public void testHashCode(){
+	Person p1 = new Person("aa");
+	Person p2 = new Person("aa");
+	System.out.println(p1.hashCode() + "==" + p2.hashCode());
+}
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p>
+										<code>public String toString()</code>
+										-- Object 的 toString 方法返回 className 和 hashCode 的十六进制值
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#jdk-Object-toString" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="jdk-Object-toString" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: java;">
+// Object 的 toString 方法
+return getClass().getName() + "@" + Integer.toHexString(hashCode());
+
+@Override
+public String toString() {
+	return "Person [name=" + name + "]";
+}
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p>
+										<code>public final native Class&lt;?> getClass()</code>
+										-- 返回该对象的运行时类的Java.lang.Class对象
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion"
+												href="#jdk-Object-getClass" aria-expanded="true"
+												class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="jdk-Object-getClass" class="panel-collapse collapse"
+											style="" aria-expanded="true">
+											<pre class="brush: java;">
+public class ObjectDemo {
+	class Person {
+		Person() {
+			// 注意如果是实例化了子类的调用，这里打印的是运行时类的类名, 是 Student
+			System.out.println("Person:" + getClass().getName());
+		}
+	}
+	
+	class Student extends Person {
+		Student(){
+			System.out.println("Student:" + getClass().getName());
+		}
+	}
+	
+	public static void main(String[] args) {
+		/** 输出:
+		 * Person:cm.nate.lang.ObjectDemo$Student
+		 * Student:cm.nate.lang.ObjectDemo$Student
+		 */
+		new ObjectDemo().new Student();
+	}
+}
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p>
+										<code>protected void finalize()</code>
+										-- 用于释放资源。因为无法确定该方法什么时候被调用，很少使用。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>notity</code>
+										,
+										<code>wait,</code>
+										,
+										<code>notityAll</code>
+										方法参见:
+										<a href="index.html#java-thread">Java 多线程</a>
+									</p>
+
+								</li>
+							</ul>
+						</div>
+
+						<a class="offset" id="jdk-lang-Class"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">Class 类</h5>
+							<pre class="brush: java;">
+public final
+    class Class&lt;T> implements java.io.Serializable, 
+			      java.lang.reflect.GenericDeclaration, 
+			      java.lang.reflect.Type,
+                              java.lang.reflect.AnnotatedElement
+</pre>
+							<p>Class类的实例表示Java应用运行时的类(class ans enum)或接口(interface and
+								annotation)。</p>
+							<h5 class="text-primary">类的加载:</h5>
+							<ul>
+								<li>
+									<code>Class.forName</code>
+									方式加载 -- 静态代码块 -> 如果调用 newInstance 方法 -> 非静态代码块 -> 构造方法
+								</li>
+								<li>
+									<code>直接 new</code>
+									-- 静态代码块 -> [如果加载过了 class -> 非静态代码块 -> 构造方法 | 没加载过 class ->
+									静态代码块 -> 非静态代码块 -> 构造方法]
+								</li>
+							</ul>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<a data-toggle="collapse" data-parent="#accordion"
+										href="#jdk-Class-load" aria-expanded="true"
+										class="code-header">
+										<span class="glyphicon glyphicon-plus"></span> View Code
+									</a>
+								</div>
+								<div id="jdk-Class-load" class="panel-collapse collapse"
+									style="" aria-expanded="true">
+									<pre class="brush: java;">
+public class ClassDemo {
+	static {
+		System.out.println("===静态代码块===");
+	}
+	
+	{
+		System.out.println("===非静态代码块===");
+	}
+	
+	public ClassDemo() {
+		System.out.println("===构造方法===");
+	}
+	
+	// Class.forName 方式加载
+	public static void testForName(){
+		try {
+			Class testTypeForName = Class.forName("cm.nate.lang.ClassDemo");
+			testTypeForName.newInstance();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+		testForName();
+		
+		// 前面加载过class了,这里不会调用静态代码块 
+		new ClassDemo();
+	}
+}
+</pre>
+								</div>
+							</div>
+							<h5 class="text-primary">Class 类的常用方法:</h5>
+							<ul>
+								<li>
+									<p>
+										<code> public static Class&lt;?> forName(String
+											className)</code>
+										-- 动态加载类。调用了 native 方法加载类。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public T newInstance()</code>
+										-- 根据对象的class新建一个对象，用于反射。
+									</p>
+								</li>
+
+								<li>
+									<p>
+										<code>public ClassLoader getClassLoader()</code>
+										-- 获得类的类加载器。
+									</p>
+								</li>
+
+								<li>
+									<p>
+										<code> public String getName()</code>
+										-- 获取类或接口的名字。记住enum为类，annotation为接口。
+									</p>
+								</li>
+
+								<li>
+									<p>
+										<code>public native Class&lt;? super T> getSuperclass()</code>
+										-- 获取类的父类，继承了父类则返回父类，否则返回java.lang.Object。
+									</p>
+								</li>
+
+								<li>
+									<p>
+										<code>public Field[] getFields()</code>
+										-- 获得域数组成员
+									</p>
+								</li>
+
+								<li>
+									<p>
+										<code>public Method[] getMethods()</code>
+										-- 获得方法
+									</p>
+								</li>
+								<li>
+									<p>
+										<code> public Constructor &lt;?>[] getConstructors()</code>
+										-- 获得所有的构造函数
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public Constructor&lt;T>
+											getConstructor(Class&lt;?>... parameterTypes)</code>
+										--
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public native int getModifiers()</code>
+										-- 获得修饰符
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public Package getPackage()</code>
+										-- 获得package
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public Class&lt;?>[] getInterfaces()</code>
+										-- 获得接口
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public String getSimpleName()</code>
+										-- 获得类名
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public String getTypeName()</code>
+										-- 获得类型名
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public java.net.URL getResource(String name)</code>
+										-- 根据字符串获得资源
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public native boolean isInterface()</code>
+										-- 是否是接口
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public native boolean isArray()</code>
+										-- 是否是数组
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public native boolean isPrimitive()</code>
+										-- 是否是基础类
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public boolean isAnnotation()</code>
+										-- 是否为注解类型
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public boolean isEnum()</code>
+										-- 是否是枚举
+									</p>
+								</li>
+							</ul>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<a data-toggle="collapse" data-parent="#accordion"
+										href="#jdk-Class-clazz" aria-expanded="true"
+										class="code-header">
+										<span class="glyphicon glyphicon-plus"></span> View Code
+									</a>
+								</div>
+								<div id="jdk-Class-clazz" class="panel-collapse collapse"
+									style="" aria-expanded="true">
+									<pre class="brush: java;">
+public class MyReflect {
+	public static void main(String[] args) {
+		/** 类型 */
+		System.out.println(Serializable.class.isInterface());
+		System.out.println(ElementType.class.isEnum());
+		System.out.println(Target.class.isAnnotation());
+		String[] array = {};
+		System.out.println(array.getClass().isArray());
+	
+		MyReflect testReflect = new MyReflect();
+		Class&lt;?> clazz = testReflect.getClass();
+		
+		System.out.println("完整类名: " + clazz.getName());
+		System.out.println("类名: " + clazz.getSimpleName());
+		System.out.println("类型名: " + clazz.getTypeName());
+		System.out.println("ClassLoader名: "
+				+ clazz.getClassLoader().getClass().getName());
+		System.out.println("父类: " + clazz.getSuperclass().getName());
+		
+		/** 实例化一个对象，并操作这个对象 */
+		try {
+			// 第一种方法，实例化默认构造方法，调用set赋值
+			Class&lt;?> myClass = Class.forName("cm.nate.reflect.MyReflect");
+			MyReflect mr = (MyReflect) myClass.newInstance();
+			mr.setName("hello");
+			System.out.println(mr.getName());
+			
+			// 取得指定的构造函数 使用构造函数赋值
+			@SuppressWarnings("unchecked")
+			Constructor&lt;MyReflect> constructor = 
+				(Constructor&lt;MyReflect>) myClass.getConstructor(String.class);
+			MyReflect mr2 = constructor.newInstance("jiwanger");
+			System.out.println(mr2.getName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		/** 取得本类的全部属性 */
+		Field[] field = clazz.getDeclaredFields();
+        for (int i = 0; i &lt; field.length; i++) {
+            // 权限修饰符
+            int mo = field[i].getModifiers();
+            String priv = Modifier.toString(mo);
+            // 属性类型
+            Class&lt;?> type = field[i].getType();
+            System.out.println(priv + " " + type.getName() + " " + field[i].getName() + ";");
+        }
+        
+        /** 获取某个类的全部方法 */
+        Method method[] = clazz.getMethods();
+        for (int i = 0; i &lt; method.length; ++i) {
+            Class&lt;?> returnType = method[i].getReturnType();
+            Class&lt;?> para[] = method[i].getParameterTypes();
+            int temp = method[i].getModifiers();
+            System.out.print(Modifier.toString(temp) + " ");
+            System.out.print(returnType.getName() + "  ");
+            System.out.print(method[i].getName() + " ");
+            System.out.print("(");
+            for (int j = 0; j &lt; para.length; ++j) {
+                System.out.print(para[j].getName() + " " + "arg" + j);
+                if (j &lt; para.length - 1) {
+                    System.out.print(",");
+                }
+            }
+            Class&lt;?> exce[] = method[i].getExceptionTypes();
+            if (exce.length > 0) {
+                System.out.print(") throws ");
+                for (int k = 0; k &lt; exce.length; ++k) {
+                    System.out.print(exce[k].getName() + " ");
+                    if (k &lt; exce.length - 1) {
+                        System.out.print(",");
+                    }
+                }
+            } else {
+                System.out.print(")");
+            }
+            System.out.println();
+        }
+        
+        /** 反射机制调用某个类的方法 */
+        try {
+			Class&lt;?> myClass = Class.forName("cm.nate.reflect.MyReflect");
+			// 调用TestReflect类中的reflect1方法
+			
+			// Java 反射机制 - 调用某个类的方法1.
+			// 调用TestReflect的reflect2方法
+			MyReflect mr3 = (MyReflect) myClass.newInstance();
+			Method method2 = myClass.getMethod("setName", String.class);
+			method2.invoke(mr3, "张三");
+			
+			Method method3 = myClass.getMethod("getName");
+			String name = (String) method3.invoke(mr3);
+			System.out.println(name);
+			
+		}  catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public MyReflect(){}
+	
+	public MyReflect(String name){
+		this.name = name;
+	}
+
+	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+}
+</pre>
+								</div>
+							</div>
+						</div>
+
+						<a class="offset" id="jdk-lang-System"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">System</h5>
+							<p>System类代表系统，系统级的很多属性和控制方法都放置在该类的内部。</p>
+							<p>
+								System类内部包含
+								<code>in</code>
+								、
+								<code>out</code>
+								和
+								<code>err</code>
+								三个成员变量，分别代表标准输入流(键盘输入)，标准输出流(显示器)和标准错误输出流(显示器)。
+							</p>
+							<ul>
+								<li>
+									<p>
+										<code>setIn(InputStream in) / setOut(PrintStream out) /
+											setError(PrintStream out)</code>
+										-- 改变标准输入流, 输出流, 错误流。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public static Console console()</code>
+										--
+									</p>
+									<pre class="brush: java;">
+
+</pre>
+								</li>
+								<li>
+									<p>
+										<code>public static native long currentTimeMillis()</code>
+										-- 该方法的作用是返回当前的计算机时间。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>public static native void arraycopy(Object src,
+											int srcPos, Object dest, int destPos, int length)</code>
+										-- 该方法的作用是数组拷贝。比使用循环更高效。
+									</p>
+									<pre class="brush: java;">
+int[] a = { 1, 2, 3, 4 };
+int[] b = new int[5];
+
+// 将数组a中，从下标为1开始，复制到数组b从下标3开始的位置，总共复制2个。b -> 0 0 0 2 3
+System.arraycopy(a, 1, b, 3, 2);
+</pre>
+								</li>
+								<li>
+									<p>
+										<code>setProperty(String key, String value) /
+											getProperty(String key) / getProperty(String key, String def)
+											/ getProperties()</code>
+										-- 获得系统中属性名为 key 的属性对应的值。
+									</p>
+									<pre class="brush: java;">
+//  所有的 property
+Properties properties = System.getProperties();
+Iterator it = properties.keySet().iterator();
+while(it.hasNext()) {
+	String key = (String) it.next();
+	System.out.println(key + ":" + properties.get(key));
+}
+
+// 指定的 property
+System.out.println(System.getProperty("os.name"));
+// 如果没有指定的 property, 返回指定的 default
+System.out.println(System.getProperty("os.name2", "default"));
+
+// 自己定义属性
+System.setProperty("property.define", "myProperty");
+</pre>
+								</li>
+								<li>
+									<p>
+										<code>public static String getenv(String name) /
+											getenv()</code>
+										--
+									</p>
+									<pre class="brush: java;">
+
+</pre>
+								</li>
+
+
+								<li>
+									<p>
+										<code>public static void load(String filename) /
+											loadLibrary(String libname)</code>
+										--
+									</p>
+									<pre class="brush: java;">
+
+</pre>
+								</li>
+								<li>
+									<p>
+										<code>public static void exit(int status) / gc()</code>
+										-- 退出程序 / 请求系统进行垃圾回收
+									</p>
+									<pre class="brush: java;">
+
+</pre>
+								</li>
+								<li>
+									<p>
+										<code>public static void setSecurityManager(final
+											SecurityManager s) / getSecurityManager()</code>
+										--
+									</p>
+									<pre class="brush: java;">
+
+</pre>
+								</li>
+
+							</ul>
+						</div>
+
+						<a class="offset" id="jdk-lang-Runtime"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">Runtime</h5>
+						</div>
+
+						<a class="offset" id="jdk-lang-Process"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">Process</h5>
+						</div>
+
+						<a class="offset" id="jdk-lang-"></a>
+						<div class="sub-item">
+							<h5 class="text-primary"></h5>
+						</div>
+
+						<a class="offset" id="jdk-lang-"></a>
+						<div class="sub-item">
+							<h5 class="text-primary"></h5>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="jdk-java.io"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">java.io 包</h3>
+					</div>
+					<div class="panel-body">
+						<div class="panel panel-success h4">
+							<div class="panel-heading">
+								<a href="#jdk-">
+									<span class="label label-danger"></span>
+								</a>
+							</div>
+						</div>
+
+						<a id="jdk-" class="offset"></a>
+						<div class="sub-item"></div>
+
+						<a id="jdk-" class="offset"></a>
+						<div class="sub-item"></div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="jdk-java.nio"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">java.nio 包</h3>
+					</div>
+					<div class="panel-body">
+						<div class="panel panel-success h4">
+							<div class="panel-heading">
+								<a href="#jdk-">
+									<span class="label label-danger"></span>
+								</a>
+							</div>
+						</div>
+
+						<a id="jdk-" class="offset"></a>
+						<div class="sub-item"></div>
+
+						<a id="jdk-" class="offset"></a>
+						<div class="sub-item"></div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="jdk-java.util"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">java.util 包</h3>
+					</div>
+					<div class="panel-body">
+						<div class="panel panel-success h4">
+							<div class="panel-heading">
+								<a href="#jdk-">
+									<span class="label label-danger"></span>
+								</a>
+							</div>
+						</div>
+
+						<a id="jdk-" class="offset"></a>
+						<div class="sub-item"></div>
+
+						<a id="jdk-" class="offset"></a>
+						<div class="sub-item"></div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="jdk-java.beans"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">java.beans 包</h3>
+					</div>
+					<div class="panel-body">
+						<div class="panel panel-success h4">
+							<div class="panel-heading">
+								<a href="#jdk-">
+									<span class="label label-danger"></span>
+								</a>
+							</div>
+						</div>
+
+						<a id="jdk-" class="offset"></a>
+						<div class="sub-item"></div>
+
+						<a id="jdk-" class="offset"></a>
+						<div class="sub-item"></div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="jdk-java.sql"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">java.sql 包</h3>
+					</div>
+					<div class="panel-body">
+						<div class="panel panel-success h4">
+							<div class="panel-heading">
+								<a href="#jdk-">
+									<span class="label label-danger"></span>
+								</a>
+							</div>
+						</div>
+
+						<a id="jdk-" class="offset"></a>
+						<div class="sub-item"></div>
+
+						<a id="jdk-" class="offset"></a>
+						<div class="sub-item"></div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="jdk-java.security"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">java.security 包</h3>
+					</div>
+					<div class="panel-body">
+						<div class="panel panel-success h4">
+							<div class="panel-heading">
+								<a href="#jdk-">
+									<span class="label label-danger"></span>
+								</a>
+							</div>
+						</div>
+
+						<a id="jdk-" class="offset"></a>
+						<div class="sub-item"></div>
+
+						<a id="jdk-" class="offset"></a>
+						<div class="sub-item"></div>
+					</div>
+				</div>
+				<!-- item over -->
+			</div>
+		</div>
+	</div>
+
+	<div class="btn-group-vertical bottom-button">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
+			<span class="caret"></span>
+		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
+	</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="../support/jquery/jquery-3.1.1.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
+	<script src="res/menu.js"></script>
+	<script src="../commons/js/common.js"></script>
+</body>
+</html>

@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -65,19 +65,27 @@
 						<h3 class="panel-title">ADB</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
+						<a href="#" class="list-group-item">简介</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+							data-parent="#accordion" href="#adb-base" aria-expanded="true">
+							ADB 基本命令<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="adb-base" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#adb-show-state" class="list-group-item">查看设备连接状态</a>
+							<a href="#adb-send-cmd" class="list-group-item">发送命令到设备</a>
+							<a href="#adb-install" class="list-group-item">安装/卸载</a>
+							<a href="#adb-file" class="list-group-item">文件操作</a>
+							<a href="#adb-shell" class="list-group-item">基本linux shell命令</a>
+							<a href="#adb-show-system-state" class="list-group-item">查看系统状态和信息</a>
+
 						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#adb-logcat" class="list-group-item">Logcat 使用</a>
+						<a href="#adb-am-pm" class="list-group-item">AM / PM 命令</a>
+						<a href="#adb-dumpsys" class="list-group-item">DUMPSYS 命令</a>
+						<a href="#adb-monkey" class="list-group-item">Monkey 与
+							MonkeyRunner</a> 
+						<a href="#adb- class="list-group-item"></a>
 					</div>
 				</div>
 			</div>
@@ -90,14 +98,675 @@
 		<div class="row">
 			<div class="col-md-9 col-md-push-3" style="float: left;">
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">简介</h3>
+					</div>
+					<div class="panel-body">
+						<p>ADB的全称为Android Debug
+							Bridge，就是起到调试桥的作用。通过adb我们可以在Eclipse中方面通过DDMS来调试Android程序，说白了就是debug工具。adb的工作方式比较特殊，采用监听Socket
+							TCP
+							5554等端口的方式让IDE和Qemu通讯，默认情况下adb会daemon相关的网络端口，所以当我们运行Eclipse时adb进程就会自动运行。</p>
+						<p>借助adb工具，我们可以管理设备或手机模拟器的状态。还可以进行很多手机操作，如安装软件、系统升级、运行shell命令等等。其实简而言说，adb就是连接Android手机与PC端的桥梁，可以让用户在电脑上对手机进行全面的操作。</p>
+						<h5 class="text-primary">ADB 组成</h5>
+						<p>ADB采用了客户端-服务器模型，包括三个部分：</p>
+						<ul>
+							<li>客户端部分，运行在开发用的电脑上，可以在命令行中运行adb命令来调用该客户端，像ADB插件和DDMS这样的Android工具也可以调用adb客户端。</li>
+							<li>服务端部分，是运行在开发用电脑上的后台进程，用于管理客户端与运行在模拟器或真机的守护进程通信。</li>
+							<li>守护进程部分，运行于模拟器或手机的后台。</li>
+						</ul>
+						<h5 class="text-primary">ADB 启动流程</h5>
+						<p>
+							当启动adb客户端时，客户端首先检测adb服务端进程是否运行，如果没有运行，则启动服务端。当服务端启动时，它会绑定到本地的TCP5037端口，并且监听从adb客户端发来的命令——所有的adb客户端都使用5037端口与adb服务端通信。接下来服务端与所有正在运行的模拟器或手机连接。它通过扫描5555-5585之间的奇数号端口来搜索模拟器或手机，一旦发现adb守护进程，就通过此端口进行连接。需要说明的是，每一个模拟器或手机使用一对有序的端口，偶数号端口用于控制台连接，奇数号端口用于adb连接，例如：
+							<br />
+							<code>Emulator 1, console: 5554Emulator 1, adb: 5555</code>
+							<br />
+							<code>Emulator 2, console: 5556Emulator 2, adb: 5557</code>
+							<br />即如果模拟器与adb在5555端口连接，则其与控制台的连接就是5554端口。
+						</p>
+
+						<h5 class="text-primary">ADB 使用</h5>
+						<pre class="brush: bash;">
+$ adb [-d|-e|-s &lt;serialNumber>] &lt;command>
+</pre>
+						<ul>
+							<li>
+								<p>
+									<code>-d</code>
+									-- 发送命令给usb连接的设备
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-e</code>
+									-- 发送命令到模拟器设备
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-s &lt;serialNumber></code>
+									-- &lt;serialNumber> 发送命令到指定设备,
+									<code>adb devices</code>
+									可看到当前可用的
+									<code>serialNumber</code>
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="adb-show-state"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">ADB 基本命令</h3>
+					</div>
+					<div class="panel-body">
+						<a id="adb-show-state" class="offset"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">查看设备连接状态</h5>
+							<pre class="brush: bash;">
+$ adb devices				# 查询当前计算机上连接那些设备
+$ adb -d get-serialno		# 获取设备的ID和序列号serialNumber
+$ adb -d get-state			# 查看模拟器/设备的当前状态.
+</pre>
+						</div>
+
+						<a id="adb-send-cmd" class="offset"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">发送命令到设备</h5>
+							<pre class="brush: bash;">
+$ adb reboot 			# 重启手机
+$ adb remount			# 将system分区重新挂载为可读写分区
+$ adb kill-server		# 终止adb服务进程
+$ adb start-server		# 重启adb服务进程
+$ adb root				# 已root权限重启adb服务
+$ adb wait-for-device	# 在模拟器/设备连接之前把命令转载在adb的命令器中
+
+$ adb forward &lt;local> &lt;remote>	# 发布端口,可以设置任意的端口号，做为主机向模拟器或设备的请求端口。
+
+$ adb shell input text &lt;string>	# 向设备输入文本（光标所在的文本框）
+# 上面的命令可用于向设备输入数据，比如说向浏览器输入网址(浏览器打开，并且光标在的输入文本框中)：
+$ adb -d shell input text "http://www.lesson1234.com"
+
+$ adb shell input keyevent &lt;event_code>	# 向设备发送按键事件
+# 上面的命令可用于向设备发送按键事件，比如发送 BACK 按钮事件:
+$ adb -d shell input keyevent 4 
+## 常用的 keycode 键名和键值:
+###### 返回键        4       KEYCODE_BACK
+###### HOME键        3      KEYCODE_HOME
+###### 回车键        66      KEYCODE_ENTER
+###### 退格键        67      KEYCODE_BACK
+###### 删除键	      112     KEYCODE_FORWARD_DEL
+###### 确定键	      23      KEYCODE_DPAD_CENTER
+###### 搜索键        84      KEYCODE_SEARCH 
+###### 菜单键        82      KEYCODE_MENU 
+###### 导航键 向上    19		 KEYCODE_DPAD_UP
+###### 导航键 向下    20		 KEYCODE_DPAD_DOWN
+###### 导航键 向左    21		 KEYCODE_DPAD_LEFT
+###### 导航键 向右    22		 KEYCODE_DPAD_RIGHT
+###### POWER键       26		KEYCODE_POWER
+###### 音量增加键     24		 KEYCODE_VOLUME_UP
+###### 音量减小键     25		 KEYCODE_VOLUME_DOWN
+###### 拍照键         27     KEYCODE_CAMERA 
+###### 拍照对焦键      80     KEYCODE_FOCUS
+###### 光标移动到开始键 122    KEYCODE_MOVE_HOME
+###### 光标移动到末尾键 123    KEYCODE_MOVE_END
+</pre>
+						</div>
+
+						<a id="adb-install" class="offset"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">安装/卸载</h5>
+							<pre class="brush: bash;">
+# -l 应用将会被安装到保护目录
+# -r 替换原有 app
+# -t 允许安装测试应用
+# -s 安装在 sdcard
+# -d 允许版本降级 
+$ adb install [-lrtsd] file.apk
+
+# -k 保留用户数据
+$ adb uninstall [-k] file.apk
+</pre>
+						</div>
+
+						<a id="adb-file" class="offset"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">文件操作</h5>
+							<pre class="brush: bash;">
+# 传文件/目录到手机
+$ adb push &lt;local> &lt;remote>f
+$ adb push test.txt /sdcard/			# push 文件　
+$ adb push images/ /sdcard/temp/		# push 目录, 不包括子目录
+
+# 从手机拉取文件/目录
+$ adb pull &lt;remote> &lt;local>
+$ adb pull /sdcard/text.txt .			# pull 文件
+$ adb pull /sdcard/temp/ .				# pull 目录, 不包括子目录
+</pre>
+						</div>
+
+						<a id="adb-shell" class="offset"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">基本linux shell命令</h5>
+							<pre class="brush: bash;">
+$ adb shell [command]
+$ ls 					# 列出目录下的文件和文件夹
+$ rm 					# 删除目录和文件
+$ cat  					# 查看文件内容
+$ echo 					# 回显内容
+$ ps 					# 可以看那个进程再跑
+$ ps -x [PID] 			# 查看单个进程的状态
+$ top 					# 可以看那个进程的占用率最高
+$ su 					# 切换到root用户
+$ kill [pid] 			# 杀死一个进程
+$ chmod 777 [file] 		# 修改该文件为可执行权限
+</pre>
+						</div>
+
+						<a id="adb-show-system-state" class="offset"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">查看系统状态和信息</h5>
+							<pre class="brush: bash;">
+$ adb shell service list 			# 查看services信息
+$ adb shell cat /proc/meminfo		# 查看当前的内存情况
+$ adb shell cat /proc/cpuinfo		# 查看CPU信息（硬件）
+$ adb shell cat /proc/iomem			# 查看IO内存分区
+
+$ adb shell getprop					# 列出系统所有属性
+$ adb shell getprop | findstr "gsm"	# 列出包含gsm的属性
+$ adb shell setprop &lt;key> &lt;value>	# 修改系统属性
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="adb-logcat"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Logcat 使用</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							Logcat 实现和原理参见:
+							<a href="src.html#src-logger" target="_blank">Logger日志系统</a>
+						</p>
+						<pre class="brush: bash;">$ [adb] logcat [&lt;options>] ... [&lt;filter-spec>] ...</pre>
+						<h5 class="text-primary">options 选项:</h5>
+						<ul>
+							<li>
+								<p>
+									<code>-s</code>
+									-- 设置过滤器，例如指定 '*:s'
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-f &lt;file></code>
+									-- 输出到文件，默认情况是标准输出
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-r [&lt;kbytes>]</code>
+									-- Rotate log every kbytes
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-n &lt;count></code>
+									-- Sets max number of rotated logs to
+									<count>, default 4 
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-v &lt;format></code>
+									-- 设置log的打印格式
+								</p>
+								<pre class="brush: bash;">
+$ adb logcat -v tag -sd LogTest
+# brief 		显示优先级/标记和过程的PID发出的消息（默认格式）
+# process 		只显示PID
+# tag 			只显示优先级/标记
+# raw 			显示原始的日志消息，没有其他元数据字段
+# time 			调用显示日期、时间、优先级/标签和过程的PID发出消息
+# threadtime 	调用显示日期、时间、优先级、标签遗迹PID TID线程发出的消息
+# long 			显示所有元数据字段与空白行和单独的消息
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>-c</code>
+									-- 清除所有log并退出
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-d</code>
+									-- 得到所有log并退出 (不阻塞)
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-t &lt;count></code>
+									-- 最多仅打印最近的指定 count 行数
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-g</code>
+									-- 得到环形缓冲区的大小并退出
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-b &lt;buffer></code>
+									-- 请求不同的环形缓冲区 ('main', 'system', 'radio', 'events',默认为"-b main
+									-b system")
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>-B</code>
+									-- 输出log到二进制中
+								</p>
+							</li>
+						</ul>
+						<h5 class="text-primary">filter-spec 格式:</h5>
+						<pre class="brush: bash;">
+&lt;tag>[:priority]
+
+# tag: 打印 Log 时使用的标签
+# priority: 日志等级，由低到高依次为:
+#	V Verbose
+#	D Debug
+#	I Info
+#	W Warn
+#	E Error
+#	F Fatal
+#	S Silent
+</pre>
+
+						<h5 class="text-primary">Logcat 常用用法:</h5>
+						<pre class="brush: bash;">
+######## 比如有一个应用包: cm.nate.test, 有如下日志:
+# Log.v("LogTest", "verbose");
+# Log.d("LogTest", "debug");
+# Log.i("LogTest", "info");
+# Log.w("LogTest", "warn");
+# Log.e("LogTest", "error");
+
+# Log.i("OtherTag", "other-info");
+# Log.w("OtherTag", "other-warn");
+###########################################
+
+# 高版本的 Anroid logcat 命令更强大, 使用 adb shell logcat -help 查看
+
+# 1.清除所有log并退出
+$ adb logcat -c
+
+# 2.查看所有应用错误日志
+$ adb logcat -s *:E
+
+# 3.查看指定 tag 日志
+$ adb logcat -s LogTest
+
+# 4.非阻塞方式查看指定 tag 日志(打印完退出)
+$ adb logcat -sd LogTest
+
+# 5.非阻塞方式查看指定 tag 并 指定级别日志(INFO 以上级别)
+$ adb logcat -sd LogTest:I
+
+# 6.同时指定多个过滤器
+$ adb logcat -sd LogTest -sd OtherTag
+
+# 7.将日志输出保存到文件(使用 -f 保存到文件报错)
+$ adb logcat -sd LogTest > logtest.log
+
+# 8.Linux 下过滤指定包名的日志
+$ adb shell ps | grep cm.nate.test		# 查找出包名对应的进程ID, 如果找到的是 344
+$ adb logcat -d | grep 344				# 使用 grep 查找出包括此进程ID的行
+
+# 9.Linux 下查找指定日志内容
+$ adb logcat -d | grep other-info
+$ adb logcat -sd *:I | grep other-info	# 组合前面的内容也是一样的
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="adb-am-pm"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">AM / PM 命令</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">AM 命令</h5>
+							<p>am全称activity
+								manager，你能使用am去模拟各种系统的行为，例如去启动一个activity，强制停止进程，发送广播进程，修改设备屏幕属性等。</p>
+
+							<pre class="brush: bash;">
+$ adb shell am [subcommand] [options]
+
+# 高版本的 Android am 命令更强大, 使用 adb shell am 查看
+
+# 1.启动 acitivty
+#	-D enable debugging
+#	-W wait for launch to complete
+$ am start [-D] [-W] &lt;INTENT>
+$ adb shell am start -a com.nate.action.SECOND		# 指定 action 启动
+$ adb shell am start -n cm.nate.test/.LogTest		# 启动指定包下的Activity
+
+# Intent 选项
+### [-a &lt;ACTION>] [-d &lt;DATA_URI>] [-t &lt;MIME_TYPE>]
+### [-c &lt;CATEGORY> [-c &lt;CATEGORY>] ...]
+### [-e|--es &lt;EXTRA_KEY> &lt;EXTRA_STRING_VALUE> ...]
+### [--esn &lt;EXTRA_KEY> ...]
+### [--ez &lt;EXTRA_KEY> &lt;EXTRA_BOOLEAN_VALUE> ...]
+### [-e|--ei &lt;EXTRA_KEY> &lt;EXTRA_INT_VALUE> ...]
+### [-n &lt;COMPONENT>] [-f &lt;FLAGS>]
+### [--grant-read-uri-permission] [--grant-write-uri-permission]
+### [--debug-log-resolution]
+### [--activity-brought-to-front] [--activity-clear-top]
+### [--activity-clear-when-task-reset] [--activity-exclude-from-recents]
+### [--activity-launched-from-history] [--activity-multiple-task]
+### [--activity-no-animation] [--activity-no-history]
+### [--activity-no-user-action] [--activity-previous-is-top]
+### [--activity-reorder-to-front] [--activity-reset-task-if-needed]
+### [--activity-single-top]
+### [--receiver-registered-only] [--receiver-replace-pending]
+### [&lt;URI>]
+
+# 2.启动 service
+$ am startservice &lt;INTENT>
+
+# 3.发送广播
+$ am broadcast &lt;INTENT>
+
+# 4.测试命令
+$ am instrument [flags] &lt;COMPONENT>
+
+# 5.在&lt;PROCESS>进程中运行profile，分析结果写到&lt;FILE>里
+$ am profile &lt;PROCESS> start &lt;FILE>
+$ am profile &lt;PROCESS> stop				# 停止profile
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">PM 命令</h5>
+							<p>pm全称package manager，你能使用pm命令去模拟Android行为或者查询设备上的应用等。</p>
+							<pre class="brush: bash;">
+pm [list|path|install|uninstall]
+pm list packages [-f]
+pm list permission-groups
+pm list permissions [-g] [-f] [-d] [-u] [GROUP]
+pm list instrumentation [-f] [TARGET-PACKAGE]
+pm list features
+pm path PACKAGE
+pm install [-l] [-r] [-t] [-i INSTALLER_PACKAGE_NAME] [-s] [-f] PATH
+pm uninstall [-k] PACKAGE
+pm enable PACKAGE_OR_COMPONENT
+pm disable PACKAGE_OR_COMPONENT
+pm setInstallLocation [0/auto] [1/internal] [2/external]
+
+# 高版本的 Android pm 命令更强大, 使用 adb shell pm 查看
+
+# 1.查看安装的应用
+$ adb shell pm list packages
+$ adb shell pm list packages -f			# -f 显示apk的位置
+
+# 2.权限组
+$ adb shell pm list permission-groups
+
+# 3.安装应用
+$ adb shell pm install [-l] [-r] [-t] [-i INSTALLER_PACKAGE_NAME] [-s] [-f] PATH
+
+# 4.移除应用
+$ adb shell pm uninstall [-k] PACKAGE
+
+# 5.查看指定包位置
+$ adb shell pm path cm.nate.test
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="adb-dumpsys"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">DUMPSYS 命令</h3>
+					</div>
+					<div class="panel-body">
+						<p>DUMPSYS 命令功能很强大，可以打印service相关的状态信息等，这些状态信息是各个service通过重写dump接口来自己实现的。</p>
+						<p>DUMPSYS 并不清楚各个service的存在，其仅仅是去service manager获取某string代表的服务是否存在，如果存在，调用其dump接口。</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="adb-monkey"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							Monkey 与 MonkeyRunner 工具
+							</h5>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<p>Monkey工具直接运行在设备或模拟器的adb shell中，生成用户或系统的伪随机事件流。</p>
+						<p>MonkeyRunner工具则是在工作站上通过API定义的特定命令和事件控制设备或模拟器。</p>
+						<div class="sub-item">
+							<h5 class="text-primary">Monkey 工具</h5>
+							<p>Monkey是Android中的一个命令行工具，可以运行在模拟器里或实际设备中。它向系统发送伪随机的用户事件流(如按键输入、触摸屏输入、手势输入等)，实现对正在开发的应用程序进行压力测试。Monkey测试是一种为了测试软件的稳定性、健壮性的快速有效的方法。</p>
+							<pre class="brush: bash;">
+$ adb shell monkey [-p ALLOWED_PACKAGE [-p ALLOWED_PACKAGE] ...]
+              [-c MAIN_CATEGORY [-c MAIN_CATEGORY] ...]
+              [--ignore-crashes] [--ignore-timeouts]
+              [--ignore-security-exceptions]
+              [--monitor-native-crashes] [--ignore-native-crashes]
+              [--kill-process-after-error] [--hprof]
+              [--pct-touch PERCENT] [--pct-motion PERCENT]
+              [--pct-trackball PERCENT] [--pct-syskeys PERCENT]
+              [--pct-nav PERCENT] [--pct-majornav PERCENT]
+              [--pct-appswitch PERCENT] [--pct-flip PERCENT]
+              [--pct-anyevent PERCENT]
+              [--pkg-blacklist-file PACKAGE_BLACKLIST_FILE]
+              [--pkg-whitelist-file PACKAGE_WHITELIST_FILE]
+              [--wait-dbg] [--dbg-no-events]
+              [--setup scriptfile] [-f scriptfile [-f scriptfile] ...]
+              [--port port]
+              [-s SEED] [-v [-v] ...]
+              [--throttle MILLISEC] [--randomize-throttle]
+              [--profile-wait MILLISEC]
+              [--device-sleep-time MILLISEC]
+              [--randomize-script]
+              [--script-log]
+              [--bugreport]
+              
+# -p 只允许系统启动指定的APP
+# -v 用于指定日志信息级别
+# 500 为指定发生 500 次随机事件
+$ adb -d shell monkey -p com.lesson1234.xueban -v 500
+
+# -s 用于指定伪随机数生成器的seed值，如果seed相同，则两次Monkey测试所产生的事件序列也相同的。
+$ adb -e shell monkey -p cm.nate.test -v -s 10 500
+
+# -c [main-category] 只允许系统启动这些指定类别中列出的Activity
+
+# --throttle [毫秒] 用于指定用户操作（即事件）间的时延，单位是毫秒
+
+# --ignore-crashes 用于指定当应用程序崩溃时（Force& Close错误），Monkey是否停止运行
+
+# --ignore-timeouts 用于指定当应用程序发生ANR错误时，Monkey是否停止运行
+
+# --ignore-security-exceptions 用于指定当应用程序发生许可错误时，Monkey是否停止运行
+
+# --kill-process-after-error 如果指定此参数，当应用程序发生错误时，应用程序停止运行并保持在当前状态
+
+# --monitor-native-crashes 用于指定是否监视并报告应用程序发生崩溃的本地代码
+
+# --pct-｛+事件类别｝｛+事件类别百分比｝ 用于指定每种类别事件的数目百分比
+## 1.触控事件设置为 10%, 触摸事件是指在屏幕中的一个down-up事件，即在屏幕某处按下并抬起的操作
+$ adb shell monkey -p cm.nate.test --pct-touch 10 1000
+## 2.motion事件设置为 10%, motion事件是由屏幕上某处一个down事件、一系列伪随机的移动事件和一个up事件组成
+$ adb shell monkey -p cm.nate.test --pct-motion 10 1000
+## 3.滚动球事件设置为 10%, 滚动球事件由一个或多个随机的移动事件组成，有时会伴随着点击事件
+$ adb shell monkey -p cm.nate.test --pct-trackball 10 1000
+## 4.基本的导航事件设置为 10%, 导航事件由方向输入设备的上下左右按键所触发的事件组成
+$ adb shell monkey -p cm.nate.test --pct-nav 10 1000
+## 5.主要导航事件设置为 10%, 这些导航事件通常会导致UI界面中的动作事件，如5-way键盘的中间键，回退按键、菜单按键
+$ adb shell monkey -p cm.nate.test --pct-majornav 10 1000
+## 6.系统事件设置为 10%, 这些按键通常由系统保留使用，如Home、Back、Start Call、End Call、音量调节
+$ adb shell monkey -p cm.nate.test --pct-syskeys 10 1000
+## 7.Activity启动事件设置为 10%, 在随机的时间间隔中，Monkey将执行一个startActivity()调用，
+## 	作为最大程度覆盖被测包中全部Activity的一种方法
+$ adb shell monkey -p cm.nate.test --pct-appswitch 10 1000
+## 8.其他事件设置为 10%, 包含所有其他事件，如按键、其他在设备上不常用的按钮等
+$ adb shell monkey -p cm.nate.test --pct-anyevent 10 1000
+## 9.同时设置多个事件百分比
+$ adb shell monkey -p cm.nate.test --pct-anyevent 50 --pct-appswitch 50 1000
+</pre>
+						</div>
+
+
+						<div class="sub-item">
+							<h5 class="text-primary">MonkeyRunner 工具</h5>
+							<p>MonkeyRunner运行依赖 Python 环境，使用 Python
+								脚本编写用例会大大简化MonkeyRunner用例的编写，且会帮助扩展MonkeyRunner的自动化功能。</p>
+							<p>MonkeyRunner工具提供了一个API，使用此API写出的程序可以在Android代码之外控制Android设备和模拟器。</p>
+							<p>MonkeyRunner工具则是在工作站上通过API定义的特定命令和事件控制设备或模拟器，它支持,自己编写插件,控制事件,随时截图,简而言之,任何你在模拟器/设备中能干的事情,MonkeyRunner都能干,而且还可以记录和回放。</p>
+							<p>MonkeyRunner工具为Android的测试提供这些独特的功能：</p>
+							<ul>
+								<li>多设备控制：可以跨多个设备或模拟器实施测试套件。您可以在同一时间接上所有的设备或一次启动全部模拟器（或统统一起），依据程序依次连接到每一个，然后运行一个或多个测试。您也可以用程序启动一个配置好的模拟器，运行一个或多个测试，然后关闭模拟器。</li>
+								<li>功能测试：可以为一个应用自动贯彻一次功能测试。您提供按键或触摸事件的输入数值，然后观察输出结果的截屏。</li>
+								<li>回归测试：可以运行某个应用，并将其结果截屏与既定已知正确的结果截屏相比较，以此测试应用的稳定性。</li>
+								<li>可扩展的自动化测试：由于MonkeyRunner是一个API工具包，您可以基于Python模块和程序开发一整套系统，以此来控制Android设备。除了使用monkeyrunner
+									API之外，您还可以使用标准的Python os和subprocess模块来调用Android Debug
+									Bridge这样的Android工具。</li>
+							</ul>
+							<p>MonkeyRunner的三个模块:</p>
+							<ul>
+								<li>MonkeyRunner --
+									MonkeyRunner程序的实用方法。这个类提供了用于连接MonkeyRunner至设备或模拟器的方法。它也提供了用于创建用户界面的MonkeyRunner程序和用于显示内置帮助的方法。</li>
+								<li>MonkeyDevice --
+									表示一个设备或模拟器。这个类提供了安装和卸载程序包，启动一个活动以及发送键盘或触摸事件到应用程序的方法。您也可以使用这个类来运行测试包。</li>
+								<li>MonkeyImage --
+									表示一个屏幕捕获图像。这个类提供了捕捉屏幕，将位图图像，以各种不同的格式，比较两个MonkeyImage对象，写一个图像文件的方法。</li>
+							</ul>
+							<pre class="brush: python;">
+# 导入三个模块MonkeyRunner，MonkeyDevice，MonkeyImage
+from com.android.monkeyrunner import MonkeyRunner as mr
+from com.android.monkeyrunner import MonkeyDevice as md
+from com.android.monkeyrunner import MonkeyImage as mi
+</pre>
+
+							<p>MonkeyRunner API 介绍</p>
+							<pre class="brush: python;">
+# 1.waitForConnection
+# 等待连接设备，与模拟器链接，返回monkeydevice对象，代表链接的设备。没有报错的话说明连接成功。
+# 默认连接：
+device= mr.waitForConnection()
+# 参数连接：
+#	timeout：超时时间，单位秒，浮点数。默认是无限期等待。
+#	deviceId：指定的设备名称
+device = mr.waitForConnection(1.0, 'emulator-5554')
+
+# 2.installPackage / removePackage
+# 安装/移除应用
+device.installPackage('your-path/app.apk')
+device.removePackage('cm.nate.test')
+
+# 3.startActivity / broadcastIntent
+# 启动 activity / 发送广播
+# 参数:　
+#　	uri - The URI for the Intent.
+#　	action - The action for the Intent.
+#　	data - The data URI for the Intent
+#　	mimetype - The mime type for the Intent.
+#　	categories - A Python iterable containing the category names for the Intent.
+#　	extras - A dictionary of extras to add to the Intent. 
+#　	component - The component of the Intent.
+#　	flags - An iterable of flags for the Intent.
+device.startActivity(component="cm.nate.test/.LogTest")
+device.broadcastIntent(uri,action,data,mimetype,categories,extras,component,flags)
+
+# 4.sleep
+# 暂停目前正在运行的进程相应的时间, 单位: 秒
+mr.sleep(2)
+
+# 5.takeSnapshot
+# 获取设备的屏蔽缓冲区，产生了整个显示器的屏蔽捕获。
+result = device.takeSnapshot()
+# 写入文件, 返回 true/false
+result.writeToFile('images/result1.png','png')
+
+# 6.type
+# 键盘上的类型指定字符串, 如向 EditText 中输入: hello
+device.type(‘hello’)
+
+# 7.wake
+# 唤醒设备屏幕
+device.wake()
+
+# 8.reboot
+# 重新引导到指定的引导程序指定的设备
+device.reboot()
+
+# 9.touch
+# 向设备发送 touch 事件
+touch(integer x,integer y,integer type)
+
+# 10.press
+# 给指定key发送一个key事件
+# 参数：
+#	name: keycode名字（参考android.view.KeyEvent）
+#	type: 触摸事件类型，如DOWN_AND_UP
+device.press(name, type)
+
+# 11.drag
+# 拖动屏幕，也是划屏的一些操作
+# start: 拖曳开始坐标 （a tuple(x,y)in pixels）
+# end:拖曳结束坐标点（a tuple(x,y)in pixels）
+# duration:持续时间（default 1.0 seconds）
+# steps:拖曳步骤（default is 10）
+device.drag(start,end,duration,steps)
+
+# 12.shell
+# 执行 shell 命令，返回结果
+device.shell('ls /sdcard/')
+
+# 13.sameAs
+# 其他MonkeyImage对象相似度，返回 true/false
+# 参数：
+#	other：其他MonkeyImage对象
+#	percent：百分比，取值为0.0-1.0
+mi.sameAs(other, percent)
+
+# 14.loadImageFromFile
+# 从文件加载　MonkeyImage 对象
+local_mi = mr.loadImageFromFile('your-path/img.png')
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="adb-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">...</h3>
 					</div>
-					<div class="panel-body">
-						
-					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 			</div>
@@ -105,14 +774,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -120,7 +788,8 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushPython.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
