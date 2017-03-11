@@ -120,11 +120,7 @@
 								</a>
 
 								<a href="#jdk-lang-Runtime">
-									<span class="label label-danger">Runtime</span>
-								</a>
-
-								<a href="#jdk-lang-Process">
-									<span class="label label-danger">Process</span>
+									<span class="label label-danger">Runtime / Process</span>
 								</a>
 							</div>
 						</div>
@@ -846,15 +842,6 @@ public class MyReflect {
 								</li>
 								<li>
 									<p>
-										<code>public static Console console()</code>
-										--
-									</p>
-									<pre class="brush: java;">
-
-</pre>
-								</li>
-								<li>
-									<p>
 										<code>public static native long currentTimeMillis()</code>
 										-- 该方法的作用是返回当前的计算机时间。
 									</p>
@@ -878,7 +865,7 @@ System.arraycopy(a, 1, b, 3, 2);
 										<code>setProperty(String key, String value) /
 											getProperty(String key) / getProperty(String key, String def)
 											/ getProperties()</code>
-										-- 获得系统中属性名为 key 的属性对应的值。
+										-- 获得/设置系统属性
 									</p>
 									<pre class="brush: java;">
 //  所有的 property
@@ -902,10 +889,19 @@ System.setProperty("property.define", "myProperty");
 									<p>
 										<code>public static String getenv(String name) /
 											getenv()</code>
-										--
+										-- 获得环境变量
 									</p>
 									<pre class="brush: java;">
+//  所有的 env
+Map&lt;String, String> env = System.getenv();
+Iterator&lt;String> it = env.keySet().iterator();
+while(it.hasNext()) {
+	String key = it.next();
+	System.out.println(key + ":" + env.get(key));
+}
 
+// 指定 env
+System.out.println(System.getenv("PATH"));
 </pre>
 								</li>
 
@@ -914,30 +910,21 @@ System.setProperty("property.define", "myProperty");
 									<p>
 										<code>public static void load(String filename) /
 											loadLibrary(String libname)</code>
-										--
+										-- 主要用来加载动态链接库, JNI 中使用, 实例参见: <a href="index.html#java-jni">Java 本地编程 - JNI</a>
 									</p>
-									<pre class="brush: java;">
-
-</pre>
 								</li>
 								<li>
 									<p>
 										<code>public static void exit(int status) / gc()</code>
-										-- 退出程序 / 请求系统进行垃圾回收
+										-- 退出程序(调用　Runtime 的 exit) / 请求系统进行垃圾回收
 									</p>
-									<pre class="brush: java;">
-
-</pre>
 								</li>
 								<li>
 									<p>
 										<code>public static void setSecurityManager(final
 											SecurityManager s) / getSecurityManager()</code>
-										--
+										-- 设置 / 获得安全管理器
 									</p>
-									<pre class="brush: java;">
-
-</pre>
 								</li>
 
 							</ul>
@@ -945,12 +932,7 @@ System.setProperty("property.define", "myProperty");
 
 						<a class="offset" id="jdk-lang-Runtime"></a>
 						<div class="sub-item">
-							<h5 class="text-primary">Runtime</h5>
-						</div>
-
-						<a class="offset" id="jdk-lang-Process"></a>
-						<div class="sub-item">
-							<h5 class="text-primary">Process</h5>
+							<h5 class="text-primary">Runtime / Process</h5>
 						</div>
 
 						<a class="offset" id="jdk-lang-"></a>

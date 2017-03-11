@@ -73,6 +73,8 @@
 						<a href="#commons-collections" class="list-group-item">commons-collections4-4.1</a>
 						<a href="#commons-compress" class="list-group-item">commons-compress-1.12</a>
 						<a href="#commons-compress" class="list-group-item">commons-io-2.5</a>
+						<a href="#apache-lucene" class="list-group-item">apache-lucene-6.4.2
+							-- 非commons组件</a>
 						<a href="#" class="list-group-item">...</a>
 
 					</div>
@@ -1651,7 +1653,8 @@ public static void printColl(String label, Collection c) {
 									<u><strong>Iterator</strong></u> --
 									java.util.Iterator接口定义了标准的Collection遍历方法，但是如果不做改变的使用它，我们得到的是从头到尾一次性的遍历。假如我们需要循环遍历，假如我们需要遍历某一段，假如我们需要遍历满足某些条件的元素，等等等等，我们就不能完全依赖于这个Iterator的标准实现了。除非我们宁可在此基础上在调用的代码中多加一些判断，不过这样的话代码就会显得混乱，时间长了就容易变得难以维护。Commons
 									Collections的这一组Iterator为我们带来了便利。
-								</p><div class="panel panel-default">
+								</p>
+								<div class="panel panel-default">
 									<div class="panel-heading">
 										<a data-toggle="collapse" data-parent="#accordion"
 											href="#commons-collections-Iterator" aria-expanded="true"
@@ -1729,8 +1732,10 @@ public static void printColl(String label, Iterator iter, int maxCount) {
 					</div>
 					<div class="panel-body">
 						<p>
-							<span class="text-primary">说明：</span>Apache Commons Compress是一个压缩、解压缩文件的类库。
-							定义一套 API 与 ar, cpio, Unix dump, tar, zip, gzip, XZ, Pack200, bzip2, 7z, arj, lzma, snappy, DEFLATE 和 Z files一起工作。
+							<span class="text-primary">说明：</span>Apache Commons
+							Compress是一个压缩、解压缩文件的类库。 定义一套 API 与 ar, cpio, Unix dump, tar, zip,
+							gzip, XZ, Pack200, bzip2, 7z, arj, lzma, snappy, DEFLATE 和 Z
+							files一起工作。
 						</p>
 						<p>
 							jar包 --
@@ -1762,13 +1767,214 @@ public static void printColl(String label, Iterator iter, int maxCount) {
 						</p>
 						<p>
 							文档 --
-							<a target="_blank"
-								href="commons/commons-io-2.5/docs/index.html">apidocs</a>
+							<a target="_blank" href="commons/commons-io-2.5/docs/index.html">apidocs</a>
 						</p>
 					</div>
 				</div>
 				<!-- item over -->
-				
+
+				<!-- item start -->
+				<a class="offset" id="apache-lucene"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">apache-lucene</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<span class="text-primary">说明：</span>
+							Lucene的目的是为软件开发人员提供一个简单易用的工具包，以方便的在目标系统中实现全文检索的功能，或者是以此为基础建立起完整的全文检索引擎。Lucene是一套用于全文检索和搜寻的开源程式库，由Apache软件基金会支持和提供。Lucene提供了一个简单却强大的应用程式接口，能够做全文索引和搜寻。
+						</p>
+						<p>
+							文档 --
+							<a target="_blank" href="commons/lucene-6.4.2/docs/index.html">apidocs</a>
+						</p>
+						<p>
+							<b>Lucene 的一些概念:</b>
+						</p>
+						<ul>
+							<li>
+								<b>analyzer</b> --
+								Analyzer是分析器，它的作用是把一个字符串按某种规则划分成一个个词语，并去除其中的无效词语，这里说的无效词语是指英文中的“of”、
+								“the”，中文中的“的”、“地”等词语，这些词语在文章中大量出现，但是本身不包含什么关键信息，去掉有利于缩小索引文件、提高效率、提高命中率。
+							</li>
+							<li>
+								<b>document</b> --
+								用户提供的源是一条条记录，它们可以是文本文件、字符串或者数据库表的一条记录等等。一条记录经过索引之后，就是以一个Document的形式存储在索引文件中的。用户进行搜索，也是以Document列表的形式返回。
+							</li>
+							<li>
+								<b>field</b> --
+								一个Document可以包含多个信息域，例如一篇文章可以包含“标题”、“正文”、“最后修改时间”等信息域，这些信息域就是通过Field在Document中存储的。Field有两个属性可选：存储和索引。通过存储属性你可以控制是否对这个Field进行存储；通过索引属性你可以控制是否对该Field进行索引。
+							</li>
+							<li>
+								<b>term</b> --
+								term是搜索的最小单位，它表示文档的一个词语，term由两部分组成：它表示的词语和这个词语所出现的field。
+							</li>
+							<li>
+								<b>tocken</b> --
+								tocken是term的一次出现，它包含trem文本和相应的起止偏移，以及一个类型字符串。一句话中可以出现多次相同的词语，它们都用同一个term表示，但是用不同的tocken，每个tocken标记该词语出现的地方。
+							</li>
+							<li>
+								<b>segment</b> --
+								添加索引时并不是每个document都马上添加到同一个索引文件，它们首先被写入到不同的小文件，然后再合并成一个大索引文件，这里每个小文件都是一个segment。
+							</li>
+						</ul>
+
+						<p>
+							<b>lucene的工作方式:</b>
+						</p>
+						<p>
+							Lucene提供的服务实际包含两部分：一入一出。所谓入是写入，即将你提供的源（本质是字符串）写入索引或者将其从索引中删除；所谓出是读出，即向用户提供全文搜索服务，让用户可以通过关键词定位源。
+						</p>
+
+						<p>
+							<b>Lucene的写入流程:</b>
+						</p>
+						<ol>
+							<li>源字符串首先经过analyzer处理，包括：分词，分成一个个单词；去除stopword（可选）。</li>
+							<li>将源中需要的信息加入Document的各个Field中，并把需要索引的Field索引起来，把需要存储的Field存储起来。
+							</li>
+							<li>将索引写入存储器，存储器可以是内存或磁盘。</li>
+						</ol>
+						<p>
+							<b>Lucene的读出流程:</b>
+						</p>
+						<ol>
+							<li>用户提供搜索关键词，经过analyzer处理。</li>
+							<li>对处理后的关键词搜索索引找出对应的Document。</li>
+							<li>用户根据需要从找到的Document中提取需要的Field。</li>
+						</ol>
+						<p>
+							<b>Lucene 6.4.2 主要包括如下内容(jar)：</b>
+						</p>
+						<ul>
+							<li>
+								<a href="commons/lucene-6.4.2/core/lucene-core-6.4.2.jar">core</a>
+								-- Lucene 核心库。
+							</li>
+
+							<li>
+								<a href="commons/lucene-6.4.2/analysis/common/lucene-analyzers-common-6.4.2.jar">analyzers-common</a>
+								-- 在不同的语言和领域分析索引内容。
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/analysis/icu/lucene-analyzers-icu-6.4.2.jar">analyzers-icu</a>
+								-- 分析与ICU(国际组件对Unicode)的集成。
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/analysis/kuromoji/lucene-analyzers-kuromoji-6.4.2.jar">analyzers-kuromoji</a>
+								-- 日语形态分析器。
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/analysis/morfologik/lucene-analyzers-morfologik-6.4.2.jar">analyzers-morfologik</a>
+								-- 分析器的字典,内置波兰字典。
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/analysis/phonetic/lucene-analyzers-phonetic-6.4.2.jar">analyzers-phonetic</a>
+								-- Analyzer for indexing phonetic signatures (for sounds-alike
+								search)
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/analysis/smartcn/lucene-analyzers-smartcn-6.4.2.jar">analyzers-smartcn</a>
+								-- 中文分词查询器
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/analysis/stempel/lucene-analyzers-stempel-6.4.2.jar">analyzers-stempel</a>
+								-- Analyzer for indexing Polish
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/analysis/uima/lucene-analyzers-uima-6.4.2.jar">analyzers-uima</a>
+								-- Analysis integration with Apache UIMA
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/backward-codecs/lucene-backward-codecs-6.4.2.jar">backward-codecs</a>
+								-- 编解码器Lucene的旧版本。
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/benchmark/lucene-benchmark-6.4.2.jar">benchmark</a>
+								-- System for benchmarking Lucene
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/classification/lucene-classification-6.4.2.jar">classification</a>
+								-- Lucene 分类模块
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/codecs/lucene-codecs-6.4.2.jar">codecs</a>
+								-- Lucene编解码器和检索格式。
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/demo/lucene-demo-6.4.2.jar">demo</a>
+								-- 简单的实例。
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/expressions/lucene-expressions-6.4.2.jar">expressions</a>
+								-- Dynamically computed values to sort/facet/search on based on
+								a pluggable grammar.
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/facet/lucene-facet-6.4.2.jar">facet</a>
+								-- Faceted indexing and search capabilities
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/grouping/lucene-grouping-6.4.2.jar">grouping</a>
+								-- 搜索结果进行分组收集。
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/highlighter/lucene-highlighter-6.4.2.jar">highlighter</a>
+								-- 高亮显示
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/join/lucene-join-6.4.2.jar">join</a>
+								-- Index-time and Query-time joins for normalized content
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/memory/lucene-memory-6.4.2.jar">memory</a>
+								-- Single-document in-memory index implementation
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/misc/lucene-misc-6.4.2.jar">misc</a>
+								-- Index tools and other miscellaneous code
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/queries/lucene-queries-6.4.2.jar">queries</a>
+								-- Filters and Queries that add to core Lucene
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/queryparser/lucene-queryparser-6.4.2.jar">queryparser</a>
+								-- Query parsers and parsing framework
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/replicator/lucene-replicator-6.4.2.jar">replicator</a>
+								-- Files replication utility
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/sandbox/lucene-sandbox-6.4.2.jar">sandbox</a>
+								-- Various third party contributions and new ideas
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/spatial/lucene-spatial-6.4.2.jar">spatial</a>
+								-- Geospatial search
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/spatial3d/lucene-spatial3d-6.4.2.jar">spatial3d</a>
+								-- 3D spatial planar geometry APIs
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/spatial-extras/lucene-spatial-extras-6.4.2.jar">spatial-extras</a>
+								-- 地理位置查询
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/suggest/lucene-suggest-6.4.2.jar">suggest</a>
+								-- 自动联想与拼写检查
+							</li>
+							<li>
+								<a href="commons/lucene-6.4.2/test-framework/lucene-test-framework-6.4.2.jar">test-framework</a>
+								-- Framework for testing Lucene-based applications
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
 				<!-- item start -->
 				<a class="offset" id="commons-"></a>
 				<div class="panel panel-default">
@@ -1785,8 +1991,7 @@ public static void printColl(String label, Iterator iter, int maxCount) {
 						</p>
 						<p>
 							文档 --
-							<a target="_blank"
-								href="commons/commons-io-2.5/docs/index.html">apidocs</a>
+							<a target="_blank" href="commons/commons-io-2.5/docs/index.html">apidocs</a>
 						</p>
 					</div>
 				</div>

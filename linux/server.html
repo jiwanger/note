@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="keywords" content="key1, key2" />
+<meta name="description" content=””>
+<meta name="author" content="nate">
+<meta name="author" content="nate &lt;jiwanger@126.com&gt;">
+<link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
+<link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<title>NATE--笔记--SERVER</title>
+<!-- Bootstrap -->
+<link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
+	rel="stylesheet">
+<!-- 
+<link href="../support/bootstrap/css/bootstrap.css" rel="stylesheet">
+-->
+<link type="text/css" rel="stylesheet"
+	href="../support/syntaxhighlighter/styles/shCoreDefault.css" />
+<link href="../commons/css/common.css" rel="stylesheet">
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<!-- nav start -->
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="../index.html">
+					<img src="../commons/images/icon.png">
+				</a>
+			</div>
+
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul id="my-nav" class="nav navbar-nav">
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- nav end -->
+
+
+	<div class="container">
+		<div class="row">
+			<!-- left-menu start -->
+			<div class="col-md-3">
+				<div class="panel panel-default"
+					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
+					<div class="panel-heading">
+						<h3 class="panel-title">SERVER</h3>
+					</div>
+					<div class="list-group">
+						<a href="#" class="list-group-item">系统信息</a>
+						<a href="#server-centos" class="list-group-item">CentOS 基本配置</a>
+						<a href="#server-" class="list-group-item"> 配置</a>
+						<a href="#server-" class="list-group-item"> 配置</a>
+						<a href="#server-" class="list-group-item"> 配置</a>
+						<a href="#server-nginx" class="list-group-item">Nginx 配置</a>
+						<a href="#server-test" class="list-group-item">压力测试</a>
+						<a href="#server-" class="list-group-item"></a>
+					</div>
+				</div>
+			</div>
+			<!-- left-menu over -->
+		</div>
+	</div>
+
+
+	<div class="container" style="margin-top: 70px;">
+		<div class="row">
+			<div class="col-md-9 col-md-push-3" style="float: left;">
+				<!-- item start -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">系统信息</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							本文所有配置均在:
+							<code>CentOS release 6.5 (Final)</code>
+							版本下进行测试。详细环境信息如下:
+						</p>
+						<ul>
+							<li>
+								<b>服务器型号:</b> -- HP Z228 Microtower Workstation
+								<pre class="brush: bash;">
+$ dmidecode | grep Product
+# Product Name: HP Z228 Microtower Workstation
+</pre>
+							</li>
+							<li>
+								<b>CPU 信息:</b> -- 4核, 64位模式运行
+								<pre class="brush: bash;">
+$ cat /proc/cpuinfo |grep "name" |cut -f2 -d: |uniq -c
+# 4  Intel(R) Xeon(R) CPU E3-1226 v3 @ 3.30GHz
+
+$ getconf LONG_BIT
+# 64
+</pre>
+							</li>
+							<li>
+								<b>内存信息:</b> -- 4G内存
+								<pre class="brush: bash;">
+$ free -m
+</pre>
+							</li>
+							<li>
+								<b>硬盘信息:</b> -- 1TB 硬盘
+								<pre class="brush: bash;">
+$ df -lh
+</pre>
+							</li>
+							<li>
+								<b>系统信息:</b>
+								<pre class="brush: bash;">
+$ head -n 1 /etc/issue
+# CentOS release 6.5 (Final)
+
+$ uname -a
+# Linux inner.lesson1234.com 2.6.32-431.el6.x86_64 #1 
+#	SMP Fri Nov 22 03:15:09 UTC 2013 x86_64 x86_64 x86_64 GNU/Linux
+</pre>
+							</li>
+							<li>
+								<b>JAVA 版本:</b> -- JDK-1.6
+								<pre class="brush: bash;">
+$ java -version
+# java version "1.6.0_45"
+</pre>
+							</li>
+							<li>
+								<b>GCC 版本:</b> -- gcc version 4.4.7
+								<pre class="brush: bash;">
+$ sudo yum install gcc					# gcc version 4.4.7
+$ sudo yum install g++					# gcc version 4.4.7
+$ sudo yum install make					# GNU Make 3.81
+</pre>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="server-centos"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">CentOS 基本配置</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">解决ssh登陆慢</h5>
+							<pre class="brush: bash;">
+$ sudo vim /etc/ssh/sshd_config
+# 	修改: UseDNS no
+# 	修改: GSSAPIAuthentication no
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">添加一个普通用户</h5>
+							<pre class="brush: bash;">
+# adduser jiwanger		# 添加用户
+# passwd jiwanger		# 为此用户设置密码	
+
+# 将此用户添加到 sudoers
+# vim /etc/sudoers
+#	在root	ALL=(ALL)	ALL 下面添加一行
+#	jiwanger	ALL=(ALL)	ALL
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">CentOS 配置网络</h5>
+							<p>
+								编辑:
+								<code>/etc/sysconfig/network-scripts/ifcfg-eth0</code>
+								文件，内容修改如下:
+							</p>
+							<pre class="brush: bash;">
+DEVICE=eth0
+HWADDR=50:65:F3:20:AB:57
+TYPE=Ethernet
+UUID=0e15bb23-6362-4926-b980-1e3d3e8836aa
+ONBOOT=yes
+NM_CONTROLLED=yes
+BOOTPROTO=none
+IPADDR=192.168.1.177
+PREFIX=24
+GATEWAY=192.168.1.1
+DNS1=119.29.29.29
+DOMAIN=8.8.8.8
+DEFROUTE=yes
+IPV4_FAILURE_FATAL=yes
+IPV6INIT=no
+NAME="inner-network"
+
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">CentOS 配置 JAVA 环境</h5>
+							<p>将系统原有的 openjdk 换成 jdk-1.6
+							<pre class="brush: bash;">
+# 1. 查询安装的　jdk 版本
+$ rpm -qa|grep java
+
+# 2. 卸载已经安装的JAVA
+$ sudo yum remove java-1.7.0-openjdk-1.7.0.45-2.4.3.3.el6.x86_64
+$ sudo yum remove java-1.6.0-openjdk-1.6.0.0-1.66.1.13.0.el6.x86_64
+$ sudo yum remove tzdata-java-2013g-1.el6.noarch
+
+# 3. SCP 上传 jdk-1.6 安装包到服务器
+$ scp jdk-6u45-linux-x64-rpm.bin jiwanger@192.168.1.177:/home/jiwanger/packages
+
+# 4. 安装 jdk-1.6
+$ cd packages
+$ chmod +x jdk-6u45-linux-x64-rpm.bin
+$ sudo ./jdk-6u45-linux-x64-rpm.bin				# 执行安装包
+$ sudo rpm -ivh jdk-6u45-linux-amd64.rpm		# 安装 rpm 包
+
+# 5. 配置环境变量
+$ sudo vim /etc/profile
+#	export JAVA_HOME=/usr/java/jdk1.6.0_45/
+#	export PATH=$JAVA_HOME/bin:$JAVA_HOME/jre/bin:$PATH
+#	export CLASSPATH=.:$JAVA_HOME/lib:$JAVA_HOME/jre/lib:$CLASSPATH
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">CentOS 配置 TOMCAT(两个 tomcat, 端口为: 80
+								和 8080)</h5>
+							<pre class="brush: bash;">
+# 1. 上传 tomcat 包
+$ scp apache-tomcat-6.0.39.tar.gz jiwanger@192.168.1.177:/home/jiwanger/packages/
+
+# 2. 解压并复制两个 tamcat 实例
+$ tar -xvf apache-tomcat-6.0.39.tar.gz
+$ cp -r apache-tomcat-6.0.39 ../soft/apache-tomcat-6.0.39-e1
+$ cp -r apache-tomcat-6.0.39 ../soft/apache-tomcat-6.0.39-e2
+
+# 3. 端口冲突解决
+#	3.1 修改 e1 这个　tomcat 实例的端口号为: 80
+$ vim apache-tomcat-6.0.39-e1/conf/server.xml
+#	3.2 将 e2 这个　tomcat 实例 server.xml 端口修改为 8006
+$ vim apache-tomcat-6.0.39-e2/conf/server.xml
+#		&lt;Server port="8006" shutdown="SHUTDOWN">
+#	3.3 将 e2 这个　tomcat 实例的 bin/catalina.sh 中的 CATALINA_HOME 这个环境变量修改为 CATALINA_HOME_2
+#	3.4 添加以下两个变量到环境变量
+$ sudo vim /etc/profile
+#	export CATALINA_HOME=/home/jiwanger/soft/apache-tomcat-6.0.39-e1/
+#	export CATALINA_HOME_2=/home/jiwanger/soft/apache-tomcat-6.0.39-e2/
+
+# 4. tamcat 添加到开机启动
+$ sudo vim /etc/rc.d/rc.local
+#	/home/jiwanger/soft/apache-tomcat-6.0.39-e1/bin/startup.sh
+#	/home/jiwanger/soft/apache-tomcat-6.0.39-e2/bin/startup.sh
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">CentOS 配置防火墙</h5>
+							<pre class="brush: bash;">
+$ sudo iptables -L -n					# 查看状态
+
+$ sudo vim /etc/sysconfig/iptables		# 添加 80 和 8080 端口
+#	-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
+#	-A INPUT -p tcp -m state --state NEW -m tcp --dport 8080 -j ACCEPT
+
+$ sudo service iptables restart 		# 重启防火墙
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">CentOS 配置MYSQL</h5>
+							<pre class="brush: bash;">
+$ sudo yum install mysql-server
+$ sudo yum -y install php-mysql				# 安装php-mysql
+$ sudo /etc/rc.d/init.d/mysqld start		# 启动mysql
+$ mysql -u root								# 用root用户登录MySQL服务器 
+$ set password for root@localhost=password('ilesson1401');		# 设置root密码
+$ select user,host,password from mysql.user;					# 查看用户信息
+$ sudo chkconfig mysqld on					# 设置MySQL服务随系统启动自启动
+$ sudo chkconfig --list mysqld				# 确认MySQL自启动
+#	mysqld 0:off 1:off 2:on 3:on 4:on 5:on 6:off　 # 如果2--5为on的状态就OK
+#	delete from mysql.user where user='';	# 删除匿名用户
+#	drop database test;						# 删除名为test的空数据库
+
+$ mysql -u root -p							# 查看编码
+# 	show variables like 'character%';
+$ sudo cp /etc/my.cnf /etc/my.cnf.bak
+$ sudo cp /usr/share/doc/mysql-server-5.1.73/my-large.cnf /etc/my.cnf
+$ sudo vim /etc/my.cnf
+#	在[mysqld]下添加
+#	default-character-set = utf8
+#	在[client]下添加
+#	default-character-set = utf8
+$ sudo service mysqld restart
+$ mysql -u root -p							# 编码是否修改为 utf-8
+#	show variables like 'character%';
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">CentOS 配置FTP</h5>
+							<pre class="brush: bash;">
+$ sudo yum install vsftpd					# 安装 vsftpd
+
+$ sudo vim /etc/sysconfig/iptables			# 配置防火墙
+#	-A INPUT -p tcp -m state --state NEW -m tcp --dport 20 -j ACCEPT 
+#	-A INPUT -p tcp -m state --state NEW -m tcp --dport 21 -j ACCEPT 
+$ sudo vim /etc/sysconfig/iptables-config	# IPTABLES_MODULES="" 修改如下:
+#	IPTABLES_MODULES="ip_nat_ftp ip_conntrack_ftp"
+$ sudo service iptables restart
+
+$ sudo vim /etc/passwd						# 修改 ftp 用户主目录
+#	ftp:x:14:50:FTP User:/home/jiwanger:/sbin/nologin
+
+$ sudo setsebool -P ftp_home_dir on			# 允许 ftp 目录为用户主目录, -P 为永久设置
+
+$ sudo chkconfig vsftpd on					# 配置开机启动
+$ sudo chkconfig --list vsftpd				# 查看是否开机启动 2和5 为: on
+
+$ sudo service vsftpd restart				# 重启 vsftpd
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="server-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="server-nginx"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Nginx 配置</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								<b>Nginx ("engine x")</b>
+								是一个高性能的HTTP和反向代理服务器，也是一个IMAP/POP3/SMTP服务器。
+							</p>
+							<p>
+								<b>Nginx作为负载均衡服务器: </b>Nginx 既可以在内部直接支持 Rails 和 PHP
+								程序对外进行服务，也可以支持作为
+								HTTP代理服务器对外进行服务。Nginx采用C进行编写，不论是系统资源开销还是CPU使用效率都比 Perlbal 要好很多。
+							</p>
+							<p>
+								<b>高并发的情况: </b>Nginx是Apache服务器不错的替代品：Nginx在美国是做虚拟主机生意的老板们经常选择的软件平台之一。能够支持高达
+								50,000 个并发连接数的响应。
+							</p>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">负载均衡原理和配置</h5>
+							<p>Nginx提供的负载均衡策略有2种：内置策略和扩展策略。内置策略: 轮询，加权轮询，Ip
+								hash；扩展策略这是不作介绍。</p>
+							<p>
+								<b>轮询和加权轮询</b>
+								-- 轮询为平均分配，加权轮询根据权重分配。
+							</p>
+							<div width="100%">
+								<img src="images/nginx-1.jpg" class="img-responsive btn-block">
+							</div>
+							</li>
+							<p>
+								<b>Ip hash算法</b> -- 对客户端请求的ip进行hash操作，然后根据hash结果将同一个客户端ip的请求分发给同一台服务器进行处理，可以解决session不共享的问题。 
+							</p>
+							<div width="100%">
+								<img src="images/nginx-2.jpg" class="img-responsive btn-block">
+							</div>
+							<p><b>安装配置</b></p>
+							<pre class="brush: bash;">
+$ sudo yum install nginx
+# 如果显示: No package nginx available.
+#	wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+#	rpm -ivh epel-release-6-8.noarch.rpm
+$ sudo chkconfig nginx on
+
+$ sudo vim /etc/nginx/nginx.d/default.conf	# 将　server 块下的 listen 端口修改为:8083
+#	listen       8083;
+
+$ sudo vim /etc/nginx/nginx.conf		# 修改配置文件，在 http 块内加如下内容:
+#   upstream 192.168.1.177 {  
+#    	server 192.168.1.177:80 weight=2;			# 80 端口权重为 2
+#    	server 192.168.1.177:8080 weight=1;			# 8080 端口权重为 1
+#		ip_hash;									# 使用 ip_hash 算法，解决session不共享的问题
+#   }  
+#
+#    server {  
+#        listen       8083;							# 监听8083端口
+#        server_name  192.168.1.177;
+#  
+#    	location / {  
+#           proxy_pass http://192.168.1.177;  		# 此处和 upstream 要一致
+#           proxy_redirect default;
+#        }
+#	
+#   }
+
+$ sudo service nginx reload				# 重启 nginx
+# 在浏览器输入: http://192.168.1.177:8083 , 此时将在 192.168.1.177 的 80 和 8080 端口间切换访问
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="server-test"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">压力测试</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+			</div>
+		</div>
+	</div>
+
+	<div class="btn-group-vertical bottom-button">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
+			<span class="caret"></span>
+		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
+	</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="../support/jquery/jquery-3.1.1.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
+	<script src="res/menu.js"></script>
+	<script src="../commons/js/common.js"></script>
+</body>
+</html>
