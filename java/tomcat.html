@@ -66,18 +66,17 @@
 					</div>
 					<div class="list-group">
 						<a href="#tomcat-intro" class="list-group-item">简介</a>
+						<a href="#tomcat-handler" class="list-group-item">Tomcat 请求处理</a>
+						<a href="#tomcat-config" class="list-group-item">常用配置</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
 							data-parent="#accordion" href="#java-tools" aria-expanded="true">
 							...<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
 						<div id="java-tools" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
 							<a href="#" class="list-group-item">...</a>
 							<a href="#" class="list-group-item">...</a>
 						</div>
-						<a href="#tamcat-config" class="list-group-item">常用配置</a>
 						<a href="#java-class-loader" class="list-group-item">...</a>
 					</div>
 				</div>
@@ -101,10 +100,102 @@
 							项目中的一个核心项目，由Apache、Sun 和其他一些公司及个人共同开发而成。</p>
 						<p>Tomcat 服务器是一个免费的开放源代码的Web
 							应用服务器，属于轻量级应用服务器，在中小型系统和并发访问用户不是很多的场合下被普遍使用，是开发和调试JSP 程序的首选。</p>
+						<div class="alert alert-danger">
+							<h4 style="margin: 0 auto;">本文所有实例使用 apache-tomcat-6.0.39
+								测试，不同的 Tomcat 版本可能略有不同。</h4>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
-				
+
+				<!-- item start -->
+				<a class="offset" id="tomcat-handler"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Tomcat 请求处理</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							Tomcat支持三种接收请求的处理方式：<b>BIO</b>、<b>NIO</b>、<b>APR</b>
+						</p>
+						<ol>
+							<li>
+								<b>BIO模式：</b>阻塞式I/O操作，表示Tomcat使用的是传统Java
+								I/O操作(即java.io包及其子包)。Tomcat7以下版本默认情况下是以bio模式运行的，由于每个请求都要创建一个线程来处理，线程开销较大，不能处理高并发的场景，在三种模式中性能也最低。<span class="text-warning">注意：Tomcat8以上版本，默认使用的就是NIO模式，不需要额外修改。</span>
+							</li>
+							<li>
+								<b>NIO模式：</b>是Java SE
+								1.4及后续版本提供的一种新的I/O操作方式(即java.nio包及其子包)。是一个基于缓冲区、并能提供非阻塞I/O操作的Java
+								API，它拥有比传统I/O操作(bio)更好的并发运行性能。要让Tomcat以nio模式来运行比较简单，只需要在Tomcat安装目录/conf/server.xml文件中将如下配置：
+								<pre class="brush: bash;">
+&lt;Connector 
+	protocol="org.apache.coyote.http11.Http11NioProtocol"
+	port="8080"
+	connectionTimeout="20000" 
+	redirectPort="8443" />
+</pre>
+							</li>
+							<li>
+								<b>APR模式：</b>简单理解，就是从操作系统级别解决异步IO问题，大幅度的提高服务器的处理和响应性能， 也是Tomcat运行高并发应用的首选模式。 
+								<pre class="brush: bash;">
+# 1.下载所需的包, 从 http://apr.apache.org/ 下载下面3个包 
+#	apr-1.5.2.tar.gz
+#	apr-iconv-1.2.1.tar.gz
+#	apr-util-1.5.4.tar.gz
+
+# 2.安装上面下载的三个文件
+$ tar zxvf apr-1.5.2.tar.gz
+$ cd apr-1.5.2
+$ ./configure --prefix=/usr/local/apr
+$ make 
+$ sudo make install
+
+$ tar zxvf apr-iconv-1.2.1.tar.gz
+$ cd apr-iconv-1.2.1
+$ ./configure --prefix=/usr/local/apr
+$ make 
+$ sudo make install
+
+$ tar zxvf apr-util-1.5.4.tar.gz
+$ cd apr-util-1.5.4
+$ ./configure --prefix=/usr/local/apr
+$ make 
+$ sudo make install
+
+# 3.安装 tomcat-native
+$ cd ~/soft/apache-tomcat-6.0.39-e1/bin/
+$ tar zxvf tomcat-native.tar.gz
+$ cd cd tomcat-native-1.1.27-src/jni/native/
+$ ./configure --with-apr=/usr/local/apr
+$ make
+$ make install
+
+# 4.添加环境变量(此步骤配置运行有问题，直接使用步骤5)
+$ sudo vim /etc/profile
+#	export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/apr/lib
+#	export LD_RUN_PATH=$LD_RUN_PATH:/usr/local/apr/lib
+
+# 5.编辑 catalina.sh 文件,在虚拟机启动参数JAVA_OPTS中添加java.library.path参数，指定apr库的路径
+$ vim ~/soft/apache-tomcat-6.0.39-e1/bin/catalina.sh
+#	JAVA_OPTS="$JAVA_OPTS -Djava.library.path=/usr/local/apr/lib"
+# Tomcat8以下版本，需要指定运行模式，将protocol从HTTP/1.1改成org.apache.coyote.http11.Http11AprProtocol
+# 修改 conf/server.xml:
+$ vim ~/soft/apache-tomcat-6.0.39-e1/conf/server.xml
+# 	&lt;Connector protocol="org.apache.coyote.http11.Http11AprProtocol" ... />
+
+# 6.重启tomcat,测试是否使用 apr 模式, 在 logs/catalina.out 中看到如下信息：
+# Loaded APR based Apache Tomcat Native library 1.1.27 using APR version 1.5.2.
+
+# 7.如果不使用 SSL, 将 SSLEngine 的值修改为 off
+$ vim ~/soft/apache-tomcat-6.0.39-e1/conf/server.xml
+# 	&lt;Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="off" />
+</pre>
+							</li>
+						</ol>
+					</div>
+				</div>
+				<!-- item over -->
+
 				<!-- item start -->
 				<a class="offset" id="tomcat-config"></a>
 				<div class="panel panel-default">
@@ -113,25 +204,55 @@
 					</div>
 					<div class="panel-body">
 						<div class="sub-item">
-						<h5 class="text-primary">最大可用内存配置</h5>
+							<h5 class="text-primary">最大可用内存配置</h5>
+							<pre class="brush: bash;">
+$ sudo vim apache-tomcat-6.0.39/bin/catalina.sh
+# 添加如下行,因为测试机器内存为4G, 设置最大和最小可用内存都为: 2048M
+#	JAVA_OPTS="-server -Xms2048m -Xmx2048m -XX:PermSize=256M -XX:MaxPermSize=1024m"
+</pre>
 						</div>
-						
+
 						<div class="sub-item">
 							<h5 class="text-primary">数据库连接池配置</h5>
+
+
 						</div>
-						
+
 						<div class="sub-item">
 							<h5 class="text-primary">数据库最大连接数配置</h5>
 						</div>
-						
+
 						<div class="sub-item">
-						<h5 class="text-primary">线程池配置</h5>
+							<h5 class="text-primary">线程池配置</h5>
+							<pre class="brush: bash;">
+# 最大线程数错误
+# INFO: Maximum number of threads (200) created for connector with address null and port 8080
+# 解决方案 -- 使用线程池
+$ vim apache-tomcat-6.0.39/conf/server.xml
+# 1.在 &lt;Service>标签下加:
+&lt;Executor name="tomcatThreadPool"   
+	namePrefix="tomcatThreadPool-"   
+	maxThreads="1000"					<!-- 最大线程数 -->
+	maxIdleTime="300000"  
+	minSpareThreads="20"/>			   <!-- 空闲线程数 -->
+
+# 2.&lt;Connector>标签，增加executor属性
+&lt;Connector 
+	executor="tomcatThreadPool"
+	port="8080" 
+	protocol="HTTP/1.1" 
+	minProcessors="5"
+	maxProcessors="75"
+	acceptCount="1000"
+	connectionTimeout="20000"
+	URIEncoding="UTF-8" />
+</pre>
 						</div>
-						
+
 						<div class="sub-item">
-						<h5 class="text-primary">HTTPS 配置</h5>
+							<h5 class="text-primary">HTTPS 配置</h5>
 						</div>
-						
+
 						<div class="sub-item">
 							<h5 class="text-primary">Linux 下最大打开文件数配置</h5>
 						</div>
@@ -188,6 +309,7 @@
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>

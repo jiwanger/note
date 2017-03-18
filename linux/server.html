@@ -71,7 +71,8 @@
 						<a href="#server-" class="list-group-item"> 配置</a>
 						<a href="#server-" class="list-group-item"> 配置</a>
 						<a href="#server-nginx" class="list-group-item">Nginx 配置</a>
-						<a href="#server-test" class="list-group-item">压力测试</a>
+						<a href="#server-jmeter" class="list-group-item">Apache Jmeter 工具</a>
+						<a href="#server-test" class="list-group-item">Tomcat 压力测试</a>
 						<a href="#server-" class="list-group-item"></a>
 					</div>
 				</div>
@@ -243,8 +244,9 @@ $ sudo vim /etc/profile
 						</div>
 
 						<div class="sub-item">
-							<h5 class="text-primary">CentOS 配置 TOMCAT(两个 tomcat, 端口为: 80
-								和 8080)</h5>
+							<h5 class="text-primary">CentOS 配置 TOMCAT(两个 tomcat, 端口为:
+								8080 和 8081)</h5>
+							<p><b>更多配置参见:</b> <a href="../java/tomcat.html" target="_blank">Tomcat 配置</a></p>
 							<pre class="brush: bash;">
 # 1. 上传 tomcat 包
 $ scp apache-tomcat-6.0.39.tar.gz jiwanger@192.168.1.177:/home/jiwanger/packages/
@@ -255,7 +257,7 @@ $ cp -r apache-tomcat-6.0.39 ../soft/apache-tomcat-6.0.39-e1
 $ cp -r apache-tomcat-6.0.39 ../soft/apache-tomcat-6.0.39-e2
 
 # 3. 端口冲突解决
-#	3.1 修改 e1 这个　tomcat 实例的端口号为: 80
+#	3.1 修改 e1 这个　tomcat 实例的端口号为: 8081
 $ vim apache-tomcat-6.0.39-e1/conf/server.xml
 #	3.2 将 e2 这个　tomcat 实例 server.xml 端口修改为 8006
 $ vim apache-tomcat-6.0.39-e2/conf/server.xml
@@ -266,7 +268,21 @@ $ sudo vim /etc/profile
 #	export CATALINA_HOME=/home/jiwanger/soft/apache-tomcat-6.0.39-e1/
 #	export CATALINA_HOME_2=/home/jiwanger/soft/apache-tomcat-6.0.39-e2/
 
-# 4. tamcat 添加到开机启动
+# 4. 配置 Tomcat Web Application Manager
+$ vim apache-tomcat-6.0.39-e1/conf/tomcat-users.xml
+$ vim apache-tomcat-6.0.39-e2/conf/tomcat-users.xml
+#	在 &lt;tomcat-users> 标签加如下两行:
+#	&lt;role rolename="manager-gui"/>
+#	&lt;user username="jiwanger" password="ilesson1401" roles="manager-gui"/>
+
+# 5. 为 tomcat 配置虚拟目录
+$ vim apache-tomcat-6.0.39-e1/conf/server.xml
+$ vim apache-tomcat-6.0.39-e2/conf/server.xml
+#	在 &lt;Host>和&lt;/Host>之间加上:
+#	&lt;Context path="/site" docBase="/home/jiwanger/data/web/site/" reloadable="true" debug="0" />
+#	&lt;Context path="/data" docBase="/home/jiwanger/data/web/data/" reloadable="true" debug="0" />
+
+# 6. tamcat 添加到开机启动
 $ sudo vim /etc/rc.d/rc.local
 #	/home/jiwanger/soft/apache-tomcat-6.0.39-e1/bin/startup.sh
 #	/home/jiwanger/soft/apache-tomcat-6.0.39-e2/bin/startup.sh
@@ -281,6 +297,7 @@ $ sudo iptables -L -n					# 查看状态
 $ sudo vim /etc/sysconfig/iptables		# 添加 80 和 8080 端口
 #	-A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
 #	-A INPUT -p tcp -m state --state NEW -m tcp --dport 8080 -j ACCEPT
+#	-A INPUT -p tcp -m state --state NEW -m tcp --dport 8081 -j ACCEPT
 
 $ sudo service iptables restart 		# 重启防火墙
 </pre>
@@ -381,20 +398,22 @@ $ sudo service vsftpd restart				# 重启 vsftpd
 							<p>Nginx提供的负载均衡策略有2种：内置策略和扩展策略。内置策略: 轮询，加权轮询，Ip
 								hash；扩展策略这是不作介绍。</p>
 							<p>
-								<b>轮询和加权轮询</b>
-								-- 轮询为平均分配，加权轮询根据权重分配。
+								<b>轮询和加权轮询</b> -- 轮询为平均分配，加权轮询根据权重分配。
 							</p>
 							<div width="100%">
 								<img src="images/nginx-1.jpg" class="img-responsive btn-block">
 							</div>
 							</li>
 							<p>
-								<b>Ip hash算法</b> -- 对客户端请求的ip进行hash操作，然后根据hash结果将同一个客户端ip的请求分发给同一台服务器进行处理，可以解决session不共享的问题。 
+								<b>Ip hash算法</b> --
+								对客户端请求的ip进行hash操作，然后根据hash结果将同一个客户端ip的请求分发给同一台服务器进行处理，可以解决session不共享的问题。
 							</p>
 							<div width="100%">
 								<img src="images/nginx-2.jpg" class="img-responsive btn-block">
 							</div>
-							<p><b>安装配置</b></p>
+							<p>
+								<b>安装配置</b>
+							</p>
 							<pre class="brush: bash;">
 $ sudo yum install nginx
 # 如果显示: No package nginx available.
@@ -402,31 +421,54 @@ $ sudo yum install nginx
 #	rpm -ivh epel-release-6-8.noarch.rpm
 $ sudo chkconfig nginx on
 
-$ sudo vim /etc/nginx/nginx.d/default.conf	# 将　server 块下的 listen 端口修改为:8083
-#	listen       8083;
+$ sudo vim /etc/nginx/nginx.d/default.conf	# 将　server 块下的 listen 端口修改为:80
+#	listen       80;
 
 $ sudo vim /etc/nginx/nginx.conf		# 修改配置文件，在 http 块内加如下内容:
 #   upstream 192.168.1.177 {  
-#    	server 192.168.1.177:80 weight=2;			# 80 端口权重为 2
-#    	server 192.168.1.177:8080 weight=1;			# 8080 端口权重为 1
+#		# 1. 轮询
+# 		# server 192.168.1.177:80;
+#    	# server 192.168.1.177:8080;
+#		# 2. 加权轮询
+#    	# server 192.168.1.177:80 weight=2;			# 80 端口权重为 2
+#    	# server 192.168.1.177:8080 weight=1;		# 8080 端口权重为 1
+#		# 3. ip_hash
 #		ip_hash;									# 使用 ip_hash 算法，解决session不共享的问题
+#		server 192.168.1.177:8080;
+#    	server 192.168.1.177:80;
 #   }  
 #
-#    server {  
-#        listen       8083;							# 监听8083端口
+#	server {  
+#        listen       80;							# 监听80端口
 #        server_name  192.168.1.177;
 #  
 #    	location / {  
 #           proxy_pass http://192.168.1.177;  		# 此处和 upstream 要一致
 #           proxy_redirect default;
 #        }
-#	
 #   }
 
 $ sudo service nginx reload				# 重启 nginx
-# 在浏览器输入: http://192.168.1.177:8083 , 此时将在 192.168.1.177 的 80 和 8080 端口间切换访问
+# 在浏览器输入: http://192.168.1.177 , 此时将在 192.168.1.177 的 80 和 8080 端口间切换访问
 </pre>
 						</div>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="server-jmeter"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Apache Jmeter 工具</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<b>Apache JMeter</b> 是Apache组织开发的基于Java的压力测试工具。用于对软件做压力测试，它最初被设计用于Web应用测试，但后来扩展到其他测试领域。
+							它可以用于测试静态和动态资源，例如静态文件、Java 小服务程序、CGI 脚本、Java 对象、数据库、FTP 服务器，
+							等等。JMeter
+							可以用于对服务器、网络或对象模拟巨大的负载，来自不同压力类别下测试它们的强度和分析整体性能。另外，JMeter能够对应用程序做功能/回归测试，通过创建带有断言的脚本来验证你的程序返回了你期望的结果。为了最大限度的灵活性，JMeter允许使用正则表达式创建断言。
+						</p>
 					</div>
 				</div>
 				<!-- item over -->
@@ -435,9 +477,15 @@ $ sudo service nginx reload				# 重启 nginx
 				<a class="offset" id="server-test"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">压力测试</h3>
+						<h3 class="panel-title">Tomcat 压力测试</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<ul>
+							<li>
+								<a href="#"></a>
+							</li>
+						</ul>
+					</div>
 				</div>
 				<!-- item over -->
 
