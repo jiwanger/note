@@ -71,7 +71,8 @@
 						<a href="#server-" class="list-group-item"> 配置</a>
 						<a href="#server-" class="list-group-item"> 配置</a>
 						<a href="#server-nginx" class="list-group-item">Nginx 配置</a>
-						<a href="#server-jmeter" class="list-group-item">Apache Jmeter 工具</a>
+						<a href="#server-jmeter" class="list-group-item">Apache Jmeter
+							工具</a>
 						<a href="#server-test" class="list-group-item">Tomcat 压力测试</a>
 						<a href="#server-" class="list-group-item"></a>
 					</div>
@@ -246,7 +247,10 @@ $ sudo vim /etc/profile
 						<div class="sub-item">
 							<h5 class="text-primary">CentOS 配置 TOMCAT(两个 tomcat, 端口为:
 								8080 和 8081)</h5>
-							<p><b>更多配置参见:</b> <a href="../java/tomcat.html" target="_blank">Tomcat 配置</a></p>
+							<p>
+								<b>更多配置参见:</b>
+								<a href="../java/tomcat.html" target="_blank">Tomcat 配置</a>
+							</p>
 							<pre class="brush: bash;">
 # 1. 上传 tomcat 包
 $ scp apache-tomcat-6.0.39.tar.gz jiwanger@192.168.1.177:/home/jiwanger/packages/
@@ -455,7 +459,7 @@ $ sudo service nginx reload				# 重启 nginx
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="server-jmeter"></a>
 				<div class="panel panel-default">
@@ -463,12 +467,301 @@ $ sudo service nginx reload				# 重启 nginx
 						<h3 class="panel-title">Apache Jmeter 工具</h3>
 					</div>
 					<div class="panel-body">
-						<p>
-							<b>Apache JMeter</b> 是Apache组织开发的基于Java的压力测试工具。用于对软件做压力测试，它最初被设计用于Web应用测试，但后来扩展到其他测试领域。
-							它可以用于测试静态和动态资源，例如静态文件、Java 小服务程序、CGI 脚本、Java 对象、数据库、FTP 服务器，
-							等等。JMeter
-							可以用于对服务器、网络或对象模拟巨大的负载，来自不同压力类别下测试它们的强度和分析整体性能。另外，JMeter能够对应用程序做功能/回归测试，通过创建带有断言的脚本来验证你的程序返回了你期望的结果。为了最大限度的灵活性，JMeter允许使用正则表达式创建断言。
-						</p>
+						<div class="sub-item">
+							<p>
+								<b>Apache JMeter</b>
+								是Apache组织开发的基于Java的压力测试工具。用于对软件做压力测试，它最初被设计用于Web应用测试，但后来扩展到其他测试领域。
+								它可以用于测试静态和动态资源，例如静态文件、Java 小服务程序、CGI 脚本、Java 对象、数据库、FTP 服务器，
+								等等。JMeter
+								可以用于对服务器、网络或对象模拟巨大的负载，来自不同压力类别下测试它们的强度和分析整体性能。另外，JMeter能够对应用程序做功能/回归测试，通过创建带有断言的脚本来验证你的程序返回了你期望的结果。为了最大限度的灵活性，JMeter允许使用正则表达式创建断言。
+							</p>
+							<p>
+								<b>测试计划:</b> 一个测试计划描述了一系列 Jmeter
+								运行时要执行的步骤。一个完整的测试计划包含一个或者多个线程组，逻辑控制器，取样发生控制，监听器，定时器，断言和配置元件。测试计划主要包括如下元件：
+							</p>
+							<ul>
+								<li>
+									<p>
+										<b>线程组:</b>
+										线程组元件是任何测试计划的起点。一个测试计划的所有元件必须在一个线程组下。由名字可以看出，线程组元件控制JMeter运行测试时使用的线程数。线程组管理允许你：
+									</p>
+
+									<ul>
+										<li>
+											<b>设置线程数:</b>
+											每个线程会作为一个整体执行测试计划并完全独立于他测试线程。多线程用来模拟到达服务器程序的同步连接。
+										</li>
+										<li>
+											<b>设置ramp-up period:</b> 可以理解为所有线程启动时间总和，如果: ramp-up 设置为 20,
+											线程数为 5, 循环次数设置为 4, 那么第一个线程启动执行 4 次循环，ram-up(20) / 线程数(5) = 4,
+											4 秒后再启动下一个线程。
+										</li>
+										<li>
+											<b>循环次数:</b> 设置每个线程循环的次数，如循环次数设置为 4，则每个线程执行 4 次请求。
+										</li>
+									</ul>
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>控制器:</b> JMeter有两种控制器：取样器(Sampler)和逻辑控制器(Logic Controller)。
+									</p>
+									<ul>
+										<li>
+											<b>取样器:</b> 取样器告诉 JMeter 发送什么样的请求到服务器。常见取样器:
+											<ol>
+												<li>
+													<b>HTTP 请求</b>
+												</li>
+												<li>
+													<b>FTP 请求</b>
+												</li>
+												<li>
+													<b>JAVA 请求</b>
+												</li>
+												<li>
+													<b>JDBC 请求</b>
+												</li>
+												<li>
+													<b>LAMP 请求</b>
+												</li>
+											</ol>
+										</li>
+										<li>
+											<b>逻辑控制器:</b> 逻辑控制器让你定制当发送请求时 JMeter 使用的判断逻辑。常见控制器:
+											<ol>
+												<li>
+													<b>ForEach 控制器</b>
+												</li>
+												<li>
+													<b>仅一次控制器</b>
+												</li>
+												<li>
+													<b>交替控制器</b>
+												</li>
+												<li>
+													<b>包含控制器</b>
+												</li>
+												<li>
+													<b>吞吐量控制器</b>
+												</li>
+												<li>
+													<b>如果(IF)控制器</b>
+												</li>
+												<li>
+													<b>录制控制器</b>
+												</li>
+												<li>
+													<b>循环控制器</b>
+												</li>
+												<li>
+													<b>简单控制器</b>
+												</li>
+												<li>
+													<b>随机控制器</b>
+												</li>
+											</ol>
+										</li>
+									</ul>
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>监听器:</b> 监听器提供访问 JMeter 收集当 JMeter
+										运行的关于测试计划的信息。监听器的监听范围：当前节点层及当前节点的子节点（直至叶子节点），也就是说监听器可以监听当前层以及比它低的层。
+									</p>
+									<ol>
+										<li>
+											<b>聚合报告</b> --
+											对于每个请求，它统计响应信息并提供请求数，平均值，最大，最小值，错误率，大约吞吐量(以请求数/秒为单位)和以kb/秒为单位的吞吐量。
+											<img src="images/jmeter-result-all.png"
+												class="img-responsive">
+											<pre class="brush: bash;">
+Ø Label：取样器名称
+Ø Samples：运行过程中一共发出了多少个请求，一般来说是其值=线程数*循环次数（前提：测试按计划跑完，
+	其中没有异常结束的线程），如5个线程，每个线程循环10次，那么对应行的Samples数是：
+	5*10=50，如果使用用户定义变量，变量中有两个请求，这个数目: 5 * 10 * 2 = 100, 总体Samples是各请求Samples之和。
+Ø Average：平均响应时间
+Ø Median：响应时间中间值
+Ø 90%Line：响应时间90%线
+Ø Min：最小响应时间
+Ø Max：最大响应时间
+Ø Error%：出错率（出错的Request数/所有的request数）
+Ø Throughput：吞吐量，每秒/每分钟（具体看“/”后面的单位）处理的Request数
+Ø KB/sec：每秒从服务器端接收到的数据量，相当于LoadRunner中的Throughput/Sec
+</pre>
+										</li>
+										<li>
+											<b>查看结果树</b> -- 此监听器显示了请求和响应取样器的细节，并且以基础的HTML和XML显示响应表现。
+											<pre class="brush: bash;">
+Ø 取样器结果：显示的是取样器相关参数（客户端参数与响应参数）
+Ø 请求：发送请求的具体值
+Ø 响应数据：服务端返回的相应参数
+</pre>
+										</li>
+										<li>
+											<b>图形结果</b> -- 使用图形显示结果。
+											<pre class="brush: bash;">
+Ø 样本数目：发出去的请求数
+Ø 最新样本：最近一个Request的响应时间
+Ø 平均：所有Request响应时间的平均值
+Ø 偏离：所有Request响应时间的标准差
+Ø 吞吐量：单位时间内（一般是1分钟）处理Request的个数
+Ø 中值：所有Request响应时间的中间值
+</pre>
+										</li>
+										<li>
+											<b>Summary Report</b> -- 这个和聚合报告相差不大。
+											<pre class="brush: bash;">
+Ø Label：取样器名称
+Ø Samples：发送的请求总数
+Ø Min：最小响应时间
+Ø Max：最大响应时间
+Ø Std.Dev：所有请求响应时间的标准差
+Ø Error%：出错率（出错的Request数/所有的request数）
+Ø Throughput：吞吐量，每秒/每分钟（具体看“/”后面的单位）处理的Request数
+Ø KB/sec：每秒从服务器端接收到的数据量，相当于LoadRunner中的Throughput/Sec
+Ø Avg.Bytes：服务端返回给Request数据的平均值，可以理解为：服务端返回所有数据/请求数
+</pre>
+										</li>
+									</ol>
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>定时器:</b>
+										定时器会使JMeter在一个线程开始每个请求间延迟一段时间。默认，JMeter线程发送请求时不在请求间暂停。我们建议你通过添加一个可用的定时器到你的线程组来指定一个延迟。
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>断言:</b>
+										断言允许你断言关于从测试服务器收到的响应的行为。使用断言你本质上你可以测试你的应用程序返回你期望的结果。
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>配置元件:</b> 配置元件配合取样器工作。虽然它不发送请求（除了HTTP代理服务器），但是它可以添加或者修改请求。
+									</p>
+									<ol>
+										<li>
+											<b>用户定义的变量</b>
+										</li>
+										<li>
+											<b>HTTP 默认请求</b>
+										</li>
+										<li>
+											<b>HTTP 简单配置元件</b>
+										</li>
+										<li>
+											<b>Java 请求默认值</b>
+										</li>
+										<li>
+											<b>HTTP Cookie Manager</b>
+										</li>
+										<li>
+											<b>HTTP Cache Manager</b>
+										</li>
+										<li>
+											<b>FTP 请求默认值</b>
+										</li>
+									</ol>
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>前置处理器元件:</b>
+										前置处理器在取样器请求建立前执行一些行为。如果前置处理器附属于取样器元件，那么它会仅在那个取样器元件运行前执行。前置处理器最常用来在取样请求运行前修改它的设置，或者更新不能从响应文本提取的变量。
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>后置处理器元件:</b>
+										后置控制器在取样器请求建立后执行一些行为。如果后置处理器附属于取样器元件，那么它会仅在那个取样器元件运行后执行。后置处理器最常用来处理响应数据，常用来从它里面提取数值。
+									</p>
+								</li>
+							</ul>
+							<p>
+								<b>测试计划元件执行顺序:</b> 配制元件 -> 前置处理器 -> 定时器 -> 取样器 ->
+								后置处理器(如果SampleResult不为空) -> 断言(如果SampleResult不为空) ->
+								监听器(如果SampleResult不为空)
+							</p>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">创建一个Web测试计划</h5>
+							<div class="row">
+								<div class="col-md-8">
+									<ol>
+										<li>
+											<p>
+												<b>添加一个 线程组:</b> 每个 JMeter
+												测试计划的第一步都是要添加一个线程组。设置的用户的数目(线程数目),发送请求的频率(ramp-up
+												period)和请求的次数(循环次数)。线程数: 50 , 循环次数: 10 。 <img
+													src="images/jmeter-thread-group.png" class="img-responsive">
+											</p>
+										</li>
+										<li>
+											<p>
+												<b>线程组下添加 ForEach 控制器:</b> ForEach
+												控制器在用户自定义变量中读取一系列相关的变量。变量前缀: url , 变量名称: returnVal 。 <img
+													src="images/jmeter-foreach.png" class="img-responsive">
+											</p>
+										</li>
+										<li>
+											<p>
+												<b>ForEach 控制器下添加 HTTP 请求:</b> 用于发送 HTTP 请求。路径: ${returnVal}
+												<img src="images/jmeter-http.png" class="img-responsive">
+											</p>
+										</li>
+
+									</ol>
+								</div>
+								<div class="col-md-4">
+									<img src="images/jmeter-plan.png" class="img-responsive">
+								</div>
+							</div>
+							<ol start="4">
+								<li>
+									<p>
+										<b>ForEach 控制器下添加 用户定义的变量:</b> 用于向 HTTP 请求 提供数据。添加两个请求:<br>
+										<code>url_1 ->
+											http://192.168.0.177:8081/site/TestServlet?type=db</code>
+										, <br>
+										<code>url_2 ->
+											http://192.168.0.177:8081/site/TestServlet?type=</code>
+										<img src="images/jmeter-user-define.png"
+											class="img-responsive">
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>线程组下添加 聚合报告:</b> 用于查看聚合数据结果。 <img
+											src="images/jmeter-result-all.png" class="img-responsive">
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>线程组下添加 用表格查看结果:</b> 用表格来查看结果。 <img
+											src="images/jmeter-result-table.png" class="img-responsive">
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>线程组下添加 察看结果树:</b> 察看结果树显示结果。 <img
+											src="images/jmeter-result-tree.png" class="img-responsive">
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>线程组下添加 图形结果:</b> 图形显示结果。 <img
+											src="images/jmeter-result-graph.png" class="img-responsive">
+									</p>
+								</li>
+							</ol>
+						</div>
+
+
 					</div>
 				</div>
 				<!-- item over -->
@@ -519,5 +812,6 @@ $ sudo service nginx reload				# 重启 nginx
 	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
+
 </body>
 </html>

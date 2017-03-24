@@ -82,10 +82,12 @@
 								Provider</a>
 						</div>
 						<a href="#android-handler" class="list-group-item">Handler 机制</a>
-						<a href="#android-image" class="list-group-item">图片加载</a>
-						<a href="#android-memory" class="list-group-item">内存管理和分析</a>
+						<a href="#android-image" class="list-group-item">图片加载及框架</a>
 						<a href="#android-fragment" class="list-group-item">Fragment
 							使用</a>
+						<a href="#android-memory" class="list-group-item">内存管理和分析</a>
+						<a href="#android-performance" class="list-group-item">Android
+							应用优化</a>
 						<a href="#android-" class="list-group-item"></a>
 					</div>
 				</div>
@@ -1372,47 +1374,48 @@ public class Main {
 				<a class="offset" id="android-image"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">图片加载</h3>
+						<h3 class="panel-title">图片加载及框架</h3>
 					</div>
 					<div class="panel-body">
-						<p>大量图片的加载和高精度图片的加载，这两种操作都是会导致应用程序OOM(OutOfMemory)的问题发生，合理的图片加载和图片内存管理就是必须解决的问题，以下将提供一个比较完善的技术方案，解决这两个问题。</p>
-						<p>首先，我们必须明确为什么会发生OOM(OutOfMemory)的问题，其原因就是因为在APP运行过程中，所使用的系统内存超出了当前APP的最大可用内存，就发生了OOM的问题。</p>
+						<div class="sub-item">
+							<p>大量图片的加载和高精度图片的加载，这两种操作都是会导致应用程序OOM(OutOfMemory)的问题发生，合理的图片加载和图片内存管理就是必须解决的问题，以下将提供一个比较完善的技术方案，解决这两个问题。</p>
+							<p>首先，我们必须明确为什么会发生OOM(OutOfMemory)的问题，其原因就是因为在APP运行过程中，所使用的系统内存超出了当前APP的最大可用内存，就发生了OOM的问题。</p>
 
-						<p class="alert alert-success" style="line-height: 1.5;">
-							<b>Android 应用可使用最大内存：</b> 这个值的定义一般在
-							<code>/system/build.prop</code>
-							文件中, 最大内存限制:
-							<code>dalvik.vm.heapsize=512m</code>
-							, 普通内存限制
-							<code>dalvik.vm.heapgrowthlimit=192m</code>
-							, 就是说应用最大可使用内存为 192 M(这是在 nexus 5 设备中), 通过在应用
-							<code>AndroidManifest.xml</code>
-							中的 application 节点配置
-							<code>android:largeHeap="true"</code>
-							时，应用可使用的最大内存就为 512 M。在应用中也可以拿到这个数值：
-							<code>Runtime.getRuntime().maxMemory() / 1024 / 1024 </code>
-							, 此时的单位为 MB。
-						</p>
-						<p class="alert alert-success">
-							<b>图片占用内存计算：</b>Android中Bitmap的默认加载使用ARGB_8888，每个像素会占用4byte，因为每个像素有两个Chanel，因此一个512*512的图片，无论什么格式，加载进入内存都占用512*512*4*2=2MB，所以，Android图片占用内存大小，只与图片的分辨率（像素）以及加载使用的色彩模式有关
-						</p>
-						<p>要解决OOM的问题，从两方面进行优化：</p>
-						<ol>
-							<li>
-								<b>合理加载资源</b>
-							</li>
-							<li>
-								<b>合理回收资源</b>
-							</li>
-						</ol>
-						<p>
-							<b>合理加载资源: </b>如果展示图片的ImageView只有128*96的像素大小，这时候把一张1024*768的图片完全加载到内存中，很明显是错误的行为。这个时候，就需要把要加载的图片进行压缩加载，就是合理地加载资源。
-						</p>
-						<p>图片的压缩讲解，设置BitmapFactory.Options中inSampleSize的值就可以实现等比例压缩。比如我们有一张2048*1536像素的图片，将inSampleSize的值设置为4，就可以把这张图片压缩成512*384像素。原本加载这张图片需要占用26M的内存，压缩后就只需要占用1.5M了。下面的方法可以根据传入的宽和高，计算出合适的inSampleSize值：</p>
-						<ol>
-							<li>
-								根据传入的宽和高，计算出合适的inSampleSize值：
-								<pre class="brush: java;">
+							<p class="alert alert-success" style="line-height: 1.5;">
+								<b>Android 应用可使用最大内存：</b> 这个值的定义一般在
+								<code>/system/build.prop</code>
+								文件中, 最大内存限制:
+								<code>dalvik.vm.heapsize=512m</code>
+								, 普通内存限制
+								<code>dalvik.vm.heapgrowthlimit=192m</code>
+								, 就是说应用最大可使用内存为 192 M(这是在 nexus 5 设备中), 通过在应用
+								<code>AndroidManifest.xml</code>
+								中的 application 节点配置
+								<code>android:largeHeap="true"</code>
+								时，应用可使用的最大内存就为 512 M。在应用中也可以拿到这个数值：
+								<code>Runtime.getRuntime().maxMemory() / 1024 / 1024 </code>
+								, 此时的单位为 MB。
+							</p>
+							<p class="alert alert-success">
+								<b>图片占用内存计算：</b>Android中Bitmap的默认加载使用ARGB_8888，每个像素会占用4byte，因为每个像素有两个Chanel，因此一个512*512的图片，无论什么格式，加载进入内存都占用512*512*4*2=2MB，所以，Android图片占用内存大小，只与图片的分辨率（像素）以及加载使用的色彩模式有关
+							</p>
+							<p>要解决OOM的问题，从两方面进行优化：</p>
+							<ol>
+								<li>
+									<b>合理加载资源</b>
+								</li>
+								<li>
+									<b>合理回收资源</b>
+								</li>
+							</ol>
+							<p>
+								<b>合理加载资源: </b>如果展示图片的ImageView只有128*96的像素大小，这时候把一张1024*768的图片完全加载到内存中，很明显是错误的行为。这个时候，就需要把要加载的图片进行压缩加载，就是合理地加载资源。
+							</p>
+							<p>图片的压缩讲解，设置BitmapFactory.Options中inSampleSize的值就可以实现等比例压缩。比如我们有一张2048*1536像素的图片，将inSampleSize的值设置为4，就可以把这张图片压缩成512*384像素。原本加载这张图片需要占用26M的内存，压缩后就只需要占用1.5M了。下面的方法可以根据传入的宽和高，计算出合适的inSampleSize值：</p>
+							<ol>
+								<li>
+									根据传入的宽和高，计算出合适的inSampleSize值：
+									<pre class="brush: java;">
 public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
 	// 源图片的高度和宽度
 	final int height = options.outHeight;
@@ -1429,10 +1432,10 @@ public static int calculateInSampleSize(BitmapFactory.Options options, int reqWi
 	return inSampleSize;
 }
 </pre>
-							</li>
-							<li>
-								计算出合适的缩放比例后，接着进行图片的实际压缩操作：
-								<pre class="brush: java;">
+								</li>
+								<li>
+									计算出合适的缩放比例后，接着进行图片的实际压缩操作：
+									<pre class="brush: java;">
 public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId, 
 			int reqWidth, int reqHeight) {
 	// 第一次解析将inJustDecodeBounds设置为true，来获取图片大小
@@ -1446,15 +1449,15 @@ public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
     return BitmapFactory.decodeResource(res, resId, options);
 }
 </pre>
-							</li>
-						</ol>
+								</li>
+							</ol>
 
-						<p>
-							<b>合理回收资源: </b>
-							既对加载在内存中的图片资源进行合理的回收，避免因为不再使用的图片资源还留存在内存中的情况出现。而要实现合理回收资源，最核心的一个类就是：LruCache，这个类非常适用于保存图片内存，它的主要算法原理是把最近使用的对象用强引用存储在
-							LinkedHashMap 中，并且把最近最少使用的对象在缓存值达到预设定值之前从内存中移除。
-						</p>
-						<pre class="brush: java;">
+							<p>
+								<b>合理回收资源: </b>
+								既对加载在内存中的图片资源进行合理的回收，避免因为不再使用的图片资源还留存在内存中的情况出现。而要实现合理回收资源，最核心的一个类就是：LruCache，这个类非常适用于保存图片内存，它的主要算法原理是把最近使用的对象用强引用存储在
+								LinkedHashMap 中，并且把最近最少使用的对象在缓存值达到预设定值之前从内存中移除。
+							</p>
+							<pre class="brush: java;">
 // 初始化 LruCache, 设置 LruCache 的最大存储为 可用内存的 1 / 8
 public void initMemoryCache() {
 	int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);
@@ -1482,24 +1485,312 @@ public Bitmap getBitmapFromMemCache(String key) {
 	return (Bitmap) mMemoryCache.get(key);
 }
 </pre>
-						<p class="alert alert-success">
-							<b>只要确保整个APP的图片资源的使用，都是通过 addBitmapToMemoryCache 和
-								getBitmapFromMemCache 来进行，即可避免图片问题引发的OOM的问题。</b>
-						</p>
+							<p class="alert alert-success">
+								<b>只要确保整个APP的图片资源的使用，都是通过 addBitmapToMemoryCache 和
+									getBitmapFromMemCache 来进行，即可避免图片问题引发的OOM的问题。</b>
+							</p>
+
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Android 图片加载框架 Glide 和
+								UniversalImageLoader</h5>
+							<p>Glide 是一个 Android
+								上的图片加载和缓存库，它不仅能实现平滑的图片列表滚动效果，还支持远程图片的获取、大小调整和展示，并且可以加载 Gif
+								动态图，可谓功能强大。Glide的集成离不开v4包，所以必须添加support包。</p>
+							<p>
+								项目位置 --
+								<a href="lib/glide-3.7.0.jar">glide-3.7.0.jar</a>
+								--
+								<a href="https://github.com/bumptech/glide" target="_blank">项目源码
+									github.com</a>
+							</p>
+							<p>Glide 如同 ImageLoader 一样，也是可以配置一些属性的，Glide 可以在 GlideModel
+								中统一配置其属性。</p>
+							<pre class="brush: java;">
+// GlideModel 可以在 AndroidManifest.xml 文件中注册，以便 Glide 能够找到你的 Module
+&lt;meta-data
+	android:name="xx.yy.GlideModelConfig"
+	android:value="GlideModule" />							
+
+public class GlideModelConfig implements GlideModule {
+
+	int diskSize = 1024 * 1024 * 100;
+	// 取1/8最大内存作为最大缓存
+	int memorySize = (int) (Runtime.getRuntime().maxMemory()) / 8;
+
+	@Override
+	public void applyOptions(Context context, GlideBuilder builder) {
+		// 定义缓存大小和位置
+		builder.setDiskCache(new InternalCacheDiskCacheFactory(context,
+				diskSize)); // 内存中
+		builder.setDiskCache(new ExternalCacheDiskCacheFactory(context,
+				"cache", diskSize)); // sd卡中
+
+		// 默认内存和图片池大小
+		MemorySizeCalculator calculator = new MemorySizeCalculator(context);
+		// 默认内存大小
+		int defaultMemoryCacheSize = calculator.getMemoryCacheSize();
+		// 默认图片池大小
+		int defaultBitmapPoolSize = calculator.getBitmapPoolSize();
+		// 该两句无需设置，是默认的
+		builder.setMemoryCache(new LruResourceCache(defaultMemoryCacheSize));
+		builder.setBitmapPool(new LruBitmapPool(defaultBitmapPoolSize));
+
+		// 自定义内存和图片池大小
+		builder.setMemoryCache(new LruResourceCache(memorySize));
+		builder.setBitmapPool(new LruBitmapPool(memorySize));
+
+		// 定义图片格式
+		builder.setDecodeFormat(DecodeFormat.PREFER_ARGB_8888);
+		builder.setDecodeFormat(DecodeFormat.PREFER_RGB_565); // 默认
+	}
+
+	@Override
+	public void registerComponents(Context context, Glide glide) {
+	}
+}
+</pre>
+							<p>Glide 的常用方法:</p>
+							<pre class="brush: java;">
+// 1.加载网络图片
+Glide.with(this).load(url).into(imageView);
+
+// 2.加载本地图片
+File file = new File(getExternalCacheDir() + "/image.jpg");
+Glide.with(this).load(file).into(imageView);
+
+// 3.加载应用资源
+int resource = R.drawable.image;
+Glide.with(this).load(resource).into(imageView);
+
+// 4.加载二进制流
+byte[] image = getImageBytes();
+Glide.with(this).load(image).into(imageView);
+
+// 5.加载Uri对象
+Uri imageUri = getImageUri();
+Glide.with(this).load(imageUri).into(imageView);
+
+// 6.加载占位图
+Glide.with(this).placeholder(R.drawable.loading);
+
+// 7.加载错误图片
+Glide.with(this).error(R.drawable.error);
+
+// 8.禁用缓存
+/**
+ * DiskCacheStrategy.ALL：两个都缓存
+ * DiskCacheStrategy.NONE：不缓存 
+ * DiskCacheStrategy.SOURCE：缓存原始图片 
+ * DiskCacheStrategy.RESULT：缓存压缩过的结果图片
+ */
+Glide.with(this).diskCacheStrategy(DiskCacheStrategy.NONE);
+
+// 9.只允许加载静态图片, Glide 支持直接加载 Gif, asBitmap() 方法不需要Glide去帮我们自动进行图片格式的判断
+Glide.with(this).asBitmap();
+
+// 10.指定图片大小
+Glide.with(this).override(100, 100);
+
+// 11.显示动画, 这个动画只在初次加载出来时使用，已经加载过了，下载再从缓存中取是不会动画的。
+Glide.with(this).animate(Animator animator);// 或者int animationId 
+Glide.with(this).dontAnimate();// 去除动画
+
+// 12.图片拉伸
+// 长的一边撑满
+Glide.with(this).centerCrop();
+// 短的一边撑满
+Glide.with(this).fitCenter();
+
+// 13.转换器 -- 提供各式各样的Api可以将图片转为各种形状，例如圆形，圆角型等等
+/**
+ * glide-transformations -- 一个基于Glide的transformation库，拥有裁剪，着色，模糊，滤镜等多种转换效果
+ * url -- https://github.com/wasabeef/glide-transformations
+ */
+// 单独转换器效果（毛玻璃为例）
+Glide.with(this).load(R.mipmap.login)
+	.bitmapTransform(new BlurTransformation(this, 20))
+	.into(imageView);
+// 复合转换器效果(毛玻璃加图角)
+Glide.with(this).load(R.mipmap.login)
+	.bitmapTransform(new BlurTransformation(this, 20), 
+		new CropCircleTransformation(this))
+	.into(imageView);
+
+// 14.缓存的动态清理
+Glide.get(this).clearDiskCache();		// 清理磁盘缓存 需要在子线程中执行
+Glide.get(this).clearMemory();			// 清理内存缓存  可以在UI主线程中进行
+
+// 15.暂停／恢复加载, GirdView, ListView 加载图片, 而当我们快速滑动 GridView，ListView，我们希望能停止图片的加载
+Glide.with(this).pauseRequests();		// 停止图片的加载
+Glide.with(this).resumeRequests();		// 恢复加载
+</pre>
+
+							<hr>
+							<p>Android-Universal-Image-Loader 是一个开源的 UI
+								组件程序，该项目的目的是提供一个可重复使用的仪器为异步图像加载，缓存和显示。</p>
+
+							<p>
+								项目位置 --
+								<a href="lib/universal-image-loader-1.9.5.jar">universal-image-loader-1.9.5.jar</a>
+								--
+								<a
+									href="https://github.com/nostra13/Android-Universal-Image-Loader"
+									target="_blank">项目源码 github.com</a>
+							</p>
+							<p>图片加载器 ImageLoader 的配置参数:</p>
+							<pre class="brush: java;">
+public class MyApplication extends Application {  
+  
+    @Override  
+    public void onCreate() {  
+        super.onCreate();  
+  
+        // 创建默认的ImageLoader配置参数  
+        ImageLoaderConfiguration configuration = ImageLoaderConfiguration  
+                .createDefault(this);
+                
+        /** 自定义的参数配置
+       	File cacheDir = StorageUtils.getCacheDirectory(context);  
+    	ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)  
+    		// max width, max height，即保存的每个缓存文件的最大长宽 
+            .memoryCacheExtraOptions(480, 800) 
+            // 设置缓存的详细信息，最好不要设置这个 
+            .diskCacheExtraOptions(480, 800, CompressFormat.JPEG, 75, null)  
+            .taskExecutor(...)  
+            .taskExecutorForCachedImages(...)  
+            .threadPoolSize(3) 							// 线程池内加载的数量  
+            .threadPriority(Thread.NORM_PRIORITY - 1)	// 线程优先级
+            .tasksProcessingOrder(QueueProcessingType.FIFO)
+            .denyCacheImageMultipleSizesInMemory()  
+            // 内存缓存大小, 这样计算: int memorySize = (int) (Runtime.getRuntime().maxMemory()) / 8;
+            .memoryCache(new LruMemoryCache(memorySize))	// 内存缓存实现
+            .memoryCacheSize(memorySize)
+            .memoryCacheSizePercentage(13)
+            .diskCache(new UnlimitedDiscCache(cacheDir))// 缓存路径  
+            .diskCacheSize(50 * 1024 * 1024)  			// 硬盘缓存 50MB  
+            .diskCacheFileCount(100)					// 缓存的File数量  
+            // 将保存的时候的URI名称用HASHCODE加密 
+            .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
+            .imageDownloader(new BaseImageDownloader(context))
+            .imageDecoder(new BaseImageDecoder()) // default  
+            .defaultDisplayImageOptions(DisplayImageOptions.createSimple()) // default  
+            .writeDebugLogs()  
+            .build();
+        */
+          
+        // Initialize ImageLoader with configuration.  
+        ImageLoader.getInstance().init(configuration);  
+    }  
+}  
+</pre>
+							<p>Android-Universal-Image-Loader 常用方法:</p>
+							<pre class="brush: java;">
+// 1.加载网络图片
+// displayImage 加载
+ImageLoader.getInstance().displayImage(url, image);
+// loadImage 加载
+ImageLoader.getInstance().loadImage(imageUrl, new ImageLoadingListener() {  
+    @Override  
+    public void onLoadingStarted(String imageUri, View view) {  
+    }  
+    @Override  
+    public void onLoadingFailed(String imageUri, View view,  
+            FailReason failReason) {  
+    }  
+      
+    @Override  
+    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {  
+        mImageView.setImageBitmap(loadedImage);  
+    }  
+      
+    @Override  
+    public void onLoadingCancelled(String imageUri, View view) {  
+    }  
+});  
+
+// 2.指定大小
+ImageSize mImageSize = new ImageSize(100, 100);         
+ImageLoader.getInstance().loadImage(imageUrl, mImageSize, new SimpleImageLoadingListener(){  
+
+    @Override  
+    public void onLoadingComplete(String imageUri, View view,  
+            Bitmap loadedImage) {  
+        super.onLoadingComplete(imageUri, view, loadedImage);  
+        mImageView.setImageBitmap(loadedImage);  
+    }  
+      
+});
+
+// 3.配置图片 
+DisplayImageOptions options = new DisplayImageOptions.Builder()  
+	.showImageOnLoading(R.drawable.ic_stub)  	// 设置图片在下载期间显示的图片  
+	.showImageForEmptyUri(R.drawable.ic_stub)	// 设置图片Uri为空或是错误的时候显示的图片  
+	.showImageOnFail(R.drawable.ic_error)		// 设置图片加载/解码过程中错误时候显示的图片 
+	.cacheInMemory(false)								// 设置下载的图片是否缓存在内存中  
+	.cacheOnDisc(true)									// 设置下载的图片是否缓存在SD卡中  
+	.considerExifParams(true)  							// 保留Exif信息  
+	.imageScaleType(ImageScaleType.EXACTLY_STRETCHED)	// 设置图片以如何的编码方式显示  
+	.bitmapConfig(Bitmap.Config.RGB_565)				// 设置图片的解码类型  
+	// 设置图片的解码配置  
+	// .decodingOptions(android.graphics.BitmapFactory.Options.decodingOptions)
+	.considerExifParams(true)  
+	.delayBeforeLoading(100)							// 设置图片下载前的延迟  
+	// .preProcessor(BitmapProcessor preProcessor)		// 设置图片加入缓存前，对bitmap进行设置  
+	.resetViewBeforeLoading(true)						// 设置图片在下载前是否重置，复位  
+	// .displayer(new RoundedBitmapDisplayer(20))		// 是否设置为圆角，弧度为多少  
+	.displayer(new FadeInBitmapDisplayer(100))			// 淡入  
+	.build();  
+	
+// displayImage 配置
+DisplayImageOptions options = new DisplayImageOptions.Builder()  
+        .showImageOnLoading(R.drawable.ic_stub)  	// 加载图片
+        .showImageOnFail(R.drawable.ic_error)  		// 错误图片
+        .cacheInMemory(true)  						// 内存缓存
+        .cacheOnDisk(true)  						// SD 缓存
+        .bitmapConfig(Bitmap.Config.RGB_565)  
+        .build();  
+ImageLoader.getInstance().displayImage(imageUrl, mImageView, options);
+
+// loadImage 来配置
+ImageSize mImageSize = new ImageSize(100, 100);  
+ImageLoader.getInstance().loadImage(imageUrl, mImageSize, options, new SimpleImageLoadingListener(){  
+
+    @Override  
+    public void onLoadingComplete(String imageUri, View view,  
+            Bitmap loadedImage) {  
+        super.onLoadingComplete(imageUri, view, loadedImage);  
+        mImageView.setImageBitmap(loadedImage);  
+    }  
+      
+});
+
+// 5.本地加载
+String imagePath = "/mnt/sdcard/image.png";  
+String imageUrl = Scheme.FILE.wrap(imagePath);  
+ImageLoader.getInstance().displayImage(imageUrl, mImageView, options); 
+
+// 6.GirdView, ListView 加载图片, 而当我们快速滑动GridView，ListView，我们希望能停止图片的加载
+listView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));  
+gridView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScroll, pauseOnFling));  
+</pre>
+
+							<p>
+								<b>Universal-Image-Loader 框架 OOM 的问题:</b>
+							</p>
+							<ul>
+								<li>减少线程池中线程的个数，在 ImageLoaderConfiguration 中的 （.threadPoolSize） 中配置，推荐配置1-5</li>
+								<li>在 DisplayImageOptions 选项中配置 bitmapConfig为Bitmap.Config.RGB_565 ，因为默认是 ARGB_8888，
+									使用 RGB_565 会比使 用ARGB_8888 少消耗2倍的内存</li>
+								<li>在 ImageLoaderConfiguration 中配置图片的内存缓存为 memoryCache(new WeakMemoryCache()) 或者不使用内存缓存</li>
+								<li>在 DisplayImageOptions 选项中设置 .imageScaleType(ImageScaleType.IN_SAMPLE_INT) 或者 imageScaleType(ImageScaleType.EXACTLY)</li>
+							</ul>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
 
-				<!-- item start -->
-				<a class="offset" id="android-memory"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">内存管理和分析</h3>
-					</div>
-					<div class="panel-body"></div>
-				</div>
-				<!-- item over -->
-				
 				<!-- item start -->
 				<a class="offset" id="android-fragment"></a>
 				<div class="panel panel-default">
@@ -1653,38 +1944,287 @@ fragmentTransaction.add(fragment, tag);
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="android-"></a>
+				<a class="offset" id="android-memory"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">内存管理和分析</h3>
 					</div>
 					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="android-performance"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Android 应用优化</h3>
+					</div>
+					<div class="panel-body">
+						<p>对Android应用进行优化的一些经验,共计八个维度:</p>
+						<div style="width: 100%; height: 320px; overflow: hidden;">
+							<img src="images/android-performance.png"
+								style="width: 100%; height: 440px; margin-top: -40px; margin-left: -40px; margin-right: -40px;">
+						</div>
+
+						<h3>1.布局优化</h3>
+						<h4>为什么?</h4>
+						<p>Android系统每个16ms发出VSYNC信号,触发对UI的渲染,要想达到界面流畅,必须实现60fps,也就意味着大多数的操作必须在16ms完成.</p>
+						<p>除了上面界面过于复杂导致渲染不能及时完成之外,还存在过度绘制问题.所谓过度绘制就是某个像素在同一帧的时间内被绘制多次.在多层次的UI界面中,如果不可见的UI也在进行绘制,那么这些重合区域的像素就会被绘制多次,从而浪费大量的CPU和GPU资源.过度绘制也发生在背景重叠的情况下,比如Layout中有自己的背景,同时子View中又有自己的背景.</p>
+						<h4>如何检测?</h4>
+						<ul>
+							<li>使用HierarchyViewer来查找Activity中的布局是否过于复杂</li>
+							<li>在开发者选项中打开Show GPU Overdraw选项进行观察是否存在过度绘制</li>
+							<li>在开发者选项中选择Profile GPU Rendering,选中On screen as bar</li>
+							<li>使用TraceView来观察CPU执行情况</li>
+						</ul>
+						<h4>如何优化?</h4>
+						<ul>
+							<li>减少布局的层级,合理的使用include,merge,ViewStub</li>
+							<li>自定义组件的onDraw()中避免大量创建临时对象,比如String,以免频繁触发GC</li>
+							<li>自定义组件的onDraw()中,考虑使用canvas.clipRect()绘制需要被绘制的区域</li>
+							<li>对像ListView这样的组件容器,考虑使用convertView,使用ViewHolder,</li>
+							<li>考虑使用性能更高的组件,比如推荐使用RecycleView来代替ListView,使用staticlayout来实现自动换行</li>
+						</ul>
+						<hr>
+
+						<h3>2.内存优化</h3>
+						<h4>为什么?</h4>
+						<p>资源总是有限的,内存同样也是一种资源.在Android当中,过度的/不恰当占用内存资源,会导致应用频繁被杀死,最终也会影响用户的整体体验.任何一名开发者,都应该将节省内存牢记心中.</p>
+						<h4>如何检测?</h4>
+						<ul>
+							<li>使用LeakCanary</li>
+							<li>使用MAT分析Java堆</li>
+							<li>使用Android Device Monitor中的Application Tracker追踪内存分配信息</li>
+							<li>Android Studio中的Android Monitor,选择其中的Memory</li>
+						</ul>
+						<h4>如何优化?</h4>
+						<ul>
+							<li>
+								<p>主动的释放内存,在onLowMemory()和onTrimMemory()中适当的释放内存</p>
+							</li>
+							<li>
+								<p>避免内存泄漏和内存溢出</p>
+							</li>
+							<li>
+								<p>
+									在使用Bitmap的时候,考虑对其进行压缩,使用缓存或者改变颜色模式,比如android默认的颜色格式是ARGB_8888,在要求不高的情况下可以采用RGB__565,这样每个像素
+									占用的内存就可懂4byte到2byte.</p>
+							</li>
+							<li>
+								<p>减少帧动画的使用,如果需要,通过SurfaceView实现</p>
+							</li>
+							<li>
+								<p>使用更轻量级的数据结构,比如ArrayMap/SparseArray</p>
+							</li>
+							<li>
+								<p>合理的使用相关组件,比如Service和Webview,在不需要的时候主动结束其生命周期</p>
+							</li>
+							<li>
+								<p>合理的使用多进程,比如像音乐播放器类,可以分为主进程和播放进程</p>
+							</li>
+							<li>
+								<p>使用异步队列时考虑有界队列</p>
+							</li>
+							<li>
+								<p>如果你能明确知道HashMap的大小,那就再初始化时为其制定容量</p>
+							</li>
+						</ul>
+						<hr>
+
+						<h3>3.电量优化</h3>
+						<h4>为什么?</h4>
+						<p>电量是移动设备非常宝贵的资源,作为一名开发者,有必要为用户着想,减少电量的消耗.调查显示通常只有30%左右的电量是被程序核心的功能所消耗,比如界面渲染,剩下的70%则是被上报数据,位置更新,后台通知所消耗.</p>
+						<h4>如何检测?</h4>
+
+						<ul>
+							<li>手机选项中通过查看APP的电量消耗的统计数据</li>
+							<li>
+								使用
+								<a href="https://github.com/google/battery-historian">Battery
+									Historian Tool</a>
+								来查看详细的电量消耗
+							</li>
+						</ul>
+
+						<h4>如何优化?</h4>
+
+						<ul>
+							<li>减少唤醒屏幕的次数与持续的时间,正确的使用WakeLock.</li>
+							<li>延迟非必须的操作到充电状态时,比如日志上报完全可以在夜间充电时完成,这点可以结合JobScheduler使用</li>
+							<li>使用传感器采集数据时,一旦不需要记得取消注册.</li>
+							<li>减少网络通信,合并通信.</li>
+							<li>合理使用定位功能,减少位置更新频率以及根据实际情况使用不同精度的定位需求</li>
+						</ul>
+
+						<hr>
+
+						<h3>4.网络优化</h3>
+
+
+
+						<h4>为什么?</h4>
+						<p>现在App几乎都需要联网操作,做好网络优化一方面可以提高体验,另一方面可以减少流量和电量的损耗.另外,无论是对用户还是网络服务提供者,网络同样是一种资源,任何开发者都不应该假设网络资源是无限制的.</p>
+						<h4>如何检测?</h4>
+
+						<ul>
+							<li>使用Android Studio里的Network Traffic Tools来查看网络请求</li>
+							<li>使用Android Studio中的Monitor</li>
+							<li>使用Fidder或者Charles等抓包工具分析网络数据包</li>
+						</ul>
+						<h4>如何优化?</h4>
+
+						<ul>
+							<li>有必要的时候务必做好缓存,无论是图片还是普通的数据,使用LruCache和DiskLruCache构建自己的缓存系统,并根据实际场景设计缓存策略</li>
+							<li>避免过度的网络同步,合并相关的网络请求</li>
+							<li>根据实际场景确定请求策略,避免使用固定的间隔频率来进行网络操作.比如连接WiFi并充电的情况下请求频率可以高,第一次网络请求失败后可以使用双倍的时间间隔来进行下一次</li>
+							<li>减少数据传输量,对传输的数据做压缩.如果传输的是图片,需要选择合适的图片格式以及根据显示大小请求合适规格的图片.对于普通数据,可以考虑使用ProtocalBuffers来减小传输数据的大小.</li>
+							<li>某些情况下可以采用IP直连,一方面可以减少DNS解析时间,另一方面可以防止域名劫持</li>
+						</ul>
+
+						<hr>
+
+						<h3>5.启动优化</h3>
+						<h4>为什么?</h4>
+						<p>启动优化看起来并不是那么必要,但从心理学角度而言,越快的启动速度往往给用户以性能好,高效可靠的心理暗示,这就很容易让用户对其产生好感,为你后面打动用户留下了余地.</p>
+
+						<h4>如何检测?</h4>
+
+						<ul>
+							<li>使用Method Tracing</li>
+							<li>使用Systrace,比如在onCreate中添加trace.beginSection()和trace.endSection()</li>
+							<li>
+								使用
+								<code>adb shell am start -W
+									[packageName]/[packageName.MainActivity]</code>
+								测量冷启动时间
+							</li>
+						</ul>
+
+						<h4>如何优化?</h4>
+						<ul>
+							<li>Activity的onCreate()中减少复杂和耗时的操作</li>
+							<li>Application的onCreate(),attachBaseContext()中同样减少复杂和耗时的操作,但是对于很多App在此处会执行大量组件和服务的初始化操作,如果可能考虑并行初始化</li>
+							<li>提供自定义启动窗口,比如将一张图片通过设置主题的方式显示为启动窗口.</li>
+							<li>优化布局</li>
+						</ul>
+
+						<hr>
+
+						<h3>6.体积优化</h3>
+						<h4>为什么?</h4>
+						<p>对用户而言,无论是用户空间还是网络,亦或是时间,都是资源.体积优化就是为用户节省资源的重要一环.如果你现在做的是SDK类产品,那么体积优化同样重要.</p>
+						<h4>如何检测?</h4>
+
+						<ul>
+							<li>使用Android Lint检查没有使用的资源</li>
+						</ul>
+
+						<h4>如何优化?</h4>
+						<ul>
+							<li>减少不必要的依赖库/Jar,在满足需求的前提下优先选择体积小的.</li>
+							<li>使用Proguard工具进行代码瘦身,优化,混淆</li>
+							<li>减少so文件的数量,根据实际情况提供so文件</li>
+							<li>使用Gradle中的shrinkResource来将无用的代码和资源排除在APK安装包之外</li>
+							<li>减少图片资源的大小,考虑图片压缩或者使用Vertor Drawable替代png/jpeg</li>
+							<li>有选择的提供对应分辨率的图片资源</li>
+							<li>复用已经存在的图片,多用通过代码对已有图片进行变换的方式实现复用</li>
+							<li>使用插件化技术(如果项目简单就不要使用)</li>
+						</ul>
+						<hr>
+
+						<h3>7.性能优化</h3>
+						<p>能发挥出100%的能力就不要只发挥其中的50%,这对应用而言并非坏事.同样的价格卖给用户两辆车,我想大多数人会选择性能更好的.</p>
+						<h4>如何检测?</h4>
+						<ul>
+							<li>使用Lint执行静态分析,在Android Studio的Analysis-&gt;Inspect Code</li>
+							<li>在开发者选项中开启StrictMode或者在代码中开启</li>
+							<li>代码Review</li>
+						</ul>
+
+						<h4>如何优化?</h4>
+						<ul>
+							<li>任务并行化,对可能的任务进行并行操作,多借助线程池而非直接使用线程</li>
+							<li>如何需要序列化数据,优先考虑Android自身提供的而非Java提供的Serializable</li>
+							<li>选择合适的数据结构,明确List/Set/Map/Stack操作的复杂度</li>
+							<li>使用Android提供更高效的容器,比如使用ArrayMap来代替HashMap,此外还是有SparseBoolMap,SparseIntMap,SparseLongMap</li>
+							<li>使用静态常量代替Enum类型,可以减少至少两倍的内存消耗</li>
+							<li>使用对象池技术,比如提供想String一样的对象池</li>
+							<li>使用缓存技术</li>
+							<li>字符串拼接操作有限使用StringBuilder</li>
+							<li>对相关的算法和逻辑进行优化,减少不必要的流程</li>
+							<li>采用JNI,对计算量较大的逻辑将其协程so文件,如图片处理</li>
+						</ul>
+						<hr>
+
+
+
+						<h3>8.业务优化</h3>
+						<p>除了上述比较通用的优化方案之外,也应该花点时间放在业务优化上.很多时候,迫于时间压迫,当前实现业务的方案并非最优.比如为了支持多张图片上传,很多人直接使用串行操作,尽管这样做容易实现,但是却并非最佳.</p>
+						<p>由于每个产品的业务并不相同,也就很难有通用的优化方案,这里又两个目标值得思考:</p>
+						<ul>
+							<li>如果有可能,串行业务并行化</li>
+							<li>如果有可能,简化业务流程.将一大象关进冰箱的方法就是打开冰箱,将大象放进去,最后关闭冰箱.</li>
+						</ul>
+
+						<p>之所以把业务优化放在最后的根本原因是业务优化的风险较高,需要团队的整体配合来完成.</p>
+						<hr>
+						<div>
+							Android中图片有四种颜色格式,分别是 <br> <img
+								src="images/android-performance-color.png"
+								class="img-responsive" style="height: 180px;"> <br>
+							默认的是
+							<code>ARGB_8888</code>
+							,其中ARGB分别代表的是透明度,红色,绿色,蓝色,每个值分别用8位来记录,也就是一个像素会占用4byte,共32位. <br>
+							而
+							<code>ARGB_4444</code>
+							和以上很类似,但是每个值分别用4位来记录,也就是一个像素会占用2byte,共16位. <br>
+							<code>RGB_565</code>
+							则分别用5位,6位,5位来记录每个值,不存在透明度,每个像素会占用2byte,共16位. <br>
+							<code>ALPHA_8</code>
+							:该像素只保存透明度,会占用1byte,共8位. <br> 在实际应用中而言,值推荐使用
+							<code>ARGB_8888</code>
+							以及
+							<code>RGB_565</code>
+							,如果你不需要透明度,那么就选择
+							<code>RGB_565</code>
+							,可以减少一半的内存占用.
+						</div>
+					</div>
+					<!-- item over -->
+
+					<!-- item start -->
+					<a class="offset" id="android-"></a>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title"></h3>
+						</div>
+						<div class="panel-body"></div>
+					</div>
+					<!-- item over -->
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button"
-			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
-			<span class="caret"></span>
-		</a>
-		<a href="#" type="button"
-			class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup"> TOP </a>
-	</div>
+		<div class="btn-group-vertical bottom-button">
+			<a href="#" type="button"
+				class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
+				<span class="caret"></span>
+			</a>
+			<a href="#" type="button"
+				class="btn btn-default dropdown-toggle btn-primary"
+				data-toggle="dropup"> TOP </a>
+		</div>
 
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="../support/jquery/jquery-3.1.1.min.js"></script>
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
-	<script src="res/menu.js"></script>
-	<script src="../commons/js/common.js"></script>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="../support/jquery/jquery-3.1.1.min.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="../support/bootstrap/js/bootstrap.min.js"></script>
+		<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
+		<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+		<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
+		<script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
+		<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
+		<script src="res/menu.js"></script>
+		<script src="../commons/js/common.js"></script>
 </body>
 </html>
