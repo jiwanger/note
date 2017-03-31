@@ -1091,7 +1091,218 @@ private ServiceConnection serviceConnection = new ServiceConnection() {
 					<div class="panel-heading">
 						<h3 class="panel-title">Broadcast</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">Android 广播机制实现原理：</h5>
+							<ul>
+								<li>1. 广播接收者 BroadcastReceiver 通过 Binder 机制向 AMS(Activity
+									Manager Service) 进行注册；</li>
+								<li>2. 广播发送者通过 Binder 机制向 AMS 发送广播；</li>
+								<li>3. AMS 查找符合相应条件（IntentFilter/Permission等）的
+									BroadcastReceiver，将广播发送到
+									BroadcastReceiver（一般情况下是Activity）相应的消息循环队列中；</li>
+								<li>4. 消息循环执行拿到此广播，回调 BroadcastReceiver 中的 onReceive() 方法。</li>
+							</ul>
+							<p class="alert alert-warning">对于不同的广播类型，以及不同的BroadcastReceiver注册方式，具体实现上会有不同。但总体流程大致如上。</p>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">广播被分为两种不同的类型：</h5>
+							<ul>
+								<li>
+									<b>普通广播</b> --
+									普通广播是完全异步的，可以在同一时刻（逻辑上）被所有广播接收者接收到，消息传递的效率比较高，但缺点是：接收者不能将处理结果传递给下一个接收者，并且无法终止广播
+									Intent 的传播；
+									<pre class="brush: java;">Context.sendBroadcast();</pre>
+								</li>
+
+								<li>
+									<b>有序广播</b> -- 然而有序广播是按照接收者声明的优先级别（声明在
+									<code>intent-filter</code>
+									元素的
+									<code>android:priority</code>
+									属性中，数越大优先级别越高,取值范围:-1000 到 1000。也可以调用
+									<code>IntentFilter</code>
+									对象的
+									<code>setPriority()</code>
+									进行设置），被接收者依次接收广播。
+									<pre class="brush: java;">
+Context.sendOrderedBroadcast();
+// 前面的接收者有权终止广播
+BroadcastReceiver.abortBroadcast();
+</pre>
+								</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">广播作为Android组件间的通信方式，可以使用的场景如下：</h5>
+							<ul>
+								<li>同一 App 内部的同一组件内的消息通信（单个或多个线程之间）；</li>
+								<li>同一 App 内部的不同组件之间的消息通信（单个进程）；</li>
+								<li>同一 App 具有多个进程的不同组件之间的消息通信；</li>
+								<li>不同 App 之间的组件之间消息通信；</li>
+								<li>Android 系统在特定情况下与 App 之间的消息通信。</li>
+							</ul>
+							<p>在上文说列举的广播机制具体可以使用的场景中，现分析实际应用中的适用性：</p>
+							<p>第一种情形：同一 App
+								内部的同一组件内的消息通信（单个或多个线程之间），实际应用中肯定是不会用到广播机制的（虽然可以用），无论是使用扩展变量作用域、基于接口的回调还是
+								Handler-post/Handler-Message等方式，都可以直接处理此类问题，若适用广播机制，显然有些“杀鸡牛刀”的感觉，会显太“重”；
+							</p>
+							<p>第二种情形：同一 App
+								内部的不同组件之间的消息通信（单个进程），对于此类需求，在有些教复杂的情况下单纯的依靠基于接口的回调等方式不好处理，此时可以直接使用
+								EventBus 等，相对而言，EventBus 由于是针对统一进程，用于处理此类需求非常适合，且轻松解耦。</p>
+							<p>
+							<blockquote>
+								EventBus 是一款针对 Android 优化的发布/订阅事件总线。主要功能是替代 Intent, Handler,
+								BroadCast 在 Fragment，
+								Activity，Service，线程之间传递消息.优点是开销小，代码更优雅。以及将发送者和接收者解耦。
+								<div class="blockquote-reverse">
+									<a href="libs.html#libs-EventBus" target="_blank">EventBus</a>
+								</div>
+							</blockquote>
+							</p>
+
+							<p>
+								第三、四、五情形：由于涉及不同进程间的消息通信，此时根据实际业务使用广播机制会显得非常适宜。下面主要针对Android广播中的具体知识点进行总结。
+							</p>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">广播的使用</h5>
+							<ul>
+								<li>
+									<b>定义 BroadcastReceiver</b> -- 广播接收器也是运行在UI线程, 不能执行太耗时的操作,
+									否则将因此ANR。
+									<pre class="brush: java;">
+public class MyReceiver extends BroadcastReceiver {  
+	@Override 
+	public void onReceive(Context context, Intent intent) {  
+  
+	}  
+}
+</pre>
+								</li>
+								<li>
+									<p>
+										<b>注册 BroadcastReceiver</b> -- BroadcastReceiver
+										总体上可以分为两种注册类型：
+									<ul>
+										<li>
+											<b>静态注册</b> -- 静态广播又叫：<b>常驻型广播</b>，当你的应用程序关闭了，如果有广播信息来，你写的广播接收器同样的能接受到，他的注册方式就是在你的应用程序中的
+											AndroidManifast.xml 进行订阅的。
+											<pre class="brush: xml;">
+<!-- 
+	注意这个　exported 属性, 能否接收其他 App 的发出的广播, 应用内广播这里设置为: false 
+	默认值是由 receiver 中有无 intent-filter 决定的，如果有 intent-filter，默认值为true，否则为false。
+-->
+&lt;receiver 
+	android:enabled=["true"|"false"]
+	android:exported=["true"|"false"]
+	android:icon="drawable resource"
+	android:label="string resource"
+	android:name="string"
+	android:permission="string"
+	android:process="string">
+	&lt;intent-filter>  
+        &lt;action android:name="action.xxx"/>  
+    &lt;/intent-filter>
+&lt;/receiver>
+</pre>
+										</li>
+
+										<li>
+											<b>动态注册</b> -- 动态广播又叫：<b>非常驻型广播</b>，当应用程序结束了，广播自然就没有了，比如你在
+											Activity 中的 onCreate 或者 onResume 中订阅广播，同时你必须在 onDestory 或者
+											onPause 中取消广播订阅。不然会报异常，这样你的广播接收器就一个非常驻型的了。
+											<pre class="brush: java;">
+Context.registerReceiver(BroadcastReceiver receiver, IntentFilter filter);
+
+Context.registerReceiver(BroadcastReceiver receiver, IntentFilter filter, 
+	String broadcastPermission, Handler scheduler);
+
+
+MyBroadcastReceiver mBroadcastReceiver = null;
+
+//* 一般在 Activity 中的 onCreate 中注册动态广播 */
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+	super.onCreate(savedInstanceState);
+	setContentView(R.layout.activity_main);
+	
+	mBroadcastReceiver = new MyBroadcastReceiver();
+	IntentFilter intentFilter = new IntentFilter();
+	intentFilter.addAction(BROADCAST_ACTION);
+	registerReceiver(mBroadcastReceiver, intentFilter);
+}
+
+//* 在 Activity 的 onDestroy 方法要注销这个广播 */
+@Override
+protected void onDestroy() {
+	super.onDestroy();
+	unregisterReceiver(mBroadcastReceiver);
+}
+</pre>
+										</li>
+									</ul>
+								</li>
+
+								<li>
+									<b>广播发送</b>
+									<pre class="brush: java;">
+//* 1.普通广播 */
+Intent intent = new Intent();
+intent.setAction(BROADCAST_ACTION);
+intent.putExtra("name", "qqyumidi");
+Context.sendBroadcast(intent);
+
+//* 2.有序广播 */
+Intent intent = new Intent(BROADCAST_ACTION);
+Context.sendOrderedBroadcast(intent, receiverPermission);
+
+/** 3.App 应用内广播 
+  * 	3.1 对于 App 内部广播，将 exported 属性人为设为: false，使得非本  App 内部发出的此广播不被接收；
+  *		3.2 在广播发送和接收时，都增加上相应的permission，用于权限验证；
+  *		3.3 发送广播时，指定特定广播接收器所在的包名，具体是通过 intent.setPackage(packageName) 指定。
+  * 另外 v4 包中，给出了封装好的　LocalBroadcastManager　类，用于统一处理App应用内的广播问题。
+  */
+
+//* 一般在 Activity 中的 onCreate 中注册动态广播 */
+localBroadcastManager = LocalBroadcastManager.getInstance(this);
+localBroadcastManager.registerReceiver(mBroadcastReceiver, intentFilter);
+
+//* 在 Activity 的 onDestroy 方法要注销这个广播 */
+localBroadcastManager.unregisterReceiver(mBroadcastReceiver);
+
+//* 发送应用内广播 */
+Intent intent = new Intent();
+intent.setAction(BROADCAST_ACTION);
+localBroadcastManager.sendBroadcast(intent);
+</pre>
+								</li>
+
+							</ul>
+							<p>
+								<b>广播使用注意事项</b>
+							</p>
+							<div class="alert alert-warning" style="font-size: 14px;">
+								<p>静态注册的广播接收器即使 App 已经退出，主要有相应的广播发出，依然可以接收到，但此种描述自Android
+									3.1开始有可能不再成立</p>
+								<p>Android 3.1 开始系统在 Intent 与广播相关的 flag 增加了参数，分别是
+									FLAG_INCLUDE_STOPPED_PACKAGES 和 FLAG_EXCLUDE_STOPPED_PACKAGES。</p>
+								<ul>
+									<li>
+										FLAG_INCLUDE_STOPPED_PACKAGES：包含已经停止的包（停止：即包所在的进程已经退出）</li>
+									<li>FLAG_EXCLUDE_STOPPED_PACKAGES：不包含已经停止的包</li>
+								</ul>
+								<p>自 Android3.1 开始，系统本身则增加了对所有 App
+									当前是否处于运行状态的跟踪。在发送广播时，不管是什么广播类型，系统默认直接增加了值为
+									FLAG_EXCLUDE_STOPPED_PACKAGES 的
+									flag，导致即使是静态注册的广播接收器，对于其所在进程已经退出的 app，同样无法接收到广播。</p>
+							</div>
+
+						</div>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -1101,7 +1312,293 @@ private ServiceConnection serviceConnection = new ServiceConnection() {
 					<div class="panel-heading">
 						<h3 class="panel-title">Content Provider</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								<b>ContentProvider</b> 为存储和获取数据提供统一的接口。可以在不同的应用程序之间共享数据。
+							</p>
+							<p>在 Android 官方指出的 Android 的数据存储方式总共有五种，分别是：Shared
+								Preferences、网络存储、文件存储、外储存储、SQLite。但是我们知道一般这些存储都只是在单独的一个应用程序之中达到一个数据的共享，有时候我们需要操作其他应用程序的一些数据，例如我们需要操作系统里的媒体库、通讯录等，这时我们就可能通过
+								ContentProvider 来满足我们的需求了。</p>
+							<p>
+								<b>ContentProvider</b>
+								向我们提供了我们在应用程序之前共享数据的一种机制，而我们知道每一个应用程序都是运行在不同的应用程序的，数据和文件在不同应用程序之间达到数据的共享不是没有可能，而是显得比较复杂，而正好
+								Android 中的 ContentProvider
+								则达到了这一需求，比如有时候我们需要操作手机里的联系人，手机里的多媒体等一些信息，我们都可以用到这个
+								ContentProvider 来达到我们所需。
+							</p>
+							<ul>
+								<li>
+									<p>ContentProvider 为存储和获取数据提供了统一的接口。ContentProvide
+										对数据进行封装，不用关心数据存储的细节。使用表的形式来组织数据。</p>
+								</li>
+								<li>
+									<p>使用 ContentProvider 可以在不同的应用程序之间共享数据。</p>
+								</li>
+								<li>
+									<p>Android 为常见的一些数据提供了默认的 ContentProvider（包括音频、视频、图片和通讯录等）。
+									</p>
+								</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>Uri介绍</b>
+							</p>
+							<ul>
+								<li>每一个 ContentProvider 都拥有一个公共的 URI，这个 URI 用于表示这个
+									ContentProvider 所提供的数据。</li>
+								<li>
+									Android 所提供的 ContentProvider 都存放在 android.provider 包中。 将其分为
+									A，B，C，D 4 个部分：
+									<p width="100%">
+										<img src="images/android-contentprovider.jpeg"
+											class="img img-responsive center-block">
+									</p>
+									<ul>
+										<li>
+											<p>
+												<b>A：</b>标准前缀，用来说明一个 Content Provider
+												控制这些数据，无法改变的；"content://"
+											</p>
+										</li>
+										<li>
+											<p>
+												<b>B：</b>URI 的标识，用于唯一标识这个
+												ContentProvider，外部调用者可以根据这个标识来找到它。它定义了是哪个 Content Provider
+												提供这些数据。对于第三方应用程序，为了保证URI标识的唯一性，它必须是一个完整的、小写的类名。这个标识在 元素的
+												authorities 属性中说明：一般是定义该 ContentProvider 的包.类的名称
+											</p>
+										</li>
+										<li>
+											<p>
+												<b>C：</b>路径（path），通俗的讲就是你要操作的数据库中表的名字，或者你也可以自己定义，记得在使用的时候保持一致就可以了；
+												<code>content://com.bing.provider.myprovider/tablename</code>
+											</p>
+										</li>
+										<li>
+											<p>
+												<b>D：</b>如果URI中包含表示需要获取的记录的 ID；则就返回该 id 对应的数据，如果没有
+												ID，就表示返回全部；
+												<code>content://com.bing.provider.myprovider/tablename/#</code>
+												# 表示数据 id。
+											</p>
+										</li>
+									</ul>
+									<pre class="brush: java;">
+路径（path）可以用来表示我们要操作的数据，路径的构建应根据业务而定，如下:
+1、要操作 person 表中 id 为 10 的记录，可以构建这样的路径: /person/10
+2、要操作 person 表中 id 为 10 的记录的 name 字段，可以构建这样的路径: person/10/name
+3、要操作 person 表中的所有记录，可以构建这样的路径: /person
+5、当然要操作的数据不一定来自数据库，也可以是文件、xml 或网络等其他存储方式，如下:
+	要操作 xml 文件中 person 节点下的 name 节点，可以构建这样的路径：/person/name
+6、如果要把一个字符串转换成 Uri，可以使用 Uri 类中的 parse()方法，如下：
+	Uri uri = Uri.parse("content://com.bing.provider.personprovider/person")
+</pre>
+								</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>UriMatcher 类使用介绍</b>
+							</p>
+							<p>因为 Uri 代表了要操作的数据，所以我们经常需要解析 Uri，并从 Uri 中获取数据。Android
+								系统提供了两个用于操作 Uri 的工具类，分别为 UriMatcher 和 ContentUris
+								。掌握它们的使用，会便于我们的开发工作。</p>
+							<p>首先第一步把你需要匹配 Uri 路径全部给注册上，如下：</p>
+							<pre class="brush: java;">
+// 常量 UriMatcher.NO_MATCH 表示不匹配任何路径的返回码
+UriMatcher sMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+// 如果 match() 方法匹配 content://com.bing.procvide.personprovider/person 路径，返回匹配码为 1
+sMatcher.addURI("com.bing.procvide.personprovider", "person", 1);
+// 如果 match() 方法匹配 content://com.bing.provider.personprovider/person/230 路径，返回匹配码为 2
+sMatcher.addURI("com.bing.provider.personprovider", "person/#", 2);// # 号为通配符
+switch(sMatcher.match(Uri.parse("content://com.ljq.provider.personprovider/person/10"))) { 
+	case 1:
+		break;
+	case 2:
+		break;
+	default:		// 不匹配
+		break;
+}
+</pre>
+							<p>
+								注册完需要匹配的 Uri 后，就可以使用 sMatcher.match(uri) 方法对输入的 Uri
+								进行匹配，如果匹配就返回匹配码，匹配码是调用 addURI() 方法传入的第三个参数，假设匹配
+								<code>content://com.ljq.provider.personprovider/person</code>
+								路径，返回的匹配码为 1
+							</p>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>ContentUris 类使用介绍</b>
+							</p>
+							<p>ContentUris 类用于操作 Uri 路径后面的 ID 部分，它有两个比较实用的方法：</p>
+							<p>
+								<code>withAppendedId(uri, id)</code>
+								用于为路径加上 ID 部分：
+							</p>
+							<pre class="brush: java;">
+Uri uri = Uri.parse("content://com.bing.provider.personprovider/person")
+Uri resultUri = ContentUris.withAppendedId(uri, 10); 
+// 生成后的 Uri 为：content://com.bing.provider.personprovider/person/10
+</pre>
+							<p>
+								<code>parseId(uri)</code>
+								方法用于从路径中获取ID部分：
+							</p>
+							<pre class="brush: java;">
+Uri uri = Uri.parse("content://com.ljq.provider.personprovider/person/10")
+long personid = ContentUris.parseId(uri);	// 获取的结果为:10
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>使用 ContentProvider 共享数据</b>
+							</p>
+							<p>ContentProvider类主要方法的作用：</p>
+							<pre class="brush: java;">
+// 该方法在 ContentProvider 创建后就会被调用，Android 开机后，ContentProvider 在其它应用第一次访问它时才会被创建。
+public boolean onCreate()
+
+// 该方法用于供外部应用往 ContentProvider 添加数据。
+public Uri insert(Uri uri, ContentValues values)
+
+// 该方法用于供外部应用从 ContentProvider 删除数据。
+public int delete(Uri uri, String selection, String[] selectionArgs)
+
+// 该方法用于供外部应用更新 ContentProvider 中的数据。
+public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs)
+
+// 该方法用于供外部应用从 ContentProvider 中获取数据。
+public Cursor query(Uri uri, String[] projection, String slction, String[] slctionArgs, String sortOrder)
+
+// 该方法用于返回当前 Uri 所代表数据的 MIME 类型。
+public String getType(Uri uri)
+</pre>
+							<p>
+								如果操作的数据属于集合类型，那么 MIME 类型字符串应该以
+								<code>vnd.android.cursor.dir/</code>
+								开头，例如：要得到所有 person 记录的Uri为
+								<code>content://com.bing.provider.personprovider/person</code>
+								，那么返回的 MIME 类型字符串应该为：
+								<code>vnd.android.cursor.dir/person</code>
+								。
+							</p>
+							<p>
+								如果要操作的数据属于非集合类型数据，那么 MIME 类型字符串应该以
+								<code>vnd.android.cursor.item/</code>
+								开头，例如：得到 id 为 10 的person记录，Uri 为
+								<code>content://com.bing.provider.personprovider/person/10</code>
+								，那么返回的MIME类型字符串为：
+								<code>vnd.android.cursor.item/person</code>
+								。
+							</p>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>ContentResolver 操作 ContentProvider 中的数据</b>
+							</p>
+
+							<p>1. 当外部应用需要对 ContentProvider 中的数据进行添加、删除、修改和查询操作时，可以使用
+								ContentResolver 类来完成，要获取 ContentResolver 对象，可以使用 Activity 提供的
+								getContentResolver()方法。</p>
+
+							<p>2. ContentResolver 类提供了与 ContentProvider 类相同签名的四个方法：</p>
+							<pre class="brush: java;">
+// 该方法用于往 ContentProvider 添加数据。
+public Uri insert(Uri uri, ContentValues values)
+
+// 该方法用于从 ContentProvider 删除数据。
+public int delete(Uri uri, String selection, String[] selectionArgs)
+
+// 该方法用于更新 ContentProvider 中的数据。
+public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs)
+
+// 该方法用于从 ContentProvider 中获取数据。
+public Cursor query(Uri uri, String[] projection, String slction, String[] slctionArgs, String sortOrder)
+</pre>
+							<p>
+								这些方法的第一个参数为 Uri，代表要操作的 ContentProvider 和对其中的什么数据进行操作， 其实和
+								ContentProvider 里面的方法是一样的。他们所对应的数据, 最终是会被传到我们在之前程序里面定义的那个
+								ContentProvider 类的方法, 假设给定的是：
+								<code>Uri.parse("content://com.bing.providers.personprovider/person/10")</code>
+								，那么将会对主机名为
+								<code>com.bing.providers.personprovider</code>
+								的 ContentProvider 进行操作，操作的数据为 person 表中id为 10 的记录。
+							</p>
+							<p>使用 ContentResolver 对 ContentProvider 中的数据进行添加、删除、修改和查询操作：</p>
+							<pre class="brush: java;">
+ContentResolver resolver =  getContentResolver();
+Uri uri = Uri.parse("content://com.bing.provider.personprovider/person");
+// 添加一条记录
+ContentValues values = new ContentValues();
+values.put("name", "bingxin");
+values.put("age", 25);
+resolver.insert(uri, values);
+
+// 获取 person 表中所有记录
+Cursor cursor = resolver.query(uri, null, null, null, "personid desc");
+while(cursor.moveToNext()){
+	Log.i("ContentTest", "personid="+ cursor.getInt(0)+ ",name="+ cursor.getString(1));
+}
+
+// 把 id 为 1 的记录的 name 字段值更改新为 zhangsan
+ContentValues updateValues = new ContentValues();
+updateValues.put("name", "zhangsan");
+Uri updateIdUri = ContentUris.withAppendedId(uri, 2);
+resolver.update(updateIdUri, updateValues, null, null);
+
+// 删除 id 为 2 的记录
+Uri deleteIdUri = ContentUris.withAppendedId(uri, 2);
+resolver.delete(deleteIdUri, null, null);
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>监听 ContentProvider 中数据的变化</b>
+							</p>
+							<p>
+								如果 ContentProvider 的访问者需要知道 ContentProvider 中的数据发生变化，可以在
+								ContentProvider 发生数据变化时调用
+								<code>getContentResolver().notifyChange(uri, null)</code>
+								来通知注册在此URI上的访问者，例子如下：
+							</p>
+
+							<pre class="brush: java;">
+public class PersonContentProvider extends ContentProvider {
+	public Uri insert(Uri uri, ContentValues values) {
+		db.insert("person", "personid", values);
+		getContext().getContentResolver().notifyChange(uri, null);
+	}
+}
+</pre>
+							<p>如果 ContentProvider 的访问者需要得到数据变化通知，必须使用 ContentObserver
+								对数据（数据采用 uri 描述）进行监听，当监听到数据变化通知时，系统就会调用 ContentObserver 的
+								onChange() 方法：</p>
+							<pre class="brush: java;">
+getContentResolver().registerContentObserver(
+	Uri.parse("content://com.ljq.providers.personprovider/person"),
+    true, new PersonObserver(new Handler()));
+    
+public class PersonObserver extends ContentObserver {
+	public PersonObserver(Handler handler) {
+		super(handler);
+	}
+   
+   	public void onChange(boolean selfChange) {
+		// 此处可以进行相应的业务处理
+	}
+}
+</pre>
+						</div>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -1780,11 +2277,16 @@ gridView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScrol
 								<b>Universal-Image-Loader 框架 OOM 的问题:</b>
 							</p>
 							<ul>
-								<li>减少线程池中线程的个数，在 ImageLoaderConfiguration 中的 （.threadPoolSize） 中配置，推荐配置1-5</li>
-								<li>在 DisplayImageOptions 选项中配置 bitmapConfig为Bitmap.Config.RGB_565 ，因为默认是 ARGB_8888，
-									使用 RGB_565 会比使 用ARGB_8888 少消耗2倍的内存</li>
-								<li>在 ImageLoaderConfiguration 中配置图片的内存缓存为 memoryCache(new WeakMemoryCache()) 或者不使用内存缓存</li>
-								<li>在 DisplayImageOptions 选项中设置 .imageScaleType(ImageScaleType.IN_SAMPLE_INT) 或者 imageScaleType(ImageScaleType.EXACTLY)</li>
+								<li>减少线程池中线程的个数，在 ImageLoaderConfiguration 中的
+									（.threadPoolSize） 中配置，推荐配置1-5</li>
+								<li>在 DisplayImageOptions 选项中配置
+									bitmapConfig为Bitmap.Config.RGB_565 ，因为默认是 ARGB_8888， 使用 RGB_565
+									会比使 用ARGB_8888 少消耗2倍的内存</li>
+								<li>在 ImageLoaderConfiguration 中配置图片的内存缓存为 memoryCache(new
+									WeakMemoryCache()) 或者不使用内存缓存</li>
+								<li>在 DisplayImageOptions 选项中设置
+									.imageScaleType(ImageScaleType.IN_SAMPLE_INT) 或者
+									imageScaleType(ImageScaleType.EXACTLY)</li>
 							</ul>
 						</div>
 					</div>
@@ -2220,7 +2722,6 @@ fragmentTransaction.add(fragment, tag);
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 		<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-		<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
 		<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 		<script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
 		<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>

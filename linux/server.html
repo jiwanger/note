@@ -67,8 +67,8 @@
 					<div class="list-group">
 						<a href="#" class="list-group-item">系统信息</a>
 						<a href="#server-centos" class="list-group-item">CentOS 基本配置</a>
-						<a href="#server-" class="list-group-item"> 配置</a>
-						<a href="#server-" class="list-group-item"> 配置</a>
+						<a href="#server-reboot" class="list-group-item">CentOS 定时任务</a>
+						<a href="#server-vnstat" class="list-group-item">流量监控工具 vnstat 配置</a>
 						<a href="#server-" class="list-group-item"> 配置</a>
 						<a href="#server-nginx" class="list-group-item">Nginx 配置</a>
 						<a href="#server-jmeter" class="list-group-item">Apache Jmeter
@@ -180,7 +180,7 @@ $ sudo vim /etc/ssh/sshd_config
 # adduser jiwanger		# 添加用户
 # passwd jiwanger		# 为此用户设置密码	
 
-# 将此用户添加到 sudoers
+# 将此用户添加到 sudoers, 只有 sudoers 用户才有权限执行 sudo 命令
 # vim /etc/sudoers
 #	在root	ALL=(ALL)	ALL 下面添加一行
 #	jiwanger	ALL=(ALL)	ALL
@@ -365,6 +365,190 @@ $ sudo service vsftpd restart				# 重启 vsftpd
 				<!-- item over -->
 
 				<!-- item start -->
+				<a class="offset" id="server-reboot"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">CentOS 定时任务</h3>
+					</div>
+					<div class="panel-body">
+						<p>Crond 是 Linux 系统用来定期执行命令或指定程序任务的一种服务或软件。</p>
+						<p>Crond
+							服务会定期（默认每分钟检查一次）检查系统中是否有要执行的任务工作。如果有，便会根据其预先设定的定时任务规则自动执行该定时任务工作。</p>
+						<p>Linux 系统中定时任务调度的工作可以分为以下两种情况：</p>
+						<ul>
+							<li>
+								<b>Linux 系统自身定期执行的任务工作：</b>系统周期性自行执行的任务工作，如轮询系统日志、备份系统数据、清理系统缓存等，这些任务无须我们人为干预。
+								<pre class="brush: bash;">
+$ ll /var/log/messages*
+# -rw-------. 1 root root    144 Mar 26 03:15 /var/log/messages
+# -rw-------. 1 root root 651889 Mar 12 00:40 /var/log/messages-20170312
+# -rw-------. 1 root root 180808 Mar 18 19:18 /var/log/messages-20170319
+# -rw-------. 1 root root  19937 Mar 22 23:42 /var/log/messages-20170326
+</pre>
+							</li>
+							<li>
+								<b>用户执行的任务工作：</b>某个用户或系统管理员定期要做的工作，例如每隔5分钟和互联网上的时间服务器进行时间同步，每天晚上0点备份网站站点数据及数据库数据，一般这些工作需要由用户自己来设置。
+								<pre class="brush: bash;">
+$ crontab -l
+# no crontab for jiwanger		# 因为 jiwanger 这个用户还没有自定义任务
+</pre>
+							</li>
+						</ul>
+						<p>
+							<b>新增调度任务可用两种方法：</b>
+						</p>
+						<ul>
+							<li>
+								在命令行输入:
+								<code>crontab -e</code>
+								然后添加相应的任务，wq 存盘退出。
+							</li>
+							<li>
+								直接编辑
+								<code>/etc/crontab</code>
+								文件，即
+								<code>$ vim /etc/crontab</code>
+								，添加相应的任务。
+							</li>
+						</ul>
+						<ul>
+							<li>
+								<p>
+									<code>$ crontab -e</code>
+									配置是针对某个用户的，而编辑
+									<code>/etc/crontab</code>
+									是针对系统的任务
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>$ crontab -l</code>
+									-- 列出当前的所有调度任务
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>$ crontab -l -u jiwanger</code>
+									-- 列出用户 jiwanger 的所有调度任务
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>$ crontab -r</code>
+									-- 删除所有任务调度工作
+								</p>
+						</ul>
+						<pre class="brush: bash;">
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+HOME=/
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name command to be executed
+
+# 这个文本解释的已经比较直观了，其中:
+# 星号（*）：代表所有可能的值，例如month字段如果是星号，则表示在满足其它字段的制约条件后每月都执行该命令操作。
+# 逗号（,）：可以用逗号隔开的值指定一个列表范围，例如，“1,2,5,7,8,9”
+# 中杠（-）：可以用整数之间的中杠表示一个整数范围，例如“2-6”表示“2,3,4,5,6”
+# 正斜线（/）：可以用正斜线指定时间的间隔频率，例如“0-23/2”表示每两小时执行一次。
+#	同时正斜线可以和星号一起使用，例如*/10，如果用在minute字段，表示每十分钟执行一次。
+</pre>
+						<p>一个实例：</p>
+						<pre class="brush: bash;">
+5      *       *           *     *     ls         # 指定每小时的第5分钟执行一次 ls 命令
+30     5       *           *     *     ls         # 指定每天的 5:30 执行 ls 命令
+30     7       8           *     *     ls         # 指定每月 8 号的 7：30 分执行 ls 命令
+30     5       8           6     *     ls         # 指定每年的 6 月 8 日 5：30 执行 ls 命令
+30     6       *           *     0     ls         # 指定每星期日的 6:30 执行 ls 命令
+30     3     10,20         *     *     ls         # 每月 10 号及 20 号的 3：30 执行 ls 命令
+25     8-11    *           *     *     ls         # 每天 8-11 点的第 25 分钟执行 ls 命令
+*/15   *       *           *     *     ls         # 每 15 分钟执行一次 ls 命令
+30     6     */10          *     *     ls         # 每个月中，每隔 10 天 6:30 执行一次 ls 命令
+</pre>
+						<p><b>为 root 用户添加一个 5 分钟后重启的命令：</b></p>
+						<pre class="brush: bash;">
+# 1.查看当前时间
+$ date
+
+# 2.如果时间不对，先同步下时间
+$ sudo /usr/sbin/ntpdate time.nist.gov
+
+# 3.切换到 root 用户
+$ su root
+
+# 4.使用 crontab -e 命令编辑
+# crontab -e
+10  17 *  *  * /sbin/shutdown -r now	# 此命令是每天 17:10 分执行　/sbin/shutdown -r now　命令
+
+# 5.使用 crontab -l 命令查看是否生效
+# crontab -l
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="server-vnstat"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">流量监控工具 vnstat 配置</h3>
+					</div>
+					<div class="panel-body">
+						<p><b>vnstat</b> 是一个 Linux 下的网络流量监控软件，它记录指定网卡每日的传输流量日志。它并非基于网络包的过滤，而是分析文件系统 <code>/proc</code>，所以 <code>vnstat</code> 无需 root 的权限就可使用。</p>
+						<p>vnstat 安装配置</p>
+						<pre class="brush: bash;">
+# 1.CentOS 需要先安装 epel 源
+$ sudo yum install epel-release
+
+# 2.安装 vnstat
+$ sudo yum install vnstat 
+
+# 3.创建监控数据库
+$ sudo vnstat -u -i eth0		# eth0 是需要监控的网卡，可以用 ifconfig 命令来查看使用的网卡
+
+# 4.添加开机启动
+$ sudo chkconfig vnstat on
+
+# 5.启动 vnstat, 启动后要过几分钟才有数据显示
+$ sudo service vnstat start
+</pre>
+						<p>查看统计数据</p>
+						<pre class="brush: bash;">
+# 1.查看流量报表
+$ vnstat
+
+# 2.查看当前实时流量
+$ vnstat -l
+
+# 3.查看每天流量统计
+$ vnstat -d
+
+# 4.查看每月流量统计
+$ vnstat -m
+
+# 5.查看每小时流量统计
+$ vnstat -h
+
+# 6.查看每周流量统计
+$ vnstat -w
+
+# 7.更多命令查看帮助文档
+$ vnstat --help
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
 				<a class="offset" id="server-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -407,18 +591,18 @@ $ sudo service vsftpd restart				# 重启 vsftpd
 							<div width="100%">
 								<img src="images/nginx-1.jpg" class="img-responsive btn-block">
 							</div>
-							</li>
-							<p>
-								<b>Ip hash算法</b> --
-								对客户端请求的ip进行hash操作，然后根据hash结果将同一个客户端ip的请求分发给同一台服务器进行处理，可以解决session不共享的问题。
-							</p>
-							<div width="100%">
-								<img src="images/nginx-2.jpg" class="img-responsive btn-block">
-							</div>
-							<p>
-								<b>安装配置</b>
-							</p>
-							<pre class="brush: bash;">
+				</li>
+				<p>
+					<b>Ip hash算法</b> --
+					对客户端请求的ip进行hash操作，然后根据hash结果将同一个客户端ip的请求分发给同一台服务器进行处理，可以解决session不共享的问题。
+				</p>
+				<div width="100%">
+					<img src="images/nginx-2.jpg" class="img-responsive btn-block">
+				</div>
+				<p>
+					<b>安装配置</b>
+				</p>
+				<pre class="brush: bash;">
 $ sudo yum install nginx
 # 如果显示: No package nginx available.
 #	wget http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
@@ -455,128 +639,126 @@ $ sudo vim /etc/nginx/nginx.conf		# 修改配置文件，在 http 块内加如�
 $ sudo service nginx reload				# 重启 nginx
 # 在浏览器输入: http://192.168.1.177 , 此时将在 192.168.1.177 的 80 和 8080 端口间切换访问
 </pre>
-						</div>
-					</div>
-				</div>
-				<!-- item over -->
+			</div>
+		</div>
+	</div>
+	<!-- item over -->
 
-				<!-- item start -->
-				<a class="offset" id="server-jmeter"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">Apache Jmeter 工具</h3>
-					</div>
-					<div class="panel-body">
-						<div class="sub-item">
-							<p>
-								<b>Apache JMeter</b>
-								是Apache组织开发的基于Java的压力测试工具。用于对软件做压力测试，它最初被设计用于Web应用测试，但后来扩展到其他测试领域。
-								它可以用于测试静态和动态资源，例如静态文件、Java 小服务程序、CGI 脚本、Java 对象、数据库、FTP 服务器，
-								等等。JMeter
-								可以用于对服务器、网络或对象模拟巨大的负载，来自不同压力类别下测试它们的强度和分析整体性能。另外，JMeter能够对应用程序做功能/回归测试，通过创建带有断言的脚本来验证你的程序返回了你期望的结果。为了最大限度的灵活性，JMeter允许使用正则表达式创建断言。
-							</p>
-							<p>
-								<b>测试计划:</b> 一个测试计划描述了一系列 Jmeter
-								运行时要执行的步骤。一个完整的测试计划包含一个或者多个线程组，逻辑控制器，取样发生控制，监听器，定时器，断言和配置元件。测试计划主要包括如下元件：
-							</p>
-							<ul>
-								<li>
-									<p>
-										<b>线程组:</b>
-										线程组元件是任何测试计划的起点。一个测试计划的所有元件必须在一个线程组下。由名字可以看出，线程组元件控制JMeter运行测试时使用的线程数。线程组管理允许你：
-									</p>
+	<!-- item start -->
+	<a class="offset" id="server-jmeter"></a>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Apache Jmeter 工具</h3>
+		</div>
+		<div class="panel-body">
+			<div class="sub-item">
+				<p>
+					<b>Apache JMeter</b>
+					是Apache组织开发的基于Java的压力测试工具。用于对软件做压力测试，它最初被设计用于Web应用测试，但后来扩展到其他测试领域。
+					它可以用于测试静态和动态资源，例如静态文件、Java 小服务程序、CGI 脚本、Java 对象、数据库、FTP 服务器，
+					等等。JMeter
+					可以用于对服务器、网络或对象模拟巨大的负载，来自不同压力类别下测试它们的强度和分析整体性能。另外，JMeter能够对应用程序做功能/回归测试，通过创建带有断言的脚本来验证你的程序返回了你期望的结果。为了最大限度的灵活性，JMeter允许使用正则表达式创建断言。
+				</p>
+				<p>
+					<b>测试计划:</b> 一个测试计划描述了一系列 Jmeter
+					运行时要执行的步骤。一个完整的测试计划包含一个或者多个线程组，逻辑控制器，取样发生控制，监听器，定时器，断言和配置元件。测试计划主要包括如下元件：
+				</p>
+				<ul>
+					<li>
+						<p>
+							<b>线程组:</b>
+							线程组元件是任何测试计划的起点。一个测试计划的所有元件必须在一个线程组下。由名字可以看出，线程组元件控制JMeter运行测试时使用的线程数。线程组管理允许你：
+						</p>
 
-									<ul>
-										<li>
-											<b>设置线程数:</b>
-											每个线程会作为一个整体执行测试计划并完全独立于他测试线程。多线程用来模拟到达服务器程序的同步连接。
-										</li>
-										<li>
-											<b>设置ramp-up period:</b> 可以理解为所有线程启动时间总和，如果: ramp-up 设置为 20,
-											线程数为 5, 循环次数设置为 4, 那么第一个线程启动执行 4 次循环，ram-up(20) / 线程数(5) = 4,
-											4 秒后再启动下一个线程。
-										</li>
-										<li>
-											<b>循环次数:</b> 设置每个线程循环的次数，如循环次数设置为 4，则每个线程执行 4 次请求。
-										</li>
-									</ul>
-									</p>
-								</li>
-								<li>
-									<p>
-										<b>控制器:</b> JMeter有两种控制器：取样器(Sampler)和逻辑控制器(Logic Controller)。
-									</p>
-									<ul>
-										<li>
-											<b>取样器:</b> 取样器告诉 JMeter 发送什么样的请求到服务器。常见取样器:
-											<ol>
-												<li>
-													<b>HTTP 请求</b>
-												</li>
-												<li>
-													<b>FTP 请求</b>
-												</li>
-												<li>
-													<b>JAVA 请求</b>
-												</li>
-												<li>
-													<b>JDBC 请求</b>
-												</li>
-												<li>
-													<b>LAMP 请求</b>
-												</li>
-											</ol>
-										</li>
-										<li>
-											<b>逻辑控制器:</b> 逻辑控制器让你定制当发送请求时 JMeter 使用的判断逻辑。常见控制器:
-											<ol>
-												<li>
-													<b>ForEach 控制器</b>
-												</li>
-												<li>
-													<b>仅一次控制器</b>
-												</li>
-												<li>
-													<b>交替控制器</b>
-												</li>
-												<li>
-													<b>包含控制器</b>
-												</li>
-												<li>
-													<b>吞吐量控制器</b>
-												</li>
-												<li>
-													<b>如果(IF)控制器</b>
-												</li>
-												<li>
-													<b>录制控制器</b>
-												</li>
-												<li>
-													<b>循环控制器</b>
-												</li>
-												<li>
-													<b>简单控制器</b>
-												</li>
-												<li>
-													<b>随机控制器</b>
-												</li>
-											</ol>
-										</li>
-									</ul>
-									</p>
-								</li>
-								<li>
-									<p>
-										<b>监听器:</b> 监听器提供访问 JMeter 收集当 JMeter
-										运行的关于测试计划的信息。监听器的监听范围：当前节点层及当前节点的子节点（直至叶子节点），也就是说监听器可以监听当前层以及比它低的层。
-									</p>
-									<ol>
-										<li>
-											<b>聚合报告</b> --
-											对于每个请求，它统计响应信息并提供请求数，平均值，最大，最小值，错误率，大约吞吐量(以请求数/秒为单位)和以kb/秒为单位的吞吐量。
-											<img src="images/jmeter-result-all.png"
-												class="img-responsive">
-											<pre class="brush: bash;">
+						<ul>
+							<li>
+								<b>设置线程数:</b> 每个线程会作为一个整体执行测试计划并完全独立于他测试线程。多线程用来模拟到达服务器程序的同步连接。
+							</li>
+							<li>
+								<b>设置ramp-up period:</b> 可以理解为所有线程启动时间总和，如果: ramp-up 设置为 20,
+								线程数为 5, 循环次数设置为 4, 那么第一个线程启动执行 4 次循环，ram-up(20) / 线程数(5) = 4, 4
+								秒后再启动下一个线程。
+							</li>
+							<li>
+								<b>循环次数:</b> 设置每个线程循环的次数，如循环次数设置为 4，则每个线程执行 4 次请求。
+							</li>
+						</ul>
+						</p>
+					</li>
+					<li>
+						<p>
+							<b>控制器:</b> JMeter有两种控制器：取样器(Sampler)和逻辑控制器(Logic Controller)。
+						</p>
+						<ul>
+							<li>
+								<b>取样器:</b> 取样器告诉 JMeter 发送什么样的请求到服务器。常见取样器:
+								<ol>
+									<li>
+										<b>HTTP 请求</b>
+									</li>
+									<li>
+										<b>FTP 请求</b>
+									</li>
+									<li>
+										<b>JAVA 请求</b>
+									</li>
+									<li>
+										<b>JDBC 请求</b>
+									</li>
+									<li>
+										<b>LAMP 请求</b>
+									</li>
+								</ol>
+							</li>
+							<li>
+								<b>逻辑控制器:</b> 逻辑控制器让你定制当发送请求时 JMeter 使用的判断逻辑。常见控制器:
+								<ol>
+									<li>
+										<b>ForEach 控制器</b>
+									</li>
+									<li>
+										<b>仅一次控制器</b>
+									</li>
+									<li>
+										<b>交替控制器</b>
+									</li>
+									<li>
+										<b>包含控制器</b>
+									</li>
+									<li>
+										<b>吞吐量控制器</b>
+									</li>
+									<li>
+										<b>如果(IF)控制器</b>
+									</li>
+									<li>
+										<b>录制控制器</b>
+									</li>
+									<li>
+										<b>循环控制器</b>
+									</li>
+									<li>
+										<b>简单控制器</b>
+									</li>
+									<li>
+										<b>随机控制器</b>
+									</li>
+								</ol>
+							</li>
+						</ul>
+						</p>
+					</li>
+					<li>
+						<p>
+							<b>监听器:</b> 监听器提供访问 JMeter 收集当 JMeter
+							运行的关于测试计划的信息。监听器的监听范围：当前节点层及当前节点的子节点（直至叶子节点），也就是说监听器可以监听当前层以及比它低的层。
+						</p>
+						<ol>
+							<li>
+								<b>聚合报告</b> --
+								对于每个请求，它统计响应信息并提供请求数，平均值，最大，最小值，错误率，大约吞吐量(以请求数/秒为单位)和以kb/秒为单位的吞吐量。
+								<img src="images/jmeter-result-all.png" class="img-responsive">
+								<pre class="brush: bash;">
 Ø Label：取样器名称
 Ø Samples：运行过程中一共发出了多少个请求，一般来说是其值=线程数*循环次数（前提：测试按计划跑完，
 	其中没有异常结束的线程），如5个线程，每个线程循环10次，那么对应行的Samples数是：
@@ -590,18 +772,18 @@ $ sudo service nginx reload				# 重启 nginx
 Ø Throughput：吞吐量，每秒/每分钟（具体看“/”后面的单位）处理的Request数
 Ø KB/sec：每秒从服务器端接收到的数据量，相当于LoadRunner中的Throughput/Sec
 </pre>
-										</li>
-										<li>
-											<b>查看结果树</b> -- 此监听器显示了请求和响应取样器的细节，并且以基础的HTML和XML显示响应表现。
-											<pre class="brush: bash;">
+							</li>
+							<li>
+								<b>查看结果树</b> -- 此监听器显示了请求和响应取样器的细节，并且以基础的HTML和XML显示响应表现。
+								<pre class="brush: bash;">
 Ø 取样器结果：显示的是取样器相关参数（客户端参数与响应参数）
 Ø 请求：发送请求的具体值
 Ø 响应数据：服务端返回的相应参数
 </pre>
-										</li>
-										<li>
-											<b>图形结果</b> -- 使用图形显示结果。
-											<pre class="brush: bash;">
+							</li>
+							<li>
+								<b>图形结果</b> -- 使用图形显示结果。
+								<pre class="brush: bash;">
 Ø 样本数目：发出去的请求数
 Ø 最新样本：最近一个Request的响应时间
 Ø 平均：所有Request响应时间的平均值
@@ -609,10 +791,10 @@ $ sudo service nginx reload				# 重启 nginx
 Ø 吞吐量：单位时间内（一般是1分钟）处理Request的个数
 Ø 中值：所有Request响应时间的中间值
 </pre>
-										</li>
-										<li>
-											<b>Summary Report</b> -- 这个和聚合报告相差不大。
-											<pre class="brush: bash;">
+							</li>
+							<li>
+								<b>Summary Report</b> -- 这个和聚合报告相差不大。
+								<pre class="brush: bash;">
 Ø Label：取样器名称
 Ø Samples：发送的请求总数
 Ø Min：最小响应时间
@@ -623,175 +805,173 @@ $ sudo service nginx reload				# 重启 nginx
 Ø KB/sec：每秒从服务器端接收到的数据量，相当于LoadRunner中的Throughput/Sec
 Ø Avg.Bytes：服务端返回给Request数据的平均值，可以理解为：服务端返回所有数据/请求数
 </pre>
-										</li>
-									</ol>
-									</p>
-								</li>
-								<li>
-									<p>
-										<b>定时器:</b>
-										定时器会使JMeter在一个线程开始每个请求间延迟一段时间。默认，JMeter线程发送请求时不在请求间暂停。我们建议你通过添加一个可用的定时器到你的线程组来指定一个延迟。
-									</p>
-								</li>
-								<li>
-									<p>
-										<b>断言:</b>
-										断言允许你断言关于从测试服务器收到的响应的行为。使用断言你本质上你可以测试你的应用程序返回你期望的结果。
-									</p>
-								</li>
-								<li>
-									<p>
-										<b>配置元件:</b> 配置元件配合取样器工作。虽然它不发送请求（除了HTTP代理服务器），但是它可以添加或者修改请求。
-									</p>
-									<ol>
-										<li>
-											<b>用户定义的变量</b>
-										</li>
-										<li>
-											<b>HTTP 默认请求</b>
-										</li>
-										<li>
-											<b>HTTP 简单配置元件</b>
-										</li>
-										<li>
-											<b>Java 请求默认值</b>
-										</li>
-										<li>
-											<b>HTTP Cookie Manager</b>
-										</li>
-										<li>
-											<b>HTTP Cache Manager</b>
-										</li>
-										<li>
-											<b>FTP 请求默认值</b>
-										</li>
-									</ol>
-									</p>
-								</li>
-								<li>
-									<p>
-										<b>前置处理器元件:</b>
-										前置处理器在取样器请求建立前执行一些行为。如果前置处理器附属于取样器元件，那么它会仅在那个取样器元件运行前执行。前置处理器最常用来在取样请求运行前修改它的设置，或者更新不能从响应文本提取的变量。
-									</p>
-								</li>
-								<li>
-									<p>
-										<b>后置处理器元件:</b>
-										后置控制器在取样器请求建立后执行一些行为。如果后置处理器附属于取样器元件，那么它会仅在那个取样器元件运行后执行。后置处理器最常用来处理响应数据，常用来从它里面提取数值。
-									</p>
-								</li>
-							</ul>
-							<p>
-								<b>测试计划元件执行顺序:</b> 配制元件 -> 前置处理器 -> 定时器 -> 取样器 ->
-								后置处理器(如果SampleResult不为空) -> 断言(如果SampleResult不为空) ->
-								监听器(如果SampleResult不为空)
-							</p>
-						</div>
-
-						<div class="sub-item">
-							<h5 class="text-primary">创建一个Web测试计划</h5>
-							<div class="row">
-								<div class="col-md-8">
-									<ol>
-										<li>
-											<p>
-												<b>添加一个 线程组:</b> 每个 JMeter
-												测试计划的第一步都是要添加一个线程组。设置的用户的数目(线程数目),发送请求的频率(ramp-up
-												period)和请求的次数(循环次数)。线程数: 50 , 循环次数: 10 。 <img
-													src="images/jmeter-thread-group.png" class="img-responsive">
-											</p>
-										</li>
-										<li>
-											<p>
-												<b>线程组下添加 ForEach 控制器:</b> ForEach
-												控制器在用户自定义变量中读取一系列相关的变量。变量前缀: url , 变量名称: returnVal 。 <img
-													src="images/jmeter-foreach.png" class="img-responsive">
-											</p>
-										</li>
-										<li>
-											<p>
-												<b>ForEach 控制器下添加 HTTP 请求:</b> 用于发送 HTTP 请求。路径: ${returnVal}
-												<img src="images/jmeter-http.png" class="img-responsive">
-											</p>
-										</li>
-
-									</ol>
-								</div>
-								<div class="col-md-4">
-									<img src="images/jmeter-plan.png" class="img-responsive">
-								</div>
-							</div>
-							<ol start="4">
-								<li>
-									<p>
-										<b>ForEach 控制器下添加 用户定义的变量:</b> 用于向 HTTP 请求 提供数据。添加两个请求:<br>
-										<code>url_1 ->
-											http://192.168.0.177:8081/site/TestServlet?type=db</code>
-										, <br>
-										<code>url_2 ->
-											http://192.168.0.177:8081/site/TestServlet?type=</code>
-										<img src="images/jmeter-user-define.png"
-											class="img-responsive">
-									</p>
-								</li>
-								<li>
-									<p>
-										<b>线程组下添加 聚合报告:</b> 用于查看聚合数据结果。 <img
-											src="images/jmeter-result-all.png" class="img-responsive">
-									</p>
-								</li>
-								<li>
-									<p>
-										<b>线程组下添加 用表格查看结果:</b> 用表格来查看结果。 <img
-											src="images/jmeter-result-table.png" class="img-responsive">
-									</p>
-								</li>
-								<li>
-									<p>
-										<b>线程组下添加 察看结果树:</b> 察看结果树显示结果。 <img
-											src="images/jmeter-result-tree.png" class="img-responsive">
-									</p>
-								</li>
-								<li>
-									<p>
-										<b>线程组下添加 图形结果:</b> 图形显示结果。 <img
-											src="images/jmeter-result-graph.png" class="img-responsive">
-									</p>
-								</li>
-							</ol>
-						</div>
-
-
-					</div>
-				</div>
-				<!-- item over -->
-
-				<!-- item start -->
-				<a class="offset" id="server-test"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">Tomcat 压力测试</h3>
-					</div>
-					<div class="panel-body">
-						<ul>
-							<li>
-								<a href="#"></a>
 							</li>
-						</ul>
-					</div>
-				</div>
-				<!-- item over -->
-
-				<a class="offset" id="..."></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
-					</div>
-					<div class="panel-body"></div>
-				</div>
-				<!-- item over -->
+						</ol>
+						</p>
+					</li>
+					<li>
+						<p>
+							<b>定时器:</b>
+							定时器会使JMeter在一个线程开始每个请求间延迟一段时间。默认，JMeter线程发送请求时不在请求间暂停。我们建议你通过添加一个可用的定时器到你的线程组来指定一个延迟。
+						</p>
+					</li>
+					<li>
+						<p>
+							<b>断言:</b> 断言允许你断言关于从测试服务器收到的响应的行为。使用断言你本质上你可以测试你的应用程序返回你期望的结果。
+						</p>
+					</li>
+					<li>
+						<p>
+							<b>配置元件:</b> 配置元件配合取样器工作。虽然它不发送请求（除了HTTP代理服务器），但是它可以添加或者修改请求。
+						</p>
+						<ol>
+							<li>
+								<b>用户定义的变量</b>
+							</li>
+							<li>
+								<b>HTTP 默认请求</b>
+							</li>
+							<li>
+								<b>HTTP 简单配置元件</b>
+							</li>
+							<li>
+								<b>Java 请求默认值</b>
+							</li>
+							<li>
+								<b>HTTP Cookie Manager</b>
+							</li>
+							<li>
+								<b>HTTP Cache Manager</b>
+							</li>
+							<li>
+								<b>FTP 请求默认值</b>
+							</li>
+						</ol>
+						</p>
+					</li>
+					<li>
+						<p>
+							<b>前置处理器元件:</b>
+							前置处理器在取样器请求建立前执行一些行为。如果前置处理器附属于取样器元件，那么它会仅在那个取样器元件运行前执行。前置处理器最常用来在取样请求运行前修改它的设置，或者更新不能从响应文本提取的变量。
+						</p>
+					</li>
+					<li>
+						<p>
+							<b>后置处理器元件:</b>
+							后置控制器在取样器请求建立后执行一些行为。如果后置处理器附属于取样器元件，那么它会仅在那个取样器元件运行后执行。后置处理器最常用来处理响应数据，常用来从它里面提取数值。
+						</p>
+					</li>
+				</ul>
+				<p>
+					<b>测试计划元件执行顺序:</b> 配制元件 -> 前置处理器 -> 定时器 -> 取样器 ->
+					后置处理器(如果SampleResult不为空) -> 断言(如果SampleResult不为空) ->
+					监听器(如果SampleResult不为空)
+				</p>
 			</div>
+
+			<div class="sub-item">
+				<h5 class="text-primary">创建一个Web测试计划</h5>
+				<div class="row">
+					<div class="col-md-8">
+						<ol>
+							<li>
+								<p>
+									<b>添加一个 线程组:</b> 每个 JMeter
+									测试计划的第一步都是要添加一个线程组。设置的用户的数目(线程数目),发送请求的频率(ramp-up
+									period)和请求的次数(循环次数)。线程数: 50 , 循环次数: 10 。 <img
+										src="images/jmeter-thread-group.png" class="img-responsive">
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>线程组下添加 ForEach 控制器:</b> ForEach 控制器在用户自定义变量中读取一系列相关的变量。变量前缀:
+									url , 变量名称: returnVal 。 <img src="images/jmeter-foreach.png"
+										class="img-responsive">
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>ForEach 控制器下添加 HTTP 请求:</b> 用于发送 HTTP 请求。路径: ${returnVal} <img
+										src="images/jmeter-http.png" class="img-responsive">
+								</p>
+							</li>
+
+						</ol>
+					</div>
+					<div class="col-md-4">
+						<img src="images/jmeter-plan.png" class="img-responsive">
+					</div>
+				</div>
+				<ol start="4">
+					<li>
+						<p>
+							<b>ForEach 控制器下添加 用户定义的变量:</b> 用于向 HTTP 请求 提供数据。添加两个请求:<br>
+							<code>url_1 ->
+								http://192.168.0.177:8081/site/TestServlet?type=db</code>
+							, <br>
+							<code>url_2 ->
+								http://192.168.0.177:8081/site/TestServlet?type=</code>
+							<img src="images/jmeter-user-define.png" class="img-responsive">
+						</p>
+					</li>
+					<li>
+						<p>
+							<b>线程组下添加 聚合报告:</b> 用于查看聚合数据结果。 <img
+								src="images/jmeter-result-all.png" class="img-responsive">
+						</p>
+					</li>
+					<li>
+						<p>
+							<b>线程组下添加 用表格查看结果:</b> 用表格来查看结果。 <img
+								src="images/jmeter-result-table.png" class="img-responsive">
+						</p>
+					</li>
+					<li>
+						<p>
+							<b>线程组下添加 察看结果树:</b> 察看结果树显示结果。 <img
+								src="images/jmeter-result-tree.png" class="img-responsive">
+						</p>
+					</li>
+					<li>
+						<p>
+							<b>线程组下添加 图形结果:</b> 图形显示结果。 <img
+								src="images/jmeter-result-graph.png" class="img-responsive">
+						</p>
+					</li>
+				</ol>
+			</div>
+
+
 		</div>
+	</div>
+	<!-- item over -->
+
+	<!-- item start -->
+	<a class="offset" id="server-test"></a>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Tomcat 压力测试</h3>
+		</div>
+		<div class="panel-body">
+			<ul>
+				<li>
+					<a href="#"></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!-- item over -->
+
+	<a class="offset" id="..."></a>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">...</h3>
+		</div>
+		<div class="panel-body"></div>
+	</div>
+	<!-- item over -->
+	</div>
+	</div>
 	</div>
 
 	<div class="btn-group-vertical bottom-button">

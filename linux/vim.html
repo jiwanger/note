@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -65,19 +65,21 @@
 						<h3 class="panel-title">VIM</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+						<a href="#" class="list-group-item">简介</a>
+						<a href="#vim-manual-zh" class="list-group-item">VIM 中文手册安装</a>
+						<a href="#vim-base" class="list-group-item">VIM 使用基础</a>
+						<a href="#vim-window" class="list-group-item">多窗口</a>
+						<a href="#vim-" class="list-group-item">...</a>
+						<a href="#vim-" class="list-group-item">...</a>
+						<a href="#vim-vimrc" class="list-group-item">
+							<code>.vimrc</code>
+							文件
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
-							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
-						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#vim-" class="list-group-item">...</a>
+						<a href="#vim-" class="list-group-item">...</a>
+						<a href="#vim-" class="list-group-item">...</a>
+						<a href="#vim-" class="list-group-item">...</a>
+						<a href="#vim-" class="list-group-item">...</a>
 					</div>
 				</div>
 			</div>
@@ -91,14 +93,417 @@
 			<div class="col-md-3"></div>
 			<div class="col-md-9" style="float: left;">
 				<!-- item start -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">简介</h3>
+					</div>
+					<div class="panel-body">
+						<p>Vim 是从 vi
+							发展出来的一个文本编辑器。代码补全、编译及错误跳转等方便编程的功能特别丰富，在程序员中被广泛使用，和 Emacs 并列成为类
+							Unix 系统用户最喜欢的文本编辑器。</p>
+						<p>
+							<b>Vim 的设计理念是命令的组合。</b>Vim 强大的编辑能力中很大部分是来自于其普通模式命令。
+						</p>
+						<p>
+							基本上 vi/vim 共分为三种模式，分别是<b>命令模式</b>，<b>插入模式</b>和<b>底线命令模式</b>。
+						</p>
+						<p width="100%">
+							<img style="height: 300px;" src="images/vim-vi-workmodel.png"
+								class="img-responsive">
+						</p>
+						<p>
+							<b>Vim 常用操作</b>
+						</p>
+						<p width="100%">
+							<img src="images/vim.jpg" class="img-responsive">
+						</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="vim-manual-zh"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">VIM 中文帮助文档安装</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							VIM 中文参考手册 HTML 版本 --
+							<a href="vim74-doc/index.html" target="_blank">Vim-74 中文参考手册</a>
+						</p>
+						<p>
+							<b>VIM 中文帮助文档安装步骤:</b>
+						</p>
+						<pre class="brush: bash;">
+# 1.下载 Vim 中文帮助文档帮助
+# 下载页面: http://vimcdoc.sourceforge.net/
+# 选择: Latest platform independent tarball, including an Linux/BSD installation script 安装
+
+# 2.解压安装
+$ tar -xzvf vimcdoc-1.9.0.tar.gz
+
+# 3.安装
+$ cd vimcdoc-1.9.0
+$ ./vimcdoc.sh -i
+
+# 4.使用手册方法
+$ vim
+# 进入 vim 后, :help
+# 在此文档中可以像 Html 一样跳转
+#	CTRL-] 跳转到当前光标所在单词对应的主题
+#	CTRL-O 回到前一个位置
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="vim-base"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Vim 使用基础</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">命令模式</h5>
+							<p>在任何模式下，只要按下 Esc 键就可以返回命令模式。</p>
+							<ul>
+								<li>
+									命令模式下移动光标
+									<pre class="brush: bash;">
+# gg -- 移动光标到文档第一行
+# G  -- 移动光标到文档最后一行
+# nG -- 移动到第 n 行
+# j k h l -- 分别表示光标 上 下 左 右 移动, 也可以使用方向键盘
+# 5j 5k -- 向下，向上移动 5 行
+# 0 $ -- 光标移到到行最后，最前面
+# n [space] -- n + 空格，向后移动 n 个字符
+</pre>
+								</li>
+								<li>
+									进入插入模式
+									<pre class="brush: bash;">
+# i	-- 在光标前插入
+# I -- 在行首插入
+# a -- 在光标后插入
+# A -- 在行末插入
+# o -- 在当前行之下新建行
+# O -- 在当前行之上新建行
+# s -- 删除光标所在的字符再插入
+# S -- 删除光标所在行再插入
+</pre>
+								</li>
+								<li>
+									命令模式下修改文件
+									<pre class="brush: bash;">
+## 删除
+# x X -- x 为删除光标下一个字符, X 为向前删光标前除一个字符
+# nx -- 删除 n 个字符
+# dd -- 删除当前行
+# ndd -- 删除 n 行
+# dG -- 删除光标所在行到最后一行
+# dnG -- 删除光标所在行到 n 行
+# d$ -- 删除光标所在位置所在行到该行的最后一个字符
+# d0 -- 删除光标所在位置所在行到该行的第一个字符
+
+## 复制
+# yy -- 复制游标所在的那一行
+# nyy -- 复制光标所在的向下 n 行
+# yG -- 复制游标所在行到最后一行的所有数据
+# ynG -- 复制游标所在行到第 n 行的所有数据
+# y0 -- 复制光标所在的那个字符到该行行首的所有数据
+# y$ -- 复制光标所在的那个字符到该行行尾的所有数据
+
+## 粘贴
+# p -- 为将已复制的数据在光标下一行贴上
+# P -- 则为贴在游标上一行
+
+## 修改
+# r -- 按 r 后，再输入别的字符，替换为新字符
+# R -- 按 R 后，再输入别的字符，替换为新字符，然后再开始修改下一个字符，直到按 Esc
+# cw -- 删除当前单词，进入输入模式
+# cc -- 删除当前行，进入输入模式
+# ncc -- 删除 n 行，进入输入模式
+# J -- 合并当前行和下一行
+# u -- 复原前一个动作
+# [Ctrl]+r -- 重做上一个动作
+
+## 储存、离开
+# :w -- 将编辑的数据写入文件
+# :w! -- 若文件属性为『只读』时，强制写入文件
+# :wq -- 储存后离开
+# :w [filename] -- 将编辑的数据储存成另一个文件
+# :n1,n2 w [filename] -- 将 n1 到 n2 行的内容储存成 filename 这个文件
+# :q -- 离开
+# :q! -- 如文件有改动，不存储离开
+# ZZ -- 若档案没有更动，则不储存离开，若档案已经被更动过，则储存后离开
+# :r [filename] -- 在编辑的数据中，读入另一个档案的数据到游标所在行
+</pre>
+								</li>
+								<li>
+									命令模式下搜索替换
+									<pre class="brush: bash;">
+## 搜索
+# /word -- 向下搜索 word 这个词
+# ?word -- 向上搜索 word 这个词
+# n -- 搜索下一个，如果执行 /word , 会向下搜索下一个；如果执行 ?word , 向上搜索下一个
+# N -- 搜索上一个，和 n 相反
+
+## 替换
+# :s/vivian/sky/g -- 替换当前行所有 vivian 为 sky
+# :n,$s/vivian/sky/ -- 替换第 n 行开始到最后一行中每一行的第一个 vivian 为 sky
+# :n1,n2s/word1/word2/g -- 在第 n1 与 n2 行之间寻找 word1 这个字符串，并将该字符串取代为 word2
+# :n1,n2s/word1/word2/gi -- 不区分大小写
+# :1,$s/word1/word2/g -- 第一行到最后一行，就是全文搜索替换
+# :1,$s/word1/word2/gc -- 这个过程会有用户确认
+</pre>
+								</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary"></h5>
+							<p></p>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary"></h5>
+							<p></p>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary"></h5>
+							<p></p>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary"></h5>
+							<p></p>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="vim-window"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">多窗口</h3>
+					</div>
+					<div class="panel-body">
+						<p>Vim 中，默认的多窗口打开，是横向分割窗口。</p>
+						<p>
+							<b>新建多窗口</b>
+						</p>
+						<p>
+							进入 Vim 编辑器以后，可以通过
+							<code>new</code>
+							，
+							<code>split</code>
+							和
+							<code>vsplit</code>
+							命令，新建一个子窗口
+						</p>
+						<pre class="brush: bash;">
+## 横向分割窗口
+:new 			# 新建一个未命名窗口
+:new name		# 新建一个名为 name 的窗口
+
+:split 			# 新建一个未命名窗口
+:split name		# 新建一个名为 name 的窗口
+
+## 纵向分割窗口
+:vsplit			# 新建一个未命名窗口
+:vsplit name	# 新建一个名为 name 的窗口
+:vs				# vsplit 缩写形式
+</pre>
+						<p>
+							<b>Vim 中的多窗口切换</b>
+						</p>
+						<p>
+							Vim 中的多窗口切换可以通过
+							<code>Ctrl + w</code>
+							组合键加上方向选择键来实现
+						</p>
+
+						<p>
+							横向分割的窗口可以通过
+							<code>Ctrl + w + j / k</code>
+							或者
+							<code>Ctrl + w + (UP) / (DOWN)</code>
+							来实现上下窗口间切换
+						</p>
+
+						<p>
+							纵向分割的窗口可以通过
+							<code>Ctrl + w + h / l</code>
+							或者
+							<code>Ctrl + w + (LEFT) / (RIGHT)</code>
+							来实现上下窗口间切换
+						</p>
+
+						<p>
+							连续两次按下
+							<code>Ctrl + w</code>
+							也组合键可以实现多个窗口间的依次切换
+						</p>
+
+						<p>
+							<b>Vim 中多窗口的调整</b>
+						</p>
+						<pre class="brush: bash;">
+## 绝对值调整
+:resize num				# 将窗口的高度调整为 num 行
+:res num				# resize 的缩写模式
+:vertical resize num	# 将窗口的宽度调整为 num 列
+:vertical res num		# 同上
+
+## 增量式调整
+:resize +num 			# 将窗口的高度增加 num 行
+:resize -num			# 将窗口的高度减少 num 行
+:vertical resize +num	# 将窗口的宽度增加 num 列
+:vertical resize -num	# 将窗口的宽度减少 num 列 
+
+## 多窗口的关闭
+:q						# 退出当前所在的窗口
+:qa						# 退出所有的窗口
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+
+				<!-- item start -->
+				<a class="offset" id="vim-vimrc"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>.vimrc</code>
+							文件
+						</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
 				<a class="offset" id="..."></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">...</h3>
 					</div>
-					<div class="panel-body">
-						
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
 					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 			</div>
@@ -106,14 +511,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -121,7 +525,7 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
