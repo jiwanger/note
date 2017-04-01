@@ -78,7 +78,7 @@
 							<a href="#" class="list-group-item">...</a>
 							<a href="#" class="list-group-item">...</a>
 						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#html5-local-storage" class="list-group-item">本地存储</a>
 
 						<a href="#html5-canvas" class="list-group-item">CANVAS</a>
 						<a href="#html5-svg" class="list-group-item">SVG</a>
@@ -105,12 +105,87 @@
 				<!-- item over -->
 
 				<!-- item start -->
-				<a id="html5-" class="offset"></a>
+				<a id="html5-local-storage" class="offset"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">本地存储</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>在 Html4 的时代在浏览器端存储点网站个性化的数据，尤其是用户浏览器的痕迹，用户的相关数据等一般只能存储在
+							Cookie 中，但是大多是浏览器对于 Cookie
+							的限制也就逼迫网站存储数据尽量精简，想存储复杂的、关系型的用户数据就根本不可能。</p>
+						<p>
+							<b>下面是Cookie的限制：</b>
+						</p>
+						<ul>
+							<li>大多数浏览器支持最大为 4096 字节的 Cookie。</li>
+							<li>浏览器还限制站点可以在用户计算机上存储的 Cookie 的数量。大多数浏览器只允许每个站点存储 20 个
+								Cookie；如果试图存储更多 Cookie，则最旧的 Cookie 便会被丢弃。</li>
+							<li>有些浏览器还会对它们将接受的来自所有站点的 Cookie 总数作出绝对限制，通常为 300 个。</li>
+							<li>Cookie 默认情况都会随着 Http 请求发送到后台服务器，但并不是所有请求都需要 Cookie
+								的，比如：js、css、图片等请求则不需要 Cookie。</li>
+						</ul>
+						<p>
+							<b>Html5 支持两种的 WebStorage:</b>
+						</p>
+						<ul>
+							<li>
+								<code>localStorage</code>
+								-- 永久本地存储, 以便于用户存储永久存储的 Web 端的数据。而且数据不会随着 Http
+								请求发送到后台服务器，而且存储数据的大小机会不用考虑，因为在 HTML5 的标准中要求浏览器至少要支持到 4
+								MB.所以，这完全是颠覆了 Cookie 的限制，为 Web 应用在本地存储复杂的用户痕迹数据提供非常方便的技术支持。
+								<pre class="brush: js;">
+// 添加 key-value 数据到 sessionStorage
+localStorage.setItem("demokey", "http://blog.itjeek.com");
+localStorage.setItem("userName", "jiwanger");
+
+// 通过 key 来获取 value
+var dt = localStorage.getItem("demokey");
+alert(dt);
+
+// 通过 key 删除本地数据
+localStorage.removeItem("demokey");
+
+// 清空所有的 key-value 数据。
+// localStorage.clear();
+alert(sessionStorage.length);
+</pre>
+							</li>
+							<li>
+								<code>sessionStorage</code>
+								-- 会话级别的本地存储, 通过此对象可以直接操作存储在浏览器中的会话级别的 WebStorage。存储在
+								sessionStorage 中的数据首先是 Key-Value
+								形式的，另外就是它跟浏览器当前会话相关，当会话结束后，数据会自动清除，跟未设置过期时间的 Cookie 类似。
+								<pre class="brush: js;">
+// 添加 key-value 数据到 sessionStorage
+sessionStorage.setItem("demokey", "http://blog.itjeek.com");
+sessionStorage.setItem("userName", "jiwanger");
+
+// 通过 key 来获取 value
+var dt = sessionStorage.getItem("demokey");
+alert(dt);
+
+// 通过 key 删除本地数据
+sessionStorage.removeItem("demokey");
+
+// 清空所有的 key-value 数据。
+// sessionStorage.clear();
+alert(sessionStorage.length);
+</pre>
+						</ul>
+
+						<p>
+							<b>本地数据库 -- IndexedDB</b>
+						</p>
+						<p>
+							虽然 Html5 已经提供了功能强大的
+							<code>localStorage</code>
+							和
+							<code>sessionStorage</code>
+							，但是他们两个都只能提供存储简单数据结构的数据，对于复杂的 Web 应用的数据却无能为力。IndexedDB
+							是一个为了能够在客户端存储可观数量的结构化数据，并且在这些数据上使用索引进行高性能检索的 API。
+						</p>
+					</div>
 				</div>
 				<!-- item over -->
 
