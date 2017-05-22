@@ -66,19 +66,67 @@
 					</div>
 					<div class="list-group">
 						<a href="#groovy-intro" class="list-group-item">简介</a>
-						<a href="#groovy-docs" class="list-group-item">文档</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+							data-parent="#accordion" href="#groovy-user-guide"
+							aria-expanded="true">
+							Groovy 用户指南<span class="caret pull-right"
+								style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="groovy-user-guide" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#groovy-install" class="list-group-item">Linux 下安装</a>
+							<a href="#groovy-java" class="list-group-item">Groovy vs Java</a>
+							<a href="#groovy-devlopment" class="list-group-item">Groovy
+								开发套件</a>
+							<a href="#groovy-meta" class="list-group-item">元编程</a>
+							<a href="#groovy-dependency" class="list-group-item">依赖管理</a>
 						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a class="list-group-item active dropup" data-toggle="collapse"
+							data-parent="#accordion" href="#groovy-base" aria-expanded="true">
+							Groovy 基础<span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="groovy-base" class="panel-collapse collapse in"
+							role="tabpanel">
+							<a href="#groovy-syntax" class="list-group-item">1. 语法基础</a>
+							<a href="#groovy-operator" class="list-group-item">2. 操作符</a>
+							<a href="#groovy-structure" class="list-group-item">3. 程序结构</a>
+							<a href="#groovy-object" class="list-group-item">4. 面向对象</a>
+							<a href="#groovy-closure" class="list-group-item">5. 闭包</a>
+							<a href="#groovy-semantics" class="list-group-item">6. 语义</a>
+						</div>
+						<a class="list-group-item active dropup" data-toggle="collapse"
+							data-parent="#accordion" href="#groovy-tools"
+							aria-expanded="true">
+							Groovy 工具<span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="groovy-tools" class="panel-collapse collapse in"
+							role="tabpanel">
+							<a href="#groovy-groovyc" class="list-group-item">
+								<code>groovyc</code>
+							</a>
+							<a href="#groovy-groovysh" class="list-group-item">
+								<code>groovysh</code>
+							</a>
+							<a href="#groovy-groovy-console" class="list-group-item">
+								<code>groovyConsole</code>
+							</a>
+							<a href="#groovy-ide" class="list-group-item">IDE 集成</a>
+						</div>
+						<a class="list-group-item active dropup" data-toggle="collapse"
+							data-parent="#accordion" href="#groovy-kit" aria-expanded="true">
+							Groovy组件指南<span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="groovy-kit" class="panel-collapse collapse in"
+							role="tabpanel">
+							<a href="#groovy-json" class="list-group-item">解码和编码JSON</a>
+							<a href="#groovy-xml" class="list-group-item">处理XML</a>
+							<a href="#groovy-db" class="list-group-item">使用关系型数据库</a>
+							<a href="#groovy-ant" class="list-group-item">Ant脚本任务</a>
+							<a href="#groovy-template" class="list-group-item">模板引擎</a>
+							<a href="#groovy-swing" class="list-group-item">创建 Swing UI</a>
+							<a href="#groovy-servlet" class="list-group-item">Servlet 支持</a>
+							<a href="#groovy-jmx" class="list-group-item">使用 JMX</a>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -99,61 +147,1775 @@
 					<div class="panel-body">
 						<p>Groovy…</p>
 						<ul>
-							<li>一个基于JVM的动态敏捷编程语言</li>
-							<li>构建于Java的优势之上，并且额外拥有很多来源于Python、Ruby和SmallTalk等语言的强大特性</li>
-							<li>Java开发者零学习曲线使用现代语言编程特性</li>
+							<li>一个基于 JVM 的动态敏捷编程语言</li>
+							<li>构建于 Java 的优势之上，并且额外拥有很多来源于 Python、Ruby 和 SmallTalk
+								等语言的强大特性</li>
+							<li>Java 开发者零学习曲线使用现代语言编程特性</li>
 							<li>执行静态类型检查和静态编译代码的健壮性和性能</li>
 							<li>支持领域专用语言(Domain-Specific
 								Language/DSL),紧凑的表达式可以使代码更加易读和维护</li>
-							<li>强大的处理原语、面向对象程序设计能力、Ant DSL使编写shell和构建脚本更加简单</li>
+							<li>强大的处理原语、面向对象程序设计能力、Ant DSL 使编写 shell 和构建脚本更加简单</li>
 							<li>在开发WEB应用、数据库应用、控制台应用中通过减少脚手架代码提高开发者效率</li>
-							<li>支持单元测试和开箱即用的MOCK</li>
-							<li>无缝集成现在有的Java类和库</li>
-							<li>直接编译为Java字节码，所以你可以任何能使用Java的的地方使用它</li>
+							<li>支持单元测试和开箱即用的 MOCK</li>
+							<li>无缝集成现在有的 Java 类和库</li>
+							<li>直接编译为 Java 字节码，所以你可以任何能使用 Java 的的地方使用它</li>
+						</ul>
+
+						<p>
+							<b>Groovy 文档</b>
+						</p>
+						<p>
+							<a href="docs/asciidoc/html5/index.html" target="_blank">Groovy
+								Language Documentation</a>
+							部分译文 --
+							<a
+								href="http://cndoc.github.io/groovy-doc-cn/cn/groovy_language_specification.html"
+								target="_blank">2.3.6 版本译文</a>
+						</p>
+						<p>
+							<a href="docs/groovydoc/index.html" target="_blank">groovy
+								doc</a>
+						</p>
+						<p>
+							<a href="docs/javadoc/index.html" target="_blank">java doc</a>
+						</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="groovy-install"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Linux 下安装</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<code>SDKMAN</code>
+							工具让在Bash平台（mac，Linux, Cygwin, Solaris, FreeBSD）安装 Groovy 变得非常简单。
+						</p>
+						<pre class="brush: bash;">
+# 根据屏幕提示完成安装 SDKMAN
+$ curl -s get.sdkman.io | bash
+
+# 初始化 SDKMAN 环境
+$ source "$HOME/.sdkman/bin/sdkman-init.sh"
+
+# SDKMAN 安装 groovy
+$ sdk install groovy
+
+# 查看 groovy 版本信息
+$ groovy -v
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="groovy-java"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Groovy 与 Java</h3>
+					</div>
+					<div class="panel-body">
+						<table class="table table-bordered table-responsive">
+							<tr>
+								<th>比较</th>
+								<th>Groovy</th>
+								<th>Java</th>
+							</tr>
+							<tr>
+								<td><b>默认导入</b></td>
+
+								<td><ul>
+										<li>java.io.*</li>
+										<li>java.lang.*</li>
+										<li>java.math.BigDecimal</li>
+										<li>java.math.BigInteger</li>
+										<li>java.net.*</li>
+										<li>java.util.*</li>
+										<li>groovy.lang.*</li>
+										<li>groovy.util.*</li>
+									</ul></td>
+								<td><ul>
+										<li>java.lang.*</li>
+									</ul></td>
+							</tr>
+							<tr>
+								<td><b>动态方法</b></td>
+								<td><p>在Groovy里，方法的调用是在运行时动态决定。这一特性叫做运行时分发(runtime
+										dispatch)或动态方法(multi-methods)。也就是说方法的最后调用是根据传入参数在运行时的类型所决定。</p> <pre
+										class="brush: groovy;">
+public class Groovy {
+
+    public static int method(String arg) {
+        return 1;
+    }
+
+    public static int method(Object arg) {
+        return 2;
+    }
+
+    public static void main(String[] args) {
+        Object o = "Object";
+        int result = method(o);
+        // Groovy 中运行得到结果 1
+        println("Groovy: " + result);
+    }
+
+}
+</pre></td>
+								<td>在Java里，这一点是不一样的：在编译时就决定了方法的参数类型。 <pre
+										class="brush: java;">
+public class Java {
+
+    public static int method(String arg) {
+        return 1;
+    }
+
+    public static int method(Object arg) {
+        return 2;
+    }
+
+    public static void main(String[] args) {
+        Object o = "Object";
+        int result = method(o);
+        // Java 中运行结果为 2
+        System.out.println("Java: " + result);
+    }
+
+}
+</pre>
+								</td>
+							</tr>
+							<tr>
+								<td><b>数组初始化</b></td>
+								<td>在Groovy，{…}已经被用作闭包，也就是说你不能使用下面的语法创建数组。<code>int[]
+										array = [1,2,3] </code></td>
+								<td><code>int[] array = { 1, 2, 3}</code></td>
+							</tr>
+							<tr>
+								<td><b>包范围可见性</b></td>
+								<td>在Groovy里，省略字段的修饰符不会像Java一样使其成为包私有属性</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><b>ARM块</b></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><b>内部类</b></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><b>拉姆达表达式</b></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><b>GStrings</b></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><b>字符串和字符</b></td>
+								<td></td>
+								<td></td>
+							</tr>
+							<tr>
+								<td><b>== 的行为</b></td>
+								<td></td>
+								<td></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+
+				<!-- item start -->
+				<a class="offset" id="groovy-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="groovy-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="groovy-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="groovy-syntax"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">语法基础</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">1. 注释</h5>
+							<pre class="brush: groovy;">
+// 单行注释
+println "hello" // a comment till the end of the line
+
+// 多行注释
+println "hello" /* a multiline comment starting
+					at the end of a statement */
+					
+// GroovyDoc 注释
+/**
+ * A Class description
+ */
+
+class Person {
+    /** the name of the person */
+    String name
+
+    /**
+     * Creates a greeting method for a certain person.
+     *
+     * @param otherPerson the person to greet
+     * @return ag reeting message
+     */
+    String greet(String otherPerson) {
+       "Hello ${otherPerson}"
+    }
+}
+
+/** Shebang 行, # 字符必须是文件的第一个字符。 任何缩进都会引起一个编译错误。通常在 UNIX 系统中被认知，
+ *	它容许脚本直接在命令行中运行那些你已经安装的 Groovy 和那些已经在 PATH 中可用的 groovy 命令。
+ */
+#!/usr/bin/env groovy
+
+println "Hello from the shebang line"
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">2. 关键字</h5>
+							<table
+								class="table table-bordered table-responsive table-striped">
+								<tbody>
+									<tr>
+										<td><p>as</p></td>
+										<td><p>assert</p></td>
+										<td><p>break</p></td>
+										<td><p>case</p></td>
+									</tr>
+									<tr>
+										<td><p>catch</p></td>
+										<td><p>class</p></td>
+										<td><p>const</p></td>
+										<td><p>continue</p></td>
+									</tr>
+									<tr>
+										<td><p>def</p></td>
+										<td><p>default</p></td>
+										<td><p>do</p></td>
+										<td><p>else</p></td>
+									</tr>
+									<tr>
+										<td><p>enum</p></td>
+										<td><p>extends</p></td>
+										<td><p>false</p></td>
+										<td><p>finally</p></td>
+									</tr>
+									<tr>
+										<td><p>for</p></td>
+										<td><p>goto</p></td>
+										<td><p>if</p></td>
+										<td><p>implements</p></td>
+									</tr>
+									<tr>
+										<td><p>import</p></td>
+										<td><p>in</p></td>
+										<td><p>instanceof</p></td>
+										<td><p>interface</p></td>
+									</tr>
+									<tr>
+										<td><p>new</p></td>
+										<td><p>null</p></td>
+										<td><p>package</p></td>
+										<td><p>return</p></td>
+									</tr>
+									<tr>
+										<td><p>super</p></td>
+										<td><p>switch</p></td>
+										<td><p>this</p></td>
+										<td><p>throw</p></td>
+									</tr>
+									<tr>
+										<td><p>throws</p></td>
+										<td><p>true</p></td>
+										<td><p>try</p></td>
+										<td><p>while</p></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">3. 标识符</h5>
+							<p>
+								<b>普通标识符</b> -- 标识符以字母，美元符或下划线开头。不能以数字开头
+							</p>
+							<p>
+								<b>带引号的标识符</b> -- 带引号标识符出现在点号表达式的点号之后。 例如: person.name 表达式中 name
+								部分就可以引号引起来成为 person."name" 或 person.'name' 有趣的是，当某些标识符包含由 Java
+								语言规范中禁止的非法字符，引号引起来后在 Groovy 就会被容许。 例如，像一个破折号，空格，感叹号等字符。
+							</p>
+							<pre class="brush: groovy;">
+// 普通标识符
+def name
+def item3
+def with_underscore
+def $dollarStart
+
+// 带引号的标识符
+def map = [:]
+map."an identifier with a space and double quotes" = "ALLOWED"
+map.'with-dash-signs-and-single-quotes' = "ALLOWED"
+
+assert map."an identifier with a space and double quotes" == "ALLOWED"
+assert map.'with-dash-signs-and-single-quotes' == "ALLOWED"
+
+def firstname = "Homer"
+map."Simson-${firstname}" = "Homer Simson"
+assert map.'Simson-Homer' == "Homer Simson"
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">4. 字符串</h5>
+							<p></p>
+							字符以链的形式形成的文本被称作字符串。 Groovy 容许你实例化
+							<code>java.lang.String</code>
+							对象，以及在其他语言中被称作插值字符串（interpolated strings）的 GStrings (
+							<code>groovy.lang.GString</code>
+							).
+							<p>
+								<b>字符串汇总表</b>
+							</p>
+							<table class="table table-bordered table-responsive"">
+								<tbody>
+									<tr>
+										<td><p>字符串名</p></td>
+										<td><p>字符串语法</p></td>
+										<td><p>插值</p></td>
+										<td><p>多行</p></td>
+										<td><p>转义字符</p></td>
+									</tr>
+									<tr>
+
+										<td><p>单引号</p></td>
+										<td><p>
+												<code>'…'</code>
+											</p></td>
+										<td><p>
+												<span>否</span>
+											</p></td>
+										<td><p>
+												<span>否</span>
+											</p></td>
+										<td><p>
+												<code>\</code>
+											</p></td>
+									</tr>
+									<tr>
+										<td><p>三单引号</p></td>
+										<td><p>
+												<code>'''…'''</code>
+											</p></td>
+										<td><p>
+												<span>否</span>
+											</p></td>
+										<td><p>
+												<span>是</span>
+											</p></td>
+										<td><p>
+												<code>\</code>
+											</p></td>
+									</tr>
+
+									<tr>
+
+										<td><p>双引号</p></td>
+										<td><p>
+												<code>"…"</code>
+											</p></td>
+										<td><p>
+												<span>是</span>
+											</p></td>
+										<td><p>
+												<span>否</span>
+											</p></td>
+										<td><p>
+												<code>\</code>
+											</p></td>
+									</tr>
+
+									<tr>
+										<td><p>三双引号</p></td>
+										<td><p>
+												<code>"""…"""</code>
+											</p></td>
+										<td><p>
+												<span>是</span>
+											</p></td>
+										<td><p>
+												<span>是</span>
+											</p></td>
+										<td><p>
+												<code>\</code>
+											</p></td>
+									</tr>
+									<tr>
+										<td><p>斜杠</p></td>
+										<td><p>
+												<code>/…/</code>
+											</p></td>
+										<td><p>
+												<span>是</span>
+											</p></td>
+										<td><p>
+												<span>是</span>
+											</p></td>
+										<td><p>
+												<code>\</code>
+											</p></td>
+									</tr>
+
+									<tr>
+										<td><p>美元符斜杠</p></td>
+										<td><p>
+												<code>$/…/$</code>
+											</p></td>
+										<td><p>
+												<span>是</span>
+											</p></td>
+										<td><p>
+												<span>是</span>
+											</p></td>
+										<td><p>
+												<code>$</code>
+											</p></td>
+									</tr>
+								</tbody>
+							</table>
+							<pre class="brush: groovy;">
+// 单引号字符串, 单引号字符串是纯的 java.lang.String，同时不支持插值。 
+def firstname = "Homer"
+map."Simson-${firstname}" = "Homer Simson"
+assert map.'Simson-Homer' == "Homer Simson"
+
+// 字符串连接
+assert 'ab' == 'a' + 'b'
+
+// 三引号字符串, 三引号字符串是纯的java.lang.String，同时不支持插值。 三引号字符串可以是多行的。
+def aMultilineString = '''line one
+line two
+line three'''
+
+// 转义特殊字符串
+'an escaped single quote: \' needs a backslash'
+'an escaped escape character: \\ needs a double backslash'
+
+/** 双引号字符串, 
+ * 如果没有插值表示式的话，双引号字符串是纯的java.lang.String， 
+ * 但如果有插值存在的话，双引号字符串就是一个groovy.lang.GString实例。 
+ */
+"a double quoted string"
+
+/** 字符串插值, 除了单引号和三引号字符串,任何 Groovy 表达式都可以插值到所有的字符串里。 
+ * 插值就是当计算字符串的值时，用值替换掉字符串中的占位符。 占位符表达式是用 ${} 围起来的，或者以 $ 为前缀的点表达式。
+ */
+def name = 'Guillaume' // a plain string
+def greeting = "Hello ${name}"
+assert greeting.toString() == 'Hello Guillaume'
+
+// 如果没有异义，可以不使用 {}
+def person = [name: 'Guillaume', age: 36]
+assert "$person.name is $person.age years old" == 'Guillaume is 36 years old'
+
+/** 插值的特殊形式闭包表达式, 可以插任意值到${}占位符，但这里有一个特殊情况就是闭包表达式。 当
+ * 占位符包含一个箭头，${→},这个表达式事实上是一个闭包表达式 — 你可以把它看作是一个带有美元符前缀的闭包：
+ */
+def sParameterLessClosure = "1 + 2 == ${-> 3}" 
+assert sParameterLessClosure == '1 + 2 == 3'
+
+def sOneParamClosure = "1 + 2 == ${ w -> w &lt;&lt; 3}" 
+assert sOneParamClosure == '1 + 2 == 3'
+
+/** 斜杠字符串,除了通常的带引号的字符串，Groovy 提供斜杠字符串，它使用 / 作为分隔符。 
+ * 斜杠字符串在定义正则表达式和模式的时候非常有用，因为不必要反斜杠来转义。
+ */
+def fooPattern = /.*foo.*/
+assert fooPattern == '.*foo.*'
+
+def multilineSlashy = /one
+    two
+    three/
+assert multilineSlashy.contains('\n')
+
+/** 美元符斜杠字符串, 美元符斜杠字符串是以 $/ 开始和以 /$ 结束的多行的 GString。 
+ * 转义的字符是美元符号，美元符号可以转义其他美元符号，或者正斜杠。 但美元符和正斜杠不是一定要去转义， 
+ * 只要转义那些好像 GString 占位符那样以美元符开始的字符串， 或者那些以关闭美元斜杠字符串分割符号为开始的字符串。 
+ */
+def name = "Guillaume"
+def date = "April, 1st"
+def dollarSlashy = $/
+    Hello $name,
+    today we're ${date}.
+    $ dollar sign
+    $$ escaped dollar sign
+    \ backslash
+    / forward slash
+    $/ escaped forward slash
+    $/$ escaped dollar slashy string delimiter
+/$
+</pre>
+
+
+
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">5. 数字</h5>
+							<p>Groovy 支持不同种类整型和十进制文本，由 Java 的 Number 类型支持。</p>
+							<p>
+								如果你使用
+								<code>def</code>
+								关键字来定义可选的类型，那么整型数字的类型就是可变的： 它能自行适配到合适的类型，以便能持有那个数字。
+							</p>
+							<p>在 Java6 和之前，以及在 Groovy 中，数字可以用十进制，八进制和十六进制来表示， 而在 Java7 和
+								Groovy2，你可以使用带有 0b 前缀的二进制记数法：</p>
+							<pre class="brush: groovy;">
+int xInt = 0b10101111
+assert xInt == 175
+
+short xShort = 0b11001001
+assert xShort == 201 as short
+
+byte xByte = 0b11
+assert xByte == 3 as byte
+
+long xLong = 0b101101101101
+assert xLong == 2925l
+
+BigInteger xBigInteger = 0b111100100001
+assert xBigInteger == 3873g
+
+int xNegativeInt = -0b10101111
+assert xNegativeInt == -175
+</pre>
+							<p>
+								<b>在数字中的下划线</b>
+							</p>
+							<p>当在输入一个很长的数字是，是很难看清楚这些数字的，
+								通过容许在数字之间输入下划线来分组，这样可以更容易分清楚这些数字:</p>
+							<pre class="brush: groovy;">
+long creditCardNumber = 1234_5678_9012_3456L
+long socialSecurityNumbers = 999_99_9999L
+double monetaryAmount = 12_345_132.12
+long hexBytes = 0xFF_EC_DE_5E
+long hexWords = 0xFFEC_DE5E
+long maxLong = 0x7fff_ffff_ffff_ffffL
+long alsoMaxLong = 9_223_372_036_854_775_807L
+long bytes = 0b11010010_01101001_10010100_10010010
+</pre>
+							<p>
+								<b>算术运算结果</b>
+							</p>
+							<table class="table table-bordered table-responsive">
+
+								<colgroup>
+
+									<col style="width: 10%;">
+
+									<col style="width: 10%;">
+
+									<col style="width: 10%;">
+
+									<col style="width: 10%;">
+
+									<col style="width: 10%;">
+
+									<col style="width: 10%;">
+
+									<col style="width: 10%;">
+
+									<col style="width: 10%;">
+
+									<col style="width: 10%;">
+
+									<col style="width: 10%;">
+
+								</colgroup>
+
+								<thead>
+
+									<tr>
+
+										<th></th>
+
+										<th>byte</th>
+
+										<th>char</th>
+
+										<th>short</th>
+
+										<th>int</th>
+
+										<th>long</th>
+
+										<th>BigInteger</th>
+
+										<th>float</th>
+
+										<th>double</th>
+
+										<th>BigDecimal</th>
+
+									</tr>
+
+								</thead>
+
+								<tbody>
+
+									<tr>
+
+										<td><p>
+												<strong>byte</strong>
+											</p></td>
+
+										<td><p>int</p></td>
+
+										<td><p>int</p></td>
+
+										<td><p>int</p></td>
+
+										<td><p>int</p></td>
+
+										<td><p>long</p></td>
+
+										<td><p>BigInteger</p></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+									</tr>
+
+									<tr>
+
+										<td><p>
+												<strong>char</strong>
+											</p></td>
+
+										<td></td>
+
+										<td><p>int</p></td>
+
+										<td><p>int</p></td>
+
+										<td><p>int</p></td>
+
+										<td><p>long</p></td>
+
+										<td><p>BigInteger</p></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+									</tr>
+
+									<tr>
+
+										<td><p>
+												<strong>short</strong>
+											</p></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td><p>int</p></td>
+
+										<td><p>int</p></td>
+
+										<td><p>long</p></td>
+
+										<td><p>BigInteger</p></td>
+
+										<td><p>double</p></td> 列表
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+									</tr>
+
+									<tr>
+
+										<td><p>
+												<strong>int</strong>
+											</p></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td><p>int</p></td>
+
+										<td><p>long</p></td>
+
+										<td><p>BigInteger</p></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+									</tr>
+
+									<tr>
+
+										<td><p>
+												<strong>long</strong>
+											</p></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td><p>long</p></td>
+
+										<td><p>BigInteger</p></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+									</tr>
+
+									<tr>
+
+										<td><p>
+												<strong>BigInteger</strong>
+											</p></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td><p>BigInteger</p></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+									</tr>
+
+									<tr>
+
+										<td><p>
+												<strong>float</strong>
+											</p></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+									</tr>
+
+									<tr>
+
+										<td><p>
+												<strong>double</strong>
+											</p></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td><p>double</p></td>
+
+										<td><p>double</p></td>
+
+									</tr>
+
+									<tr>
+
+										<td><p>
+												<strong>BigDecimal</strong>
+											</p></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td></td>
+
+										<td><p>BigDecimal</p></td>
+
+									</tr>
+
+								</tbody>
+
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">6. 列表,数组和映射</h5>
+							<p>
+								<b>列表</b> -- Groovy 使用逗号分割列表的值，使用方括号括起，来表示列表。 Groovy列表是普通的JDK
+								<code>java.util.List</code>
+								，因为 Groovy 中没有定义自己的集合类。 在默认情况下，定义列表的实现具体类是
+								<code>java.util.ArrayList</code>
+								，除非你决定自己指定，正如我们将在后面看到的。
+							</p>
+							<pre class="brush: groovy;">
+def numbers = [1, 2, 3]         
+assert numbers instanceof List  
+assert numbers.size() == 3
+
+def heterogeneous = [1, "a", true]
+
+def arrayList = [1, 2, 3]
+assert arrayList instanceof java.util.ArrayList		// 使用 as 操作符强制要求一个 ArrayList 的实现 
+
+def linkedList = [2, 3, 4] as LinkedList    
+assert linkedList instanceof java.util.LinkedList	// 使用 as 操作符强制要求一个 LinkedList 的实现 
+
+LinkedList otherLinked = [3, 4, 5]          
+assert otherLinked instanceof java.util.LinkedList
+
+def letters = ['a', 'b', 'c', 'd']
+
+assert letters[0] == 'a'     
+assert letters[1] == 'b'
+
+assert letters[-1] == 'd'	// 用一个负数索引来访问最尾的元素：-1是从尾部算起的第一个元素
+assert letters[-2] == 'c'
+
+
+letters[2] = 'C'             
+assert letters[2] == 'C'
+
+letters &lt;&lt; 'e'        // 使用 &lt;&lt; 左移动操作符添加一个元素到列表的最后 
+
+assert letters[ 4] == 'e'
+assert letters[-1] == 'e'
+
+assert letters[1, 3] == ['b', 'd']			// 一次访问两个元素，返回一个包含这两个元素的新列表 
+assert letters[2..4] == ['C', 'd', 'e']		// 使用一个从开始到结束元素的位置的范围来访问列表的一个范围内的值。 
+</pre>
+							<p>
+								<b>数组</b> -- Groovy
+								中重用列表符号表示数组，但创建这样的文字数组，你需要通过强制或类型声明，明确地定义数组类型。<span
+									class="text-danger">Groovy 不支持 Java 的数组初始符号，而大括号可能被误解为
+									Groovy 闭包的符号。 </span>
+							</p>
+							<pre class="brush: groovy;">
+String[] arrStr = ['Ananas', 'Banana', 'Kiwi']  
+
+assert arrStr instanceof String[]		// 使用明确的变量类型声明定义一个字符串数组 
+assert !(arrStr instanceof List)		// 断言我们建立了一个字符串数字
+
+
+def numArr = [1, 2, 3] as int[]      
+assert numArr instanceof int[]       
+assert numArr.size() == 3
+</pre>
+							<p>
+								<b>映射</b> -- 在其他语言中有时也被称为字典或关联数组的特性在 Groovy 称为映射（maps）。
+								映射（maps）关联键到值，用冒号来分隔键到值，用逗号分割每对键值对，同时用方括号把整个键值包起来。 <span
+									class="text-danger">Groovy 建立的 maps 实际上是 <code>java.util.LinkedHashMap</code>
+									的实例。
+								</span>
+							</p>
+							<pre class="brush: groovy;">
+def colors = [red: '#FF0000', green: '#00FF00', blue: '#0000FF']   
+
+assert colors['red'] == '#FF0000'
+assert colors.green  == '#00FF00' 		// 也可以使用属性表示法来断言绿色的十六进制表示 
+
+colors['pink'] = '#FF00FF'           
+colors.yellow  = '#FFFF00'           
+
+assert colors.pink == '#FF00FF'
+assert colors['yellow'] == '#FFFF00'
+
+assert colors instanceof java.util.LinkedHashMap
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="groovy-operator"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">操作符</h3>
+					</div>
+					<div class="panel-body">
+						<p>Groovy 支持在数学和其他编程语言如 Java 中常见的算术运算符.Java 中所有的算术运算符都能够被支持.</p>
+						<p>Groovy 支持运算符重载，各种运算符被映射到普通的 Java
+							对象的方法调用，这就使得开发者可以利用运算符重载的优势来编写自己的Java或者 Groovy 对象。</p>
+						<div class="sub-item">
+							<h5 class="text-primary">操作符重载</h5>
+							<pre class="brush: groovy;">
+class Bucket {
+    int size
+
+    Bucket(int size) { this.size = size }
+
+    Bucket plus(Bucket other) {                     
+        return new Bucket(this.size + other.size)
+    }
+}
+
+def b1 = new Bucket(4)
+def b2 = new Bucket(11)
+assert (b1 + b2).size == 15
+</pre>
+							<p>
+								<b>下表是各个操作符的函数名称:</b>
+							</p>
+							<table class="table table-bordered table-responsive">
+								<thead>
+									<tr>
+										<th style="text-align: center">操作符</th>
+										<th>方法</th>
+										<th style="text-align: left">操作符</th>
+										<th>方法</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><p>
+												<code>+</code>
+											</p></td>
+										<td><p>a.plus(b)</p></td>
+										<td><p>
+												<code>a[b]</code>
+											</p></td>
+										<td><p>a.getAt(b)</p></td>
+									</tr>
+									<tr>
+										<td><p>
+												<code>-</code>
+											</p></td>
+										<td><p>a.minus(b)</p></td>
+										<td><p>
+												<code>a[b] = c</code>
+											</p></td>
+										<td><p>a.putAt(b, c)</p></td>
+									</tr>
+									<tr>
+										<td><p>
+												<code>*</code>
+											</p></td>
+										<td><p>a.multiply(b)</p></td>
+										<td><p>
+												<code>a in b</code>
+											</p></td>
+										<td><p>b.isCase(a)</p></td>
+									</tr>
+									<tr>
+										<td><p>
+												<code>/</code>
+											</p></td>
+										<td><p>a.div(b)</p></td>
+										<td><p>
+												<code>&lt;&lt;</code>
+											</p></td>
+										<td><p>a.leftShift(b)</p></td>
+									</tr>
+									<tr>
+										<td><p>
+												<code>%</code>
+											</p></td>
+										<td><p>a.mod(b)</p></td>
+										<td><p>
+												<code>&gt;&gt;</code>
+											</p></td>
+										<td><p>a.rightShift(b)</p></td>
+									</tr>
+									<tr>
+										<td><p>
+												<code>**</code>
+											</p></td>
+										<td><p>a.power(b)</p></td>
+										<td><p>
+												<code>&gt;&gt;&gt;</code>
+											</p></td>
+										<td><p>a.rightShiftUnsigned(b)</p></td>
+									</tr>
+									<tr>
+										<td><p>
+												<code>|</code>
+											</p></td>
+										<td><p>a.or(b)</p></td>
+										<td><p>
+												<code>++</code>
+											</p></td>
+										<td><p>a.next()</p></td>
+									</tr>
+									<tr>
+										<td><p>
+												<code>&amp;</code>
+											</p></td>
+										<td><p>a.and(b)</p></td>
+										<td><p>
+												<code>--</code>
+											</p></td>
+										<td><p>a.previous()</p></td>
+									</tr>
+									<tr>
+										<td><p>
+												<code>^</code>
+											</p></td>
+										<td><p>a.xor(b)</p></td>
+										<td><p>
+												<code>+a</code>
+											</p></td>
+										<td><p>a.positive()</p></td>
+									</tr>
+									<tr>
+										<td><p>
+												<code>as</code>
+											</p></td>
+										<td><p>a.asType(b)</p></td>
+										<td><p>
+												<code>-a</code>
+											</p></td>
+										<td><p>a.negative()</p></td>
+									</tr>
+									<tr>
+										<td><p>
+												<code>a()</code>
+											</p></td>
+										<td><p>a.call()</p></td>
+										<td><p>
+												<code>~a</code>
+											</p></td>
+										<td><p>a.bitwiseNegate()</p></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">1. 数学运算符</h5>
+
+							<p>
+								<b>1.1 常用数学运算符</b>
+							</p>
+							<table class="table table-bordered table-responsive">
+								<thead>
+									<tr>
+										<th>Operator</th>
+										<th>Purpose</th>
+										<th>Remarks</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>+</td>
+										<td>加</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>-</td>
+										<td>减</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>*</td>
+										<td>乘</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>/</td>
+										<td>除</td>
+										<td>整除使用 <code>intdiv()</code> 方法
+										</td>
+									</tr>
+									<tr>
+										<td>%</td>
+										<td>求余</td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>**</td>
+										<td>乘方</td>
+									</tr>
+								</tbody>
+							</table>
+							<pre class="brush: groovy;">
+assert  1  + 2 == 3
+assert  4  - 3 == 1
+assert  3  * 5 == 15
+assert  3  / 2 == 1.5
+assert 10  % 3 == 1
+assert  2 ** 3 == 8
+
+assert +3 == 3
+assert -4 == 0 - 4
+assert -(-1) == 1
+
+def a = 2
+def b = a++ * 3             
+
+assert a == 3 && b == 6
+
+def c = 3
+def d = c-- * 2             
+
+assert c == 2 && d == 6
+
+def e = 1
+def f = ++e + 3             
+
+assert e == 2 && f == 5
+
+def g = 4
+def h = --g + 1             
+
+assert g == 3 && h == 4
+
+def a = 4
+a += 3
+
+assert a == 7
+
+def b = 5
+b -= 3
+
+assert b == 2
+
+def c = 5
+c *= 3
+
+assert c == 15
+
+def d = 10
+d /= 2
+
+assert d == 5
+
+def e = 10
+e %= 3
+
+assert e == 1
+
+def f = 3
+f **= 2
+
+assert f == 9							
+</pre>
+
+							<p>
+								<b>1.2 关系运算符</b>
+							</p>
+							<table class="table table-bordered table-responsive">
+								<thead>
+									<tr>
+										<th>运算符</th>
+										<th>用途</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td><code>==</code></td>
+										<td>相等</td>
+									</tr>
+									<tr>
+										<td><code>!=</code></td>
+										<td>不等</td>
+									</tr>
+									<tr>
+										<td><code>&lt;</code></td>
+										<td>小于</td>
+									</tr>
+									<tr>
+										<td><code>&lt;=</code></td>
+										<td>小于等于</td>
+									</tr>
+									<tr>
+										<td><code>&gt;</code></td>
+										<td>大于</td>
+									</tr>
+									<tr>
+										<td><code>&gt;=</code></td>
+										<td>大于等于</td>
+									</tr>
+								</tbody>
+							</table>
+
+							<p>
+								<b>1.3 逻辑运算符</b>
+							</p>
+							<pre class="brush: groovy;">
+assert !false           
+assert true && true     
+assert true || false
+</pre>
+
+							<p>
+								<b>1.4 位运算符</b>
+							</p>
+							<pre class="brush: groovy;">
+int a = 0b00101010
+assert a==42
+int b = 0b00001000
+assert b==8
+assert (a & a) == a                     
+assert (a & b) == b                     
+assert (a | a) == a                     
+assert (a | b) == a                     
+
+int mask = 0b11111111                   
+assert ((a ^ a) & mask) == 0b00000000   
+assert ((a ^ b) & mask) == 0b00100010   
+assert ((~a) & mask)    == 0b11010101
+</pre>
+
+							<p>
+								<b>1.5 条件运算符</b>
+							</p>
+							<pre class="brush: groovy;">
+assert (!true)    == false                      
+assert (!'foo')   == false                      
+assert (!'')      == true
+</pre>
+
+							<p>
+								<b>1.6 三元表达式</b>
+							</p>
+							<pre class="brush: groovy;">
+if (string != null && string.length() > 0) {
+    result = 'Found'
+} else {
+    result = 'Not found'
+}
+
+// 等价于 ==>
+result = (string!=null && string.length()>0) ? 'Found' : 'Not found'
+
+// 考虑到 Groovy 的真值表，可以进一步简化为 ==>
+result = string ? 'Found' : 'Not found'
+
+// 进一步简化 ==> 
+name = name ?: "Anonymous"
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">2. 对象运算符</h5>
+							<p>
+								<b>2.1 空对象安全引用运算符</b>
+							</p>
+							<p>引用空对象会抛出 NullPointerException 异常。安全引用运算符会避免抛出这个异常，仅仅返回
+								null 值</p>
+							<pre class="brush: groovy;">
+class Person{
+    int id;
+    String name;
+}
+
+def p = null
+println(p?.id + "==" + p?.name)		// 此处不会报空指针
+
+</pre>
+							<p>
+								<b>2.2 直接字段访问操作符</b>
+							</p>
+							<p>直接字段访问 .@ 可以跳过 getXXX 方法，直接获得字段的值</p>
+							<pre class="brush: groovy;">
+class User {
+    public final String name                 
+    User(String name) { this.name = name}
+    String getName() { "Name: $name" }       
+}
+
+def user = new User('Bob')
+assert user.name == 'Name: Bob'
+
+// 相当于 user.getName()
+assert user.@name == 'Bob'
+</pre>
+
+							<p>
+								<b>2.3 方法指针操作符</b>
+							</p>
+							<p>方法指针 (.&) 操作符可以获取一个方法指针，后面再调用这个指针</p>
+							<pre class="brush: groovy;">
+def str = 'example of method reference'            
+def fun = str.&toUpperCase                         
+def upper = fun()                                  
+assert upper == str.toUpperCase()
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">3. 正则表达式运算符</h5>
+							<p>
+								<b>3.1 模式运算符</b>
+							</p>
+							<p>模式运算符 (~) 创建一个 java.util.regex.Pattern 对象</p>
+							<pre class="brush: groovy;">
+def p = ~/foo/
+assert p instanceof Pattern
+
+// 其实不一定非要用斜杠创建模式，其他类型的字符串也可以充当模式
+p = ~'foo'                                                        
+p = ~"foo"                                                        
+p = ~$/dollar/slashy $ string/$                                   
+p = ~"${pattern}"
+</pre>
+							<p>
+								<b>3.2 匹配对象操作符</b>
+							</p>
+							<p>匹配对象操作符 =~ 直接创建一个 java.util.regex.Matcher 对象</p>
+							<pre class="brush: groovy;">
+def text = "some text to match"
+def m = text =~ /match/                  
+assert m instanceof Matcher                                       
+if (!m) {                                                         
+    throw new RuntimeException("Oops, text not found!")
+}
+</pre>
+							<p>
+								<b>3.3 直接匹配操作符</b>
+							</p>
+							<p>直接匹配操作符 (==~) 直接返回一个 boolean 值</p>
+							<pre class="brush: groovy;">
+m = text ==~ /match/                                              
+assert m instanceof Boolean                                       
+if (m) {                                                          
+    throw new RuntimeException("Should not reach that point!")
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">4. 其他操作符</h5>
+							<p>
+								<b>4.1 扩展操作符</b>
+							</p>
+							<p>将“对象列表”转换成“对象属性的列表”。有点像 Python 的列表生成</p>
+							<pre class="brush: groovy;">
+class Car {
+    String make
+    String model
+}
+
+def cars = [
+       new Car(make: 'Peugeot', model: '508'),
+       new Car(make: 'Renault', model: 'Clio')]  
+
+def makes = cars*.make                                
+assert makes == ['Peugeot', 'Renault']
+</pre>
+
+							<p>
+								<b>4.2 解包方法参数</b>
+							</p>
+							<pre class="brush: groovy;">
+int function(int x, int y, int z) {
+    x * y + z
+}
+
+def args = [4,5,6]
+assert function(*args) == 26
+</pre>
+
+							<p>
+								<b>4.3 解包列表元素</b>
+							</p>
+							<pre class="brush: groovy;">
+def items = [4,5]                      
+def list = [1,2,3,*items,6]            
+assert list == [1,2,3,4,5,6]
+</pre>
+
+							<p>
+								<b>4.4 解包键值对</b>
+							</p>
+							<pre class="brush: groovy;">
+def m1 = [c:3, d:4]                   
+def map = [a:1, b:2, *:m1]            
+assert map == [a:1, b:2, c:3, d:4]
+</pre>
+
+							<p>
+								<b>4.5 范围操作符</b>
+							</p>
+							<p>范围操作符 (..) 创建一个 groovy.lang.Range 对象，这个类型同时实现了 List 接口</p>
+							<pre class="brush: groovy;">
+def range = 0..5                                    
+assert (0..5).collect() == [0, 1, 2, 3, 4, 5]       
+assert (0..<5).collect() == [0, 1, 2, 3, 4]         
+assert (0..5) instanceof List                       
+assert (0..5).size() == 6
+</pre>
+
+							<p>
+								<b>4.6 比较操作符</b>
+							</p>
+							<p>比较操作符 (&lt;=&gt;) 其实就是 compareTo 方法</p>
+							<pre class="brush: groovy;">
+assert (1 &lt;=> 1) == 0
+assert (1 &lt;=> 2) == -1
+assert (2 &lt;=> 1) == 1
+assert ('a' &lt;=> 'z') == -1
+</pre>
+
+							<p>
+								<b>4.7 索引操作符</b>
+							</p>
+							<p>索引操作符本质上是调用 getAt 和 putAt 方法，可以切片获取或者切片赋值</p>
+							<pre class="brush: groovy;">
+def list = [0,1,2,3,4]
+assert list[2] == 2                         
+list[2] = 4                                 
+assert list[0..2] == [0,1,4]                
+list[0..2] = [6,6,6]                        
+assert list == [6,6,6,3,4]
+</pre>
+
+							<p>
+								<b>4.8 成员操作符</b>
+							</p>
+							<p>成员操作符 (in) 相当于调用了列表的 contains 方法或者 isCase 方法</p>
+							<pre class="brush: groovy;">
+def list = ['Grace','Rob','Emmy']
+assert ('Emmy' in list)
+</pre>
+
+							<p>
+								<b>4.9 同一操作符</b>
+							</p>
+							<p>在 Groovy 中， == 仅仅检测值是否相同，如果想检测是否是同一个对象，使用 is 操作符</p>
+							<pre class="brush: groovy;">
+def list1 = ['Groovy 1.8','Groovy 2.0','Groovy 2.3']        
+def list2 = ['Groovy 1.8','Groovy 2.0','Groovy 2.3']        
+assert list1 == list2                                       
+assert !list1.is(list2)
+</pre>
+
+							<p>
+								<b>4.10 类型转换操作符</b>
+							</p>
+							<p>转型操作符 (as) 可以转换一些不兼容变量的类型，例如下面的转换会抛出异常</p>
+							<pre class="brush: groovy;">
+Integer x = 123
+String s = (String) x
+
+// ==>
+Integer x = 123
+String s = x as String
+</pre>
+
+							<p>
+								<b>4.11 调用操作符</b>
+							</p>
+							<p>调用操作符 () 隐式调用 call 方法。可以重写 call 实现一些自定义的行为，然后用调用操作符调用</p>
+							<pre class="brush: groovy;">
+class MyCallable {
+    int call(int x) {           
+        2 * x
+    }
+}
+
+def mc = new MyCallable()
+assert mc.call(2) == 4
+assert mc(2) == 4
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="groovy-structure"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">程序结构</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">1. 包名</h5>
+							<p>Groovy 的包名同 Java
+								中的包名发挥着同样的角色。包名允许我们分隔代码从而避免冲突。Groovy类必须在定义之前指定他们的包,并且假设默认的包名存在。
+							</p>
+							<pre class="brush: groovy;">package com.yoursite</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">2. 导包</h5>
+							<p>为了引用任意一个类,而不需要包名。Groovy 遵从了 Java 的方式允许使用 import 声明来解决类的导入。</p>
+							<pre class="brush: groovy;">
+import groovy.xml.MarkupBuilder
+
+// using the imported class to create an object
+def xml = new MarkupBuilder()
+
+assert xml != null						
+	
+// Groovy 中默认导入如下包
+import java.lang.*
+import java.util.*
+import java.io.*
+import java.net.*
+import groovy.lang.*
+import groovy.util.*
+import java.math.BigInteger
+import java.math.BigDecimal
+
+// Groovy 支持静态导包别名
+import static Calendar.getInstance as now
+assert now().class == Calendar.getInstance().class
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">3. 脚本 vs 类</h5>
+							<p>Groovy 同时支持 class 和script(即类和脚本)。使用一下代码作为例子:</p>
+							<pre class="brush: groovy;">
+// 定义一个 Main 类,名字是任意的        
+class Main {                      
+	static void main(String... args) {          
+	    println 'Groovy world!'                 
+	}
+}
+
+// 等价于 ==>
+println 'Groovy world!'
+
+// 脚本总是会被编译成类。Groovy 编译器会为你编译这个类,会把脚本体复制进 run 方法。上面的例子会被编译如下: 
+import org.codehaus.groovy.runtime.InvokerHelper
+
+class Main extends Script { //Main类继承了groovy.lang.Script类
+	// groovy.lang.Script 需要 run 方法返回一个值
+    def run() {                             
+        println 'Groovy world!'                 
+    }
+    
+    // 自动生成
+    static void main(String[] args) {       
+        InvokerHelper.runScript(Main, args) 
+    }
+}
+
+</pre>
+							<p>定义方法在脚本中是可以的,如下:</p>
+							<pre class="brush: groovy;">
+println 'Hello'					// 脚步开始处                               
+int power(int n) {				// 一个没有脚本体的方法            
+	2**n 
+}       
+println "2^6==${power(6)}"		// 脚本 
+
+// 面的例子会被编译如下: ==>
+import org.codehaus.groovy.runtime.InvokerHelper
+
+class Main extends Script {
+	// power 方法被复制进了自动生成的脚本类里面            
+    int power(int n) { 
+    	2 ** n
+    }
+    
+    def run() {
+        println 'Hello'      //脚本被复制到了这里面                   
+        println "2^6==${power(6)}"              
+    }
+    
+    static void main(String[] args) {
+        InvokerHelper.runScript(Main, args)
+    }
+}
+</pre>
+							<p>变量 -- 变量在脚本中不需要类型声明。然而,二者之间在语义学上是不同的,表现如下:</p>
+							<ul>
+								<li>
+									如果声明变量如同第一个例子,它是本地变量。将会被声明在run方法,在脚本外部不可用。特别的,这种变量在脚本的其他方法中不可见。
+								</li>
+								<li>
+									如果变量没有被声明,变量会被绑定到脚本。并且对其他方法可见,你使用脚本与其他程序交互需要传递数据在脚本和程序之间,这种声明是非常有用的。
+								</li>
+							</ul>
+							<pre class="brush: groovy;">
+int x = 1
+int y = 2
+assert x+y == 3
+
+// 等同于: ==>
+x = 1
+y = 2
+assert x+y == 3
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="groovy-object"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">面向对象</h3>
+					</div>
+					<div class="panel-body">
+						<p>Groovy 类不同于 Java 的一些关键部分:</p>
+						<ul>
+							<li>Public 字段自动转化成了属性,这就减少了冗余代码,不需要大量的 getter 和 setter
+								方法.更多关于这方面的内容,将会在字段和属性部分刊出;</li>
+							<li>它们的声明和属性或者方法不需要 public 修饰也可以访问;</li>
+							<li>文件名不需要和类型一致;</li>
+							<li>一个文件可能会包含一个或多个类(如果一个文件中不包含类,将会被认为是一个脚本)。</li>
 						</ul>
 					</div>
 				</div>
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="groovy-docs"></a>
+				<a class="offset" id="groovy-closure"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">Groovy 文档</h3>
+						<h3 class="panel-title">闭包</h3>
 					</div>
 					<div class="panel-body">
-						<p><a href="docs/asciidoc/html5/index.html" target="_blank">Groovy Language Documentation</a></p>
-						<p><a href="docs/groovydoc/index.html" target="_blank">groovy doc</a></p>
-						<p><a href="docs/javadoc/index.html" target="_blank">java doc</a></p>
+						<p>所谓闭包，是指一段开放的、匿名的代码块，它可以拥有参数、返回值或者直接被赋值给一个变量使用。与其他常见的闭包不同，Groovy
+							中的 Closure 不但可以引用在其内部作用域中声明的变量，而且也可以包含任何在其作用域之外定义的变量。</p>
+						<div class="sub-item">
+							<pre class="brush: groovy;">
+{ [closureParameters -> ] statements }
+// 其中，[closureParameters->] 表示可选参数列表，多个参数之间由 , 分隔；
+// statements 是指 Groovy 语句。闭包的参数列表与方法的参数列表相似，可以给每个参数指定具体的类型，也可以不用指定。
+
+1. { item++ }  									// 引用了一个名叫item的变量的闭包
+2. { -> item++ }								   // 通过增加一个箭头符号->可以从闭包代码中显示的区分参数
+3. { println it }								// 使用了隐式参数 it 的闭包
+4. { it -> println it }							// 使用了显式参数 it 的闭包
+5. { name -> println name }						// 在使用闭包时最好为每个参数显式地命名
+6. { String x, int y ->							// 接受了两个有类型的参数的闭包
+		println "hey ${x} the value is ${y}"
+	}
+7. { reader -> 									// 一个闭包可以包含多条语句
+		def line = reader.readLine()
+		line.trim()
+	}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>把闭包当做一个对象</b> -- 尽管闭包是一段代码块，但它本质上是
+								<code>groovy.lang.Closure</code>
+								类的一个实例，因此可以将它像其他变量一样赋给另一个变量或字段。
+							</p>
+							<pre class="brush: groovy;">
+// 可以将一个闭包赋给一个变量，因为闭包是groovy.lang.Closure类的实例
+def listener = { e -> println "clicked on $e.source" }
+	assert listener instance Closure
+	
+// 如果不使用 def 的话，可以将一个闭包赋给一个类型为 groovy.lang.Closure 的变量
+Closure callback = { println 'Done!' }
+
+//  你还可以视情况而定，利用 groovy.lang.Closure 的泛型类型为闭包指定返回值
+Closure&lt;Boolean&gt; isTextFile = {
+	File it -> it.name.endsWith('.txt')
+}
+</pre>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="groovy-intro"></a>
+				<a class="offset" id="groovy-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">简介</h3>
-					</div>
-					<div class="panel-body"></div>
-				</div>
-				<!-- item over -->
-
-				<!-- item start -->
-				<a class="offset" id="groovy-intro"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">简介</h3>
-					</div>
-					<div class="panel-body"></div>
-				</div>
-				<!-- item over -->
-
-				<!-- item start -->
-				<a class="offset" id="groovy-intro"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">简介</h3>
+						<h3 class="panel-title"></h3>
 					</div>
 					<div class="panel-body"></div>
 				</div>
@@ -177,7 +1939,9 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
