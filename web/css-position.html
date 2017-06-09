@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="keywords" content="key1, key2" />
+<meta name="description" content=””>
+<meta name="author" content="nate">
+<meta name="author" content="nate &lt;jiwanger@126.com&gt;">
+<link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
+<link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="css-position/normalize.css" rel="stylesheet">
+<link href="css-position/test.css" rel="stylesheet">
+<title>NATE--笔记--测试</title>
+</head>
+<body>
+	<div class="container">
+		<div class="top">
+			<div>CSS 定位属性实战</div>
+		</div>
+
+		<!-- content start -->
+		<div class="content">
+			<!-- left start -->
+			<div class="left">
+				<ul>
+					<li class="active">
+						<a target="#static">position -- static</a>
+					</li>
+					<li>
+						<a target="#absolute">position -- absolute</a>
+					</li>
+					<li>
+						<a target="#fixed">position -- fixed</a>
+					</li>
+					<li>
+						<a target="#relative">position -- relative</a>
+					</li>
+					<li>
+						<a target="#inherit">position -- inherit</a>
+					</li>
+					<li>
+						<a target="#display">display</a>
+					</li>
+					<li>
+						<a target="#float">float | clear</a>
+					</li>
+				</ul>
+			</div>
+			<!-- left over -->
+
+			<!-- right start -->
+			<div class="right">
+				<!-- item start -->
+				<div id="static">
+					<div class="position-relative">
+						<div class="position-static">
+							<div class="static cl-01">
+								static -- 01
+								<p>01 和 02 为 两个 block 的 div 元素。</p>
+							</div>
+							<div class="static cl-02">
+								static -- 02
+								<p>01 和 02 为 两个 block 的 div 元素。</p>
+							</div>
+							<div>
+								<div class="static inline-block cl-03">
+									static -- 03
+									<p>03 和 04 为 两个 inline-block 的 div 元素。</p>
+								</div>
+								<div class="static inline-block cl-04">
+									static -- 04
+									<p>03 和 04 为 两个 inline-block 的 div 元素。</p>
+								</div>
+							</div>
+						</div>
+						<div class="description">
+							<div>
+								<b>静态布局测试</b>
+							</div>
+							<div>
+								<p>1. 默认值。没有定位，元素出现在正常的流中；</p>
+								<p>2. 忽略 top, bottom, left, right 或者 z-index 声明。</p>
+								<p>
+									<b>实例：</b>
+								</p>
+								<p>1. 01 和 02 为块级元素，各占一行；</p>
+								<p>2. 03 和 04 为行内块级元素，只占一行。</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<div id="absolute">
+					<div class="relative">
+						<div class="absolute abs-01 cl-01">
+							absolute -- 01
+							<p>01, 02 和 03 的父元素为 relative, 01 有一个： top: 40px; 的样式。</p>
+						</div>
+						<div class="absolute abs-02 cl-02">
+							absolute -- 02
+							<p>01, 02 和 03 的父元素为 relative, 02 有一个： left: 100px; 的样式。</p>
+						</div>
+						<div class="absolute abs-03 cl-03">
+							absolute -- 03
+							<p>01, 02 和 03 的父元素为 relative, 03 有一个： left: 100px;z-index:
+								0;top: 80px; 的样式。</p>
+						</div>
+						<div class="description">
+							<div>
+								<b>绝对布局测试</b>
+							</div>
+							<div>
+								<p>1. 生成绝对定位的元素，相对于 static 定位以外的第一个父元素进行定位；</p>
+								<p>2. 元素的位置通过 left, top, right, bottom 以及 z-index 属性进行规定。</p>
+								<p>
+									<b>实例：</b>
+								</p>
+								<p>1. 01 02 和 03 的父元素为 relative，因此其定位相对于它们的父元素；</p>
+								<p>2. 01 02 和 03 为 absolute 布局。在上层，层级顺序和位置有关；</p>
+								<p>3. 01 和 02 的 z-index 为 １。在上层，层级顺序和位置有关；</p>
+								<p>4. 03 的 z-index 为 0，因此在下面。</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<div id="fixed">
+					<div class="position-relative">
+						<div class="position-static" style="margin-bottom: 500px;">
+							<div class="static cl-01">
+								static -- 01
+								<p>此为静态布局，用来作参照。</p>
+							</div>
+
+							<div class="fixed cl-02">
+								fixed -- 02
+								<p>此为绝对定位(浏览器)，页面滚动时，相对浏览器位置不变。</p>
+							</div>
+
+							<div>
+								<div class="static inline-block cl-03">
+									static -- 03
+									<p>因为前面的 02 为 fixed 布局，不占空间，此块被挡住。</p>
+								</div>
+								<div class="fixed inline-block cl-04">
+									fixed -- 04
+									<p>03 和 04 本来在一起的，但是 04 为 fixed。</p>
+								</div>
+							</div>
+						</div>
+						<div class="description">
+							<div>
+								<b>绝对定位(浏览器)测试</b>
+							</div>
+							<div>
+								<p>1. 生成绝对定位的元素，相对于浏览器窗口进行定位；</p>
+								<p>2. 元素的位置通过 left, top, right, bottom 以及 z-index 属性进行规定；</p>
+								<p>3. 如果不指定如上属性，其初始位置为正常流位置，但不占空间，浏览器滚动时，其相对浏览器位置不变。</p>
+								<p>
+									<b>实例：</b>
+								</p>
+								<p>1. 01 为 static 布局；</p>
+								<p>2. 02 为 fixed 布局；</p>
+								<p>3. 03 为 static 布局，但和 04 为 inline-block 元素，同在一行内；</p>
+								<p>4. 04 为 fixed 布局，但和 03 为 inline-block 元素，同在一行内。</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<div id="relative">
+					<div class="position-relative">
+						<div class="position-static">
+							<div class="static cl-01">
+								static -- 01
+								<p>此为静态布局，用来作参照。</p>
+							</div>
+
+							<div>
+								<div class="rel inline-block cl-02">
+									relative -- 02
+									<p>相对正常定位有一个 left: 20px; 的属性。</p>
+								</div>
+								<div class="static inline-block cl-03"
+									style="text-align: right;">
+									static -- 03
+									<p>02 左边有 20px 偏移，此块有 20px 被挡住。</p>
+								</div>
+							</div>
+						</div>
+						<div class="description">
+							<div>
+								<b>相对布局测试</b>
+							</div>
+							<div>
+								<p>1. 生成相对定位的元素，相对于其正常位置进行定位；</p>
+								<p>2. 使用 top, bottom, left, right 或者 z-index 声明其位置。</p>
+								<p>
+									<b>实例：</b>
+								</p>
+								<p>1. 01 和 03 为静态布局，用作参考；</p>
+								<p>2. 02 为 relative 布局，左边的 20px 偏移，此偏移挡住 03 块 20 px。</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<div id="inherit">
+					<div class="position-relative">
+						<div class="position-static">
+							<div class="static cl-01">
+								static -- 01
+								<p>此为静态布局，用来作参照。</p>
+							</div>
+							<div class="position-relative">
+								<div class="static inline-block cl-02"
+									style="position: inherit; left: 20px;">
+									inherit -- 02
+									<p>相对正常定位有一个 left: 20px; 的属性。</p>
+								</div>
+								<div class="static inline-block cl-03"
+									style="text-align: right;">
+									static -- 03
+									<p>02 左边有 20px 偏移，此块有 20px 被挡住。</p>
+								</div>
+							</div>
+						</div>
+						<div class="description">
+							<div>
+								<b>定位继承测试</b>
+							</div>
+							<div>
+								<p>1. 规定应该从父元素继承 position 属性的值。</p>
+								<p>
+									<b>实例：</b>
+								</p>
+								<p>1. 01 和 03 使用静态布局；</p>
+								<p>2. 02 外部样式为 static, 但是行内样式指定了 inherit, 它使用了父元素的 relative
+									布局，因此最终为 relative 的布局。</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<div id="display">
+					<div class="position-relative">
+						<div class="position-static">
+							<div class="static cl-01">
+								block -- 01
+								<p>此为 block 布局，占一行。</p>
+							</div>
+							<div class="inline-block">
+								<div class="static inline-block cl-02">
+									inline-block -- 02
+									<p>此为 inline-block，父元素也为 inline-block。</p>
+								</div>
+								<div class="static inline-block cl-03">
+									inline-block -- 03
+									<p>此为 inline-block，父元素也为 inline-block。</p>
+								</div>
+							</div>
+							<div>
+								<div class="inline cl-06">
+									inline -- 04<br> 此为 inline，父元素为 block，不支持宽和高的设置。
+								</div>
+							</div>
+						</div>
+						<div class="description">
+							<div>
+								<b>display 测试</b>
+							</div>
+							<div>
+								<p>1. block -- 不设置宽度时，宽度为父元素宽度；独占一行；支持宽高；</p>
+								<p>2. inline-block -- 不设置宽度时，内容撑开宽度；非独占一行；支持宽高；代码换行被解析成空格；</p>
+								<p>3. inline -- 内容撑开宽度；非独占一行；不支持宽高；代码换行被解析成空格；</p>
+								<p>4. none -- 隐藏元素并脱离文档流；</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<div id="float">
+					<div class="position-relative">
+						<div class="position-static">
+							<div class="static cl-01">
+								static -- 01
+								<p>此为静态布局，用来作参照。</p>
+							</div>
+							<div style="width: 700px;">
+								<div class="float fl-left cl-02">
+									float -- 02
+									<p>此为左浮动布局。</p>
+								</div>
+								<div class="float fl-right cl-03">
+									float -- 03
+									<p>此为右浮动布局。此元素后有一个 clear: both, 用来清除浮动，撑开此内容。</p>
+								</div>
+								<div style="clear: both;"></div>
+							</div>
+							<div class="cl-09" style="width: 280px;font-size: 12px;padding: 10px;height: 60px;">
+								<span style="float: left; font-size: 2.0em;color: white;padding-right: 10px;">在</span>此的段落中, 第一个字嵌入在 span 元素中。 这个 span 元素的宽度是当前字体大小的 2 倍，并且为左浮动，文字浮动在此元素周围。 
+							</div>
+						</div>
+						<div class="description">
+							<div>
+								<b>float 测试</b>
+							</div>
+							<div>
+								<p>1. 指定一个盒子（元素）是否应该浮动。</p>
+								<p>2. 绝对定位的元素忽略float属性！</p>
+								<p>3. 一个浮动元素会尽量向左或向右移动，直到它的外边缘碰到包含框或另一个浮动框的边框为止。</p>
+								<p>4. 浮动元素之后的元素将围绕它, 浮动元素之前的元素将不会受到影响。</p>
+								<p>5. clear 元素用来指定不允许元素周围有浮动元素。</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<div id="">
+					<div class="position-relative">
+						<div class="position-static">
+							<div class="static cl-01">
+								static -- 01
+								<p>此为静态布局，用来作参照。</p>
+							</div>
+						</div>
+						<div class="description">
+							<div>
+								<b> 测试</b>
+							</div>
+							<div>
+								<p>1.</p>
+								<p>
+									<b>实例：</b>
+								</p>
+								<p>1.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+			</div>
+			<!-- right over -->
+		</div>
+		<!-- content over -->
+	</div>
+
+	<script src="../support/jquery/jquery-3.1.1.min.js"></script>
+	<script src="../support/my-tools/ruler.js"></script>
+	<script src="css-position/test.js"></script>
+</body>
+</html>
