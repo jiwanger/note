@@ -429,6 +429,7 @@ new File(baseDir,'file.txt').withInputStream { stream ->
 }
 </pre>
 						</div>
+
 						<div class="sub-item">
 							<p>
 								<b>1.2 写文件</b> -- 参阅
@@ -498,6 +499,7 @@ dir.eachFileRecurse(FileType.FILES) { file ->
 }
 </pre>
 						</div>
+
 						<div class="sub-item">
 							<p>
 								<b>1.4 数据和对象</b> -- 在 Java 里，使用
@@ -574,52 +576,483 @@ process.in.eachLine { line ->
 
 						<div class="sub-item">
 							<p>
-								<b>2.1 List</b>
+								<b>2.1 List -- 每一个 list 表达式都是 <code>java.util.ArrayList</code>
+									的一个实现。
+								</b>
 							</p>
 							<pre class="brush: groovy;">
+def list = [5, 6, 7, 8]
+
+assert list.get(2) == 7
+assert list[2] == 7
+assert list instanceof java.util.List			// is a java.util.List
+assert list instanceof java.util.ArrayList		// is a java.util.ArrayList
+
+def emptyList = []
+assert emptyList.size() == 0
+emptyList.add(5)
+assert emptyList.size() == 1
+
+def list1 = ['a', 'b', 'c']
+def list2 = new ArrayList(list1)
+
+assert list2 == list1
+def list3 = list1.clone()
+assert list3 == list1
+
+// 构造一个新的 List
+def list1 = ['a', 'b', 'c']
+//construct a new list, seeded with the same items as in list1
+def list2 = new ArrayList&lt;String>(list1)
+
+assert list2 == list1 // == checks that each corresponding element is the same
+
+// clone() can also be called
+def list3 = list1.clone()
+assert list3 == list1
+
+// list 作为一个 boolean 表达式
+assert ![]             // an empty list evaluates as false
+
+//all other lists, irrespective of contents, evaluate as true
+assert [1] && ['a'] && [0] && [0.0] && [false] && [null]
+
+
+// list迭代
+[1, 2, 3].each {
+    println "Item: $it" // `it` is an implicit parameter corresponding to the current element
+}
+['a', 'b', 'c'].eachWithIndex { it, i -> // `it` is the current element, while `i` is the index
+    println "$i: $it"
+}
+
+// 通过使用迭代，还可以将某些元素转换为另外一种元素来创建一个新的集合
+assert [1, 2, 3].collect { it * 2 } == [2, 4, 6]
+
+// shortcut syntax instead of collect
+assert [1, 2, 3]*.multiply(2) == [1, 2, 3].collect { it.multiply(2) }
+
+def list = [0]
+// it is possible to give `collect` the list which collects the elements
+assert [1, 2, 3].collect(list) { it * 2 } == [0, 2, 4, 6]
+assert list == [0, 2, 4, 6]
+
+// 过滤和搜索
+assert [1, 2, 3].find { it > 1 } == 2           // find 1st element matching criteria
+assert [1, 2, 3].findAll { it > 1 } == [2, 3]   // find all elements matching critieria
+assert ['a', 'b', 'c', 'd', 'e'].findIndexOf {      // find index of 1st element matching criteria
+    it in ['c', 'e', 'g']
+} == 2
+
+assert ['a', 'b', 'c', 'd', 'c'].indexOf('c') == 2  // index returned
+assert ['a', 'b', 'c', 'd', 'c'].indexOf('z') == -1 // index -1 means value not in list
+assert ['a', 'b', 'c', 'd', 'c'].lastIndexOf('c') == 4
+
+assert [1, 2, 3].every { it < 5 }               // returns true if all elements match the predicate
+assert ![1, 2, 3].every { it < 3 }
+assert [1, 2, 3].any { it > 2 }                 // returns true if any element matches the predicate
+assert ![1, 2, 3].any { it > 3 }
+
+assert [1, 2, 3, 4, 5, 6].sum() == 21                // sum anything with a plus() method
+assert ['a', 'b', 'c', 'd', 'e'].sum {
+    it == 'a' ? 1 : it == 'b' ? 2 : it == 'c' ? 3 : it == 'd' ? 4 : it == 'e' ? 5 : 0
+    // custom value to use in sum
+} == 15
+assert ['a', 'b', 'c', 'd', 'e'].sum { ((char) it) - ((char) 'a') } == 10
+assert ['a', 'b', 'c', 'd', 'e'].sum() == 'abcde'
+assert [['a', 'b'], ['c', 'd']].sum() == ['a', 'b', 'c', 'd']
+
+// an initial value can be provided
+assert [].sum(1000) == 1000
+assert [1, 2, 3].sum(1000) == 1006
+
+assert [1, 2, 3].join('-') == '1-2-3'           // String joining
+assert [1, 2, 3].inject('counting: ') {
+    str, item -> str + item                     // reduce operation
+} == 'counting: 123'
+assert [1, 2, 3].inject(0) { count, item ->
+    count + item
+} == 6
+
+// 查找最大最小值的标准代码
+def list = [9, 4, 2, 10, 5]
+assert list.max() == 10
+assert list.min() == 2
+
+// we can also compare single characters, as anything comparable
+assert ['x', 'y', 'a', 'z'].min() == 'a'
+
+// we can use a closure to specify the sorting behaviour
+def list2 = ['abc', 'z', 'xyzuvw', 'Hello', '321']
+assert list2.max { it.size() } == 'xyzuvw'
+assert list2.min { it.size() } == 'z'
+
+// 使用Comparator来定义一个比较 
+Comparator mc = { a, b -> a == b ? 0 : (a < b ? -1 : 1) }
+
+def list = [7, 4, 9, -6, -1, 11, 2, 3, -9, 5, -13]
+assert list.max(mc) == 11
+assert list.min(mc) == -13
+
+Comparator mc2 = { a, b -> a == b ? 0 : (Math.abs(a) < Math.abs(b)) ? -1 : 1 }
+
+
+assert list.max(mc2) == -13
+assert list.min(mc2) == -1
+
+assert list.max { a, b -> a.equals(b) ? 0 : Math.abs(a) < Math.abs(b) ? -1 : 1 } == -13
+assert list.min { a, b -> a.equals(b) ? 0 : Math.abs(a) < Math.abs(b) ? -1 : 1 } == -1
+
+// 排序操作
+assert [6, 3, 9, 2, 7, 1, 5].sort() == [1, 2, 3, 5, 6, 7, 9]
+
+def list = ['abc', 'z', 'xyzuvw', 'Hello', '321']
+assert list.sort {
+    it.size()
+} == ['z', 'abc', '321', 'Hello', 'xyzuvw']
+
+def list2 = [7, 4, -6, -1, 11, 2, 3, -9, 5, -13]
+assert list2.sort { a, b -> a == b ? 0 : Math.abs(a) < Math.abs(b) ? -1 : 1 } ==
+        [-1, 2, 3, 4, 5, -6, 7, -9, 11, -13]
+
+Comparator mc = { a, b -> a == b ? 0 : Math.abs(a) < Math.abs(b) ? -1 : 1 }
+
+// JDK 8+ only
+// list2.sort(mc)
+// assert list2 == [-1, 2, 3, 4, 5, -6, 7, -9, 11, -13]
+
+def list3 = [6, -3, 9, 2, -7, 1, 5]
+
+Collections.sort(list3)
+assert list3 == [-7, -3, 1, 2, 5, 6, 9]
+
+Collections.sort(list3, mc)
+assert list3 == [1, 2, -3, 5, 6, -7, 9]
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>2.2 Map</b> -- 在 Groovy 里，maps ( 通常和 arrays 联系在一起 )可以使用 [:]
+								来创建
+							</p>
+							<pre class="brush: groovy;">
+def map = [name: 'Gromit', likes: 'cheese', id: 1234]
+assert map.get('name') == 'Gromit'
+assert map.get('id') == 1234
+assert map['name'] == 'Gromit'
+assert map['id'] == 1234
+assert map instanceof java.util.Map
+
+def emptyMap = [:]
+assert emptyMap.size() == 0
+emptyMap.put("foo", 5)
+assert emptyMap.size() == 1
+assert emptyMap.get("foo") == 5
+
+// 使用变量作为 map 的 key, 必须使用括号来转义
+def a = 'Bob'
+def ages = [a: 43]
+assert ages['Bob'] == null // `Bob` is not found
+assert ages['a'] == 43     // because `a` is a literal!
+
+ages = [(a): 43]            // now we escape `a` by using parenthesis
+assert ages['Bob'] == 43   // and the value is found!
+
+// Map 属性标记, Map s可以像你操作 Bean 那样通过使用属性标记来 get/set Map内部的元素。只要key是Groovy识别的字符串:
+def map = [name: 'Gromit', likes: 'cheese', id: 1234]
+assert map.name == 'Gromit'     // can be used instead of map.get('name')
+assert map.id == 1234
+
+// Maps 的迭代
+def map = [
+        Bob  : 42,
+        Alice: 54,
+        Max  : 33
+]
+
+// `entry` is a map entry
+map.each { entry ->
+    println "Name: $entry.key Age: $entry.value"
+}
+
+// `entry` is a map entry, `i` the index in the map
+map.eachWithIndex { entry, i ->
+    println "$i - Name: $entry.key Age: $entry.value"
+}
+
+// Alternatively you can use key and value directly
+map.each { key, value ->
+    println "Name: $key Age: $value"
+}
+
+// Key, value and i as the index in the map
+map.eachWithIndex { key, value, i ->
+    println "$i - Name: $key Age: $value"
+}
+
+// 操作 maps
+def defaults = [1: 'a', 2: 'b', 3: 'c', 4: 'd']
+def overrides = [2: 'z', 5: 'x', 13: 'x']
+
+def result = new LinkedHashMap(defaults)
+result.put(15, 't')
+result[17] = 'u'
+result.putAll(overrides)
+assert result == [1: 'a', 2: 'z', 3: 'c', 4: 'd', 5: 'x', 13: 'x', 15: 't', 17: 'u']
+
+// 过滤和查找
+def people = [
+    1: [name:'Bob', age: 32, gender: 'M'],
+    2: [name:'Johnny', age: 36, gender: 'M'],
+    3: [name:'Claire', age: 21, gender: 'F'],
+    4: [name:'Amy', age: 54, gender:'F']
+]
+
+def bob = people.find { it.value.name == 'Bob' } // find a single entry
+def females = people.findAll { it.value.gender == 'F' }
+
+// both return entries, but you can use collect to retrieve the ages for example
+def ageOfBob = bob.value.age
+def agesOfFemales = females.collect {
+    it.value.age
+}
+
+assert ageOfBob == 32
+assert agesOfFemales == [21,54]
+
+// but you could also use a key/pair value as the parameters of the closures
+def agesOfMales = people.findAll { id, person ->
+    person.gender == 'M'
+}.collect { id, person ->
+    person.age
+}
+assert agesOfMales == [32, 36]
+
+// `every` returns true if all entries match the predicate
+assert people.every { id, person ->
+    person.age > 18
+}
+
+// `any` returns true if any entry matches the predicate
+assert people.any { id, person ->
+    person.age == 54
+}
+
+// 访问 keys, values, entries
+def map = [1:'a', 2:'b', 3:'c']
+
+def entries = map.entrySet()
+entries.each { entry ->
+  assert entry.key in [1,2,3]
+  assert entry.value in ['a','b','c']
+}
+
+def keys = map.keySet()
+assert keys == [1,2,3] as Set
+
+// 分组, 以将一个 list 按某些维度分组到一个 map 中
+assert ['a', 7, 'b', [2, 3]].groupBy {
+    it.class
+} == [(String)   : ['a', 'b'],
+      (Integer)  : [7],
+      (ArrayList): [[2, 3]]
+]
+
+assert [
+        [name: 'Clark', city: 'London'], [name: 'Sharma', city: 'London'],
+        [name: 'Maradona', city: 'LA'], [name: 'Zhang', city: 'HK'],
+        [name: 'Ali', city: 'HK'], [name: 'Liu', city: 'HK'],
+].groupBy { it.city } == [
+        London: [[name: 'Clark', city: 'London'],
+                 [name: 'Sharma', city: 'London']],
+        LA    : [[name: 'Maradona', city: 'LA']],
+        HK    : [[name: 'Zhang', city: 'HK'],
+                 [name: 'Ali', city: 'HK'],
+                 [name: 'Liu', city: 'HK']],
+]
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>2.3 Range</b> -- Ranges 允许你创建一个序列值得 list，它可以当成 list 用，因为
+								Range 继承了
+								<code>java.util.List</code>
+								。
+							</p>
+							<pre class="brush: groovy;">
+// Ranges定义使用 .. 代表闭区间, 使用 ..&lt; 代表一个半开半闭，只包含第一个值不包含最后一个值
+def range = 5..8
+assert range.size() == 4
+assert range.get(2) == 7
+assert range[2] == 7
+assert range instanceof java.util.List
+assert range.contains(5)
+assert range.contains(8)
+
+// lets use a half-open range
+range = 5..&lt;8
+assert range.size() == 3
+assert range.get(2) == 7
+assert range[2] == 7
+assert range instanceof java.util.List
+assert range.contains(5)
+assert !range.contains(8)
+
+//get the end points of the range without using indexes
+range = 1..10
+assert range.from == 1
+assert range.to == 10
+
+// 循环
+for (i in 1..10) {
+    println "Hello ${i}"
+}
+
+(1..10).each { i ->
+    println "Hello ${i}"
+}
+
+switch (years) {
+    case 1..10: interestRate = 0.076; break;
+    case 11..25: interestRate = 0.052; break;
+    default: interestRate = 0.037;
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>2.4 Collections 的语法增强</b> -- 幸亏属性标记对 Lists 和 Maps 都支持，Groovy
+								提供了非常实用的方法来使嵌套集合处理变得非常简洁，示例代码如下:
+							</p>
+							<pre class="brush: groovy;">
+def listOfMaps = [['a': 11, 'b': 12], ['a': 21, 'b': 22]]
+assert listOfMaps.a == [11, 21] //GPath notation
+assert listOfMaps*.a == [11, 21] //spread dot notation
+
+listOfMaps = [['a': 11, 'b': 12], ['a': 21, 'b': 22], null]
+assert listOfMaps*.a == [11, 21, null] // caters for null values
+assert listOfMaps*.a == listOfMaps.collect { it?.a } //equivalent notation
+// But this will only collect non-null values
+assert listOfMaps.a == [11,21]
+
+// Spread 操作可以认为是将一个集合内联到另外一个集合
+assert [ 'z': 900, *: ['a': 100, 'b': 200], 'a': 300] == ['a': 300, 'b': 200, 'z': 900]
+//spread map notation in map definition
+assert [*: [3: 3, *: [5: 5]], 7: 7] == [3: 3, 5: 5, 7: 7]
+
+def f = { [1: 'u', 2: 'v', 3: 'w'] }
+assert [*: f(), 10: 'zz'] == [1: 'u', 10: 'zz', 2: 'v', 3: 'w']
+//spread map notation in function arguments
+f = { map -> map.c }
+assert f(*: ['a': 10, 'b': 20, 'c': 30], 'e': 50) == 30
+
+f = { m, i, j, k -> [m, i, j, k] }
+//using spread map notation with mixed unnamed and named arguments
+assert f('e': 100, *[4, 5], *: ['a': 10, 'b': 20, 'c': 30], 6) ==
+        [["e": 100, "b": 20, "c": 30, "a": 10], 4, 5, 6]
+
+// 星号操作
+assert [1, 3, 5] == ['a', 'few', 'words']*.size()
+
+class Person {
+    String name
+    int age
+}
+def persons = [new Person(name:'Hugo', age:17), new Person(name:'Sandra',age:19)]
+assert [17, 19] == persons*.age
+
+// 使用下标操作来分片
+def text = 'nice cheese gromit!'
+def x = text[2]
+
+assert x == 'c'
+assert x.class == String
+
+def sub = text[5..10]
+assert sub == 'cheese'
+
+def list = [10, 11, 12, 13]
+def answer = list[2,3]
+assert answer == [12,13]
+
+list = 100..200
+sub = list[1, 3, 20..25, 33]
+assert sub == [101, 103, 120, 121, 122, 123, 124, 125, 133]
+
 
 </pre>
 						</div>
 
 						<div class="sub-item">
 							<p>
-								<b>2.2 Map</b>
+								<b>2.5 有用的工具类</b>
 							</p>
-							<pre class="brush: groovy;">
-
-</pre>
-						</div>
-
-						<div class="sub-item">
 							<p>
-								<b>2.3 Range</b>
+								<b>2.5.1 ConfigSlurper</b> -- 用来读配置文件的工具类，通常是 Grooy
+								脚本格式的配置文件。类似于 Java 里的 *.properties 文件。
 							</p>
 							<pre class="brush: groovy;">
+def config = new ConfigSlurper().parse('''
+    app.date = new Date()  
+    app.age  = 42
+    app {                  
+        name = "Test${42}"
+    }
+''')
 
+assert config.app.date instanceof Date
+assert config.app.age == 42
+assert config.app.name == 'Test42'
 </pre>
-						</div>
-						<div class="sub-item">
 							<p>
-								<b>2.4 Collections 的语法增强</b>
+								<b>2.5.2 Expando</b> -- 用于动态创建可拓展对象。尽管它的类名没有采用
+								ExpandoMetaClass。每一个 Expando 对象代表一个独立的动态的实例，可以在运行时被属性或方法所拓展。
 							</p>
 							<pre class="brush: groovy;">
+def expando = new Expando()
+expando.name = 'John'
 
+assert expando.name == 'John'
+
+def expando = new Expando()
+expando.toString = { -> 'John' }
+expando.say = { String s -> "John says: ${s}" }
+
+assert expando as String == 'John'
+assert expando.say('Hi') == 'John says: Hi'
 </pre>
-						</div>
-						<div class="sub-item">
 							<p>
-								<b>2.5 增强的集合方法</b>
+								<b>2.5.3 可观察的 list, map 和 set</b> -- Groovy提供了可观察的 lists, maps 和
+								sets。每一个都是一个 java.beans.propertyChangeEvnent
+								事件的触发器。当元素被添加，删除，修改就会被触发。注意 PropertyChangeEvent
+								不仅仅当某些事件发生才出发，同时可以保存新旧值。
 							</p>
 							<pre class="brush: groovy;">
+import java.beans.PropertyChangeListener
 
-</pre>
-						</div>
-						<div class="sub-item">
-							<p>
-								<b>2.6 有用的工具类</b>
-							</p>
-							<pre class="brush: groovy;">
+def event                                       
+def listener = {
+    if (it instanceof ObservableList.ElementEvent)  {  
+        event = it
+    }
+} as PropertyChangeListener
 
+
+def observable = [1, 2, 3] as ObservableList    
+observable.addPropertyChangeListener(listener)  
+
+observable.add 42		// 触发 listener 运行      
+
+assert event instanceof ObservableList.ElementAddedEvent
+
+def elementAddedEvent = event as ObservableList.ElementAddedEvent
+assert elementAddedEvent.changeType == ObservableList.ChangeType.ADDED
+assert elementAddedEvent.index == 3
+assert elementAddedEvent.oldValue == null
+assert elementAddedEvent.newValue == 42
 </pre>
 						</div>
 
@@ -634,7 +1067,8 @@ process.in.eachLine { line ->
 						<h3 class="panel-title">运行时和编译时元编程</h3>
 					</div>
 					<div class="panel-body">
-						<p>Groovy 语言支持两种风格的元编程：运行时元编程和编译时元编程。第一种元编程支持在程序运行时修改类模型和程序行为，而第二种发生在编译时。两种元编程有各自的优缺点。</p>
+						<p>Groovy
+							语言支持两种风格的元编程：运行时元编程和编译时元编程。第一种元编程支持在程序运行时修改类模型和程序行为，而第二种发生在编译时。两种元编程有各自的优缺点。</p>
 					</div>
 				</div>
 				<!-- item over -->
@@ -645,7 +1079,37 @@ process.in.eachLine { line ->
 					<div class="panel-heading">
 						<h3 class="panel-title">Grape 依赖管理器</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>Grape 是一个内嵌在 Groovy 里的 Jar 包依赖管理器。Grape 让你可以快速添加 maven
+							仓库依赖到你的 classpath 里，使脚本运行更加简单。</p>
+						<p>Grape（The Groovy Adaptable Packaging Engine or Groovy
+							Advanced Packaging Engine)）是 Groovy 里内嵌的一个基础组件，通过 grab()
+							方法调用，一些类可以使用 Ivy 来打包成仓库给 Groovy
+							用。这就支持开发者通过写一段脚本来实现一些核心库的需求。装载这段脚本，Grape
+							将会在运行时下载并链接所有依赖的库。即便这些库存在于 Jcenter， Ibiblio和 java.net</p>
+						<p>Grape遵从Ivy对模块版本标识和命名转换。</p>
+						<ul>
+							<li>group – 模块属于一个模块组。对应 Maven 的 groupId 或者一个 Ivy 组织。任何匹配
+								/groovy[x][\..*]^/ 的组都是被保留的，对于 Groovy 是有特定意义的。</li>
+							<li>module – 加载的模块名字，对应 Maven 的 artifactId 或 Ivy 的 artifact</li>
+							<li>version – 模块使用的版本号，要么是字符串 ‘1.1-RC3’，要么是 Ivy 的 (2.2.1,)
+								代表 2.2.1 或更高版本</li>
+							<li>classifier – 可选的分类器，比如 jdk15</li>
+						</ul>
+						<pre class="brush: groovy;">
+// 最简单的一种用法是只需要在你的脚本里添加一个注解：
+@Grab(group='org.springframework', module='spring-orm', version='3.2.5.RELEASE')
+import org.springframework.jdbc.core.JdbcTemplate
+
+// @Grab也支持简洁版
+@Grab('org.springframework:spring-orm:3.2.5.RELEASE')
+import org.springframework.jdbc.core.JdbcTemplate
+
+// 不是所有的依赖都在maven中心仓库里，你可以像下面这样添加新的仓库:
+@GrabResolver(name='restlet', root='http://maven.restlet.org/')
+@Grab(group='org.restlet', module='org.restlet', version='1.1.6')
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -2352,8 +2816,11 @@ class Test {
 						<h3 class="panel-title">闭包</h3>
 					</div>
 					<div class="panel-body">
-						<p>所谓闭包，是指一段开放的、匿名的代码块，它可以拥有参数、返回值或者直接被赋值给一个变量使用。与其他常见的闭包不同，Groovy
-							中的 Closure 不但可以引用在其内部作用域中声明的变量，而且也可以包含任何在其作用域之外定义的变量。</p>
+						<p>
+							<b>闭包</b> --
+							是指一段开放的、匿名的代码块，它可以拥有参数、返回值或者直接被赋值给一个变量使用。与其他常见的闭包不同，Groovy 中的
+							Closure 不但可以引用在其内部作用域中声明的变量，而且也可以包含任何在其作用域之外定义的变量。
+						</p>
 						<div class="sub-item">
 							<pre class="brush: groovy;">
 { [closureParameters -> ] statements }
@@ -2395,17 +2862,742 @@ Closure&lt;Boolean&gt; isTextFile = {
 }
 </pre>
 						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>闭包调用和参数</b> -- 闭包作为一段匿名代码块，可以像调用其他方法一样被调用。
+							</p>
+							<pre class="brush: groovy;">
+def code = { 123 }
+assert code() == 123
+assert code.call() == 123
+
+def isOdd = { int i -> i % 2 == 1 }
+assert isOdd(3) == true
+assert isOdd.call(2) == false
+
+// 参数
+def closureWithOneArgWithExplicitType = { String str -> str.toUpperCase() }
+assert closureWithOneArgWithExplicitType('groovy') == 'GROOVY'
+
+// 隐式参数
+def greeting = { "hello, $it!" }
+assert greeting('Patrick') == 'hello, Patrick!'
+
+// 可变参数
+def concat1 = { String... args -> args.join('') }
+assert concat1('abc', 'def') == 'abcdef'
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>委托机制</b> -- Groovy 中的闭包是作为 Closure 类的实例存在的。这使得它和 Java8 中的
+								lambda 表达式有着很大的区别。委托 (delegate) 是 Groovy 闭包中很重要的概念，但它和 lambda 中的
+								delegate 不同。Groovy 具有修改闭包的委托（亦称代理）或委托策略的能力，这使得在 Groovy
+								中设计优美的特定领域定义语言 （DSL）成为一种可能。
+							</p>
+							<p>
+								<code>owner</code>
+								,
+								<code>delegate</code>
+								和
+								<code>this</code>
+								-- 要想理解委托的概念，我们必须先要解释闭包中 this 的含义。一个闭包实际上定义了 3 个隐含的变量：
+							</p>
+							<ul>
+								<li>
+									<code>this</code>
+									是指定义了闭包本身的那个<strong>class</strong>
+								</li>
+								<li>
+									<code>owner</code>
+									拥有者，是指定义了闭包本身的那个对象, 它有可能是一个类或者一个闭包
+								</li>
+								<li>
+									<code>delegate</code>
+									代理者，表示不管何时何地，调用方法或者解析属性时，没有定义消息接收者的一个第三方对象
+								</li>
+							</ul>
+							<p>
+								<b>闭包的 <code>this</code>
+								</b>
+							</p>
+							<pre class="brush: groovy;">
+class Enclosing {
+    /** 
+     * 在 Enclosing 类内部定义了一个闭包，它返回 getThisObject
+     * 调用闭包将返回 Enclosing 类的实例，闭包就是在 Enclosing 中定义的
+     * 更常见的方式是，直接使用简写的 this 方式
+     * 准确的返回了同一个对象
+     */
+    void run() {
+    	def whatIsThisObject = { getThisObject() }
+    	assert whatIsThisObject() == this
+    	def whatIsThis = { this }
+    	assert whatIsThis() == this
+    }
+}
+
+class EnclosedInnerClass {
+    /** 
+     * 在内部类中定义了一个闭包
+     * 闭包返回的自然是内部类的实例，而不是它外层的类实例
+     */
+	class Inner {
+		Closure cl = { this }
+	}
+
+	void run() {
+		def inner = new Inner()
+		assert inner.cl() == inner
+	}
+}
+
+class NestedClosures {
+    /** 
+     * 嵌套闭包，就像此处的 cl，它是在闭包 nestedClosures 里面定义的闭包
+     * 那么这个 this 对应的就是最近的外部类，而不是闭包
+     */
+	void run() {
+		def nestedClosures = {
+			def cl = { this }
+			cl()
+		}
+		assert nestedClosures() == this
+	}
+}
+
+new Enclosing().run()
+new EnclosedInnerClass().run()
+new NestedClosures().run()
+</pre>
+							<p>
+								<b>闭包的 <code>owner</code></b> -- 闭包的
+								<code>owner</code>
+								和前面所讲的
+								<code>this</code>
+								很相似，仅仅有一点不同：它可以返回直接的闭合的对象，可能是一个闭包的，也可能是一个类的。
+							</p>
+							<pre class="brush: groovy;">
+class Enclosing {
+    /**
+     * 在 Enclosing 类里定义了一个闭包，返回 getOwner
+     * 调用这个闭包将返回定义了这个闭包的类 Enclosing 的实例
+     * 更常用的是，可以直接使用简写方式 owner
+     * 返回的还是同一个对象
+     */
+	void run() {
+		def whatIsOwnerMethod = { getOwner() }
+		assert whatIsOwnerMethod() == this
+		def whatIsOwner = { owner }
+		assert whatIsOwner() == this
+	}
+}
+
+class EnclosedInnerClass {
+    /** 
+     * 在内部类中定义一个闭包
+     * 闭包中的 owner 返回的是内部类，而不是最上层的类
+     */
+	class Inner {
+		Closure cl = { owner }
+	}
+	void run() {
+		def inner = new Inner()
+		assert inner.cl() == inner
+	}
+}
+
+class NestedClosures {
+    /**
+     * 定义了嵌套闭包 cl
+     * 但是此处的 owner 指的是闭合的闭包，而不是外部类，这一点和 this 有所不同
+     */ 
+	void run() {
+		def nestedClosures = {
+			def cl = { owner }
+			cl()
+		}
+		assert nestedClosures() == nestedClosures
+	}
+}
+
+new Enclosing().run()
+new EnclosedInnerClass().run()
+new NestedClosures().run()
+</pre>
+							<p>
+								<b>闭包的 <code>delegate</code></b> -- 一个闭包的 delegate 可以通过
+								<code>delegate</code>
+								属性或者
+								<code>getDelegate</code>
+								方法访问。在 Groovy 中，它是一个很强大的概念，尤其是在构建DSL的时候。与
+								<code>this</code>
+								和
+								<code>owner</code>
+								表示的是闭包的<strong>词法作用域</strong>的含义不同，
+								<code>delegate</code>
+								是指一个由用户自己定义的对象，而且闭包可以使用它。默认情况下，
+								<code>delegate</code>
+								被设置为
+								<code>owner</code>
+								：
+							</p>
+							<pre class="brush: groovy;">
+/**
+ * 可以通过调用 getDelegate 方法获取到闭包的 delegate
+ * 或者直接使用 delegate 属性
+ * 两者返回的都是同一个对象
+ * 有可能是闭合的类或者闭包
+ * 在特殊的嵌套闭包的情形中
+ * delegate 和 owner 保持一致
+ */
+class Enclosing {
+	void run() {
+		def cl = { getDelegate() }
+		def cl2 = { delegate }
+		assert cl() == cl2()
+		assert cl() == this
+		def enclosed = {
+			{ -> delegate }.call()
+		}
+		assert enclosed() == enclosed
+	}
+}
+
+class People {
+	String name
+}
+
+class Thing {
+	String name
+}
+
+def p = new People(name: 'tom')
+def t = new Thing(name: 'tea')
+
+def upperCasedName = { delegate.name.toUpperCase() }
+upperCasedName.delegate = p
+assert upperCasedName() == 'TOM'
+upperCasedName.delegate = t
+assert upperCasedName() == 'TEA'
+</pre>
+							<p>
+								<b>委托机制</b> -- 在一个闭包中，无论何时，属性都可以被访问，而不必显式的为其设置接收者对象。
+							</p>
+							<pre class="brush: groovy;">
+class People {
+	String name
+}
+
+def p = new People(name: 'tom')
+def cl = { name.toUpperCase() }
+cl.delegate = p
+assert cl() == 'TOM'
+</pre>
+							<p>
+								这段代码能够正常执行是因为属性 name 被显式地解析到了 delegate
+								对象上。这种解析闭包里的属性和方法的方式是非常强大的。使用时也不必显式的设置接收者
+								<code>delegate.</code>
+								，闭包默认的委托机制很好的完成了调用。闭包实际上定义了多种委托机制，你可以自由选择：
+							</p>
+							<ul>
+								<li>
+									<code>Closure.OWNER_FIRST</code>
+									是默认机制。如果闭包的 <strong>owner</strong> 拥有对应的属性或方法，那么他们将会调用 <strong>owner</strong>
+									的，否则，就会调用 <strong>delegate</strong> 的。
+								</li>
+								<li>
+									<code>Closure.DELEGATE_FIRST</code>
+									刚好和上面的逻辑相反，首先调用 <strong>delegate</strong> 的，然后才是 <strong>owner</strong>
+									的。
+								</li>
+								<li>
+									<code>Closure.OWNER_ONLY</code>
+									这种机制下，将只会调用 <strong>owner</strong> 的，<strong>delegate</strong>
+									将会被忽略。
+								</li>
+								<li>
+									<code>Closure.DELEGATE_ONLY</code>
+									这种机制则只会查找 <strong>delegate</strong> 的，而 <strong>owner</strong>
+									会被忽略。
+								</li>
+								<li>
+									<code>Closure.TO_SELF</code>
+									这种机制是为那些想实现更高级的元编程技术和想实现自定义机制的开发者提供的。它既不会作用于 <strong>owner</strong>，也不会作用于
+									<strong>delegate</strong>，而只会作用于闭包类自己。通常，它只会在你实现了自己的
+									<code>Closure</code>
+									子类后才会有意义。
+								</li>
+							</ul>
+							<pre class="brush: groovy;">
+/** OWNER_FIRST 机制说明 */
+class Person {
+	String name
+	def pretty = { "my name is $name" }			// 1. 此处定义了一个闭包成员，它引用了 “name”
+	String toString() {
+		pretty()
+	}
+}
+
+class Thing {
+	String name									// 2. Person 类和 Thing 类都定义了一个 name 属性
+}
+
+def p = new Person(name: 'Tom')
+def t = new Thing(name: 'Tea')
+
+assert p.toString() == 'my name is Tom'			// 3. 使用默认机制的话，name 属性会优先被解析为 owner 的
+p.pretty.delegate = t							// 4. 如果我们将闭包的 delegate 改为类 Thing 的一个实例 t
+assert p.toString() == 'my name is Tom'			// 5. 那么最终的结果仍不变，因为 name 会被优先解析到闭包的 owner上
+
+// 更改闭包的实现机制后
+p.pretty.resolveStrategy = Closure.DELEGATE_FIRST
+assert p.toString() == 'my name is Tea'
+</pre>
+							<p>
+								为了说明 <strong>delegate first</strong>、<strong>delegate
+									only</strong>、<strong>owner first</strong> 以及 <strong>owner
+									only</strong> 之间的区别，我们假设其中一种委托（比如owner）并没有对应的方法或者属性：
+							</p>
+							<pre class="brush: groovy;">
+class Person {
+	String name
+	int age
+	def fetchAge = { age }
+}
+
+class Thing {
+	String name
+}
+
+def p = new Person(name: 'Jeff', age: 30)
+def t = new Thing(name: 'ball')
+
+def cl = p.fetchAge
+cl.delegate = p
+assert cl() == 30
+
+cl.delegate = t
+assert cl() == 30
+
+cl.resolveStrategy = Closure.DELEGATE_ONLY
+cl.delegate = p
+assert cl() == 30
+
+cl.delegate = t
+try {
+	cl()
+	assert false
+} catch (MissingPropertyException ex) {
+	// "age" is not defined on the delegate
+}
+</pre>
+							<p>
+								在这个例子中，我分别定义了两个类，
+								<code>Person</code>
+								和
+								<code>Thing</code>
+								。其中二者都有一个
+								<code>name</code>
+								属性，不同的是
+								<code>Person</code>
+								还有一个
+								<code>age</code>
+								属性。
+								<code>Person</code>
+								类还声明了一个引用的
+								<code>age</code>
+								属性的闭包。我们可以将默认的 <strong>owner first</strong> 委托机制更改为 <strong>delegate
+									only</strong> 委托机制。因为闭包的拥有者是
+								<code>Person</code>
+								类，所以我们可以通过成功调用闭包，验证出闭包的委托就是
+								<code>Person</code>
+								类的一个实例。但是如果我们用类
+								<code>Thing</code>
+								的一个实例作为委托来调用闭包，发现失败了，程序抛出了
+								<code>groovy.lang.MissingPropertyException</code>
+								异常。尽管闭包是在
+								<code>Person</code>
+								类中定义的，但是拥有者却没被使用。
+							</p>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b><code>GString</code> 中的闭包</b>
+							</p>
+							<pre class="brush: groovy;">
+def x = 1
+def gs = "x = ${x}"
+assert gs == 'x = 1'
+
+x = 2
+assert gs == 'x = 2'		// 错误, 修改为如下写法
+
+def x = 1
+def gs = "x = ${-> x}"		// 注意此处的不同
+assert gs == 'x = 1'
+
+x = 2
+assert gs == 'x = 2'
+
+// 同理，对对象的处理
+class Person {
+    String name
+    String toString() { name }          
+}
+def sam = new Person(name:'Sam')        
+def lucy = new Person(name:'Lucy')      
+def p = sam                             
+def gs = "Name: ${p}"                   
+assert gs == 'Name: Sam'                
+p = lucy                                
+assert gs == 'Name: Sam'        // 注意这里的输出还是 Sam
+sam.name = 'Lucy'                       
+assert gs == 'Name: Lucy'  
+
+
+// =====> 修改为如下：
+class Person {
+    String name
+    String toString() { name }
+}
+def sam = new Person(name:'Sam')
+def lucy = new Person(name:'Lucy')
+def p = sam
+
+def gs = "Name: ${-> p}"		// 注意此处的不同
+assert gs == 'Name: Sam'
+p = lucy
+assert gs == 'Name: Lucy'
+</pre>
+						</div>
+
+
 					</div>
 				</div>
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="groovy-"></a>
+				<a class="offset" id="groovy-semantics"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">语义</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								<b>1. 变量</b>
+							</p>
+							<pre class="brush: groovy;">
+// 1.1 变量定义
+String x
+def o
+
+// 1.2 变量赋值
+x = 1
+println x
+
+x = new java.util.Date()
+println x
+
+// 1.3 多个赋值 
+def (a, b, c) = [10, 20, 'foo']
+assert a == 10 && b == 20 && c == 'foo'
+
+def (int i, String j) = [10, 'foo']
+assert i == 10 && j == 'foo'
+
+def nums = [1, 3, 5]
+def a, b, c
+(a, b, c) = nums
+assert a == 1 && b == 3 && c == 5
+
+def (_, month, year) = "18th June 2009".split()
+assert "In $month of $year" == 'In June of 2009'
+
+// 1.4 溢出和下溢 
+def (a, b, c) = [1, 2]
+assert a == 1 && b == 2 && c == null
+
+def (a, b) = [1, 2, 3]
+assert a == 1 && b == 2
+
+// 1.5 对象解构
+class Coordinates {
+    double latitude
+    double longitude
+
+    double getAt(int idx) {
+        if (idx == 0) latitude
+        else if (idx == 1) longitude
+        else throw new Exception("Wrong coordinate index, use 0 or 1")
+    }
+}
+
+def coordinates = new Coordinates(latitude: 43.23, longitude: 3.67) 
+def (la, lo) = coordinates
+
+assert la == 43.23                                                  
+assert lo == 3.67
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>2. 控制结构</b>
+							</p>
+							<p>
+								2.1
+								<code>if / else</code>
+							</p>
+							<pre class="brush: groovy;">
+if / else 和 java 无区别
+</pre>
+							<p>
+								2.2
+								<code>switch / case</code>
+							</p>
+							<pre class="brush: groovy;">
+// switch / case 和 java 的区别是　Groovy 可以支持任意类型的 case 匹配
+/**
+ * switch 支持以下类型的比较:
+ *   类型值匹配,如果 switch 值是类的实例
+ *   正则表达式匹配 switch 值
+ *   集合中包含 switch 值
+ *   闭包的返回值
+ *   如果无值匹配,使用 default
+ */
+def x = 1.23
+def result = ""
+
+switch ( x ) {
+    case "foo":
+        result = "found foo"
+    case [4, 5, 6, 'inList']:
+        result = "list"
+        break
+    case 12..30:
+        result = "range"
+        break
+    case Integer:
+        result = "integer"
+        break
+    case Number:
+        result = "number"
+        break
+    case ~/fo*/: // toString() representation of x matches the pattern?
+        result = "foo regex"
+        break
+    case { it < 0 }: // or { x < 0 }
+        result = "negative"
+        break
+    default:
+        result = "default"
+}
+assert result == "number"
+</pre>
+							<p>
+								2.3
+								<code>for</code>
+							</p>
+							<pre class="brush: groovy;">
+// 支持标准 Java / C for 循环: 
+String message = ''
+for (int i = 0; i < 5; i++) {
+    message += 'Hi '
+}
+assert message == 'Hi Hi Hi Hi Hi '
+
+// Groovy 中有更简单的 for 循环
+// iterate over a list
+x = 0
+for ( i in [0, 1, 2, 3, 4] ) {
+    x += i
+}
+assert x == 10
+
+// iterate over an array
+def array = (0..4).toArray()
+x = 0
+for ( i in array ) {
+    x += i
+}
+assert x == 10
+
+// iterate over a map
+def map = ['abc':1, 'def':2, 'xyz':3]
+x = 0
+for ( e in map ) {
+    x += e.value
+}
+assert x == 6
+
+// iterate over values in a map
+x = 0
+for ( v in map.values() ) {
+    x += v
+}
+assert x == 6
+
+// iterate over the characters in a string
+def text = "abc"
+def list = []
+for (c in text) {
+    list.add(c)
+}
+assert list == ["a", "b", "c"]
+</pre>
+							<p>
+								2.4
+								<code>while</code>
+							</p>
+							<pre class="brush: groovy;">
+def x = 0
+def y = 5
+
+while ( y-- > 0 ) {
+    x++
+}
+
+assert x == 5
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>3. 异常处理</b> -- 异常处理和 Java 是一样的。 
+							</p>
+							<pre class="brush: groovy;">
+try {
+    'moo'.toLong()   // this will generate an exception
+    assert false     // asserting that this point should never be reached
+} catch ( e ) {
+    assert e in NumberFormatException
+}
+
+
+</pre>
+						</div>
+						
+						<div class="sub-item">
+							<p>
+								<b>4. 断言</b> -- 断言使用 <code>assert</code> 关键字, 和 Java 是一样的。但在 Groovy 中表现非常不同, 不论 JVM 的 <code>-ea</code> 是否打开，断言总是执行的。如果断言是真的,然后什么都没有发生；如果断言是假的,那么它提供了一个可视化表示的子表达式。
+							</p>
+							<pre class="brush: groovy;">
+// 断言包含三个部分，最后一部分为注意的消息，可以不使用
+assert [left expression] == [right expression] : (optional message)
+
+try {
+    'moo'.toLong()   // this will generate an exception
+    assert false     // asserting that this point should never be reached
+} catch ( e ) {
+    assert e in NumberFormatException
+}
+
+
+</pre>
+						</div>
+						
+						<div class="sub-item">
+							<p><b>5. 标签声明</b> -- 任何声明可以被关联到一个标签。 标签不影响代码的语义,可以用来制造 的代码更容易阅读。就像 C 语言中的 <code>goto</code></p>
+							<pre class="brush: groovy;">
+given:
+    println 'given'
+    def x = 1
+    def y = 2
+when:
+    println 'when'
+    def z = x+y
+then:
+    println 'then'
+    assert z == 3
+// 上面的代码执行就像是没有标签一样的
+
+// 此写法只限在循环中
+for (def i : 1..9) {
+    if (i == 5) {
+        break exit
+    }
+    println i
+}
+exit: println "for over!"					
+</pre>
+						</div>
+						
+						<div class="sub-item">
+							<p><b>5. Gpath</b> -- GPath 是 groovy 代码的一个强劲对象导航的结构，名称的选择与 XPath 相似，XPath 是一个用来描述 XML（和等价物）文档的标准，正如 XPath，GPath 的目标是用在表达试：明确的，紧凑易读的表达式。</p>
+							<pre class="brush: groovy;">
+def xmlText = """
+<root>
+    <level>
+        <sublevel id='1'>
+            <keyVal>
+                <key>mykey</key>
+                <value>value 123</value>
+            </keyVal>
+        </sublevel>
+        <sublevel id='2'>
+            <keyVal>
+                <key>anotherKey</key>
+                <value>42</value>
+            </keyVal>
+            <keyVal>
+                <key>mykey</key>
+                <value>fizzbuzz</value>
+            </keyVal>
+        </sublevel>
+    </level>
+</root>
+"""
+
+def root = new XmlSlurper().parseText(xmlText.stripMargin())
+assert root.level.size() == 1 
+assert root.level.sublevel.size() == 2 
+assert root.level.sublevel.findAll { it.@id == 1 }.size() == 1 
+assert root.level.sublevel[1].keyVal[0].key.text() == 'anotherKey'
+</pre>
+						</div>
+						
+						<div class="sub-item">
+							<p><b>6. 闭包强制转换</b></p>
+							<pre class="brush: groovy;">
+interface Predicate&lt;T> {
+    boolean accept(T obj)
+}
+
+abstract class Greeter {
+    abstract String getName()
+    void greet() {
+        println "Hello, $name"
+    }
+}
+
+Predicate filter = { it.contains 'G' } as Predicate
+assert filter.accept('Groovy') == true
+
+Greeter greeter = { 'Groovy' } as Greeter
+greeter.greet()
+// Groovy 2.2 和可以这样写
+Predicate filter2 = { it.contains 'G' }
+assert filter2.accept('Groovy') == true
+
+Greeter greeter2 = { 'Groovy' }
+greeter2.greet()
+
+// 再看下面的方法
+boolean doFilter(String s) { s.contains('G') }
+
+Predicate filter3 = this.&doFilter
+assert filter3.accept('Groovy') == true
+
+Greeter greeter3 = GroovySystem.&getVersion
+greeter3.greet()
+</pre>
+						</div>
+					</div>
 				</div>
 				<!-- item over -->
 

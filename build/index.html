@@ -66,17 +66,16 @@
 					</div>
 					<div class="list-group">
 						<a href="#gradle-intro" class="list-group-item">简介</a>
-						<a href="#gradle-docs" class="list-group-item">文档</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+							data-parent="#accordion" href="#gradle-base" aria-expanded="true">
+							Gradle 基础<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="gradle-base" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#gradle-basic" class="list-group-item">1. 构建基础</a>
+							<a href="#gradle-lifecycle" class="list-group-item">2.
+								构建的生命周期</a>
+							<a href="#gradle-" class="list-group-item">...</a>
 						</div>
 						<a href="#java-class-loader" class="list-group-item">...</a>
 					</div>
@@ -97,19 +96,70 @@
 						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-						<p>Gradle 是一个基于 Apache Ant 和 Apache
-							Maven 概念的项目自动化建构工具。它使用一种基于 Groovy 的特定领域语言 (DSL) 来声明项目设置，抛弃了基于 XML 的各种繁琐配置。</p>
-					</div>
-				</div>
-				<!-- item over -->
+						<p>Gradle 是一个基于 Apache Ant 和 Apache Maven 概念的项目自动化建构工具。它使用一种基于
+							Groovy 的特定领域语言 (DSL) 来声明项目设置，抛弃了基于 XML 的各种繁琐配置。</p>
+						<ul>
+							<li>
+								<p>
+									一个像
+									<code>ant</code>
+									一样，通用的灵活的构建工具
+								</p>
+							</li>
+							<li>
+								<p>
+									一种可切换的，像
+									<code>maven</code>
+									一样的基于约定约定优于配置的构建框架
+								</p>
+							</li>
+							<li>
+								<p>强大的多工程构建支持</p>
+							</li>
+							<li>
+								<p>
+									强大的依赖管理(基于
+									<code>ApacheIvy</code>
+									)
+								</p>
+							</li>
+							<li>
+								<p>
+									对已有的
+									<code>maven</code>
+									和
+									<code>ivy</code>
+									仓库的全面支持
+								</p>
+							</li>
+							<li>
+								<p>
+									支持传递性依赖管理，而不需要远程仓库或者
+									<code>pom.xml</code>
+									或者
+									<code>ivy</code>
+									配置文件
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>ant</code>
+									式的任务和构建是
+									<code>gradle</code>
+									的第一公民
+								</p>
+							</li>
+							<li>
+								<p>
+									<span class="emphasis">基于 <code>groovy</code>，其 <code>build</code>
+										脚本使用 <code>groovy dsl</code> 编写 
+								</p>
+							</li>
+							<li>
+								<p>具有广泛的领域模型支持你的构建</p>
+							</li>
+						</ul>
 
-				<!-- item start -->
-				<a class="offset" id="gradle-docs"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">文档</h3>
-					</div>
-					<div class="panel-body">
 						<p>
 							Gradle 用户手册 --
 							<a
@@ -131,10 +181,272 @@
 						</p>
 						<p>
 							Gradle Java Doc --
-							<a href="https://docs.gradle.org/current/javadoc/" target="_blank">官网原文</a>
+							<a href="https://docs.gradle.org/current/javadoc/"
+								target="_blank">官网原文</a>
 							--
-							<a href="docs/docs-gradle-1.12/javadoc/index.html" target="_blank">本地副本</a>
+							<a href="docs/docs-gradle-1.12/javadoc/index.html"
+								target="_blank">本地副本</a>
 						</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="gradle-basic"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">1. 构建基础</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								<b>1. 项目文件</b> -- Gradle 项目配置文件主要为如下几个:
+							</p>
+							<ul>
+								<li>
+									<p>
+										<code>~/.gradle/init.gradle</code>
+										-- 此文件为全局初始化执行文件，启动任何一个构建前都要先执行这个文件，可以在做一些全局的配置。更多配置查看
+										<a
+											href="docs/docs-gradle-1.12/dsl/org.gradle.api.invocation.Gradle.html"
+											target="_blank">Gradle</a>
+										对象。
+									</p>
+									<pre class="brush: groovy;">
+// 在此文件中 Gradle 已经初始化，因此可以使用　Gradle 的属性和方法
+println gradle.getHomeDir
+println getHomeDir
+</pre>
+								</li>
+								<li>
+									<p>
+										<code>~/.gradle/gradle.properties</code>
+										-- 此文件全局属性配置文件，比如配置是否启动 daemon 配置，另外，在此文件中配置的属性，全局可用。
+									</p>
+									<pre class="brush: groovy;">
+// 这个属性配置启动 Gradle daemon
+org.gradle.daemon=true
+
+// 这两个属性配置供其它项目使用
+author=jiwanger
+mail=jiwanger@126.com
+</pre>
+								</li>
+								<li>
+									<p>
+										<code>settings.gradle</code>
+										-- 此文件主要用于多项目配置，位于根项目下，配置项目包含哪些子项目，配置子项目的共有配置。更多配置查看
+										<a
+											href="docs/docs-gradle-1.12/dsl/org.gradle.api.initialization.Settings.html"
+											target="_blank">Settings</a>
+										对象。
+									</p>
+									<pre class="brush: groovy;">
+// 这两个属性配置在 ~/.gradle/gradle.properties 文件中
+println author
+println mail
+
+// Settings 有一个 Gradle 的属性，前一步已经初始化
+println gradle.gradleHomeDir
+
+// Settings 已经初始化，因此可以使用 Settings 的属性和方法
+println rootProject.name
+println settings.rootProject.name
+</pre>
+								</li>
+								<li>
+									<p>
+										<code>build.gradle</code>
+										-- 为项目的默认配置文件，更多配置查看
+										<a
+											href="docs/docs-gradle-1.12/dsl/org.gradle.api.Project.html"
+											target="_blank">Project</a>
+										对象。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>gradle.properties</code>
+										-- 此文件为项目属性配置文件，在此文件中配置的属性，在
+										<code>build.gradle</code>
+										中可用。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>gradlew | gradlew.bat</code>
+										-- 作用是根据
+										<code>gradle-wrapper.properties</code>
+										文件中的 distributionUrl 下载对应的 gradle
+										版本。这样就可以保证在不同的环境下构建时都是使用的统一版本的 gradle，即使该环境没有安装 gradle 也可以，因为
+										gradle wrapper 会自动下载对应的 gradle 版本。如果从别处下载的项目，包含这些文件，应该使用
+										<code>./gradlew taskName</code>
+										去运行构建。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>gradle/wrapper/gradle-wrapper.jar</code>
+										-- 运行 gradlew 时，如果没有对应的 gralde 版本，gradle-wrapper 会自动下载对应的
+										gradle 版本。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>gradle/wrapper/gradle-wrapper.properties</code>
+										-- 此文件为自动生成，用于配置指定版本的 Gradle 下载地址和下载后存放位置，内容如下：
+									</p>
+									<pre class="brush: bash">
+#Fri Jun 16 09:05:48 CST 2017
+# 下载的版本解压后基础位置存放于 ~/.gradle/ 目录
+distributionBase=GRADLE_USER_HOME	
+# 下载的版本解压后具体位置存放于 wrapper/dists 目录, 结合上面就为：~/.gradle/wrapper/dists
+distributionPath=wrapper/dists		
+# 下载的 zip 文件存放基础位置为 ~/.gradle/
+zipStoreBase=GRADLE_USER_HOME		
+# 下载的 zip 文件存放具体位置为 wrapper/dists , 结合上面就为：~/.gradle/wrapper/dists
+zipStorePath=wrapper/dists			
+# 下载地址
+distributionUrl=https\://services.gradle.org/distributions/gradle-2.14.1-bin.zip
+</pre>
+									<p>
+										如想更改用于构建的 Gradle 版本，可在根目录的
+										<code>build.gradle</code>
+										文件中加入如下内容：
+									</p>
+									<pre class="brush: groovy;">
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.0'		// 指定用于构建的 gradle 版本
+}
+</pre>
+<p>然后运行 <code>gradle wrapper</code>, 此命令会下载 3.0 版本的 Gradle, 然后运行时，使用 <code>./gradlew task</code> 运行构建。另外，在任何目录下直接运行 <code>gradle wrapper</code>, 也会生成 Wrapper 相关文件，但是使用的是机器上安装的 Gradle 版本。</p>
+
+								</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>2. Projects 和 Tasks</b> -- projects 和 tasks是 Gradle 中最重要的两个概念
+							</p>
+							<p>任何一个 Gradle 构建都是由一个或多个 projects 组成.每个 project 包括许多可构建组成部分.
+								这完全取决于你要构建些什么.举个例子.每个 project 或许是一个 jar 包或者一个 web 应用,
+								它也可以是一个由许多其他项目中产生的 jar 构成的 zip 压缩包.一个 project 不必描述它只能进行构建操作.
+								它也可以部署你的应用或搭建你的环境.不要担心它像听上去的那样庞大. Gradle 的 build-by-convention
+								可以让您来具体定义一个 project 到底该做什么.</p>
+							<p>每个 project 都由多个 tasks 组成.每个 task
+								都代表了构建执行过程中的一个原子性操作.如编译,打包,生成 javadoc,发布到某个仓库等操作。</p>
+						</div>
+
+
+						<div class="sub-item">
+							<p>
+								<b>3. </b>
+							</p>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>4. </b>
+							</p>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="gradle-lifecycle"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">2. 构建的生命周期</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								<b>Gradle 构建三个明显的阶段</b>
+							</p>
+							<ul>
+								<li>
+									<p>
+										<b>初始化</b> -- 构建初始化时创建
+										<a
+											href="docs/docs-gradle-1.12/dsl/org.gradle.api.invocation.Gradle.html"
+											target="_blank">Gradle</a>
+										对象，整个构建执行过程中只有这么一个对象，主要有两个文件配置规则：
+										<code>~/.gradle/init.gradle</code>
+										和
+										<code>~/.gradle/gradle.properties</code>
+										。Gradle 支持单项目及多项目的构建。在初始化阶段，Gradle 确定哪些项目是需要构建的，执行
+										<code>settings.gradle</code>
+										, 转换成一个
+										<a
+											href="docs/docs-gradle-1.12/dsl/org.gradle.api.initialization.Settings.html"
+											target="_blank">Settings</a>
+										对象，并为每个需要构建的项目创建一个
+										<a
+											href="docs/docs-gradle-1.12/dsl/org.gradle.api.Project.html"
+											target="_blank">Project</a>
+										对象实例。
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>配置</b> -- 在这一阶段，对 project 对象进行配置，确定 Project 和
+										<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html"
+											tagget="_blank">Task</a>
+										的关系，建立一个有向图来描述 Task 间的依赖关系。属于构建的所有 projects 的
+										<code>build.gradle</code>
+										都会被执行。通过
+										<code>build.gradle</code>
+										来配置上一步的 Project 对象。
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>执行</b> -- Gradle 确定在配置阶段中，创建和配置的要被执行的任务的子集。这个子集是由传递给 gradle
+										命令的任务名称参数和当前目录所决定的。然后 Gradle 执行每个选定的任务。
+									</p>
+								</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>设置文件</b> -- 在构建脚本文件旁边，Gradle 定义了一个设置文件。这个设置文件是由 Gradle
+								通过一种命名约定来决定的。它的默认名称是
+								<code>settings.gradle</code>
+								。
+							</p>
+							<p>
+								这个配置文件会在初始化阶段执行。一个多项目的构建，必须在这个多项目的层次结构中的根目录下有一个
+								<code>settings.gradle</code>
+								文件。因为在这个设置文件中，会定义哪些项目会加入这个多项目构建。对于单项目的构建，有没有设置文件都可以。你可能需要一个关于将
+								libraries 添加到你的构建脚本类路径中的例子。我们先来看一个一个单项目构建：
+							</p>
+							<pre class="brush: groovy;">
+// settings.gradle 文件
+println "settings.gradle, 此文件在初始化时执行！"
+
+// build.gradle 文件
+println 'build.gradle 中脚本，不在 task 中，在配置时执行！'
+
+task configured {
+    println '这个 task 也是在配置时执行！'
+}
+
+task test &lt;&lt; {
+    println '这个 task 要调用才会执行！'
+}
+</pre>
+							<p>
+								对于一个构建脚本，属性的访问和方法的调用会委派给一个 project 对象。同样，在设置文件中的属性访问和方法调用也会委托给一个
+								settings 对象。可以看一下
+								<a
+									href="docs/docs-gradle-1.12/dsl/org.gradle.api.initialization.Settings.html"
+									target="_blank">Settings</a>
+								。
+							</p>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
@@ -143,21 +455,12 @@
 				<a class="offset" id="gradle-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
-					</div>
-					<div class="panel-body"></div>
-				</div>
-				<!-- item over -->
-
-				<!-- item start -->
-				<a class="offset" id="gradle-intro"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
 						<h3 class="panel-title"></h3>
 					</div>
 					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
+
 			</div>
 		</div>
 	</div>
@@ -177,7 +480,8 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

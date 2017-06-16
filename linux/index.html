@@ -1451,25 +1451,242 @@ $
 						<h3 class="panel-title">WGET 命令</h3>
 					</div>
 					<div class="panel-body">
-						<p></p>
+						<p>wget 是一个从网络上自动下载文件的自由工具，支持通过 HTTP、HTTPS、FTP 三个最常见的 TCP/IP 协议下载，并可以使用 HTTP 代理。wget 名称的由来是 “World Wide Web” 与 “get” 的结合。</p>
+						<p>wget 命令用来从指定的 URL 下载文件。wget 非常稳定，它在带宽很窄的情况下和不稳定网络中有很强的适应性，如果是由于网络的原因下载失败，wget 会不断的尝试，直到整个文件下载完毕。如果是服务器打断下载过程，它会再次联到服务器上从停止的地方继续下载。这对从那些限定了链接时间的服务器上下载大文件非常有用。</p>
 						<pre class="brush: bash;">
+# 1. 不使用参数，直接下载
+$ wget wget http://www.linuxde.net/testfile.zip
+# 2. 指定保存文件的名字
+$ wget -O wordpress.zip http://www.linuxde.net/download.aspx?id=1080
+# 3. 使用wget断点续传
+$ wget -c http://www.linuxde.net/testfile.zip
+# 4. 使用wget后台下载
+$ wget -b http://www.linuxde.net/testfile.zip
+
+# 整个站点下载
 $ wget -r -p -np -k https://nodejs.org/api/index.html
 	# -r,  --recursive(指定递归下载）
 	# -k,  --convert-links（将下载的HTML页面中的链接转换为相对链接即本地链接）
 	# -p,  --page-requisites（下载所有的图片等页面显示所需的内容）
 	# -np, --no-parent（不追溯至父级）
 </pre>
+<p><b>参数</b></p>
+<pre class="brush: bash;">
+用法： wget [选项]... [URL]...
+
+启动：
+  -V,  --version           显示 Wget 的版本信息并退出。
+  -h,  --help              打印此帮助。
+  -b,  --background        启动后转入后台。
+  -e,  --execute=COMMAND   运行一个“.wgetrc”风格的命令。
+
+日志和输入文件：
+  -o,  --output-file=FILE    将日志信息写入 FILE。
+  -a,  --append-output=FILE  将信息添加至 FILE。
+  -d,  --debug               打印大量调试信息。
+  -q,  --quiet               安静模式 (无信息输出)。
+  -v,  --verbose             详尽的输出 (此为默认值)。
+  -nv, --no-verbose          关闭详尽输出，但不进入安静模式。
+  -i,  --input-file=FILE     下载本地或外部 FILE 中的 URLs。
+  -F,  --force-html          把输入文件当成 HTML 文件。
+  -B,  --base=URL            解析与 URL 相关的
+                             HTML 输入文件 (由 -i -F 选项指定)。
+       --config=FILE         Specify config file to use.
+
+下载：
+  -t,  --tries=NUMBER            设置重试次数为 NUMBER (0 代表无限制)。
+       --retry-connrefused       即使拒绝连接也是重试。
+  -O,  --output-document=FILE    将文档写入 FILE。
+  -nc, --no-clobber              skip downloads that would download to
+                                 existing files (overwriting them).
+  -c,  --continue                断点续传下载文件。
+       --progress=TYPE           选择进度条类型。
+  -N,  --timestamping            只获取比本地文件新的文件。
+  --no-use-server-timestamps     不用服务器上的时间戳来设置本地文件。
+  -S,  --server-response         打印服务器响应。
+       --spider                  不下载任何文件。
+  -T,  --timeout=SECONDS         将所有超时设为 SECONDS 秒。
+       --dns-timeout=SECS        设置 DNS 查寻超时为 SECS 秒。
+       --connect-timeout=SECS    设置连接超时为 SECS 秒。
+       --read-timeout=SECS       设置读取超时为 SECS 秒。
+  -w,  --wait=SECONDS            等待间隔为 SECONDS 秒。
+       --waitretry=SECONDS       在获取文件的重试期间等待 1..SECONDS 秒。
+       --random-wait             获取多个文件时，每次随机等待间隔
+                                 0.5*WAIT...1.5*WAIT 秒。
+       --no-proxy                禁止使用代理。
+  -Q,  --quota=NUMBER            设置获取配额为 NUMBER 字节。
+       --bind-address=ADDRESS    绑定至本地主机上的 ADDRESS (主机名或是 IP)。
+       --limit-rate=RATE         限制下载速率为 RATE。
+       --no-dns-cache            关闭 DNS 查寻缓存。
+       --restrict-file-names=OS  限定文件名中的字符为 OS 允许的字符。
+       --ignore-case             匹配文件/目录时忽略大小写。
+  -4,  --inet4-only              仅连接至 IPv4 地址。
+  -6,  --inet6-only              仅连接至 IPv6 地址。
+       --prefer-family=FAMILY    首先连接至指定协议的地址
+                                 FAMILY 为 IPv6，IPv4 或是 none。
+       --user=USER               将 ftp 和 http 的用户名均设置为 USER。
+       --password=PASS           将 ftp 和 http 的密码均设置为 PASS。
+       --ask-password            提示输入密码。
+       --no-iri                  关闭 IRI 支持。
+       --local-encoding=ENC      IRI (国际化资源标识符) 使用 ENC 作为本地编码。
+       --remote-encoding=ENC     使用 ENC 作为默认远程编码。
+       --unlink                  remove file before clobber.
+
+目录：
+  -nd, --no-directories           不创建目录。
+  -x,  --force-directories        强制创建目录。
+  -nH, --no-host-directories      不要创建主目录。
+       --protocol-directories     在目录中使用协议名称。
+  -P,  --directory-prefix=PREFIX  以 PREFIX/... 保存文件
+       --cut-dirs=NUMBER          忽略远程目录中 NUMBER 个目录层。
+
+HTTP 选项：
+       --http-user=USER        设置 http 用户名为 USER。
+       --http-password=PASS    设置 http 密码为 PASS。
+       --no-cache              不在服务器上缓存数据。
+       --default-page=NAME     改变默认页
+                               (默认页通常是“index.html”)。
+  -E,  --adjust-extension      以合适的扩展名保存 HTML/CSS 文档。
+       --ignore-length         忽略头部的‘Content-Length’区域。
+       --header=STRING         在头部插入 STRING。
+       --max-redirect          每页所允许的最大重定向。
+       --proxy-user=USER       使用 USER 作为代理用户名。
+       --proxy-password=PASS   使用 PASS 作为代理密码。
+       --referer=URL           在 HTTP 请求头包含‘Referer: URL’。
+       --save-headers          将 HTTP 头保存至文件。
+  -U,  --user-agent=AGENT      标识为 AGENT 而不是 Wget/VERSION。
+       --no-http-keep-alive    禁用 HTTP keep-alive (永久连接)。
+       --no-cookies            不使用 cookies。
+       --load-cookies=FILE     会话开始前从 FILE 中载入 cookies。
+       --save-cookies=FILE     会话结束后保存 cookies 至 FILE。
+       --keep-session-cookies  载入并保存会话 (非永久) cookies。
+       --post-data=STRING      使用 POST 方式；把 STRING 作为数据发送。
+       --post-file=FILE        使用 POST 方式；发送 FILE 内容。
+       --content-disposition   当选中本地文件名时
+                               允许 Content-Disposition 头部 (尚在实验)。
+       --auth-no-challenge     发送不含服务器询问的首次等待
+                               的基本 HTTP 验证信息。
+
+HTTPS (SSL/TLS) 选项：
+       --secure-protocol=PR     选择安全协议，可以是 auto、SSLv2、
+                                SSLv3 或是 TLSv1 中的一个。
+       --no-check-certificate   不要验证服务器的证书。
+       --certificate=FILE       客户端证书文件。
+       --certificate-type=TYPE  客户端证书类型，PEM 或 DER。
+       --private-key=FILE       私钥文件。
+       --private-key-type=TYPE  私钥文件类型，PEM 或 DER。
+       --ca-certificate=FILE    带有一组 CA 认证的文件。
+       --ca-directory=DIR       保存 CA 认证的哈希列表的目录。
+       --random-file=FILE       带有生成 SSL PRNG 的随机数据的文件。
+       --egd-file=FILE          用于命名带有随机数据的 EGD 套接字的文件。
+
+FTP 选项：
+       --ftp-user=USER         设置 ftp 用户名为 USER。
+       --ftp-password=PASS     设置 ftp 密码为 PASS。
+       --no-remove-listing     不要删除‘.listing’文件。
+       --no-glob               不在 FTP 文件名中使用通配符展开。
+       --no-passive-ftp        禁用“passive”传输模式。
+       --retr-symlinks         递归目录时，获取链接的文件 (而非目录)。
+
+递归下载：
+  -r,  --recursive          指定递归下载。
+  -l,  --level=NUMBER       最大递归深度 (inf 或 0 代表无限制，即全部下载)。
+       --delete-after       下载完成后删除本地文件。
+  -k,  --convert-links      让下载得到的 HTML 或 CSS 中的链接指向本地文件。
+  -K,  --backup-converted   在转换文件 X 前先将它备份为 X.orig。
+  -m,  --mirror             -N -r -l inf --no-remove-listing 的缩写形式。
+  -p,  --page-requisites    下载所有用于显示 HTML 页面的图片之类的元素。
+       --strict-comments    用严格方式 (SGML) 处理 HTML 注释。
+
+递归接受/拒绝：
+  -A,  --accept=LIST               逗号分隔的可接受的扩展名列表。
+  -R,  --reject=LIST               逗号分隔的要拒绝的扩展名列表。
+  -D,  --domains=LIST              逗号分隔的可接受的域列表。
+       --exclude-domains=LIST      逗号分隔的要拒绝的域列表。
+       --follow-ftp                跟踪 HTML 文档中的 FTP 链接。
+       --follow-tags=LIST          逗号分隔的跟踪的 HTML 标识列表。
+       --ignore-tags=LIST          逗号分隔的忽略的 HTML 标识列表。
+  -H,  --span-hosts                递归时转向外部主机。
+  -L,  --relative                  只跟踪有关系的链接。
+  -I,  --include-directories=LIST  允许目录的列表。
+  --trust-server-names             use the name specified by the redirection
+                                   url last component.
+  -X,  --exclude-directories=LIST  排除目录的列表。
+  -np, --no-parent                 不追溯至父目录。
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="linux-"></a>
+				<a class="offset" id="linux-apt"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">APT 命令集</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">1. APT 工作原理</h5>
+							<p>APT 采用集中式的软件仓库机制，将各式各样 的软件包分门别类地存放在软件仓库中，进行有效地组织和管理。然后，将软件仓库置于许许多多的镜像服务器中，并保持基本一致。这样，所有的 APT 用户随时都能获得最新版本的安装软件包。因此，对于用户，这些镜像服务器就是他们的软件源（Reposity）。</p>
+							<p>软件源配置文件只是告知 APT 可以访问的镜像站点地址，但那些镜像站点具体都拥有什么软件资源并不清楚。若每安装一个软件包，就在服务器上寻找一遍，效率是很低的。因而，就有必要为这些软件资源列个清单（建立索引文件），以便本地主机查询。</p>
+							<p>同时，APT 能够检查系统中的软件包依赖关系，大大简化了 APT 用户安装和卸载软件包的过程。</p>
+						</div>
+					
+						<div class="sub-item">
+							<h5 class="text-primary">2. <code>/etc/apt/sources.list</code> 文件</h5>
+							<p><code>sources.list</code> 文件结构</p>
+							<pre class="brush: bash;">
+# 第一部分：deb 或 deb-src 使用 deb 表示二进制软件包，使用 deb-src 表示源码包
+# 第二部分：为软件源地址，常用类型有：http、ftp、file、cdrom、ssh等
+# 第三部分：表示各个发行版本，不同的发行版使用不同的源，如: qiana(Mint 17), trusty(Ubuntu 14.04)
+# 后面部分：表示软件包组件类别，是由技术支持程度不同而划分的类别，对应到镜像站点就是不同的目录
+#		   可选择 main、restricted、universe 和 multiverse 等中的一种或多种
+
+deb http://mirrors.ustc.edu.cn/linuxmint/ qiana main upstream import
+# 对应 http://mirrors.ustc.edu.cn 站点的 linuxmint 的 qiana 版本中的三个类别包组件下 binary-xxx , 因为机器为 i386
+# http://mirrors.ustc.edu.cn/linuxmint/dists/qiana/main/binary-i386/
+# http://mirrors.ustc.edu.cn/linuxmint/dists/qiana/upstream/binary-i386/
+# http://mirrors.ustc.edu.cn/linuxmint/dists/qiana/import/binary-i386/
+
+# 如果使用的是 deb-src, 对应是相应包组件下的　 source/ 目录
+# http://mirrors.ustc.edu.cn/linuxmint/dists/qiana/main/source/
+</pre>
+							<p>我的(LinuxMint 17) <code>sources.list</code> 文件</p>
+							<pre class="brush: bash;">
+deb http://mirrors.ustc.edu.cn/linuxmint/ qiana main upstream import
+
+deb http://mirrors.ustc.edu.cn/ubuntu/ trusty main universe multiverse restricted
+deb http://mirrors.ustc.edu.cn/ubuntu/ trusty-security main universe multiverse restricted
+deb http://mirrors.ustc.edu.cn/ubuntu/ trusty-updates main universe multiverse restricted
+
+deb http://archive.canonical.com/ubuntu/ trusty partner
+#deb http://packages.medibuntu.org/ trusty free non-free
+</pre>
+						</div>
+						
+						<div class="sub-item">
+							<h5 class="text-primary">3. <code>/etc/apt/sources.list.d/</code> 目录, 该文件夹下的文件是第三方软件的源，可以分别存放不同的第三方源地址，只需 “扩展名” 为 <code>.list</code> 即可。</h5>
+						</div>
+						
+						<div class="sub-item">
+							<h5 class="text-primary">4. 使用 APT 命令更新软件</h5>
+							<pre class="brush: bash;">
+# 1. 选择一个速度比较快的源, 使用　netselect 工具, 下载 http://apenwarr.ca/netselect/
+$ tar -xvf netselect-0.3.tar.gz
+$ sudo make && make install
+$ netselect -v mirrors.ustc.edu.cn mirrors.aliyun.com cn.archive.ubuntu.com ubuntu.cn99.com debian.cn99.com
+
+# 2. 将最快的源写入 /etc/apt/sources.list
+$ sudo vim /etc/apt/sources.list
+
+# 3. 更新软件包信息
+$ sudo apt-get update
+
+# 4. 更新软件
+$ sudo apt-get upgrade
+</pre>
+						</div>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -1580,6 +1797,23 @@ COMMAND	命令名/命令行
 # W		将当前设置写入~/.toprc文件中。这是写top配置文件的推荐方法。
 </pre>
 						</div>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="linux-xargs"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">XARGS 命令</h3>
+					</div>
+					<div class="panel-body">
+						<p>管道实现的是将前面的 <code>stdout</code> 作为后面的 <code>stdin</code>，但是有些命令不接受管道的传递方式，最常见的就是 <code>ls</code> 命令。有些时候命令希望管道传递的是参数，但是直接用管道有时无法传递到命令的参数位，这时候需要 <code>xargs</code>，<code>xargs</code> 实现的是将管道传输过来的 <code>stdin</code> 进行处理然后传递到命令的参数位上。也就是说 <code>xargs</code> 完成了两个行为：处理管道传输过来的 <code>stdin</code>；将处理后的传递到正确的位置上。</p>
+						<p><code>xargs</code> 的作用不仅仅限于简单的 <code>stdin</code> 传递到命令的参数位，它更大的作用是可以将 <code>stdin</code> 或者文件 <code>stdin</code> 分割成批，每个批中有很多分割片段，然后将这些片段按批交给 <code>xargs</code> 后面的命令进行处理。</p>
+						<pre class="brush: bash;">
+$ echo "--help" | cat				# 此命令直接显示 '--help'
+$ echo "--help" | xargs cat			# 此命令是显示执行　'cat --help' 命令的结果
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
