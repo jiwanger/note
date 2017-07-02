@@ -73,9 +73,13 @@
 						<div id="gradle-base" class="panel-collapse collapse in"
 							role="tabpanel">
 							<a href="#gradle-basic" class="list-group-item">1. 构建基础</a>
-							<a href="#gradle-lifecycle" class="list-group-item">2.
-								构建的生命周期</a>
-							<a href="#gradle-" class="list-group-item">...</a>
+							<a href="#gradle-init-task" class="list-group-item">2. 初始任务</a>
+							<a href="#gradle-cmd" class="list-group-item">3. 命令行参数</a>
+							<a href="#gradle-task" class="list-group-item">4. 任务详述</a>
+							<a href="#gradle-plugins" class="list-group-item">5. Gradle
+								插件</a>
+							<a href="#gradle-dependency" class="list-group-item">6. 依赖管理</a>
+							<a href="#gradle-java" class="list-group-item">7. Java 插件</a>
 						</div>
 						<a href="#java-class-loader" class="list-group-item">...</a>
 					</div>
@@ -151,8 +155,13 @@
 							</li>
 							<li>
 								<p>
-									<span class="emphasis">基于 <code>groovy</code>，其 <code>build</code>
-										脚本使用 <code>groovy dsl</code> 编写 
+									基于
+									<code>groovy</code>
+									，其
+									<code>build</code>
+									脚本使用
+									<code>groovy dsl</code>
+									编写
 								</p>
 							</li>
 							<li>
@@ -200,7 +209,7 @@
 					<div class="panel-body">
 						<div class="sub-item">
 							<p>
-								<b>1. 项目文件</b> -- Gradle 项目配置文件主要为如下几个:
+								<b>1.1 项目文件</b> -- Gradle 项目配置文件主要为如下几个:
 							</p>
 							<ul>
 								<li>
@@ -216,6 +225,12 @@
 // 在此文件中 Gradle 已经初始化，因此可以使用　Gradle 的属性和方法
 println gradle.getHomeDir
 println getHomeDir
+
+/** 另外，还有相似的两个文件，按如下顺序加载
+ * 1. 加载 ~/.gradle/init.gradle 文件
+ * 2. 加载 ~/.gradle/init.d/ 目录下的以 .gradle 结尾的文件
+ * 3. 加载 $GRADLE_HOME/init.d/ 目录下的以 .gradle 结尾的文件
+ */
 </pre>
 								</li>
 								<li>
@@ -310,16 +325,24 @@ zipStorePath=wrapper/dists
 distributionUrl=https\://services.gradle.org/distributions/gradle-2.14.1-bin.zip
 </pre>
 									<p>
-										如想更改用于构建的 Gradle 版本，可在根目录的
+										如想更改用于构建的 Gradle 版本，在任何目录下直接运行
+										<code>$ gradle wrapper --gradle-version 3.0</code>
+										, 也会生成指定版本的 Wrapper 相关文件。也可在根目录的
 										<code>build.gradle</code>
 										文件中加入如下内容：
 									</p>
-									<pre class="brush: groovy;">
+									<pre class="brush: groovy; gutter:false;">
 task wrapper(type: Wrapper) {
     gradleVersion = '3.0'		// 指定用于构建的 gradle 版本
 }
 </pre>
-<p>然后运行 <code>gradle wrapper</code>, 此命令会下载 3.0 版本的 Gradle, 然后运行时，使用 <code>./gradlew task</code> 运行构建。另外，在任何目录下直接运行 <code>gradle wrapper</code>, 也会生成 Wrapper 相关文件，但是使用的是机器上安装的 Gradle 版本。</p>
+									<p>
+										然后运行
+										<code>gradle wrapper</code>
+										, 此命令会下载 3.0 版本的 Gradle, 然后运行时，使用
+										<code>./gradlew task</code>
+										运行构建。
+									</p>
 
 								</li>
 							</ul>
@@ -327,43 +350,7 @@ task wrapper(type: Wrapper) {
 
 						<div class="sub-item">
 							<p>
-								<b>2. Projects 和 Tasks</b> -- projects 和 tasks是 Gradle 中最重要的两个概念
-							</p>
-							<p>任何一个 Gradle 构建都是由一个或多个 projects 组成.每个 project 包括许多可构建组成部分.
-								这完全取决于你要构建些什么.举个例子.每个 project 或许是一个 jar 包或者一个 web 应用,
-								它也可以是一个由许多其他项目中产生的 jar 构成的 zip 压缩包.一个 project 不必描述它只能进行构建操作.
-								它也可以部署你的应用或搭建你的环境.不要担心它像听上去的那样庞大. Gradle 的 build-by-convention
-								可以让您来具体定义一个 project 到底该做什么.</p>
-							<p>每个 project 都由多个 tasks 组成.每个 task
-								都代表了构建执行过程中的一个原子性操作.如编译,打包,生成 javadoc,发布到某个仓库等操作。</p>
-						</div>
-
-
-						<div class="sub-item">
-							<p>
-								<b>3. </b>
-							</p>
-						</div>
-
-						<div class="sub-item">
-							<p>
-								<b>4. </b>
-							</p>
-						</div>
-					</div>
-				</div>
-				<!-- item over -->
-
-				<!-- item start -->
-				<a class="offset" id="gradle-lifecycle"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">2. 构建的生命周期</h3>
-					</div>
-					<div class="panel-body">
-						<div class="sub-item">
-							<p>
-								<b>Gradle 构建三个明显的阶段</b>
+								<b>1.2 构建的生命周期</b> -- Gradle 构建三个明显的阶段：
 							</p>
 							<ul>
 								<li>
@@ -393,7 +380,7 @@ task wrapper(type: Wrapper) {
 									<p>
 										<b>配置</b> -- 在这一阶段，对 project 对象进行配置，确定 Project 和
 										<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html"
-											tagget="_blank">Task</a>
+											target="_blank">Task</a>
 										的关系，建立一个有向图来描述 Task 间的依赖关系。属于构建的所有 projects 的
 										<code>build.gradle</code>
 										都会被执行。通过
@@ -408,81 +395,1645 @@ task wrapper(type: Wrapper) {
 									</p>
 								</li>
 							</ul>
+							<p>
+								<b>Gradle 生命周期中的一些回调方法：</b>
+							</p>
+							<pre class="brush: groovy;">
+/** 归纳总结：
+ * gradle.settingsEvaluated 和 gradle.projectsLoaded 只执行一次,在 settings.gradle 中才有效,还没加载 build 文件
+ * gradle.beforeProject 在每个项目配置前启动，有多少项目执行多少次
+ * gradle.afterProject 在每个项目配置后启动，有多少项目执行多少次
+ * project.beforeEvaluate 当此项目被配置前马上执行，注意：直接写在本项目中，不会调用，因为还未配置，只能在父工程中使用
+ * project.afterEvaluate 当此项目被配置后马上执行，和 gradle.afterProject 相比，它只关心本身所在的项目
+ * gradle.projectsEvaluated 所有项目被配置完成后执行，执行完它后，就应该去执行指定的 task 了
+ * gradle.buildFinished 在所有构建执行完成后执行，settings.gradle 和 build.gradle 中都有效
+ */
+
+/** 添加一个闭包, 当 settings.gradle 被加载并被配置时被调用 */
+gradle.settingsEvaluated {}
+/** 添加一个闭包, 当所有项目从 settings 中创建时调用 */
+gradle.projectsLoaded {}
+/** 添加一个闭包, 当项目被配置前马上执行 */
+gradle.beforeProject {}
+/** 添加一个闭包, 当项目被配置后马上执行 */
+gradle.afterProject {}
+/** 添加一个闭包, 当所有项目被配置完成后执行，执行完它后，就应该去执行指定的 task 了 */
+gradle.projectsEvaluated {}
+/** 构建完成后执行 */
+gradle.buildFinished {}
+
+/** 添加一个闭包, 当此项目被配置前马上执行
+ * 和 gradle.beforeProject 相比，它只关心本身所在的项目
+ * 只能在父工程中的 build.gradle 中使用，因为本工程还未配置
+ */
+project.beforeEvaluate {}
+subprojects { 							// 此代码只能写在要配置的项目父工程下
+    if(it.path.equals(":sub-project")) {
+        it.beforeEvaluate {				// 在这里应用 beforeEvaluate 回调
+            println "Evaluate before of "+ it.path
+        }
+    }
+}
+
+/** 添加一个闭包, 当此项目被配置后马上执行，
+ * 和 gradle.afterProject 相比，它只关心本身所在的项目
+ */
+project.afterEvaluate {}
+							
+/** 
+ * 项目结构为: 一个主项目，一个子项目，以下为这些回调方法的执行顺序：
+ * settings: 表示此方法在 settings.gradle 中
+ * root: 表示此方法在根项目的 build.gradle 中
+ * sub: 表示此方法在子项目的 build.gradle 中
+ * 其中序号为: 2-6(顺序为 2 和 6 各执行一次), 3-8(同前面), 4-9(同前面)
+ */
+========== 0. settings: gradle.settingsEvaluated =========
+========== 1. settings: gradle.projectsLoaded =========
+========== 2-6. settings: gradle.beforeProject =========
+========== 3-8. settings: gradle.afterProject =========
+========== 4-9. root: gradle.afterProject =========
+========== 5. root: project.afterEvaluate ==========
+========== 2-6. settings: gradle.beforeProject =========
+========== 7. root: gradle.beforeProject =========
+========== 3-8. settings: gradle.afterProject =========
+========== 4-9. root: gradle.afterProject =========
+========== 10. sub: gradle.afterProject =========
+========== 11. sub: project.afterEvaluate ==========
+========== 12. settings: gradle.projectsEvaluated =========
+========== 13. root: gradle.projectsEvaluated =========
+========== 14. sub: gradle.projectsEvaluated =========
+---------- 15. 目标 task 执行！ ----------------
+========== 16. settings: gradle.buildFinished =========
+========== 17. root: gradle.buildFinished =========
+========== 18. sub: gradle.buildFinished =========
+
+/** 如果不包括子项目，执行结果如下： */
+========== 0. settings: gradle.settingsEvaluated =========
+========== 1. settings: gradle.projectsLoaded =========
+========== 2-6. settings: gradle.beforeProject =========
+========== 3-8. settings: gradle.afterProject =========
+========== 4-9. root: gradle.afterProject =========
+========== 5. root: project.afterEvaluate ==========
+========== 12. settings: gradle.projectsEvaluated =========
+========== 13. root: gradle.projectsEvaluated =========
+---------- 15. root: 目标 task 执行！ ----------------
+========== 16. settings: gradle.buildFinished =========
+========== 17. root: gradle.buildFinished =========　
+</pre>
+
 						</div>
 
 						<div class="sub-item">
 							<p>
-								<b>设置文件</b> -- 在构建脚本文件旁边，Gradle 定义了一个设置文件。这个设置文件是由 Gradle
-								通过一种命名约定来决定的。它的默认名称是
+								<b>1.3 <a
+										href="docs/docs-gradle-1.12/javadoc/org/gradle/api/Script.html"
+										target="_blank" style="text-decoration: underline;">Script</a>
+									对象
+								</b> -- 每个
+								<code>.gradle</code>
+								脚本都实现了 Script 接口，也就是说可以直接使用 Script 接口的属性与方法。
+							</p>
+							<pre class="brush: groovy;">
+apply from: 'ask.gradle'
+apply plugin: 'java'
+
+copy {
+    from configurations.runtime
+    into 'build/deploy/lib'
+}
+
+mkdir('script-dir')
+
+// info 级别的日志
+logger.info("=== Script API ===")
+logger.quiet("=== Script API ===")
+
+file('build.gradle')
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>1.4 <a
+										href="docs/docs-gradle-1.12/dsl/org.gradle.api.invocation.Gradle.html"
+										target="_blank" style="text-decoration: underline;">Gradle</a>
+									对象
+								</b> -- 构建初始化时创建 Gradle 对象，整个构建执行过程中只有这么一个对象。
+							</p>
+							<pre class="brush: groovy;">
+defaultTasks 'gradleProperties'
+
+task gradleProperties {
+    doLast {
+        println 'gradle-version: ' + gradle.gradleVersion
+        println 'gradle-home-dir: ' + gradle.gradleHomeDir
+        println 'gradle-user-home-dir: ' + gradle.gradleUserHomeDir
+        def root = gradle.rootProject;
+        println 'root-project-name: ' + root.name
+        println 'root-project-dir: ' + root.projectDir
+        println 'root-project-build-dir: ' + root.buildDir
+        println 'root-project-build-file: ' + root.buildFile
+        println 'root-project-defaultTasks: ' + root.defaultTasks
+    }
+}
+
+// 此方法在项目从 settings.gradle 中创建后执行
+gradle.projectsLoaded {
+     println "========== settings: projectsLoaded ========="
+}
+// 此方法在所有项目被初始化完成后执行
+gradle.projectsEvaluated {
+    println "========== settings: projectsEvaluated ========="
+}
+// 此方法在对 project 初始化前调用
+gradle.beforeProject {
+    println "========== settings: beforeProject ========="
+}
+// 此方法在对 project 初始化完成调用
+gradle.afterProject {
+    println "========== build: afterProject ========="
+}
+// 此方法在构建完成后调用
+gradle.buildFinished {
+    println "========== build: buildFinished ========="
+}
+</pre>
+
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>1.5 <a
+										href="docs/docs-gradle-1.12/dsl/org.gradle.api.initialization.Settings.html"
+										target="_blank" style="text-decoration: underline;">Settings</a>
+									对象
+								</b> -- Gradle 支持单项目及多项目的构建。在初始化阶段，Gradle 确定哪些项目是需要构建的，执行
 								<code>settings.gradle</code>
-								。
+								，创建 Settings 对象。
 							</p>
 							<p>
 								这个配置文件会在初始化阶段执行。一个多项目的构建，必须在这个多项目的层次结构中的根目录下有一个
 								<code>settings.gradle</code>
-								文件。因为在这个设置文件中，会定义哪些项目会加入这个多项目构建。对于单项目的构建，有没有设置文件都可以。你可能需要一个关于将
-								libraries 添加到你的构建脚本类路径中的例子。我们先来看一个一个单项目构建：
+								文件。因为在这个设置文件中，会定义哪些项目会加入这个多项目构建。对于单项目的构建，有没有设置文件都可以。
 							</p>
 							<pre class="brush: groovy;">
 // settings.gradle 文件
-println "settings.gradle, 此文件在初始化时执行！"
+include ':', ':sub-project'
 
-// build.gradle 文件
-println 'build.gradle 中脚本，不在 task 中，在配置时执行！'
+println 'settings-root-dir: ' + rootDir
+assert rootDir == settings.rootDir
 
-task configured {
-    println '这个 task 也是在配置时执行！'
+println 'settings-settings-dir: ' + settingsDir
+println 'settings-settings-dir: ' + settingsDir
+</pre>
+							<p>对于一个构建脚本，属性的访问和方法的调用会委派给一个 project
+								对象。同样，在设置文件中的属性访问和方法调用也会委托给一个 settings 对象。</p>
+
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>1.6 <a
+										href="docs/docs-gradle-1.12/dsl/org.gradle.api.Project.html"
+										target="_blank" style="text-decoration: underline;">Project</a>
+									对象
+								</b> -- Settings 对象包含了构建要创建的 Project 对象信息，任何一个 Gradle 构建都是由一个或多个
+								projects 组成。
+							</p>
+							<pre class="brush: groovy;">
+apply plugin: 'java'
+
+group = 'cm.nate'
+version = '0.1.0'
+
+/** 静态 filed */
+def staticField() {
+    println DEFAULT_BUILD_DIR_NAME
+    println DEFAULT_BUILD_FILE
+    println DEFAULT_STATUS 
+    println DEFAULT_VERSION 
+    println GRADLE_PROPERTIES 
+    println PATH_SEPARATOR
+    println SYSTEM_PROP_PREFIX 
 }
 
-task test &lt;&lt; {
-    println '这个 task 要调用才会执行！'
+/** Project 自己的属性, 有此属性为只读, 更多属性查看文档 */
+def selfProperties() {
+    allprojects.each(){                     // 所有子项目， 保存为： Set&lt;Project&gt;
+        println 'project: ' + it.name
+    }
+    println buildDir                        // 构建生成目录
+    buildDir = 'dists'                      // 修改构建生成目录
+    println buildDir
+    buildDir = DEFAULT_BUILD_DIR_NAME       // 恢复为 build 目录
+    println buildDir
+
+    println buildFile                       // 构建脚本，只读属性
+}
+
+/** java 插件提供的属性, 必须使用 java 插件才有此属性 */
+def javaPluginProperties() {
+    println archivesBaseName                // 生成的 jar 使用此名字加 version
+    archivesBaseName = 'nate-test'          // 修改生成　jar 名字(要在 build 前执行到此代码才行)
+
+    println distsDirName
+    println docsDirName
+    println libsDirName
+    println testReportDirName
+    println testResultsDirName
+}
+
+/** 测试　project 属性 */
+task projectProperties {
+    doLast {
+ 	    staticField()
+
+        selfProperties()
+
+        javaPluginProperties()
+    }
+}
+
+afterEvaluate {
+    println "=== afterEvaluate ==="
+}
+
+/** 测试　project 方法 */
+task projectMethods {
+    doLast {
+        mkdir('build/my/')
+
+        copy {
+            from 'build/libs/*.jar'
+            into 'build/my/'
+        }
+    }
+}</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>1.7 <a
+										href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html"
+										target="_blank" style="text-decoration: underline;">Task</a>
+									对象
+								</b> -- 每个 Project 都由多个 tasks 组成。每个 task 都代表了构建执行过程中的一个原子性操作。
+							<p>
+							<pre class="brush: groovy;">
+apply plugin: 'java'
+
+group = 'cm.nate'
+version = '0.1.0'
+
+task taskProperties {
+    description = "This is Task Properties Test!"
+
+    doLast {
+        println name
+        println temporaryDir
+        println project
+        println enabled
+        println description
+    }
+}
+
+task taskMethods {
+    dependsOn 'taskProperties'
+
+    doLast {
+        println taskProperties.description
+    }
 }
 </pre>
+						</div>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="gradle-init-task"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">2. 初始任务 和 帮助任务</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							Gradle 安装成功后，在任意一个空目录下执行
+							<code>$ gradle tasks</code>
+							, 可以看到如下输出：两个 setup 任务和一些 help 任务。使用
+							<code>$ gradle help --task init</code>
+							可查看指定任务的帮助信息。
+						</p>
+						<p width="100%">
+							<img src="images/gradle-def-tasks.png" class="img-responsive">
+						</p>
+						<ul>
+							<li>
+								<p>
+									<code>
+										<b>init</b>
+									</code>
+									-- 初始化一个新的 Gradle 构建。生成
+									<code>settings.gradle</code>
+									,
+									<code>build.gradle</code>
+									及 Wrapper 相关文件。
+								</p>
+								<pre class="brush: bash;">
+## 在 gradle 4.0 的版本中，init 任务支持以下几种构建类型 ##
+$ gradle init 		# 不使用参数的 init, 生成上面的基本文件 
+
+$ gradle init --type java-application
+
+$ gradle init --type java-library
+
+$ gradle init --type scala-library
+
+$ gradle init --type groovy-application
+
+$ gradle init --type groovy-library
+
+$ gradle help --task init			# 使用 help 查看 init 任务相关信息
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>
+										<b>wrapper</b>
+									</code>
+									-- 生成 Wrapper 相关文件。
+								</p>
+								<pre class="brush: bash;">
+# 不使用参数的 wrapper 任务，直接生成系统安装版本的 wrapper 相关文件
+$ gradle wrapper
+
+# 修改或生成指定版本的 wrapper 相关的文件
+$ gradle wrapper --gradle-version 3.0
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>
+										<b>tasks</b>
+									</code>
+									-- 显示所有可运行的任务。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>
+										<b>projects</b>
+									</code>
+									-- 显示所有加入构建的子项目。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>
+										<b>properties</b>
+									</code>
+									-- 获取项目属性列表 。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>
+										<b>dependencies</b>
+									</code>
+									-- 获取依赖列表。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>
+										<b>help</b>
+									</code>
+									-- 显示帮助信息。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>
+										<b>model</b>
+									</code>
+									-- 显示模型配置。
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="gradle-cmd"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">3. 命令行参数</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: bash;">
+# 查看 task 的帮助信息
+$ gradle help --task init			# init 任务帮助信息
+
+# 使用方法，更多参数请使用　$ gradle --help 命令查看
+$ gradle [option...] [task...]
+
+# 命令行参数
+-?, -h, --help          显示帮助信息
+-a, --no-rebuild        不重新构建依赖信息
+-b, --build-file        指定 build 文件
+--build-cache           启用构建缓存
+-c, --settings-file     指定 settings 文件
+--configure-on-demand   仅配置必需的项目
+--console               指定要生成的控制台输出类型
+--continue              任务失败后继续执行任务
+-D, --system-prop       设置 JVM 的系统属性 (e.g. -Dmyprop=myvalue).
+-d, --debug             日志设置为 debug 级别
+--daemon                使用 Gradle Daemon 运行构建
+--foreground            在前台启动 Gradle Daemon
+-g, --gradle-user-home  指定　gradle-user home
+-I, --init-script      	指定初始化脚本
+-i, --info              日志设置为 info 级别
+--include-build         在 composite 中包含指定的构建
+-m, --dry-run           使用所有禁用的任务动作运行构建
+--max-workers           配置 Gradle 使用的最大并发数
+--no-build-cache        不启用构建缓存
+--no-daemon             不使用 Gradle Daemon 运行构建
+--no-scan               禁用生成扫描的构建
+--offline               不启用 network 构建
+-P, --project-prop      为构建指定属性,和 build.properties 中一样(e.g. -Pmyprop=myvalue).
+-p, --project-dir       指定 Gradle 启动目录
+--parallel              并行构建项目
+--profile               建立执行时间剖面并生成报告于 /reports/profile 目录
+--project-cache-dir     指定项目特定的缓存目录，默认为根项目的 .gradle 目录
+-q, --quiet             日志设置为 error 级别
+--recompile-scripts     重新编译构建脚本
+--refresh-dependencies  刷新依赖
+--rerun-tasks           忽略以前缓存的任务结果，重新运行任务
+-S, --full-stacktrace   打印出完整的（很罗嗦）所有异常堆栈跟踪
+-s, --stacktrace        打印出所有的异常堆栈跟踪
+--scan                  创建构建扫描，如果生成扫描插件已不适用，Gradle　将发出警告 
+--status                显示运行的状态和最近停止的 Gradle Daemon
+--stop                  停止　Gradle Daemon
+-t, --continuous        启用连续构建, Gradle 不退出并运行改变的任务
+-u, --no-search-upward  不从父目录搜索 settings.gradle 文件
+-v, --version           显示 Gradle 版本信息
+-w, --warn              日志设置为 warn 级别
+-x, --exclude-task      从构建中排除指定的任务
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="gradle-task"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">4. 任务详述</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
 							<p>
-								对于一个构建脚本，属性的访问和方法的调用会委派给一个 project 对象。同样，在设置文件中的属性访问和方法调用也会委托给一个
-								settings 对象。可以看一下
-								<a
-									href="docs/docs-gradle-1.12/dsl/org.gradle.api.initialization.Settings.html"
-									target="_blank">Settings</a>
-								。
+								每个 Project 都由多个 Tasks 组成。每个
+								<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html"
+									target="_blank" style="text-decoration: underline;">Task</a>
+								都代表了构建执行过程中的一个原子性操作。
 							</p>
+
+							<p>
+								<b>4.1 定义任务</b>
+							</p>
+							<pre class="brush: groovy;">
+defaultTasks 't1', 't2', 't3', 't4', 't5', 't8'
+
+task t1 {
+    doLast { println 'This is t1.' }
+}
+
+// 此种写法的 gradle 5.0 中删除，不再使用 &lt;&lt;
+task t2 &lt;&lt; { println 'This is t2.' }
+
+task(t3) &lt;&lt; { println 'This is t3.' }
+
+task('t4') &lt;&lt; { println 'This is t4.' }
+
+// 动态任务
+(5..7).each { index ->
+    task "t$index" &lt;&lt; {
+        println "This is t$index."
+    }
+}
+
+tasks.create('t8') &lt;&lt; { println 'This is t8.' }
+
+task(name: 't9', type: Copy) {
+    from(file('srcDir'))
+    into(buildDir)
+}
+
+tasks.create(name: 't10', type: Copy) &lt;&lt; {
+    from(file('srcDir'))
+    into(buildDir)
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>4.2 配置任务</b>
+							</p>
+							<pre class="brush:groovy;">
+defaultTasks 't1'
+
+task t1
+
+t1.doLast {
+    println 'This is t1.'
+}
+t1.description = '属性定义'
+// 添加属性，通过 ext 方式添加，使用的时候不用再使用 ext 
+t1.ext.mail = 'jiwanger@126.com'
+assert t1.mail == 'jiwanger@126.com'
+
+// 以属性方式访问任务
+assert 't1' == t1.name && 't1' == project.t1.name
+// 通过tasks集合访问任务
+assert 't1' == tasks.t1.name && 't1' == tasks['t1'].name
+// 通过路径访问任务
+println tasks.getByPath('t1').name
+println tasks.getByPath(':t1').name
+println tasks.getByPath('sub-project:t1').name
+println tasks.getByPath(':sub-project:t1').name
+
+// 配置任务
+Copy myCopy = task(myCopy, type: Copy)
+myCopy.from 'resources'
+myCopy.into 'target'
+myCopy.include('**/*.txt', '**/*.xml', '**/*.properties')
+
+task myCopy(type: Copy)
+
+myCopy {
+   from 'resources'
+   into 'target'
+   include('**/*.txt', '**/*.xml', '**/*.properties')
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>4.3 任务依赖</b>
+							</p>
+							<pre class="brush: groovy;">
+defaultTasks 'D'
+
+task A {
+    doLast { println 'This is task A!' }
+}
+
+task B(dependsOn: A) {
+    doLast { println "This is task B!" }
+}
+
+task C {
+    doLast { println "This is task C!" }
+}
+C.dependsOn 'B'
+
+task D {
+    doLast { println "This is task D!" }
+}
+D.dependsOn {
+    tasks.findAll { task -> task.name.equals('C') }
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>4.4 任务排序</b> -- 任务排序在许多情况下可能很有用：
+							</p>
+							<ul>
+								<li>强制任务顺序执行： 如“build”永远不会在 "clean" 前面执行。</li>
+								<li>在构建中尽早进行构建验证：如，验证在开始发布的工作前有一个正确的证书。</li>
+								<li>通过在长久验证前运行快速验证以得到更快的反馈：如，单元测试应在集成测试之前运行。</li>
+								<li>一个任务聚合了某一特定类型的所有任务的结果：如，测试报告任务结合了所有执行的测试任务的输出。</li>
+							</ul>
+							<p>
+								有两种排序规则是可用的："必须在之后运行” 和 “应该在之后运行”。<b>注意:任务排序并不意味着任务执行</b>
+							</p>
+							<pre class="brush: groovy;">
+defaultTasks 'taskZ', 'taskY', 'taskX'
+
+task taskX {
+    doLast { println 'This is taskX!' }
+}
+
+task taskY {
+    doLast { println 'This is taskY!' }
+}
+
+task taskZ {
+    doLast { println 'This is taskZ!' }
+}
+
+// shouldRunAfter 在并行的情况下，taskY 可能先运行
+taskY.shouldRunAfter 'taskX'
+taskZ.mustRunAfter 'taskX'
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>4.5 跳过处于最新状态的任务</b> -- 如果您使用 Gradle 自带的任务，如 Java
+								插件所添加的任务的话，你可能已经注意到 Gradle 将跳过处于最新状态的任务(标识为 up-to-date
+								的任务)。这种行在您自己定义的任务上也有效，而不仅仅是内置任务。
+							</p>
+							<p>
+								一个没有定义输出的任务将 <u>永远不会</u> 被当作是最新的。对于任务的输出并不是文件的场景，或者是更复杂的场景，
+								TaskOutputs.upToDateWhen() 方法允许您以编程方式计算任务的输出是否应该被判断为最新状态。
+							</p>
+							<p>一个只定义了输出的任务，如果自上一次构建以来它的输出没有改变，那么它会被判定为最新状态。</p>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>4.6 任务的一些其它方法</b>
+							</p>
+							<pre class="brush: groovy;">
+/** 1. 替换任务（重写任务） */
+task copy(type: Copy)
+
+// 当执行 gradle copy 时，以下任务被执行，必须将 overwrite 属性设置为 true
+task copy(overwrite: true) {
+	doLast { println('I am the new one.') }
+}
+
+/** 2. 跳过任务 */
+task hello { 
+	doLast { println 'hello world' }
+}
+
+/** 2.1 使用断言跳过一个任务
+ * $ gradle hello -PskipHello
+ */
+hello.onlyIf { !project.hasProperty('skipHello') }
+
+// 2.2 使用 StopExecutionException
+ask compile {
+	doLast { println 'We are doing the compile.' }
+}
+
+compile.doFirst {
+    if (true) { throw new StopExecutionException() }
+}
+task myTask(dependsOn: 'compile') {
+   doLast { println 'I am not affected' }
+}
+
+// 2.3 启用和禁用任务
+task disableMe {
+	doLast { println 'This should not be printed if the task is disabled.' }
+}
+disableMe.enabled = false
+</pre>
 						</div>
 					</div>
 				</div>
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="gradle-"></a>
+				<a class="offset" id="gradle-plugins"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">5. Gradle 插件</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								<b>5.1 Gradle 插件简介</b>
+							</p>
+							<p>Gradle 在它的核心中有意地提供了一些小但有用的功能，用于在真实世界中的自动化。所有有用的功能，例如以能够编译
+								Java 代码为例，都是通过 插件 进行添加的。插件添加了新任务（如 JavaCompile ），域对象（如 SourceSet
+								），约定（如主要的 Java 源代码是位于 src/main/java），以及扩展的核心对象和其他插件的对象。</p>
+							<p>
+								一个插件是任何实现了
+								<a
+									href="docs/docs-gradle-1.12/javadoc/org/gradle/api/Plugin.html"
+									target="_blank">
+									<u>Plugin</u>
+								</a>
+								接口的简单的类。Gradle
+								提供了核心插件作为其发行包的一部分，所以简单地应用如上插件是你所需要做的。然而，对于第三方插件，你需要进行配置以使插件在构建类路径中可用。
+							</p>
+							<p>
+								插件都认为是被应用，通过
+								<code>Project.apply()</code>
+								方法来完成。可以使用如下三种方式应用插件：
+							</p>
+							<pre class="brush: groovy;">
+apply plugin: 'java'
+apply plugin: JavaPlugin
+apply plugin: org.gradle.api.plugins.JavaPlugin
+</pre>
+							<p>把插件应用到项目中可以让插件来扩展项目的功能。它可以做的事情如：</p>
+							<ul>
+								<li>将任务添加到项目 （如编译、 测试）；</li>
+								<li>使用有用的默认设置对已添加的任务进行预配置；</li>
+								<li>向项目中添加依赖配置；</li>
+								<li>通过扩展对现有类型添加新的属性和方法。</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>5.2 标准的 Gradle 插件</b>
+							</p>
+							<p>
+								<b>5.2.1 语言插件</b>
+							</p>
+							<table class="table table-responsive table-bordered">
+
+							</table>
+
+							<p>
+								<b>5.2.2 集成插件</b>
+							</p>
+							<table class="table table-responsive table-bordered">
+
+							</table>
+
+							<p>
+								<b>5.2.3 软件开发插件</b>
+							</p>
+							<table class="table table-responsive table-bordered">
+
+							</table>
+
+							<p>
+								<b>5.2.4 基本插件</b>
+							</p>
+							<table class="table table-responsive table-bordered">
+
+							</table>
+
+							<p>
+								<b>5.2.5 第三方插件</b>
+							</p>
+							<table class="table table-responsive table-bordered">
+
+							</table>
+
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>5.3 编写 Gradle 插件</b>
+							</p>
+							<p>Gradle 的插件有三种打包方式:</p>
+							<ul>
+								<li>
+									<p>
+										<code>Build script</code>
+										-- 直接写在
+										<code>build.gradle</code>
+										文件中，这样写插件的好处是自动编译和包含在类路径的构建脚本,你无须做任何事。然而,插件构建脚本之外是不可见的,所以你不能重用插件。此种方式还包括了把插件写在
+										<code>~/.gradle/init.grade</code>
+										文件中，如果是在此文件中，同样也是可重复使用的，此方式一般用于初始化项目。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>buildSrc project</code>
+										-- 在
+										<code>rootProjectDir/buildSrc/src/main/groovy</code>
+										目录下编写插件代码，Gradle 将照顾编译和测试插件的类路径,使其可以在构建脚本。
+										<code>Gradle 3.0</code>
+										源码编译也使用了这种方式。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>Standalone project</code>
+										-- 一个独立的 Groovy 和 Java 项目，可以把这个项目打包成 Jar 文件包，一个 Jar
+										文件包还可以包含多个插件入口，将文件包发布到本地 maven 库或托管平台上，供以后使用。
+									</p>
+								</li>
+							</ul>
+							<p>
+								<b>5.3.1 <code>Build script</code> 方式编写插件：
+								</b>
+							</p>
+							<pre class="brush: groovy;">
+// 编写一个文件: roorProjectDir/scripts/SayHelloPlugin.gradle
+apply plugin:  SayHelloPlugin
+
+class SayHelloPlugin implements Plugin&lt;Project> {
+    @Override
+    void apply(Project project) {
+    	/**
+    	 * 此插件向项目添加了一个 hello 的任务
+    	 * 执行 $ gradle -q hello 可看到 hello 任务的运行
+    	 */
+        project.task('hello').doLast {
+            println 'hello, world!'
+        }
+    }
+}
+
+// 在要应用此插件的子项目的构建文件中引入插件
+apply from: '../scripts/SayHelloPlugin.gradle'
+</pre>
+							<p>
+								<b>5.3.2 <code>buildSrc project</code> 方式编写插件：
+								</b>
+							</p>
+							<div class="row">
+								<div class="col-md-8">
+									<ul>
+										<li>
+											<p>
+												插件编写：在项目根目录下新建
+												<code>buildSrc/src/main/groovy/</code>
+												目录，并编写实现代码。
+											<p>
+											<pre class="brush: groovy;">
+/**
+ * 此插件向项目添加 author 属性，包括作者信息
+ * Author.groovy -- 封装数据
+ * AuthorPlugin.groovy -- 实现插件，并添加 author 属性
+ */
+
+// buildSrc/src/main/groovy/cm/plugin/model/Author.groovy
+package cm.plugin.model
+
+class Author {
+    def id = '431122198903241712'
+    def name = 'nate'
+    def mail = 'jiwanger@126.com'
+    def qq = '522704399'
+    def phone = '13823039350'
+    def birthday = '1989年3月24日'
+    def age = 28
+}
+
+// buildSrc/src/main/groovy/cm/plugin/AuthorPlugin.groovy
+package cm.plugin
+
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+
+import cm.plugin.model.Author
+
+class AuthorPlugin implements Plugin&lt;Project> {
+    @Override
+    void apply(Project project) {  
+        project.ext.author = new Author();
+    }  
+}
+</pre>
+										</li>
+										<li>
+											<p>
+												插件编写：创建
+												<code>buildSrc/src/main/resources/META-INF/gradle-plugins/author.properties</code>
+												文件，注意这个文件命名是自定义的，文件名称可当作插件的名字，如
+												<code>apply plugin: 'java'</code>
+												, 在这里的名字就是
+												<code>java</code>
+												。
+												<code>author.properties</code>
+												指定了插件的实现类，文件内容如下：
+											</p>
+											<pre class="brush: groovy;">implementation-class=cm.plugin.AuthorPlugin</pre>
+										</li>
+										<li>
+											插件调用：在子项目中直接调用插件：
+											<pre class="brush: groovy;">
+apply plugin: 'author'
+
+task showPerson {
+    doLast {
+        println author.id
+        println author.name
+        println author.birthday
+    }
+}								
+</pre>
+										</li>
+									</ul>
+								</div>
+								<div class="col-md-4">
+									<img src="images/gradle-build-src.png" class="img-responsive">
+								</div>
+							</div>
+
+							<p>
+								<b>5.3.3 <code>Standalone project</code> 方式编写插件：
+								</b>
+							</p>
+							<div class="row">
+								<div class="col-md-8">
+									<ul>
+										<li>
+											<p>
+												插件编写：在项目根目录下新建
+												<code>src/main/groovy/</code>
+												目录，并编写实现代码。
+											<p>
+											<pre class="brush: groovy;">
+/**
+ * 此插件向项目添加 author 属性，包括作者信息
+ * Author.groovy -- 封装数据
+ * AuthorPlugin.groovy -- 实现插件，并添加 author 属性
+ */
+
+// buildSrc/src/main/groovy/cm/plugin/model/Author.groovy
+package cm.plugin.model
+
+class Author {
+    def id = '431122198903241712'
+    def name = 'nate'
+    def mail = 'jiwanger@126.com'
+    def qq = '522704399'
+    def phone = '13823039350'
+    def birthday = '1989年3月24日'
+    def age = 28
+}
+
+// buildSrc/src/main/groovy/cm/plugin/AuthorPlugin.groovy
+package cm.plugin
+
+import org.gradle.api.Plugin
+import org.gradle.api.Project
+
+import cm.plugin.model.Author
+
+class AuthorPlugin implements Plugin&lt;Project> {
+    @Override
+    void apply(Project project) {  
+        project.ext.author = new Author();
+    }  
+}
+</pre>
+										</li>
+										<li>
+											<p>
+												插件编写：创建
+												<code>src/main/resources/META-INF/gradle-plugins/author.properties</code>
+												文件，注意这个文件命名是自定义的，文件名称可当作插件的名字，如
+												<code>apply plugin: 'java'</code>
+												, 在这里的名字就是
+												<code>java</code>
+												。
+												<code>author.properties</code>
+												指定了插件的实现类，文件内容如下：
+											</p>
+											<pre class="brush: groovy;">implementation-class=cm.plugin.AuthorPlugin</pre>
+										</li>
+										<li>
+											<p>
+												插件编写：
+												<code>build.gradle</code>
+											</p>
+											<pre class="brush: groovy;">
+
+</pre>
+										</li>
+										<li>
+											<p>插件编写：编译并发布插件到本地 maven 仓库。</p>
+											<pre class="brush: bash;">
+
+</pre>
+										</li>
+										<li>
+											<p>
+												插件调用：在插件使用的构建脚本
+												<code>build.gradle</code>
+												文件中：
+											</p>
+											<pre class="brush: bash;">
+
+</pre>
+										</li>
+								</div>
+								<div class="col-md-4"></div>
+							</div>
+							</ul>
+						</div>
+
+					</div>
 				</div>
 				<!-- item over -->
 
+				<!-- item start -->
+				<a class="offset" id="gradle-dependency"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">6. 依赖管理</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								<b>6.1 依赖管理简介</b>
+							</p>
+							<p>依赖管理是每个构建的关键特性，并且 Gradle 强调提供最好的依赖管理，容易理解以及使用各种各样的方法来兼容。</p>
+							<p>
+								<b>Gradle 支持的依赖管理的主要亮点:</b>
+							</p>
+							<ul>
+								<li>
+									<p>
+										<em>依赖管理传递</em>： Gradle 赋予你对你的项目依赖项树的完全控制。
+									</p>
+								</li>
+								<li>
+									<p>
+										<em>对非管理依赖的支持</em>：如果你的依赖只是版本控制下或共享的驱动器中的文件，Gradle
+										也提供了强大的功能以支持这种情况。
+									</p>
+								</li>
+								<li>
+									<p>
+										<em>支持依赖定义的自定义</em>：Gradle 的模块依赖给你在构建脚本中描述依赖项层次结构的能力。
+									</p>
+								</li>
+								<li>
+									<p>
+										<em>一个完全可自定义的依赖解析的方法</em>：Gradle 为你提供了自定义解析规则的能力，让你可以轻松替换依赖。
+									</p>
+								</li>
+								<li>
+									<p>
+										<em>完全兼容 Maven 和 Ivy </em>：如果你已经在 Maven POM 文件或 Ivy
+										文件中定义了依赖，Gradle 提供了一系列受欢迎的构建工具可以进行无缝集成。
+									</p>
+								</li>
+								<li>
+									<p>
+										<em>与现有依赖管理基础结构的集成</em>：Gradle 兼容 Maven 和 Ivy 仓库。如果你使用
+										Archiva， Nexus，或者是 Artifactory, Gradle 100% 兼容所有仓库的格式。
+									</p>
+								</li>
+							</ul>
+							<div class="alert alert-success">Apache Ivy 是 Apache Ant
+								的一个子项目，提供了一致、可重复、易于维护的方法，来管理项目的所有构建依赖项。</div>
+							<div class="alert alert-success">Maven 是一个项目管理和整合的工具，Maven
+								为开发者提供了一套完整的构建生命周期框架，而 Ivy 则完全着眼于依赖管理。</div>
+
+						</div>
+						<div class="sub-item">
+							<p>
+								<b>6.2 管理传递依赖</b>
+							</p>
+							<p>
+								传递依赖管理是一种技术，让你的项目能够依赖那些反过来依赖其他库的库。这种递归模式传递依赖的结果是，在一个依赖树中，会包含你的项目的第一级依赖、第二级依赖，等等。如果你不把你的依赖作为层次结构树的第一级和第二级依赖的模型，那么在对未组织的依赖进行混乱的组装之后，就会很容易地失去控制。考虑
+								Gradle 项目本身，虽然 Gradle 仅有几个直接的第一级依赖，当 编译 Gradle
+								时在它的类路径上会需要超过一百个的依赖。</p>
+							<p>
+								<b>解决版本冲突的问题：</b> 相同的 jar
+								包的冲突版本应该被检测到，并且要么解决，要么抛出异常。如果你不使用传递依赖管理，版本冲突没被发现，那么在类路径中无法预测的顺序，将导致不知道会使用哪一个版本的依赖。
+							</p>
+							<p>
+								<b>Gradle 提供了以下的冲突解决策略：</b>
+							</p>
+							<ul>
+								<li>
+									<em>Newest</em>：使用最新版本的依赖这是 Gradle 的默认策略，只要版本都能向后兼容，往往是合适的选择。
+								</li>
+								<li>
+									<em>Fail</em>：一个版本冲突将导致构建失败。这种策略强制在构建脚本中明确地解决所有的版本冲突。
+								</li>
+							</ul>
+							<p>虽然上面介绍的策略通常足够解决大部分的冲突，但是 Gradle 也提供更细粒度的机制，以解决版本冲突：</p>
+							<ul>
+								<li>
+									<em>强制</em>配置第一级依赖。如果冲突中的依赖已经是第一级的依赖，那么这种方法会很有用。
+								</li>
+								<li>
+									<em>强制</em>配置任何依赖项（不管是否可传递）。如果冲突中的依赖是传递依赖，那么这种方法会很有用。它也可以用于强制第一级依赖的版本。
+								</li>
+								<li>依赖解析规则让你可以对特定的依赖细粒度地控制所选定的版本。</li>
+							</ul>
+
+							<p>
+								<b>使用动态版本和变化的模块：</b>
+								有许多情况，是你想要使用一个特定依赖的最新版本，或者是某个版本范围内的最新版。这可以是在开发中需要，或者你可能正在开发一个库，它被设计为使用一个范围内的依赖版本。你可以通过使用动态版本很容易地依赖这些不断变化的依赖。一个动态的版本可以是一个版本范围（如
+								<code>2.+</code>
+								），也可以是表示可用的最新版本的占位符（如
+								<code>latest.integration</code>
+								）。
+							</p>
+							<p>另外，你请求的模块随着时间推移，即使是同一版本，有时也可能改变了。这种变化模块的类型的一个例子是 Maven
+								SNAPSHOT 模块，它总是指向最新发布的构件。换句话说，一个标准的 Maven snapshot
+								是一个这样的模块，它永远不会不变，可以说，它是 “不断变化的模块”。</p>
+							<p>
+								<em>动态版本</em> 和 <em>变化模块</em> 的主要区别是，当你解析一个 <em>动态版本</em>
+								时，你会得到真正的、 静态的版本作为模块名称。当你解析一个 <em>变化模块</em> 时，这个 artifacts
+								使用你请求的版本进行命名，但下层的 artifacts 可能随时会有变化。
+							</p>
+							<p>默认情况下，Gradle 对动态版本和变化模块的缓存时间是 24 小时。你可以使用命令行选项重写默认的缓存模式。</p>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>6.3 如何声明依赖</b>
+							</p>
+							<p>你可以声明几种不同类型的依赖：</p>
+							<ul>
+								<li>
+									<p>
+										<a target="_blank"
+											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:module_dependencies">外部模块依赖</a>
+										-- 对一些仓库中的外部模块的依赖
+									</p>
+									<pre class="brush: groovy;">
+dependencies {
+    runtime group: 'org.springframework', name: 'spring-core', version: '2.5'
+    runtime 'org.springframework:spring-core:2.5', 'org.springframework:spring-aop:2.5'
+    runtime(
+        [group: 'org.springframework', name: 'spring-core', version: '2.5'],
+        [group: 'org.springframework', name: 'spring-aop', version: '2.5']
+    )
+    runtime('org.hibernate:hibernate:3.0.5') {
+        transitive = true
+    }
+    runtime group: 'org.hibernate', name: 'hibernate', version: '3.0.5', transitive: true
+    runtime(group: 'org.hibernate', name: 'hibernate', version: '3.0.5') {
+        transitive = true
+    }
+}
+</pre>
+								</li>
+								<li>
+									<p>
+										<a target="_blank"
+											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:project_dependencies">项目依赖</a>
+										-- 在同一个构建中对另一个项目的依赖
+									</p>
+									<pre class="brush: groovy;">
+dependencies {
+    compile project(':shared')
+}
+</pre>
+								</li>
+								<li>
+									<p>
+										<a target="_blank"
+											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:file_dependencies">文件依赖</a>
+										-- 对本地文件系统中的一些文件的依赖
+									</p>
+									<pre class="brush: groovy;">
+dependencies {
+    runtime files('libs/a.jar', 'libs/b.jar')
+    runtime fileTree(dir: 'libs', include: '*.jar')
+}
+</pre>
+								</li>
+								<li>
+									<p>
+										<a target="_blank"
+											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:client_module_dependencies">客户端模块依赖</a>
+										-- 对外部模块的依赖，该块部模块的 artifacts
+										存储于一些仓库中，但是模块的元数据由本地构建指定。当你想要重写模块的元数据时，你可以使用这种类型的依赖。
+									</p>
+									<pre class="brush: groovy;">
+dependencies {
+    runtime module("org.codehaus.groovy:groovy-all:2.2.0") {
+        dependency("commons-cli:commons-cli:1.0") {
+            transitive = false
+        }
+        module(group: 'org.apache.ant', name: 'ant', version: '1.9.3') {
+            dependencies "org.apache.ant:ant-launcher:1.9.3@jar", "org.apache.ant:ant-junit:1.9.3"
+        }
+    }
+}
+</pre>
+								</li>
+								<li>
+									<p>
+										<a target="_blank"
+											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:api_dependencies">Gradle
+											API 依赖</a>
+										-- 对当前的 Gradle 版本的 API 的依赖当你正在开发自定义的 Gradle
+										插件和任务类型时，你可以使用这种类型的依赖。
+									</p>
+									<pre class="brush: groovy;">
+dependencies {
+    compile gradleApi()
+}
+</pre>
+								</li>
+								<li>
+									<p>
+										<a target="_blank"
+											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:groovy_dependencies">本地的
+											Groovy 依赖</a>
+										-- 对当前的 Gradle 所使用的 Groovy 版本的依赖。当你正在开发自定义的 Gradle
+										插件和任务类型时，你可以使用这种类型的依赖。
+									</p>
+									<pre class="brush: groovy;">
+dependencies {
+    compile localGroovy()
+}
+</pre>
+								</li>
+							</ul>
+						</div>
+						
+						<div class="sub-item">
+							<p><b>6.x 仓库类型和使用</b></p>
+							<ul>
+								<li><p><a target="_blank"
+											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:maven_central">Maven 中央仓库</a> -- 一个会在 Maven 中央仓中查找依赖的预配置仓库。</p>
+								<pre class="brush: groovy;">
+repositories {
+    mavenCentral()
+}
+</pre>
+								</li>
+								<li><p><a target="_blank"
+											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:maven_jcenter">Maven JCenter 仓库</a> -- 一个会在 Bintray 的 Jcenter 查找依赖的预配置仓库。</p>
+								<pre class="brush: groovy;">
+repositories {
+    jcenter()
+}
+</pre>
+								</li>
+								<li><p><a target="_blank"
+											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:maven_local">Maven 本地仓库</a> -- 一个会在本地 Maven 仓库中查找依赖的预配置仓库。</p>
+								<pre class="brush: groovy;">
+repositories {
+    mavenLocal()
+}
+</pre>
+								</li>
+								<li><p><a target="_blank"
+											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:maven_repo">Maven 仓库</a> -- 一个 Maven 仓库。可以位于本地文件系统上，或在某个远程的位置。</p>
+								<pre class="brush: groovy;">
+repositories {
+    maven {
+        url "http://repo.mycompany.com/maven2"
+    }
+}
+
+// 一个仓库会出现 POM 文件发布在一个地方，而 JAR 文件和其他构件发布在另一个地方。定义这样的仓库，可以这样： 
+repositories {
+    maven {
+        // Look for POMs and artifacts, such as JARs, here
+        url "http://repo2.mycompany.com/maven2"
+        // Look for artifacts here if not found at the above location
+        artifactUrls "http://repo.mycompany.com/jars"
+        artifactUrls "http://repo.mycompany.com/jars2"
+    }
+}
+
+// 访问密码保护的 Maven 仓库
+repositories {
+    maven {
+        credentials {
+            username 'user'
+            password 'password'
+        }
+        url "http://repo.mycompany.com/maven2"
+    }
+}
+</pre>
+								</li>
+								<li><p><a target="_blank"
+											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sec:ivy_repositories">Ivy 仓库</a> -- 一个 Ivy 仓库可以位于本地文件系统上，或在某个远程的位置。</p>
+								<pre class="brush: groovy;">
+repositories {
+    ivy {
+        url "http://repo.mycompany.com/repo"
+        layout "maven"
+    }
+}
+
+// 为一个 Ivy 存储库定义自定义的模式
+repositories {
+    ivy {
+        url "http://repo.mycompany.com/repo"
+        layout "pattern", {
+            artifact "[module]/[revision]/[type]/[artifact].[ext]"
+        }
+    }
+}
+
+// 使用 Maven 兼容布局的 Ivy 仓库
+repositories {
+    ivy {
+        url "http://repo.mycompany.com/repo"
+        layout "pattern", {
+            artifact "[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"
+            m2compatible = true
+        }
+    }
+}
+
+// 为一个 Ivy 仓库定义不同的 artifact 和 Ivy 文件位置
+repositories {
+  ivy {
+    url "http://repo.mycompany.com/repo"
+    layout "pattern", {
+        artifact "3rd-party-artifacts/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"
+        artifact "company-artifacts/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"
+        ivy "ivy-files/[organisation]/[module]/[revision]/ivy.xml"
+    }
+  }
+}
+
+// 访问密码保护的 Ivy 仓库
+repositories {
+    ivy {
+        url 'http://repo.mycompany.com'
+        credentials {
+            username 'user'
+            password 'password'
+        }
+    }
+}
+</pre>
+								</li>
+								<li><p><a target="_blank"
+											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sec:flat_dir_resolver">Flat 目录仓库</a> -- 一个在本地文件系统上的简单的仓库。不支持任何元数据格式。</p>
+								<pre class="brush: groovy;">
+repositories {
+    flatDir {
+        dirs 'lib'
+    }
+    flatDir {
+        dirs 'lib1', 'lib2'
+    }
+}
+</pre>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- item over -->
+
+					<!-- item start -->
+					<a class="offset" id="gradle-java"></a>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">7. Java 插件</h3>
+						</div>
+						<div class="panel-body">
+							<p>Java 插件向 project 添加了 Java 编译、 测试和捆绑的能力。它是很多其他 Gradle
+								插件的基础服务。</p>
+							<p>
+								Java 插件引入了一个 <b>源集</b> 的概念。一个源集只是一组用于编译并一起执行的源文件。这些源文件可能包括 Java
+								源代码文件和资源文件。其他有一些插件添加了在源集里包含 Groovy 和 Scala
+								的源代码文件的能力。一个源集有一个相关联的编译类路径和运行时类路径。Java 插件定义了两个标准的源集，分别是 main 和
+								test。 main 源集包含你产品的源代码，它们将被编译并组装成一个 JAR 文件。 test
+								源集包含你的单元测试的源代码，它们将被编译并使用 JUnit 或 TestNG 来执行。
+							</p>
+							<div class="sub-item">
+								<p>
+									<b>7.1 任务</b> -- Java 插件向你的项目添加了大量的任务，如下所示:
+								</p>
+								<table class="table table-bordered table-responsive">
+									<thead>
+										<tr>
+											<td>任务名称</td>
+											<td>依赖于</td>
+											<td>类型</td>
+											<td>描述</td>
+										</tr>
+									</thead>
+									<tbody>
+										<tr>
+											<td><code>compileJava</code></td>
+											<td>产生编译类路径中的所有任务。这包括了用于 <code>编译</code>配置中包含的项目依赖关系的 <code>jar</code>任务。
+											</td>
+											<td><a class="ulink"
+													href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.compile.JavaCompile.html"
+													target="_blank">
+													<code class="classname">JavaCompile</code>
+												</a></td>
+											<td>使用 javac 编译产品中的 Java 源文件。</td>
+										</tr>
+										<tr>
+											<td><code>processResources</code></td>
+											<td>-</td>
+											<td><a class="ulink"
+													href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Copy.html"
+													target="_blank">
+													<code class="classname">Copy</code>
+												</a></td>
+											<td>把生产资源文件拷贝到生产的类目录中。</td>
+										</tr>
+										<tr>
+											<td><code>classes</code></td>
+											<td><code>compileJava</code>和 <code>processResources</code>。一些插件添加了额外的编译任务。</td>
+											<td><a class="ulink"
+													href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html"
+													target="_blank">
+													<code class="classname">Task</code>
+												</a></td>
+											<td>组装生产的类目录。</td>
+										</tr>
+										<tr>
+											<td><code>compileTestJava</code></td>
+											<td><code>compile</code>，再加上所有能产生测试编译类路径的任务。</td>
+											<td><a class="ulink"
+													href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.compile.JavaCompile.html"
+													target="_blank">
+													<code class="classname">JavaCompile</code>
+												</a></td>
+											<td>使用 javac 编译 Java 的测试源文件。</td>
+										</tr>
+										<tr>
+											<td><code>processTestResources</code></td>
+											<td>-</td>
+											<td><a class="ulink"
+													href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Copy.html"
+													target="_blank">
+													<code class="classname">Copy</code>
+												</a></td>
+											<td>把测试的资源文件拷贝到测试的类目录中。</td>
+										</tr>
+										<tr>
+											<td><code>testClasses</code></td>
+											<td><code>compileTestJava</code>和 <code>processTestResources</code>。一些插件添加了额外的测试编译任务。</td>
+											<td><a class="ulink"
+													href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html"
+													target="_blank">
+													<code class="classname">Task</code>
+												</a></td>
+											<td>组装测试的类目录。</td>
+										</tr>
+										<tr>
+											<td><code>jar</code></td>
+											<td><code>compile</code></td>
+											<td><a class="ulink"
+													href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.bundling.Jar.html"
+													target="_blank">
+													<code class="classname">Jar</code>
+												</a></td>
+											<td>组装 JAR 文件</td>
+										</tr>
+										<tr>
+											<td><code>javadoc</code></td>
+											<td><code>compile</code></td>
+											<td><a class="ulink"
+													href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.javadoc.Javadoc.html"
+													target="_blank">
+													<code class="classname">Javadoc</code>
+												</a></td>
+											<td>使用 Javadoc 生成生产的 Java 源代码的API文档</td>
+										</tr>
+										<tr>
+											<td><code>test</code></td>
+											<td><code>compile</code>， <code>compileTest</code>，再加上所有产生测试运行时类路径的任务。</td>
+											<td><a class="ulink"
+													href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.testing.Test.html"
+													target="_blank">
+													<code class="classname">Test</code>
+												</a></td>
+											<td>使用 JUnit 或 TestNG运行单元测试。</td>
+										</tr>
+										<tr>
+											<td><code>uploadArchives</code></td>
+											<td>使用 <code>archives</code>的配置生成构件的任务，包括 <code>jar</code>。
+											</td>
+											<td><a class="ulink"
+													href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Upload.html"
+													target="_blank">
+													<code class="classname">Upload</code>
+												</a></td>
+											<td>使用 <code>archives</code>配置上传包括 JAR 文件的构件。
+											</td>
+										</tr>
+										<tr>
+											<td><code>clean</code></td>
+											<td>-</td>
+											<td><a class="ulink"
+													href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Delete.html"
+													target="_blank">
+													<code class="classname">Delete</code>
+												</a></td>
+											<td>删除项目的build目录。</td>
+										</tr>
+										<tr>
+											<td><code>
+													clean<em class="replaceable"><code>TaskName</code></em>
+												</code></td>
+											<td>-</td>
+											<td><a class="ulink"
+													href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Delete.html"
+													target="_blank">
+													<code class="classname">Delete</code>
+												</a></td>
+											<td>删除由指定的任务所产生的输出文件。例如， <code>cleanJar</code>将删除由 <code>jar</code>任务中所创建的
+												JAR 文件， <code>cleanTest</code>将删除由 <code>test</code>任务所创建的测试结果。
+											</td>
+										</tr>
+									</tbody>
+								</table>
+
+								<p>
+									<b>下图显示了这些任务之间的关系:</b>
+								</p>
+								<p width="100%">
+									<img src="images/javaPluginTasks.png" class="img-responsive">
+								</p>
+							</div>
+
+							<div class="sub-item">
+								<p>
+									<b>7.2 属性</b> -- Java
+									插件向项目添加了许多常规属性，如下图所示。您可以在构建脚本中使用这些属性，就像它们是 project 对象的属性一样
+								</p>
+								<pre class="brush: groovy;">
+task generalAttributes {
+    doLast {
+        println relativePath(libsDir)
+        println relativePath(distsDir)
+        println relativePath(docsDir)
+        println relativePath(reportsDir)
+        println relativePath(testResultsDir)
+        println relativePath(testReportDir)
+    }
+}
+
+task sourceSetAttributes {
+    doLast {
+        /** sourceSets 的属性 */
+        sourceSets.each {
+            println it.name       // 每个源集的名字
+        }
+        def main = sourceSets['main']
+        println relativePath(main.output.classesDir)        // classes 输出目录
+        println relativePath(main.output.resourcesDir)      // 资源输出目录
+        main.java.srcDirs.each {          // 该源目录包含了此源集的所有 Java 源文件
+            println relativePath(it)
+        }
+        main.java.each {          // 源集下所有的类文件(java 目录下所有文件)
+            println it.name
+        }
+        main.resources.srcDirs.each {     // 源集下所有的资源文件目录
+            println it.name
+        }
+        main.resources.each {     // 源集下所有的资源文件(resources 目录下所有文件)
+            println it.name
+        }
+    }
+}
+</pre>
+							</div>
+
+
+
+						</div>
+					</div>
+					<!-- item over -->
+
+					<!-- item start -->
+					<a class="offset" id="gradle-"></a>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title"></h3>
+						</div>
+						<div class="panel-body"></div>
+					</div>
+					<!-- item over -->
+
+					<!-- item start -->
+					<a class="offset" id="gradle-"></a>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title"></h3>
+						</div>
+						<div class="panel-body"></div>
+					</div>
+					<!-- item over -->
+
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button"
-			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
-			<span class="caret"></span>
-		</a>
-		<a href="#" type="button"
-			class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup"> TOP </a>
-	</div>
+		<div class="btn-group-vertical bottom-button">
+			<a href="#" type="button"
+				class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
+				<span class="caret"></span>
+			</a>
+			<a href="#" type="button"
+				class="btn btn-default dropdown-toggle btn-primary"
+				data-toggle="dropup"> TOP </a>
+		</div>
 
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-	<script src="../support/jquery/jquery-3.1.1.min.js"></script>
-	<!-- Include all compiled plugins (below), or include individual files as needed -->
-	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
-	<script src="res/menu.js"></script>
-	<script src="../commons/js/common.js"></script>
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="../support/jquery/jquery-3.1.1.min.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="../support/bootstrap/js/bootstrap.min.js"></script>
+		<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
+		<script src="../support/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
+		<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
+		<script src="res/menu.js"></script>
+		<script src="../commons/js/common.js"></script>
 </body>
 </html>

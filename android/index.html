@@ -1623,24 +1623,58 @@ public class PersonObserver extends ContentObserver {
 								线程启动后会进入一个无限的循环体之中，每循环一次，从其内部的消息队列中取出一个消息，然后回调相应的消息处理函数，执行完成一个消息后则继续循环。若消息队列为空，线程则会阻塞等待。
 							</p>
 							<p class="alert alert-success">
-								<b>Looer.loop()方法可能会引起主线程的阻塞，但只要它的消息循环没有被阻塞，能一直处理事件就不会产生ANR异常。
+								<b>Looer.loop() 方法可能会引起主线程的阻塞，但只要它的消息循环没有被阻塞，能一直处理事件就不会产生 ANR 异常。
 								</b>
 							</p>
 
 							<p>
-								<b>Looper</b>: 能够确保线程持续存活并且可以不断的从任务队列中获取任务并进行执行。
+								<b>Looper:</b> 将 Looper 对象和线程绑定，能够确保线程持续存活并且可以不断的从任务队列中获取任务并进行执行；
+							</p>
+							<p><b>ThreadLocal:</b> ThreadLocal 其实是一个 Map，其 key 为一个线程；</p>
+							<p>
+								<b>MessageQueue:</b> MessageQueue 有个 LinkedBlockingQueue 队列，此队列的出队方法为阻塞式，没有消息则一直等待。
 							</p>
 							<p>
-								<b>Handler</b>:
-								能够帮助实现队列任务的管理，不仅仅能够把任务插入到队列的头部，尾部，还可以按照一定的时间延迟来确保任务从队列中能够来得及被取消掉。
+								<b>Handler:</b>
+								能够帮助实现队列任务的管理，不仅仅能够把任务插入到队列的头部，尾部，还可以按照一定的时间延迟来确保任务从队列中能够来得及被取消掉；
 							</p>
+							<p><b>Message:</b> 对象包装消息，并绑定到一个 Handler 实例；</p>
 							<p>
-								<b>MessageQueue</b>: 使用 Intent，Message，Runnable
-								作为任务的载体在不同的线程之间进行传递。
+								<b>HandlerThread:</b> 把上面组件打包到一起进行协作。
 							</p>
-							<p>
-								<b>HandlerThread</b> : 把上面三个组件打包到一起进行协作。
-							</p>
+							
+							<p><b>Handler 机制流程：</b>
+							<pre class="brush: java;">
+1. Looper 初始化, 先调用 Looper.prepare() 方法，将 Looper 对象和主线程绑定(因为在主线程调用此方法)，执行以下操作：
+    1.1 ThreadLocal.get() 是否为空，ThreadLocal 其实是一个 Map, map.get(Thread.currentThread()) 是否为空；
+    1.2 不为空直接抛出异常，因为一个线程只能绑定一个 Looper 对象；为空就调用 ThreadLocal.set()；
+    1.3 其实是将当前线程和 Looper 绑定, map.put(Thread.currentThread(), new Looper())
+        1.3.1 Looper 有一个 MessageQueue 的私有成员，绑定 Looper 就相当于绑定了一个 MessageQueue 对象;
+        1.3.2 MessageQueue 有个 LinkedBlockingQueue 队列，此队列有出队方法为阻塞式，没有消息则一直等待。
+    1.4 经过上一步，当前线程（主线程）就和 Looper 对象绑定了, 也相当于绑定了 MessageQueue 队列。
+        
+2. Handler 初始化, 将创建 Hander 的线程（主线程）和 Looper 的 MessageQueue 队列绑定。
+	Handler 对象也有一个 MessageQueue 成员，将 Handler 的 messageQueue 值设置为 Looper 的 MessageQueue
+		this.messageQueue = Looper.myLooper().messageQueue 
+		Looper.myLooper() 方法 ThreadLocal.get(), 也就是 map.get(Thread.currentThread()), 返回当前线程的 Looper
+
+3. Handler 方法调用，消息发送
+	3.1 Message 对象包装消息，并绑定到一个 Handler 实例
+	3.2 Handler 消息发送，比如：Handler.sendMessage(Message msg) 方法
+		3.2.1 将 Message 绑定到 Handler, msg.target = this;
+		3.2.2 将 Message 加入消息队列，messageQueue.enqueueMessage(msg)。
+
+4. Handler 消息处理，在 Looper.prepare() 完成后，就调用了 Looper.loop() 方法(主线程调用)，此方法就像如下:
+	Looper looper = myLooper();		// 拿到当前线程的 Looper
+		
+	MessageQueue messageQueue = looper.messageQueue;	// 拿到 Looper 的消息队列
+
+	// 进入死循环，一直等待消息进入队列，等到就处理
+	while(true) {
+		Message message = messageQueue.next();	// 阻塞式，没有消息则一直等待
+		message.target.handleMessage(message);	// 将消息交给 Message 绑定的 Handler 处理
+	}
+</pre>
 						</div>
 
 						<div class="sub-item">

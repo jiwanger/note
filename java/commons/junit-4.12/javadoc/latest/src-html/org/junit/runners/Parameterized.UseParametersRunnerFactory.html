@@ -1,0 +1,560 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
+</head>
+<body>
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span>package org.junit.runners;<a name="line.1"></a>
+<span class="sourceLineNo">002</span><a name="line.2"></a>
+<span class="sourceLineNo">003</span>import java.lang.annotation.Annotation;<a name="line.3"></a>
+<span class="sourceLineNo">004</span>import java.lang.annotation.ElementType;<a name="line.4"></a>
+<span class="sourceLineNo">005</span>import java.lang.annotation.Inherited;<a name="line.5"></a>
+<span class="sourceLineNo">006</span>import java.lang.annotation.Retention;<a name="line.6"></a>
+<span class="sourceLineNo">007</span>import java.lang.annotation.RetentionPolicy;<a name="line.7"></a>
+<span class="sourceLineNo">008</span>import java.lang.annotation.Target;<a name="line.8"></a>
+<span class="sourceLineNo">009</span>import java.text.MessageFormat;<a name="line.9"></a>
+<span class="sourceLineNo">010</span>import java.util.ArrayList;<a name="line.10"></a>
+<span class="sourceLineNo">011</span>import java.util.Arrays;<a name="line.11"></a>
+<span class="sourceLineNo">012</span>import java.util.Collection;<a name="line.12"></a>
+<span class="sourceLineNo">013</span>import java.util.Collections;<a name="line.13"></a>
+<span class="sourceLineNo">014</span>import java.util.List;<a name="line.14"></a>
+<span class="sourceLineNo">015</span><a name="line.15"></a>
+<span class="sourceLineNo">016</span>import org.junit.internal.AssumptionViolatedException;<a name="line.16"></a>
+<span class="sourceLineNo">017</span>import org.junit.runner.Description;<a name="line.17"></a>
+<span class="sourceLineNo">018</span>import org.junit.runner.Runner;<a name="line.18"></a>
+<span class="sourceLineNo">019</span>import org.junit.runner.notification.Failure;<a name="line.19"></a>
+<span class="sourceLineNo">020</span>import org.junit.runner.notification.RunNotifier;<a name="line.20"></a>
+<span class="sourceLineNo">021</span>import org.junit.runners.model.FrameworkMethod;<a name="line.21"></a>
+<span class="sourceLineNo">022</span>import org.junit.runners.model.InvalidTestClassError;<a name="line.22"></a>
+<span class="sourceLineNo">023</span>import org.junit.runners.model.TestClass;<a name="line.23"></a>
+<span class="sourceLineNo">024</span>import org.junit.runners.parameterized.BlockJUnit4ClassRunnerWithParametersFactory;<a name="line.24"></a>
+<span class="sourceLineNo">025</span>import org.junit.runners.parameterized.ParametersRunnerFactory;<a name="line.25"></a>
+<span class="sourceLineNo">026</span>import org.junit.runners.parameterized.TestWithParameters;<a name="line.26"></a>
+<span class="sourceLineNo">027</span><a name="line.27"></a>
+<span class="sourceLineNo">028</span>/**<a name="line.28"></a>
+<span class="sourceLineNo">029</span> * The custom runner &lt;code&gt;Parameterized&lt;/code&gt; implements parameterized tests.<a name="line.29"></a>
+<span class="sourceLineNo">030</span> * When running a parameterized test class, instances are created for the<a name="line.30"></a>
+<span class="sourceLineNo">031</span> * cross-product of the test methods and the test data elements.<a name="line.31"></a>
+<span class="sourceLineNo">032</span> * &lt;p&gt;<a name="line.32"></a>
+<span class="sourceLineNo">033</span> * For example, to test the &lt;code&gt;+&lt;/code&gt; operator, write:<a name="line.33"></a>
+<span class="sourceLineNo">034</span> * &lt;pre&gt;<a name="line.34"></a>
+<span class="sourceLineNo">035</span> * &amp;#064;RunWith(Parameterized.class)<a name="line.35"></a>
+<span class="sourceLineNo">036</span> * public class AdditionTest {<a name="line.36"></a>
+<span class="sourceLineNo">037</span> *     &amp;#064;Parameters(name = &amp;quot;{index}: {0} + {1} = {2}&amp;quot;)<a name="line.37"></a>
+<span class="sourceLineNo">038</span> *     public static Iterable&amp;lt;Object[]&amp;gt; data() {<a name="line.38"></a>
+<span class="sourceLineNo">039</span> *         return Arrays.asList(new Object[][] { { 0, 0, 0 }, { 1, 1, 2 },<a name="line.39"></a>
+<span class="sourceLineNo">040</span> *                 { 3, 2, 5 }, { 4, 3, 7 } });<a name="line.40"></a>
+<span class="sourceLineNo">041</span> *     }<a name="line.41"></a>
+<span class="sourceLineNo">042</span> *<a name="line.42"></a>
+<span class="sourceLineNo">043</span> *     private int firstSummand;<a name="line.43"></a>
+<span class="sourceLineNo">044</span> *<a name="line.44"></a>
+<span class="sourceLineNo">045</span> *     private int secondSummand;<a name="line.45"></a>
+<span class="sourceLineNo">046</span> *<a name="line.46"></a>
+<span class="sourceLineNo">047</span> *     private int sum;<a name="line.47"></a>
+<span class="sourceLineNo">048</span> *<a name="line.48"></a>
+<span class="sourceLineNo">049</span> *     public AdditionTest(int firstSummand, int secondSummand, int sum) {<a name="line.49"></a>
+<span class="sourceLineNo">050</span> *         this.firstSummand = firstSummand;<a name="line.50"></a>
+<span class="sourceLineNo">051</span> *         this.secondSummand = secondSummand;<a name="line.51"></a>
+<span class="sourceLineNo">052</span> *         this.sum = sum;<a name="line.52"></a>
+<span class="sourceLineNo">053</span> *     }<a name="line.53"></a>
+<span class="sourceLineNo">054</span> *<a name="line.54"></a>
+<span class="sourceLineNo">055</span> *     &amp;#064;Test<a name="line.55"></a>
+<span class="sourceLineNo">056</span> *     public void test() {<a name="line.56"></a>
+<span class="sourceLineNo">057</span> *         assertEquals(sum, firstSummand + secondSummand);<a name="line.57"></a>
+<span class="sourceLineNo">058</span> *     }<a name="line.58"></a>
+<span class="sourceLineNo">059</span> * }<a name="line.59"></a>
+<span class="sourceLineNo">060</span> * &lt;/pre&gt;<a name="line.60"></a>
+<span class="sourceLineNo">061</span> * &lt;p&gt;<a name="line.61"></a>
+<span class="sourceLineNo">062</span> * Each instance of &lt;code&gt;AdditionTest&lt;/code&gt; will be constructed using the<a name="line.62"></a>
+<span class="sourceLineNo">063</span> * three-argument constructor and the data values in the<a name="line.63"></a>
+<span class="sourceLineNo">064</span> * &lt;code&gt;&amp;#064;Parameters&lt;/code&gt; method.<a name="line.64"></a>
+<span class="sourceLineNo">065</span> * &lt;p&gt;<a name="line.65"></a>
+<span class="sourceLineNo">066</span> * In order that you can easily identify the individual tests, you may provide a<a name="line.66"></a>
+<span class="sourceLineNo">067</span> * name for the &lt;code&gt;&amp;#064;Parameters&lt;/code&gt; annotation. This name is allowed<a name="line.67"></a>
+<span class="sourceLineNo">068</span> * to contain placeholders, which are replaced at runtime. The placeholders are<a name="line.68"></a>
+<span class="sourceLineNo">069</span> * &lt;dl&gt;<a name="line.69"></a>
+<span class="sourceLineNo">070</span> * &lt;dt&gt;{index}&lt;/dt&gt;<a name="line.70"></a>
+<span class="sourceLineNo">071</span> * &lt;dd&gt;the current parameter index&lt;/dd&gt;<a name="line.71"></a>
+<span class="sourceLineNo">072</span> * &lt;dt&gt;{0}&lt;/dt&gt;<a name="line.72"></a>
+<span class="sourceLineNo">073</span> * &lt;dd&gt;the first parameter value&lt;/dd&gt;<a name="line.73"></a>
+<span class="sourceLineNo">074</span> * &lt;dt&gt;{1}&lt;/dt&gt;<a name="line.74"></a>
+<span class="sourceLineNo">075</span> * &lt;dd&gt;the second parameter value&lt;/dd&gt;<a name="line.75"></a>
+<span class="sourceLineNo">076</span> * &lt;dt&gt;...&lt;/dt&gt;<a name="line.76"></a>
+<span class="sourceLineNo">077</span> * &lt;dd&gt;...&lt;/dd&gt;<a name="line.77"></a>
+<span class="sourceLineNo">078</span> * &lt;/dl&gt;<a name="line.78"></a>
+<span class="sourceLineNo">079</span> * &lt;p&gt;<a name="line.79"></a>
+<span class="sourceLineNo">080</span> * In the example given above, the &lt;code&gt;Parameterized&lt;/code&gt; runner creates<a name="line.80"></a>
+<span class="sourceLineNo">081</span> * names like &lt;code&gt;[2: 3 + 2 = 5]&lt;/code&gt;. If you don't use the name parameter,<a name="line.81"></a>
+<span class="sourceLineNo">082</span> * then the current parameter index is used as name.<a name="line.82"></a>
+<span class="sourceLineNo">083</span> * &lt;p&gt;<a name="line.83"></a>
+<span class="sourceLineNo">084</span> * You can also write:<a name="line.84"></a>
+<span class="sourceLineNo">085</span> * &lt;pre&gt;<a name="line.85"></a>
+<span class="sourceLineNo">086</span> * &amp;#064;RunWith(Parameterized.class)<a name="line.86"></a>
+<span class="sourceLineNo">087</span> * public class AdditionTest {<a name="line.87"></a>
+<span class="sourceLineNo">088</span> *     &amp;#064;Parameters(name = &amp;quot;{index}: {0} + {1} = {2}&amp;quot;)<a name="line.88"></a>
+<span class="sourceLineNo">089</span> *     public static Iterable&amp;lt;Object[]&amp;gt; data() {<a name="line.89"></a>
+<span class="sourceLineNo">090</span> *         return Arrays.asList(new Object[][] { { 0, 0, 0 }, { 1, 1, 2 },<a name="line.90"></a>
+<span class="sourceLineNo">091</span> *                 { 3, 2, 5 }, { 4, 3, 7 } });<a name="line.91"></a>
+<span class="sourceLineNo">092</span> *     }<a name="line.92"></a>
+<span class="sourceLineNo">093</span> *<a name="line.93"></a>
+<span class="sourceLineNo">094</span> *     &amp;#064;Parameter(0)<a name="line.94"></a>
+<span class="sourceLineNo">095</span> *     public int firstSummand;<a name="line.95"></a>
+<span class="sourceLineNo">096</span> *<a name="line.96"></a>
+<span class="sourceLineNo">097</span> *     &amp;#064;Parameter(1)<a name="line.97"></a>
+<span class="sourceLineNo">098</span> *     public int secondSummand;<a name="line.98"></a>
+<span class="sourceLineNo">099</span> *<a name="line.99"></a>
+<span class="sourceLineNo">100</span> *     &amp;#064;Parameter(2)<a name="line.100"></a>
+<span class="sourceLineNo">101</span> *     public int sum;<a name="line.101"></a>
+<span class="sourceLineNo">102</span> *<a name="line.102"></a>
+<span class="sourceLineNo">103</span> *     &amp;#064;Test<a name="line.103"></a>
+<span class="sourceLineNo">104</span> *     public void test() {<a name="line.104"></a>
+<span class="sourceLineNo">105</span> *         assertEquals(sum, firstSummand + secondSummand);<a name="line.105"></a>
+<span class="sourceLineNo">106</span> *     }<a name="line.106"></a>
+<span class="sourceLineNo">107</span> * }<a name="line.107"></a>
+<span class="sourceLineNo">108</span> * &lt;/pre&gt;<a name="line.108"></a>
+<span class="sourceLineNo">109</span> * &lt;p&gt;<a name="line.109"></a>
+<span class="sourceLineNo">110</span> * Each instance of &lt;code&gt;AdditionTest&lt;/code&gt; will be constructed with the default constructor<a name="line.110"></a>
+<span class="sourceLineNo">111</span> * and fields annotated by &lt;code&gt;&amp;#064;Parameter&lt;/code&gt;  will be initialized<a name="line.111"></a>
+<span class="sourceLineNo">112</span> * with the data values in the &lt;code&gt;&amp;#064;Parameters&lt;/code&gt; method.<a name="line.112"></a>
+<span class="sourceLineNo">113</span> *<a name="line.113"></a>
+<span class="sourceLineNo">114</span> * &lt;p&gt;<a name="line.114"></a>
+<span class="sourceLineNo">115</span> * The parameters can be provided as an array, too:<a name="line.115"></a>
+<span class="sourceLineNo">116</span> * <a name="line.116"></a>
+<span class="sourceLineNo">117</span> * &lt;pre&gt;<a name="line.117"></a>
+<span class="sourceLineNo">118</span> * &amp;#064;Parameters<a name="line.118"></a>
+<span class="sourceLineNo">119</span> * public static Object[][] data() {<a name="line.119"></a>
+<span class="sourceLineNo">120</span> *      return new Object[][] { { 0, 0, 0 }, { 1, 1, 2 }, { 3, 2, 5 }, { 4, 3, 7 } } };<a name="line.120"></a>
+<span class="sourceLineNo">121</span> * }<a name="line.121"></a>
+<span class="sourceLineNo">122</span> * &lt;/pre&gt;<a name="line.122"></a>
+<span class="sourceLineNo">123</span> * <a name="line.123"></a>
+<span class="sourceLineNo">124</span> * &lt;h3&gt;Tests with single parameter&lt;/h3&gt;<a name="line.124"></a>
+<span class="sourceLineNo">125</span> * &lt;p&gt;<a name="line.125"></a>
+<span class="sourceLineNo">126</span> * If your test needs a single parameter only, you don't have to wrap it with an<a name="line.126"></a>
+<span class="sourceLineNo">127</span> * array. Instead you can provide an &lt;code&gt;Iterable&lt;/code&gt; or an array of<a name="line.127"></a>
+<span class="sourceLineNo">128</span> * objects.<a name="line.128"></a>
+<span class="sourceLineNo">129</span> * &lt;pre&gt;<a name="line.129"></a>
+<span class="sourceLineNo">130</span> * &amp;#064;Parameters<a name="line.130"></a>
+<span class="sourceLineNo">131</span> * public static Iterable&amp;lt;? extends Object&amp;gt; data() {<a name="line.131"></a>
+<span class="sourceLineNo">132</span> *      return Arrays.asList(&amp;quot;first test&amp;quot;, &amp;quot;second test&amp;quot;);<a name="line.132"></a>
+<span class="sourceLineNo">133</span> * }<a name="line.133"></a>
+<span class="sourceLineNo">134</span> * &lt;/pre&gt;<a name="line.134"></a>
+<span class="sourceLineNo">135</span> * &lt;p&gt;<a name="line.135"></a>
+<span class="sourceLineNo">136</span> * or<a name="line.136"></a>
+<span class="sourceLineNo">137</span> * &lt;pre&gt;<a name="line.137"></a>
+<span class="sourceLineNo">138</span> * &amp;#064;Parameters<a name="line.138"></a>
+<span class="sourceLineNo">139</span> * public static Object[] data() {<a name="line.139"></a>
+<span class="sourceLineNo">140</span> *      return new Object[] { &amp;quot;first test&amp;quot;, &amp;quot;second test&amp;quot; };<a name="line.140"></a>
+<span class="sourceLineNo">141</span> * }<a name="line.141"></a>
+<span class="sourceLineNo">142</span> * &lt;/pre&gt;<a name="line.142"></a>
+<span class="sourceLineNo">143</span> *<a name="line.143"></a>
+<span class="sourceLineNo">144</span> * &lt;h3&gt;Executing code before/after executing tests for specific parameters&lt;/h3&gt;<a name="line.144"></a>
+<span class="sourceLineNo">145</span> * &lt;p&gt;<a name="line.145"></a>
+<span class="sourceLineNo">146</span> * If your test needs to perform some preparation or cleanup based on the<a name="line.146"></a>
+<span class="sourceLineNo">147</span> * parameters, this can be done by adding public static methods annotated with<a name="line.147"></a>
+<span class="sourceLineNo">148</span> * {@code @BeforeParam}/{@code @AfterParam}. Such methods should either have no<a name="line.148"></a>
+<span class="sourceLineNo">149</span> * parameters or the same parameters as the test.<a name="line.149"></a>
+<span class="sourceLineNo">150</span> * &lt;pre&gt;<a name="line.150"></a>
+<span class="sourceLineNo">151</span> * &amp;#064;BeforeParam<a name="line.151"></a>
+<span class="sourceLineNo">152</span> * public static void beforeTestsForParameter(String onlyParameter) {<a name="line.152"></a>
+<span class="sourceLineNo">153</span> *     System.out.println("Testing " + onlyParameter);<a name="line.153"></a>
+<span class="sourceLineNo">154</span> * }<a name="line.154"></a>
+<span class="sourceLineNo">155</span> * &lt;/pre&gt;<a name="line.155"></a>
+<span class="sourceLineNo">156</span> *<a name="line.156"></a>
+<span class="sourceLineNo">157</span> * &lt;h3&gt;Create different runners&lt;/h3&gt;<a name="line.157"></a>
+<span class="sourceLineNo">158</span> * &lt;p&gt;<a name="line.158"></a>
+<span class="sourceLineNo">159</span> * By default the {@code Parameterized} runner creates a slightly modified<a name="line.159"></a>
+<span class="sourceLineNo">160</span> * {@link BlockJUnit4ClassRunner} for each set of parameters. You can build an<a name="line.160"></a>
+<span class="sourceLineNo">161</span> * own {@code Parameterized} runner that creates another runner for each set of<a name="line.161"></a>
+<span class="sourceLineNo">162</span> * parameters. Therefore you have to build a {@link ParametersRunnerFactory}<a name="line.162"></a>
+<span class="sourceLineNo">163</span> * that creates a runner for each {@link TestWithParameters}. (<a name="line.163"></a>
+<span class="sourceLineNo">164</span> * {@code TestWithParameters} are bundling the parameters and the test name.)<a name="line.164"></a>
+<span class="sourceLineNo">165</span> * The factory must have a public zero-arg constructor.<a name="line.165"></a>
+<span class="sourceLineNo">166</span> *<a name="line.166"></a>
+<span class="sourceLineNo">167</span> * &lt;pre&gt;<a name="line.167"></a>
+<span class="sourceLineNo">168</span> * public class YourRunnerFactory implements ParametersRunnerFactory {<a name="line.168"></a>
+<span class="sourceLineNo">169</span> *     public Runner createRunnerForTestWithParameters(TestWithParameters test)<a name="line.169"></a>
+<span class="sourceLineNo">170</span> *             throws InitializationError {<a name="line.170"></a>
+<span class="sourceLineNo">171</span> *         return YourRunner(test);<a name="line.171"></a>
+<span class="sourceLineNo">172</span> *     }<a name="line.172"></a>
+<span class="sourceLineNo">173</span> * }<a name="line.173"></a>
+<span class="sourceLineNo">174</span> * &lt;/pre&gt;<a name="line.174"></a>
+<span class="sourceLineNo">175</span> * &lt;p&gt;<a name="line.175"></a>
+<span class="sourceLineNo">176</span> * Use the {@link UseParametersRunnerFactory} to tell the {@code Parameterized}<a name="line.176"></a>
+<span class="sourceLineNo">177</span> * runner that it should use your factory.<a name="line.177"></a>
+<span class="sourceLineNo">178</span> *<a name="line.178"></a>
+<span class="sourceLineNo">179</span> * &lt;pre&gt;<a name="line.179"></a>
+<span class="sourceLineNo">180</span> * &amp;#064;RunWith(Parameterized.class)<a name="line.180"></a>
+<span class="sourceLineNo">181</span> * &amp;#064;UseParametersRunnerFactory(YourRunnerFactory.class)<a name="line.181"></a>
+<span class="sourceLineNo">182</span> * public class YourTest {<a name="line.182"></a>
+<span class="sourceLineNo">183</span> *     ...<a name="line.183"></a>
+<span class="sourceLineNo">184</span> * }<a name="line.184"></a>
+<span class="sourceLineNo">185</span> * &lt;/pre&gt;<a name="line.185"></a>
+<span class="sourceLineNo">186</span> *<a name="line.186"></a>
+<span class="sourceLineNo">187</span> * @since 4.0<a name="line.187"></a>
+<span class="sourceLineNo">188</span> */<a name="line.188"></a>
+<span class="sourceLineNo">189</span>public class Parameterized extends Suite {<a name="line.189"></a>
+<span class="sourceLineNo">190</span>    /**<a name="line.190"></a>
+<span class="sourceLineNo">191</span>     * Annotation for a method which provides parameters to be injected into the<a name="line.191"></a>
+<span class="sourceLineNo">192</span>     * test class constructor by &lt;code&gt;Parameterized&lt;/code&gt;. The method has to<a name="line.192"></a>
+<span class="sourceLineNo">193</span>     * be public and static.<a name="line.193"></a>
+<span class="sourceLineNo">194</span>     */<a name="line.194"></a>
+<span class="sourceLineNo">195</span>    @Retention(RetentionPolicy.RUNTIME)<a name="line.195"></a>
+<span class="sourceLineNo">196</span>    @Target(ElementType.METHOD)<a name="line.196"></a>
+<span class="sourceLineNo">197</span>    public @interface Parameters {<a name="line.197"></a>
+<span class="sourceLineNo">198</span>        /**<a name="line.198"></a>
+<span class="sourceLineNo">199</span>         * Optional pattern to derive the test's name from the parameters. Use<a name="line.199"></a>
+<span class="sourceLineNo">200</span>         * numbers in braces to refer to the parameters or the additional data<a name="line.200"></a>
+<span class="sourceLineNo">201</span>         * as follows:<a name="line.201"></a>
+<span class="sourceLineNo">202</span>         * &lt;pre&gt;<a name="line.202"></a>
+<span class="sourceLineNo">203</span>         * {index} - the current parameter index<a name="line.203"></a>
+<span class="sourceLineNo">204</span>         * {0} - the first parameter value<a name="line.204"></a>
+<span class="sourceLineNo">205</span>         * {1} - the second parameter value<a name="line.205"></a>
+<span class="sourceLineNo">206</span>         * etc...<a name="line.206"></a>
+<span class="sourceLineNo">207</span>         * &lt;/pre&gt;<a name="line.207"></a>
+<span class="sourceLineNo">208</span>         * &lt;p&gt;<a name="line.208"></a>
+<span class="sourceLineNo">209</span>         * Default value is "{index}" for compatibility with previous JUnit<a name="line.209"></a>
+<span class="sourceLineNo">210</span>         * versions.<a name="line.210"></a>
+<span class="sourceLineNo">211</span>         *<a name="line.211"></a>
+<span class="sourceLineNo">212</span>         * @return {@link MessageFormat} pattern string, except the index<a name="line.212"></a>
+<span class="sourceLineNo">213</span>         *         placeholder.<a name="line.213"></a>
+<span class="sourceLineNo">214</span>         * @see MessageFormat<a name="line.214"></a>
+<span class="sourceLineNo">215</span>         */<a name="line.215"></a>
+<span class="sourceLineNo">216</span>        String name() default "{index}";<a name="line.216"></a>
+<span class="sourceLineNo">217</span>    }<a name="line.217"></a>
+<span class="sourceLineNo">218</span><a name="line.218"></a>
+<span class="sourceLineNo">219</span>    /**<a name="line.219"></a>
+<span class="sourceLineNo">220</span>     * Annotation for fields of the test class which will be initialized by the<a name="line.220"></a>
+<span class="sourceLineNo">221</span>     * method annotated by &lt;code&gt;Parameters&lt;/code&gt;.<a name="line.221"></a>
+<span class="sourceLineNo">222</span>     * By using directly this annotation, the test class constructor isn't needed.<a name="line.222"></a>
+<span class="sourceLineNo">223</span>     * Index range must start at 0.<a name="line.223"></a>
+<span class="sourceLineNo">224</span>     * Default value is 0.<a name="line.224"></a>
+<span class="sourceLineNo">225</span>     */<a name="line.225"></a>
+<span class="sourceLineNo">226</span>    @Retention(RetentionPolicy.RUNTIME)<a name="line.226"></a>
+<span class="sourceLineNo">227</span>    @Target(ElementType.FIELD)<a name="line.227"></a>
+<span class="sourceLineNo">228</span>    public @interface Parameter {<a name="line.228"></a>
+<span class="sourceLineNo">229</span>        /**<a name="line.229"></a>
+<span class="sourceLineNo">230</span>         * Method that returns the index of the parameter in the array<a name="line.230"></a>
+<span class="sourceLineNo">231</span>         * returned by the method annotated by &lt;code&gt;Parameters&lt;/code&gt;.<a name="line.231"></a>
+<span class="sourceLineNo">232</span>         * Index range must start at 0.<a name="line.232"></a>
+<span class="sourceLineNo">233</span>         * Default value is 0.<a name="line.233"></a>
+<span class="sourceLineNo">234</span>         *<a name="line.234"></a>
+<span class="sourceLineNo">235</span>         * @return the index of the parameter.<a name="line.235"></a>
+<span class="sourceLineNo">236</span>         */<a name="line.236"></a>
+<span class="sourceLineNo">237</span>        int value() default 0;<a name="line.237"></a>
+<span class="sourceLineNo">238</span>    }<a name="line.238"></a>
+<span class="sourceLineNo">239</span><a name="line.239"></a>
+<span class="sourceLineNo">240</span>    /**<a name="line.240"></a>
+<span class="sourceLineNo">241</span>     * Add this annotation to your test class if you want to generate a special<a name="line.241"></a>
+<span class="sourceLineNo">242</span>     * runner. You have to specify a {@link ParametersRunnerFactory} class that<a name="line.242"></a>
+<span class="sourceLineNo">243</span>     * creates such runners. The factory must have a public zero-arg<a name="line.243"></a>
+<span class="sourceLineNo">244</span>     * constructor.<a name="line.244"></a>
+<span class="sourceLineNo">245</span>     */<a name="line.245"></a>
+<span class="sourceLineNo">246</span>    @Retention(RetentionPolicy.RUNTIME)<a name="line.246"></a>
+<span class="sourceLineNo">247</span>    @Inherited<a name="line.247"></a>
+<span class="sourceLineNo">248</span>    @Target(ElementType.TYPE)<a name="line.248"></a>
+<span class="sourceLineNo">249</span>    public @interface UseParametersRunnerFactory {<a name="line.249"></a>
+<span class="sourceLineNo">250</span>        /**<a name="line.250"></a>
+<span class="sourceLineNo">251</span>         * @return a {@link ParametersRunnerFactory} class (must have a default<a name="line.251"></a>
+<span class="sourceLineNo">252</span>         *         constructor)<a name="line.252"></a>
+<span class="sourceLineNo">253</span>         */<a name="line.253"></a>
+<span class="sourceLineNo">254</span>        Class&lt;? extends ParametersRunnerFactory&gt; value() default BlockJUnit4ClassRunnerWithParametersFactory.class;<a name="line.254"></a>
+<span class="sourceLineNo">255</span>    }<a name="line.255"></a>
+<span class="sourceLineNo">256</span><a name="line.256"></a>
+<span class="sourceLineNo">257</span>    /**<a name="line.257"></a>
+<span class="sourceLineNo">258</span>     * Annotation for {@code public static void} methods which should be executed before<a name="line.258"></a>
+<span class="sourceLineNo">259</span>     * evaluating tests with particular parameters.<a name="line.259"></a>
+<span class="sourceLineNo">260</span>     *<a name="line.260"></a>
+<span class="sourceLineNo">261</span>     * @see org.junit.BeforeClass<a name="line.261"></a>
+<span class="sourceLineNo">262</span>     * @see org.junit.Before<a name="line.262"></a>
+<span class="sourceLineNo">263</span>     * @since 4.13<a name="line.263"></a>
+<span class="sourceLineNo">264</span>     */<a name="line.264"></a>
+<span class="sourceLineNo">265</span>    @Retention(RetentionPolicy.RUNTIME)<a name="line.265"></a>
+<span class="sourceLineNo">266</span>    @Target(ElementType.METHOD)<a name="line.266"></a>
+<span class="sourceLineNo">267</span>    public @interface BeforeParam {<a name="line.267"></a>
+<span class="sourceLineNo">268</span>    }<a name="line.268"></a>
+<span class="sourceLineNo">269</span><a name="line.269"></a>
+<span class="sourceLineNo">270</span>    /**<a name="line.270"></a>
+<span class="sourceLineNo">271</span>     * Annotation for {@code public static void} methods which should be executed after<a name="line.271"></a>
+<span class="sourceLineNo">272</span>     * evaluating tests with particular parameters.<a name="line.272"></a>
+<span class="sourceLineNo">273</span>     *<a name="line.273"></a>
+<span class="sourceLineNo">274</span>     * @see org.junit.AfterClass<a name="line.274"></a>
+<span class="sourceLineNo">275</span>     * @see org.junit.After<a name="line.275"></a>
+<span class="sourceLineNo">276</span>     * @since 4.13<a name="line.276"></a>
+<span class="sourceLineNo">277</span>     */<a name="line.277"></a>
+<span class="sourceLineNo">278</span>    @Retention(RetentionPolicy.RUNTIME)<a name="line.278"></a>
+<span class="sourceLineNo">279</span>    @Target(ElementType.METHOD)<a name="line.279"></a>
+<span class="sourceLineNo">280</span>    public @interface AfterParam {<a name="line.280"></a>
+<span class="sourceLineNo">281</span>    }<a name="line.281"></a>
+<span class="sourceLineNo">282</span><a name="line.282"></a>
+<span class="sourceLineNo">283</span>    /**<a name="line.283"></a>
+<span class="sourceLineNo">284</span>     * Only called reflectively. Do not use programmatically.<a name="line.284"></a>
+<span class="sourceLineNo">285</span>     */<a name="line.285"></a>
+<span class="sourceLineNo">286</span>    public Parameterized(Class&lt;?&gt; klass) throws Throwable {<a name="line.286"></a>
+<span class="sourceLineNo">287</span>        this(klass, new RunnersFactory(klass));<a name="line.287"></a>
+<span class="sourceLineNo">288</span>    }<a name="line.288"></a>
+<span class="sourceLineNo">289</span><a name="line.289"></a>
+<span class="sourceLineNo">290</span>    private Parameterized(Class&lt;?&gt; klass, RunnersFactory runnersFactory) throws Exception {<a name="line.290"></a>
+<span class="sourceLineNo">291</span>        super(klass, runnersFactory.createRunners());<a name="line.291"></a>
+<span class="sourceLineNo">292</span>        validateBeforeParamAndAfterParamMethods(runnersFactory.parameterCount);<a name="line.292"></a>
+<span class="sourceLineNo">293</span>    }<a name="line.293"></a>
+<span class="sourceLineNo">294</span><a name="line.294"></a>
+<span class="sourceLineNo">295</span>    private void validateBeforeParamAndAfterParamMethods(Integer parameterCount)<a name="line.295"></a>
+<span class="sourceLineNo">296</span>            throws InvalidTestClassError {<a name="line.296"></a>
+<span class="sourceLineNo">297</span>        List&lt;Throwable&gt; errors = new ArrayList&lt;Throwable&gt;();<a name="line.297"></a>
+<span class="sourceLineNo">298</span>        validatePublicStaticVoidMethods(Parameterized.BeforeParam.class, parameterCount, errors);<a name="line.298"></a>
+<span class="sourceLineNo">299</span>        validatePublicStaticVoidMethods(Parameterized.AfterParam.class, parameterCount, errors);<a name="line.299"></a>
+<span class="sourceLineNo">300</span>        if (!errors.isEmpty()) {<a name="line.300"></a>
+<span class="sourceLineNo">301</span>            throw new InvalidTestClassError(getTestClass().getJavaClass(), errors);<a name="line.301"></a>
+<span class="sourceLineNo">302</span>        }<a name="line.302"></a>
+<span class="sourceLineNo">303</span>    }<a name="line.303"></a>
+<span class="sourceLineNo">304</span><a name="line.304"></a>
+<span class="sourceLineNo">305</span>    private void validatePublicStaticVoidMethods(<a name="line.305"></a>
+<span class="sourceLineNo">306</span>            Class&lt;? extends Annotation&gt; annotation, Integer parameterCount,<a name="line.306"></a>
+<span class="sourceLineNo">307</span>            List&lt;Throwable&gt; errors) {<a name="line.307"></a>
+<span class="sourceLineNo">308</span>        List&lt;FrameworkMethod&gt; methods = getTestClass().getAnnotatedMethods(annotation);<a name="line.308"></a>
+<span class="sourceLineNo">309</span>        for (FrameworkMethod fm : methods) {<a name="line.309"></a>
+<span class="sourceLineNo">310</span>            fm.validatePublicVoid(true, errors);<a name="line.310"></a>
+<span class="sourceLineNo">311</span>            if (parameterCount != null) {<a name="line.311"></a>
+<span class="sourceLineNo">312</span>                int methodParameterCount = fm.getMethod().getParameterTypes().length;<a name="line.312"></a>
+<span class="sourceLineNo">313</span>                if (methodParameterCount != 0 &amp;&amp; methodParameterCount != parameterCount) {<a name="line.313"></a>
+<span class="sourceLineNo">314</span>                    errors.add(new Exception("Method " + fm.getName()<a name="line.314"></a>
+<span class="sourceLineNo">315</span>                            + "() should have 0 or " + parameterCount + " parameter(s)"));<a name="line.315"></a>
+<span class="sourceLineNo">316</span>                }<a name="line.316"></a>
+<span class="sourceLineNo">317</span>            }<a name="line.317"></a>
+<span class="sourceLineNo">318</span>        }<a name="line.318"></a>
+<span class="sourceLineNo">319</span>    }<a name="line.319"></a>
+<span class="sourceLineNo">320</span><a name="line.320"></a>
+<span class="sourceLineNo">321</span>    private static class AssumptionViolationRunner extends Runner {<a name="line.321"></a>
+<span class="sourceLineNo">322</span>        private final Description description;<a name="line.322"></a>
+<span class="sourceLineNo">323</span>        private final AssumptionViolatedException exception;<a name="line.323"></a>
+<span class="sourceLineNo">324</span><a name="line.324"></a>
+<span class="sourceLineNo">325</span>        AssumptionViolationRunner(TestClass testClass, String methodName,<a name="line.325"></a>
+<span class="sourceLineNo">326</span>                AssumptionViolatedException exception) {<a name="line.326"></a>
+<span class="sourceLineNo">327</span>            this.description = Description<a name="line.327"></a>
+<span class="sourceLineNo">328</span>                    .createTestDescription(testClass.getJavaClass(),<a name="line.328"></a>
+<span class="sourceLineNo">329</span>                            methodName + "() assumption violation");<a name="line.329"></a>
+<span class="sourceLineNo">330</span>            this.exception = exception;<a name="line.330"></a>
+<span class="sourceLineNo">331</span>        }<a name="line.331"></a>
+<span class="sourceLineNo">332</span><a name="line.332"></a>
+<span class="sourceLineNo">333</span>        @Override<a name="line.333"></a>
+<span class="sourceLineNo">334</span>        public Description getDescription() {<a name="line.334"></a>
+<span class="sourceLineNo">335</span>            return description;<a name="line.335"></a>
+<span class="sourceLineNo">336</span>        }<a name="line.336"></a>
+<span class="sourceLineNo">337</span><a name="line.337"></a>
+<span class="sourceLineNo">338</span>        @Override<a name="line.338"></a>
+<span class="sourceLineNo">339</span>        public void run(RunNotifier notifier) {<a name="line.339"></a>
+<span class="sourceLineNo">340</span>            notifier.fireTestAssumptionFailed(new Failure(description, exception));<a name="line.340"></a>
+<span class="sourceLineNo">341</span>        }<a name="line.341"></a>
+<span class="sourceLineNo">342</span>    }<a name="line.342"></a>
+<span class="sourceLineNo">343</span><a name="line.343"></a>
+<span class="sourceLineNo">344</span>    private static class RunnersFactory {<a name="line.344"></a>
+<span class="sourceLineNo">345</span>        private static final ParametersRunnerFactory DEFAULT_FACTORY = new BlockJUnit4ClassRunnerWithParametersFactory();<a name="line.345"></a>
+<span class="sourceLineNo">346</span><a name="line.346"></a>
+<span class="sourceLineNo">347</span>        private final TestClass testClass;<a name="line.347"></a>
+<span class="sourceLineNo">348</span>        private final FrameworkMethod parametersMethod;<a name="line.348"></a>
+<span class="sourceLineNo">349</span>        private final List&lt;Object&gt; allParameters;<a name="line.349"></a>
+<span class="sourceLineNo">350</span>        private final int parameterCount;<a name="line.350"></a>
+<span class="sourceLineNo">351</span>        private final Runner runnerOverride;<a name="line.351"></a>
+<span class="sourceLineNo">352</span><a name="line.352"></a>
+<span class="sourceLineNo">353</span>        private RunnersFactory(Class&lt;?&gt; klass) throws Throwable {<a name="line.353"></a>
+<span class="sourceLineNo">354</span>            testClass = new TestClass(klass);<a name="line.354"></a>
+<span class="sourceLineNo">355</span>            parametersMethod = getParametersMethod(testClass);<a name="line.355"></a>
+<span class="sourceLineNo">356</span>            List&lt;Object&gt; allParametersResult;<a name="line.356"></a>
+<span class="sourceLineNo">357</span>            AssumptionViolationRunner assumptionViolationRunner = null;<a name="line.357"></a>
+<span class="sourceLineNo">358</span>            try {<a name="line.358"></a>
+<span class="sourceLineNo">359</span>                allParametersResult = allParameters(testClass, parametersMethod);<a name="line.359"></a>
+<span class="sourceLineNo">360</span>            } catch (AssumptionViolatedException e) {<a name="line.360"></a>
+<span class="sourceLineNo">361</span>                allParametersResult = Collections.emptyList();<a name="line.361"></a>
+<span class="sourceLineNo">362</span>                assumptionViolationRunner = new AssumptionViolationRunner(testClass,<a name="line.362"></a>
+<span class="sourceLineNo">363</span>                        parametersMethod.getName(), e);<a name="line.363"></a>
+<span class="sourceLineNo">364</span>            }<a name="line.364"></a>
+<span class="sourceLineNo">365</span>            allParameters = allParametersResult;<a name="line.365"></a>
+<span class="sourceLineNo">366</span>            runnerOverride = assumptionViolationRunner;<a name="line.366"></a>
+<span class="sourceLineNo">367</span>            parameterCount =<a name="line.367"></a>
+<span class="sourceLineNo">368</span>                    allParameters.isEmpty() ? 0 : normalizeParameters(allParameters.get(0)).length;<a name="line.368"></a>
+<span class="sourceLineNo">369</span>        }<a name="line.369"></a>
+<span class="sourceLineNo">370</span><a name="line.370"></a>
+<span class="sourceLineNo">371</span>        private List&lt;Runner&gt; createRunners() throws Exception {<a name="line.371"></a>
+<span class="sourceLineNo">372</span>            if (runnerOverride != null) {<a name="line.372"></a>
+<span class="sourceLineNo">373</span>                return Collections.singletonList(runnerOverride);<a name="line.373"></a>
+<span class="sourceLineNo">374</span>            }<a name="line.374"></a>
+<span class="sourceLineNo">375</span>            Parameters parameters = parametersMethod.getAnnotation(Parameters.class);<a name="line.375"></a>
+<span class="sourceLineNo">376</span>            return Collections.unmodifiableList(createRunnersForParameters(<a name="line.376"></a>
+<span class="sourceLineNo">377</span>                    allParameters, parameters.name(),<a name="line.377"></a>
+<span class="sourceLineNo">378</span>                    getParametersRunnerFactory()));<a name="line.378"></a>
+<span class="sourceLineNo">379</span>        }<a name="line.379"></a>
+<span class="sourceLineNo">380</span><a name="line.380"></a>
+<span class="sourceLineNo">381</span>        private ParametersRunnerFactory getParametersRunnerFactory()<a name="line.381"></a>
+<span class="sourceLineNo">382</span>                throws InstantiationException, IllegalAccessException {<a name="line.382"></a>
+<span class="sourceLineNo">383</span>            UseParametersRunnerFactory annotation = testClass<a name="line.383"></a>
+<span class="sourceLineNo">384</span>                    .getAnnotation(UseParametersRunnerFactory.class);<a name="line.384"></a>
+<span class="sourceLineNo">385</span>            if (annotation == null) {<a name="line.385"></a>
+<span class="sourceLineNo">386</span>                return DEFAULT_FACTORY;<a name="line.386"></a>
+<span class="sourceLineNo">387</span>            } else {<a name="line.387"></a>
+<span class="sourceLineNo">388</span>                Class&lt;? extends ParametersRunnerFactory&gt; factoryClass = annotation<a name="line.388"></a>
+<span class="sourceLineNo">389</span>                        .value();<a name="line.389"></a>
+<span class="sourceLineNo">390</span>                return factoryClass.newInstance();<a name="line.390"></a>
+<span class="sourceLineNo">391</span>            }<a name="line.391"></a>
+<span class="sourceLineNo">392</span>        }<a name="line.392"></a>
+<span class="sourceLineNo">393</span><a name="line.393"></a>
+<span class="sourceLineNo">394</span>        private TestWithParameters createTestWithNotNormalizedParameters(<a name="line.394"></a>
+<span class="sourceLineNo">395</span>                String pattern, int index, Object parametersOrSingleParameter) {<a name="line.395"></a>
+<span class="sourceLineNo">396</span>            Object[] parameters = normalizeParameters(parametersOrSingleParameter);<a name="line.396"></a>
+<span class="sourceLineNo">397</span>            return createTestWithParameters(testClass, pattern, index, parameters);<a name="line.397"></a>
+<span class="sourceLineNo">398</span>        }<a name="line.398"></a>
+<span class="sourceLineNo">399</span><a name="line.399"></a>
+<span class="sourceLineNo">400</span>        private static Object[] normalizeParameters(Object parametersOrSingleParameter) {<a name="line.400"></a>
+<span class="sourceLineNo">401</span>            return (parametersOrSingleParameter instanceof Object[]) ? (Object[]) parametersOrSingleParameter<a name="line.401"></a>
+<span class="sourceLineNo">402</span>                    : new Object[] { parametersOrSingleParameter };<a name="line.402"></a>
+<span class="sourceLineNo">403</span>        }<a name="line.403"></a>
+<span class="sourceLineNo">404</span><a name="line.404"></a>
+<span class="sourceLineNo">405</span>        @SuppressWarnings("unchecked")<a name="line.405"></a>
+<span class="sourceLineNo">406</span>        private static List&lt;Object&gt; allParameters(<a name="line.406"></a>
+<span class="sourceLineNo">407</span>                TestClass testClass, FrameworkMethod parametersMethod) throws Throwable {<a name="line.407"></a>
+<span class="sourceLineNo">408</span>            Object parameters = parametersMethod.invokeExplosively(null);<a name="line.408"></a>
+<span class="sourceLineNo">409</span>            if (parameters instanceof List) {<a name="line.409"></a>
+<span class="sourceLineNo">410</span>                return (List&lt;Object&gt;) parameters;<a name="line.410"></a>
+<span class="sourceLineNo">411</span>            } else if (parameters instanceof Collection) {<a name="line.411"></a>
+<span class="sourceLineNo">412</span>                return new ArrayList&lt;Object&gt;((Collection&lt;Object&gt;) parameters);<a name="line.412"></a>
+<span class="sourceLineNo">413</span>            } else if (parameters instanceof Iterable) {<a name="line.413"></a>
+<span class="sourceLineNo">414</span>                List&lt;Object&gt; result = new ArrayList&lt;Object&gt;();<a name="line.414"></a>
+<span class="sourceLineNo">415</span>                for (Object entry : ((Iterable&lt;Object&gt;) parameters)) {<a name="line.415"></a>
+<span class="sourceLineNo">416</span>                    result.add(entry);<a name="line.416"></a>
+<span class="sourceLineNo">417</span>                }<a name="line.417"></a>
+<span class="sourceLineNo">418</span>                return result;<a name="line.418"></a>
+<span class="sourceLineNo">419</span>            } else if (parameters instanceof Object[]) {<a name="line.419"></a>
+<span class="sourceLineNo">420</span>                return Arrays.asList((Object[]) parameters);<a name="line.420"></a>
+<span class="sourceLineNo">421</span>            } else {<a name="line.421"></a>
+<span class="sourceLineNo">422</span>                throw parametersMethodReturnedWrongType(testClass, parametersMethod);<a name="line.422"></a>
+<span class="sourceLineNo">423</span>            }<a name="line.423"></a>
+<span class="sourceLineNo">424</span>        }<a name="line.424"></a>
+<span class="sourceLineNo">425</span><a name="line.425"></a>
+<span class="sourceLineNo">426</span>        private static FrameworkMethod getParametersMethod(TestClass testClass) throws Exception {<a name="line.426"></a>
+<span class="sourceLineNo">427</span>            List&lt;FrameworkMethod&gt; methods = testClass<a name="line.427"></a>
+<span class="sourceLineNo">428</span>                    .getAnnotatedMethods(Parameters.class);<a name="line.428"></a>
+<span class="sourceLineNo">429</span>            for (FrameworkMethod each : methods) {<a name="line.429"></a>
+<span class="sourceLineNo">430</span>                if (each.isStatic() &amp;&amp; each.isPublic()) {<a name="line.430"></a>
+<span class="sourceLineNo">431</span>                    return each;<a name="line.431"></a>
+<span class="sourceLineNo">432</span>                }<a name="line.432"></a>
+<span class="sourceLineNo">433</span>            }<a name="line.433"></a>
+<span class="sourceLineNo">434</span><a name="line.434"></a>
+<span class="sourceLineNo">435</span>            throw new Exception("No public static parameters method on class "<a name="line.435"></a>
+<span class="sourceLineNo">436</span>                    + testClass.getName());<a name="line.436"></a>
+<span class="sourceLineNo">437</span>        }<a name="line.437"></a>
+<span class="sourceLineNo">438</span><a name="line.438"></a>
+<span class="sourceLineNo">439</span>        private List&lt;Runner&gt; createRunnersForParameters(<a name="line.439"></a>
+<span class="sourceLineNo">440</span>                Iterable&lt;Object&gt; allParameters, String namePattern,<a name="line.440"></a>
+<span class="sourceLineNo">441</span>                ParametersRunnerFactory runnerFactory) throws Exception {<a name="line.441"></a>
+<span class="sourceLineNo">442</span>            try {<a name="line.442"></a>
+<span class="sourceLineNo">443</span>                List&lt;TestWithParameters&gt; tests = createTestsForParameters(<a name="line.443"></a>
+<span class="sourceLineNo">444</span>                        allParameters, namePattern);<a name="line.444"></a>
+<span class="sourceLineNo">445</span>                List&lt;Runner&gt; runners = new ArrayList&lt;Runner&gt;();<a name="line.445"></a>
+<span class="sourceLineNo">446</span>                for (TestWithParameters test : tests) {<a name="line.446"></a>
+<span class="sourceLineNo">447</span>                    runners.add(runnerFactory<a name="line.447"></a>
+<span class="sourceLineNo">448</span>                            .createRunnerForTestWithParameters(test));<a name="line.448"></a>
+<span class="sourceLineNo">449</span>                }<a name="line.449"></a>
+<span class="sourceLineNo">450</span>                return runners;<a name="line.450"></a>
+<span class="sourceLineNo">451</span>            } catch (ClassCastException e) {<a name="line.451"></a>
+<span class="sourceLineNo">452</span>                throw parametersMethodReturnedWrongType(testClass, parametersMethod);<a name="line.452"></a>
+<span class="sourceLineNo">453</span>            }<a name="line.453"></a>
+<span class="sourceLineNo">454</span>        }<a name="line.454"></a>
+<span class="sourceLineNo">455</span><a name="line.455"></a>
+<span class="sourceLineNo">456</span>        private List&lt;TestWithParameters&gt; createTestsForParameters(<a name="line.456"></a>
+<span class="sourceLineNo">457</span>                Iterable&lt;Object&gt; allParameters, String namePattern)<a name="line.457"></a>
+<span class="sourceLineNo">458</span>                throws Exception {<a name="line.458"></a>
+<span class="sourceLineNo">459</span>            int i = 0;<a name="line.459"></a>
+<span class="sourceLineNo">460</span>            List&lt;TestWithParameters&gt; children = new ArrayList&lt;TestWithParameters&gt;();<a name="line.460"></a>
+<span class="sourceLineNo">461</span>            for (Object parametersOfSingleTest : allParameters) {<a name="line.461"></a>
+<span class="sourceLineNo">462</span>                children.add(createTestWithNotNormalizedParameters(namePattern,<a name="line.462"></a>
+<span class="sourceLineNo">463</span>                        i++, parametersOfSingleTest));<a name="line.463"></a>
+<span class="sourceLineNo">464</span>            }<a name="line.464"></a>
+<span class="sourceLineNo">465</span>            return children;<a name="line.465"></a>
+<span class="sourceLineNo">466</span>        }<a name="line.466"></a>
+<span class="sourceLineNo">467</span><a name="line.467"></a>
+<span class="sourceLineNo">468</span>        private static Exception parametersMethodReturnedWrongType(<a name="line.468"></a>
+<span class="sourceLineNo">469</span>                TestClass testClass, FrameworkMethod parametersMethod) throws Exception {<a name="line.469"></a>
+<span class="sourceLineNo">470</span>            String className = testClass.getName();<a name="line.470"></a>
+<span class="sourceLineNo">471</span>            String methodName = parametersMethod.getName();<a name="line.471"></a>
+<span class="sourceLineNo">472</span>            String message = MessageFormat.format(<a name="line.472"></a>
+<span class="sourceLineNo">473</span>                    "{0}.{1}() must return an Iterable of arrays.", className,<a name="line.473"></a>
+<span class="sourceLineNo">474</span>                    methodName);<a name="line.474"></a>
+<span class="sourceLineNo">475</span>            return new Exception(message);<a name="line.475"></a>
+<span class="sourceLineNo">476</span>        }<a name="line.476"></a>
+<span class="sourceLineNo">477</span><a name="line.477"></a>
+<span class="sourceLineNo">478</span>        private TestWithParameters createTestWithParameters(<a name="line.478"></a>
+<span class="sourceLineNo">479</span>                TestClass testClass, String pattern, int index,<a name="line.479"></a>
+<span class="sourceLineNo">480</span>                Object[] parameters) {<a name="line.480"></a>
+<span class="sourceLineNo">481</span>            String finalPattern = pattern.replaceAll("\\{index\\}",<a name="line.481"></a>
+<span class="sourceLineNo">482</span>                    Integer.toString(index));<a name="line.482"></a>
+<span class="sourceLineNo">483</span>            String name = MessageFormat.format(finalPattern, parameters);<a name="line.483"></a>
+<span class="sourceLineNo">484</span>            return new TestWithParameters("[" + name + "]", testClass,<a name="line.484"></a>
+<span class="sourceLineNo">485</span>                    Arrays.asList(parameters));<a name="line.485"></a>
+<span class="sourceLineNo">486</span>        }<a name="line.486"></a>
+<span class="sourceLineNo">487</span>    }<a name="line.487"></a>
+<span class="sourceLineNo">488</span>}<a name="line.488"></a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</body>
+</html>

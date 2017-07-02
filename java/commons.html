@@ -12,7 +12,7 @@
 <link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
 <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
 <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<title>NATE--笔记--COMMONS</title>
+<title>NATE--笔记--LIBS</title>
 <!-- Bootstrap -->
 <link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
 	rel="stylesheet">
@@ -62,7 +62,7 @@
 				<div class="panel panel-default"
 					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
 					<div class="panel-heading">
-						<h3 class="panel-title">commons</h3>
+						<h3 class="panel-title">LIBS</h3>
 					</div>
 					<div class="list-group">
 						<a href="#commons-intro" class="list-group-item">简介</a>
@@ -70,6 +70,8 @@
 						<a href="#commons-logging" class="list-group-item">commons-logging-1.2</a>
 						<a href="#apache-log4j" class="list-group-item">apache-log4j-1.2.17
 							-- 非commons组件</a>
+						<a href="#junit" class="list-group-item">junit-4.12 --
+							非commons组件</a>
 						<a href="#commons-collections" class="list-group-item">commons-collections4-4.1</a>
 						<a href="#commons-compress" class="list-group-item">commons-compress-1.12</a>
 						<a href="#commons-compress" class="list-group-item">commons-io-2.5</a>
@@ -1041,10 +1043,369 @@ log4j.appender.release.File=./logs/release.log4j
 				<!-- item over -->
 
 				<!-- item start -->
+				<a class="offset" id="junit"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">JUnit-4.12</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								<span class="text-primary">说明：</span> JUnit 是一个 Java
+								语言的单元测试框架，有它自己的 JUnit 扩展生态圈。多数 Java 的开发环境都已经集成了 JUnit 作为单元测试的工具。
+							</p>
+							<p>JUnit 是一个开放源代码的 Java 测试框架，用于编写和运行可重复的测试。JUnit 提供以下功能：</p>
+							<ol>
+								<li>用于测试期望结果的断言</li>
+								<li>用于共享共同测试数据的测试工具</li>
+								<li>用于方便的组织和运行测试的测试套件</li>
+								<li>图形和文本的测试运行器</li>
+							</ol>
+							<p>
+								<b>JUnit 的特点:</b>
+							</p>
+							<ul>
+								<li>
+									<p>JUnit是用于编写和运行测试的开源框架。</p>
+								</li>
+								<li>
+									<p>提供了注释，以确定测试方法。</p>
+								</li>
+								<li>
+									<p>提供断言测试预期结果。</p>
+								</li>
+								<li>
+									<p>提供了测试运行的运行测试。</p>
+								</li>
+								<li>
+									<p>JUnit测试让您可以更快地编写代码，提高质量</p>
+								</li>
+								<li>
+									<p>JUnit是优雅简洁。它是不那么复杂以及不需要花费太多的时间。</p>
+								</li>
+								<li>
+									<p>JUnit测试可以自动运行，检查自己的结果，并提供即时反馈。没有必要通过测试结果报告来手动梳理。</p>
+								</li>
+								<li>
+									<p>JUnit测试可以组织成测试套件包含测试案例，甚至其他测试套件。</p>
+								</li>
+								<li>
+									<p>Junit显示测试进度的，如果测试是没有问题条形是绿色的，测试失败则会变成红色。</p>
+								</li>
+							</ul>
+							<p>
+								JAR 包 --
+								<a href="commons/junit-4.12/junit-4.12.jar">JUnit-4.12.jar</a>
+							</p>
+							<p>
+								JUnit-4.12 依赖 hamcrest-1.3 版本 --
+								<a href="commons/junit-4.12/hamcrest-core-1.3.jar">hamcrest-core-1.3.jar</a>
+								和
+								<a href="commons/junit-4.12/hamcrest-library-1.3.jar">hamcrest-library-1.3.jar</a>
+							</p>
+							<p>
+								文档 --
+								<a target="_blank"
+									href="commons/junit-4.12/javadoc/latest/index.html">apidocs</a>
+							</p>
+
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>在 Gradle 中使用 JUnit 测试</b>
+							</p>
+							<div class="row">
+								<div class="col-md-6">
+									<p>使用 Gradle 构建的 Java项目，结构如右图所示：</p>
+									<p>
+										1. 在
+										<code>build.gradle</code>
+										文件中加入
+										<code>junit-4.12</code>
+										依赖
+									</p>
+									<pre class="brush: groovy;">
+apply plugin: 'java'
+apply plugin: 'application'
+
+// 为 application 插件指定运行主类
+mainClassName = 'App'
+
+// 使用 jcenter 仓库
+repositories {
+    jcenter()
+}
+
+// 加入 junit-4.12 库依赖
+dependencies {
+    testCompile 'junit:junit:4.12'
+}
+
+// 生成的 jar 包 manefest 文件加入运行主类和作者信息
+jar {
+    manifest {
+        attributes 'Main-Class': 'App'
+        attributes 'author': author
+        attributes 'mail': mail
+    }
+}
+</pre>
+								</div>
+								<div class="col-md-6">
+									<p width="100%">
+										<img src="images/java-project.png" class="img-responsive">
+									</p>
+								</div>
+							</div>
+
+							<p>
+								2. 在
+								<code>src/test/java</code>
+								目录编写相关测试类。
+							</p>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<a data-toggle="collapse" data-parent="#accordion"
+										href="#junit-java-src" aria-expanded="false"
+										class="code-header collapsed">
+										<span class="glyphicon glyphicon-plus"></span> View Code
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										<code>src/main/java/cm/nate/parser/XmlParserUtils.java</code>
+									</a>
+								</div>
+								<div id="junit-java-src" class="panel-collapse collapse"
+									style="height: 0px;" aria-expanded="false">
+									<pre class="brush: java;">
+package cm.nate.parser;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.ArrayList;
+
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.SAXException;
+
+import cm.nate.model.Book;
+import cm.nate.service.BookSaxParserService;
+
+public class XmlParserUtils {
+	/**
+	 * 此类从 res/books.xml 文件中读取 book 信息
+	 */
+    public static ArrayList&lt;Book> getBooks(String xmlPath) {
+        if(null == xmlPath || "".equals(xmlPath)) {
+            return null;
+        }
+
+        File xml = new File(xmlPath);
+        if(!xml.exists() || xml.isDirectory()) {
+            return null;
+        }
+
+        SAXParserFactory factory = SAXParserFactory.newInstance();  
+        SAXParser parser = null;
+        BookSaxParserService handler;
+        try {
+            parser = factory.newSAXParser();
+            handler = new BookSaxParserService();
+            parser.parse(new FileInputStream(xml), handler);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        ArrayList&lt;Book> list = handler.getBooks();
+        
+        return list;
+    }
+}
+</pre>
+								</div>
+							</div>
+
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<a data-toggle="collapse" data-parent="#accordion"
+										href="#junit-test-src" aria-expanded="false"
+										class="code-header collapsed">
+										<span class="glyphicon glyphicon-plus"></span> View Code
+										&nbsp;&nbsp;&nbsp;&nbsp;
+										<code>src/main/java/cm/nate/parser/XmlParserUtilsTest.java</code>
+									</a>
+								</div>
+								<div id="junit-test-src" class="panel-collapse collapse"
+									style="height: 0px;" aria-expanded="false">
+									<pre class="brush: java;">
+package cm.nate.parser;
+
+import cm.nate.model.Book;
+import java.util.ArrayList;
+
+// 静态导入 Assert 类的方法
+import static org.junit.Assert.*;
+import org.junit.Test;
+
+public class XmlParserUtilsTest {
+
+    @Test			// 使用 Test 注解
+    public void testGetBooks() {
+        assertNull(XmlParserUtils.getBooks(null));		// 参数为 null 测试
+        assertNull(XmlParserUtils.getBooks(""));		// 参数为空测试
+
+        assertNull(XmlParserUtils.getBooks("res/"));	// 参数为目录测试
+        assertNull(XmlParserUtils.getBooks("res/not-exist.xml"));    // 文件不存在测试
+        assertNotNull(XmlParserUtils.getBooks("res/books.xml"));     // 一切正常测试
+    }
+}
+</pre>
+								</div>
+							</div>
+							<p>
+								3. 直接运行
+								<code>$ gradle test</code>
+								, 如果测试通过，打开
+								<code>build/reports/tests/test/index.html</code>
+								文件，可以看到生成的测试报告。
+							</p>
+
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>Assert 类的一些方法：</b> -- 详情参数 API 文档: &nbsp;&nbsp;
+								<a
+									href="commons/junit-4.12/javadoc/latest/org/junit/Assert.html"
+									target="_blank">Assert</a>
+							</p>
+							<ul>
+								<li>
+									<p>
+										<code>assertNull(Object object)</code>
+										-- 检查对象是空的
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>assertNotNull(Object object)</code>
+										-- 检查对象不是空的
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>assertTrue(boolean condition)</code>
+										-- 检查条件为 true
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>assertFalse(boolean condition)</code>
+										-- 检查条件为 false
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>assertEquals(Object expected, Object actual)</code>
+										-- 检查是否 equals
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>assertNotEquals(Object expected, Object actual)</code>
+										-- 检查是否不 equals
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>fail</code>
+										-- 在没有报告的情况下使测试不通过
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>fail((String message))</code>
+										-- 使测试不通过并生成一条消息
+									</p>
+								</li>
+							</ul>
+
+							<p>
+								<b>JUnit 4 中常用注解:</b>
+							</p>
+							<ul>
+								<li>
+									<p>
+										<code>@Test</code>
+										-- @Test 注解的 public void 方法将会被当做测试用例，JUnit 每次都会创建一个新的测试实例，然后调用
+										@Test 注解方法，任何异常的抛出都会认为测试失败。
+									</p>
+									<pre class="brush: java;">
+/**
+ * @Test 注解提供 2 个参数：
+ * 1. expected -- 定义测试方法应该抛出的异常，如果测试方法没有抛出异常或者抛出了一个不同的异常，测试失败
+ * 2. timeout -- 如果测试运行时间长于该定义时间，测试失败（单位为毫秒）
+ */
+@Test(expected=Exception.class)
+public void testAdd() throws Exception {  
+    throw new Exception();
+}
+
+@Test(timeout=5000)  
+public void testAdd() {  
+    while(true) {}  
+}
+</pre>
+								</li>
+								<li>
+									<p>
+										<code>@Before</code>
+										-- 使用 @Before 注解一个 public void 方法会使该方法在 @Test
+										注解方法被执行前执行（那么就可以在该方法中创建相同的对象）
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>@After</code>
+										-- 使用 @After 注解一个 public void 方法会使该方法在 @Test 注解方法执行后被执行, 即使在
+										@Before 注解方法、@Test 注解方法中抛出了异常，所有的 @After 注解方法依然会被执行
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>@BeforeClass</code>
+										-- 使用 @BeforeClass 注解一个 public static void
+										方法，并且该方法不带任何参数，会使该方法在所有测试方法被执行前执行一次，并且只执行一次
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>@AfterClass</code>
+										-- 使用 @AfterClass 注解一个 public static void
+										方法会使该方法在测试类中的所有测试方法执行完后被执行, 即使在 @BeforeClass 注解方法中抛出了异常，所有的
+										@AfterClass 注解方法依然会被执行
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>@Ignore</code>
+										-- 对包含测试类的类或 @Test 注解方法使用 @Ignore
+										注解将使被注解的类或方法不会被当做测试执行，相当于放弃对类或 @Test 标示方法的测试。
+									</p>
+								</li>
+								</li>
+						</div>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
 				<a class="offset" id="commons-collections"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">commons-collctinos4-4.1</h3>
+						<h3 class="panel-title">commons-collections4-4.1</h3>
 					</div>
 					<div class="panel-body">
 						<p>
@@ -1593,8 +1954,8 @@ while (iter2.hasNext()) {
 
 							<li>
 								<p>
-									<u><strong>Closure</strong></u> --
-									这一组接口和类提供一个操作对象的execute方法，为我们在处理一系列对象时可以将处理逻辑分离出来。 <strong>ChainedClosure</strong>可以包装一组Closure作为整体执行；IfClosure在创建时需要提供给它一个Predicate和两个Closure，执行时先做Predicate判定再决定执行哪一个Closure；
+									<u><strong>Closure</strong></u> -- 这一组接口和类提供一个操作对象的 execute
+									方法，为我们在处理一系列对象时可以将处理逻辑分离出来。 <strong>ChainedClosure</strong>可以包装一组Closure作为整体执行；IfClosure在创建时需要提供给它一个Predicate和两个Closure，执行时先做Predicate判定再决定执行哪一个Closure；
 									<strong>SwitchClosure</strong>跟SwitchTransformer类似，根据创建时传入的Predicate组和Closure组对应执行；
 									<strong>WhileClosure</strong>则根据创建时传入的Predicate做判断，如果为true则执行Closure，直到Predicate返回false；等等。
 								</p>
@@ -2232,6 +2593,7 @@ public void queryAll() {
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
