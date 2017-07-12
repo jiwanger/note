@@ -66,8 +66,9 @@
 					</div>
 					<div class="list-group">
 						<a href="#" class="list-group-item">简介</a>
-						<a href="#apache-" class="list-group-item">...</a>
-						<a href="#apache-" class="list-group-item">...</a>
+						<a href="#apache-ssl" class="list-group-item">安全套接字层(SSL)</a>
+						<a href="#apache-encrypt" class="list-group-item">Let's
+							Encrypt 免费 SSL 证书</a>
 						<a href="#apache-" class="list-group-item">...</a>
 						<a href="#apache-" class="list-group-item">...</a>
 					</div>
@@ -87,11 +88,18 @@
 						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-						<p><b>Apache 2.2 中文文档</b> -- <a href="apache-doc-2.2/index.html" target="_blank">Apache 2.2 中文文档</a> &nbsp;&nbsp; <b>官方网址</b> -- <a href="http://httpd.apache.org/" target="_blank">Apache Http Server</a></p>
+						<p>
+							<b>Apache 2.2 中文文档</b> --
+							<a href="apache-doc-2.2/index.html" target="_blank">Apache
+								2.2 中文文档</a>
+							&nbsp;&nbsp; <b>官方网址</b> --
+							<a href="http://httpd.apache.org/" target="_blank">Apache
+								Http Server</a>
+						</p>
 						<p>
 							<b>Apache HTTP Server</b> 是 Apache
 							软件基金会的一个开放源码的网页服务器，可以在大多数计算机操作系统中运行，由于其多平台和安全性被广泛使用，是最流行的 Web
-							服务器端软件之一。它快速、可靠并且可通过简单的 API 扩展，将 Perl/Python 等解释器编译到服务器中
+							服务器端软件之一。它快速、可靠并且可通过简单的 API 扩展，将 Perl/Python 等解释器编译到服务器中。
 						</p>
 						<p>
 							<b>Apache 和 Tomcat</b>
@@ -113,22 +121,150 @@
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="apache-"></a>
+				<a class="offset" id="apache-ssl"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">安全套接字层(SSL)</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								更多 SSL 的知识看:
+								<a href="apache-doc-2.2/ssl/" target="_blank">Apache 的
+									SSL/TLS 加密</a>
+							</p>
+							<p>
+								要理解 SSL 就必须理解 <b>密码系统</b>、<b>消息摘要函数(单向或散列函数)</b> 和 <b>数字签名</b>，提供了保密性、完整性和认证的基础。
+							</p>
+							<p>
+								<b>密码系统</b> -- 密码系统有两大类：常规的和公共密钥。常规密码
+								又称为对称密码，需要发送者和接收者共同持有一个密钥：一小段用来加密和解密的秘密信息。如果这个密钥是保密的，那么这条消息除了发送者和接受者以外可能没有人可以阅读。
+							</p>
+							<p>
+								<b>消息摘要</b> --
+								消息摘要用于对较大而且变长的消息建立较短而且等长的一种表述，其设计使将摘要还原成消息极其困难，而且对两个不同的消息几乎不可能生成相同的摘要，从而排除了替换一个消息为另一个而维持相同摘要的可能性。
+							</p>
+							<p>
+								<b>数字签名</b> --
+								数字签名是以加密的消息摘要和其他信息(比如一个流水号)以及发送者的私有密钥建立的。虽然任何人都可能用公共密钥解密签名，但是只有签发者知道其私有密钥，也就是，只有密钥的持有者才能签发。包含在签名中的摘要只对该消息有效，以确保没有人可以改变摘要而保持签名不变。
+							</p>
+							<p>
+								SSL 的一个常见的用途是保护浏览器和网络服务器之间的网络 HTTP 通讯，但这并排除应用于不加保护的
+								HTTP。其方法主要是，对普通 HTTP 加以 SSL 保护(称为 HTTPS)，但有一个重要的区别：它使用 URL 类型
+								https 而不是 http ，而且使用不同的服务器端口(默认的是 443)。
+								<code>mod_ssl</code>
+								为 Apache 网络服务器提供的功能主要就是这些了。
+							</p>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>Centos 下 apache 配置 https:</b>
+							</p>
+							<pre class="brush: bash;">
+# 1. 先安装 mod_ssl
+$ sudo yum install mod_ssl
+
+# 2. 查看是否安装成功，成功后在 /etc/httpd/conf.d/ 下会有一个 ssl.conf 的文件,打开
+# 主要是看下证书及密钥的位置
+#	SSLCertificateFile /etc/pki/tls/certs/localhost.crt
+#	SSLCertificateKeyFile /etc/pki/tls/private/localhost.key
+
+# 3. 删除并重新生成 /etc/pki/tls/private/localhost.key
+$ cd /etc/pki/tls/private/
+$ sudo rm -f localhost.key
+$ sudo openssl genrsa 1024 > localhost.key
+
+# 4. 删除并重新生成 /etc/pki/tls/certs/localhost.crt
+$ cd /etc/pki/tls/certs/
+$ sudo rm -rf localhost.crt
+$ sudo openssl req -new -x509 -days 365 -key ../private/localhost.key -out localhost.crt
+# 这一步要填写需要填写的信息，证书就生成了
+
+# 5. iptables 开启 443 端口, 并重启 iptables
+$ sudo vim /etc/sysconfig/iptables
+# A INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
+$ sudo service iptables restart
+
+# 6. 重启 apache, 发送 https 可访问了（在浏览器中要添加为信任）
+$ sudo service httpd restart
+</pre>
+						</div>
+					</div>
 				</div>
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="apache-"></a>
+				<a class="offset" id="apache-encript"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">申请 Let's Encrypt 永久免费 SSL 证书</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								<b>Let's Encrypt 申请</b>
+							</p>
+							<p>Let's Encrypt 作为一个公共且免费 SSL 的项目逐渐被广大用户传播和使用，是由
+								Mozilla、Cisco、Akamai、IdenTrust、EFF 等组织人员发起，主要的目的也是为了推进网站从 HTTP 向
+								HTTPS 过度的进程，目前已经有越来越多的商家加入和赞助支持。</p>
+							<p>
+								虽然目前 Let's Encrypt 免费 SSL 证书 <b>默认是 90 天有效期</b>，但是我们也可以到期自动续约，不影响我们的尝试和使用。
+							</p>
+							<p>根据官方的要求，我们在 VPS、服务器上部署 Let's Encrypt 免费 SSL 证书之前，需要系统支持
+								Python2.7 以上版本以及支持 GIT 工具。</p>
+							<pre class="brush: bash;">
+# 1. 下载 Let's Encrypt
+$ git clone https://github.com/letsencrypt/letsencrypt
+
+# 2. 先关闭 apache, apache 占用了 443 端口
+$ sudo service httpd stop
+
+# 3. 配置 Let's Encrypt, 注意: office.lesson1234.com 的域名所有者邮箱是 jiwanger@126.com
+$ cd letsencrypt
+$ ./letsencrypt-auto certonly --standalone --email jiwanger@126.com -d office.lesson1234.com
+
+# 4. 在完成 Let's Encrypt 证书的生成之后，我们会在如下域名目录下有 4 个文件就是生成的密钥证书文件。
+$ sudo ls /etc/letsencrypt/live/office.lesson1234.com/
+#	cert.pem  - Apache服务器端证书
+#	chain.pem  - Apache根证书和中继证书
+#	fullchain.pem  - Nginx所需要ssl_certificate文件
+#	privkey.pem - 安全证书KEY文件
+</pre>
+
+							<p>
+								<b>Apache 应用 Let's Encrypt 证书</b>
+							</p>
+							<p>如果 Apache 已经支持 https, 只修改证书文件就可以了；如果还不支持，请参照前面如何为 Apache
+								配置 https。</p>
+							<pre class="brush: bash;">
+$ sudo vim /etc/httpd/conf.d/ssl.conf
+# 修改 SSLCertificateFile 和 SSLCertificateKeyFile 位置为申请的证书
+	SSLCertificateFile /etc/letsencrypt/live/office.lesson1234.com/fullchain.pem
+		
+	SSLCertificateKeyFile /etc/letsencrypt/live/office.lesson1234.com/privkey.pem
+	
+$ sudo service httpd restart
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>Let's Encrypt 续期</b>
+							</p>
+							<pre class="brush: bash;">
+# 此行这句代码，Let's Encrypt 会续期， 在 90 天内再去执行一次就可以解决续期问题，这样又可以继续使用 90 天
+./letsencrypt-auto certonly --renew-by-default --email jiwanger@126.com -d office.lesson1234.com
+</pre>
+
+							<p>
+								<b>CentOS 下使用 Crond 定时任务完成自动续期</b>
+							</p>
+							<pre class="brush: bash;">
+
+</pre>
+						</div>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -260,7 +396,7 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

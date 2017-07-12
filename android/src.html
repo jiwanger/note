@@ -100,7 +100,7 @@
 							Content Provider 组件的实现原理<span class="badge">10</span>
 						</a>
 						<a href="#src-" class="list-group-item">
-							Zygote和System进程的启动过程<span class="badge">11</span>
+							Zygote 和 System 进程的启动过程<span class="badge">11</span>
 						</a>
 						<a href="#src-" class="list-group-item">
 							应用程序进程的启动过程<span class="badge">12</span>
@@ -140,9 +140,9 @@
 							<p>
 							<p>本文的实际測試环境:</p>
 							<ul>
-								<li>OS: Linux Mint 17 (32位)</li>
-								<li>JAVA: 1.6.0_45(本人常用jdk1.8.0_65版本，要换成1.6的java版本)</li>
-								<li>GCC/G++: 4.4(系统的 gcc/g++ 的版本太高，要换成4.4的版本)</li>
+								<li>OS: Linux Mint 17 (32 位)</li>
+								<li>JAVA: 1.6.0_45(本人常用 jdk1.8.0_65 版本，要换成 1.6 的 java 版本)</li>
+								<li>GCC/G++: 4.4(系统的 gcc/g++ 的版本太高，要换成 4.4 的版本)</li>
 								<li>MAKE: GNU Make 3.81</li>
 								<li>GIT: 1.9.1</li>
 							</ul>
@@ -507,7 +507,7 @@ device
 								<p>
 									<code>external</code>
 									--
-									Android使用的一些开源的模组，做Android移植时，例如要进行蓝牙模块、wifi模块移植时，external目录下的源代码对你就很重要了。
+									Android 使用的一些开源的模组，做 Android 移植时，例如要进行蓝牙模块、wifi模块移植时，external目录下的源代码对你就很重要了。
 								</p>
 								<pre class="brush: bash;">
 external
@@ -921,30 +921,30 @@ system
 					</div>
 					<div class="panel-body">
 						<div class="sub-item">
-							<h5 class="text-primary">Android系统和linux内核的关系</h5>
-							<p>Android是基于Linux内核的操作系统，虽然Android基于Linux内核，但是它与Linux之间还是有很大的差别，比如Android在Linux内核的基础上添加了
+							<h5 class="text-primary">Android 系统和 linux 内核的关系</h5>
+							<p>Android 是基于 Linux 内核的操作系统，虽然 Android 基于 Linux 内核，但是它与 Linux 之间还是有很大的差别，比如 Android 在 Linux 内核的基础上添加了
 								自己所特有的驱动程序。</p>
-							<p>Android对linux系统的改动主要有以下几个方面：</p>
+							<p>Android 对 Linux 系统的改动主要有以下几个方面：</p>
 							<ul>
-								<li>它没有glibc支持;</li>
-								<li>它并不包括一整套标准的Linux使用程序;</li>
-								<li>它没有本地基于X服务的窗口系统;</li>
-								<li>Android专有的驱动程序。</li>
+								<li>它没有 glibc 支持;</li>
+								<li>它并不包括一整套标准的 Linux 使用程序;</li>
+								<li>它没有本地基于 X 服务的窗口系统;</li>
+								<li>Android 专有的驱动程序。</li>
 							</ul>
-							<p>Android专有的驱动程序主要修改如下:</p>
+							<p>Android 专有的驱动程序主要修改如下:</p>
 							<ol>
 								<li>
-									Android Binder 基于OpenBinder框架的一个驱动，用于提供
-									Android平台的进程间通信功能。源代码位于:
+									Android Binder 基于 OpenBinder 框架的一个驱动，用于提供 
+									Android 平台的进程间通信功能。源代码位于:
 									<code>drivers/staging/android/binder.c</code>
 								</li>
 								<li>
-									Android电源管理(PM) 一个基于标准Linux电源管理系统的轻量级Android电源管理驱动，针对嵌入式设备做
+									Android 电源管理(PM) 一个基于标准 Linux 电源管理系统的轻量级 Android 电源管理驱动，针对嵌入式设备做
 									了很多优化。源代码位于:
 									<code>kernel/power/...</code>
 								</li>
 								<li>
-									低内存管理器(Low Memory Killer) 比Linux的标准的OOM(Out Of
+									低内存管理器(Low Memory Killer) 比 Linux 的标准的 OOM(Out Of
 									Memory)机制更加灵活，它可以根据需要 杀死进程以释放需要的内存。源代码位于:
 									<code>drivers/staging/android/lowmemorykiller.c</code>
 								</li>
@@ -953,12 +953,12 @@ system
 									<code>mm/ashmem.c</code>
 								</li>
 								<li>
-									Android PMEM(Physical) PMEM用于向用户空间提供连续的物理内存区域，DSP和某些设备只能工作在连续的物
+									Android PMEM(Physical) PMEM 用于向用户空间提供连续的物理内存区域，DSP 和某些设备只能工作在连续的物
 									理内存上。源代码位于:
 									<code>drivers/misc/pmem.c</code>
 								</li>
 								<li>
-									Android Logger 一个轻量级的日志设备，用于抓取Android系统的各种日志。源代码位于:
+									Android Logger 一个轻量级的日志设备，用于抓取 Android 系统的各种日志。源代码位于:
 									<code> drivers/staging/android/logger.c</code>
 								</li>
 								<li>
@@ -967,27 +967,27 @@ system
 									<code>drivers/rtc/alarm.c</code>
 								</li>
 								<li>
-									USB Gadget驱动 一个基于标准 Linux USB
-									gadget驱动框架的设备驱动，Android的USB驱动是基于gaeget框 架的。源代码位于:
+									USB Gadget 驱动 一个基于标准 Linux USB
+									gadget 驱动框架的设备驱动，Android 的 USB 驱动是基于 gaeget 框架的。源代码位于:
 									<code>drivers/usb/gadget/</code>
 								</li>
 								<li>
-									Android Ram Console 为了提供调试功能，Android允许将调试日志信息写入一个被称为RAM
-									Console的设备 里，它是一个基于RAM的Buffer。源代码位于:
+									Android Ram Console 为了提供调试功能，Android 允许将调试日志信息写入一个被称为 RAM
+									Console 的设备 里，它是一个基于 RAM 的 Buffer。源代码位于:
 									<code>drivers/staging/android/ram_console.c</code>
 								</li>
 								<li>
-									Android timed device 提供了对设备进行定时控制的功能，目前支持vibrator和LED设备。源代码位于:
+									Android timed device 提供了对设备进行定时控制的功能，目前支持 vibrator 和 LED 设备。源代码位于:
 									<code>
 										drivers/staging/android/timed_output.c(timed_gpio.c)</code>
 								</li>
 								<li>
-									Yaffs2 文件系统 Android采用Yaffs2作为MTD nand flash文件系统，源代码位于:
+									Yaffs2 文件系统 Android 采用 Yaffs2 作为 MTD nand flash 文件系统，源代码位于:
 									<code>fs/yaffs2/</code>
-									目录下。Yaffs2是一个快速稳定的应用于NAND和NOR
-									Flash的跨平台的嵌入式设备文件系统，同其他Flash文件系统相比，
-									Yaffs2能使用更小的内存来保存其运行状态，因此它占用内存小。Yaffs2的垃圾回收非常简单而且快速，因此能表
-									现出更好的性能。Yaffs2在大容量的NAND Flash上的性能表现尤为突出，非常适合大容量的Flash存储。
+									目录下。Yaffs2 是一个快速稳定的应用于 NAND 和 NOR
+									Flash 的跨平台的嵌入式设备文件系统，同其他 Flash 文件系统相比，
+									Yaffs2 能使用更小的内存来保存其运行状态，因此它占用内存小。Yaffs2 的垃圾回收非常简单而且快速，因此能表
+									现出更好的性能。Yaffs2 在大容量的 NAND Flash 上的性能表现尤为突出，非常适合大容量的 Flash 存储。
 								</li>
 							</ol>
 						</div>
@@ -997,8 +997,8 @@ system
 								<code>android-goldfish-2.6.29</code>
 								的源代码。
 							</p>
-							<p>Goldfish是一种虚拟的ARM处理器，在Android的仿真环境中使用。Android模拟器通过运行它来运行arm926t指令集（arm926t属于armv5构架，goldfish处理器有ARMv5和ARMv7两个版本，在一般情况下，使用ARMv5的版本即可）编译生成的linux内核镜像在android的模拟器中使用。启动模拟器时，Linux
-								Kernel镜像默认使用：prebuilt/android-arm/kernel目录下的kernel-qemu文件。</p>
+							<p>Goldfish 是一种虚拟的 ARM 处理器，在 Android 的仿真环境中使用。Android 模拟器通过运行它来运行 arm926t 指令集（arm926t 属于 armv5 构架，goldfish 处理器有 ARMv5 和 ARMv7 两个版本，在一般情况下，使用 ARMv5 的版本即可）编译生成的 Linux 内核镜像在 Android 的模拟器中使用。启动模拟器时，Linux
+								Kernel 镜像默认使用：<code>prebuilt/android-arm/kernel</code> 目录下的 kernel-qemu 文件。</p>
 							<pre class="brush: bash;">
 android-goldfish-2.6.29
 	├── arch						# architecture的缩写。所有与体系结构相关的代码都在这个目录

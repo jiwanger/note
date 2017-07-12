@@ -1257,6 +1257,19 @@ $ grep '[[:digit:]]' /etc/passwd		# 所有有数字的行
 					</div>
 					<div class="panel-body">
 						<div class="sub-item">
+							<p>ICONV 命令 -- 字符集转换</p>
+							<p>iconv 程序把文本从一种编码转换为另一种编码. 更准确一点, 他是把 -f 指定的编码转换为 -t 指定的编码.  这两种编码默认都是当前 locale 的编码,  所有 inputfile 都依次进行转换. 如果没有指定 inputfile 则使用标准输入, 转换后的内容会输出到标准输出.</p>
+							<pre class="brush: bash;">
+$ iconv [-f encoding] [-t encoding] [inputfile ...]
+
+# in.txt 为 GBK 编码，转换后为 UTF-8 编码
+$ iconv -f GBK -t UTF-8 in.txt
+
+# 转换后另存储为 out.txt
+$ iconv -f GBK -t UTF-8 in.txt > out.txt
+</pre>
+						</div>
+						<div class="sub-item">
 							<p>CAT 命令</p>
 							<pre class="brush: bash;">
 $ cat todo.txt				# 连接文件并在标准输出上输出

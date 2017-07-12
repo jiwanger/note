@@ -12,7 +12,7 @@
 <link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
 <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
 <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<title>NATE--笔记</title>
+<title>NATE--笔记--MAVEN</title>
 <!-- Bootstrap -->
 <link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
 	rel="stylesheet">
@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -62,22 +62,24 @@
 				<div class="panel panel-default"
 					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">MAVEN</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
+						<a href="#" class="list-group-item">简介</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+							data-parent="#accordion" href="#mvn-base" aria-expanded="true">
+							Maven 基础<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="mvn-base" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#mvn-archetype" class="list-group-item">1. Archetype
+								插件</a>
+							<a href="#mvn-pom" class="list-group-item">2. POM</a>
+							<a href="#mvn-lifecircle" class="list-group-item">3. 构建生命周期</a>
+							<a href="#mvn-responsitory" class="list-group-item">4. 仓库与依赖</a>
+							<a href="#mvn-plugin" class="list-group-item">5. 插件</a>
 						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#mvn-" class="list-group-item">...</a>
 					</div>
 				</div>
 			</div>
@@ -91,13 +93,310 @@
 			<div class="col-md-3"></div>
 			<div class="col-md-9" style="float: left;">
 				<!-- item start -->
-				<a class="offset" id="..."></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-						
+						<p>Apache Maven
+							是一套软件工程管理和整合工具。基于工程对象模型（POM）的概念，通过一个中央信息管理模块，Maven
+							能够管理项目的构建、报告和文档。</p>
+						<p>Maven 能够帮助开发者完成以下工作：</p>
+						<ul>
+							<li>
+								<b>构建</b>
+							</li>
+							<li>
+								<b>文档生成</b>
+							</li>
+							<li>
+								<b>报告</b>
+							</li>
+							<li>
+								<b>依赖</b>
+							</li>
+							<li>
+								<b>SCMs</b>
+							</li>
+							<li>
+								<b>发布</b>
+							</li>
+							<li>
+								<b>分发</b>
+							</li>
+							<li>
+								<b>邮件列表</b>
+							</li>
+						</ul>
+						<p>总的来说，Maven
+							简化了工程的构建过程，并对其标准化。它无缝衔接了编译、发布、文档生成、团队合作和其他任务。Maven
+							提高了重用性，负责了大部分构建相关的任务。</p>
+						<p>Maven 的主要目的是为开发者提供</p>
+						<ul>
+							<li>一个可复用、可维护、更易理解的工程综合模型</li>
+							<li>与这个模型交互的插件或者工具</li>
+						</ul>
+						<p>Maven 工程结构和内容被定义在一个 xml 文件中 － pom.xml，是 Project Object
+							Model (POM) 的简称，此文件是整个 Maven 系统的基础组件。</p>
+
+						<p>
+							<b>约定优于配置</b>
+						</p>
+						<p>Maven 使用约定而不是配置，意味着开发者不需要再自己创建构建过程。</p>
+						<p>开发者不需要再关心每一个配置细节。Maven 为工程提供了合理的默认行为。当创建 Maven 工程时，Maven
+							会创建默认的工程结构。开发者只需要合理的放置文件，而在 pom.xml 中不再需要定义任何配置。</p>
+						<p>
+							举例说明，下面的表格展示了工程源码文件、资源文件的默认配置，和其他一些配置。假定
+							<code>${basedir}</code>
+							表示工程目录：
+						</p>
+						<table class="table table-responsive table-condensed">
+							<thead>
+								<tr>
+									<th>配置项</th>
+									<th>默认值</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>source code</td>
+									<td><code>${basedir}/src/main/java</code></td>
+								</tr>
+								<tr>
+									<td>resources</td>
+									<td><code>${basedir}/src/main/resources</code></td>
+								</tr>
+								<tr>
+									<td>Tests</td>
+									<td><code>${basedir}/src/test</code></td>
+								</tr>
+								<tr>
+									<td>Complied byte code</td>
+									<td><code>${basedir}/target</code></td>
+								</tr>
+								<tr>
+									<td>distributable JAR</td>
+									<td><code>${basedir}/target/classes</code></td>
+								</tr>
+							</tbody>
+						</table>
+						<p>为了构建工程，Maven 为开发者提供了选项来配置生命周期目标和工程依赖（依赖于 Maven
+							的插件扩展功能和默认的约定）。大部分的工程管理和构建相关的任务是由 Maven 插件完成的。</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-archetype"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">1. Archetype 插件</h3>
+					</div>
+					<div class="panel-body">
+						<p>Archetype 插件可以基于已有的模板创建一个 Maven
+							项目，开发人员可以在此基础上进行扩展开发。在这里，项目模板就被称为 Archetype。</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-pom"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">2. POM 工程对象模型</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							POM(Project Object Modal) 代表工程对象模型。它是使用 Maven 工作时的基本组建，是一个 xml
+							文件。它被放在工程根目录下，文件命名为
+							<code>pom.xml</code>
+							。
+						</p>
+						<p>需要说明的是每个工程应该只有一个 POM 文件。</p>
+						<ul>
+							<li>
+								所有的 POM 文件需要 <b>project</b> 元素和三个必须的字段：<b>groupId</b>, <b>artifactId</b>,
+								<b>version</b>。
+							</li>
+							<li>
+								在仓库中的工程标识为 <b>groupId:artifactId:version</b>
+							</li>
+							<li>
+								POM.xml 的根元素是 <b>project</b>，它有三个主要的子节点：
+							</li>
+						</ul>
+						<table class="table table-condensed table-responsive">
+							<thead>
+								<tr>
+									<th>节点</th>
+									<th>描述</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td><b>groupId</b></td>
+									<td>这是工程组的标识。它在一个组织或者项目中通常是唯一的。例如，一个银行组织 com.company.bank
+										拥有所有的和银行相关的项目。</td>
+								</tr>
+								<tr>
+									<td><b>artifactId</b></td>
+									<td>这是工程的标识。它通常是工程的名称。例如，消费者银行。groupId 和 artifactId 一起定义了
+										artifact 在仓库中的位置。</td>
+								</tr>
+								<tr>
+									<td><b>version</b></td>
+									<td>这是工程的版本号。在 artifact 的仓库中，它用来区分不同的版本。</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-lifecircle"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">3. 构建生命周期</h3>
+					</div>
+					<div class="panel-body">
+						<p>构建生命周期是一组阶段的序列，每个阶段定义了目标被执行的顺序。这里的阶段是生命周期的一部分。</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-responsitory"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">4. 仓库与依赖</h3>
+					</div>
+					<div class="panel-body">
+						<p>在 Maven 的术语中，仓库是一个位置（place），例如目录，可以存储所有的工程 jar 文件、library
+							jar 文件、插件或任何其他的工程指定的文件。</p>
+						<p>Maven 仓库有三种类型：</p>
+						<ul>
+							<li><p>本地（local） -- Maven 本地仓库是机器上的一个文件夹。它在你第一次运行任何 maven 命令的时候创建。</p></li>
+							<li><p>中央（central） -- Maven 中央仓库是由 Maven 社区提供的仓库，其中包含了大量常用的库。</li>
+							<li><p>远程（remote） -- 如果 Maven 在中央仓库中也找不到依赖的库文件，它会停止构建过程并输出错误信息到控制台。为避免这种情况，Maven 提供了远程仓库的概念，它是开发人员自己定制仓库，包含了所需要的代码库或者其他工程中用到的 jar 文件。</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-plugin"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">5. 插件</h3>
+					</div>
+					<div class="panel-body">
+						<p>Maven 实际上是一个依赖插件执行的框架，每个任务实际上是由插件完成。Maven 插件通常被用来：</p>
+						<ul>
+							<li>创建 jar 文件</li>
+							<li>创建 war 文件</li>
+							<li>编译代码文件</li>
+							<li>代码单元测试</li>
+							<li>创建工程文档</li>
+							<li>创建工程报告</li>
+						</ul>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"></h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"></h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"></h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"></h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"></h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"></h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"></h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="mvn-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"></h3>
+					</div>
+					<div class="panel-body">
+						<p></p>
 					</div>
 				</div>
 				<!-- item over -->
@@ -106,14 +405,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
