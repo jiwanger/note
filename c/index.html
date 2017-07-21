@@ -82,10 +82,10 @@
 							<a href="#c-function" class="list-group-item">函数</a>
 							<a href="#c-area" class="list-group-item">作用域规则</a>
 							<a href="#c-array" class="list-group-item">数组</a>
-							<a href="#c-preprocessor" class="list-group-item">预处理器</a>
 							<a href="#c-header" class="list-group-item">头文件</a>
 							<a href="#c-string" class="list-group-item">字符串</a>
 							<a href="#c-struct" class="list-group-item">结构体</a>
+							<a href="#c-share" class="list-group-item">共用体</a>
 							<a href="#c-bit-area" class="list-group-item">位域</a>
 							<a href="#c-error" class="list-group-item">错误处理</a>
 							<a href="#c-variable-arg" class="list-group-item">可变参数</a>
@@ -93,11 +93,12 @@
 							<a href="#c-cmd" class="list-group-item">命令行参数</a>
 						</div>
 						<a href="#c-printf" class="list-group-item">格式化输出</a>
+						<a href="#c-preprocessor" class="list-group-item">预处理器</a>
 						<a href="#c-poiter" class="list-group-item">指针</a>
 						<a href="#c-file" class="list-group-item">文件读写</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
 							data-parent="#accordion" href="#c-lib" aria-expanded="true">
-							C 标准库<span class="caret pull-right" style="margin-top: 5px;"></span>
+							C 标准库(89)<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
 						<div id="c-lib" class="panel-collapse collapse in" role="tabpanel">
 							<a href="#c-lib-string" class="list-group-item">
@@ -110,7 +111,7 @@
 								<code>stdlib.h</code>
 							</a>
 							<a href="#c-lib-error" class="list-group-item">
-								<code>error.h</code>
+								<code>errno.h</code>
 							</a>
 							<a href="#c-lib-math" class="list-group-item">
 								<code>math.h</code>
@@ -146,6 +147,55 @@
 								<code>stddef.h</code>
 							</a>
 						</div>
+					
+						<a class="list-group-item active dropup" data-toggle="collapse"
+							data-parent="#accordion" href="#c-lib-11" aria-expanded="true">
+							C 标准库(11)<span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="c-lib-11" class="panel-collapse collapse in" role="tabpanel">
+							<a href="#c-lib-iso646" class="list-group-item">
+								<code>iso646.h</code>
+							</a>
+							<a href="#c-lib-wchar" class="list-group-item">
+								<code>wchar.h</code>
+							</a>
+							<a href="#c-lib-wctype" class="list-group-item">
+								<code>wctype.h</code>
+							</a>
+							<a href="#c-lib-complex" class="list-group-item">
+								<code>complex.h</code>
+							</a>
+							<a href="#c-lib-fenv" class="list-group-item">
+								<code>fenv.h</code>
+							</a>
+							<a href="#c-lib-inttypes" class="list-group-item">
+								<code>inttypes.h</code>
+							</a>
+							<a href="#c-lib-stdbool" class="list-group-item">
+								<code>stdbool.h</code>
+							</a>
+							<a href="#c-lib-stdint" class="list-group-item">
+								<code>stdint.h</code>
+							</a>
+							<a href="#c-lib-tgmath" class="list-group-item">
+								<code>tgmath.h</code>
+							</a>
+							<a href="#c-lib-stdalign" class="list-group-item">
+								<code>stdalign.h</code>
+							</a>
+							<a href="#c-lib-stdatomic" class="list-group-item">
+								<code>stdatomic.h</code>
+							</a>
+							<a href="#c-lib-stdnoreturn" class="list-group-item">
+								<code>stdnoreturn.h</code>
+							</a>
+							<a href="#c-lib-threads" class="list-group-item">
+								<code>threads.h</code>
+							</a>
+							<a href="#c-lib-uchar" class="list-group-item">
+								<code>uchar.h</code>
+							</a>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -171,6 +221,33 @@
 							<li>MAKE: GNU Make 3.81</li>
 						</ul>
 
+						<p>
+							<b>Linux 下的 libc 和 glibc 库:</b>
+						</p>
+						<ul>
+							<li>
+								<p>
+									<b>libc</b> -- libc 是 Linux 下的 ANSI C 函数库；libc 实际上是一个泛指。凡是符合实现了
+									C 标准规定的内容，都是一种 libc 。 ANSI C 函数库是基本的 C 语言函数库，包含了 C
+									语言最基本的库函数。这个库可以根据头文件划分为 15 个部分，参见下面的 C 标准库。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>glibc</b> -- GNU C 函数库是一种类似于第三方插件的东西。由于 Linux 是用 C 语言写的，所以
+									Linux 的一些操作是用 C 语言实现的，因此，GUN 组织开发了一个 C 语言的库 以便让我们更好的利用 C 语言开发基于
+									Linux 操作系统的程序。不过现在的不同的 Linux
+									的发行版本对这两个函数库有不同的处理方法，有的可能已经集成在同一个库里了；glibc 是 GNU 组织对 libc
+									的一种实现。它是 unix/linux 的根基之一。
+								</p>
+							</li>
+						</ul>
+						<p>
+							<b>glibc</b> 是 Linux 下面 C 标准库的实现，即GNU C Library。glibc 本身是 GNU 旗下的
+							C 标准库，<b>后来逐渐成为了 Linux 的标准 C 库，而 Linux 下原来的标准 C 库 Linux libc
+								逐渐不再被维护</b>。Linux 下面的标准 C 库不仅有这一个，如 uclibc、klibc，以及上面被提到的 Linux
+							libc，但是<b>glibc 无疑是用得最多的</b>。
+						</p>
 					</div>
 				</div>
 				<!-- item over -->
@@ -367,6 +444,17 @@ main:
 									</tr>
 								</tbody>
 							</table>
+
+							<pre class="brush: c;">
+// C 语言中提供了存储说明符 auto、register、extern、static 说明的四种存储类别:
+auto -- 定义局部变量，仅在语句块内部使用，所有的非全局变量的缺省值假定为 auto ,因此 auto 几乎不使用。
+
+extern -- 可置于变量或者函数前，以表示变量或者函数的定义在别的文件中，提示编译器遇到此变量或函数时，在其它模块中寻找其定义。
+
+register -- 修饰符暗示编译程序相应的变量将被频繁地使用，如果可能的话，应将其保存在CPU的寄存器中，以加快其存储速度。
+
+static -- 只能在内部使用，和 java 相反; 如果修饰局部变量，那么这个局部变量是静态局部变量了。
+</pre>
 						</div>
 
 						<a id="c-type" class="offset"></a>
@@ -496,7 +584,7 @@ main:
 								class="table table-responsive table-bordered table-condensed">
 								<tbody>
 									<tr>
-										<th>序号</th>
+										<th width="8%">序号</th>
 										<th>类型与描述</th>
 									</tr>
 									<tr>
@@ -1126,133 +1214,7 @@ int a[3][4] = {
 </pre>
 						</div>
 
-						<a id="c-preprocessor" class="offset"></a>
-						<div class="sub-item">
-							<h5 class="text-primary">预处理器</h5>
-							<p>C 预处理器不是编译器的组成部分，但是它是编译过程中一个单独的步骤。简言之，C
-								预处理器只不过是一个文本替换工具而已，它们会指示编译器在实际编译之前完成所需的预处理。</p>
-							<p>所有的预处理器命令都是以井号（#）开头。它必须是第一个非空字符，为了增强可读性，预处理器指令应从第一列开始。下面列出了所有重要的预处理器指令：</p>
-							<table
-								class="table table-responsive table-bordered table-condensed">
-								<tbody>
-									<tr>
-										<th style="width: 20%">指令</th>
-										<th>描述</th>
-									</tr>
-									<tr>
-										<td>#define</td>
-										<td>定义宏</td>
-									</tr>
-									<tr>
-										<td>#include</td>
-										<td>包含一个源代码文件</td>
-									</tr>
-									<tr>
-										<td>#undef</td>
-										<td>取消已定义的宏</td>
-									</tr>
-									<tr>
-										<td>#ifdef</td>
-										<td>如果宏已经定义，则返回真</td>
-									</tr>
-									<tr>
-										<td>#ifndef</td>
-										<td>如果宏没有定义，则返回真</td>
-									</tr>
-									<tr>
-										<td>#if</td>
-										<td>如果给定条件为真，则编译下面代码</td>
-									</tr>
-									<tr>
-										<td>#else</td>
-										<td>#if 的替代方案</td>
-									</tr>
-									<tr>
-										<td>#elif</td>
-										<td>如果前面的 #if 给定条件不为真，当前条件为真，则编译下面代码</td>
-									</tr>
-									<tr>
-										<td>#endif</td>
-										<td>结束一个 #if……#else 条件编译块</td>
-									</tr>
-									<tr>
-										<td>#error</td>
-										<td>当遇到标准错误时，输出错误消息</td>
-									</tr>
-									<tr>
-										<td>#pragma</td>
-										<td>使用标准化方法，向编译器发布特殊的命令到编译器中</td>
-									</tr>
-								</tbody>
-							</table>
 
-							<p>ANSI C 定义了许多宏。在编程中您可以使用这些宏，但是不能直接修改这些预定义的宏。</p>
-							<table
-								class="table table-responsive table-bordered table-condensed">
-								<tbody>
-									<tr>
-										<th style="width: 20%">宏</th>
-										<th>描述</th>
-									</tr>
-									<tr>
-										<td>__DATE__</td>
-										<td>当前日期，一个以 "MMM DD YYYY" 格式表示的字符常量。</td>
-									</tr>
-									<tr>
-										<td>__TIME__</td>
-										<td>当前时间，一个以 "HH:MM:SS" 格式表示的字符常量。</td>
-									</tr>
-									<tr>
-										<td>__FILE__</td>
-										<td>这会包含当前文件名，一个字符串常量。</td>
-									</tr>
-									<tr>
-										<td>__LINE__</td>
-										<td>这会包含当前行号，一个十进制常量。</td>
-									</tr>
-									<tr>
-										<td>__STDC__</td>
-										<td>当编译器以 ANSI 标准编译时，则定义为 1。</td>
-									</tr>
-								</tbody>
-							</table>
-
-							<pre class="brush: cpp;">
-#include &lt;stdio.h>
-
-#ifndef MESSAGE
-   #define MESSAGE "You wish!"
-#endif
-// defined 达到上面相同的效果
-#if !defined (MESSAGE)
-   #define MESSAGE "You wish!"
-#endif
-
-// 在宏定义中，当需要把一个宏的参数转换为字符串常量时，则使用字符串常量化运算符（#）。
-#define  message_for(a, b)  \
-    printf(#a " and " #b ": We love you!\n")
-
-// 宏定义内的标记粘贴运算符（##）会合并两个参数。它允许在宏定义中两个独立的标记被合并为一个标记。
-#define tokenpaster(n) printf ("token" #n" = %d\n", token##n)
-
-#define MAX(x,y) ((x) > (y) ? (x) : (y))
-      
-int main() {
-    printf("Message: %s.\n", MESSAGE);
-
-    int token34 = 40;
-    tokenpaster(34);
-
-    message_for(Carole, Debra);
-
-    printf("Max between 20 and 10 is %d.\n", MAX(10, 20));
-
-    printf("Date Time: %s %s.\n", __DATE__, __TIME__);
-
-    return 0;
-}
-</pre>
-						</div>
 
 						<a id="c-header" class="offset"></a>
 						<div class="sub-item">
@@ -1275,6 +1237,193 @@ int main() {
  */
 #include "file"
 </pre>
+							<p>
+								<b>C 标准头文件</b>
+							</p>
+							<p>C89 标准头文件(共 15 个)</p>
+							<ul>
+								<li>
+									<p>
+										<code>stdio.h</code>
+										-- 标准输入输出
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>stdlib.h</code>
+										-- 一些通用函数
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>string.h</code>
+										-- 定义 C 语言字符串处理函数。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>errno.h</code>
+										-- 用来测试由库函数报的错误代码。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>assert.h</code>
+										-- 包含断言宏，被用来在程序的调试版本中帮助检测逻辑错误以及其他类型的 bug。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>math.h</code>
+										-- 定义C语言数学函数。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>stdarg.h</code>
+										-- 标准参数，主要目的为让函数能够接收可变参数。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>stddef.h</code>
+										-- 定义了一些标准宏以及类型。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>ctype.h</code>
+										-- 定义了一组函数，用来根据类型来给字符分类，或者进行大小写转换，而不关心所使用的字符集。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>time.h</code>
+										-- 日期和时间头文件。用于需要时间方面的函数。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>locale.h</code>
+										-- 定义C语言本地化函数。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>float.h</code>
+										-- 提供了浮点型的范围和精度的宏，没有类型和函数的定义，一般用于数值分析。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>limits.h</code>
+										-- 门用于检测整型数据数据类型的表达值范围。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>signal.h</code>
+										-- 定义 C 语言信号处理函数。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>setjmp.h</code>
+										-- 定义了宏 setjmp 和 longjmp，在非局部跳转的时候使用。
+									</p>
+								</li>
+							</ul>
+							<p>C99 另加的标准头文件(前 3 个为 1995 年添加，后 6 个为 1999 年添加，共 24 个)</p>
+							<ul>
+								<li>
+									<p>
+										<code>iso646.h</code>
+										-- 定义了一批 C 语言常见运算符的可选拼写。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>wchar.h</code>
+										-- 宽字符处理及输入/输出
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>wctype.h</code>
+										-- 宽字符分类
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>complex.h</code>
+										-- 一组操作复数的函数。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>fenv.h</code>
+										-- 定义了一组用来控制浮点数环境的函数。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>inttypes.h</code>
+										-- 整数格式转换
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>stdbool.h</code>
+										-- 布尔环境
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>stdint.h</code>
+										-- 整型环境
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>tgmath.h</code>
+										-- 通用类型数学宏
+									</p>
+								</li>
+							</ul>
+							<p>C11 另加的标准头文件(2011 年添加了 5 个, 共 29 个)</p>
+							<ul>
+								<li>
+									<p>
+										<code>stdalign.h</code>
+										-- 用于查询和指定对象的数据结构对齐。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>stdatomic.h</code>
+										-- 用于在线程之间共享数据的原子操作。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>stdnoreturn.h</code>
+										-- 用于指定非返回函数。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>threads.h</code>
+										-- 定义用于管理多线程功能以及互斥锁和条件变量。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>uchar.h</code>
+										-- 处理 unicode 字符的类型和函数。
+									</p>
+								</li>
+							</ul>
+
 						</div>
 
 						<a id="c-string" class="offset"></a>
@@ -1323,75 +1472,79 @@ int main () {
 							<pre class="brush: cpp;">
 #include &lt;stdio.h>
 #include &lt;string.h>
- 
-struct Books {
-	char  title[50];
-	char  author[50];
-	char  subject[100];
-	int   book_id;
+
+struct Student {
+    int id;
+    char name[32];
 };
 
-/* 函数声明 */
-void printBook( struct Books book );
- 
-struct Books {
-	char  title[50];
-	char  author[50];
-	char  subject[100];
-	int   book_id;
-};
-
-/* 函数声明 */
-void printBook( struct Books book );
- 
-int main() {
-	struct Books Book1;        /* 声明 Book1，类型为 Book */
-	struct Books Book2;        /* 声明 Book2，类型为 Book */
-	
-	/* Book1 详述 */
-	strcpy( Book1.title, "C Programming");
-	strcpy( Book1.author, "Nuha Ali"); 
-	strcpy( Book1.subject, "C Programming Tutorial");
-	Book1.book_id = 6495407;
-	
-	/* Book2 详述 */
-	strcpy( Book2.title, "Telecom Billing");
-	strcpy( Book2.author, "Zara Ali");
-	strcpy( Book2.subject, "Telecom Billing Tutorial");
-	Book2.book_id = 6495700;
-	
-	/* 输出 Book1 信息 */
-	printBook(Book1);
-	printBookPointer(&Book1);
-	
-	/* 输出 Book2 信息 */
-	printBook(Book2);
-	printBookPointer(&Book2);
-	
-	return 0;
+void show_person(const struct Student s) {
+    printf("id:%d name:%s\n", s.id, s.name);    
 }
 
-/* 结构作为函数参数 */
-void printBook( struct Books book ) {
-	printf( "Book title : %s\n", book.title);
-	printf( "Book author : %s\n", book.author);
-	printf( "Book subject : %s\n", book.subject);
-	printf( "Book book_id : %d\n", book.book_id);
+void show_person_p(const struct Student *s) {
+    printf("id:%d name:%s\n", s->id, s->name);
 }
 
-/* 指向结构的指针 */
-void printBookPointer( struct Books *book ) {
-	printf( "Book title : %s\n", book->title);
-	printf( "Book author : %s\n", book->author);
-	printf( "Book subject : %s\n", book->subject);
-	printf( "Book book_id : %d\n", book->book_id);
+/** 结构体变量作为参数 */
+struct Student update_person(struct Student s) {
+    s.id = 1002;
+    strcpy(s.name, "李四");
+    return s;
 }
+
+/** 结构体指针作为参数 */
+void update_person_p(struct Student *s) {
+    s->id = 1003;
+    strcpy(s->name, "王五");
+}
+
+/** 结构体成员变量作为参数 */
+int update_person_id(int id, int new_id) {
+    id = new_id;
+    return id;
+}
+
+/** 结构体成员变量指针作为参数 */
+void update_person_id_p(int *id, int new_id) {
+    *id = new_id;
+}
+
+int main() {      
+    struct Student s;
+    s.id = 1001;
+    strcpy(s.name, "张三");
+
+    printf("== 1. 如果只是读取，两种都可以：\n");
+    show_person(s);
+    show_person_p(&s);
+
+    printf("== 2. 传结构体变量，对变量做一份拷贝，不修改原来的值：\n");
+    struct Person s2 = update_person(s);
+    show_person(s2);    // s2 为拷贝，修改 s2 的值不影响 s
+    show_person(s);
+
+    printf("== 3. 传结构体指针，直接修改原来的值：\n");
+    update_person_p(&s);
+    show_person(s);
+
+    printf("== 4. 结构体成员变量，对变量做一份拷贝，不修改原来的值: \n");
+    update_person_id(s.id, 1004);
+    show_person(s);
+
+    printf("== 5. 结构体成员指针，直接修改原来的值: \n");
+    update_person_id_p(&s.id, 1005);
+    show_person(s);
+
+    return 0;
+}
+
 </pre>
 						</div>
 
 						<a id="c-share" class="offset"></a>
 						<div class="sub-item">
-							<h5 class="sub-item">共用体</h5>
+							<h5 class="text-primary">共用体</h5>
 							<p>共用体是一种特殊的数据类型，允许您在相同的内存位置存储不同的数据类型。您可以定义一个带有多成员的共用体，但是任何时候只能有一个成员带有值。共用体提供了一种使用相同的内存位置的有效方式。</p>
 							<pre class="brush: cpp;">
 #include &lt;stdio.h>
@@ -1661,110 +1814,178 @@ int main( int argc, char *argv[] ) {
 						<p>格式转换为一个百分比符号(%)及其后的格式字符所组成。一般而言，每个%符号在其后都必需有一个参数与之相呼应（只有当%%转换字符出现时会直接输出%字符），而欲输出的数据类型必须与其相对应的转换字符类型相同。</p>
 						<pre class="brush: cpp;">
 /* 格式转换的一般形式如下：% 和 type 是必要的 */
-%(flags)(width)(.prec)type
+%[flags][width][.precision][length]type
 </pre>
 						<p>
 							<b>type 的类型:</b>
 						</p>
-						<ul>
-							<li>
-								<b>数值</b>
-								<ul>
-									<li>
-										<code>%d / %ld</code>
-										-- 整数的参数会被转成有符号的十进制数字(%ld 表示输出 long 整数)
-									</li>
-									<li>
-										<code>%u</code>
-										-- 整数的参数会被转成无符号的十进制数字
-									</li>
-									<li>
-										<code>%o</code>
-										-- 整数的参数会被转成无符号的八进制数字
-									</li>
-									<li>
-										<code>%x</code>
-										-- 整数的参数会被转成无符号的十六进制数字，并以小写 abcdef 表示
-									</li>
-									<li>
-										<code>%X</code>
-										-- 整数的参数会被转成无符号的十六进制数字，并以大写 ABCDEF 表示浮点型数
-									</li>
-									<li>
-										<code>%f / %lf</code>
-										-- double 型的参数会被转成十制数字，并取到小数点以下六位，四舍五入(%lf 表示输出double浮点数)
-									</li>
-									<li>
-										<code>%e</code>
-										-- double 型的参数以指数形式打印，有一个数字会在小数点前，六位数字在小数点后，而在指数部分会以小写的 e 来表示
-									</li>
-									<li>
-										<code>%E</code>
-										-- 与 %e 作用相同，唯一区别是指数部分将以大写的E 来表示
-									</li>
-									<li>
-										<code>%g</code>
-										-- double 型的参数会自动选择以 %f 或 %e 的格式来打印，其标准是根据打印的数值及所设置的有效位数来决定。
-									</li>
-									<li>
-										<code>%G</code>
-										-- 与 %g 作用相同，唯一区别在以指数形态打印时会选择 %E 格式。
-									</li>
-								</ul>
-							</li>
-							<li>
-								<b>字符及字符串</b>
-								<ul>
-									<li>
-										<code>%c</code>
-										-- 整型数的参数会被转成 unsigned char 型打印出
-									</li>
-									<li>
-										<code>%s</code>
-										-- 指向字符串的参数会被逐字输出，直到出现 NULL 字符为止
-									</li>
-									<li>
-										<code>%p</code>
-										-- 如果是参数是 "void *" 型指针则使用十六进制格式显示
-									</li>
-								</ul>
-							</li>
-						</ul>
-						<p>
-							<b>prec 有几种情况：</b>
-						</p>
-						<ul>
-							<li>正整数的最小位数</li>
-							<li>在浮点型数中代表小数位数</li>
-							<li>格式代表有效位数的最大值</li>
-							<li>在%s 格式代表字符串的最大长度</li>
-							<li>若为×符号则代表下个参数值为最大长度</li>
-						</ul>
+						<table class="table table-bordered table-responsive table-striped"
+							<tbody>
+								<tr>
+									<th>格式字符</th>
+									<th>意义</th>
+								</tr>
+								<tr>
+									<td>d</td>
+									<td>以十进制形式输出带符号整数(正数不输出符号)</td>
+								</tr>
+								<tr>
+									<td>o</td>
+									<td>以八进制形式输出无符号整数(不输出前缀0)</td>
+								</tr>
+								<tr>
+									<td>x,X</td>
+									<td>以十六进制形式输出无符号整数(不输出前缀Ox)</td>
+								</tr>
+								<tr>
+									<td>u</td>
+									<td>以十进制形式输出无符号整数</td>
+								</tr>
+								<tr>
+									<td>f</td>
+									<td>以小数形式输出单、双精度实数</td>
+								</tr>
+								<tr>
+									<td>e,E</td>
+									<td>以指数形式输出单、双精度实数</td>
+								</tr>
+								<tr>
+									<td>g,G</td>
+									<td>以%f或%e中较短的输出宽度输出单、双精度实数</td>
+								</tr>
+								<tr>
+									<td>c</td>
+									<td>输出单个字符</td>
+								</tr>
+								<tr>
+									<td>s</td>
+									<td>输出字符串</td>
+								</tr>
 
-						<p>
-							<b>width</b> -- 为参数的最小长度，若此栏并非数值，而是 * 符号，则表示以下一个参数当做参数长度。
-						</p>
+								<tr>
+									<td>p</td>
+									<td>输出指针地址</td>
+								</tr>
+
+								<tr>
+									<td>lu</td>
+									<td>32位无符号整数</td>
+								</tr>
+
+								<tr>
+									<td>llu</td>
+									<td>64位无符号整数</td>
+								</tr>
+							</tbody>
+						</table>
 
 						<p>
 							<b>flags 有下列几种情况:</b>
 						</p>
-						<ul>
-							<li>
-								<code>+</code>
-								-- 一般在打印负数时，printf()会加印一个负号，整数则不加任何负号，此旗标会使得在打印正数前多一个正号 (+)。
-							</li>
-							<li>
-								<code>#</code>
-								-- 此旗标会根据其后转换字符的不同而有不同含义。当在类型为 o 之前 (如 %#o )，则会在打印八进制数值前多印一个
-								o。而在类型为 x 之前 (%#x)则会在打印十六进制数前多印 '0x'，在型态为 e、E、f、g 或 G
-								之前则会强迫数值打印小数点。在类型为 g 或 G 之前时则同时保留小数点及小数位数末尾的零。
-							</li>
-							<li>
-								<code>0</code>
-								-- 当有指定参数时，无数字的参数将补上0。默认是关闭此旗标，所以一般会打印出空白字符。
-							</li>
-						</ul>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th style="width: 18%">flags（标识）</th>
+									<th>描述</th>
+								</tr>
+								<tr>
+									<td>-</td>
+									<td>在给定的字段宽度内左对齐，默认是右对齐（参见 width 子说明符）。</td>
+								</tr>
+								<tr>
+									<td>+</td>
+									<td>强制在结果之前显示加号或减号（+ 或 -），即正数前面会显示 + 号。默认情况下，只有负数前面会显示一个 -
+										号。</td>
+								</tr>
+								<tr>
+									<td>空格</td>
+									<td>如果没有写入任何符号，则在该值前面插入一个空格。</td>
+								</tr>
+								<tr>
+									<td>#</td>
+									<td>与 o、x 或 X 说明符一起使用时，非零值前面会分别显示 0、0x 或 0X。<br> 与
+										e、E 和 f
+										一起使用时，会强制输出包含一个小数点，即使后边没有数字时也会显示小数点。默认情况下，如果后边没有数字时候，不会显示显示小数点。<br>
+										与 g 或 G 一起使用时，结果与使用 e 或 E 时相同，但是尾部的零不会被移除。
+									</td>
+								</tr>
+								<tr>
+									<td>0</td>
+									<td>在指定填充 padding 的数字左边放置零（0），而不是空格（参见 width 子说明符）。</td>
+								</tr>
+							</tbody>
+						</table>
 
+						<p>
+							<b>width</b> -- 为参数的最小长度，若此栏并非数值，而是 * 符号，则表示以下一个参数当做参数长度。
+						</p>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th style="width: 18%">width（宽度）</th>
+									<th>描述</th>
+								</tr>
+								<tr>
+									<td>(number)</td>
+									<td>要输出的字符的最小数目。如果输出的值短于该数，结果会用空格填充。如果输出的值长于该数，结果不会被截断。</td>
+								</tr>
+								<tr>
+									<td>*</td>
+									<td>宽度在 format 字符串中未指定，但是会作为附加整数值参数放置于要被格式化的参数之前。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>precision 有几种情况：</b>
+						</p>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th style="width: 18%">.precision（精度）</th>
+									<th>描述</th>
+								</tr>
+								<tr>
+									<td>.number</td>
+									<td>对于整数说明符（d、i、o、u、x、X）：precision
+										指定了要写入的数字的最小位数。如果写入的值短于该数，结果会用前导零来填充。如果写入的值长于该数，结果不会被截断。精度为 0
+										意味着不写入任何字符。<br> 对于 e、E 和 f 说明符：要在小数点后输出的小数位数。<br> 对于
+										g 和 G 说明符：要输出的最大有效位数。<br> 对于 s:
+										要输出的最大字符数。默认情况下，所有字符都会被输出，直到遇到末尾的空字符。<br> 对于 c 类型：没有任何影响。<br>
+										当未指定任何精度时，默认为 1。如果指定时不带有一个显式值，则假定为 0。
+									</td>
+								</tr>
+								<tr>
+									<td>.*</td>
+									<td>精度在 format 字符串中未指定，但是会作为附加整数值参数放置于要被格式化的参数之前。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>length 有下列几种情况:</b>
+						</p>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th style="width: 18%">length（长度）</th>
+									<th>描述</th>
+								</tr>
+								<tr>
+									<td>h</td>
+									<td>参数被解释为短整型或无符号短整型（仅适用于整数说明符：i、d、o、u、x 和 X）。</td>
+								</tr>
+								<tr>
+									<td>l</td>
+									<td>参数被解释为长整型或无符号长整型，适用于整数说明符（i、d、o、u、x 和 X）及说明符
+										c（表示一个宽字符）和 s（表示宽字符字符串）。</td>
+								</tr>
+								<tr>
+									<td>L</td>
+									<td>参数被解释为长双精度型（仅适用于浮点数说明符：e、E、f、g 和 G）。</td>
+								</tr>
+							</tbody>
+						</table>
 						<pre class="brush: cpp;">
 #include &lt;stdio.h>
 
@@ -1784,9 +2005,143 @@ int main() {
    
     /* 其它控制 */
     printf ("==整型数的参数会被转成 unsigned char 型:======%c %c \n", 'a', 65);
-    printf ("==原始输出:%d 十六进制:%x 八进制:%o 加0x的十六进制:%#x 加0的八进制:%#o \n", 100, 100, 100, 100, 100);
+    printf ("==原始:%d 十六进制:%x 八进制:%o 加0x的十六进制:%#x 加0的八进制:%#o \n", 100, 100, 100, 100, 100);
     printf ("==double 型的参数以指数形式打印: %+.0e %E \n", 3.1416, 3.1416);
     printf ("==由参数作参数长度控制打印:======%*d======\n", 5, 10);
+    return 0;
+}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-preprocessor" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">预处理器</h3>
+					</div>
+					<div class="panel-body">
+						<p>C 预处理器不是编译器的组成部分，但是它是编译过程中一个单独的步骤。简言之，C
+							预处理器只不过是一个文本替换工具而已，它们会指示编译器在实际编译之前完成所需的预处理。</p>
+						<p>所有的预处理器命令都是以井号（#）开头。它必须是第一个非空字符，为了增强可读性，预处理器指令应从第一列开始。下面列出了所有重要的预处理器指令：</p>
+						<table
+							class="table table-responsive table-bordered table-condensed">
+							<tbody>
+								<tr>
+									<th style="width: 20%">指令</th>
+									<th>描述</th>
+								</tr>
+								<tr>
+									<td>#define</td>
+									<td>定义宏</td>
+								</tr>
+								<tr>
+									<td>#include</td>
+									<td>包含一个源代码文件</td>
+								</tr>
+								<tr>
+									<td>#undef</td>
+									<td>取消已定义的宏</td>
+								</tr>
+								<tr>
+									<td>#ifdef</td>
+									<td>如果宏已经定义，则返回真</td>
+								</tr>
+								<tr>
+									<td>#ifndef</td>
+									<td>如果宏没有定义，则返回真</td>
+								</tr>
+								<tr>
+									<td>#if</td>
+									<td>如果给定条件为真，则编译下面代码</td>
+								</tr>
+								<tr>
+									<td>#else</td>
+									<td>#if 的替代方案</td>
+								</tr>
+								<tr>
+									<td>#elif</td>
+									<td>如果前面的 #if 给定条件不为真，当前条件为真，则编译下面代码</td>
+								</tr>
+								<tr>
+									<td>#endif</td>
+									<td>结束一个 #if……#else 条件编译块</td>
+								</tr>
+								<tr>
+									<td>#error</td>
+									<td>当遇到标准错误时，输出错误消息</td>
+								</tr>
+								<tr>
+									<td>#pragma</td>
+									<td>使用标准化方法，向编译器发布特殊的命令到编译器中</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>ANSI C 定义了许多宏。在编程中您可以使用这些宏，但是不能直接修改这些预定义的宏。</p>
+						<table
+							class="table table-responsive table-bordered table-condensed">
+							<tbody>
+								<tr>
+									<th style="width: 20%">宏</th>
+									<th>描述</th>
+								</tr>
+								<tr>
+									<td>__DATE__</td>
+									<td>当前日期，一个以 "MMM DD YYYY" 格式表示的字符常量。</td>
+								</tr>
+								<tr>
+									<td>__TIME__</td>
+									<td>当前时间，一个以 "HH:MM:SS" 格式表示的字符常量。</td>
+								</tr>
+								<tr>
+									<td>__FILE__</td>
+									<td>这会包含当前文件名，一个字符串常量。</td>
+								</tr>
+								<tr>
+									<td>__LINE__</td>
+									<td>这会包含当前行号，一个十进制常量。</td>
+								</tr>
+								<tr>
+									<td>__STDC__</td>
+									<td>当编译器以 ANSI 标准编译时，则定义为 1。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<pre class="brush: cpp;">
+#include &lt;stdio.h>
+
+#ifndef MESSAGE
+   #define MESSAGE "You wish!"
+#endif
+// defined 达到上面相同的效果
+#if !defined (MESSAGE)
+   #define MESSAGE "You wish!"
+#endif
+
+// 在宏定义中，当需要把一个宏的参数转换为字符串常量时，则使用字符串常量化运算符（#）。
+#define  message_for(a, b)  \
+    printf(#a " and " #b ": We love you!\n")
+
+// 宏定义内的标记粘贴运算符（##）会合并两个参数。它允许在宏定义中两个独立的标记被合并为一个标记。
+#define tokenpaster(n) printf ("token" #n" = %d\n", token##n)
+
+#define MAX(x,y) ((x) > (y) ? (x) : (y))
+      
+int main() {
+    printf("Message: %s.\n", MESSAGE);
+
+    int token34 = 40;
+    tokenpaster(34);
+
+    message_for(Carole, Debra);
+
+    printf("Max between 20 and 10 is %d.\n", MAX(10, 20));
+
+    printf("Date Time: %s %s.\n", __DATE__, __TIME__);
+
     return 0;
 }
 </pre>
@@ -1907,7 +2262,10 @@ int main() {
 				<a id="c-file" class="offset"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">文件读写</h3>
+						<h3 class="panel-title">
+							文件读写 -- 参见 C 标准库
+							<code>stdio.h</code>
+						</h3>
 					</div>
 					<div class="panel-body">
 						<p>一个文件，无论它是文本文件还是二进制文件，都是代表了一系列的字节。C
@@ -1917,7 +2275,7 @@ int main() {
 						</p>
 						<p>使用 fopen() 函数来创建一个新的文件或者打开一个已有的文件，这个调用会初始化类型 FILE 的一个对象，类型
 							FILE 包含了所有用来控制流的必要的信息</p>
-						<pre class="brush: cpp;">FILE *fopen(const char *filename, const char *mode);</pre>
+						<pre class="brush: cpp;">FILE *fopen(const char *filename, const char *mode)</pre>
 						<table class="table table-bordered table-responsive table-striped">
 							<tbody>
 								<tr>
@@ -1961,7 +2319,7 @@ int main() {
 						<p>如果成功关闭文件，fclose( ) 函数返回零，如果关闭文件时发生错误，函数返回
 							EOF。这个函数实际上，会清空缓冲区中的数据，关闭文件，并释放用于该文件的所有内存。EOF 是一个定义在头文件 stdio.h
 							中的常量。</p>
-						<pre class="brush: cpp;">int fclose(FILE *fp);</pre>
+						<pre class="brush: cpp;">int fclose(FILE *fp)</pre>
 
 						<p>
 							<b>写入文件</b>
@@ -1971,9 +2329,15 @@ int main() {
 						<p>函数 fputs() 把字符串 s 写入到 fp
 							所指向的输出流中。如果写入成功，它会返回一个非负值，如果发生错误，则会返回 EOF。</p>
 						<pre class="brush: cpp;">
-int fputc(int c, FILE *fp);
+int fprintf(FILE *stream, const char *format, ...)
 
-int fputs(const char *s, FILE *fp);
+int fputs(const char *s, FILE *fp)
+
+int fputc(int c, FILE *fp)
+
+int putc(int char, FILE *stream)
+
+int vfprintf(FILE *stream, const char *format, va_list arg)
 </pre>
 
 						<p>
@@ -1983,9 +2347,13 @@ int fputs(const char *s, FILE *fp);
 						<p>函数 fgets() 从 fp 所指向的输入流中读取 n - 1 个字符。它会把读取的字符串复制到缓冲区
 							buf，并在最后追加一个 null 字符来终止字符串。</p>
 						<pre class="brush: cpp;">
-int fgetc(FILE * fp);
+int fscanf(FILE *stream, const char *format, ...)
 
-char *fgets( char *buf, int n, FILE *fp );
+char *fgets(char *str, int n, FILE *stream)
+
+int getc(FILE * fp);
+
+int fgetc(FILE *stream)
 </pre>
 
 						<p>
@@ -2014,8 +2382,49 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>string.h</code>
 							头文件定义了一个变量类型、一个宏和各种操作字符数组的函数。
 						</p>
+
+						<p>
+							<b>库变量</b>
+						</p>
+						<p>下面是头文件 string.h 中定义的变量类型：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>变量 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>size_t </b><br>这是无符号整数类型，它是 <b>sizeof</b>
+										关键字的结果。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库宏</b>
+						</p>
+						<p>下面是头文件 string.h 中定义的宏：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>宏 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>NULL</b><br>这个宏是一个空指针常量的值。</td>
+								</tr>
+							</tbody>
+						</table>
+
 						<p>
 							<b>库函数</b>
+						</p>
 						<table
 							class="table table-bordered table-responsive table-striped runoob"
 							data-base="http://www.runoob.com/cprogramming/">
@@ -2158,6 +2567,135 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 								</tr>
 							</tbody>
 						</table>
+
+						<p>
+							<b></b>
+						</p>
+						<pre class="brush: c;">
+#include &lt;stdio.h>
+#include &lt;string.h>
+#include &lt;assert.h>
+#include &lt;errno.h>
+
+int main() {
+    /** 1.字符串长度 */
+    assert(12 == strlen("Hello World!"));
+    assert(18 == strlen("我是中国人！"));        // 中文3个字节
+
+    /** 2.字符串比较
+     *  strcmp 是按照字节比较的，并且比较的过程中会检查是否出现了"/0"结束符，一旦任意一个字符串指针前进过程中遇到结束符，
+     *  将终止比较。而 memcmp 函数是用于比较两个内存块的内容是否相等，在用于字符串比较时通常用于测试字符串是否相等，
+     *  不常进行 byte-wise 的字符串比较。如果要比较的对象中包含一些由于边界对齐需求而填入结构对象中的空格、
+     *  联合 (union)结束的额外空格、字符串所分配的空间未使用完的部分引起的“holes”的话，最好使用memcmp来完成。
+     *  
+     *  strcmp 比较的字符串，而 memcmp 比较的是内存块，strcmp 需要时刻检查是否遇到了字符串结束的 /0 字符，
+     *  而 memcmp 则完全不用担心这个问题，所以 memcmp 的效率要高于 strcmp
+     *
+     *  strcoll 默认情况下(LC_COLLATE为"POSIX"或"C")和 strcmp 一样根据 ASCII 比较字符串大小。
+     *  对于设置了LC_COLLATE语言环境的情况下，则根据LC_COLLATE设置的语言排序方式进行比较。例如：汉字，根据拼音进行比较。
+     */
+    assert(!strcmp("abc", "abc"));              // ascii 码值相同返回 0
+    assert(!strncmp("abc", "abcd", 3));         // 最多比较前 3 个字节
+    assert(!memcmp("abc", "abcd", 3));          // memcmp 比较的是内存块
+    assert(!strcoll("abc", "abc"));             // LC_COLLATE 有关
+
+
+    /** 3.复制字符串
+     *  strcpy 和 memcpy 主要有以下 3 方面的区别。
+     *  1. 复制的内容不同。strcpy 只能复制字符串，而 memcpy 可以复制任意内容，例如字符数组、整型、结构体、类等。
+     *  2. 复制的方法不同。strcpy 不需要指定长度，它遇到被复制字符的串结束符"\0"才结束，所以容易溢出。
+     *      memcpy 则是根据其第3个参数决定复制的长度。
+     *  3. 用途不同。通常在复制字符串时用 strcpy，而需要复制其他类型数据时则一般用 memcpy
+     *
+     *  memmove 和 memcpy 区别功能差不多，但是在重叠内存块这方面，memmove() 是比 memcpy() 更安全的方法。
+     *  如果目标区域和源区域有重叠的话，memmove() 能够保证源串在被覆盖之前将重叠区域的字节拷贝到目标区域中，
+     *  复制后源区域的内容会被更改。如果目标区域与源区域没有重叠，则和 memcpy() 函数功能相同。
+     *
+     *  strxfrm 根据程序当前的区域选项中的 LC_COLLATE 来转换字符串 src 的前 n 个字符，并把它们放置在字符串 dest 中
+     */
+    char *s1 = "jiwanger";
+    char s2[20];
+
+    strcpy(s2, s1);                            // 复制字符串
+    assert(!strcmp(s1, s2));
+    
+    memset(s2, '\0', sizeof(s2));              // 清空 s2, 用 '\0' 填充 s2 的前 sizeof(s2) 个字符
+    
+    strncpy(s2, s1, 3);                        // 最多复制前 3 个字符
+    assert(!strcmp(s2, "jiw"));
+
+    memset(s2, '\0', sizeof(s2));              // 清空 s2
+    memcpy(s2, s1, 3);                         // 使用 memcpy 复制
+    assert(!strcmp(s2, "jiw"));
+
+    memset(s2, '\0', sizeof(s2));              // 清空 s2
+    memmove(s2, s1, 3);
+    assert(!strcmp(s2, "jiw"));
+
+    char s_3[20];
+    strxfrm(s_3, s1, 20);                      // 最多复制 20 个字符
+    assert(!strcmp(s_3, s1));
+
+    /** 4.查找，截取
+     *  strchr  -- 搜索第一次出现字符 c 的位置，返回查找到的结束字符串
+     *  strrchr -- 搜索最后出现字符 c 的位置，返回查找到的结束字符串
+     *  memchr  -- 前 n 个字节中搜索第一次出现字符 c 的位置，返回查找到的结束字符串
+     *
+     *  strspn  -- 检索字符串 str1 中第一个不在字符串 str2 中出现的字符下标
+     *
+     *  strcspn -- 开头连续不含字符串 “012” 中任何一个字符的字符数量
+     *
+     *  strstr  -- 从出现字符串的位置截取
+     *  strpbrk -- 从出现串中的任何一个字符的位置截取
+     */
+    char *s3 = "nate-nate";
+    char *s4 = strchr(s3, 't');                 // 截取从第一个 't' 开始到结束的串
+    assert(!strcmp("te-nate", s4));
+    assert(!strcmp("te", strrchr(s3, 't')));    // 截取从最后一个 't' 开始到结束的串
+    char *s5 = memchr(s3, 't', sizeof(s3));     // 前 n 个字节中搜索第一次出现字符 c 的位置
+    assert(!strcmp("te-nate", s5));
+
+    assert(2 == strspn("abc", "ab0"));          // 检索字符串 str1 中第一个不在字符串 str2 中出现的字符下标
+    assert(7 == strcspn("abcdefg1234", "012")); // 开头连续不含字符串 “012” 中字符的字符数
+
+    assert(!strcmp("efghi", strstr("abecdefghi", "ef")));    // 第一次出现 "ef" 的位置开始截取
+    assert(!strcmp("cdefg", strpbrk("abcdefg", "cf"))); // 第一次出现 ‘c’ 或 'f' 的位置开始截取
+
+    /** 5.追加 */
+    char s6[20];
+    strcpy(s6, "jiwanger");
+    char *s7 = "@126.com";
+    strcat(s6, s7);                 // 把 src 所指向的字符串追加到 dest 所指向的字符串的结尾
+    assert(!strcmp("jiwanger@126.com", s6));
+
+    strncat(s6, s7, 4);             // 追加最多 4 个字符
+    assert(!strcmp("jiwanger@126.com@126", s6));
+    
+    /** 6.errno 转换为可读的 string， 就像一个 map 一条错误码对应一条错误消息     */
+    printf("Message: %s\n", strerror(errno));       // errno 轮换为 string
+    FILE *fp = fopen("file.txt", "r");
+    if(NULL == fp) {
+         printf("Message: %s\n", strerror(errno));  // errno 轮换为 string
+    }
+    // 查看定义了哪些错误消息，共 134 条错误码对应的错误消息
+    for(int i = 0; i < 1000; i++) {
+        printf("%d.%s\n", i+1, strerror(i));
+    }
+
+    /** 7.分割字符串 */
+    char str[80] = "1001:nate:jiwanger@126.com";
+    char *token;
+   
+    token = strtok(str, ":");   // 获取第一个子字符串
+    
+    while(token != NULL) {      // 继续获取其他的子字符串
+        printf("%s\n", token);
+        token = strtok(NULL, ":");
+    }
+
+    return 0;
+}
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -2176,7 +2714,96 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							头文件定义了三个变量类型、一些宏和各种函数来执行输入和输出。
 						</p>
 						<p>
+							<b>库变量</b>
+						</p>
+						<p>下面是头文件 stdio.h 中定义的变量类型：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>变量 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>size_t </b><br>这是无符号整数类型，它是 <b>sizeof</b>
+										关键字的结果。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>FILE </b><br>这是一个适合存储文件流信息的对象类型。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><b>fpos_t </b><br>这是一个适合存储文件中任何位置的对象类型。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库宏</b>
+						</p>
+						<p>下面是头文件 stdio.h 中定义的宏：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>宏 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>NULL</b><br>这个宏是一个空指针常量的值。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>_IOFBF、_IOLBF</b> 和 <b> _IONBF </b><br>这些宏扩展了带有特定值的整型常量表达式，并适用于
+										<b>setvbuf</b> 函数的第三个参数。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><b>BUFSIZ</b><br>这个宏是一个整数，该整数代表了 <b>setbuf</b>
+										函数使用的缓冲区大小。</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><b>EOF</b> <br>这个宏是一个表示已经到达文件结束的负整数。</td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td><b>FOPEN_MAX</b> <br>这个宏是一个整数，该整数代表了系统可以同时打开的文件数量。</td>
+								</tr>
+								<tr>
+									<td>6</td>
+									<td><b>FILENAME_MAX</b> <br>这个宏是一个整数，该整数代表了字符数组可以存储的文件名的最大长度。如果实现没有任何限制，则该值应为推荐的最大值。</td>
+								</tr>
+								<tr>
+									<td>7</td>
+									<td><b>L_tmpnam</b> <br>这个宏是一个整数，该整数代表了字符数组可以存储的由
+										tmpnam 函数创建的临时文件名的最大长度。</td>
+								</tr>
+								<tr>
+									<td>8</td>
+									<td><b>SEEK_CUR、SEEK_END</b> 和 <b>SEEK_SET</b> <br>这些宏是在These
+										macros are used in the <b>fseek</b> 函数中使用，用于在一个文件中定位不同的位置。</td>
+								</tr>
+								<tr>
+									<td>9</td>
+									<td><b>TMP_MAX </b> <br>这个宏是 tmpnam 函数可生成的独特文件名的最大数量。</td>
+								</tr>
+								<tr>
+									<td>10</td>
+									<td><b>stderr、stdin</b> 和 <b>stdout </b> <br>这些宏是指向
+										FILE 类型的指针，分别对应于标准错误、标准输入和标准输出流。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
 							<b>库函数</b>
+						</p>
 						<table
 							class="table table-bordered table-responsive table-striped runoob"
 							data-base="http://www.runoob.com/cprogramming/">
@@ -2411,8 +3038,302 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 										str，后跟一个冒号，然后是一个空格。</td>
 								</tr>
 							</tbody>
-
 						</table>
+
+						<pre class="brush: c;">
+#include &lt;stdio.h>
+#include &lt;math.h>
+#include &lt;string.h>
+#include &lt;stdarg.h>
+#include &lt;errno.h>
+
+char buffer[40];
+/** 
+ * vprintf -- 使用参数列表发送格式化输出到标准输出
+ * vsprintf -- 使用参数列表发送格式化输出到字符串， 相对于 vprintf 多一个参数用于接收格式化后的内容
+ * */
+void vprintf_test(char * format, ...) {
+    va_list args;
+   
+    va_start(args, format);
+    vprintf(format, args);              // 使用参数列表发送格式化输出到标准输出
+    vsprintf(buffer, format, args);     // 使用参数列表发送格式化输出到 buffer 数组
+    va_end(args);
+}
+
+/** 标准输入和输出
+ *  printf -- 发送格式化输出到标准输出, 更多参见 -- 格式化输出
+ *  sprintf -- 发送格式化输出到字符串, 此方法可用于复制字符串
+ *  scanf -- 从标准输入读取数据
+ *  sscanf -- 从字符串读取格式化输入
+ *  getchar -- 标准输入读取一个字符
+ *  putchar -- 标准输入输出一个字符
+ *  gets -- 标准输入读取一行
+ *  puts -- 标准输入输出一行
+ *  perror -- 把描述性错误消息输出到标准错误 stderr。输出字符串 str，后跟一个冒号，然后是一个空格
+ */
+void in_out(){
+    /** 1.常用的宏 */
+    printf("%d \n", EOF);           // 表示已经到达文件结束的负整数
+    printf("%d \n", BUFSIZ);        // 该整数代表了 setbuf 函数使用的缓冲区大小
+    printf("%d \n", FOPEN_MAX);     // 该整数代表了系统可以同时打开的文件数量
+    printf("%d \n", FILENAME_MAX);  // 该整数代表了字符数组可以存储的文件名的最大长度
+    printf("%d \n", TMP_MAX);       // 是 tmpnam 函数可生成的独特文件名的最大数量
+
+    /** 2.格式化输出 */
+    int len = printf("%f %2.0f\n", pow(2, 32), pow(2, 32));// 发送格式化输出到标准输出, 更多参见 -- 格式化输出
+    printf("%d\n", len);            // 如果成功，则返回写入的字符总数，否则返回一个负数。
+    char s1[20];
+    sprintf(s1, "%2.0f", pow(2, 32));   // 发送格式化输出到字符串, 此方法可用于复制字符串
+    printf("%s\n", s1);
+
+    vprintf_test("%2.0f\n", pow(2, 32));
+    printf("buffer: %s\n", buffer);
+    vprintf_test("%d 的 %d 次幂为: %2.0f\n", 2, 32, pow(2,32));
+    printf("buffer: %s\n", buffer);
+
+    /** 3.格式化输入 */
+    char name[20];
+    int age;
+    printf("输入你的姓名和年龄，中间用空格分割：\n");
+    scanf("%s %d", name, &age);                 // 从标准输入读取数据
+    printf("你的姓名为： %s, 你的年龄为: %d。\n", name, age);
+
+    sscanf("jiwanger 27", "%s %d", name, &age); // 从字符串读取格式化输入
+    printf("你的姓名为： %s, 你的年龄为: %d。\n", name, age);
+
+    /** 4.标准输入和标准输出
+     * 此处有输入缓冲区问题, 因为前面使用 scanf 函数有数据残留，getchar 直接读取了，不会停留在输入。
+     */
+    printf("标准输入读取一个字符：(请输入)\n");
+    char ch = getchar();
+    printf("输入字符为:");
+    putchar(ch);
+
+    char str_fgets[50];
+    printf("请输入一个字符串：");
+    gets(str_fgets);
+    printf("您输入的字符串是：");
+    puts(str_fgets);
+
+    /** 5.标准错误 */
+    perror("An error!");    // 把描述性错误消息输出到标准错误 stderr。输出字符串 str，后跟一个冒号，然后是一个空格。
+}
+
+char en_str[] = "English Only!";
+char zh_en_str[] = "中文abcd测试！";
+/** 6.文件写入
+ *  fopen -- 打开文件，更多模式查看 -- 文件读写章节
+ *  fclose -- 关闭文件
+ *  fprintf -- 和 printf 一样，但不是发送到标准输出流，发送到打开的文件流
+ *  fputs -- 和 puts 一样，只是流不一样
+ *  putc / fputc -- 把参数 char 指定的字符写入到指定的流 stream 中，并把位置标识符往前移动
+ *  vfprintf -- 和 vprintf 一样，只是流不一样
+ */
+void file_write() {
+    FILE * fp;
+    
+    const char * filename = "files/file.txt";
+
+    fp = fopen (filename, "w");        // 打开文件，更多模式查看 -- 文件读写章节
+    if(fp == NULL) {
+       printf("Error: %s\n", strerror(errno));
+    }
+
+    fprintf(fp, "%s %d.\n", "We are in", 2017);     // 发送格式化输出到流 stream 中
+    fprintf(fp, "%s\n", "Wellcome!");
+   
+    fputs("使用 fputs 写入！\n", fp);                // fputs 写入
+
+    char *chs = "使用 putc / fputc 写入！";
+    for(int i = 0; i < strlen(chs); i++) {
+        putc(chs[i], fp);
+    }
+    fputs("\n", fp);
+    for(int i = 0; i < strlen(chs); i++) {
+        fputc(chs[i], fp);
+    }
+
+    fclose(fp);
+    puts("文件写入完成！");
+}
+
+/** 文本读取
+ *  fscanf -- 从文件读取格式化输入
+ *  fgets -- 当读取 (n-1) 个字符时，或者读取到换行符时，或者到达文件末尾时，它会停止
+ *  feof -- 是否到达文件末尾
+ *  fgetc / getc -- 读取一个字符
+ */
+void file_read() {
+    FILE * fp;
+    
+    const char * filename = "files/file.txt";
+    fp = fopen (filename, "r");        // 打开文件，更多模式查看 -- 文件读写章节
+
+    if(fp == NULL) {
+       printf("=== Error: %s ===\n", strerror(errno));
+       return;
+    }
+
+    char line_1_s1[20],line_1_s2[20],line_1_s3[20],line_1_s4[20];
+    int line_1_d;
+    char br;            // 用于读取换行符
+    // 文件第一行为: We are in 2017.
+    fscanf(fp, "%s %s %s %d %s%c", line_1_s1, line_1_s2, line_1_s3, &line_1_d, line_1_s4, &br);
+    printf("%s %s %s %d%s%c", line_1_s1, line_1_s2, line_1_s3, line_1_d, line_1_s4, br);
+
+    char line_2_s[40];
+    fscanf(fp, "%s%c", line_2_s, &br);      // %c 用于读取换行符
+    printf("%s%c", line_2_s, br);
+
+    char str_gets[40];
+    fgets(str_gets, BUFSIZ, fp);// 当读取 (n-1) 个字符时，或者读取到换行符时，或者到达文件末尾时，它会停止
+    printf("%s", str_gets);
+
+    char str_fgetc[BUFSIZ] = "\0";
+    int index = 0;
+    while(!feof(fp)) {          // 是否到达文件末尾
+        str_fgetc[index] = fgetc(fp);
+        index++;
+    }
+    printf("%s\n", str_fgetc);
+
+    fclose(fp);
+}
+
+typedef struct {
+    char id[20];
+    char name[32];
+    unsigned char age;
+} Person;
+
+/** 二进制写入结构体
+ * fwrite -- 二进制写入
+ */
+void obj_write() {
+    FILE * fp = fopen("files/persons.dat", "wb");
+    if(fp == NULL) {
+        printf("=== Error: %s ===\n", strerror(errno));
+        return;
+    }
+
+    Person p1;
+    strcpy(p1.id, "431122198903241712");
+    strcpy(p1.name, "jiwanger");
+    p1.age = 27;
+    fwrite(&p1, sizeof(p1), 1, fp);
+
+    strcpy(p1.id, "13823039350");
+    strcpy(p1.name, "nate");
+    p1.age = 28;
+    fwrite(&p1, sizeof(p1), 1, fp);
+
+    fclose(fp);
+}
+
+/** 二进制读取结构体 
+ * fread -- 二进制读取
+ */
+void obj_read() {
+    FILE * fp = fopen("files/persons.dat", "rb");
+    if(fp == NULL) {
+        printf("=== Error: %s ===\n", strerror(errno));
+        return;
+    }
+
+    Person p1;
+    fread(&p1, sizeof(p1), 1, fp);
+    printf("id:%s name:%s age:%d\n", p1.id, p1.name, p1.age);
+
+    fread(&p1, sizeof(p1), 1, fp);
+    printf("id:%s name:%s age:%d\n", p1.id, p1.name, p1.age);
+
+    fclose(fp);
+}
+
+/** stdio.h 其它一些方法
+ *  freopen -- 把一个新的文件名 filename 与给定的打开的流 stream 关联，同时关闭流中的旧文件
+ *  ferror -- 测试给定流 stream 是否有错误标识符
+ *  clearerr -- 清除给定流 stream 的文件结束和错误标识符
+ *  fgetpos -- 获取流 stream 的当前文件位置，并把它写入到 position
+ *  fsetpos -- 设置给定流 stream 的文件位置为给定的位置 posiction
+ *  rewind -- 设置文件位置为给定流 stream 的文件的开头
+ * 	rename -- 重命名
+ *  remove -- 删除文件
+ *  tmpfile -- 创建临时文件
+ *  tmpnam -- 生成并返回一个有效的临时文件名
+ *  ftell -- 返回给定流 stream 的当前文件位置
+ *  fseek -- 设置流 stream 的文件位置为给定的偏移 offset
+ */
+void other() {
+    char * filename = "files/error.txt";
+    FILE * fp = fopen(filename, "w");
+    if(fp == NULL) {
+        printf("=== Error: %s ===\n", strerror(errno));
+        return;
+    }
+
+    fp = freopen(filename, "w", fp);
+    char c = fgetc(fp);
+    if(ferror(fp)) {    // 测试是否有错误，因为 fgetc 读取空文件，有错误发生
+        printf("1.读取文件：%s 时发生错误!\n", filename);
+    }
+    clearerr(fp);       // 清除给定流 stream 的文件结束和错误标识符
+    if(ferror(fp)) {    // 无错误，因为前面 clearerr, 下面代码不执行
+        printf("2.读取文件：%s 时发生错误!\n", filename);
+    }
+
+    fpos_t position;
+    fgetpos(fp, &position);         // 将当前位置写入 position
+    fputs("Hello, World!", fp);
+  
+    fsetpos(fp, &position);         // 移动到 posiction 位置
+    fputs("这将覆盖之前的内容", fp);
+
+    fclose(fp);
+}
+
+/**
+ *  setbuf -- 定义流 stream 应如何缓冲
+ *  setvbuf -- 定义流 stream 应如何缓冲的函数
+ *  fflush -- 刷新流 stream 的输出缓冲区
+ */
+void buffer_test(){
+    char buff[1024];
+
+    memset(buff, '\0', sizeof(buff));
+
+    fprintf(stdout, "启用全缓冲\n");
+    setvbuf(stdout, buff, _IOFBF, 1024);    // 启用全缓冲，因为大小为 buffer 大小
+
+    fprintf(stdout, "该输出将保存到 buff\n");
+
+    fprintf(stdout, "这将在编程时出现\n");
+    fprintf(stdout, "最后休眠 3 秒钟\n");
+    fflush(stdout);     // 如果不使用这句，上面的两行输出会在休眠后打印，因为数据在缓冲区
+
+    sleep(3);
+    fprintf(stdout, "休眠完成！\n");
+}
+
+int main() {
+    in_out();           // 库变量和标准输入，输出
+
+    file_write();       // 写文本文件
+
+    file_read();        // 读文本文件
+
+    obj_write();        // 写二进制文件
+
+    obj_read();         // 读二进制文件
+
+    other();            // 其它一些方法
+
+    buffer_test();      // 使用缓冲
+
+    return 0;
+}
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -2430,8 +3351,79 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>stdlib.h</code>
 							头文件定义了四个变量类型、一些宏和各种通用工具函数。
 						</p>
+
+
+						<p>
+							<b>库变量</b>
+						</p>
+						<p>下面是头文件 stdlib.h 中定义的变量类型：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>变量 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>size_t </b><br>这是无符号整数类型，它是 <b>sizeof</b>
+										关键字的结果。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>wchar_t </b><br>这是一个宽字符常量大小的整数类型。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><b>div_t </b><br>这是 <b>div</b> 函数返回的结构。</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><b>ldiv_t </b><br>这是 <b>ldiv</b> 函数返回的结构。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库宏</b>
+						</p>
+						<p>下面是头文件 stdlib.h 中定义的宏：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>宏 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>NULL</b><br>这个宏是一个空指针常量的值。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>EXIT_FAILURE</b><br>这是 exit 函数失败时要返回的值。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><b>EXIT_SUCCESS</b><br>这是 exit 函数成功时要返回的值。</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><b>RAND_MAX </b><br>这个宏是 rand 函数返回的最大值。</td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td><b>MB_CUR_MAX </b> <br>这个宏表示在多字节字符集中的最大字符数，不能大于
+										MB_LEN_MAX。</td>
+								</tr>
+							</tbody>
+						</table>
+
 						<p>
 							<b>库函数</b>
+						</p>
 						<table
 							class="table table-bordered table-responsive table-striped runoob"
 							data-base="http://www.runoob.com/cprogramming/">
@@ -2596,6 +3588,141 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 								</tr>
 							</tbody>
 						</table>
+
+						<pre class="brush: c;">
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+#include &lt;assert.h>
+#include &lt;time.h>
+
+int cmpfunc (const void * a, const void * b){
+   return (*(int*)a - *(int*)b);
+}
+
+void print_int_array(int arr[], int len) {
+    for(int i = 0; i < len; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+}
+
+void when_exit() {
+    printf("Application exited!\n");
+}
+
+int main() {
+    /** 数值相关
+     *  atof -- 字符串转换为一个浮点数
+     *  strtod -- 符串转换为一个浮点数, 和 atof 不同的是它存储了转换数据的后面部分
+     *  atoi -- 转换为整型
+     *  atol -- 转换为长型
+     *  strol -- 把参数 str 所指向的字符串转换为一个长整数
+     *  stroul -- 把参数 str 所指向的字符串转换为一个无符号长整数
+     *  abs -- 绝对值，参数为 int 
+     *  labs -- 绝对值，参数为 long int 
+     *  div -- 分子除以分母，返回结果为 div_t 类型，包括商和余数
+     *  ldiv -- 分子除以分母，参数为 long int 
+     *  rand -- 生成 0 - RAND_MAX 间的伪随机数
+     *  srand -- 产生新的随机种子，随机种子一样，rand 生成的数一样
+     */
+    assert(3.141592 - atof("3.141592") <= 1E-6);    // 转换为浮点数, 1E-6 为 0.000001
+    assert(3 == atoi("3"));                         // 转换为整数
+    assert(3 == atoi("3.6"));
+    assert(3 == atol("3"));                         // 长整数
+    char *ptr;
+    assert(20.30300 - strtod("20.30300 This is test", &ptr) <= 1E-6);  // 符串转换为一个浮点数
+    assert(!strcmp(" This is test", ptr));
+    assert(10003000 == strtol("10003000 This is long int test", &ptr, 10));  // 长整数，10进制
+    assert(10003000 == strtoul("10003000 This is long int test", &ptr, 10)); // 无符号长整数，10进制
+    assert(!strcmp(" This is long int test", ptr));
+
+    assert(3 == abs(3) && 3 == abs(-3));            // 绝对值
+    assert(3 == labs(3L) && 3 == labs(-3L));        // 绝对值
+
+    div_t result = div(27, 4);                      // 分子除以分母，返回结果为 div_t 类型，包括商和余数
+    assert(6 == result.quot && 3 == result.rem);
+    ldiv_t l_result = ldiv(27L, 4L);                  // 分子除以分母，返回结果为 ldiv_t 类型，包括商和余数
+    assert(6 == l_result.quot && 3 == l_result.rem);
+
+    time_t t;       // time_t 为 time.h 中定义的时间类型
+    srand((unsigned) time(&t)); // 产生新的随机种子，随机种子一样，rand 产生的数字一亲，最大为宏 RAND_MAX 定义
+    printf("%d\n", rand());
+
+    /** 内存相关
+     *  calloc -- 分配所需的内存空间，并返回一个指向它的指针
+     *  malloc -- 和 calloc 之间的不同点是，malloc 不会设置内存为零，而 calloc 会设置分配的内存为零
+     *  free -- 释放之前调用 calloc、malloc 或 realloc 所分配的内存空间
+     *  realloc -- 尝试重新调整之前调用 malloc 或 calloc 所分配的 ptr 所指向的内存块的大小
+     */
+    int *a = calloc(2, sizeof(int));    // 分配 2 个大小为 sizeof(int) 的空间
+    a[0] = 1001;
+    a[1] = 1002;
+    assert(a[0] == 1001 && a[1] ==  1002);
+    free(a);
+
+    char *str;
+    str = (char *) malloc(15);
+    strcpy(str, "runoob");
+    printf("String = %s,  Address = %#x\n", str, str);
+
+    str = (char *) realloc(str, 25);
+    strcat(str, ".com");
+    printf("String = %s,  Address = %#x\n", str, str);
+
+    free(str);      // 清除 str 内存空间
+    
+    /** 多字节字符
+     *  mblen -- 返回参数 str 所指向的多字节字符的长度
+     *  mbtowc -- 检查参数 str 所指向的多字节字符
+     *  mbstowcs -- 把参数 str 所指向的多字节字符的字符串转换为参数 pwcs 所指向的数组
+     *  wcstombs -- 把数组 pwcs 中存储的编码转换为多字节字符，并把它们存储在字符串 str 中
+     *  wctomb -- 检查对应于参数 wchar 所给出的多字节字符的编码
+     */
+    char *pmb = (char *)malloc( MB_CUR_MAX );
+    wchar_t *pwc = L"Hi";
+
+    int len = wcstombs(pmb, pwc, MB_CUR_MAX);   // 转换为多字节字符串
+    printf("被转换的字符 %d\n", len);
+    printf("第一个多字节字符的十六进制值：%#x\n", pmb);
+    
+    len = mblen( pmb, MB_CUR_MAX );
+    printf( "多字节字符 %x 的字节长度：%u\n", pmb, len );
+
+    /** 排序和查找
+     *  qsort -- 数组排序
+     *  bsearch -- 执行二分查找
+     */
+    int values[5] = { 3, 2, 100, 80, 4 };
+    print_int_array(values, 5);
+    qsort(values, 5, sizeof(int), cmpfunc);
+    print_int_array(values, 5);
+
+    int *item;
+    int key = 80;
+    /* 使用 bsearch() 在数组中查找值 32 */
+    item = (int*) bsearch(&key, values, 5, sizeof (int), cmpfunc);
+    if(item != NULL) {
+        printf("Found item = %d\n", *item);
+    }
+
+    /** 系统控制
+     *  getenv -- 搜索 name 所指向的环境字符串，并返回相关的值给字符串
+     *  system -- 由 string 指定的命令传给要被命令处理器执行的主机环境
+     *  abort -- 使一个异常程序终止
+     *  exit -- 使程序正常终止
+     *  atexit -- 当程序正常终止时，调用指定的函数 func
+     */
+    printf("PATH:%s\n", getenv("PATH"));
+    printf("HOME:%s\n", getenv("HOME"));
+    system("ls -l");
+    atexit(when_exit);                  // exit 前调用 when_exit 函数
+
+    exit(0);
+    printf("Allready exited!\n");       // 不会执行
+    return 0;
+}
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -2605,7 +3732,7 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">
-							<code>error.h</code>
+							<code>errno.h</code>
 						</h3>
 					</div>
 					<div class="panel-body">
@@ -2645,6 +3772,39 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 								</tr>
 							</tbody>
 						</table>
+
+						<pre class="brush: c;">
+#include &lt;stdio.h>
+#include &lt;errno.h>
+#include &lt;string.h>
+#include &lt;math.h>
+
+int main() {
+    // 只读方式打开一个不存在的文件
+    FILE * fp = fopen("no-exist.txt", "r");
+    if( fp == NULL ) {
+        printf("errno:%d \nmessage:%s\n", errno, strerror(errno));
+    } else {
+        fclose(fp);
+    }
+
+    errno = 0;
+    double val = sqrt(-10);
+    // 这个宏表示一个域错误，它在输入参数超出数学函数定义的域时发生，errno 被设置为 EDOM
+    if( errno == EDOM) {
+        printf("errno:%d \nmessage:%s\n", errno, strerror(errno));
+    }
+
+    errno = 0;
+    double value = log(0.00);
+    // 这个宏表示一个范围错误，它在输入参数超出数学函数定义的范围时发生，errno 被设置为 ERANGE
+    if( errno == ERANGE ) {
+        printf("errno:%d \nmessage:%s\n", errno, strerror(errno));
+    }
+    
+    return(0);
+}
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -2657,7 +3817,233 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>math.h</code>
 						</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							<code>math.h</code>
+							头文件定义了各种数学函数和一个宏。在这个库中所有可用的功能都带有一个 double 类型的参数，且都返回 double
+							类型的结果。
+						</p>
+
+						<p>
+							<b>库宏</b>
+						</p>
+						<p>下面是这个库中定义的唯一的一个宏：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>宏 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>HUGE_VAL</b><br>
+										<p>当函数的结果不可以表示为浮点数时。如果是因为结果的幅度太大以致于无法表示，则函数会设置 errno 为
+											ERANGE 来表示范围错误，并返回一个由宏 HUGE_VAL 或者它的否定（-
+											HUGE_VAL）命名的一个特定的很大的值。</p>
+										<p>如果结果的幅度太小，则会返回零值。在这种情况下，error 可能会被设置为 ERANGE，也有可能不会被设置为
+											ERANGE。</p></td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库函数</b>
+						</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>函数 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><a href="c-function-acos.html">double acos(double
+											x)</a><br>返回以弧度表示的 x 的反余弦。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><a href="c-function-asin.html">double asin(double
+											x)</a><br>返回以弧度表示的 x 的反正弦。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><a href="c-function-atan.html">double atan(double
+											x)</a><br>返回以弧度表示的 x 的反正切。</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><a href="c-function-atan2.html">double
+											atan2(double y, double x)</a><br>返回以弧度表示的 y/x 的反正切。y 和 x
+										的值的符号决定了正确的象限。</td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td><a href="c-function-cos.html">double cos(double x)</a><br>返回弧度角
+										x 的余弦。</td>
+								</tr>
+								<tr>
+									<td>6</td>
+									<td><a href="c-function-cosh.html">double cosh(double
+											x)</a><br>返回 x 的双曲余弦。</td>
+								</tr>
+								<tr>
+									<td>7</td>
+									<td><a href="c-function-sin.html">double sin(double x)</a><br>返回弧度角
+										x 的正弦。</td>
+								</tr>
+								<tr>
+									<td>8</td>
+									<td><a href="c-function-sinh.html">double sinh(double
+											x)</a><br>返回 x 的双曲正弦。</td>
+								</tr>
+								<tr>
+									<td>9</td>
+									<td><a href="c-function-tanh.html">double tanh(double
+											x)</a><br>返回 x 的双曲正切。</td>
+								</tr>
+								<tr>
+									<td>10</td>
+									<td><a href="c-function-exp.html">double exp(double x)</a><br>返回
+										e 的 x 次幂的值。</td>
+								</tr>
+								<tr>
+									<td>11</td>
+									<td><a href="c-function-frexp.html">double
+											frexp(double x, int *exponent)</a><br>把浮点数 x
+										分解成尾数和指数。返回值是尾数，并将指数存入 exponent 中。所得的值是 x = mantissa * 2 ^
+										exponent。</td>
+								</tr>
+								<tr>
+									<td>12</td>
+									<td><a href="c-function-ldexp.html">double
+											ldexp(double x, int exponent)</a><br>返回 x 乘以 2 的 exponent
+										次幂。</td>
+								</tr>
+								<tr>
+									<td>13</td>
+									<td><a href="c-function-log.html">double log(double x)</a><br>返回
+										x 的自然对数（基数为 e 的对数）。</td>
+								</tr>
+								<tr>
+									<td>14</td>
+									<td><a href="c-function-log10.html">double
+											log10(double x)</a><br>返回 x 的常用对数（基数为 10 的对数）。</td>
+								</tr>
+								<tr>
+									<td>15</td>
+									<td><a href="c-function-modf.html">double modf(double
+											x, double *integer)</a><br>返回值为小数部分（小数点后的部分），并设置 integer
+										为整数部分。</td>
+								</tr>
+								<tr>
+									<td>16</td>
+									<td><a href="c-function-pow.html">double pow(double x,
+											double y)</a><br>返回 x 的 y 次幂。</td>
+								</tr>
+								<tr>
+									<td>17</td>
+									<td><a href="c-function-sqrt.html">double sqrt(double
+											x)</a><br>返回 x 的平方根。</td>
+								</tr>
+								<tr>
+									<td>18</td>
+									<td><a href="c-function-ceil.html">double ceil(double
+											x)</a><br>返回大于或等于 x 的最小的整数值。</td>
+								</tr>
+								<tr>
+									<td>19</td>
+									<td><a href="c-function-fabs.html">double fabs(double
+											x)</a><br>返回 x 的绝对值。</td>
+								</tr>
+								<tr>
+									<td>20</td>
+									<td><a href="c-function-floor.html">double
+											floor(double x)</a><br>返回小于或等于 x 的最大的整数值。</td>
+								</tr>
+								<tr>
+									<td>21</td>
+									<td><a href="c-function-fmod.html">double fmod(double
+											x, double y)</a><br>返回 x 除以 y 的余数。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<pre class="brush: c;">
+#include &lt;stdio.h>
+#include &lt;math.h>
+#include &lt;string.h>
+#include &lt;assert.h>
+
+int main() {
+    /** 三角函数, 参数为浮点数，是一个以弧度表示的角度。弧度 = (角度 / 180) * PI
+     *  sin -- 正弦，对边 / 斜边，返回弧度角 x 的正弦
+     *  cos -- 余弦，邻边 / 斜边，返回弧度角 x 的余弦
+     *  asin -- 返回以弧度表示的 x 的反正弦
+     *  acos -- 返回以弧度表示的 x 的反余弦
+     *  atan -- 返回以弧度表示的 x 的反正切
+     *  atan2 -- 返回以弧度表示的 y/x 的反正切
+     *  sinh -- 返回 x 的双曲正弦
+     *  cosh -- 返回 x 的双曲余弦
+     *  tanh -- 返回 x 的双曲正切
+     */
+    const double PI = 3.14159265;
+
+    printf("%lf\n", sin(0 / 180.0 * PI));     // 0 度角 sin 值
+    printf("%lf\n", sin(30 / 180.0 * PI));    // 30 度角 sin 值
+    printf("%lf\n", sin(45 / 180.0 * PI));    // 45 度角 sin 值
+    printf("%lf\n", sin(60 / 180.0 * PI));    // 60 度角 sin 值
+    printf("%lf\n", sin(90 / 180.0 * PI));     // 60 度角 sin 值
+
+    printf("%lf\n", sin(120 / 180.0 * PI));    // 120 度角 sin 值
+    printf("%lf\n", sin(180 / 180.0 * PI));    // 180 度角 sin 值
+    printf("%lf\n", sin(225 / 180.0 * PI));    // 225 度角 sin 值
+    printf("%lf\n", sin(270 / 180.0 * PI));    // 270 度角 sin 值
+    printf("%lf\n", sin(360 / 180.0 * PI));    // 360 度角 sin 值
+    
+    /** 幂次运算
+     *  pow -- 返回 x 的 y 次幂
+     *  sqrt -- 返回 x 的平方根
+     *  exp -- 返回 e 的 x 次幂的值, e 约为 2.718281828459...
+     *  log -- 返回 x 的自然对数（基数为 e 的对数）
+     *  log10 -- 返回 x 的常用对数（基数为 10 的对数）
+     *  ldexp -- 返回 x 乘以 2 的 exponent 次幂
+     *  frexp -- 把浮点数 x 分解成尾数和指数。返回值是尾数，并将指数存入 exponent 中
+     *      尾数的绝对值范围从 1/2（包含）到 1（不包含）
+     */
+    assert(8 == pow(2, 3));
+    assert(4 == sqrt(16));
+    printf("e 的三次方：%lf\n", exp(3));
+    assert(10 == log(exp(10)));
+    assert(2 == log10(100));
+    assert(48 == ldexp(3, 4));  // 相当于： 3 * pow(2, 4)
+    int e;
+    double num = 6.0;
+    double fraction = frexp(num, &e);
+    printf("%lf = %lf * 2^%d\n", num, fraction, e);
+
+    /** 
+     *  fabs -- 返回 x 的绝对值
+     *  floor -- 返回小于或等于 x 的最大的整数值
+     *  cell -- 返回大于或等于 x 的最小的整数值
+     *  fmod -- 返回 x 除以 y 的余数
+     *  modf -- 返回值为小数部分（小数点后的部分），并设置 integer 为整数部分
+     */
+    assert(3.14 - fabs(-3.14) < 1E-6);
+    assert(3 == floor(3.9));
+    assert(4 == ceil(3.1));
+    assert(2 == fmod(8, 3));
+    double v;
+    double result = modf(3.1415926, &v);
+    printf("%.0lf %.8lf\n", v, result);
+
+    return 0;
+}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -2669,7 +4055,331 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>time.h</code>
 						</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							<code>time.h</code>
+							头文件定义了四个变量类型、两个宏和各种操作日期和时间的函数。
+						</p>
+						<p>
+							<b>库变量</b>
+						</p>
+						<p>下面是头文件 time.h 中定义的变量类型：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>变量 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>size_t</b><br>是无符号整数类型，它是 <b>sizeof</b>
+										关键字的结果。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>clock_t</b><br>这是一个适合存储处理器时间的类型。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><b>time_t</b><br>这是一个适合存储日历时间类型。</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><b>struct tm</b><br>这是一个用来保存时间和日期的结构。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>struct tm 结构体</b>
+						</p>
+						<pre class="brush: c;">
+struct tm {
+    int tm_sec;         /* 秒，范围从 0 到 59		*/
+    int tm_min;         /* 分，范围从 0 到 59		*/
+    int tm_hour;        /* 小时，范围从 0 到 23		*/
+    int tm_mday;        /* 一月中的第几天，范围从 1 到 31	*/
+    int tm_mon;         /* 月，范围从 0 到 11		*/
+    int tm_year;        /* 自 1900 年起的年数		*/
+    int tm_wday;        /* 一周中的第几天，范围从 0 到 6	*/
+    int tm_yday;        /* 一年中的第几天，范围从 0 到 365	*/
+    int tm_isdst;       /* 夏令时				*/
+};
+</pre>
+						<p>
+							<b>库宏</b>
+						</p>
+						<p>下面是头文件 time.h 中定义的宏：</p>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>宏 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>NULL</b><br>这个宏是一个空指针常量的值。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>CLOCKS_PER_SEC </b><br>这个宏表示每秒的处理器时钟个数。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库函数</b>
+						</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>函数 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><a href="c-function-asctime.html">char
+											*asctime(const struct tm *timeptr)</a><br>返回一个指向字符串的指针，它代表了结构
+										timeptr 的日期和时间。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><a href="c-function-clock.html">clock_t
+											clock(void)</a><br>返回程序执行起（一般为程序的开头），处理器时钟所使用的时间。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><a href="c-function-ctime.html">char *ctime(const
+											time_t *timer)</a><br>返回一个表示当地时间的字符串，当地时间是基于参数 timer。</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><a href="c-function-difftime.html">double
+											difftime(time_t time1, time_t time2)</a><br>返回 time1 和 time2
+										之间相差的秒数 (time1-time2)。</td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td><a href="c-function-gmtime.html">struct tm
+											*gmtime(const time_t *timer)</a><br>timer 的值被分解为 tm
+										结构，并用协调世界时（UTC）也被称为格林尼治标准时间（GMT）表示。</td>
+								</tr>
+								<tr>
+									<td>6</td>
+									<td><a href="c-function-localtime.html">struct tm
+											*localtime(const time_t *timer)</a><br>timer 的值被分解为 tm
+										结构，并用本地时区表示。</td>
+								</tr>
+								<tr>
+									<td>7</td>
+									<td><a href="c-function-mktime.html">time_t
+											mktime(struct tm *timeptr)</a><br>把 timeptr
+										所指向的结构转换为一个依据本地时区的 time_t 值。</td>
+								</tr>
+								<tr>
+									<td>8</td>
+									<td><a href="c-function-strftime.html">size_t
+											strftime(char *str, size_t maxsize, const char *format, const
+											struct tm *timeptr)</a><br>根据 format 中定义的格式化规则，格式化结构 timeptr
+										表示的时间，并把它存储在 str 中。</td>
+								</tr>
+								<tr>
+									<td>9</td>
+									<td><a href="c-function-time.html">time_t time(time_t
+											*timer)</a><br>计算当前日历时间，并把它编码成 time_t 格式。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>strftime 函数格式化时间的格式说明符</b>
+						</p>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th style="width: 8%">说明符</th>
+									<th>替换为</th>
+									<th>实例</th>
+								</tr>
+								<tr>
+									<td>%a</td>
+									<td>缩写的星期几名称</td>
+									<td>Sun</td>
+								</tr>
+								<tr>
+									<td>%A</td>
+									<td>完整的星期几名称</td>
+									<td>Sunday</td>
+								</tr>
+								<tr>
+									<td>%b</td>
+									<td>缩写的月份名称</td>
+									<td>Mar</td>
+								</tr>
+								<tr>
+									<td>%B</td>
+									<td>完整的月份名称</td>
+									<td>March</td>
+								</tr>
+								<tr>
+									<td>%c</td>
+									<td>日期和时间表示法</td>
+									<td>Sun Aug 19 02:56:02 2012</td>
+								</tr>
+								<tr>
+									<td>%d</td>
+									<td>一月中的第几天（01-31）</td>
+									<td>19</td>
+								</tr>
+								<tr>
+									<td>%H</td>
+									<td>24 小时格式的小时（00-23）</td>
+									<td>14</td>
+								</tr>
+								<tr>
+									<td>%I</td>
+									<td>12 小时格式的小时（01-12）</td>
+									<td>05</td>
+								</tr>
+								<tr>
+									<td>%j</td>
+									<td>一年中的第几天（001-366）</td>
+									<td>231</td>
+								</tr>
+								<tr>
+									<td>%m</td>
+									<td>十进制数表示的月份（01-12）</td>
+									<td>08</td>
+								</tr>
+								<tr>
+									<td>%M</td>
+									<td>分（00-59）</td>
+									<td>55</td>
+								</tr>
+								<tr>
+									<td>%p</td>
+									<td>AM 或 PM 名称</td>
+									<td>PM</td>
+								</tr>
+								<tr>
+									<td>%S</td>
+									<td>秒（00-61）</td>
+									<td>02</td>
+								</tr>
+								<tr>
+									<td>%U</td>
+									<td>一年中的第几周，以第一个星期日作为第一周的第一天（00-53）</td>
+									<td>33</td>
+								</tr>
+								<tr>
+									<td>%w</td>
+									<td>十进制数表示的星期几，星期日表示为 0（0-6）</td>
+									<td>4</td>
+								</tr>
+								<tr>
+									<td>%W</td>
+									<td>一年中的第几周，以第一个星期一作为第一周的第一天（00-53）</td>
+									<td>34</td>
+								</tr>
+								<tr>
+									<td>%x</td>
+									<td>日期表示法</td>
+									<td>08/19/12</td>
+								</tr>
+								<tr>
+									<td>%X</td>
+									<td>时间表示法</td>
+									<td>02:50:06</td>
+								</tr>
+								<tr>
+									<td>%y</td>
+									<td>年份，最后两个数字（00-99）</td>
+									<td>01</td>
+								</tr>
+								<tr>
+									<td>%Y</td>
+									<td>年份</td>
+									<td>2012</td>
+								</tr>
+								<tr>
+									<td>%Z</td>
+									<td>时区的名称或缩写</td>
+									<td>CDT</td>
+								</tr>
+								<tr>
+									<td>%%</td>
+									<td>一个 % 符号</td>
+									<td>%</td>
+								</tr>
+							</tbody>
+						</table>
+						<pre class="brush: c;">
+#include &lt;stdio.h>
+#include &lt;time.h>
+
+#define CCT (+8)
+
+int main() {
+    // 1. time -- 计算当前日历时间, 并存储在 time_t 中, time_t 为从1970年到现在经过了多少秒
+    time_t timer;
+    time(&timer);           // time_t 为从1970年到现在经过了多少秒
+    printf("1970 年到现在为 %ld 秒, 约 %ld 年.\n", timer, timer / 60 / 60 / 24 / 365);
+
+    // 2. gmtime -- 返回 time_t 结构体, 这个是时间 0 的时间，所以要加中国时区 8，前面的 CCT
+    struct tm *now = gmtime(&timer);
+    printf("现在时间： %d 年 %d 月 %d 日, 星期 %d, %d 时 %d 分 %d 秒\n", \
+        1900 + now->tm_year, 1 + now->tm_mon, now->tm_mday, \
+        now->tm_wday, CCT + now->tm_hour, now->tm_min, now->tm_sec);
+    
+    // 3. localtime -- 返回 time_t 结构体, 这个是本地时区
+    now = localtime(&timer);
+    printf("现在时间: %d 年 %d 月 %d 日, 星期 %d, %d 时 %d 分 %d 秒\n", \
+        1900 + now->tm_year, 1 + now->tm_mon, now->tm_mday, \
+        now->tm_wday, now->tm_hour, now->tm_min, now->tm_sec);
+    
+    // 4. ctime -- 返回一个表示当地时间的字符串
+    printf("现在时间: %s", ctime(&timer));
+
+    // 5. mktime -- 所指向的 struct tm 结构转换为一个依据本地时区的 time_t 值
+    struct tm birthday;
+    birthday.tm_year = 1989 - 1900;
+    birthday.tm_mon = 2;
+    birthday.tm_mday = 24;
+    birthday.tm_hour = 10;
+    birthday.tm_min = 30;
+    birthday.tm_sec = 0;
+    birthday.tm_isdst = -1;
+    time_t bth = mktime(&birthday);
+    printf("生日为: %s", ctime(&bth));
+
+    // 6. difftime -- 返回 time1 和 time2 之间相差的秒数
+    double diff = difftime(timer, bth);
+    double diff_day = diff / 60 / 60 / 24;
+    printf("我的生是过去了 %.0lf 秒，%.0lf 天, %.0lf 年。\n", diff, diff_day, diff_day / 365);
+
+    // 7. strtime -- 将 struct tm 结构格式化为 format 指定的格式，存储在 buffer 数组中
+    char buffer[80];
+    char * format = "%x - %I:%M%p";         // format 格式
+    strftime(buffer, sizeof(buffer), format, &birthday);
+    printf("%s\n", buffer);
+
+    // 8. asctime -- 和 ctime 不同的只是参数
+    printf("%s\n", asctime(&birthday));
+
+    // 9. clock -- 为了获取 CPU 所使用的秒数，需要除以 CLOCKS_PER_SEC
+    clock_t start_t = clock();
+    for(int i = 0; i < 10000000; i++) {}
+    clock_t end_t = clock();
+    printf("CPU 占用的总时间: %f 秒。\n", (double)(end_t - start_t) / CLOCKS_PER_SEC);
+
+    return 0;
+}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -2681,7 +4391,53 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>assert.h</code>
 						</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							C 标准库的
+							<code>assert.h</code>
+							头文件提供了一个名为 assert 的宏，它可用于验证程序做出的假设，并在假设为假时输出诊断消息。
+						</p>
+
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>函数 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><a href="c-macro-assert.html">void assert(int
+											expression)</a><br>这实际上是一个宏，不是一个函数，可用于在 C 程序中添加诊断。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<pre class="brush: c;">
+#include &lt;assert.h>
+#include &lt;string.h>
+
+int main() {
+    assert(1);                          // 非 0 为真
+    assert('a');
+    assert('a' == 'a');                 // 字符
+
+    assert(1 == 1);                     // 整数
+    double PI = 3.1415926;
+    assert(3.1415926 - PI < 1E-6);      // 浮点数不能直接对比
+
+
+    assert(!strcmp("abc", "abc"));	   // 字符串
+
+    int x = 32;							// 指针
+    int *a = &x, *b = &x;
+    assert(a == b);
+
+    return 0;
+}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -2693,7 +4449,190 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>ctype.h</code>
 						</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							C 标准库的
+							<code>ctype.h</code>
+							头文件提供了一些函数，可用于测试和映射字符。
+						</p>
+						<p>这些函数接受 int 作为参数，它的值必须是 EOF 或表示为一个无符号字符。</p>
+
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>函数 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><a href="c-function-isalnum.html">int isalnum(int
+											c)</a><br>该函数检查所传的字符是否是字母和数字。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><a href="c-function-isalpha.html">int isalpha(int
+											c)</a><br>该函数检查所传的字符是否是字母。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><a href="c-function-iscntrl.html">int iscntrl(int
+											c)</a><br>该函数检查所传的字符是否是控制字符。</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><a href="c-function-isdigit.html">int isdigit(int
+											c)</a><br>该函数检查所传的字符是否是十进制数字。</td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td><a href="c-function-isgraph.html">int isgraph(int
+											c)</a><br>该函数检查所传的字符是否有图形表示法。</td>
+								</tr>
+								<tr>
+									<td>6</td>
+									<td><a href="c-function-islower.html">int islower(int
+											c)</a><br>该函数检查所传的字符是否是小写字母。</td>
+								</tr>
+								<tr>
+									<td>7</td>
+									<td><a href="c-function-isprint.html">int isprint(int
+											c)</a><br>该函数检查所传的字符是否是可打印的。</td>
+								</tr>
+								<tr>
+									<td>8</td>
+									<td><a href="c-function-ispunct.html">int ispunct(int
+											c)</a><br>该函数检查所传的字符是否是标点符号字符。</td>
+								</tr>
+								<tr>
+									<td>9</td>
+									<td><a href="c-function-isspace.html">int isspace(int
+											c)</a><br>该函数检查所传的字符是否是空白字符。</td>
+								</tr>
+								<tr>
+									<td>10</td>
+									<td><a href="c-function-isupper.html">int isupper(int
+											c)</a><br>该函数检查所传的字符是否是大写字母。</td>
+								</tr>
+								<tr>
+									<td>11</td>
+									<td><a href="c-function-isxdigit.html">int
+											isxdigit(int c)</a><br>该函数检查所传的字符是否是十六进制数字。</td>
+								</tr>
+								<tr>
+									<td>12</td>
+									<td><a href="c-function-tolower.html">int tolower(int
+											c)</a><br>该函数把大写字母转换为小写字母。</td>
+								</tr>
+								<tr>
+									<td>13</td>
+									<td><a href="c-function-toupper.html">int toupper(int
+											c)</a><br>该函数把小写字母转换为大写字母。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<pre class="brush: c;">
+#include &lt;ctype.h>
+#include &lt;stdio.h>
+#include &lt;assert.h>
+#include &lt;limits.h>
+
+int main() {
+    /** 1. 字母或数字
+     *  isalnum -- 检查所传的字符是否是字母或数字
+     *      48-57 对应数字 0-9
+     *      65-90 对应字母 A-Z
+     *      97-122 对应字母 a-z
+     */
+    assert(isalnum('0'));
+    assert(isalnum(48));
+    assert(isalnum(65));
+
+    /** 2. 字母
+     *  isalpha -- 检查所传的字符是否是字母
+     *  islower -- 查所传的字符是否是小写字母
+     *  isupper -- 检查所传的字符是否是大写字母
+     *  toupper -- 把小写字母转换为大写字母
+     *  tolower -- 把大写字母转换为小写字母
+     *      65-90 对应字母 A-Z
+     *      97-122 对应字母 a-z
+     */
+    assert(isalpha('A'));
+    assert(isalpha(65));
+    assert(!isalpha(48));
+
+    assert(islower('a'));
+    assert(islower(97));
+
+    assert(isupper('A'));
+    assert(isupper(65));
+
+    assert(isupper(toupper('a')));
+    assert(islower(tolower('A')));
+
+    /** 3. 数字
+     *  isdigit -- 检查所传的字符是否是十进制数字
+     *  isxdigit -- 检查所传的字符是否是十六进制数字
+     *      48-57 对应数字 0-9
+     *      65-70 对应字母 A-F
+     *      97-102 对应字母 a-f
+     */
+    assert(isdigit('0'));
+    assert(isdigit(48));
+
+    assert(isxdigit('A'));
+    assert(isxdigit('a'));
+    assert(isxdigit(65));
+    assert(isxdigit(97));
+
+    /** 4. 其它字符
+     *  isspace -- 空白字符,标准的空白字符包括:
+     *      ' '     (0x20)	space (SPC) 空格符
+     *      '\t'	(0x09)	horizontal tab (TAB) 水平制表符	
+     *      '\n'	(0x0a)	newline (LF) 换行符
+     *      '\v'	(0x0b)	vertical tab (VT) 垂直制表符
+     *      '\f'	(0x0c)	feed (FF) 换页符
+     *      '\r'	(0x0d)	carriage return (CR) 回车符
+     *  iscntrl -- 检查所传的字符是否是控制字符
+     *      0-31 及 127 为控制字符
+     *  isgraph -- 检查所传的字符是否有图形表示法, 除了控制字符和空白字符
+     *  ispunct -- 检查所传的字符是否是标点符号字符, 
+     *      标点符号字符可以是非字母数字（正如 isalnum 中的一样）的任意图形字符（正如 isgraph 中的一样）
+     *  isprint -- 检查所传的字符是否是可打印的, 可打印字符是非控制字符的字符
+     */
+    assert(isspace(' '));
+    assert(isspace(32));
+
+    assert(iscntrl('\t'));
+    assert(iscntrl('\r'));
+    assert(iscntrl('\n'));
+    assert(iscntrl(0));
+    assert(iscntrl(31));
+    assert(iscntrl(127));
+    assert(!iscntrl(32));
+
+    assert(isgraph('0'));
+    assert(!isgraph('\t'));
+    assert(!isgraph(' '));
+    assert(!isgraph('\n'));
+    assert(!isgraph(32));
+
+    assert(ispunct(','));
+
+    assert(isprint('A'));
+    assert(isprint(' '));
+    
+    /** ASCII 字符查看 */
+    for(int i = CHAR_MIN; i <= CHAR_MAX; i++) {
+        printf("%d == %c\n", i, i);
+    }
+
+    return 0;
+}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -2705,7 +4644,238 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>float.h</code>
 						</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							C 标准库的
+							<code>float.h</code>
+							头文件包含了一组与浮点值相关的依赖于平台的常量。这些常量是由 ANSI C 提出的，这让程序更具有可移植性。
+							浮点数是由下面四个元素组成的：
+						</p>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th style="width: 10%">组件</th>
+									<th>组件描述</th>
+								</tr>
+								<tr>
+									<td>S</td>
+									<td>符号 ( +/- )</td>
+								</tr>
+								<tr>
+									<td>b</td>
+									<td>指数表示的基数，2 表示二进制，10 表示十进制，16 表示十六进制，等等...</td>
+								</tr>
+								<tr>
+									<td>e</td>
+									<td>指数，一个介于最小值 <b>e<sub>min</sub></b> 和最大值 <b>e<sub>max</sub></b>
+										之间的整数。
+									</td>
+								</tr>
+								<tr>
+									<td>p</td>
+									<td>精度，基数 b 的有效位数</td>
+								</tr>
+							</tbody>
+						</table>
+						<p>基于以上 4 个组成部分，一个浮点数的值如下：</p>
+						<p>
+							<strong>floating-point = ( S ) p x b<sup>e</sup></strong>
+						</p>
+						<p>或</p>
+						<p>
+							<strong>floating-point = (+/-) precision x base<sup>exponent</sup></strong>
+						</p>
+
+						<p>下面的值是特定实现的，且是通过 #define 指令来定义的，这些值都不得低于下边所给出的值。请注意，所有的实例
+							FLT 是指类型 float，DBL 是指类型 double，LDBL 是指类型 long double。</p>
+						<table class="table table-bordered table-responsive table-striped">
+							<tbody>
+								<tr>
+									<th style="width: 30%">宏</th>
+									<th>描述</th>
+								</tr>
+								<tr>
+									<td>FLT_ROUNDS</td>
+									<td>定义浮点加法的舍入模式，它可以是下列任何一个值：
+										<ul>
+											<li>
+												<p>-1 - 无法确定</p>
+											</li>
+											<li>
+												<p>0 - 趋向于零</p>
+											</li>
+											<li>
+												<p>1 - 去最近的值</p>
+											</li>
+											<li>
+												<p>2 - 趋向于正无穷</p>
+											</li>
+											<li>
+												<p>3 - 趋向于负无穷</p>
+											</li>
+										</ul>
+									</td>
+								</tr>
+								<tr>
+									<td>FLT_RADIX 2</td>
+									<td>这个宏定义了指数表示的基数。基数 2 表示二进制，基数 10 表示十进制，基数 16 表示十六进制。</td>
+								</tr>
+								<tr>
+									<td>
+										<p>FLT_MANT_DIG</p>
+										<p>DBL_MANT_DIG</p>
+										<p>LDBL_MANT_DIG</p>
+									</td>
+									<td>这些宏定义了 FLT_RADIX 基数中的位数。</td>
+								</tr>
+								<tr>
+									<td>
+										<p>FLT_DIG 6</p>
+										<p>DBL_DIG 10</p>
+										<p>LDBL_DIG 10</p>
+									</td>
+									<td>这些宏定义了舍入后不会改变表示的十进制数字的最大值（基数 10）。</td>
+								</tr>
+								<tr>
+									<td>
+										<p>FLT_MIN_EXP</p>
+										<p>DBL_MIN_EXP</p>
+										<p>LDBL_MIN_EXP</p>
+									</td>
+									<td>这些宏定义了基数为 FLT_RADIX 时的指数的最小负整数值。</td>
+								</tr>
+								<tr>
+									<td>
+										<p>FLT_MIN_10_EXP -37</p>
+										<p>DBL_MIN_10_EXP -37</p>
+										<p>LDBL_MIN_10_EXP -37</p>
+									</td>
+									<td>这些宏定义了基数为 10 时的指数的最小负整数值。</td>
+								</tr>
+								<tr>
+									<td>
+										<p>FLT_MAX_EXP</p>
+										<p>DBL_MAX_EXP</p>
+										<p>LDBL_MAX_EXP</p>
+									</td>
+									<td>这些宏定义了基数为 FLT_RADIX 时的指数的最大整数值。</td>
+								</tr>
+								<tr>
+									<td>
+										<p>FLT_MAX_10_EXP +37</p>
+										<p>DBL_MAX_10_EXP +37</p>
+										<p>LDBL_MAX_10_EXP +37</p>
+									</td>
+									<td>这些宏定义了基数为 10 时的指数的最大整数值。</td>
+								</tr>
+								<tr>
+									<td>
+										<p>FLT_MAX 1E+37</p>
+										<p>DBL_MAX 1E+37</p>
+										<p>LDBL_MAX 1E+37</p>
+									</td>
+									<td>这些宏定义最大的有限浮点值。</td>
+								</tr>
+								<tr>
+									<td>
+										<p>FLT_EPSILON 1E-5</p>
+										<p>DBL_EPSILON 1E-9</p>
+										<p>LDBL_EPSILON 1E-9</p>
+									</td>
+									<td>这些宏定义了可表示的最小有效数字。</td>
+								</tr>
+								<tr>
+									<td>
+										<p>FLT_MIN 1E-37</p>
+										<p>DBL_MIN 1E-37</p>
+										<p>LDBL_MIN 1E-37</p>
+									</td>
+									<td>这些宏定义了最小的浮点值。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<pre class="brush: c;">
+#include &lt;stdio.h>
+#include &lt;float.h>
+
+int main() {
+    /** 
+     *  如果浮点数的整数部分比较大，小数位精度相应变小，因为占用总字节地址限制，优先保证整数能存储
+     *  float -- 4 字节，最大 6 位小数, 第 6 位还可能是进了一位的数
+     *  double -- 8 字节，最大 15 位小数，第 15 位还可能是进了一位的数
+     *  long double -- 16 字节， 最大 19 位小数，第 19 位还可能是进了一位的数
+     */
+    float PI_7 = 3.1415926f;
+    double D_PI_16 = 3.1415926535897932;
+    long double LD_PI_20 = 3.14159265358979323876;
+
+    printf("float: %.6f\n", PI_7);
+    printf("double: %.15f\n", D_PI_16);
+    printf("long louble: %.19Lf\n", LD_PI_20);
+
+    printf("舍入模式：%d\n", FLT_ROUNDS);     // 舍入模式
+
+    printf("指数表示的基数：%d\n", FLT_RADIX); // 指数表示的基数
+
+    // 不同类型,定义了宏 FLT_RADIX 基数中的位数
+    printf("宏 FLT_RADIX 基数中的位数:\n");
+    printf("float: %d\n", FLT_MANT_DIG);
+    printf("double: %d\n", DBL_MANT_DIG);
+    printf("long double: %d\n", LDBL_MANT_DIG);
+
+    // 舍入后不会改变表示的十进制数字的最大值
+    printf("舍入后不会改变表示的十进制数字的最大值:\n");
+    printf("float: %d\n", FLT_DIG);
+    printf("double: %d\n", DBL_DIG);
+    printf("long double: %d\n", LDBL_DIG);
+
+    // 定义了基数为 FLT_RADIX 时的指数的最小负整数值
+    printf("定义了基数为 FLT_RADIX 时的指数的最小负整数值:\n");
+    printf("float: %d\n", FLT_MIN_EXP);
+    printf("double: %d\n", DBL_MIN_EXP);
+    printf("long double: %d\n", LDBL_MIN_EXP);
+
+    // 定义了基数为 10 时的指数的最小负整数值
+    printf("定义了基数为 10 时的指数的最小负整数值:\n");
+    printf("float: %d\n", FLT_MIN_10_EXP);
+    printf("double: %d\n", DBL_MIN_10_EXP);
+    printf("long double: %d\n", LDBL_MIN_10_EXP);
+
+    // 定义了基数为 FLT_RADIX 时的指数的最大整数值
+    printf("定义了基数为 FLT_RADIX 时的指数的最大整数值:\n");
+    printf("float: %d\n", FLT_MAX_EXP);
+    printf("double: %d\n", DBL_MAX_EXP);
+    printf("long double: %d\n", LDBL_MAX_EXP);
+
+    // 定义了基数为 10 时的指数的最大整数值
+    printf("定义了基数为 10 时的指数的最大整数值:\n");
+    printf("float: %d\n", FLT_MAX_10_EXP);
+    printf("double: %d\n", DBL_MAX_10_EXP);
+    printf("long double: %d\n", LDBL_MAX_10_EXP);
+
+    // 定义最大的有限浮点值
+    printf("定义最大的有限浮点值:\n");
+    printf("float: %f\n", FLT_MAX);
+    printf("double: %f\n", DBL_MAX);
+    printf("long double: %Lf\n", LDBL_MAX);
+
+    // 定义了可表示的最小有效数字
+    printf("定义了可表示的最小有效数字:\n");
+    printf("float: %f\n", FLT_EPSILON);
+    printf("double: %f\n", DBL_EPSILON);
+    printf("long double: %LF\n", LDBL_EPSILON);
+
+    // 定义了最小的浮点值
+    printf("定义了最小的浮点值:\n");
+    printf("float: %f\n", FLT_MIN);
+    printf("double: %f\n", DBL_MIN);
+    printf("long double: %Lf\n", LDBL_MIN);
+
+    return 0;
+}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -2717,7 +4887,135 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>limits.h</code>
 						</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							<code>limits.h</code>
+							头文件决定了各种变量类型的各种属性。定义在该头文件中的宏限制了各种变量类型（比如 char、int 和 long）的值。
+						</p>
+						<p>这些限制指定了变量不能存储任何超出这些限制的值，例如一个无符号可以存储的最大值是 255。</p>
+
+
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 25%">宏</th>
+									<th style="width: 25%">值</th>
+									<th>描述</th>
+								</tr>
+								<tr>
+									<td>CHAR_BIT</td>
+									<td>8</td>
+									<td>定义一个字节的比特数。</td>
+								</tr>
+								<tr>
+									<td>SCHAR_MIN</td>
+									<td>-128</td>
+									<td>定义一个有符号字符的最小值。</td>
+								</tr>
+								<tr>
+									<td>SCHAR_MAX</td>
+									<td>127</td>
+									<td>定义一个有符号字符的最大值。</td>
+								</tr>
+								<tr>
+									<td>UCHAR_MAX</td>
+									<td>255</td>
+									<td>定义一个无符号字符的最大值。</td>
+								</tr>
+								<tr>
+									<td>CHAR_MIN</td>
+									<td>0</td>
+									<td>定义类型 char 的最小值，如果 char 表示负值，则它的值等于 SCHAR_MIN，否则等于 0。</td>
+								</tr>
+								<tr>
+									<td>CHAR_MAX</td>
+									<td>127</td>
+									<td>定义类型 char 的最大值，如果 char 表示负值，则它的值等于 SCHAR_MAX，否则等于
+										UCHAR_MAX。</td>
+								</tr>
+								<tr>
+									<td>MB_LEN_MAX</td>
+									<td>1</td>
+									<td>定义多字节字符中的最大字节数。</td>
+								</tr>
+								<tr>
+									<td>SHRT_MIN</td>
+									<td>-32768</td>
+									<td>定义一个短整型的最小值。</td>
+								</tr>
+								<tr>
+									<td>SHRT_MAX</td>
+									<td>+32767</td>
+									<td>定义一个短整型的最大值。</td>
+								</tr>
+								<tr>
+									<td>USHRT_MAX</td>
+									<td>65535</td>
+									<td>定义一个无符号短整型的最大值。</td>
+								</tr>
+								<tr>
+									<td>INT_MIN</td>
+									<td>-32768</td>
+									<td>定义一个整型的最小值。</td>
+								</tr>
+								<tr>
+									<td>INT_MAX</td>
+									<td>+32767</td>
+									<td>定义一个整型的最大值。</td>
+								</tr>
+								<tr>
+									<td>UINT_MAX</td>
+									<td>65535</td>
+									<td>定义一个无符号整型的最大值。</td>
+								</tr>
+								<tr>
+									<td>LONG_MIN</td>
+									<td>-2147483648</td>
+									<td>定义一个长整型的最小值。</td>
+								</tr>
+								<tr>
+									<td>LONG_MAX</td>
+									<td>+2147483647</td>
+									<td>定义一个长整型的最大值。</td>
+								</tr>
+								<tr>
+									<td>ULONG_MAX</td>
+									<td>4294967295</td>
+									<td>定义一个无符号长整型的最大值。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<pre class="brush: c;">
+#include &lt;limits.h>
+#include &lt;math.h>
+#include &lt;stdio.h>
+
+int main()
+{
+    printf("%d\n", CHAR_BIT); // 定义一个字节的比特数
+
+    printf("%d %d\n", SCHAR_MIN, SCHAR_MAX); // 定义一个有符号字符的最小和最大值
+    printf("%d %d\n", CHAR_MIN, CHAR_MAX); // 定义类型 char 的最小和最大值
+    printf("%d\n", UCHAR_MAX); // 定义一个无符号字符的最大值
+
+    printf("%d\n", MB_LEN_MAX); // 定义多字节字符中的最大字节数
+
+    printf("%d %d\n", SHRT_MIN, SHRT_MAX); // 定义一个短整型的最小和最大值
+    printf("%d\n", USHRT_MAX); // 定义一个无符号短整型的最大值
+
+    printf("%d %d\n", INT_MIN, INT_MAX); // 定义一个整型的最小和最大值
+    printf("%u\n", UINT_MAX); // 定义一个无符号整型的最大值
+
+    printf("%ld %ld\n", LONG_MIN, LONG_MAX); // 定义一个长整型的最小和最大值
+    printf("%lu\n", ULONG_MAX); // 定义一个无符号长整型的最大值
+
+    return 0;
+}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -2729,7 +5027,254 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>locale.h</code>
 						</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							<code>locale.h</code>
+							头文件定义了特定地域的设置，比如日期格式和货币符号。接下来我们将介绍一些宏，以及一个重要的结构 struct lconv
+							和两个重要的函数。
+						</p>
+
+						<p>
+							<b>lconv 结构体</b>
+						</p>
+						<pre class="brush: c;">
+typedef struct {
+   char *decimal_point;
+   char *thousands_sep;
+   char *grouping;	
+   char *int_curr_symbol;
+   char *currency_symbol;
+   char *mon_decimal_point;
+   char *mon_thousands_sep;
+   char *mon_grouping;
+   char *positive_sign;
+   char *negative_sign;
+   char int_frac_digits;
+   char frac_digits;
+   char p_cs_precedes;
+   char p_sep_by_space;
+   char n_cs_precedes;
+   char n_sep_by_space;
+   char p_sign_posn;
+   char n_sign_posn;
+} lconv
+</pre>
+						<p>
+							<b>lconv 结构体字段的描述</b>
+						</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 10%">序号</th>
+									<th>字段 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>decimal_point</b><br>用于非货币值的小数点字符。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>thousands_sep</b><br>用于非货币值的千位分隔符。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><b>grouping</b><br>一个表示非货币量中每组数字大小的字符串。每个字符代表一个整数值，每个整数指定当前组的位数。值为
+										0 意味着前一个值将应用于剩余的分组。</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><b>int_curr_symbol</b><br>国际货币符号使用的字符串。前三个字符是由
+										ISO 4217:1987 指定的，第四个字符用于分隔货币符号和货币量。</td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td><b>currency_symbol</b><br>用于货币的本地符号。</td>
+								</tr>
+								<tr>
+									<td>6</td>
+									<td><b>mon_decimal_point</b><br>用于货币值的小数点字符。</td>
+								</tr>
+								<tr>
+									<td>7</td>
+									<td><b>mon_thousands_sep</b><br>用于货币值的千位分隔符。</td>
+								</tr>
+								<tr>
+									<td>8</td>
+									<td><b>mon_grouping</b><br>一个表示货币值中每组数字大小的字符串。每个字符代表一个整数值，每个整数指定当前组的位数。值为
+										0 意味着前一个值将应用于剩余的分组。</td>
+								</tr>
+								<tr>
+									<td>9</td>
+									<td><b>positive_sign</b><br>用于正货币值的字符。</td>
+								</tr>
+								<tr>
+									<td>10</td>
+									<td><b>negative_sign</b><br>用于负货币值的字符。</td>
+								</tr>
+								<tr>
+									<td>11</td>
+									<td><b>int_frac_digits</b><br>国际货币值中小数点后要显示的位数。</td>
+								</tr>
+								<tr>
+									<td>12</td>
+									<td><b>frac_digits</b><br>货币值中小数点后要显示的位数。</td>
+								</tr>
+								<tr>
+									<td>13</td>
+									<td><b>p_cs_precedes</b><br>如果等于 1，则 currency_symbol
+										出现在正货币值之前。如果等于 0，则 currency_symbol 出现在正货币值之后。</td>
+								</tr>
+								<tr>
+									<td>14</td>
+									<td><b>p_sep_by_space</b><br>如果等于 1，则 currency_symbol
+										和正货币值之间使用空格分隔。如果等于 0，则 currency_symbol 和正货币值之间不使用空格分隔。</td>
+								</tr>
+								<tr>
+									<td>15</td>
+									<td><b>n_cs_precedes</b><br>如果等于 1，则 currency_symbol
+										出现在负货币值之前。如果等于 0，则 currency_symbol 出现在负货币值之后。</td>
+								</tr>
+								<tr>
+									<td>16</td>
+									<td><b>n_sep_by_space</b><br>如果等于 1，则 currency_symbol
+										和负货币值之间使用空格分隔。如果等于 0，则 currency_symbol 和负货币值之间不使用空格分隔。</td>
+								</tr>
+								<tr>
+									<td>17</td>
+									<td><b>p_sign_posn</b><br>表示正货币值中正号的位置。</td>
+								</tr>
+								<tr>
+									<td>18</td>
+									<td><b>n_sign_posn</b><br>表示负货币值中负号的位置。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库宏</b>
+						</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 10%">序号</th>
+									<th>宏 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>LC_ALL</b><br>设置下面的所有选项。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>LC_COLLATE</b><br>影响 strcoll 和 strxfrm 函数。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><b>LC_CTYPE</b><br>影响所有字符函数。</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><b>LC_MONETARY</b><br>影响 localeconv 函数提供的货币信息。</td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td><b>LC_NUMERIC</b><br>影响 localeconv
+										函数提供的小数点格式化和信息。</td>
+								</tr>
+								<tr>
+									<td>6</td>
+									<td><b>LC_TIME</b><br>影响 strftime 函数。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库函数</b>
+						</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>函数 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><a href="c-function-setlocale.html">char
+											*setlocale(int category, const char *locale)</a><br>设置或读取地域化信息。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><a href="c-function-localeconv.html">struct lconv
+											*localeconv(void)</a><br>设置或读取地域化信息。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<pre class="brush: c;">
+#include &lt;locale.h>
+#include &lt;stdio.h>
+
+void print_conv(struct lconv* lc)
+{
+    printf("%s\n", lc->decimal_point); // 用于非货币值的小数点字符
+    printf("%s\n", lc->thousands_sep); // 用于非货币值的千位分隔符
+    printf("%s\n", lc->grouping); // 一个表示非货币量中每组数字大小的字符串
+
+    printf("%s\n", lc->int_curr_symbol); // 国际货币符号使用的字符串
+    printf("%s\n", lc->currency_symbol); // 用于货币的本地符号
+
+    printf("%s\n", lc->mon_decimal_point); // 用于货币值的小数点字符
+    printf("%s\n", lc->mon_thousands_sep); // 用于货币值的千位分隔符
+    printf("%s\n", lc->mon_grouping); // 一个表示货币值中每组数字大小的字符串
+
+    printf("%s\n", lc->positive_sign); // 用于正货币值的字符
+    printf("%s\n", lc->negative_sign); // 用于负货币值的字符
+
+    printf("%c\n", lc->int_frac_digits); // 国际货币值中小数点后要显示的位数
+    printf("%c\n", lc->frac_digits); // 货币值中小数点后要显示的位数
+
+    /** 如果等于 1，则 currency_symbol 出现在正货币值之前。
+     *	如果等于 0，则 currency_symbol 出现在正货币值之后
+     */
+    printf("%c\n", lc->p_cs_precedes);
+    /** 如果等于 1，则 currency_symbol 和正货币值之间使用空格分隔。
+     *  如果等于 0，则 currency_symbol 和正货币值之间不使用空格分隔
+     */
+    printf("%c\n", lc->p_sep_by_space);
+    /** 如果等于 1，则 currency_symbol 出现在负货币值之前。
+     *  如果等于 0，则 currency_symbol 出现在负货币值之后
+     */
+    printf("%c\n", lc->n_cs_precedes);
+    /** 如果等于 1，则 currency_symbol 和负货币值之间使用空格分隔。
+     *  如果等于 0，则 currency_symbol 和负货币值之间不使用空格分隔
+     */
+    printf("%c\n", lc->n_sep_by_space);
+    // 表示正货币值中正号的位置
+    printf("%c\n", lc->p_sign_posn);
+    // 表示负货币值中负号的位置
+    printf("%c\n", lc->n_sign_posn);
+}
+
+int main()
+{
+    setlocale(LC_ALL, "");
+
+    struct lconv* lc = localeconv();
+    print_conv(lc);
+
+    setlocale(LC_ALL, "C");
+    lc = localeconv();
+    print_conv(lc);
+
+    return 0;
+}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -2741,7 +5286,102 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>setjmp.h</code>
 						</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							<code>setjmp.h</code>
+							头文件定义了宏 setjmp()、函数 longjmp() 和变量类型 jmp_buf，该变量类型会绕过正常的函数调用和返回规则。
+						</p>
+
+						<p>
+							<b>库变量</b>
+						</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>变量 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>jmp_buf </b><br>这是一个用于存储宏 <b>setjmp()</b> 和函数
+										<b>longjmp()</b> 相关信息的数组类型。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库宏</b>
+						</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>宏 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><a href="c-macro-setjmp.html">int setjmp(jmp_buf
+											environment)</a><br>这个宏把当前环境保存在变量 <b>environment</b> 中，以便函数
+										<b>longjmp()</b> 后续使用。如果这个宏直接从宏调用中返回，则它会返回零，但是如果它从 <b>longjmp()</b>
+										函数调用中返回，则它会返回一个非零值。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库函数</b>
+						</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>函数 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><a href="c-function-longjmp.html">void
+											longjmp(jmp_buf environment, int value)</a><br>该函数恢复最近一次调用 <b>setjmp()</b>
+										宏时保存的环境，<b>jmp_buf</b> 参数的设置是由之前调用 setjmp() 生成的。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<pre class="brush: c;">
+#include &lt;setjmp.h>
+#include &lt;stdio.h>
+
+static jmp_buf buf;
+
+void second(void)
+{
+    printf("second\n"); // 打印
+    longjmp(buf, 1); // 跳回 setjmp 的调用处 - 使得 setjmp 返回值为 1
+}
+
+void first(void)
+{
+    second();
+    printf("first\n"); // 不可能执行到此行
+}
+
+int main()
+{
+    if (!setjmp(buf)) {
+        first(); // 进入此行前，setjmp 返回 0
+    } else { // 当 longjmp 跳转回，setjmp 返回 1，因此进入此行
+        printf("main\n"); // 打印
+    }
+
+    return 0;
+}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -2753,7 +5393,156 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>signal.h</code>
 						</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							<code>signal.h</code>
+							头文件定义了一个变量类型 <b>sig_atomic_t</b>、两个函数调用和一些宏来处理程序执行期间报告的不同信号。
+						</p>
+
+						<p>
+							<b>库变量</b>
+						</p>
+						<p>下面是头文件 signal.h 中定义的变量类型：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>变量 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>sig_atomic_t </b><br>这是 <b>int</b>
+										类型，在信号处理程序中作为变量使用。它是一个对象的整数类型，该对象可以作为一个原子实体访问，即使存在异步信号时，该对象可以作为一个原子实体访问。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库宏</b>
+						</p>
+						<p>
+							下面是头文件 signal.h 中定义的宏，这些宏将在下列两个函数中使用。<b>SIG_</b> 宏与 signal
+							函数一起使用来定义信号的功能。
+						</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>宏 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>SIG_DFL</b><br>默认的信号处理程序。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>SIG_ERR</b><br>表示一个信号错误。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><b>SIG_IGN</b><br>忽视信号。</td>
+								</tr>
+							</tbody>
+						</table>
+						<p>
+							<b>SIG</b> 宏用于表示以下各种条件的信号码：
+						</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>宏 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>SIGABRT</b><br>程序异常终止。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>SIGFPE</b><br>算术运算出错，如除数为 0 或溢出。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><b>SIGILL</b><br>非法函数映象，如非法指令。</td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><b>SIGINT</b><br>中断信号，如 ctrl-C。</td>
+								</tr>
+								<tr>
+									<td>5</td>
+									<td><b>SIGSEGV</b><br>非法访问存储器，如访问不存在的内存单元。</td>
+								</tr>
+								<tr>
+									<td>6</td>
+									<td><b>SIGTERM</b><br>发送给本程序的终止请求信号。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库函数</b>
+						</p>
+						<p>下面是头文件 signal.h 中定义的函数：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>函数 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><a href="c-function-signal.html">void (*signal(int
+											sig, void (*func)(int)))(int)</a><br>该函数设置一个函数来处理信号，即信号处理程序。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><a href="c-function-raise.html">int raise(int sig)</a><br>该函数会促使生成信号
+										<b>sig</b>。sig 参数与 SIG 宏兼容。</td>
+								</tr>
+							</tbody>
+						</table>
+						<pre class="brush: c;">
+#include &lt;signal.h>
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+
+void signal_catchfunc(int signal)
+{
+    printf("!! 信号捕获 %d!!\n", signal);
+}
+
+int main()
+{
+    int ret;
+
+    ret = signal(SIGINT, signal_catchfunc);
+
+    if (ret == SIG_ERR) {
+        printf("错误：不能设置信号处理程序。\n");
+        exit(0);
+    }
+    printf("开始生成一个信号\n");
+    ret = raise(SIGINT);
+    if (ret != 0) {
+        printf("错误：不能生成 SIGINT 信号。\n");
+        exit(0);
+    }
+
+    printf("退出...\n");
+
+    return 0;
+}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -2765,7 +5554,96 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>stdarg.h</code>
 						</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							<b>stdarg.h</b> 主要是为了实现可变参数，定义了一个变量类型 <b>va_list</b>
+							和三个宏，这三个宏可用于在参数个数未知（即参数个数可变）时获取函数中的参数。
+						</p>
+						<p>可变参数的函数通在参数列表的末尾是使用省略号(,...)定义的。</p>
+
+						<p>
+							<b>库变量</b>
+						</p>
+						<p>下面是头文件 stdarg.h 中定义的变量类型：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>变量 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>va_list </b><br>这是一个适用于 <b>va_start()、va_arg()</b>
+										和 <b>va_end()</b> 这三个宏存储信息的类型。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库宏</b>
+						</p>
+						<p>下面是头文件 stdarg.h 中定义的宏：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>宏 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><a href="c-macro-va_start.html">void
+											va_start(va_list ap, last_arg)</a><br>这个宏初始化 <b>ap</b> 变量，它与
+										<b>va_arg</b> 和 <b>va_end</b> 宏是一起使用的。<b>last_arg</b>
+										是最后一个传递给函数的已知的固定参数，即省略号之前的参数。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><a href="c-macro-va_arg.html">type va_arg(va_list
+											ap, type)</a><br>这个宏检索函数参数列表中类型为 <b>type</b> 的下一个参数。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><a href="c-macro-va_end.html">void va_end(va_list
+											ap)</a><br>这个宏允许使用了 <b>va_start</b>
+										宏的带有可变参数的函数返回。如果在从函数返回之前没有调用 <b>va_end</b>，则结果为未定义。</td>
+								</tr>
+							</tbody>
+						</table>
+						<pre class="brush: c;">
+#include &lt;stdarg.h>
+#include &lt;stdio.h>
+
+int sum(int, ...);
+
+int main(void)
+{
+    printf("10、20 和 30 的和 = %d\n", sum(3, 10, 20, 30));
+    printf("4、20、25 和 30 的和 = %d\n", sum(4, 4, 20, 25, 30));
+
+    return 0;
+}
+
+int sum(int num_args, ...)
+{
+    int val = 0;
+    va_list ap;
+    int i;
+
+    va_start(ap, num_args);
+    for (i = 0; i < num_args; i++) {
+        val += va_arg(ap, int);
+    }
+    va_end(ap);
+
+    return val;
+}
+</pre>
+
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -2777,9 +5655,95 @@ size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_element
 							<code>stddef.h</code>
 						</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							<b>stddef .h</b> 头文件定义了各种变量类型和宏。这些定义中的大部分也出现在其它头文件中。
+						</p>
+
+						<p>
+							<b>库变量</b>
+						</p>
+						<p>下面是头文件 stddef.h 中定义的变量类型：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>变量 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><b>ptrdiff_t</b><br>这是有符号整数类型，它是两个指针相减的结果。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><b>size_t </b><br>这是无符号整数类型，它是 <b>sizeof</b>
+										关键字的结果。</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><b>wchar_t </b><br>这是一个宽字符常量大小的整数类型。</td>
+								</tr>
+							</tbody>
+						</table>
+
+						<p>
+							<b>库宏</b>
+						</p>
+						<p>下面是头文件 stddef.h 中定义的宏：</p>
+						<table
+							class="table table-bordered table-responsive table-striped runoob"
+							data-base="http://www.runoob.com/cprogramming/">
+							<tbody>
+								<tr>
+									<th style="width: 8%">序号</th>
+									<th>宏 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><a href="c-macro-null.html">NULL</a><br>这个宏是一个空指针常量的值。</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><a href="c-macro-offsetof.html">offsetof(type,
+											member-designator)</a><br>这会生成一个类型为 size_t
+										的整型常量，它是一个结构成员相对于结构开头的字节偏移量。成员是由 <i>member-designator</i>
+										给定的，结构的名称是在 <i>type</i> 中给定的。</td>
+								</tr>
+							</tbody>
+						</table>
+						<pre class="brush: c;">
+#include &lt;stddef.h>
+#include &lt;stdio.h>
+
+struct address {
+    char name[50];
+    char street[50];
+    int phone;
+};
+
+int main()
+{
+    printf("address 结构中的 name 偏移 = %d 字节。\n",
+        offsetof(struct address, name));
+
+    printf("address 结构中的 street 偏移 = %d 字节。\n",
+        offsetof(struct address, street));
+
+    printf("address 结构中的 phone 偏移 = %d 字节。\n",
+        offsetof(struct address, phone));
+
+    return (0);
+}
+</pre>
+
+
+					</div>
 				</div>
 				<!-- item over -->
+
+
 			</div>
 		</div>
 	</div>

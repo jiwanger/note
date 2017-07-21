@@ -1,1 +1,1 @@
-var arr = [ "index.html", "TIPS", "material.html", "MATERIAL DESIGN", "tools.html", "TOOLS" ];
+var arr = [ "index.html", "TIPS", "material.html", "MATERIAL DESIGN", "tools.html", "TOOLS", "charset.html", "CHARSET" ];
