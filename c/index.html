@@ -59,8 +59,7 @@
 		<div class="row">
 			<!-- left-menu start -->
 			<div class="col-md-3">
-				<div class="panel panel-default"
-					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
+				<div class="panel panel-default menu">
 					<div class="panel-heading">
 						<h3 class="panel-title">C</h3>
 					</div>
@@ -75,6 +74,7 @@
 							role="tabpanel">
 							<a href="#c-keyword" class="list-group-item">关键字</a>
 							<a href="#c-type" class="list-group-item">数据类型</a>
+							<a href="#c-typedef" class="list-group-item">typedef 关键字</a>
 							<a href="#c-converter" class="list-group-item">强制类型转换</a>
 							<a href="#c-const" class="list-group-item">常量</a>
 							<a href="#c-calculator" class="list-group-item">运算符</a>
@@ -95,7 +95,9 @@
 						<a href="#c-printf" class="list-group-item">格式化输出</a>
 						<a href="#c-preprocessor" class="list-group-item">预处理器</a>
 						<a href="#c-poiter" class="list-group-item">指针</a>
+						<a href="#c-gdb" class="list-group-item">GDB 调试工具</a>
 						<a href="#c-file" class="list-group-item">文件读写</a>
+						<a href="#c-apt-source" class="list-group-item">APT 下载命令行工具源码</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
 							data-parent="#accordion" href="#c-lib" aria-expanded="true">
 							C 标准库(89)<span class="caret pull-right" style="margin-top: 5px;"></span>
@@ -147,12 +149,13 @@
 								<code>stddef.h</code>
 							</a>
 						</div>
-					
+
 						<a class="list-group-item active dropup" data-toggle="collapse"
 							data-parent="#accordion" href="#c-lib-11" aria-expanded="true">
 							C 标准库(11)<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="c-lib-11" class="panel-collapse collapse in" role="tabpanel">
+						<div id="c-lib-11" class="panel-collapse collapse in"
+							role="tabpanel">
 							<a href="#c-lib-iso646" class="list-group-item">
 								<code>iso646.h</code>
 							</a>
@@ -194,6 +197,23 @@
 							</a>
 							<a href="#c-lib-uchar" class="list-group-item">
 								<code>uchar.h</code>
+							</a>
+
+						</div>
+						<a class="list-group-item active dropup" data-toggle="collapse"
+							data-parent="#accordion" href="#c-lib-posix" aria-expanded="true">
+							POSIX 库<span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="c-lib-posix" class="panel-collapse collapse in"
+							role="tabpanel">
+							<a href="#c-posix-unistd" class="list-group-item">
+								<code>unistd.h</code>
+							</a>
+							<a href="#c-posix-" class="list-group-item">
+								<code>...</code>
+							</a>
+							<a href="#c-posix-" class="list-group-item">
+								<code>...</code>
 							</a>
 						</div>
 					</div>
@@ -248,6 +268,16 @@
 								逐渐不再被维护</b>。Linux 下面的标准 C 库不仅有这一个，如 uclibc、klibc，以及上面被提到的 Linux
 							libc，但是<b>glibc 无疑是用得最多的</b>。
 						</p>
+						<p>
+							<b>POSIX 库:</b> POSIX 库函数是 C 标准库函数的超集。在 UNIX 世界里，最通用的操作系统 API 基于
+							POSIX（Portable Operating System Interface of
+							UNIX，可移植操作系统接口）标准。POSIX 标准定义了 "POSIX 兼容" 的操作系统所必须提供的服务。Linux 兼容于
+							POSIX 标准，提供了根据 POSIX 而定义的 API 函数。这些 API 函数和系统调用之间有着直接的关系，一个 API
+							函数可以由一个系统调用实现，也可以通过调用多个系统调用来实现，还可以完全不使用任何系统调用。
+						</p>
+
+						<p class="well text-primary">C 标准库为跨平台库，各平台都有实现，POSIX 库跨 Unix
+							和 Linux 平台。</p>
 					</div>
 				</div>
 				<!-- item over -->
@@ -606,6 +636,99 @@ static -- 只能在内部使用，和 java 相反; 如果修饰局部变量，�
 									</tr>
 								</tbody>
 							</table>
+						</div>
+
+
+						<a id='c-typedef' class="offset"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">typedef 关键字</h5>
+							<p>C 语言提供了 typedef 关键字，您可以使用它来为类型取一个新的名字。</p>
+							<p>
+								<b>typedef vs #define</b>
+							</p>
+							<p>
+								<b>#define</b> 是 C 指令，用于为各种数据类型定义别名，与 <b>typedef</b>
+								类似，但是它们有以下几点不同：
+							</p>
+							<ul>
+								<li>
+									<b>typedef</b> 仅限于为类型定义符号名称，<b>#define</b>
+									不仅可以为类型定义别名，也能为数值定义别名，比如您可以定义 1 为 ONE。
+								</li>
+								<li>
+									<b>typedef</b> 是由编译器执行解释的，<b>#define</b> 语句是由预编译器进行处理的。
+								</li>
+							</ul>
+							<pre class="brush: c;">
+#include &lt;stdio.h>
+#include &lt;assert.h>
+
+/** typedef 定义基本变量 */
+typedef unsigned char BYTE;
+
+typedef int AGE;
+
+/** typedef 定义结构体 */
+typedef struct Book {
+   char  title[50];
+   char  author[50];
+   char  subject[100];
+   int   book_id;
+} book;
+
+struct Person {
+    char name[50];
+    int age;
+};
+ 
+/* 求最大值 */ 
+int max(int a, int b) {  
+    return a > b ? a : b;  
+}  
+   
+/* 求最小值 */ 
+int min(int a, int b) {  
+    return a < b ? a : b;  
+}
+
+/** 使用 typedef 定义函数指针，func 是函数指针类型 */
+typedef int (*func)(int, int);
+
+/* 函数指针作为函数的参数 */
+int max_or_min(func p, int a, int b) {
+    return p(a, b);
+}
+
+/** funx 是函数指针类型的变量 */
+int (*funx)(int, int);
+
+int max_or_min_2(int a, int b) {
+    return (*funx)(a, b);
+}
+
+int main() {
+    BYTE x;
+
+    AGE age;
+
+    book b1;// 使用 typedef 定义的结构体
+
+    struct Person p1;// 不使用 typedef 定义的结构体
+
+    func c = max;// func 是类型，后面的funx 是变量
+    assert(200 == c(100, 200));
+
+    max_or_min(max, 30, 40);
+    max_or_min(min, 30, 40);
+
+    funx = max;// funx 是变量，前面的 func 是类型
+    assert(40 == (*funx)(30, 40));
+    funx = min;
+    assert(30 == (*funx)(30, 40));
+    
+    return 0;
+}
+</pre>
 						</div>
 
 						<a id="c-converter" class="offset"></a>
@@ -1620,7 +1743,7 @@ int main() {
 extern int errno ;
 
 int main () {
-    FILE * pf;
+    FILE *pf;
     int errnum;
     pf = fopen ("unexist.txt", "rb");
     if (pf == NULL) {
@@ -2203,11 +2326,12 @@ int		*(*ptr)[4];			// 指针所指向的类型是 int *()[4]
 
 int main() {
 	int a = 100;
-	printf("%#X\n", &a);		// 输出变量 a 内存地址
-	
-	char str[20] = "c.biancheng.net";
-	printf("%#X\n", str);		// 数组的内存地址为 str[0] 的地址
-	printf("%#X\n", &str[0]);	// 和上面的输出是一样的
+    int *b = &a;
+    printf("%p %p\n", &a, b); // 输出变量 a 内存地址
+
+    char str[20] = "c.biancheng.net";
+    char *p = str;
+    printf("%p %p %p\n", str, &str[0], p); // 数组的内存地址为 str[0] 的地址
 
 	return 0;
 }
@@ -2232,7 +2356,29 @@ int main() {
 							。
 						</p>
 						<pre class="brush: cpp;">
+#include &lt;stdio.h>
 
+int main() {
+    int int_arr[5] = { 10, 20, 30, 40, 50 };
+    int *p = int_arr;
+    printf("数组方式：");
+    for(int i = 0; i < 5; i++) {
+        printf("%d ", int_arr[i]);
+    }
+
+    printf("\n指针加下标方式：");
+    for(int i = 0; i < 5; i++) {
+        printf("%d ", p[i]);
+    }
+
+    printf("\n指针方式：");
+    for(int i = 0; i < 5; i++) {
+        printf("%d ", *p++);
+    }
+    printf("\n");
+
+    return 0;
+}
 </pre>
 
 						<h5 class="text-primary">指向指针的指针</h5>
@@ -2242,18 +2388,119 @@ int main() {
 								class="img-responsive center-block">
 						</p>
 						<pre class="brush: cpp;">
+#include &lt;stdio.h>
+#include &lt;string.h>
 
+int main() {      
+    int m = 100;
+    int n = 200;
+
+    int *x = &m;// x 指向 m 的地址
+    int **y = &x;// y 指向 x 的实际地址
+    printf("value: %d %d %d %d\n", m,  n, *x, **y);
+    printf("address: %p %p %p %p\n", &m,  &n, x, *y);
+    
+    **y = n;// n 的值赋给 y 指向的地址
+    printf("value: %d %d %d %d\n", m,  n, *x, **y);
+    printf("address: %p %p %p %p\n", &m,  &n, x, *y);
+
+    *y = &n;// y 指向 n 的地址
+    printf("value: %d %d %d %d\n", m,  n, *x, **y);
+    printf("address: %p %p %p %p\n", &m,  &n, x, *y);
+
+    return 0;
+}
 </pre>
 
 						<h5 class="text-primary">指针数组</h5>
 						<pre class="brush: cpp;">
+#include &lt;stdio.h>
 
+int main() {
+    int *ptr_arr[2];// 指针数组
+
+    int arr_a[3] = { 1, 2, 3 };
+    int arr_b[2] = { 10, 20 };
+
+    ptr_arr[0] = arr_a;
+    ptr_arr[1] = arr_b;
+
+    printf("%d %d %d\n", ptr_arr[0][0], ptr_arr[0][1], ptr_arr[0][2]);
+    printf("%d %d\n", ptr_arr[1][0], ptr_arr[1][1]);
+
+    return 0;
+}
 </pre>
 
 						<h5 class="text-primary">指针与函数</h5>
 						<pre class="brush: cpp;">
+#include &lt;stdio.h>
 
+/* 求最大值 */ 
+int max(int a, int b) {  
+    return a > b ? a : b;  
+}  
+   
+/* 求最小值 */ 
+int min(int a, int b) {  
+    return a < b ? a : b;  
+}  
+ 
+/* 声明函数指针，指向返回值类型为 int，有两个参数类型都是 int 的函数 */
+int (*f)(int, int); 
+
+typedef int (*func) (int, int);
+
+/* 函数指针作为函数的参数 */
+int max_or_min(func p, int a, int b) {
+    return p(a, b);
+}
+ 
+int main() {
+    f = max;
+    printf("%d\n", f(3, 4));
+
+    f = min;
+    printf("%d\n", f(3, 4));
+
+
+    printf("%d\n", max_or_min(max, 10, 20));
+    printf("%d\n", max_or_min(min, 10, 20));
+    
+    return 0;
+}
 </pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-gdb" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>GDB 调试工具</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<b>GDB</b> 是一个由 GNU 开源组织发布的、UNIX/LINUX 操作系统下的、基于命令行的、功能强大的程序调试工具。
+						</p>
+						<p>GDB 主要帮忙你完成下面四个方面的功能：</p>
+						<ul>
+							<li>
+								<p>启动你的程序，可以按照你的自定义的要求随心所欲的运行程序。</p>
+							</li>
+							<li>
+								<p>可让被调试的程序在你所指定的调置的断点处停住。（断点可以是条件表达式）</p>
+							</li>
+							<li>
+								<p>当程序被停住时，可以检查此时你的程序中所发生的事。</p>
+							</li>
+							<li>
+								<p>动态的改变你程序的执行环境。</p>
+							</li>
+						</ul>
 					</div>
 				</div>
 				<!-- item over -->
@@ -2351,7 +2598,7 @@ int fscanf(FILE *stream, const char *format, ...)
 
 char *fgets(char *str, int n, FILE *stream)
 
-int getc(FILE * fp);
+int getc(FILE *fp);
 
 int fgetc(FILE *stream)
 </pre>
@@ -2365,6 +2612,66 @@ size_t fread(void *ptr, size_t size_of_elements, size_t number_of_elements, FILE
 
 size_t fwrite(const void *ptr, size_t size_of_elements, size_t number_of_elements, FILE *a_file);
 </pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-apt-source" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">APT 下载命令行工具源码</h3>
+					</div>
+					<div class="panel-body">
+						<p>Linux 是开源的，它自带的功能强大的命令也是开源的，也就是说，我们可以获得这些命令的源代码并研究它。</p>
+						<p>命令的源代码是一个软件包为单元的，放在一个软件包的源代码中，若要下载一个命令的源代码，就要把这个命令所属的软件包的源代码都下载下来。命令的源代码就在下载的源代码的相关目录内，通常是
+							src 目录，相应的主文件名为 cmd.c，其中 cmd 为具体的命令，如ls命令的主程序文件为 ls.c。</p>
+						<p>由于在不同的 Linux 发行版上，源代码的获取方法并不相同，所以下面以 Ubuntu 系为例子进行说明。</p>
+						<ul>
+							<li>
+								<p>
+									1. 使用
+									<code>which</code>
+									命令查看命令的位置，如下：
+								</p>
+								<pre class="brush: bash;">$ which ls		# 查询 ls 命令的位置</pre>
+							</li>
+							<li>
+								<p>
+									2. 使用
+									<code>dpkg</code>
+									命令查询命令所属的包，如下：
+								</p>
+								<pre class="brush: bash;">$ dpkg -S /bin/ls		# /bin/ls 为上一步查询到的命令的位置</pre>
+							</li>
+							<li>
+								<p>
+									3. 使用
+									<code>apt-get</code>
+									命令来下载命令所在的包的源代码，如下：
+								</p>
+								<pre class="brush: bash;">
+$ apt-get source coreutils		# coreutils 为上一步查询到的命令所属的包,很多常用命令都在这个包中
+$ apt-get source grep			# grep, fgrep, egrep 等命令在这个包中								
+# 注意：这一步要先配置好 /etc/apt/sources.list 中源码的位置才能下载到相应的源码, deb-src 为源码包的位置
+deb http://mirrors.ustc.edu.cn/linuxmint/ qiana main upstream import
+deb-src http://mirrors.ustc.edu.cn/linuxmint/ qiana main upstream import
+
+deb http://mirrors.ustc.edu.cn/ubuntu/ trusty main universe multiverse restricted
+deb-src http://mirrors.ustc.edu.cn/ubuntu/ trusty main universe multiverse restricted
+
+deb http://mirrors.ustc.edu.cn/ubuntu/ trusty-security main universe multiverse restricted
+deb http://mirrors.ustc.edu.cn/ubuntu/ trusty-updates main universe multiverse restricted
+
+deb http://security.ubuntu.com/ubuntu trusty-security main universe
+deb-src http://security.ubuntu.com/ubuntu trusty-security main universe
+
+deb http://archive.canonical.com/ubuntu/ trusty partner
+#deb http://packages.medibuntu.org/ trusty free non-free
+</pre>
+							</li>
+
+						</ul>
 					</div>
 				</div>
 				<!-- item over -->
@@ -3052,7 +3359,7 @@ char buffer[40];
  * vprintf -- 使用参数列表发送格式化输出到标准输出
  * vsprintf -- 使用参数列表发送格式化输出到字符串， 相对于 vprintf 多一个参数用于接收格式化后的内容
  * */
-void vprintf_test(char * format, ...) {
+void vprintf_test(char *format, ...) {
     va_list args;
    
     va_start(args, format);
@@ -3131,9 +3438,9 @@ char zh_en_str[] = "中文abcd测试！";
  *  vfprintf -- 和 vprintf 一样，只是流不一样
  */
 void file_write() {
-    FILE * fp;
+    FILE *fp;
     
-    const char * filename = "files/file.txt";
+    const char *filename = "files/file.txt";
 
     fp = fopen (filename, "w");        // 打开文件，更多模式查看 -- 文件读写章节
     if(fp == NULL) {
@@ -3165,9 +3472,9 @@ void file_write() {
  *  fgetc / getc -- 读取一个字符
  */
 void file_read() {
-    FILE * fp;
+    FILE *fp;
     
-    const char * filename = "files/file.txt";
+    const char *filename = "files/file.txt";
     fp = fopen (filename, "r");        // 打开文件，更多模式查看 -- 文件读写章节
 
     if(fp == NULL) {
@@ -3211,7 +3518,7 @@ typedef struct {
  * fwrite -- 二进制写入
  */
 void obj_write() {
-    FILE * fp = fopen("files/persons.dat", "wb");
+    FILE *fp = fopen("files/persons.dat", "wb");
     if(fp == NULL) {
         printf("=== Error: %s ===\n", strerror(errno));
         return;
@@ -3235,7 +3542,7 @@ void obj_write() {
  * fread -- 二进制读取
  */
 void obj_read() {
-    FILE * fp = fopen("files/persons.dat", "rb");
+    FILE *fp = fopen("files/persons.dat", "rb");
     if(fp == NULL) {
         printf("=== Error: %s ===\n", strerror(errno));
         return;
@@ -3266,8 +3573,8 @@ void obj_read() {
  *  fseek -- 设置流 stream 的文件位置为给定的偏移 offset
  */
 void other() {
-    char * filename = "files/error.txt";
-    FILE * fp = fopen(filename, "w");
+    char *filename = "files/error.txt";
+    FILE *fp = fopen(filename, "w");
     if(fp == NULL) {
         printf("=== Error: %s ===\n", strerror(errno));
         return;
@@ -3596,7 +3903,7 @@ int main() {
 #include &lt;assert.h>
 #include &lt;time.h>
 
-int cmpfunc (const void * a, const void * b){
+int cmpfunc (const void *a, const void *b){
    return (*(int*)a - *(int*)b);
 }
 
@@ -3617,8 +3924,8 @@ int main() {
      *  strtod -- 符串转换为一个浮点数, 和 atof 不同的是它存储了转换数据的后面部分
      *  atoi -- 转换为整型
      *  atol -- 转换为长型
-     *  strol -- 把参数 str 所指向的字符串转换为一个长整数
-     *  stroul -- 把参数 str 所指向的字符串转换为一个无符号长整数
+     *  strtol -- 把参数 str 所指向的字符串转换为一个长整数
+     *  strtoul -- 把参数 str 所指向的字符串转换为一个无符号长整数
      *  abs -- 绝对值，参数为 int 
      *  labs -- 绝对值，参数为 long int 
      *  div -- 分子除以分母，返回结果为 div_t 类型，包括商和余数
@@ -3633,8 +3940,11 @@ int main() {
     char *ptr;
     assert(20.30300 - strtod("20.30300 This is test", &ptr) <= 1E-6);  // 符串转换为一个浮点数
     assert(!strcmp(" This is test", ptr));
-    assert(10003000 == strtol("10003000 This is long int test", &ptr, 10));  // 长整数，10进制
-    assert(10003000 == strtoul("10003000 This is long int test", &ptr, 10)); // 无符号长整数，10进制
+    
+    assert(9 == strtol("1001", NULL, 2));// 长整数，从二进制转换
+    assert(10003000 == strtol("10003000 This is long", &ptr, 10));  // 长整数，10进制
+    assert(10003000 == strtoul("10003000 This is long", NULL, 16)); // 无符号长整数，16进制
+    assert(10003000 == strtoul("10003000", NULL, 16)); // 不存储了转换数据的后面部分
     assert(!strcmp(" This is long int test", ptr));
 
     assert(3 == abs(3) && 3 == abs(-3));            // 绝对值
@@ -3781,7 +4091,7 @@ int main() {
 
 int main() {
     // 只读方式打开一个不存在的文件
-    FILE * fp = fopen("no-exist.txt", "r");
+    FILE *fp = fopen("no-exist.txt", "r");
     if( fp == NULL ) {
         printf("errno:%d \nmessage:%s\n", errno, strerror(errno));
     } else {
@@ -5556,7 +5866,8 @@ int main()
 					</div>
 					<div class="panel-body">
 						<p>
-							<b>stdarg.h</b> 主要是为了实现可变参数，定义了一个变量类型 <b>va_list</b>
+							<code>stdarg.h</code>
+							主要是为了实现可变参数，定义了一个变量类型 <b>va_list</b>
 							和三个宏，这三个宏可用于在参数个数未知（即参数个数可变）时获取函数中的参数。
 						</p>
 						<p>可变参数的函数通在参数列表的末尾是使用省略号(,...)定义的。</p>
@@ -5657,7 +5968,8 @@ int sum(int num_args, ...)
 					</div>
 					<div class="panel-body">
 						<p>
-							<b>stddef .h</b> 头文件定义了各种变量类型和宏。这些定义中的大部分也出现在其它头文件中。
+							<code>stddef .h</code>
+							头文件定义了各种变量类型和宏。这些定义中的大部分也出现在其它头文件中。
 						</p>
 
 						<p>
@@ -5743,6 +6055,957 @@ int main()
 				</div>
 				<!-- item over -->
 
+				<!-- item start -->
+				<a id="c-lib-iso646" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>iso646.h</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<b>iso646.h</b> 中定义了一组宏表示一组逻辑运算符。
+						</p>
+						<table class="table table-bordered table-responsive">
+							<tbody>
+								<tr>
+									<td><strong>macro</strong></td>
+									<td><strong>operator</strong></td>
+								</tr>
+								<tr>
+									<td>and</td>
+									<td>&amp;&amp;</td>
+								</tr>
+								<tr>
+									<td>and_eq</td>
+									<td>&amp;=</td>
+								</tr>
+								<tr>
+									<td>bitand</td>
+									<td>&amp;</td>
+								</tr>
+								<tr>
+									<td>bitor</td>
+									<td>|</td>
+								</tr>
+								<tr>
+									<td>compl</td>
+									<td>~</td>
+								</tr>
+								<tr>
+									<td>not</td>
+									<td>!</td>
+								</tr>
+								<tr>
+									<td>not_eq</td>
+									<td>!=</td>
+								</tr>
+								<tr>
+									<td>or</td>
+									<td>|</td>
+								</tr>
+								<tr>
+									<td>or_eq</td>
+									<td>|=</td>
+								</tr>
+								<tr>
+									<td>xor</td>
+									<td>^</td>
+								</tr>
+								<tr>
+									<td>xor_eq</td>
+									<td>^=</td>
+								</tr>
+							</tbody>
+						</table>
+						<pre class="brush: cpp;">
+/** iso646.h 定义如下宏： */
+#define and	&&
+#define and_eq	&=
+#define bitand	&
+#define bitor	|
+#define compl	~
+#define not	!
+#define not_eq	!=
+#define or	||
+#define or_eq	|=
+#define xor	^
+#define xor_eq	^=
+
+#include &lt;iso646.h>
+#include &lt;stdio.h>
+#include &lt;assert.h>
+
+int main() {
+    assert(1 > 0 and 3 > 2);
+    assert(not 3 < 2);
+    assert(0 > 1 or 2 > 1);
+
+    return 0;
+}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-wchar" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>wchar.h</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<code>wchar.h</code>
+							用于支持多字节和宽字节函数。
+						</p>
+						<p><code>wchar.h</code> 相当于包含了宽字符的 <code>string.h</code> <code>stdio.h</code> <code>stdlib.h</code> <code>ctype.h</code></p>
+						<p class="well text-primary">注意使用宽字符指定编码非常重要，就是 <code>setlocale</code> 函数。可以使用　<code>$ locale</code> 命令查看相关编码。</p>
+						<table class="table table-bordered table-responsive">
+							<tr>
+								<th style="width: 8%">序号</th>
+								<th>函数 &amp; 描述</th>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td><b>wint_t</b><br>无符号的 int 值</td>
+							</tr>
+							<tr>
+								<td>2</td>
+								<td><b>wctype_t</b><br>无符号的 long 值<br></td>
+							</tr>
+							<tr>
+								<td>3</td>
+								<td><b>mbstate_t</b><br>数组类型以外的对象类型，该数组类型可以保存在（可能是多字节）字符序列和宽字符序列之间转换所必需的转换状态信息。</td>
+							</tr>
+						</table>
+						<table class="table table-bordered  table-responsive">
+							<tr>
+								<th style="width: 8%">序号</th>
+								<th>函数 &amp; 描述</th>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td><b>wint_t btowc(int);</b><br>把多字节字符转换为宽字符</td>
+
+							</tr>
+							<tr>
+								<td>2</td>
+								<td><b>wint_t fgetwc(FILE *);</b><br>从流中读入一个字符并转换为宽字符</td>
+							</tr>
+							<tr>
+								<td>3</td>
+								<td><b>wchar_t *fgetws(wchar_t *restrict, int, FILE
+										*restrict);</b><br>从流中读入一个字符串并转换为宽字符串</td>
+							</tr>
+							<tr>
+								<td>4</td>
+								<td><b>wint_t fputwc(wchar_t, FILE *);</b><br>把宽字符转换为多字节字符并且输出到标准输出</td>
+							</tr>
+							<tr>
+								<td>5</td>
+								<td><b>int fputws(const wchar_t *restrict, FILE
+										*restrict);</b><br>把宽字符串转换为多字节字符并且输出到标准输出串</td>
+							</tr>
+							<tr>
+								<td>6</td>
+								<td><b>int fwide(FILE *, int);</b><br></td>
+							</tr>
+							<tr>
+								<td>7</td>
+								<td><b>int fwprintf(FILE *restrict, const wchar_t
+										*restrict, ...);</b><br>发送格式化输出到流 stream 中</td>
+							</tr>
+							<tr>
+								<td>8</td>
+								<td><b>int fwscanf(FILE *restrict, const wchar_t
+										*restrict, ...);</b><br>格式化读入</td>
+							</tr>
+							<tr>
+								<td>9</td>
+								<td><b>wint_t getwc(FILE *);</b><br>从标准输入中读取字符， 并且转换为宽字符</td>
+							</tr>
+							<tr>
+								<td>10</td>
+								<td><b>wint_t getwchar(void);</b><br>从标准输入中读取字符， 并且转换为宽字符</td>
+							</tr>
+							<tr>
+								<td>11</td>
+								<td><b>int iswalnum(wint_t);</b><br>测试字符是否为数字或字母</td>
+							</tr>
+							<tr>
+								<td>12</td>
+								<td><b>int iswalpha(wint_t);</b><br>测试字符是否是字母</td>
+							</tr>
+							<tr>
+								<td>13</td>
+								<td><b>int iswcntrl(wint_t);</b><br>测试字符是否是控制符</td>
+							</tr>
+							<tr>
+								<td>14</td>
+								<td><b>int iswctype(wint_t, wctype_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>15</td>
+								<td><b>int iswdigit(wint_t);</b><br>测试字符是否为数字</td>
+							</tr>
+							<tr>
+								<td>16</td>
+								<td><b>int iswgraph(wint_t);</b><br>测试字符是否是可见字符</td>
+							</tr>
+							<tr>
+								<td>17</td>
+								<td><b>int iswlower(wint_t);</b><br>测试字符是否是小写字符</td>
+							</tr>
+							<tr>
+								<td>18</td>
+								<td><b>int iswprint(wint_t);</b><br>测试字符是否是可打印字符</td>
+							</tr>
+							<tr>
+								<td>19</td>
+								<td><b>int iswpunct(wint_t);</b><br>测试字符是否是标点符号</td>
+							</tr>
+							<tr>
+								<td>20</td>
+								<td><b>int iswspace(wint_t);</b><br>测试字符是否是空白符号</td>
+							</tr>
+							<tr>
+								<td>21</td>
+								<td><b>int iswupper(wint_t);</b><br>测试字符是否是大写字符</td>
+							</tr>
+							<tr>
+								<td>22</td>
+								<td><b>int iswxdigit(wint_t);</b><br>测试字符是否是十六进制的数字</td>
+							</tr>
+							<tr>
+								<td>23</td>
+								<td><b>size_t mbrlen(const char *restrict, size_t,
+										mbstate_t *restrict);</b><br>根据locale的设置确定字符的字节数</td>
+							</tr>
+							<tr>
+								<td>24</td>
+								<td><b>size_t mbrtowc(wchar_t *restrict, const char
+										*restrict, size_t, mbstate_t *restrict);</b><br></td>
+							</tr>
+							<tr>
+								<td>25</td>
+								<td><b>int mbsinit(const mbstate_t *);</b><br></td>
+							</tr>
+							<tr>
+								<td>26</td>
+								<td><b>size_t mbsrtowcs(wchar_t *restrict, const char
+										**restrict, size_t, mbstate_t *restrict);</b><br></td>
+							</tr>
+							<tr>
+								<td>27</td>
+								<td><b>wint_t putwc(wchar_t, FILE *);</b><br>把宽字符转换成多字节字符并且写到标准输出</td>
+							</tr>
+							<tr>
+								<td>28</td>
+								<td><b>wint_t putwchar(wchar_t);</b><br>把宽字符转换成多字节字符并且写到标准输出</td>
+							</tr>
+							<tr>
+								<td>29</td>
+								<td><b>int swprintf(wchar_t *restrict, size_t, const
+										wchar_t *restrict, ...);</b><br>格式化输出到字符串</td>
+							</tr>
+							<tr>
+								<td>30</td>
+								<td><b>int swscanf(const wchar_t *restrict, const
+										wchar_t *restrict, ...);</b><br></td>
+							</tr>
+							<tr>
+								<td>31</td>
+								<td><b>wint_t towlower(wint_t);</b><br>转换为小写</td>
+							</tr>
+							<tr>
+								<td>32</td>
+								<td><b>wint_t towupper(wint_t);</b><br>转换为大写</td>
+							</tr>
+
+							<tr>
+								<td>33</td>
+								<td><b>wint_t ungetwc(wint_t, FILE *);</b><br>把一个宽字符放回到输入流中</td>
+							</tr>
+							<tr>
+								<td>34</td>
+								<td><b>int vfwprintf(FILE *restrict, const wchar_t
+										*restrict, va_list);</b><br>使用格式化参数输出到文件</td>
+							</tr>
+							<tr>
+								<td>35</td>
+								<td><b>int vfwscanf(FILE *restrict, const wchar_t
+										*restrict, va_list);</b><br></td>
+							</tr>
+							<tr>
+								<td>36</td>
+								<td><b>int vwprintf(const wchar_t *restrict, va_list);</b><br></td>
+							</tr>
+							<tr>
+								<td>37</td>
+								<td><b>int vswprintf(wchar_t *restrict, size_t, const
+										wchar_t *restrict, va_list);</b><br>格式化　stdarg　参量表并写到字符串</td>
+							</tr>
+							<tr>
+								<td>38</td>
+								<td><b>int vswscanf(const wchar_t *restrict, const
+										wchar_t *restrict, va_list);</b><br>根据 stdarg 参量格式化读入到字符串</td>
+							</tr>
+							<tr>
+								<td>39</td>
+								<td><b>int vwscanf(const wchar_t *restrict, va_list);</b><br>根据 stdarg 参量格式化读入</td>
+							</tr>
+							<tr>
+								<td>40</td>
+								<td><b>size_t wcrtomb(char *restrict, wchar_t,
+										mbstate_t *restrict);</b><br></td>
+							</tr>
+							<tr>
+								<td>41</td>
+								<td><b>wchar_t *wcscat(wchar_t *dest, const wchar_t
+										*src);</b><br>把 src 所指向的字符串追加到 dest 所指向的字符串的结尾</td>
+							</tr>
+							<tr>
+								<td>42</td>
+								<td><b>wchar_t *wcschr(const wchar_t *src, wchar_t c);</b><br>在参数 str 所指向的字符串中搜索第一次出现字符 c（一个无符号字符）的位置。</td>
+							</tr>
+							<tr>
+								<td>43</td>
+								<td><b>int wcscmp(const wchar_t *, const wchar_t *);</b><br>宽字符比较</td>
+							</tr>
+							<tr>
+								<td>44</td>
+								<td><b>int wcscoll(const wchar_t *, const wchar_t *);</b><br>根据 LC_CTYPE 比较字符串大小。</td>
+							</tr>
+							<tr>
+								<td>45</td>
+								<td><b>wchar_t *wcscpy(wchar_t *restrict, const wchar_t
+										*restrict);</b><br>宽字符复制</td>
+							</tr>
+							<tr>
+								<td>46</td>
+								<td><b>size_t wcscspn(const wchar_t *, const wchar_t
+										*);</b><br>检索字符串 str1 中第一个不在字符串 str2 中出现的字符下标</td>
+							</tr>
+							<tr>
+								<td>47</td>
+								<td><b>size_t wcsftime(wchar_t *restrict, size_t, const
+										wchar_t *restrict, const struct tm *restrict);</b><br>根据指定的字符串格式和locale设置格式化日期和时间， 并返回宽字符串</td>
+							</tr>
+							<tr>
+								<td>48</td>
+								<td><b>size_t wcslen(const wchar_t *);</b><br>宽字符长度计算</td>
+							</tr>
+							<tr>
+								<td>49</td>
+								<td><b>wchar_t *wcsncat(wchar_t *dest, const
+										wchar_t *src, size_t n);</b><br>把 src 所指向的字符串追加到 dest 所指向的字符串的结尾，直到 n 字符长度为止。</td>
+							</tr>
+							<tr>
+								<td>50</td>
+								<td><b>int wcsncmp(const wchar_t *, const wchar_t *,
+										size_t n);</b><br>宽字符比较, 最多比较前 n 个字符</td>
+							</tr>
+							<tr>
+								<td>51</td>
+								<td><b>wchar_t *wcsncpy(wchar_t *dest, const
+										wchar_t *src, size_t n);</b><br>宽字符复制, 最多复制前 n 个字符</td>
+							</tr>
+							<tr>
+								<td>52</td>
+								<td><b>wchar_t *wcspbrk(const wchar_t *, const wchar_t
+										*);</b><br>从一字符字符串中查找另一字符串中任何一个字符第一次出现的位置</td>
+							</tr>
+							<tr>
+								<td>53</td>
+								<td><b>wchar_t *wcsrchr(const wchar_t *, wchar_t);</b><br>从尾部开始查找子字符串出现的第一个位置</td>
+							</tr>
+							<tr>
+								<td>54</td>
+								<td><b>size_t wcsrtombs(char *restrict, const wchar_t
+										**restrict, size_t, mbstate_t *restrict);</b><br></td>
+							</tr>
+							<tr>
+								<td>55</td>
+								<td><b>size_t wcsspn(const wchar_t *, const wchar_t *);</b><br>返回包含第二个字符串的初始数目</td>
+							</tr>
+							<tr>
+								<td>56</td>
+								<td><b>wchar_t *wcsstr(const wchar_t *restrict, const
+										wchar_t *restrict);</b><br>在一字符串中查找另一字符串第一次出现的位置</td>
+							</tr>
+							<tr>
+								<td>57</td>
+								<td><b>double wcstod(const wchar_t *restrict, wchar_t
+										**restrict);</b><br>把宽字符的初始部分转换为双精度浮点数</td>
+							</tr>
+							<tr>
+								<td>58</td>
+								<td><b>float wcstof(const wchar_t *restrict, wchar_t
+										**restrict);</b><br>把宽字符的初始部分转换为浮点数</td>
+							</tr>
+							<tr>
+								<td>59</td>
+								<td><b>wchar_t *wcstok(wchar_t *restrict, const wchar_t
+										*restrict, wchar_t **restrict);</b><br></td>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td><b>long wcstol(const wchar_t *restrict, wchar_t
+										**restrict, int);</b><br>把宽字符的初始部分转换为长整数</td>
+							</tr>
+							<tr>
+								<td>60</td>
+								<td><b>long double wcstold(const wchar_t *restrict,
+										wchar_t **restrict);</b><br>把宽字符的初始部分转换为 long int</td>
+							</tr>
+							<tr>
+								<td>61</td>
+								<td><b>long long wcstoll(const wchar_t *restrict,
+										wchar_t **restrict, int);</b><br>把宽字符的初始部分转换为 long long</td>
+							</tr>
+							<tr>
+								<td>62</td>
+								<td><b>unsigned long wcstoul(const wchar_t *restrict,
+										wchar_t **restrict, int);</b><br>把宽字符的初始部分转换为 unsigned long</td>
+							</tr>
+							<tr>
+								<td>63</td>
+								<td><b>unsigned long long wcstoull(const wchar_t
+										*restrict, wchar_t **restrict, int);</b><br>把宽字符的初始部分转换为 unsigned long long</td>
+							</tr>
+
+							<tr>
+								<td>64</td>
+								<td><b>wchar_t *wcswcs(const wchar_t *, const wchar_t
+										*);</b><br>在一字符串中查找另一字符串第一次出现的位置</td>
+							</tr>
+							<tr>
+								<td>65</td>
+								<td><b>int wcswidth(const wchar_t *, size_t);</b><br>获得宽字符串的宽度</td>
+							</tr>
+							<tr>
+								<td>66</td>
+								<td><b>size_t wcsxfrm(wchar_t *restrict, const wchar_t
+										*restrict, size_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>67</td>
+								<td><b>int wctob(wint_t);</b><br>把宽字符转换为多字节字符</td>
+							</tr>
+
+							<tr>
+								<td>68</td>
+								<td><b>wctype_t wctype(const char *);</b><br></td>
+							</tr>
+							<tr>
+								<td>69</td>
+								<td><b>int wcwidth(wchar_t);</b><br>获得宽字符的宽度</td>
+							</tr>
+
+							<tr>
+								<td>70</td>
+								<td><b>wchar_t *wmemchr(const wchar_t *, wchar_t,
+										size_t);</b><br>见 string.h 的 memchr</td>
+							</tr>
+							<tr>
+								<td>71</td>
+								<td><b>int wmemcmp(const wchar_t *, const wchar_t *,
+										size_t);</b><br>见 string.h 的 memcmp</td>
+							</tr>
+							<tr>
+								<td>72</td>
+								<td><b>wchar_t *wmemcpy(wchar_t *restrict, const
+										wchar_t *restrict, size_t);</b><br>见 string.h 的 memcpy</td>
+							</tr>
+							<tr>
+								<td>73</td>
+								<td><b>wchar_t *wmemmove(wchar_t *, const wchar_t *,
+										size_t);</b><br>见 string.h 的 memmove</td>
+							</tr>
+							<tr>
+								<td>74</td>
+								<td><b>wchar_t *wmemset(wchar_t *, wchar_t, size_t);</b><br>见 string.h 的 memset</td>
+							</tr>
+							<tr>
+								<td>75</td>
+								<td><b>int wprintf(const wchar_t *restrict, ...);</b><br>标准输出</td>
+							</tr>
+							<tr>
+								<td>76</td>
+								<td><b>int wscanf(const wchar_t *restrict, ...);</b><br>标准输入</td>
+							</tr>
+						</table>
+						<pre class="brush: c;">
+#include &lt;assert.h>
+#include &lt;locale.h>
+#include &lt;stdio.h>
+#include &lt;string.h>
+#include &lt;wchar.h>
+
+/**
+ *  wchar.h 用于支持宽字符函数
+ */
+int main(int argc, char* argv[])
+{
+    /**
+     *  unicode 码 -- '你': 4F 60 '好': 59 7D
+     *  utf-8 编码 -- '你': E4 BD A0 '好': E5 A5 BD
+     *  使用od 命令查看生成的可执行文件：
+     *  $ od -tx1 a.out | grep "e4 bd a0 e5 a5 bd"
+     */
+    char* str = "你好";
+    assert(6 == strlen(str)); // utf-8 编码中一个汉字为三个字节
+
+    /**
+     *  宽字符 字符 函数 -- 见 string.h
+     *  wcscpy -- 宽字符复制
+     *  wcsncpy -- 宽字符复制, 最多复制 n 个字符
+     *  wcslen -- 宽字符长度计算
+     *  wcscat -- 连接
+     *  wcsncat -- 最多连接 n 个字符
+     *  wcscmp -- 比较
+     *  wcsncmp -- 最多比较前  n 个字符
+     *  wmemcpy -- 见 memcpy
+     *  wmemset -- 见 memset
+     *  wmemmove -- 见 wmemmove
+     *  wmemcmp -- 见 wmemcmp
+     *  wmemchr -- 见 wmemchr
+     *  wcwidth -- 
+     *  wctype -- 
+     *  wcsxfrm -- 
+     *  wcswidth -- 
+     *  wcswcs -- 
+     *  wcsstr -- 
+     *  wcsspn -- 
+     *  wcscspn -- 
+     *  wcspbrk -- 
+     *  wcsftime -- 
+     *  wcscoll -- 
+     *  wcschr -- 
+     *  wcsrchr -- 
+     *  
+     */
+    wchar_t* l_str = L"你好";
+    setlocale(LC_CTYPE, "en_US.UTF-8"); // 设置为 en_US.UTF-8
+    assert(2 == wcslen(l_str)); // 宽字符 '你好' 在 utf-8 编码为 2 * 3 字节
+
+    assert(!wcscmp(L"你好", l_str));
+
+    wchar_t s1[20], s2[20], s3[20];
+    wcscpy(s1, L"宽字符操作");
+    wcscpy(s2, L"宽字符函数");
+    wcscpy(s3, L"宽字符复制");
+
+    assert(!wcsncmp(L"宽字符", s1, 3)); // 只比较前三个字符
+    
+    wchar_t s4[20];
+    wmemset(s4, L'\0', wcslen(s4)); // 宽字符 \0 填充
+    wcsncpy(s4, s1, 3); // 最多复制 3 个字符
+    assert(!wcscmp(L"宽字符", s4));
+
+    /**
+     *  宽字符 转换 函数 -- 见 stdlib.h
+     *  wctob -- 
+     *  wcstoull -- 
+     *  wcstoul -- 
+     *  wcstoll --
+     *  wcstold -- 
+     *  wcstol -- 
+     *  wcstok --  
+     *  wcstof -- 
+     *  wcstod --  
+     *  wcrtomb -- 
+     *  wcsrtombs -- 
+     *  mbsrtowcs -- 
+     *  mbsinit -- 
+     *  mbrtowc -- 
+     *  mbrlen -- 
+     *  btowc -- 
+     */
+
+    /**
+     *  宽字符 测试和映射字符 函数 -- 见 ctype.h
+     *  towupper -- 
+     *  towlower -- 
+     *  iswxdigit -- 
+     *  iswupper -- 
+     *  iswspace -- 
+     *  iswpunct -- 
+     *  iswprint -- 
+     *  iswlower -- 
+     *  iswgraph -- 
+     *  iswdigit -- 
+     *  iswctype -- 
+     *  iswcntrl -- 
+     *  iswalpha -- 
+     *  iswalnum -- 
+     */
+
+    /**
+     *  宽字符 I/O 函数 -- 见 stdio.h
+     *  wscanf -- 
+     *  fwscanf -- 
+     *  swscanf -- 
+     *  vwscanf -- 
+     *  vswscanf --
+     *  vfwscanf --  
+     *  wprintf -- 
+     *  fwprintf -- 
+     *  swprintf -- 
+     *  vwprintf -- 
+     *  vswprintf -- 
+     *  vfwprintf -- 
+     *  ungetwc -- 
+     *  putwchar -- 
+     *  putwc -- 
+     *  getwchar --
+     *  getwc -- 
+     *  fwide -- 
+     *  fputws -- 
+     *  fputwc -- 
+     *  fgetws -- 
+     *  fgetwc -- 
+     */
+
+    return 0;
+}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-wctype" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>wctype.h</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<code>wctype.h</code>
+							头文件提供了一些函数，可用于宽字符测试和映射。
+						</p>
+
+
+						<table class="table table-bordered table-responsive">
+							<tr>
+								<th style="width: 8%">序号</th>
+								<th>函数 &amp; 描述</th>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td><b>int iswalnum(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>2</td>
+								<td><b>int iswalpha(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>3</td>
+								<td><b>int iswblank(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>4</td>
+								<td><b>int iswcntrl(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>5</td>
+								<td><b>int iswdigit(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>6</td>
+								<td><b>int iswgraph(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>7</td>
+								<td><b>int iswlower(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>8</td>
+								<td><b>int iswprint(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>9</td>
+								<td><b>int iswpunct(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>10</td>
+								<td><b>int iswspace(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>11</td>
+								<td><b>int iswupper(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>12</td>
+								<td><b>int iswxdigit(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>13</td>
+								<td><b>int iswctype(wint_t, wctype_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>14</td>
+								<td><b>wint_t towctrans(wint_t, wctrans_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>15</td>
+								<td><b>wint_t towlower(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>16</td>
+								<td><b>wint_t towupper(wint_t);</b><br></td>
+							</tr>
+							<tr>
+								<td>17</td>
+								<td><b>wctrans_t wctrans(const char *);</b><br></td>
+							</tr>
+							<tr>
+								<td>18</td>
+								<td><b>wctype_t wctype(const char *);</b><br></td>
+							</tr>
+						</table>
+						<pre class="brush: c;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>...</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: c;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>...</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: c;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>...</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: c;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>...</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: c;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>...</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: c;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>...</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: c;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>...</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: c;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-uchar" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>uchar.h</code>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<code>uchar.h</code>
+							引入了对 UTF8、UTF16 以及 UTF32 字符编码的支持。
+						</p>
+						<pre class="brush: c;">
+#include &lt;stdio.h>
+#include &lt;uchar.h>
+#include &lt;string.h>
+
+size_t UTF16StrLen(const char16_t *utf16String)
+{
+    if(utf16String == NULL)
+        return 0;
+     
+    size_t index;
+    for(index = 0; utf16String[index] != u'\0'; index++);
+        return index;
+}
+ 
+size_t UTF16ToUTF8(char *mbBuffer, const char16_t *utf16String)
+{
+    if(mbBuffer == NULL || utf16String == NULL)
+        return 0;
+ 
+    mbstate_t state = {};
+ 
+    size_t mbIndex = 0;
+    for(int utf16Index = 0; utf16String[utf16Index] != u'\0'; utf16Index++)
+    {
+        const size_t length = c16rtomb(&mbBuffer[mbIndex], utf16String[utf16Index], &state);
+        mbIndex += length;
+    } 
+ 
+    mbBuffer[mbIndex] = '\0';
+     
+    return mbIndex;
+}
+ 
+int main(int argc, char *argv[])
+{
+    char16_t ch = u'好';
+    char chBuffer[64];
+    mbstate_t state = {};
+     
+    size_t length = c16rtomb(chBuffer, ch, &state);
+    chBuffer[length] = '\0';
+     
+    printf("The UTF-8 character length is: %zu, and the character is: %s\n", length, chBuffer);
+     
+    const char *utf8Str = u8"你好，世界。";
+    printf("The UTF-8 string is: %s\n", utf8Str);
+     
+    const char16_t *utf16Str = u"你好，世界。";
+    printf("The utf16 string length is: %zu\n", UTF16StrLen(utf16Str));
+ 
+    length = UTF16ToUTF8(chBuffer, utf16Str);
+     
+    printf("The UTF-8 string length is: %zu, and the content is: %s\n",length,chBuffer);
+     
+    printf("If the converted UTF-8 string is equal to the original one? %s\n", \
+    	strcmp(chBuffer, utf8Str) == 0 ? "YES" : "NO");
+
+    return 0;
+}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>...</code>
+						</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>...</code>
+						</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="c-lib-" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>...</code>
+						</h3>
+					</div>
+					<div class="panel-body"></div>
+				</div>
+				<!-- item over -->
+
+
+
 
 			</div>
 		</div>
@@ -5767,8 +7030,5 @@ int main()
 	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
-
-
-
 </body>
 </html>

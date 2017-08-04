@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -65,19 +65,24 @@
 						<h3 class="panel-title">我的工具</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
+						<a href="#" class="list-group-item">简介</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+							data-parent="#accordion" href="#tools-my" aria-expanded="true">
+							自己写的工具<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="tools-my" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#tools-number-format" class="list-group-item">进制转换工具</a>
+							<a href="#tools-font2png" class="list-group-item">文字生成图片工具</a>
+							<a href="#tools-code" class="list-group-item">二维生成工具</a>
+							<a href="#tools-file-script" class="list-group-item">文件传输脚本</a>
+							<a href="#tools-" class="list-group-item">...</a>
 						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#tools-" class="list-group-item">...</a>
+						<a href="#tools-" class="list-group-item">...</a>
+						<a href="#tools-" class="list-group-item">...</a>
+						<a href="#tools-" class="list-group-item">...</a>
+						<a href="#tools-" class="list-group-item">...</a>
 					</div>
 				</div>
 			</div>
@@ -92,23 +97,257 @@
 				<!-- item start -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-						
+						<p>此页面介绍个人的一些常用的工具使用。</p>
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
-				<a id="" class="offset"></a>
+				<a id="tools-number-format" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">进制转换工具</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<b>程序下载：</b>
+							<a href="res/number-format">number-format</a>
+						</p>
+						<p>
+							<b>功能描述：</b>本程序接收一个 二进制/十制整/十六进制 正整数值参数，并显示其 十六进制 & 十制整 &
+							八制整 & 二进制 形式。
+						</p>
+						<p>
+							<b>编译运行：</b>本程序为命令行工具，用 C 语言实现，在 Linux Mint 32 位中编译运行。
+						</p>
+						<pre class="brush: bash;">
+$ gcc src/main/number-format.c -o jnumfmt -std=c11
+
+# 参数：
+#	参数可以使用空格, 如: 0x0F FE, 0b11 1000...
+#	参数为二进制正整数值，要加前缀 0b, 如: 0b100, 0b111, 0b11 1000...
+#	参数为十进制正整数值，直接输入, 如: 32, 1000, 429 496 729...
+#	参数为十六进制正整数值，要加前缀 0x, 如: 0x32, 0xFF, 0xFF FF FF FF...
+$ ./jnumfmt 0b10			# 二进制测试
+$ ./jnumfmt 0b1001 1001		# 二进制测试
+$ ./jnumfmt 1024			# 十进制测试
+$ ./jnumfmt 10 240			# 十进制测试
+$ ./jnumfmt 0xFF			# 十六进制测试
+$ ./jnumfmt 0xA0 FF			# 十六进制测试
+</pre>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<a data-toggle="collapse" data-parent="#accordion"
+									href="#apache-log4j-example" aria-expanded="false"
+									class="code-header collapsed">
+									<span class="glyphicon glyphicon-plus"></span> View Code
+								</a>
+							</div>
+							<div id="apache-log4j-example" class="panel-collapse collapse"
+								style="height: 0px;" aria-expanded="false">
+								<pre class="brush: cpp;">
+#include &lt;ctype.h>
+#include &lt;stdio.h>
+#include &lt;stdlib.h>
+#include &lt;string.h>
+
+#define ARG_ERROR_MESSAGE "非法参数，必须接收一个 二进制/十制整/十六进制 正整数值参数,\
+    如： 32, 1000, 0b100, 0b111, 0x32, 0xA0, 0xF003...\n"
+
+void delete_blank(char *);
+/**
+ *  本程序接收一个 二进制/十制整/十六进制 正整数值参数，并显示其 十六进制 & 十制整 & 八制整 & 二进制 形式。
+ *  长参数可以使用空格, 如: 0x0F FE, 0b11 1000...
+ *  参数为二进制正整数值，要加前缀 0b, 如: 0b100, 0b111, 0b111000...
+ *  参数为十进制正整数值，直接输入, 如: 32, 1000, 429496729...
+ *  参数为十六进制正整数值，要加前缀 0x, 如: 0x32, 0xFF, 0xFFFFFFFF...
+ */
+int main(int argc, char* argv[])
+{
+    if (argc < 2 || !strcmp("-h", argv[1]) || !strcmp("--help", argv[1])) {
+        printf("本函数必须接收一个最大 0xFFFFFFFF 的 二进制/十制整/十六进制 正整数值参数，并显示其各种形式！\n");
+        printf("  -- 长参数可以使用空格, 如: 0x0F FE, 0b11 1000...\n");
+        printf("  -- 参数为二进制正整数值，要加前缀 0b, 如: 0b100, 0b111, 0b111000...\n");
+        printf("  -- 参数为十进制正整数值，直接输入, 如: 32, 1000, 429496729...\n");
+        printf("  -- 参数为十六进制正整数值，要加前缀 0x, 如: 0x32, 0xFF, 0xFFFFFFFF...\n");
+        return 0;
+    }
+
+    char input[50];// 参数最长为: 0b0000 0000 1000 0000 0000 0000 0000 0000
+    memset(input, '\0', sizeof(input));
+    for(int k = 1; k < argc; k++) {
+        strcat(strcat(input, " "), argv[k]);
+    }
+    
+    char arg[50];
+    strcpy(arg, input);
+    delete_blank(arg);
+
+    int len = strlen(arg);
+ 
+    int flag = 10; // 输入参数为十制整/十六进制
+ 
+    if (len > 2 && !strncmp("0x", arg, 2)) { // 十六进制整
+        for (int k = 2; k < len; k++) {
+            if (!isxdigit(arg[k])) {
+                printf(ARG_ERROR_MESSAGE);
+                return 0;
+            }
+        }
+        flag = 16;
+    } else if(len > 2 && !strncmp("0b", arg, 2)) {
+        for (int k = 2; k < len; k++) {
+            if ('1' != arg[k] && '0' != arg[k]) {
+                printf(ARG_ERROR_MESSAGE);
+                return 0;
+            }
+        }
+        memset(arg, ' ', 2);
+        flag = 2;
+    } else { // 十制整
+        for (int k = 0; k < len; k++) {
+            if (!isdigit(arg[k])) {
+                printf(ARG_ERROR_MESSAGE);
+                return 0;
+            }
+        }
+    }
+ 
+    printf("输入的参数为 %d 进制： %s\n", flag, input);
+    unsigned long n = strtoul(arg, NULL, flag);
+ 
+    printf("十六进制:  %lX\n", n);
+    printf("  十进制:  %lu\n", n);
+    printf("  八进制:  %lo\n", n);
+ 
+    int i = 0;
+    char bin[32];
+ 
+    memset(bin, '0', 32);
+ 
+    while (n) {
+        bin[31 - i] = (n & 1) + '0';
+        n = n >> 1;
+        i++;
+    }
+    printf("  二进制: ");
+    for (i = 0; i < 32; i++) {
+        if (i % 4 == 0) {
+            printf(" ");
+        }
+        printf("%c", bin[i]);
+    }
+    printf("\n");
+ 
+    return 0;
+}
+
+/** 删除字符串的所有空格 */
+void delete_blank(char s[])
+{
+    char *p = s;
+    while (*p != '\0') {
+        if (*p != ' ') {
+            *s++ = *p;
+        }
+        p++;
+    }
+    *s = '\0';
+}
+</pre>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="tools-font2png" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">文字生成图片工具</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<b>程序下载：</b>
+							<a href="res/font2png.rar">font2png.zip</a>
+						</p>
+						<p>
+							<b>功能描述：</b>本程序将文字转换为指定颜色和大小的 PNG 图片。
+						</p>
+						<p>
+							<b>编译运行：</b>本程序为命令行工具，用 Java 语言实现。
+						</p>
+						<pre class="brush: bash;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="tools-code" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">二维生成工具</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<b>程序下载：</b>
+							<a href="res/code.zip">code.zip</a>
+						</p>
+						<p>
+							<b>功能描述：</b>本程序将文字转换为二维码 JPG 图片。
+						</p>
+						<p>
+							<b>编译运行：</b>本程序为命令行工具，用 Java 语言实现。
+						</p>
+						<pre class="brush: bash;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="tools-file-script" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">文件传输脚本</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<b>功能描述：</b> 几个文件传输脚本，从指定服务器上传/下载文件，从 USB 连接的 android 手机传输文件。
+						</p>
+						<p>
+							<b>运行：</b>本程序为 Linux 脚本文件。
+						</p>
+						<pre class="brush: bash;">
+
+</pre>
+						<p>
+							<b>源文件：</b>
+						</p>
+						<ul>
+							<li><p></p></li>
+							<li><p></p></li>
+							<li><p></p></li>
+							<li><p></p></li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="tools-" class="offset"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title"></h3>
 					</div>
-					<div class="panel-body">
-						
-					</div>
+					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 			</div>
@@ -116,14 +355,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -131,7 +369,9 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushCpp.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

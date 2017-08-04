@@ -35,7 +35,7 @@ function runoobLinkJump() {
 
 /** 左侧菜单组折叠小按钮状态切换 */
 function leftMenuDropButton() {
-	$(".container .col-md-3 .list-group .active").on("click", function() {
+	$(".container .col-md-3 .list-group .active").unbind("click").on("click", function() {
 		$(this).toggleClass("dropdown");
 		$(this).toggleClass("dropup");
 	});
