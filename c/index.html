@@ -269,6 +269,14 @@
 							libc，但是<b>glibc 无疑是用得最多的</b>。
 						</p>
 						<p>
+							<b>EGLIBC</b> 是 GNU C Library (GLIBC) 的一个变种，用于工作在嵌入式的系统中。EGLIBC
+							严格兼容二进制的 GLIBC 。
+						</p>
+						<p>GLIBC 为了实现最优化处理，致使在空间占用上越来越为人诟病。EGLIBC
+							的主要特性是更好的支持嵌入式架构，支持不同的 shell(GLIBC 只支持
+							bash)，支持 -Os，可配置组件，稳定分支修正了一些重要 Bug 等。</p>
+						<p>目前 Debian 已经决定用嵌入式 GLIBC(EGLIBC) 取代 GNU C Library(GLIBC)。Debian 下可使用 <code>$ apt-get source libc-bin</code> 下载 eglibc 源码。</p>
+						<p>
 							<b>POSIX 库:</b> POSIX 库函数是 C 标准库函数的超集。在 UNIX 世界里，最通用的操作系统 API 基于
 							POSIX（Portable Operating System Interface of
 							UNIX，可移植操作系统接口）标准。POSIX 标准定义了 "POSIX 兼容" 的操作系统所必须提供的服务。Linux 兼容于
@@ -2233,38 +2241,78 @@ int main() {
 							</tbody>
 						</table>
 
+						<p>
+							预处理器和宏，可以使用
+							<code>$ gcc -E src/define.c -o define.i</code>
+							命令生成经过预处理后的 .i 文件。
+						</p>
 						<pre class="brush: cpp;">
 #include &lt;stdio.h>
+#include &lt;assert.h>
 
-#ifndef MESSAGE
-   #define MESSAGE "You wish!"
+/** 1. define */
+#define MSG "(%d, %d) max is %d.\n"
+#define X 30
+#define MAX(a, b) (a >= b ? a : b)
+#define info(name, email) printf("Name is "#name", Email is "#email".\n")
+/** 标记粘贴运算符(##)
+ *  宏定义内的标记粘贴运算符（##）会合并两个参数。它允许在宏定义中两个独立的标记被合并为一个标记。例如：
+ */
+#define tokenpaster(n) printf ("token" #n " = %d\n", token##n)
+
+/** 2. ifdef, undef, endif */
+#ifdef X
+    #undef X
+    #define X 10
 #endif
-// defined 达到上面相同的效果
-#if !defined (MESSAGE)
-   #define MESSAGE "You wish!"
+
+/** 3. defined */
+#if !defined Y
+    #define Y 30
 #endif
 
-// 在宏定义中，当需要把一个宏的参数转换为字符串常量时，则使用字符串常量化运算符（#）。
-#define  message_for(a, b)  \
-    printf(#a " and " #b ": We love you!\n")
+/** 4. ifndef */
+#ifndef Z
+    #define Z 40
+#endif
 
-// 宏定义内的标记粘贴运算符（##）会合并两个参数。它允许在宏定义中两个独立的标记被合并为一个标记。
-#define tokenpaster(n) printf ("token" #n" = %d\n", token##n)
+/** 5. if, elif, else */
+#if defined M
+    #undef M
+    #define M 100
+#elif defined N
+    #undef N
+    #define N 200
+#else
+    #define M 50
+    #define N 60
+#endif
 
-#define MAX(x,y) ((x) > (y) ? (x) : (y))
-      
-int main() {
-    printf("Message: %s.\n", MESSAGE);
+/** 6. error -- 如果未定义 M, 终止编译 */
+#ifndef M
+    #error
+#endif
 
+int main(int argc, char **argv) {
+    /** 预处理器命令 */
+    assert(30 == MAX(X, Y));
+    printf(MSG, X, Y, MAX(X, Y));
+    info("Jiwanger", "jiwanger@126.com");
+
+    printf(MSG, X, Z, MAX(X, Z));
+    printf(MSG, M, N, MAX(M, N));
+    
     int token34 = 40;
     tokenpaster(34);
 
-    message_for(Carole, Debra);
-
-    printf("Max between 20 and 10 is %d.\n", MAX(10, 20));
-
-    printf("Date Time: %s %s.\n", __DATE__, __TIME__);
-
+    /** ANSI C 定义的宏 */
+    printf("__DATE__ -- %s\n", __DATE__);// 编译源文件的日期
+    printf("__TIME__ -- %s\n", __TIME__);// 编译源文件的时间  
+    printf("__TIMESTAMP__ -- %s\n", __TIMESTAMP__);// 最后修改源文件的时间
+    printf("__FILE__ -- %s\n", __FILE__);// 编译源文件名称
+    printf("__LINE__ -- %d\n", __LINE__);// 源文件的行号  
+    printf("__FUNCTION__ -- %s\n", __FUNCTION__);// 当前所在函数名 
+    
     return 0;
 }
 </pre>
@@ -6162,8 +6210,20 @@ int main() {
 							<code>wchar.h</code>
 							用于支持多字节和宽字节函数。
 						</p>
-						<p><code>wchar.h</code> 相当于包含了宽字符的 <code>string.h</code> <code>stdio.h</code> <code>stdlib.h</code> <code>ctype.h</code></p>
-						<p class="well text-primary">注意使用宽字符指定编码非常重要，就是 <code>setlocale</code> 函数。可以使用　<code>$ locale</code> 命令查看相关编码。</p>
+						<p>
+							<code>wchar.h</code>
+							相当于包含了宽字符的
+							<code>string.h</code>
+							<code>stdio.h</code>
+							<code>stdlib.h</code>
+						</p>
+						<p class="well text-primary">
+							注意使用宽字符指定编码非常重要，就是
+							<code>setlocale</code>
+							函数。可以使用
+							<code>$ locale</code>
+							命令查看相关编码。
+						</p>
 						<table class="table table-bordered table-responsive">
 							<tr>
 								<th style="width: 8%">序号</th>
@@ -6175,10 +6235,6 @@ int main() {
 							</tr>
 							<tr>
 								<td>2</td>
-								<td><b>wctype_t</b><br>无符号的 long 值<br></td>
-							</tr>
-							<tr>
-								<td>3</td>
 								<td><b>mbstate_t</b><br>数组类型以外的对象类型，该数组类型可以保存在（可能是多字节）字符序列和宽字符序列之间转换所必需的转换状态信息。</td>
 							</tr>
 						</table>
@@ -6226,59 +6282,13 @@ int main() {
 							</tr>
 							<tr>
 								<td>9</td>
-								<td><b>wint_t getwc(FILE *);</b><br>从标准输入中读取字符， 并且转换为宽字符</td>
+								<td><b>wint_t getwc(FILE *);</b><br>从标准输入中读取字符，
+									并且转换为宽字符</td>
 							</tr>
 							<tr>
 								<td>10</td>
-								<td><b>wint_t getwchar(void);</b><br>从标准输入中读取字符， 并且转换为宽字符</td>
-							</tr>
-							<tr>
-								<td>11</td>
-								<td><b>int iswalnum(wint_t);</b><br>测试字符是否为数字或字母</td>
-							</tr>
-							<tr>
-								<td>12</td>
-								<td><b>int iswalpha(wint_t);</b><br>测试字符是否是字母</td>
-							</tr>
-							<tr>
-								<td>13</td>
-								<td><b>int iswcntrl(wint_t);</b><br>测试字符是否是控制符</td>
-							</tr>
-							<tr>
-								<td>14</td>
-								<td><b>int iswctype(wint_t, wctype_t);</b><br></td>
-							</tr>
-							<tr>
-								<td>15</td>
-								<td><b>int iswdigit(wint_t);</b><br>测试字符是否为数字</td>
-							</tr>
-							<tr>
-								<td>16</td>
-								<td><b>int iswgraph(wint_t);</b><br>测试字符是否是可见字符</td>
-							</tr>
-							<tr>
-								<td>17</td>
-								<td><b>int iswlower(wint_t);</b><br>测试字符是否是小写字符</td>
-							</tr>
-							<tr>
-								<td>18</td>
-								<td><b>int iswprint(wint_t);</b><br>测试字符是否是可打印字符</td>
-							</tr>
-							<tr>
-								<td>19</td>
-								<td><b>int iswpunct(wint_t);</b><br>测试字符是否是标点符号</td>
-							</tr>
-							<tr>
-								<td>20</td>
-								<td><b>int iswspace(wint_t);</b><br>测试字符是否是空白符号</td>
-							</tr>
-							<tr>
-								<td>21</td>
-								<td><b>int iswupper(wint_t);</b><br>测试字符是否是大写字符</td>
-							</tr>
-							<tr>
-								<td>22</td>
-								<td><b>int iswxdigit(wint_t);</b><br>测试字符是否是十六进制的数字</td>
+								<td><b>wint_t getwchar(void);</b><br>从标准输入中读取字符，
+									并且转换为宽字符</td>
 							</tr>
 							<tr>
 								<td>23</td>
@@ -6347,7 +6357,7 @@ int main() {
 							<tr>
 								<td>37</td>
 								<td><b>int vswprintf(wchar_t *restrict, size_t, const
-										wchar_t *restrict, va_list);</b><br>格式化　stdarg　参量表并写到字符串</td>
+										wchar_t *restrict, va_list);</b><br>格式化 stdarg 参量表并写到字符串</td>
 							</tr>
 							<tr>
 								<td>38</td>
@@ -6356,7 +6366,8 @@ int main() {
 							</tr>
 							<tr>
 								<td>39</td>
-								<td><b>int vwscanf(const wchar_t *restrict, va_list);</b><br>根据 stdarg 参量格式化读入</td>
+								<td><b>int vwscanf(const wchar_t *restrict, va_list);</b><br>根据
+									stdarg 参量格式化读入</td>
 							</tr>
 							<tr>
 								<td>40</td>
@@ -6370,7 +6381,8 @@ int main() {
 							</tr>
 							<tr>
 								<td>42</td>
-								<td><b>wchar_t *wcschr(const wchar_t *src, wchar_t c);</b><br>在参数 str 所指向的字符串中搜索第一次出现字符 c（一个无符号字符）的位置。</td>
+								<td><b>wchar_t *wcschr(const wchar_t *src, wchar_t c);</b><br>在参数
+									str 所指向的字符串中搜索第一次出现字符 c（一个无符号字符）的位置。</td>
 							</tr>
 							<tr>
 								<td>43</td>
@@ -6378,7 +6390,8 @@ int main() {
 							</tr>
 							<tr>
 								<td>44</td>
-								<td><b>int wcscoll(const wchar_t *, const wchar_t *);</b><br>根据 LC_CTYPE 比较字符串大小。</td>
+								<td><b>int wcscoll(const wchar_t *, const wchar_t *);</b><br>根据
+									LC_CTYPE 比较字符串大小。</td>
 							</tr>
 							<tr>
 								<td>45</td>
@@ -6393,7 +6406,8 @@ int main() {
 							<tr>
 								<td>47</td>
 								<td><b>size_t wcsftime(wchar_t *restrict, size_t, const
-										wchar_t *restrict, const struct tm *restrict);</b><br>根据指定的字符串格式和locale设置格式化日期和时间， 并返回宽字符串</td>
+										wchar_t *restrict, const struct tm *restrict);</b><br>根据指定的字符串格式和locale设置格式化日期和时间，
+									并返回宽字符串</td>
 							</tr>
 							<tr>
 								<td>48</td>
@@ -6401,8 +6415,9 @@ int main() {
 							</tr>
 							<tr>
 								<td>49</td>
-								<td><b>wchar_t *wcsncat(wchar_t *dest, const
-										wchar_t *src, size_t n);</b><br>把 src 所指向的字符串追加到 dest 所指向的字符串的结尾，直到 n 字符长度为止。</td>
+								<td><b>wchar_t *wcsncat(wchar_t *dest, const wchar_t
+										*src, size_t n);</b><br>把 src 所指向的字符串追加到 dest 所指向的字符串的结尾，直到 n
+									字符长度为止。</td>
 							</tr>
 							<tr>
 								<td>50</td>
@@ -6411,8 +6426,8 @@ int main() {
 							</tr>
 							<tr>
 								<td>51</td>
-								<td><b>wchar_t *wcsncpy(wchar_t *dest, const
-										wchar_t *src, size_t n);</b><br>宽字符复制, 最多复制前 n 个字符</td>
+								<td><b>wchar_t *wcsncpy(wchar_t *dest, const wchar_t
+										*src, size_t n);</b><br>宽字符复制, 最多复制前 n 个字符</td>
 							</tr>
 							<tr>
 								<td>52</td>
@@ -6475,14 +6490,10 @@ int main() {
 							<tr>
 								<td>63</td>
 								<td><b>unsigned long long wcstoull(const wchar_t
-										*restrict, wchar_t **restrict, int);</b><br>把宽字符的初始部分转换为 unsigned long long</td>
+										*restrict, wchar_t **restrict, int);</b><br>把宽字符的初始部分转换为
+									unsigned long long</td>
 							</tr>
 
-							<tr>
-								<td>64</td>
-								<td><b>wchar_t *wcswcs(const wchar_t *, const wchar_t
-										*);</b><br>在一字符串中查找另一字符串第一次出现的位置</td>
-							</tr>
 							<tr>
 								<td>65</td>
 								<td><b>int wcswidth(const wchar_t *, size_t);</b><br>获得宽字符串的宽度</td>
@@ -6490,16 +6501,11 @@ int main() {
 							<tr>
 								<td>66</td>
 								<td><b>size_t wcsxfrm(wchar_t *restrict, const wchar_t
-										*restrict, size_t);</b><br></td>
+										*restrict, size_t);</b><br>宽字符复制</td>
 							</tr>
 							<tr>
 								<td>67</td>
 								<td><b>int wctob(wint_t);</b><br>把宽字符转换为多字节字符</td>
-							</tr>
-
-							<tr>
-								<td>68</td>
-								<td><b>wctype_t wctype(const char *);</b><br></td>
 							</tr>
 							<tr>
 								<td>69</td>
@@ -6528,7 +6534,8 @@ int main() {
 							</tr>
 							<tr>
 								<td>74</td>
-								<td><b>wchar_t *wmemset(wchar_t *, wchar_t, size_t);</b><br>见 string.h 的 memset</td>
+								<td><b>wchar_t *wmemset(wchar_t *, wchar_t, size_t);</b><br>见
+									string.h 的 memset</td>
 							</tr>
 							<tr>
 								<td>75</td>
@@ -6546,10 +6553,11 @@ int main() {
 #include &lt;string.h>
 #include &lt;wchar.h>
 
+
 /**
  *  wchar.h 用于支持宽字符函数
  */
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     /**
      *  unicode 码 -- '你': 4F 60 '好': 59 7D
@@ -6557,8 +6565,8 @@ int main(int argc, char* argv[])
      *  使用od 命令查看生成的可执行文件：
      *  $ od -tx1 a.out | grep "e4 bd a0 e5 a5 bd"
      */
-    char* str = "你好";
-    assert(6 == strlen(str)); // utf-8 编码中一个汉字为三个字节
+	char *str = "你好";
+	assert(6 == strlen(str));	// utf-8 编码中一个汉字为三个字节
 
     /**
      *  宽字符 字符 函数 -- 见 string.h
@@ -6569,43 +6577,64 @@ int main(int argc, char* argv[])
      *  wcsncat -- 最多连接 n 个字符
      *  wcscmp -- 比较
      *  wcsncmp -- 最多比较前  n 个字符
+     *  wcscoll -- 比较, 见 strcoll
      *  wmemcpy -- 见 memcpy
      *  wmemset -- 见 memset
      *  wmemmove -- 见 wmemmove
      *  wmemcmp -- 见 wmemcmp
      *  wmemchr -- 见 wmemchr
-     *  wcwidth -- 
-     *  wctype -- 
-     *  wcsxfrm -- 
-     *  wcswidth -- 
-     *  wcswcs -- 
-     *  wcsstr -- 
-     *  wcsspn -- 
-     *  wcscspn -- 
-     *  wcspbrk -- 
-     *  wcsftime -- 
-     *  wcscoll -- 
-     *  wcschr -- 
-     *  wcsrchr -- 
+     *  wcwidth -- 宽字符宽度
+     *  wcswidth -- 宽字符串宽度
+     *  wcsxfrm -- 复制最多 n 个字节，见 strxfrm
+     *  wcsstr -- 查找，并截取
+     *  wcsspn -- str1 包含多少个 str2 中的字符
+     *  wcscspn -- str1 哪一个字符最先在 str2 中出现，返回 str1 中的这个字符的位置
+     *  wcspbrk -- 从出现串中的任何一个字符的位置截取
+     *  wcsftime -- 见 strftime
+     *  wcschr -- 搜索第一次出现字符 c 的位置，返回查找到的结束字符串
+     *  wcsrchr -- 搜索最后出现字符 c 的位置，返回查找到的结束字符串
      *  
      */
-    wchar_t* l_str = L"你好";
-    setlocale(LC_CTYPE, "en_US.UTF-8"); // 设置为 en_US.UTF-8
-    assert(2 == wcslen(l_str)); // 宽字符 '你好' 在 utf-8 编码为 2 * 3 字节
 
-    assert(!wcscmp(L"你好", l_str));
+    assert(4 == sizeof(wchar_t));
 
-    wchar_t s1[20], s2[20], s3[20];
-    wcscpy(s1, L"宽字符操作");
-    wcscpy(s2, L"宽字符函数");
-    wcscpy(s3, L"宽字符复制");
+	wchar_t *l_str = L"你好";
+	setlocale(LC_CTYPE, "en_US.UTF-8");	// 设置为 en_US.UTF-8
+	assert(2 == wcslen(l_str));	// 宽字符 '你好' 在 utf-8 编码为 2 * 3 字节
 
-    assert(!wcsncmp(L"宽字符", s1, 3)); // 只比较前三个字符
+	assert(!wcscmp(L"你好", l_str));	// 比较
+    assert(!wcscoll(L"宽字符", L"宽字符"));// locale 相关比较
+
+	wchar_t s1[20], s2[20], s3[20];
+	wcscpy(s1, L"宽字符操作");
+	wcscpy(s2, L"宽字符函数");
+	wcscpy(s3, L"宽字符复制");
+	assert(!wcsncmp(L"宽字符", s1, 3));	// 只比较前三个字符
+
+	wchar_t s4[20];
+	wmemset(s4, L'\0', sizeof(s4) / sizeof(wchar_t));	// 宽字符 \0 填充
+	wcsncpy(s4, s1, 3);	// 最多复制 3 个字符
+	assert(!wcscmp(L"宽字符", s4));
+
+	wchar_t s5[20];
+    wmemset(s5, L'\0', sizeof(s5) / sizeof(wchar_t));
+    wcsxfrm(s5, L"宽字符复制", 3); // 最多复制 3 个字符
+    assert(!wcscmp(L"宽字符", s5));
+
+	wcscat(s1, s2);		// 连接
+	assert(!wcscmp(L"宽字符操作宽字符函数", s1));
+	wcsncat(s1, s2, 3);	// 连接，最多复制３从字符
+	assert(!wcscmp(L"宽字符操作宽字符函数宽字符", s1));
+
+    wchar_t *s6 = wcsstr(L"宽字符操作宽字符函数", L"操作");// 查找
+    assert(!wcscmp(L"操作宽字符函数", s6));
+
+    assert(3 == wcsspn(L"宽字符函数", L"宽字符操作"));// str1 包含多少个 str2 中的字符
+    assert(1 == wcscspn(L"函数", L"宽字符数"));// '数' 有 str2 中出现了，‘数’在 str1 位置为 １
+    assert(!wcscmp(L"cdefg", wcspbrk(L"abcdefg", L"cf"))); // 第一次出现 ‘c’ 或 'f' 的位置开始截取
     
-    wchar_t s4[20];
-    wmemset(s4, L'\0', wcslen(s4)); // 宽字符 \0 填充
-    wcsncpy(s4, s1, 3); // 最多复制 3 个字符
-    assert(!wcscmp(L"宽字符", s4));
+    assert(!wcscmp(L"符操作宽字符函数", wcschr(L"宽字符操作宽字符函数", L'符')));
+    assert(!wcscmp(L"符函数", wcsrchr(L"宽字符操作宽字符函数", L'符')));
 
     /**
      *  宽字符 转换 函数 -- 见 stdlib.h
@@ -6625,24 +6654,6 @@ int main(int argc, char* argv[])
      *  mbrtowc -- 
      *  mbrlen -- 
      *  btowc -- 
-     */
-
-    /**
-     *  宽字符 测试和映射字符 函数 -- 见 ctype.h
-     *  towupper -- 
-     *  towlower -- 
-     *  iswxdigit -- 
-     *  iswupper -- 
-     *  iswspace -- 
-     *  iswpunct -- 
-     *  iswprint -- 
-     *  iswlower -- 
-     *  iswgraph -- 
-     *  iswdigit -- 
-     *  iswctype -- 
-     *  iswcntrl -- 
-     *  iswalpha -- 
-     *  iswalnum -- 
      */
 
     /**
@@ -6671,8 +6682,9 @@ int main(int argc, char* argv[])
      *  fgetwc -- 
      */
 
-    return 0;
+	return 0;
 }
+
 </pre>
 					</div>
 				</div>
