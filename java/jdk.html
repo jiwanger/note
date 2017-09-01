@@ -65,14 +65,31 @@
 					</div>
 					<div class="list-group">
 						<a href="#jdk-intro" class="list-group-item">简介</a>
-						<a href="#jdk-java.lang" class="list-group-item">java.lang 包</a>
-						<a href="#jdk-java.io" class="list-group-item">java.io 包</a>
-						<a href="#jdk-java.nio" class="list-group-item">java.nio 包</a>
-						<a href="#jdk-java.util" class="list-group-item">java.util 包</a>
-						<a href="#jdk-java.beans" class="list-group-item">java.beans 包</a>
-						<a href="#jdk-java.sql" class="list-group-item">java.sql 包</a>
-						<a href="#jdk-java.security" class="list-group-item">java.security
-							包</a>
+						<a class="list-group-item active dropup"
+							data-toggle="collapse" data-parent="#accordion"
+							href="#java-lang" aria-expanded="true">
+							java.lang<span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="java-lang" class="panel-collapse collapse in"
+							role="tabpanel">
+							<a href="#jdk-lang-Object" class="list-group-item">Object</a>
+							<a href="#jdk-lang-Class" class="list-group-item">Class</a>
+							<a href="#jdk-lang-Package" class="list-group-item">Package</a>
+							<a href="#jdk-lang-System" class="list-group-item">System</a>
+							<a href="#jdk-lang-Process" class="list-group-item">Process</a>
+							<a href="#jdk-lang-Runtime" class="list-group-item">Runtime</a>
+							<a href="#jdk-lang-" class="list-group-item"></a>
+						</div>
+						<a class="list-group-item active dropdown"
+							data-toggle="collapse" data-parent="#accordion"
+							href="#java-" aria-expanded="true">
+							java.<span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="java-" class="panel-collapse collapse"
+							role="tabpanel">
+							<a href="#java-" class="list-group-item"></a>
+						</div>
+						<a href="#java-" class="list-group-item"></a>
 					</div>
 				</div>
 			</div>
@@ -95,37 +112,19 @@
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="jdk-java.lang"></a>
+				<a class="offset" id="jdk-lang-Object"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">java.lang 包</h3>
 					</div>
 					<div class="panel-body">
-						<p>
-							<code>java.lang</code>
-							包在使用的时候无需显示导入，编译时由编译器自动导入。
-						</p>
-						<div class="panel panel-success h4">
-							<div class="panel-heading">
-								<a href="#jdk-lang-Object">
-									<span class="label label-danger">Object</span>
-								</a>
-
-								<a href="#jdk-lang-Class">
-									<span class="label label-danger">Class</span>
-								</a>
-
-								<a href="#jdk-lang-System">
-									<span class="label label-danger">System</span>
-								</a>
-
-								<a href="#jdk-lang-Runtime">
-									<span class="label label-danger">Runtime / Process</span>
-								</a>
-							</div>
+						<div class="sub-item">
+							<p>
+								<code>java.lang</code>
+								包在使用的时候无需显示导入，编译时由编译器自动导入。
+							</p>
 						</div>
 
-						<a class="offset" id="jdk-lang-Object"></a>
 						<div class="sub-item">
 							<h5 class="text-primary">Object 类</h5>
 							<p>Object 类是类层次结构的根，Java中所有的类从根本上都继承自这个类。</p>
@@ -819,10 +818,17 @@ public class MyReflect {
 							</div>
 						</div>
 
+						<a class="offset" id="jdk-lang-Package"></a>
+						<div class="sub-item">
+							<h5 class="text-primary">Package</h5>
+							<p>Package 对象包含有关 Java 包的实现和规范的版本信息。通过用于加载类的 ClassLoader 实例，可以获取并获得此版本信息。通常，此信息存储在与类一起分发的清单中。 </p>
+							<p>组成包的类集可以实现一个特定规范，如此一来，就可以通过规范标题、版本号和供应商字符串来标识该规范。应用程序可以询问包是否与特定版本兼容，有关详细信息，请参阅 isCompatibleWith 方法。 </p>
+						</div>
+
 						<a class="offset" id="jdk-lang-System"></a>
 						<div class="sub-item">
 							<h5 class="text-primary">System</h5>
-							<p>System类代表系统，系统级的很多属性和控制方法都放置在该类的内部。</p>
+							<p>System 类代表系统，系统级的很多属性和控制方法都放置在该类的内部。</p>
 							<p>
 								System类内部包含
 								<code>in</code>
@@ -910,13 +916,14 @@ System.out.println(System.getenv("PATH"));
 									<p>
 										<code>public static void load(String filename) /
 											loadLibrary(String libname)</code>
-										-- 主要用来加载动态链接库, JNI 中使用, 实例参见: <a href="index.html#java-jni">Java 本地编程 - JNI</a>
+										-- 主要用来加载动态链接库, JNI 中使用, 实例参见:
+										<a href="index.html#java-jni">Java 本地编程 - JNI</a>
 									</p>
 								</li>
 								<li>
 									<p>
 										<code>public static void exit(int status) / gc()</code>
-										-- 退出程序(调用　Runtime 的 exit) / 请求系统进行垃圾回收
+										-- 退出程序(调用 Runtime 的 exit) / 请求系统进行垃圾回收
 									</p>
 								</li>
 								<li>
@@ -930,15 +937,31 @@ System.out.println(System.getenv("PATH"));
 							</ul>
 						</div>
 
-						<a class="offset" id="jdk-lang-Runtime"></a>
+						<a class="offset" id="jdk-lang-Process"></a>
 						<div class="sub-item">
-							<h5 class="text-primary">Runtime / Process</h5>
+							<h5 class="text-primary">Process</h5>
+							<p>ProcessBuilder.start() 和 Runtime.exec 方法创建一个本机进程，并返回
+								Process 子类的一个实例，该实例可用来控制进程并获得相关信息。Process
+								类提供了执行从进程输入、执行输出到进程、等待进程完成、检查进程的退出状态以及销毁（杀掉）进程的方法。</p>
+							<p>创建进程的方法可能无法针对某些本机平台上的特定进程很好地工作，比如，本机窗口进程，守护进程，Microsoft
+								Windows 上的 Win16/DOS 进程，或者 shell 脚本。创建的子进程没有自己的终端或控制台。它的所有标准
+								io（即 stdin、stdout 和 stderr）操作都将通过三个流
+								(getOutputStream()、getInputStream() 和 getErrorStream())
+								重定向到父进程。父进程使用这些流来提供到子进程的输入和获得从子进程的输出。因为有些本机平台仅针对标准输入和输出流提供有限的缓冲区大小，如果读写子进程的输出流或输入流迅速出现失败，则可能导致子进程阻塞，甚至产生死锁。
+							</p>
+							<p>当没有 Process 对象的更多引用时，不是删掉子进程，而是继续异步执行子进程。</p>
+							<p>对于带有 Process 对象的 Java 进程，没有必要异步或并发执行由 Process 对象表示的进程。</p>
 						</div>
 
-						<a class="offset" id="jdk-lang-"></a>
+						<a class="offset" id="jdk-lang-Runtime"></a>
 						<div class="sub-item">
-							<h5 class="text-primary"></h5>
+							<h5 class="text-primary">Runtime</h5>
+							<p>每个 Java 应用程序都有一个 Runtime 类实例，使应用程序能够与其运行的环境相连接。可以通过
+								getRuntime 方法获取当前运行时。 应用程序不能创建自己的 Runtime 类实例。</p>
+
 						</div>
+
+
 
 						<a class="offset" id="jdk-lang-"></a>
 						<div class="sub-item">

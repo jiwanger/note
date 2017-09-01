@@ -34,8 +34,8 @@
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle"
-					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<button type="button" class="navbar-toggle" data-toggle="collapse"
+					data-target="#bs-example-navbar-collapse-1">
 					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
@@ -65,19 +65,18 @@
 						<h3 class="panel-title">REGEXP-JAVA</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
-						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
-							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
-						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#java-Pattern" class="list-group-item">Pattern 类</a>
+
+						<a href="#java-MatchResult" class="list-group-item">MatchResult
+							接口</a>
+
+						<a href="#java-Matcher" class="list-group-item">Matcher 类</a>
+
+
+						<a href="#java-PatternSyntaxException" class="list-group-item">PatternSyntaxException
+							类</a>
+						<a href="#java-Tools" class="list-group-item">正则表达式工具类</a>
+						<a href="#java-" class="list-group-item"></a>
 					</div>
 				</div>
 			</div>
@@ -91,13 +90,579 @@
 			<div class="col-md-3"></div>
 			<div class="col-md-9" style="float: left;">
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="java-Pattern"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">Pattern 类</h3>
 					</div>
 					<div class="panel-body">
-						
+						<p>
+							JDK 中用于正则表达式的类位于
+							<code>java.util.regex</code>
+							包中。主要是
+							<code>Pattern</code>
+							类和
+							<code>Matcher</code>
+							类，此包中还有一个用于异常处理的
+							<code>PatternSyntaxException</code>
+							类，一个
+							<code>MatcherResult</code>
+							接口。
+						</p>
+
+						<p>
+							<code>Pattern</code>
+							类为正则表达式的编译表示形式。指定为字符串的正则表达式必须首先被编译为此类的实例。然后，可将得到的模式用于创建 Matcher
+							对象，依照正则表达式，该对象可以与任意字符序列匹配。执行匹配所涉及的所有状态都驻留在匹配器中，所以多个匹配器可以共享同一模式。
+						</p>
+						<pre class="brush: java;">
+/** 典型的调用顺序 */
+Pattern p = Pattern.compile("a*b");
+Matcher m = p.matcher("aaaaab");
+boolean b = m.matches();
+
+/**
+ *	在仅使用一次正则表达式时，可以方便地通过此类定义 matches 方法, 等效于上面的三个语句，
+ *	尽管对于重复的匹配而言它效率不高，因为它不允许重用已编译的模式。 
+ */
+boolean b = Pattern.matches("a*b", "aaaaab");
+</pre>
+						<p>
+							<code>Pattern</code>
+							类的常用方法:
+						</p>
+						<pre class="brush: java;">
+/**
+ *	1.Pattern 类静态方法
+ *	Pattern.compile(regex) -- 将给定的正则表达式编译到模式中
+ *	Pattern.compile(regex, flag) --  将给定的正则表达式编译到具有给定标志的模式中。
+ *		flag 有如下选项：
+ *		CASE_INSENSITIVE -- 不区分大小写
+ *		LITERAL -- 指定此标志后，输入序列中的元字符或转义序列不具有任何特殊意义
+ *		DOTALL -- 此模式下表达式 . 可以匹配任何字符，包括行结束符。默认情况下，此表达式不匹配行结束符。 
+ *		MULTILINE -- 启用多行模式, 表达式 ^ 和 $ 仅分别在行结束符前后匹配
+ *		UNIX_LINES -- 启用 Unix 行模式
+ *		COMMENTS -- 模式中允许空白和注释
+ *		UNICODE_CASE -- 启用 Unicode 感知的大小写折叠
+ *		CANON_EQ -- 启用规范等价
+ *	Pattern.matches(regex, input) -- 编译给定正则表达式并尝试将给定输入与其匹配
+ *	Pattern.quote(s) --  返回指定 String 的字面值模式 String
+ */
+Pattern  p = Pattern.compile("^\\d{4}$");
+Matcher m = p.matcher("1234");
+assert m.matches();
+
+p = Pattern.compile("^abc$", Pattern.CASE_INSENSITIVE);
+assert p.matcher("ABC").matches();
+
+assert Pattern.matches("^\\w{6}\\d{6}$", "abcdef123456");
+
+// 下面代码输出: \Q^\w{6}\d{6}$\E
+System.out.println(Pattern.quote("^\\w{6}\\d{6}$"));
+
+/**
+ *	matcher(input) -- 创建匹配给定输入与此模式的匹配器
+ *	pattern() -- 返回在其中编译过此模式的正则表达式
+ *	flags() -- 返回此模式的匹配标志
+ *	split(input) -- 围绕此模式的匹配拆分给定输入序列
+ *	split(input, limit) -- 围绕此模式的匹配拆分给定输入序列
+ */
+p = Pattern.compile("^abc$", Pattern.CASE_INSENSITIVE);
+m = p.matcher("ABC");
+System.out.println(p.pattern()); // out: ^abc$
+assert Pattern.CASE_INSENSITIVE == p.flags();
+assert m.matches();
+p = Pattern.compile("年|月|日");
+String arr[] = p.split("1989年3月24日");// arr[] = { "1989", "3", "24" }
+for (int i = 0; i < arr.length; i++) {
+	System.out.println(arr[i]);
+}
+String arr2[] = p.split("1989年3月24日", 2);// arr2[] = { "1989", "3月24日" }
+for (int i = 0; i < arr2.length; i++) {
+	System.out.println(arr2[i]);
+}						
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-MatchResult"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">MatchResult 接口</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<code>MatchResult</code>
+							接口包含用于确定与正则表达式匹配结果的查询方法。通过 MatchResult 可以查看匹配边界、组和组边界，但是不能修改。
+						</p>
+						<ul>
+							<li>
+								<p>
+									<code>int start()</code>
+									返回匹配的初始索引。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>int start(int group)</code>
+									返回在匹配期间由给定组捕获的子序列的初始索引。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>int end()</code>
+									返回最后匹配字符之后的偏移量。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>int end(int group)</code>
+									返回在匹配期间由给定组所捕获子序列的最后字符之后的偏移量。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>int group()</code>
+									返回由以前匹配所匹配的输入子序列。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>int group(int group)</code>
+									返回在以前匹配操作期间由给定组捕获的输入子序列。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>int groupCount()</code>
+									返回此匹配结果的模式中的捕获组数。
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-Matcher"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Matcher 类</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<code>Matcher</code>
+							类通过解释 Pattern 对 input 执行匹配操作的引擎。
+						</p>
+						<p>
+							<code>Matcher</code>
+							类实现了 MatchResult 接口。
+						</p>
+						<p>
+							通过调用模式的
+							<code>matcher(input)</code>
+							方法从模式创建匹配器。创建匹配器后，可以使用它执行三种不同的匹配操作：
+						</p>
+						<ul>
+
+							<li>
+								<p>
+									<b><code>matches</code> 方法尝试将整个输入序列与该模式匹配。</b>
+								</p>
+							</li>
+
+							<li>
+								<p>
+									<b><code>lookingAt</code> 方法尝试将输入序列从头开始与该模式匹配。</b>
+								</p>
+							</li>
+
+							<li>
+								<p>
+									<b><code>find</code> 方法扫描输入序列以查找与该模式匹配的下一个子序列。</b>
+								</p>
+							</li>
+						</ul>
+						<p>每个方法都返回一个表示成功或失败的布尔值。通过查询匹配器的状态可以获取关于成功匹配的更多信息。</p>
+						<p>
+							匹配器在其输入的子集（称为区域）中查找匹配项。默认情况下，此区域包含全部的匹配器输入。可通过
+							<code>region</code>
+							方法修改区域，通过
+							<code>regionStart</code>
+							和
+							<code>regionEnd</code>
+							方法查询区域。区域边界与某些模式构造交互的方式是可以更改的。
+						</p>
+						<p>
+							此类还定义使用新字符串替换匹配子序列的方法，需要时，可以从匹配结果计算出新字符串的内容。可以先后使用
+							<code>appendReplacement</code>
+							和
+							<code>appendTail</code>
+							方法将结果收集到现有的字符串缓冲区，或者使用更加便捷的
+							<code>replaceAll</code>
+							方法创建一个可以在其中替换输入序列中每个匹配子序列的字符串。
+						</p>
+						<p>
+							匹配器的显式状态包括最近成功匹配的开始和结束索引。它还包括模式中每个捕获组捕获的输入子序列的开始和结束索引以及该子序列的总数。出于方便的考虑，还提供了以字符串的形式返回这些已捕获子序列的方法。
+						</p>
+						<p>
+							匹配器的显式状态最初是未定义的；在成功匹配导致
+							<code>IllegalStateException</code>
+							抛出之前尝试查询其中的任何部分。每个匹配操作都将重新计算匹配器的显式状态。
+						</p>
+						<p>
+							匹配器的隐式状态包括输入字符序列和添加位置，添加位置最初是零，然后由
+							<code>appendReplacement</code>
+							方法更新。
+						</p>
+						<p>
+							可以通过调用匹配器的
+							<code>reset()</code>
+							方法来显式重置匹配器，如果需要新输入序列，则调用其
+							<code>reset(CharSequence)</code>
+							方法。重置匹配器将放弃其显式状态信息并将添加位置设置为零。
+						</p>
+						<pre class="brush: java;">
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class RegexMatcherDemo {
+	static void testFind() {
+		String input = "人教版语文3年级上册第22课 数学学习天地";
+
+		// 提取科目
+		Pattern p = Pattern.compile("(语文|数学|英语)");
+		Matcher m = p.matcher(input);
+		if (m.find()) {
+			for (int i = 0; i < m.groupCount(); i++) {
+				System.out.println("start:" + m.start(i) + ", content:"
+						+ m.group(i) + ", end:" + m.end(i));
+			}
+		}
+
+		// 提取年级
+		p = Pattern.compile("(.年级)");
+		m = p.matcher(input);
+		if (m.find()) {
+			for (int i = 0; i < m.groupCount(); i++) {
+				System.out.println("start:" + m.start(i) + ", content:"
+						+ m.group(i) + ", end:" + m.end(i));
+			}
+		}
+
+		// 提取上下册
+		p = Pattern.compile("([上下]册)");
+		m = p.matcher(input);
+		if (m.find()) {
+			for (int i = 0; i < m.groupCount(); i++) {
+				System.out.println("start:" + m.start(i) + ", content:"
+						+ m.group(i) + ", end:" + m.end(i));
+			}
+		}
+
+		// 提取章节
+		p = Pattern.compile("第.{1,2}(课|节|讲|章|单元)");
+		m = p.matcher(input);
+		if (m.find()) {
+			for (int i = 0; i < m.groupCount(); i++) {
+				System.out.println("start:" + m.start(i) + ", content:"
+						+ m.group(i) + ", end:" + m.end(i));
+			}
+		}
+
+	}
+
+	public static void main(String[] args) {
+		/**
+		 * matches() -- 尝试将整个区域与模式匹配 
+		 * find() -- 尝试查找与该模式匹配的输入序列的下一个子序列
+		 * find(start) -- 重置此匹配器，然后尝试查找匹配该模式、从指定索引开始的输入序列的下一个子序列 
+		 * start() -- 返回匹配的初始索引
+		 * start(group) -- 回在匹配期间由给定组捕获的子序列的初始索引 
+		 * groupCount() -- 返回此匹配结果的模式中的捕获组数
+		 * group() -- 返回由以前匹配所匹配的输入子序列
+		 * group(group) -- 回在以前匹配操作期间由给定组捕获的输入子序列
+		 * end() -- 返回最后匹配字符之后的偏移量
+		 * end(group) -- 返回在匹配期间由给定组所捕获子序列的最后字符之后的偏移量
+		 */
+		testFind();
+
+		/**
+		 * pattern() -- 返回由此匹配器解释的模式
+		 * quoteReplacement() -- 返回指定 String 的字面值替换 String
+		 * reset() -- 重置匹配器
+		 * reset(input) -- 重置此具有新输入序列的匹配器
+		 * toMatchResult() -- 作为 MatchResult 返回此匹配器的匹配状态
+		 * usePattern(newPattern) -- 更改此 Matcher 用于查找匹配项的 Pattern
+		 */
+		String str_pattern = "[a-z]+";
+		String input = "jiwanger@126.com";
+		Pattern pattern = Pattern.compile(str_pattern);
+		Matcher matcher = pattern.matcher(input);
+		System.out.println(matcher.pattern());
+		System.out.println(Matcher.quoteReplacement(str_pattern));
+		if (matcher.find()) {
+			System.out.println(matcher.group());
+		}
+		matcher.usePattern(Pattern.compile("\\d+"));
+		if (matcher.find()) {
+			System.out.println(matcher.group());
+		}
+		matcher.reset("522704399@qq.com");
+		matcher.usePattern(Pattern.compile(".*"));
+		if (matcher.find()) {
+			System.out.println("==" + matcher.group());
+		}
+
+		/**
+		 * useAnchoringBounds(bool) -- 设置匹配器区域界限的定位, 默认情况下，匹配器使用定位区域边界
+		 * hasAnchoringBounds() -- 查询此匹配器区域界限的定位
+		 * useTransparentBounds(bool) -- 设置此匹配器区域边界的透明度, 默认情况下，匹配器使用不透明边界
+		 * hasTransparentBounds() -- 查询此匹配器区域边界的透明度
+		 */
+		matcher.useAnchoringBounds(true);
+		System.out.println(matcher.hasAnchoringBounds());
+		matcher.useTransparentBounds(false);
+		System.out.println(matcher.hasTransparentBounds());
+
+		/**
+		 * replaceFirst(replacement) -- 替换模式与给定替换字符串匹配的输入序列的第一个子序列
+		 * replaceAll(replacement) -- 替换模式与给定替换字符串相匹配的输入序列的每个子序列
+		 */
+		matcher.reset();
+		matcher.usePattern(Pattern.compile(".*"));
+		if (matcher.find()) {
+			System.out.println("===" + matcher.group());
+		}
+		matcher.usePattern(Pattern.compile("\\d+"));
+		System.out.println(matcher.replaceFirst("13823039350"));
+		System.out.println(matcher.replaceAll("522704399"));
+
+		/**
+		 * regionStart() -- 报告此匹配器区域的开始索引
+		 * regionEnd() -- 报告此匹配器区域的结束索引
+		 * region(start, end) -- 设置此匹配器的区域限制
+		 * lookingAt() -- 尝试将从区域开头开始的输入序列与该模式匹配, 与 matches() 不同的是，它不需要匹配整个区域
+		 */
+		System.out.println("匹配开始位置：" + matcher.regionStart());
+		System.out.println("匹配结束位置：" + matcher.regionEnd());
+		matcher.region("522704399".length(), matcher.regionEnd());
+		System.out.println("修改后的匹配开始位置：" + matcher.regionStart());
+		matcher.usePattern(Pattern.compile(".*\\."));
+		if (matcher.find()) {
+			System.out.println("从匹配开始位置查找一直到 '.' 这里结束：" + matcher.group());
+		}
+
+		matcher.usePattern(Pattern.compile("人教版语文.{1,2}年级"));
+		matcher.reset("人教版语文3年级上册第22课 数学学习天地");
+		if (matcher.lookingAt()) {
+			System.out.println("start:" + matcher.start() + ", content:"
+					+ matcher.group() + ", end:" + matcher.end());
+		}
+
+		/**
+		 * appendReplacement(sbf, replace) -- 从添加位置开始在输入序列读取字符，并将其添加到给定字符串缓冲区
+		 * appendTail(sbf) -- 可以在一次或多次调用 appendReplacement 方法后调用它来复制剩余的输入序列
+		 */
+		Pattern p = Pattern.compile("a*b");
+		// 获取 matcher 对象
+		Matcher m = p.matcher("aabfooaabfooabfoob");
+		StringBuffer sb = new StringBuffer();
+		while (m.find()) {
+			m.appendReplacement(sb, "-");
+		}
+		m.appendTail(sb);
+		System.out.println(sb.toString());
+	}
+}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-PatternSyntaxException"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">PatternSyntaxException 类</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<code>PatternSyntaxException</code>
+							抛出未经检查的异常，表明正则表达式模式中的语法错误。
+						</p>
+						<pre class="brush:java;">
+java.lang.Object
+  java.lang.Throwable
+      java.lang.Exception
+          java.lang.RuntimeException
+              java.lang.IllegalArgumentException
+                  java.util.regex.PatternSyntaxException
+</pre>
+						<ul>
+							<li>
+								<p>
+									<code>String getDescription()</code>
+									-- 获取错误的描述。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>int getIndex()</code>
+									-- 获取错误的索引。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>String getMessage()</code>
+									-- 返回多行字符串，包含语法错误及其索引的描述、错误的正则表达式模式和模式中错误索引的可视化指示。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>String getPattern()</code>
+									-- 获取错误的正则表达式模式。
+								</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="java-Tools"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">正则表达式工具类</h3>
+					</div>
+					<div class="panel-body">
+						<p>此类用于检测常用的字符串和模式是否匹配，另外有一些常用的字符串提取方法。</p>
+						<pre class="brush: java;">
+public class RegexUtils {
+	// 汉字
+	public static final String REGEX_CN = "^[\u4E00-\u9FA5]+$";
+
+	// 空白字符(空格, \r, \n, \t)
+	public static final String REGEX_BLANK = "\\s+";
+
+	// 字母或数字
+	public static final String REGEX_ALNUM = "^[0-9a-zA-Z]+$";
+
+	// 十进制数字
+	public static final String REGEX_DIGTIL = "^[0-9]+$";
+
+	// int 类型(0, 1, -1, -2000)
+	public static final String REGEX_INT = "^-[1-9]+[0-9]*|0|[1-9]+[0-9]*$";
+
+	// float 类型(0, -0, 1, -1, 200.0, -2000.0, -0.3, -0.0)
+	public static final String REGEX_FLOAT = "^(-[1-9]+|0|-0|[1-9]+[0-9]*)(\\.{1}[0-9]+)?|-0.[0-9]+$";
+
+	// 十进制正整数
+	public static final String REGEX_PLUS_DIGTIL = "^[1-9]+[0-9]?$";
+
+	// 十六进制数字(不区分大小写)
+	public static final String REGEX_XDIGTIL = "^([0-F]|[0-f])+$";
+
+	// 大写十六进制数字
+	public static final String REGEX_UXDIGTIL = "^[0-F]+$";
+
+	// 字母
+	public static final String REGEX_ALPHA = "^[a-zA-Z]+$";
+
+	// 大写字母
+	public static final String REGEX_UPPER = "^[A-Z]+$";
+
+	// 小写字母
+	public static final String REGEX_LOWER = "^[a-z]+$";
+
+	// 变量名(字母或下划线打头，后面可以是字母，数字，下划线)
+	public static final String REGEX_VAR = "^[A-Za-z_]+[A-Za-z_0-9]*$";
+
+	// 首字母大写，后面可以是字母，数字，下划线
+	public static final String REGEX_FWORD = "^[A-Z]+[A-Za-z_0-9]*$";
+
+	// HTML 颜色值 RGB(#DDD, #F3F3F3)
+	public static final String REGEX_HCOLOE = "^#{1}[a-fA-F0-9]{3}([a-fA-F0-9]{3})?$";
+
+	// ANDROID 颜色值 ARGB(#FFF, #DDDD, #F3F3F3, #DDFFFFFF)
+	public static final String REGEX_ACOLOE = 
+		"^#{1}[a-fA-F0-9]{3,4}$|^#{1}[a-fA-F0-9]{6}$|^#{1}[a-fA-F0-9]{8}$";
+
+	// 域名(lesson1234.com, lesson-1234.com.cn)
+	public static final String REGEX_DOMAIN = 
+		"^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$";
+
+	// 常用 EMAIL 地址(不精确，有的 email 用户名可以包括中文,空格等,jiwanger@126.com, nate.jiwanger@gmail.com, nate-web@qq.com.cn)
+	public static final String REGEX_EMAIL = 
+		"^\\w+([-+.]\\w+)*@[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$";
+
+	// http 或 https 地址(不精确，比如 ? 号最多只能出现一次)
+	public static final String REGEX_WEB = 
+		"^http[s]?://[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+.*$";
+
+	// 身份证号码(非 0 开头，15 / 18 位数字，最后一位可为字母)
+	public static final String REGEX_ID = "^[1-9]\\d{13}[a-zA-Z0-9]{1}$|^[1-9]\\d{16}[a-zA-Z0-9]{1}$";
+
+	// IPV4 地址
+	public static final String REGEX_IPV4 = 
+		"(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5]).(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5]).(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5]).(\\d|[1-9]\\d|1\\d{2}|2[0-4]\\d|25[0-5])";
+	
+	// 十进制数字提取
+	public static final String EXTRACT_NUM = "[0-9]+";
+
+	// float 类型提取
+	public static final String EXTRACT_FLOAT = "(-[1-9]+|0|-0|[1-9]+[0-9]*)(\\.{1}[0-9]+)?|-0.[0-9]+";
+
+	// HTML 颜色颜色值提取
+	public static final String EXTRACT_HCOLOR = "#{1}[a-fA-F0-9]{3}([a-fA-F0-9]{3})?";
+
+	// ANDROID 颜色颜色值提取(先尝试提取 8 个，再尝试 6 个，再尝试 4 个，最后 3 个)
+	public static final String EXTRACT_ACOLOR = 
+		"(#{1}[a-fA-F0-9]{8})+|(#{1}[a-fA-F0-9]{6})+|(#{1}[a-fA-F0-9]{3,4})+";
+
+	// 是否匹配
+	public static boolean matches(String regex, String input) {
+		return Pattern.matches(regex, input);
+	}
+
+	// 提取所有匹配项
+	public static final ArrayList&lt;String> extract(String regex, String input) {
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(input);
+		ArrayList&lt;String> results = null;
+		while (matcher.find()) {
+			if (null == results) {
+				results = new ArrayList&lt;String>();
+			}
+			results.add(matcher.group());
+		}
+		return results;
+	}
+
+	// 提取最先匹配项
+	public static final String extractFirst(String regex, String input) {
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(input);
+		if (matcher.find()) {
+			return matcher.group();
+		}
+		return null;
+	}
+
+	// 提取最后匹配项
+	public static final String extractLast(String regex, String input) {
+		Pattern pattern = Pattern.compile(regex);
+		Matcher matcher = pattern.matcher(input);
+		String tmp = null;
+		while (matcher.find()) {
+			tmp = matcher.group();
+		}
+		return tmp;
+	}
+}
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -106,14 +671,13 @@
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
-			data-toggle="dropup">
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup">
-			TOP
-		</a>
+		<a href="#" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -121,7 +685,7 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

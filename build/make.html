@@ -74,6 +74,8 @@
 						<div id="make-Makefile" class="panel-collapse collapse in"
 							role="tabpanel">
 							<a href="#Makefile-base" class="list-group-item">Makefile 基础</a>
+							<a href="#Makefile-content" class="list-group-item">Makefile
+								的内容</a>
 							<a href="#Makefile-regular" class="list-group-item">Makefile
 								的规则</a>
 							<a href="#" class="list-group-item">...</a>
@@ -116,14 +118,36 @@
 							<li>头文件在上一次执行 make 之后被修改。则所有包含此头文件的 C 源文件在本 次执行 make
 								时将会被重新编译。</li>
 						</ol>
-						<p><b>C 语言程序编译的过程:</b></p>
+						<p>
+							<b>C 语言程序编译的过程:</b>
+						</p>
 						<ul>
-							<li><p><b>预处理</b> -- C 语言程序从源代码变成可执行程序的第一步，主要是C语言编译器对各种预处理命令进行处理，包括头文件的包含、宏定义的扩展、条件编译的选择等。打印出预处理之后的结果：gcc -E hello.c 或者 cpp hello.c这样我们就可以看到源代码中的各种预处理命令是如何被解释的，从而方便理解和查错。</p></li>
-							<li><p><b>编译</b> -- C 语言编译器会进行词法分析、语法分析，接着会把源代码翻译成中间语言，即汇编语言。</p></li>
-							<li><p><b>汇编</b> -- 把作为中间结果的汇编代码翻译成了机器代码，即目标代码，不过它还不可以运行。</p></li>
-							<li><p><b>链接</b> -- 链接是处理可重定位文件，把它们的各种符号引用和符号定义转换为可执行文件中的合适信息(一般是虚拟内存地址)的过程。链接又分为静态链接和动态链接，前者是程序开发阶段程序员用ld(gcc实际上在后台调用了ld)静态链接器手动链接的过程，而动态链接则是程序运行期间系统调用动态链接器(ld-linux.so)自动链接的过程。</p></li>
+							<li>
+								<p>
+									<b>预处理</b> -- C
+									语言程序从源代码变成可执行程序的第一步，主要是C语言编译器对各种预处理命令进行处理，包括头文件的包含、宏定义的扩展、条件编译的选择等。打印出预处理之后的结果：gcc
+									-E hello.c 或者 cpp
+									hello.c这样我们就可以看到源代码中的各种预处理命令是如何被解释的，从而方便理解和查错。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>编译</b> -- C 语言编译器会进行词法分析、语法分析，接着会把源代码翻译成中间语言，即汇编语言。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>汇编</b> -- 把作为中间结果的汇编代码翻译成了机器代码，即目标代码，不过它还不可以运行。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>链接</b> --
+									链接是处理可重定位文件，把它们的各种符号引用和符号定义转换为可执行文件中的合适信息(一般是虚拟内存地址)的过程。链接又分为静态链接和动态链接，前者是程序开发阶段程序员用ld(gcc实际上在后台调用了ld)静态链接器手动链接的过程，而动态链接则是程序运行期间系统调用动态链接器(ld-linux.so)自动链接的过程。
+								</p>
+							</li>
 						</ul>
-						
+
 						<p>
 							<b>MAKE 的执行过程如下:</b>
 						</p>
@@ -242,6 +266,18 @@ TARGET... : PREREQUISITES...
 								<p>在第二阶段: 根据第一阶段已经建立的依赖关系结构链表决定哪些目标需要更新, 并使用对应的规则来重建这些目标。</p>
 							</li>
 						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="Makefile-content"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Makefile 的内容</h3>
+					</div>
+					<div class="panel-body">
+						<p>在一个完整的 Makefile 中,包含了 5 个东西: 显式规则、隐含规则、变量定义、 指示符和注释。</p>
 					</div>
 				</div>
 				<!-- item over -->
