@@ -67,22 +67,36 @@
 					<div class="list-group">
 						<a href="#spring-intro" class="list-group-item">简介</a>
 						<a href="#spring-docs" class="list-group-item">文档和 JAR 包</a>
-						<a href="#spring-example" class="list-group-item">松耦合实例</a>
-						<a href="#spring-bean" class="list-group-item">Bean</a>
-						<a href="#spring-dependency" class="list-group-item">依赖注入</a>
-						<a href="#spring-mvc" class="list-group-item">MVC 实例</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+						<a class="list-group-item active dropdown" data-toggle="collapse"
+							data-parent="#accordion" href="#spring-base" aria-expanded="true">
+							Spring 基础<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="spring-base" class="panel-collapse collapse"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#spring-example" class="list-group-item">松耦合实例</a>
+							<a href="#spring-bean" class="list-group-item">Bean</a>
+							<a href="#spring-dependency" class="list-group-item">依赖注入</a>
+							<a href="#spring-list" class="list-group-item">注入集合</a>
+							<a href="#spring-autowriting" class="list-group-item">Beans
+								自动装配</a>
+							<a href="#spring-annotation" class="list-group-item">基于注解的配置</a>
+							<a href="#spring-java" class="list-group-item">基于 Java 的配置</a>
 						</div>
-						<a href="#java-class-loader" class="list-group-item">...</a>
+						<a href="#spring-aop" class="list-group-item">Spring 框架的 AOP</a>
+						<a class="list-group-item active dropup" data-toggle="collapse"
+							data-parent="#accordion" href="#spring-mvc" aria-expanded="true"
+							style="border-top: 1px solid #DDDDDD;">
+							Spring MVC<span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="spring-mvc" class="panel-collapse collapse in"
+							role="tabpanel">
+							<a href="#spring-mvc-example" class="list-group-item">WEBMVC
+								实例</a>
+							<a href="#spring-" class="list-group-item">...</a>
+							<a href="#spring-" class="list-group-item">...</a>
+						</div>
+
+						<a href="#spring-" class="list-group-item">...</a>
 					</div>
 				</div>
 			</div>
@@ -101,7 +115,42 @@
 						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-						<h5 class="text-primary">框架特征</h5>
+						<p class="well text-primary">SSM 则指的是 SpringMVC
+							做控制器(controller)，Spring 管理各层的组件，MyBatis 负责持久化层。</p>
+						<p class="well text-primary">SSH 通常指的是 Struts2
+							做控制器(controller)，spring 管理各层的组件，hibernate 负责持久化层。</p>
+						<p>
+							<b>MVC 模型</b>
+						</p>
+						<p>模型-视图-控制器或通常被称为 MVC，是一种用于开发 web
+							应用程序的软件设计模式。模型-视图-控制器模式由以下三个部分组成：</p>
+						<ul>
+							<li>
+								<p>
+									<strong>Model</strong> -
+									模式的最低层，负责维护数据。模型负责管理应用程序的数据。它响应来自视图的请求，而且它也响应来自控制器的指令进行更新自身。
+								</p>
+							</li>
+							<li>
+								<p>
+									<strong>View</strong> -
+									负责显示全部或部分的数据给用户。在一个特定格式中数据的展示由一个控制器的决定引发来呈现该数据。
+								</p>
+							</li>
+							<li>
+								<strong>Controller</strong> -
+								控制器负责响应用户的输入和执行数据模型对象的交互。控制器接收输入，验证输入，然后执行修改数据模型状态的业务操作。
+							</li>
+						</ul>
+						<p>MVC
+							是受欢迎的，是因为它把应用逻辑从用户接口层中分离，而且支持关注点的分离。在这里，控制器接收应用程序的所有请求，然后与模型一起工作准备好视图需要的任何数据。然后视图使用控制器准备好的数据来生成最终正式的响应。MVC
+							抽象可以用图形表示，如下所示。</p>
+						<p width="100%">
+							<img src="images/struts-mvc.jpg"
+								class="img-responsive center-block">
+						</p>
+
+						<h5 class="text-primary">Spring 框架特征</h5>
 						<p>
 							<b>轻量</b>——从大小与开销两方面而言Spring都是轻量的。完整的Spring框架可以在一个大小只有1MB多的JAR文件里发布。并且Spring所需的处理开销也是微不足道的。此外，Spring是非侵入式的：典型地，Spring应用中的对象不依赖于Spring的特定类。
 						</p>
@@ -253,43 +302,155 @@
 				<a class="offset" id="spring-docs"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">文档</h3>
+						<h3 class="panel-title">文档和 JAR 包</h3>
 					</div>
 					<div class="panel-body">
 						<p>
-							<a href="docs/docs-spring/javadoc-api/index.html" target="_blank">spring-javadoc</a>
-							&lt;property name="message3" value="Namaste India!" />
-							<p>
-							<a href="docs/docs-spring/html/index.html" target="_blank">Spring
-								Framework Reference Documentation</a>
+							Javadoc:
+							<a href="docs/docs-spring/javadoc-api/index.html" target="_blank">spring-4.3.4-javadoc</a>
 						</p>
-						<p>jar 包下载:</p>
-						<div class="container-fluid">
-							<a href="libs/spring-4.3.4/spring-aop-4.3.4.RELEASE.jar">spring-aop-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-aspects-4.3.4.RELEASE.jar">spring-aspects-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-beans-4.3.4.RELEASE.jar">spring-beans-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-context-4.3.4.RELEASE.jar">spring-context-4.3.4.RELEASE.jar</a>
+						<p>
+							<a href="docs/docs-spring/html/index.html" target="_blank">spring-4.3.4
+								官方手册</a>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							<a
-								href="libs/spring-4.3.4/spring-context-support-4.3.4.RELEASE.jar">spring-context-support-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-core-4.3.4.RELEASE.jar">spring-core-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-expression-4.3.4.RELEASE.jar">spring-expression-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-instrument-4.3.4.RELEASE.jar">spring-instrument-4.3.4.RELEASE.jar</a>
+								href="https://waylau.gitbooks.io/spring-framework-4-reference/"
+								target="_blank">spring-4.X 部分中文手册</a>
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							<a
-								href="libs/spring-4.3.4/spring-instrument-tomcat-4.3.4.RELEASE.jar">spring-instrument-tomcat-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-jdbc-4.3.4.RELEASE.jar">spring-jdbc-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-jms-4.3.4.RELEASE.jar">spring-jms-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-messaging-4.3.4.RELEASE.jar">spring-messaging-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-orm-4.3.4.RELEASE.jar">spring-orm-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-oxm-4.3.4.RELEASE.jar">spring-oxm-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-test-4.3.4.RELEASE.jar">spring-test-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-tx-4.3.4.RELEASE.jar">spring-tx-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-web-4.3.4.RELEASE.jar">spring-web-4.3.4.RELEASE.jar</a>
-							<a href="libs/spring-4.3.4/spring-webmvc-4.3.4.RELEASE.jar">spring-webmvc-4.3.4.RELEASE.jar</a>
-							<a
-								href="libs/spring-4.3.4/spring-webmvc-portlet-4.3.4.RELEASE-javadoc.jar">spring-webmvc-portlet-4.3.4.RELEASE-javadoc.jar</a>
-							<a
-								href="libs/spring-4.3.4/spring-websocket-4.3.4.RELEASE-javadoc.jar">spring-websocket-4.3.4.RELEASE-javadoc.jar</a>
-						</div>
+								href="https://linesh.gitbooks.io/spring-mvc-documentation-linesh-translation/content/"
+								target="_blank">spring-4.2.4 MVC 中文手册</a>
+						</p>
+						<p>
+							SPRING-4.3.4-ALL 下载: &nbsp;&nbsp;
+							<a href="libs/spring-framework-4.3.4.RELEASE-dist.zip">spring-framework-4.3.4.RELEASE-dist.zip</a>
+							, 包括以下 JAR 包(另外，Spring 强制依赖 commons-logging 包):
+						</p>
+						<ul>
+							<li>
+								<p>
+									<b>spring-core-4.3.4.RELEASE.jar</b> 和 <b>spring-beans-4.3.4.RELEASE.jar</b>
+									-- Spring 框架的基础，包括控制反转和依赖注入等功能。BeanFactory
+									是工厂模式的微妙实现，它移除了编码式单例的需要，并且可以把配置和依赖从实际编码逻辑中解耦。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-context-4.3.4.RELEASE.jar</b> 和 <b>spring-context-support-4.3.4.RELEASE.jar</b>
+									-- 在 Core 和 Bean 模块的基础上建立起来的，它以一种类似于 JNDI 注册的方式访问对象。Context
+									模块继承自 Bean 模块，并且添加了国际化（比如，使用资源束）、事件传播、资源加载和透明地创建上下文（比如，通过
+									Servelet 容器）等功能。Context 模块也支持 Java EE 的功能，比如 EJB、JMX
+									和远程调用等。ApplicationContext 接口是 Context
+									模块的焦点。spring-context-support 提供了对第三方库集成到 Spring
+									上下文的支持，比如缓存（EhCache, Guava, JCache）、邮件（JavaMail）、调度（CommonJ,
+									Quartz）、模板引擎（FreeMarker, JasperReports, Velocity）等。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-expression-4.3.4.RELEASE.jar</b> -- SpEL，Spring
+									表达式语言, 提供了强大的表达式语言用于在运行时查询和操作对象图。它是 JSP2.1 规范中定义的统一表达式语言的扩展，支持
+									set 和 get 属性值、属性赋值、方法调用、访问数组集合及索引的内容、逻辑算术运算、命名变量、通过名字从 Spring
+									IoC 容器检索对象，还支持列表的投影、选择以及聚合等。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-web-4.3.4.RELEASE.jar</b> -- 模块提供面向 web 的基本功能和面向 web
+									的应用上下文，比如多部分（multipart）文件上传功能、使用 Servlet 监听器初始化 IoC 容器等。它还包括
+									HTTP 客户端以及 Spring 远程调用中与 web 相关的部分。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-webmvc-4.3.4.RELEASE.jar</b> -- 为 web
+									应用提供了模型视图控制（MVC）和 REST Web 服务的实现。Spring 的 MVC
+									框架可以使领域模型代码和web表单完全地分离，且可以与 Spring 框架的其它所有功能进行集成。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-webmvc-portlet-4.3.4.RELEASE-javadoc.jar</b> --提供了用于
+									Portlet 环境的 MVC 实现，并反映了 spring-webmvc 模块的功能。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-websocket-4.3.4.RELEASE-javadoc.jar</b> -- websocket
+									是 Html5 新增加特性之一，目的是浏览器与服务端建立全双工的通信方式。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-aop-4.3.4.RELEASE.jar</b> --
+									提供了面向切面编程（AOP）的实现，可以定义诸如方法拦截器和切入点等，从而使实现功能的代码彻底的解耦出来。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-aspects-4.3.4.RELEASE.jar</b> -- 提供了对 AspectJ 的集成。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-instrument-4.3.4.RELEASE.jar</b> --
+									提供了对检测类的支持和用于特定的应用服务器的类加载器的实现。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-instrument-tomcat-4.3.4.RELEASE.jar</b> -- 包含了用于
+									tomcat 的 Spring 检测代理。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-jdbc-4.3.4.RELEASE.jar</b> -- 提供了 JDBC 抽象层，它消除了冗长的
+									JDBC 编码和对数据库供应商特定错误代码的解析。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-jms-4.3.4.RELEASE.jar</b> --
+									包含生产（produce）和消费（consume）消息的功能。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-messaging-4.3.4.RELEASE.jar</b> -- Spring 4 包含的
+									spring-messaging 模块是从 Spring 集成项目的关键抽象中提取出来的，这些项目包括
+									Message、MessageChannel、MessageHandler
+									和其它服务于消息处理的项目。这个模块也包含一系列的注解用于映射消息到方法，这类似于 Spring MVC 基于编码模型的注解。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-orm-4.3.4.RELEASE.jar</b> -- 提供了对流行的对象关系映射 API 的集成，包括
+									JPA、JDO 和 Hibernate 等。通过此模块可以让这些 ORM 框架和 Spring
+									的其它功能整合，比如前面提及的事务管理。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-oxm-4.3.4.RELEASE.jar</b> -- 提供了对 OXM 实现的支持，比如
+									JAXB、Castor、XML Beans、JiBX、XStream 等。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-tx-4.3.4.RELEASE.jar</b> --
+									支持编程式事务和声明式事务，可用于实现了特定接口的类和所有的POJO对象。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>spring-test-4.3.4.RELEASE.jar</b> -- 通过 JUnit 和 TestNG
+									组件支持单元测试和集成测试。它提供了一致性地加载和缓存 Spring 上下文，也提供了用于单独测试代码的模拟对象（mock
+									object）。
+								</p>
+							</li>
+
+						</ul>
 					</div>
 				</div>
 				<!-- item over -->
@@ -419,7 +580,7 @@ public static void main(String[] args) {
 					<div class="panel-body">
 						<div class="sub-item">
 							<pre class="brush: xml;">
-<?xml version="1.0" encoding="UTF-8"?>
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 
 &lt;beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -520,10 +681,9 @@ public static void main(String[] args) {
 								</tbody>
 							</table>
 							<pre class="brush: xml;">
-<bean id="helloWorld" class="cm.nate.spring.modal.HelloWorld"
-									scope="singleton">
+&lt;bean id="helloWorld" class="cm.nate.spring.modal.HelloWorld" scope="singleton">
 	&lt;property name="message" value="Hello World!" />
-</bean>							
+&lt;/bean>							
 </pre>
 						</div>
 
@@ -616,22 +776,21 @@ obj.getMessage();
 								定义的继承与 Java 类的继承无关，但是继承的概念是一样的。你可以定义一个父 bean 的定义作为模板和其他子 bean
 								就可以从父 bean 中继承所需的配置。</p>
 							<pre class="brush: xml;">
-<bean id="helloWorld" class="com.tutorialspoint.HelloWorld">
+&lt;bean id="helloWorld" class="com.tutorialspoint.HelloWorld">
    &lt;property name="message1" value="Hello World!" />
    &lt;property name="message2" value="Hello Second World!" />
-</bean>
+&lt;/bean>
 
-<bean id="helloIndia" class="com.tutorialspoint.HelloIndia"
-									parent="helloWorld">
+&lt;bean id="helloIndia" class="com.tutorialspoint.HelloIndia" parent="helloWorld">
    &lt;property name="message1" value="Hello India!" />
-   
-							</bean></pre>
-	
-											</div>
+&lt;/bean>
+							</pre>
+
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="spring-dependency"></a>
 				<div class="panel panel-default">
@@ -639,21 +798,934 @@ obj.getMessage();
 						<h3 class="panel-title">依赖注入</h3>
 					</div>
 					<div class="panel-body">
-						<p>每个基于应用程序的 java 都有几个对象，这些对象一起工作来呈现出终端用户所看到的工作的应用程序。当编写一个复杂的 Java 应用程序时，应用程序类应该尽可能独立于其他 Java 类来增加这些类重用的可能性，并且在做单元测试时，测试独立于其他类的独立性。依赖注入（或有时称为布线）有助于把这些类粘合在一起，同时保持他们独立。 </p>
+						<p>每个基于应用程序的 java 都有几个对象，这些对象一起工作来呈现出终端用户所看到的工作的应用程序。当编写一个复杂的
+							Java 应用程序时，应用程序类应该尽可能独立于其他 Java
+							类来增加这些类重用的可能性，并且在做单元测试时，测试独立于其他类的独立性。依赖注入（或有时称为布线）有助于把这些类粘合在一起，同时保持他们独立。
+						</p>
+						<pre class="brush: java;">
+/**
+ * 在这里，TextEditor 不应该担心 SpellChecker 的实现。SpellChecker 将会独立实现，
+ *   并且在 TextEditor 实例化的时候将提供给 TextEditor，整个过程是由 Spring 框架的控制。
+ * 在这里，我们已经从 TextEditor 中删除了全面控制，并且把它保存到其他地方（即 XML 配置文件），
+ *   且依赖关系（即 SpellChecker 类）通过类构造函数被注入到 TextEditor 类中。因此，控制流通过依赖注入（DI）已经“反转”，
+ * 	 因为你已经有效地委托依赖关系到一些外部系统。
+ * 依赖注入的第二种方法是通过 TextEditor 类的 Setter 方法，我们将创建 SpellChecker 实例，
+ *   该实例将被用于调用 setter 方法来初始化 TextEditor 的属性。 
+ */
+public class TextEditor {
+   private SpellChecker spellChecker;
+   
+   public TextEditor() {
+      spellChecker = new SpellChecker();
+   }
+}
+</pre>
+						<p>
+							<b>有两种方式的依赖注入:</b>
+						</p>
+						<ul>
+							<li>
+								<p>
+									<b>基于类构造函数</b> -- 当容器调用带有多个参数的构造函数类时，实现基于构造函数的
+									DI，每个代表在其他类中的一个依赖关系。
+								</p>
+								<pre class="brush: java;">
+/** SpellChecker 类 **/
+package cm.nate.spring.model;
+
+public class SpellChecker {
+	public SpellChecker() {
+		System.out.println("Inside SpellChecker constructor.");
+	}
+
+	public void checkSpelling() {
+		System.out.println("Inside checkSpelling.");
+	}
+}
+
+/** TextEditor 类 **/
+package cm.nate.spring.model;
+
+public class TextEditor {
+	private SpellChecker spellChecker;
+
+	public TextEditor(SpellChecker spellChecker) {
+		System.out.println("Inside TextEditor constructor.");
+		this.spellChecker = spellChecker;
+	}
+
+	public void spellCheck() {
+		spellChecker.checkSpelling();
+	}
+}
+
+/** Bears.xml 文件 **/
+	&lt;bean id="textEditor" class="cm.nate.spring.model.TextEditor"&gt;
+		&lt;constructor-arg ref="spellChecker" /&gt;
+	&lt;/bean&gt;
+
+	&lt;bean id="spellChecker" class="cm.nate.spring.model.SpellChecker" /&gt;
+
+/** main 方法 **/
+public class Main {
+
+	public static void main(String[] args) {
+		AbstractApplicationContext context = new ClassPathXmlApplicationContext("Beans.xml");
+
+		TextEditor te = (TextEditor) context.getBean("textEditor");
+		/** 
+		 * 在构造 TextEditor 前, 会先构造 SpellChecker, 因此输出如下:
+		 * Inside SpellChecker constructor.
+		 * Inside TextEditor constructor.
+		 * Inside checkSpelling.
+		 */
+		te.spellCheck();
+	}
+
+}
+</pre>
+							</li>
+							<li>
+								<p>
+									<b>基于 setter 方法</b> -- 基于 setter 方法的 DI
+									是通过在调用无参数的构造函数或无参数的静态工厂方法实例化 bean 之后容器调用 beans 的 setter 方法来实现的。
+								</p>
+								<pre class="brush: java;">
+/** TextEditor 类做如下修改 **/
+package cm.nate.spring.model;
+
+public class TextEditor {
+	private SpellChecker spellChecker;
+
+	public void setSpellChecker(SpellChecker spellChecker) {
+		System.out.println("Inside setSpellChecker.");
+		this.spellChecker = spellChecker;
+	}
+
+	public SpellChecker getSpellChecker() {
+		return spellChecker;
+	}
+
+	public void spellCheck() {
+		spellChecker.checkSpelling();
+	}
+}
+
+/** Beans.xml 做如下修改 **/
+	&lt;bean id="textEditor" class="cm.nate.spring.model.TextEditor"&gt;
+    	&lt;property name="spellChecker" ref="spellChecker"/&gt;
+	&lt;/bean&gt;
+
+	&lt;bean id="spellChecker" class="cm.nate.spring.model.SpellChecker" /&gt;
+
+/** 注入内部 Beans，Beans.xml 做如下修改，达到上面一样效果 **/
+	&lt;bean id="textEditor" class="cm.nate.spring.model.TextEditor"&gt;
+		&lt;property name="spellChecker"&gt;
+			&lt;bean id="spellChecker" class="cm.nate.spring.model.SpellChecker"/&gt;
+		&lt;/property&gt;
+	&lt;/bean&gt;
+</pre>
+							</li>
+						</ul>
 					</div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
-				<a class="offset" id="spring-"></a>
+				<a class="offset" id="spring-list"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">注入集合</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>
+							注入数据到
+							<code>JavaCollection</code>
+							类的集合中：
+						</p>
+						<pre class="brush: java;">
+package cm.nate.spring.model;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
+
+public class JavaCollection {
+	List addressList;
+	Set addressSet;
+	Map addressMap;
+	Properties addressProp;
+
+	public void setAddressList(List addressList) {
+		this.addressList = addressList;
+	}
+
+	public List getAddressList() {
+		System.out.println("List Elements :" + addressList);
+		return addressList;
+	}
+
+	public void setAddressSet(Set addressSet) {
+		this.addressSet = addressSet;
+	}
+
+	public Set getAddressSet() {
+		System.out.println("Set Elements :" + addressSet);
+		return addressSet;
+	}
+
+	public void setAddressMap(Map addressMap) {
+		this.addressMap = addressMap;
+	}
+
+	public Map getAddressMap() {
+		System.out.println("Map Elements :" + addressMap);
+		return addressMap;
+	}
+
+	public void setAddressProp(Properties addressProp) {
+		this.addressProp = addressProp;
+	}
+
+	public Properties getAddressProp() {
+		System.out.println("Property Elements :" + addressProp);
+		return addressProp;
+	}
+}
+</pre>
+						<p>
+							<code>Beans.xml</code>
+							配置
+						</p>
+						<pre class="brush: xml;">
+<?xml version="1.0" encoding="UTF-8"?>
+
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    
+	<bean id="javaCollection" class="cm.nate.spring.model.JavaCollection">
+
+		<!-- results in a setAddressList(java.util.List) call -->
+		<property name="addressList">
+			<list>
+				<value>INDIA</value>
+				<value>Pakistan</value>
+				<value>USA</value>
+				<value>USA</value>
+			</list>
+		</property>
+
+		<!-- results in a setAddressSet(java.util.Set) call -->
+		<property name="addressSet">
+			<set>
+				<value>INDIA</value>
+				<value>Pakistan</value>
+				<value>USA</value>
+				<value>USA</value>
+			</set>
+		</property>
+
+		<!-- results in a setAddressMap(java.util.Map) call -->
+		<property name="addressMap">
+			<map>
+				<entry key="1" value="INDIA" />
+				<entry key="2" value="Pakistan" />
+				<entry key="3" value="USA" />
+				<entry key="4" value="USA" />
+			</map>
+		</property>
+
+		<!-- results in a setAddressProp(java.util.Properties) call -->
+		<property name="addressProp">
+			<props>
+				<prop key="one">INDIA</prop>
+				<prop key="two">Pakistan</prop>
+				<prop key="three">USA</prop>
+				<prop key="four">USA</prop>
+			</props>
+		</property>
+	</bean>
+
+&lt;/beans>
+</pre>
+						<p>测试数据是否注入到集合中</p>
+						<pre class="brush: java;">
+public class Main {
+
+	public static void main(String[] args) {
+		AbstractApplicationContext context = new ClassPathXmlApplicationContext(
+				"Beans.xml");
+
+		JavaCollection jc = (JavaCollection) context.getBean("javaCollection");
+		jc.getAddressList();
+		jc.getAddressSet();
+		jc.getAddressMap();
+		jc.getAddressProp();
+	}
+
+}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
-				
+
+				<!-- item start -->
+				<a class="offset" id="spring-autowriting"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Beans 自动装配</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							Spring 容器可以在不使用
+							<code>&lt;constructor-arg></code>
+							和
+							<code>&lt;property></code>
+							元素的情况下<strong>自动装配</strong>相互协作的 bean 之间的关系，这有助于减少编写一个大的基于 Spring
+							的应用程序的 XML 配置的数量。
+							</property>
+						<p>
+							<b>自动装配模式</b>
+						</p>
+						<p>
+							下列自动装配模式，它们可用于指示 Spring 容器为来使用自动装配进行依赖注入。你可以使用 &lt;bean> 元素的 <strong>autowire</strong>
+							属性为一个 bean 定义指定自动装配模式。
+							</bean>
+						</p>
+						<table class="table table-bordered">
+							<tbody>
+								<tr>
+									<th style="width: 25%">模式</th>
+									<th>描述</th>
+								</tr>
+								<tr>
+									<td>no</td>
+									<td>这是默认的设置，它意味着没有自动装配，你应该使用显式的bean引用来连线。你不用为了连线做特殊的事。在依赖注入章节你已经看到这个了。</td>
+								</tr>
+								<tr>
+									<td>byName</td>
+									<td>由属性名自动装配。Spring 容器看到在 XML 配置文件中 bean 的<i>自动装配</i>的属性设置为
+										<i>byName</i>。然后尝试匹配，并且将它的属性与在配置文件中被定义为相同名称的 beans 的属性进行连接。
+									</td>
+								</tr>
+								<tr>
+									<td>byType</td>
+									<td>由属性数据类型自动装配。Spring 容器看到在 XML 配置文件中 bean 的<i>自动装配</i>的属性设置为
+										<i>byType</i>。然后如果它的<b>类型</b>匹配配置文件中的一个确切的 bean
+										名称，它将尝试匹配和连接属性的类型。如果存在不止一个这样的 bean，则一个致命的异常将会被抛出。
+									</td>
+								</tr>
+								<tr>
+									<td>constructor</td>
+									<td>类似于 byType，但该类型适用于构造函数参数类型。如果在容器中没有一个构造函数参数类型的
+										bean，则一个致命错误将会发生。</td>
+								</tr>
+								<tr>
+									<td>autodetect</td>
+									<td>Spring首先尝试通过 <i>constructor</i>
+										使用自动装配来连接，如果它不执行，Spring 尝试通过 <i>byType</i> 来自动装配。
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<pre class="brush: java;">
+/** TextEditor 类 **/
+package cm.nate.spring.model;
+
+public class TextEditor {
+	private SpellChecker spellChecker;
+	private Formater formater;
+
+	public TextEditor(SpellChecker spellChecker) {
+		System.out.println("Inside spellChecker.");
+		this.spellChecker = spellChecker;
+	}
+
+	public SpellChecker getSpellChecker() {
+		return spellChecker;
+	}
+
+	public Formater getFormater() {
+		return formater;
+	}
+
+	public void setFormater(Formater formater) {
+		this.formater = formater;
+	}
+
+	public void spellCheck() {
+		spellChecker.checkSpelling();
+	}
+
+	public void format() {
+		formater.format();
+	}
+}
+
+/** SpellChecker 类 **/
+package cm.nate.spring.model;
+
+public class SpellChecker {
+	public SpellChecker() {
+		System.out.println("Inside SpellChecker constructor.");
+	}
+
+	public void checkSpelling() {
+		System.out.println("Inside checkSpelling.");
+	}
+}
+
+/** Formater 类 **/
+package cm.nate.spring.model;
+
+public class Formater {
+	public Formater() {
+		System.out.println("Inside Formater constructor.");
+	}
+	
+	public void format() {
+		System.out.println("Inside formating.");
+	}
+}
+</pre>
+						<p>
+							<code>Bears.xml</code>
+							文件
+						</p>
+						<pre class="brush: xml;">
+<?xml version="1.0" encoding="UTF-8"?>
+
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+	<!-- 1.不使用自动装配(默认): autowire="no" -->
+	<!-- 
+	<bean id="textEditor" class="cm.nate.spring.model.TextEditor"
+		autowire="no">
+		<constructor-arg ref="spellChecker" />
+		<property name="formater" ref="formater" />
+	</bean>
+
+	<bean id="spellChecker" class="cm.nate.spring.model.SpellChecker" />
+
+	<bean id="formater" class="cm.nate.spring.model.Formater" />
+	-->
+	
+	<!-- 2.byName 类型的自动装配: autowire="byName" -->
+	&lt;bean id="textEditor" class="cm.nate.spring.model.TextEditor"
+		autowire="byName">
+		&lt;constructor-arg ref="spellChecker" />
+	&lt;/bean>
+
+	&lt;bean id="spellChecker" class="cm.nate.spring.model.SpellChecker" />
+
+	&lt;bean id="formater" class="cm.nate.spring.model.Formater" />
+	
+	<!-- 3.byType 类型的自动装配: autowire="byType" 
+	<bean id="textEditor" class="cm.nate.spring.model.TextEditor"
+		autowire="byType">
+		<constructor-arg ref="spellChecker" />
+	</bean>
+
+	<bean id="spellChecker" class="cm.nate.spring.model.SpellChecker" />
+
+	<bean class="cm.nate.spring.model.Formater" />
+	-->
+
+							<!-- 4.constructor 类型的自动装配: autowire="constructor" 
+	&lt;bean id="textEditor" class="cm.nate.spring.model.TextEditor"
+								autowire="constructor">
+		&lt;property name="formater" ref="formater" />
+	</bean>
+
+	&lt;bean class="cm.nate.spring.model.SpellChecker" />
+
+	&lt;bean id="formater" class="cm.nate.spring.model.Formater" />
+	-->
+&lt;/beans>
+						</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="spring-annotation"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">基于注解的配置</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							从 Spring 2.5 开始就可以使用<strong>注解</strong>来配置依赖注入。而不是采用 XML 来描述一个
+							bean 连线，你可以使用相关类，方法或字段声明的注解，将 bean 配置移动到组件类本身。
+						</p>
+						<p>在 XML 注入之前进行注解注入，因此后者的配置将通过两种方式的属性连线被前者重写。</p>
+						<p>注解连线在默认情况下在 Spring 容器中不打开。因此，在可以使用基于注解的连线之前，我们将需要在我们的
+							Spring 配置文件中启用它。所以如果你想在 Spring 应用程序中使用的任何注解，可以考虑到下面的配置文件。</p>
+						<pre class="brush: xml;">
+<?xml version="1.0" encoding="UTF-8"?>
+
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    &lt;context:annotation-config />
+&lt;/beans>
+</pre>
+						<p>
+							一旦
+							<code>&lt;context:annotation-config></code>
+							被配置后，你就可以开始注解你的代码，表明 Spring
+							应该自动连接值到属性，方法和构造函数。让我们来看看几个重要的注解，并且了解它们是如何工作的：
+						</p>
+						<table class="table table-bordered">
+							<tbody>
+								<tr>
+									<th class="fivepct">序号</th>
+									<th>注解 &amp; 描述</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td><code>@Required</code>
+										<p>@Required 注解应用于 bean 属性的 setter 方法。它表明受影响的 bean 属性
+											在配置时必须放在 XML 配置文件中，否则容器就会抛出一个 BeanInitializationException 异常。</p></td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td><code>@Autowired</code>
+										<p>@Autowired 注解可以应用到 bean 属性的 setter 方法，非 setter
+											方法，构造函数和属性。</p></td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td><code>@Qualifier</code>
+										<p>通过指定确切的将被连线的 bean，@Autowired 和 @Qualifier 注解可以用来删除混乱。</p></td>
+								</tr>
+								<tr>
+									<td>4</td>
+									<td><code>JSR-250 Annotations</code>
+										<p>Spring 支持 JSR-250 的基础的注解，其中包括了 @Resource，@PostConstruct
+											和 @PreDestroy 注解。</p></td>
+								</tr>
+							</tbody>
+						</table>
+
+						<ul>
+							<li>
+								<p>
+									<code>@Required</code>
+									注解, 表明受影响的 bean 属性 在配置时必须放在 XML 配置文件中。
+								</p>
+								<pre class="brush: xml;">
+public class Student {
+	private Integer age;
+	private String name;
+
+	@Required
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	@Required
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+}
+
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+
+	&lt;context:annotation-config />
+
+	&lt;bean id="student" class="cm.nate.spring.model.Student">
+		<!-- @Required 注释应用于 bean 属性的 setter 方法，它表明受影响的 bean 属性
+			在配置时必须放在 XML 配置文件中，否则容器就会抛出一个 BeanInitializationException 异常。
+			如果没有配置如下属性，会引起 BeanInitializationException 异常 -->
+		&lt;property name="name" value="jiwanger" />
+		&lt;property name="age" value="11" />
+	&lt;/bean>
+&lt;/beans>
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>@Autowired</code>
+									注解，可以应用到 bean 属性的 setter 方法，非 setter 方法，构造函数和属性。使用就像 bean
+									的自动装配。
+								</p>
+								<pre class="brush: xml;">
+public class TextEditor {
+	@Autowired		// 应用于属性
+	private SpellChecker spellChecker;
+	private Formater formater;
+	
+	@Autowired 		// 应用于构造方法
+	public TextEditor(SpellChecker spellChecker) {
+		this.spellChecker = spellChecker;
+	}
+	
+	public SpellChecker getSpellChecker() {
+		return spellChecker;
+	}
+
+	public Formater getFormater() {
+		return formater;
+	}
+
+	@Autowired(required=false)	// 应用于方法，默认情况下，@Autowired 注释意味着依赖是必须的
+	public void setFormater(Formater formater) {
+		this.formater = formater;
+	}
+
+	public void spellCheck() {
+		spellChecker.checkSpelling();
+	}
+
+	public void format() {
+		formater.format();
+	}
+}
+
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+
+	&lt;context:annotation-config />
+
+	&lt;bean id="textEditor" class="cm.nate.spring.model.TextEditor" />
+ 
+    &lt;bean id="spellChecker" class="cm.nate.spring.model.SpellChecker" />
+ 
+    &lt;bean id="formater" class="cm.nate.spring.model.Formater" />
+&lt;/beans>
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>@Qualifier</code>
+									注解，可能会有这样一种情况，当你创建多个具有相同类型的 bean
+									时，并且想要用一个属性只为它们其中的一个进行装配，在这种情况下，你可以使用 @Qualifier 注释和 @Autowired
+									注释通过指定哪一个真正的 bean 将会被装配来消除混乱。
+								</p>
+								<pre class="brush: xml;">
+public class TextEditor {
+	@Autowired
+	@Qualifier("spellChecker2")	// 指定装配 spellChecker2
+	private SpellChecker spellChecker;
+
+	public SpellChecker getSpellChecker() {
+		return spellChecker;
+	}
+
+	public void spellCheck() {
+		spellChecker.checkSpelling();
+	}
+
+}
+
+public class SpellChecker {
+	private String name;
+
+	public SpellChecker() {
+		System.out.println("Inside SpellChecker.");
+	}
+
+	public void checkSpelling() {
+		System.out.println("Name:" + name + ", Inside checkSpelling.");	// 显示装配的　SpellChecker 名字
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	@Required
+	public void setName(String name) {
+		this.name = name;
+	}
+
+}
+
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+
+	&lt;context:annotation-config />
+
+	&lt;bean id="textEditor" class="cm.nate.spring.model.TextEditor" />
+ 
+    &lt;bean id="spellChecker" class="cm.nate.spring.model.SpellChecker" >
+    	&lt;property name="name" value="C1" />
+    &lt;/bean>
+    
+    &lt;bean id="spellChecker2" class="cm.nate.spring.model.SpellChecker" >
+    	&lt;property name="name" value="C2" />
+    &lt;/bean>
+&lt;/beans>
+</pre>
+							</li>
+							<li>
+								<p>
+									<code>JSR-250</code>
+									注释，Spring 还使用基于 JSR-250 注释，它包括 @PostConstruct， @PreDestroy 和
+									@Resource 注释。
+								</p>
+								<pre class="brush: xml;">
+public class TextEditor {
+	@Resource(name = "spellChecker")		// 相关于 byName 类型的自动装配
+	private SpellChecker spellChecker;
+	
+	public void setSpellChecker(SpellChecker spellChecker) {
+		this.spellChecker = spellChecker;
+	}
+
+	public SpellChecker getSpellChecker() {
+		return spellChecker;
+	}
+
+	public void spellCheck() {
+		spellChecker.checkSpelling();
+	}
+
+	@PostConstruct			// 在 bean 的实例化阶段会立即被调用，相当于在 bean 中使用 init-method
+	public void init() {
+		System.out.println("Bean is going through init.");
+	}
+
+	@PreDestroy				// 在一个 bean 从容器中删除之前被调用，相当于在 bean 中使用 destroy-method
+	public void destroy() {
+		System.out.println("Bean will destroy now.");
+	}
+}
+
+&lt;beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+
+	&lt;context:annotation-config />
+
+	<!-- init-method 属性指定了一个方法，该方法在 bean 的实例化阶段会立即被调用。
+		 destroy-method 指定了一个方法，该方法只在一个 bean 从容器中删除之前被调用。
+		 在　Bean　中使用 @PostConstruct 注释作为初始化回调函数的一个替代，
+		 使用 @PreDestroy 注释作为销毁回调函数的一个替代 -->
+	&lt;bean id="textEditor" class="cm.nate.spring.model.TextEditor"
+		init-method="init" destroy-method="destroy" />
+
+	&lt;bean id="spellChecker" class="cm.nate.spring.model.SpellChecker">
+		&lt;property name="name" value="C1" />
+	&lt;/bean>
+
+&lt;/beans>
+</pre>
+
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="spring-java"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">基于 Java 的配置</h3>
+					</div>
+					<div class="panel-body">
+						<p>到目前为止，你已经看到如何使用 XML 配置文件来配置 Spring bean。如果你熟悉使用 XML
+							配置，那么我会说，不需要再学习如何进行基于 Java 的配置是，因为你要达到相同的结果，可以使用其他可用的配置。</p>
+						<p>带有 @Configuration 的注解类表示这个类可以使用 Spring IoC 容器作为 bean 定义的来源。</p>
+						<p>@Bean 注解告诉 Spring，一个带有 @Bean 的注解方法将返回一个对象，该对象应该被注册为在 Spring
+							应用程序上下文中的 bean。</p>
+						<p>@import 注解允许从另一个配置类中加载 @Bean 定义。</p>
+						<pre class="brush: java;">
+@Configuration
+public class HelloWorldConfig {
+   @Bean 
+   public HelloWorld helloWorld(){
+      return new HelloWorld();
+   }
+}
+
+// 上面的代码将等同于下面的 XML 配置：
+// &lt;bean id="helloWorld" class="com.tutorialspoint.HelloWorld" />
+
+AbstractApplicationContext ctx = new AnnotationConfigApplicationContext(HelloWorldConfig.class);
+
+HelloWorld helloWorld = ctx.getBean(HelloWorld.class);
+helloWorld.setMessage("Hello World!");
+helloWorld.getMessage();
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="spring-aop"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Spring 框架的 AOP</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h5 class="text-primary">AOP 简介</h5>
+							<p>
+								<b>面向切面编程(AOP: Aspect Oriented Programming)</b> --
+								通过预编译方式和运行期动态代理实现在不修改源代码的情况下给程序动态统一添加功能的一种技术。AOP 是 OOP
+								的延续，是软件开发中的一个热点，也是 Spring 框架中的一个重要内容，是函数式编程的一种衍生范型。利用 AOP
+								可以对业务逻辑的各个部分进行隔离，从而使得业务逻辑各部分之间的耦合度降低，提高程序的可重用性，同时提高了开发的效率。
+							</p>
+							<p class="text-primary well">
+								AOP 的核心思想: <b>将应用程序中的商业逻辑同对其提供支持的通用服务进行分离。</b>
+							</p>
+							<p>
+								<b>AOP</b> 是一个概念，并没有设定具体语言的实现，它能克服那些只有单继承特性语言的缺点。AspectJ 是 AOP
+								的一个很悠久的实现，它能够和 Java 配合起来使用。
+							</p>
+							<p>
+								<b>spring-aop-4.3.4.RELEASE.jar</b> --
+								提供了面向切面编程（AOP）的实现，可以定义诸如方法拦截器和切入点等，从而使实现功能的代码彻底的解耦出来。
+							</p>
+							<p>
+								<b>spring-aspects-4.3.4.RELEASE.jar</b> -- 提供了对 AspectJ 的集成。
+							</p>
+							<p>
+								<b>AOP 和 OOP</b>
+							</p>
+							<p>
+								<b>OOP</b>
+								引入封装、继承和多态性等概念来建立一种对象层次结构，用以模拟公共行为的一个集合。当我们需要为分散的对象引入公共行为的时候，OOP则显得无能为力。也就是说，OOP允许你定义从上到下的关系，但并不适合定义从左到右的关系。例如日志功能。日志代码往往水平地散布在所有对象层次中，而与它所散布到的对象的核心功能毫无关系。对于其他类型的代码，如安全性、异常处理和透明的持续性也是如此。这种散布在各处的无关的代码被称为横切（cross-cutting）代码，在OOP设计中，它导致了大量代码的重复，而不利于各个模块的重用。
+							</p>
+							<p>
+								<b>AOP</b>
+								利用一种称为“横切”的技术，剖解开封装的对象内部，并将那些影响了多个类的公共行为封装到一个可重用模块，并将其名为“Aspect”，即方面。所谓“方面”，简单地说，就是将那些与业务无关，却为业务模块所共同调用的逻辑或责任封装起来，便于减少系统的重复代码，降低模块间的耦合度，并有利于未来的可操作性和可维护性。AOP代表的是一个横向的关系，如果说“对象”是一个空心的圆柱体，其中封装的是对象的属性和行为；那么面向方面编程的方法，就仿佛一把利刃，将这些空心圆柱体剖开，以获得其内部的消息。而剖开的切面，也就是所谓的“方面”了。然后它又以巧夺天功的妙手将这些剖开的切面复原，不留痕迹。
+							</p>
+							<p>
+								<b>AOP</b>
+								把软件系统分为两个部分：核心关注点和横切关注点。业务处理的主要流程是核心关注点，与之关系不大的部分是横切关注点。横切关注点的一个特点是，他们经常发生在核心关注点的多处，而各处都基本相似。比如权限认证、日志、事务处理。AOP
+								的作用在于分离系统中的各种关注点，将核心关注点和横切关注点分离开来。
+							</p>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">AOP相关概念</h5>
+							<ul>
+								<li>
+									<p>
+										<b>切面(Aspect)</b> -- 一个关注点的模块化，这个关注点实现可能另外横切多个对象。事务管理是 J2EE
+										应用中一个很好的横切关注点例子。方面用 Spring 的 Advisor 或拦截器实现。
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>连接点(Join point)</b> -- 程序执行过程中明确的点，如方法的调用或特定的异常被抛出。
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>通知(Advice)</b> -- 在特定的连接点，AOP 框架执行的动作。各种类型的通知包括
+										<code>around</code>
+										、
+										<code>before</code>
+										和
+										<code>throws</code>
+										通知。通知类型将在下面讨论。许多 AOP 框架包括 Spring
+										都是以拦截器做通知模型，维护一个“围绕”连接点的拦截器链。Spring 中定义了四个 Advice:
+										<code>BeforeAdvice</code>
+										,
+										<code>AfterAdvice</code>
+										,
+										<code>ThrowAdvice</code>
+										和
+										<code>DynamicIntroductionAdvice</code>
+										。
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>切入点(Pointcut)</b> --
+										指定一个通知将被引发的一系列连接点的集合。AOP框架必须允许开发者指定切入点：例如，使用正则表达式。 Spring 定义了
+										Pointcut 接口，用来组合 MethodMatcher 和 ClassFilter，可以通过名字很清楚的理解，
+										MethodMatcher 是用来检查目标类的方法是否可以被应用此通知，而 ClassFilter 是用来检查
+										Pointcut 是否应该应用到目标类上
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>引入(Introduction)</b> -- 添加方法或字段到被通知的类。 Spring
+										允许引入新的接口到任何被通知的对象。例如，你可以使用一个引入使任何对象实现
+										<code>IsModified</code>
+										接口，来简化缓存。Spring 中要使用
+										<code>Introduction</code>
+										, 可有通过
+										<code>DelegatingIntroductionInterceptor</code>
+										来实现通知，通过
+										<code>DefaultIntroductionAdvisor</code>
+										来配置 Advice 和代理类要实现的接口。
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>目标对象(Target Object)</b> -- 包含连接点的对象。也被称作被通知或被代理对象。
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>AOP 代理(AOP Proxy)</b> -- AOP 框架创建的对象，包含通知。 在 Spring 中，AOP
+										代理可以是 JDK 动态代理或者 CGLIB 代理。
+									</p>
+								</li>
+								<li>
+									<p>
+										<b>织入(Weaving)</b> -- 组装方面来创建一个被通知对象。这可以在编译时完成（例如使用 AspectJ
+										编译器），也可以在运行时完成。Spring 和其他纯 Java AOP 框架一样，在运行时完成织入。
+									</p>
+								</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<h5 class="text-primary">Spring AOP 使用</h5>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
 				<!-- item start -->
 				<a class="offset" id="spring-"></a>
 				<div class="panel panel-default">
@@ -665,24 +1737,16 @@ obj.getMessage();
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="spring-mvc"></a>
+				<a class="offset" id="spring-mvc-example"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">MVC 实例</h3>
+						<h3 class="panel-title">WEBMVC 实例</h3>
 					</div>
 					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 
-				<!-- item start -->
-				<a class="offset" id="spring-"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body"></div>
-				</div>
-				<!-- item over -->
+
 
 				<!-- item start -->
 				<a class="offset" id="spring-"></a>

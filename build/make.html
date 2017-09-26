@@ -74,8 +74,6 @@
 						<div id="make-Makefile" class="panel-collapse collapse in"
 							role="tabpanel">
 							<a href="#Makefile-base" class="list-group-item">Makefile 基础</a>
-							<a href="#Makefile-content" class="list-group-item">Makefile
-								的内容</a>
 							<a href="#Makefile-regular" class="list-group-item">Makefile
 								的规则</a>
 							<a href="#" class="list-group-item">...</a>
@@ -147,23 +145,6 @@
 								</p>
 							</li>
 						</ul>
-
-						<p>
-							<b>MAKE 的执行过程如下:</b>
-						</p>
-						<ol>
-							<li>依次读取变量 “MAKEFILES” 定义的 makefile 文件列表</li>
-							<li>读取工作目录下的 makefile 文件(根据命名的查找顺序 “GNUmakefile”,
-								“makefile”, “Makefile”)</li>
-							<li>依次读取工作目录 makefile 文件中使用指示符 “include” 包含的文件</li>
-							<li>查找重建所有已读取的 makefile 文件的规则(如果存在一个目标是当前读取的 某一个 makefile
-								文件,则执行此规则重建此 makefile 文件,完成以后从第一步 开始重新执行)</li>
-							<li>初始化变量值并展开那些需要立即展开的变量和函数并根据预设条件确定执行 分支</li>
-							<li>根据“终极目标”以及其他目标的依赖关系建立依赖关系链表</li>
-							<li>执行除“终极目标”以外的所有的目标的规则(规则中如果依赖文件中任一个
-								文件的时间戳比目标文件新,则使用规则所定义的命令重建目标文件)</li>
-							<li>执行“终极目标”所在的规则</li>
-						</ol>
 					</div>
 				</div>
 				<!-- item over -->
@@ -256,28 +237,53 @@ TARGET... : PREREQUISITES...
 						<p>
 							<b>MAKE 如何解析 Makefile 文件:</b>
 						</p>
-						<ul>
+						<p class="well">
+							<b>第一阶段:</b> 读取所有的 Makefile 文件(包括 “MAKIFILES” 变量指定的、指示符 “include”
+							指定的、以及命令行选项
+							<code>-f</code>
+							或
+							<code>--file</code>
+							指定的 Makefile 文件),内建所有的 变量、明确规则和隐含规则,并建立所有目标和依赖之间的依赖关系结构链表。
+						</p>
+						<p class="well">
+							<b>第二阶段:</b> 根据第一阶段已经建立的依赖关系结构链表决定哪些目标需要更新, 并使用对应的规则来重建这些目标。
+						</p>
+						<p>在 make 执行的第一阶段中如果变量和函数被展开,那么称此展开是“立即”的,
+							此时所有的变量和函数被展开在需要构建的结构链表的对应规则中(此规则在建立链表
+							是需要使用)。其他的展开称之为“延后”的。这些变量和函数不会被“立即”展开, 而是直到后续某些规则须要使用时或者在 make
+							处理的第二阶段它们才会被展开。</p>
+						<p>
+							<b>总结 make 的执行过程如下:</b>
+						</p>
+						<ol>
 							<li>
-								<p>第一阶段: 读取所有的 makefile 文件(包括“MAKIFILES”变量指定的、指示符
-									“include”指定的、以及命令行选项“-f(--file)”指定的 makefile 文件),内建所有的
-									变量、明确规则和隐含规则,并建立所有目标和依赖之间的依赖关系结构链表。</p>
+								<p>依次读取变量 “MAKEFILES” 定义的 makefile 文件列表</p>
 							</li>
 							<li>
-								<p>在第二阶段: 根据第一阶段已经建立的依赖关系结构链表决定哪些目标需要更新, 并使用对应的规则来重建这些目标。</p>
+								<p>读取工作目录下的 makefile 文件(根据命名的查找顺序“GNUmakefile”,
+									“makefile”,“Makefile”,首先找到那个就读取那个)</p>
 							</li>
-						</ul>
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="Makefile-content"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">Makefile 的内容</h3>
-					</div>
-					<div class="panel-body">
-						<p>在一个完整的 Makefile 中,包含了 5 个东西: 显式规则、隐含规则、变量定义、 指示符和注释。</p>
+							<li>
+								<p>依次读取工作目录 makefile 文件中使用指示符 “include” 包含的文件</p>
+							</li>
+							<li>
+								<p>查找重建所有已读取的 makefile 文件的规则(如果存在一个目标是当前读取的 某一个 makefile
+									文件,则执行此规则重建此 makefile 文件,完成以后从第一步 开始重新执行)</p>
+							</li>
+							<li>
+								<p>初始化变量值并展开那些需要立即展开的变量和函数并根据预设条件确定执行分支</p>
+							</li>
+							<li>
+								<p>根据“终极目标”以及其他目标的依赖关系建立依赖关系链表</p>
+							</li>
+							<li>
+								<p>执行除“终极目标”以外的所有的目标的规则(规则中如果依赖文件中任一个
+									文件的时间戳比目标文件新,则使用规则所定义的命令重建目标文件)</p>
+							</li>
+							<li>
+								<p>执行“终极目标”所在的规则</p>
+							</li>
+						</ol>
 					</div>
 				</div>
 				<!-- item over -->
@@ -289,16 +295,61 @@ TARGET... : PREREQUISITES...
 						<h3 class="panel-title">Makefile 的规则</h3>
 					</div>
 					<div class="panel-body">
-						<p>
-							<b>终极目标:</b> 除了 makefile 的“终极目标”所在的规则以外,其它规则的顺序在 makefile 文件
-							中没有意义。“终极目标”是执行 make 的唯一目的,其所在的规则作为第一个被执行的规则。
-							而其它的规则是在完成重建“终极目标”的过程中被连带出来的。所以这些目标所在规 则在 Makefile 中的顺序无关紧要。
-						</p>
-						<p>
-							<b>规则的中心思想是:</b> 目标文件的内容是由依赖文件文件决定,依赖文件的任何一处
-							改动,将导致目前已经存在的目标文件的内容过期。
-						</p>
-						<p>一个规则告诉“make”两件事: 1. 目标在什么情况下已经过期; 2. 如果需要重建目标时,如何去重建这个目标。</p>
+						<div class="sub-item">
+							<p>
+								<b>1.规则基础</b>
+							</p>
+							<p>
+								<b>终极目标:</b> 除了 makefile 的“终极目标”所在的规则以外,其它规则的顺序在 makefile 文件
+								中没有意义。“终极目标”是执行 make 的唯一目的,其所在的规则作为第一个被执行的规则。
+								而其它的规则是在完成重建“终极目标”的过程中被连带出来的。所以这些目标所在规 则在 Makefile 中的顺序无关紧要。
+							</p>
+							<p>
+								<b>规则的中心思想是:</b> 目标文件的内容是由依赖文件文件决定,依赖文件的任何一处
+								改动,将导致目前已经存在的目标文件的内容过期。
+							</p>
+							<p>一个规则告诉“make”两件事: 1. 目标在什么情况下已经过期; 2. 如果需要重建目标时,如何去重建这个目标。</p>
+							<pre class="brush: bash;">
+foo.o: foo.c
+	cc -c foo.c
+
+# foo.o -- 规则需要重建的文件, 是目标
+# foo.c -- 重建 foo.o 所要使用的文件，是依赖
+# cc -c foo.c -- 描述了如何使用规则中的依赖文件重建目标，是命令
+
+# 如果目标不存在或依赖比目标要新，则使用命令重建目标。依赖文件的任何一处改动,将导致目前已经存在的目标文件的内容过期。
+</pre>
+							<p>有时,需要定义一个这样的规则,在更新目标(目标文件已经存在)时只需要根据
+								依赖文件中的部分来决定目标是否需要被重建,而不是在依赖文件的任何一个被修改后都重建目标。</p>
+							<pre class="brush: bash;">
+foo: foo.c | foo.h
+	cc foo.c -o foo 
+
+# 规则依赖列表中管道符号 "|"左边的是常规依赖,管道符号右边的就是“order-only”依赖。
+# 此文件中，如果 "foo" 文件已经存在，当修改管道符号 "|" 右边的的依赖时，不更新目标文件 "foo"
+</pre>
+						</div>
+						<div class="sub-item">
+							<p>
+								<b>2.文件名使用通配符</b>
+							</p>
+							<p>Makefile 中表示文件名时可使用通配符。可使用的通配符有: "*"、"?" 和 "[...]"。</p>
+							<p>在 Makefile 中通配符的用法和含义和 Linux(unix) 的 Bourne shell 完全相同。例如,
+								“*.c” 代表了当前工作目录下所有的以 “.c” 结尾的文件等。但是在 Makefile 中这些
+								统配符并不是可以用在任何地方, Makefile 中统配符可以出现在以下两种场合:</p>
+							<ol>
+								<li>可以用在规则的目标、依赖中,make 在读取 Makefile 时会自动对其进行匹配处理(通配符展开);</li>
+								<li>可出现在规则的命令中,通配符的通配处理是在 shell 在执行此命令时完成的。</li>
+							</ol>
+							<pre class="brush: bash;">
+build: src/*.c
+	cc src/*.c -o exeute
+	
+# 删除所有的 .o 文件
+clean:
+	rm -f *.o
+</pre>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
