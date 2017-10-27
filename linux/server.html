@@ -71,7 +71,7 @@
 						<a href="#server-reboot" class="list-group-item">CentOS 定时任务</a>
 						<a href="#server-vnstat" class="list-group-item">流量监控工具 vnstat
 							配置</a>
-						<a href="#server-" class="list-group-item"> 配置</a>
+						<a href="#server-ntfs" class="list-group-item">自动挂载 NTFS</a>
 						<a href="#server-nginx" class="list-group-item">Nginx 配置</a>
 						<a href="#server-jmeter" class="list-group-item">Apache Jmeter
 							工具</a>
@@ -611,12 +611,36 @@ $ vnstat --help
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="server-"></a>
+				<a class="offset" id="server-ntfs"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">CentOS 自动挂载 NTFS</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<p>CentOS 6.5 实现自动挂载 NTFS 格式移动设备</p>
+						<pre class="brush: bash;">
+# 1. 安装 fuse
+$ sudo yum install fase
+
+# 2. 下载 ntfs-3g
+$ wget https://tuxera.com/opensource/ntfs-3g_ntfsprogs-2017.3.23.tgz --no-check-certificate
+
+# 3. 解压 tgz 文件
+$ tar -xvf ntfs-3g_ntfsprogs-2017.3.23.tgz
+
+# 4. 安装 ntfs-3g
+$ ./configuration
+$ make 
+$ sudo make install
+
+# 5. 实现移动硬盘自动挂载
+$ sudo vim /sbin/mount.ntfs
+# 写入如下内容：
+	#!/bin/sh
+	export LANG=Zh_CN.UTF-8
+	exec /sbin/mount.ntfs-3g $@ 
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
