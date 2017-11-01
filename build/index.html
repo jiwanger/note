@@ -1,51 +1,49 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
+
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport"
-	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="keywords" content="key1, key2" />
-<meta name="description" content=””>
-<meta name="author" content="nate">
-<meta name="author" content="nate &lt;jiwanger@126.com&gt;">
-<link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
-<link href="images/favicon.ico" rel="icon" type="image/x-icon" />
-<link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<title>NATE--笔记--GRADLE</title>
-<!-- Bootstrap -->
-<link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
-	rel="stylesheet">
-<!-- 
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta name="keywords" content="key1, key2" />
+	<meta name="description" content=””>
+	<meta name="author" content="nate">
+	<meta name="author" content="nate &lt;jiwanger@126.com&gt;">
+	<link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
+	<link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+	<link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+	<title>NATE--笔记--GRADLE</title>
+	<!-- Bootstrap -->
+	<link href="../support/bootstrap/theme/yeti-bootstrap.min.css" rel="stylesheet">
+	<!-- 
 <link href="../support/bootstrap/css/bootstrap.css" rel="stylesheet">
 -->
-<link type="text/css" rel="stylesheet"
-	href="../support/syntaxhighlighter/styles/shCoreDefault.css" />
-<link href="../commons/css/common.css" rel="stylesheet">
-<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-<!--[if lt IE 9]>
+	<link type="text/css" rel="stylesheet" href="../support/syntaxhighlighter/styles/shCoreDefault.css" />
+	<link href="../commons/css/common.css" rel="stylesheet">
+	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
       <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
       <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 </head>
+
 <body>
 	<!-- nav start -->
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target="#bs-example-navbar-collapse-1">
-					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="../index.html">
 					<img src="../commons/images/icon.png">
 				</a>
 			</div>
 
-			<div class="collapse navbar-collapse"
-				id="bs-example-navbar-collapse-1">
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul id="my-nav" class="nav navbar-nav">
 
 				</ul>
@@ -59,27 +57,26 @@
 		<div class="row">
 			<!-- left-menu start -->
 			<div class="col-md-3">
-				<div class="panel panel-default"
-					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
+				<div class="panel panel-default" style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
 					<div class="panel-heading">
 						<h3 class="panel-title">GRADLE</h3>
 					</div>
 					<div class="list-group">
 						<a href="#gradle-intro" class="list-group-item">简介</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#gradle-base" aria-expanded="true">
-							Gradle 基础<span class="caret pull-right" style="margin-top: 5px;"></span>
+						<a class="list-group-item active dropup" data-toggle="collapse" data-parent="#accordion" href="#gradle-base" aria-expanded="true">
+							Gradle 基础
+							<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="gradle-base" class="panel-collapse collapse in"
-							role="tabpanel">
+						<div id="gradle-base" class="panel-collapse collapse in" role="tabpanel">
 							<a href="#gradle-basic" class="list-group-item">1. 构建基础</a>
 							<a href="#gradle-init-task" class="list-group-item">2. 初始任务</a>
 							<a href="#gradle-cmd" class="list-group-item">3. 命令行参数</a>
 							<a href="#gradle-task" class="list-group-item">4. 任务详述</a>
-							<a href="#gradle-plugins" class="list-group-item">5. Gradle
-								插件</a>
+							<a href="#gradle-plugins" class="list-group-item">5. Gradle 插件
+							</a>
 							<a href="#gradle-dependency" class="list-group-item">6. 依赖管理</a>
 							<a href="#gradle-java" class="list-group-item">7. Java 插件</a>
+							<a href="#gradle-android" class="list-group-item">8. Android 插件</a>
 						</div>
 						<a href="#java-class-loader" class="list-group-item">...</a>
 					</div>
@@ -100,21 +97,18 @@
 						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-						<p>Gradle 是一个基于 Apache Ant 和 Apache Maven 概念的项目自动化建构工具。它使用一种基于
-							Groovy 的特定领域语言 (DSL) 来声明项目设置，抛弃了基于 XML 的各种繁琐配置。</p>
+						<p>Gradle 是一个基于 Apache Ant 和 Apache Maven 概念的项目自动化建构工具。它使用一种基于 Groovy 的特定领域语言 (DSL) 来声明项目设置，抛弃了基于 XML 的各种繁琐配置。</p>
 						<ul>
 							<li>
 								<p>
 									一个像
-									<code>ant</code>
-									一样，通用的灵活的构建工具
+									<code>ant</code> 一样，通用的灵活的构建工具
 								</p>
 							</li>
 							<li>
 								<p>
 									一种可切换的，像
-									<code>maven</code>
-									一样的基于约定约定优于配置的构建框架
+									<code>maven</code> 一样的基于约定约定优于配置的构建框架
 								</p>
 							</li>
 							<li>
@@ -123,45 +117,35 @@
 							<li>
 								<p>
 									强大的依赖管理(基于
-									<code>ApacheIvy</code>
-									)
+									<code>ApacheIvy</code> )
 								</p>
 							</li>
 							<li>
 								<p>
 									对已有的
-									<code>maven</code>
-									和
-									<code>ivy</code>
-									仓库的全面支持
+									<code>maven</code> 和
+									<code>ivy</code> 仓库的全面支持
 								</p>
 							</li>
 							<li>
 								<p>
 									支持传递性依赖管理，而不需要远程仓库或者
-									<code>pom.xml</code>
-									或者
-									<code>ivy</code>
-									配置文件
+									<code>pom.xml</code> 或者
+									<code>ivy</code> 配置文件
 								</p>
 							</li>
 							<li>
 								<p>
-									<code>ant</code>
-									式的任务和构建是
-									<code>gradle</code>
-									的第一公民
+									<code>ant</code> 式的任务和构建是
+									<code>gradle</code> 的第一公民
 								</p>
 							</li>
 							<li>
 								<p>
 									基于
-									<code>groovy</code>
-									，其
-									<code>build</code>
-									脚本使用
-									<code>groovy dsl</code>
-									编写
+									<code>groovy</code> ，其
+									<code>build</code> 脚本使用
+									<code>groovy dsl</code> 编写
 								</p>
 							</li>
 							<li>
@@ -171,16 +155,11 @@
 
 						<p>
 							Gradle 用户手册 --
-							<a
-								href="https://docs.gradle.org/current/userguide/userguide.html"
-								target="_blank">官网原文</a>
+							<a href="https://docs.gradle.org/current/userguide/userguide.html" target="_blank">官网原文</a>
 							--
-							<a
-								href="http://gradledoc.qiniudn.com/1.12/userguide/userguide.html"
-								target="_blank">1.12版本中英对照</a>
+							<a href="http://gradledoc.qiniudn.com/1.12/userguide/userguide.html" target="_blank">1.12版本中英对照</a>
 							--
-							<a href="docs/docs-gradle-1.12/userguide/userguide.html"
-								target="_blank">1.12版本本地副本</a>
+							<a href="docs/docs-gradle-1.12/userguide/userguide.html" target="_blank">1.12版本本地副本</a>
 						</p>
 						<p>
 							Gradle DSL --
@@ -190,11 +169,9 @@
 						</p>
 						<p>
 							Gradle Java Doc --
-							<a href="https://docs.gradle.org/current/javadoc/"
-								target="_blank">官网原文</a>
+							<a href="https://docs.gradle.org/current/javadoc/" target="_blank">官网原文</a>
 							--
-							<a href="docs/docs-gradle-1.12/javadoc/index.html"
-								target="_blank">本地副本</a>
+							<a href="docs/docs-gradle-1.12/javadoc/index.html" target="_blank">本地副本</a>
 						</p>
 					</div>
 				</div>
@@ -214,11 +191,8 @@
 							<ul>
 								<li>
 									<p>
-										<code>~/.gradle/init.gradle</code>
-										-- 此文件为全局初始化执行文件，启动任何一个构建前都要先执行这个文件，可以在做一些全局的配置。更多配置查看
-										<a
-											href="docs/docs-gradle-1.12/dsl/org.gradle.api.invocation.Gradle.html"
-											target="_blank">Gradle</a>
+										<code>~/.gradle/init.gradle</code> -- 此文件为全局初始化执行文件，启动任何一个构建前都要先执行这个文件，可以在做一些全局的配置。更多配置查看
+										<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.invocation.Gradle.html" target="_blank">Gradle</a>
 										对象。
 									</p>
 									<pre class="brush: groovy;">
@@ -235,8 +209,7 @@ println getHomeDir
 								</li>
 								<li>
 									<p>
-										<code>~/.gradle/gradle.properties</code>
-										-- 此文件全局属性配置文件，比如配置是否启动 daemon 配置，另外，在此文件中配置的属性，全局可用。
+										<code>~/.gradle/gradle.properties</code> -- 此文件全局属性配置文件，比如配置是否启动 daemon 配置，另外，在此文件中配置的属性，全局可用。
 									</p>
 									<pre class="brush: groovy;">
 // 这个属性配置启动 Gradle daemon
@@ -249,11 +222,8 @@ mail=jiwanger@126.com
 								</li>
 								<li>
 									<p>
-										<code>settings.gradle</code>
-										-- 此文件主要用于多项目配置，位于根项目下，配置项目包含哪些子项目，配置子项目的共有配置。更多配置查看
-										<a
-											href="docs/docs-gradle-1.12/dsl/org.gradle.api.initialization.Settings.html"
-											target="_blank">Settings</a>
+										<code>settings.gradle</code> -- 此文件主要用于多项目配置，位于根项目下，配置项目包含哪些子项目，配置子项目的共有配置。更多配置查看
+										<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.initialization.Settings.html" target="_blank">Settings</a>
 										对象。
 									</p>
 									<pre class="brush: groovy;">
@@ -271,45 +241,33 @@ println settings.rootProject.name
 								</li>
 								<li>
 									<p>
-										<code>build.gradle</code>
-										-- 为项目的默认配置文件，更多配置查看
-										<a
-											href="docs/docs-gradle-1.12/dsl/org.gradle.api.Project.html"
-											target="_blank">Project</a>
+										<code>build.gradle</code> -- 为项目的默认配置文件，更多配置查看
+										<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.Project.html" target="_blank">Project</a>
 										对象。
 									</p>
 								</li>
 								<li>
 									<p>
-										<code>gradle.properties</code>
-										-- 此文件为项目属性配置文件，在此文件中配置的属性，在
-										<code>build.gradle</code>
-										中可用。
+										<code>gradle.properties</code> -- 此文件为项目属性配置文件，在此文件中配置的属性，在
+										<code>build.gradle</code> 中可用。
 									</p>
 								</li>
 								<li>
 									<p>
-										<code>gradlew | gradlew.bat</code>
-										-- 作用是根据
-										<code>gradle-wrapper.properties</code>
-										文件中的 distributionUrl 下载对应的 gradle
-										版本。这样就可以保证在不同的环境下构建时都是使用的统一版本的 gradle，即使该环境没有安装 gradle 也可以，因为
-										gradle wrapper 会自动下载对应的 gradle 版本。如果从别处下载的项目，包含这些文件，应该使用
-										<code>./gradlew taskName</code>
-										去运行构建。
+										<code>gradlew | gradlew.bat</code> -- 作用是根据
+										<code>gradle-wrapper.properties</code> 文件中的 distributionUrl 下载对应的 gradle 版本。这样就可以保证在不同的环境下构建时都是使用的统一版本的 gradle，即使该环境没有安装 gradle 也可以，因为 gradle wrapper
+										会自动下载对应的 gradle 版本。如果从别处下载的项目，包含这些文件，应该使用
+										<code>./gradlew taskName</code> 去运行构建。
 									</p>
 								</li>
 								<li>
 									<p>
-										<code>gradle/wrapper/gradle-wrapper.jar</code>
-										-- 运行 gradlew 时，如果没有对应的 gralde 版本，gradle-wrapper 会自动下载对应的
-										gradle 版本。
+										<code>gradle/wrapper/gradle-wrapper.jar</code> -- 运行 gradlew 时，如果没有对应的 gralde 版本，gradle-wrapper 会自动下载对应的 gradle 版本。
 									</p>
 								</li>
 								<li>
 									<p>
-										<code>gradle/wrapper/gradle-wrapper.properties</code>
-										-- 此文件为自动生成，用于配置指定版本的 Gradle 下载地址和下载后存放位置，内容如下：
+										<code>gradle/wrapper/gradle-wrapper.properties</code> -- 此文件为自动生成，用于配置指定版本的 Gradle 下载地址和下载后存放位置，内容如下：
 									</p>
 									<pre class="brush: bash">
 #Fri Jun 16 09:05:48 CST 2017
@@ -326,10 +284,8 @@ distributionUrl=https\://services.gradle.org/distributions/gradle-2.14.1-bin.zip
 </pre>
 									<p>
 										如想更改用于构建的 Gradle 版本，在任何目录下直接运行
-										<code>$ gradle wrapper --gradle-version 3.0</code>
-										, 也会生成指定版本的 Wrapper 相关文件。也可在根目录的
-										<code>build.gradle</code>
-										文件中加入如下内容：
+										<code>$ gradle wrapper --gradle-version 3.0</code> , 也会生成指定版本的 Wrapper 相关文件。也可在根目录的
+										<code>build.gradle</code> 文件中加入如下内容：
 									</p>
 									<pre class="brush: groovy; gutter:false;">
 task wrapper(type: Wrapper) {
@@ -338,10 +294,8 @@ task wrapper(type: Wrapper) {
 </pre>
 									<p>
 										然后运行
-										<code>gradle wrapper</code>
-										, 此命令会下载 3.0 版本的 Gradle, 然后运行时，使用
-										<code>./gradlew task</code>
-										运行构建。
+										<code>gradle wrapper</code> , 此命令会下载 3.0 版本的 Gradle, 然后运行时，使用
+										<code>./gradlew task</code> 运行构建。
 									</p>
 
 								</li>
@@ -356,42 +310,29 @@ task wrapper(type: Wrapper) {
 								<li>
 									<p>
 										<b>初始化</b> -- 构建初始化时创建
-										<a
-											href="docs/docs-gradle-1.12/dsl/org.gradle.api.invocation.Gradle.html"
-											target="_blank">Gradle</a>
+										<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.invocation.Gradle.html" target="_blank">Gradle</a>
 										对象，整个构建执行过程中只有这么一个对象，主要有两个文件配置规则：
-										<code>~/.gradle/init.gradle</code>
-										和
-										<code>~/.gradle/gradle.properties</code>
-										。Gradle 支持单项目及多项目的构建。在初始化阶段，Gradle 确定哪些项目是需要构建的，执行
-										<code>settings.gradle</code>
-										, 转换成一个
-										<a
-											href="docs/docs-gradle-1.12/dsl/org.gradle.api.initialization.Settings.html"
-											target="_blank">Settings</a>
+										<code>~/.gradle/init.gradle</code> 和
+										<code>~/.gradle/gradle.properties</code> 。Gradle 支持单项目及多项目的构建。在初始化阶段，Gradle 确定哪些项目是需要构建的，执行
+										<code>settings.gradle</code> , 转换成一个
+										<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.initialization.Settings.html" target="_blank">Settings</a>
 										对象，并为每个需要构建的项目创建一个
-										<a
-											href="docs/docs-gradle-1.12/dsl/org.gradle.api.Project.html"
-											target="_blank">Project</a>
+										<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.Project.html" target="_blank">Project</a>
 										对象实例。
 									</p>
 								</li>
 								<li>
 									<p>
 										<b>配置</b> -- 在这一阶段，对 project 对象进行配置，确定 Project 和
-										<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html"
-											target="_blank">Task</a>
+										<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html" target="_blank">Task</a>
 										的关系，建立一个有向图来描述 Task 间的依赖关系。属于构建的所有 projects 的
-										<code>build.gradle</code>
-										都会被执行。通过
-										<code>build.gradle</code>
-										来配置上一步的 Project 对象。
+										<code>build.gradle</code> 都会被执行。通过
+										<code>build.gradle</code> 来配置上一步的 Project 对象。
 									</p>
 								</li>
 								<li>
 									<p>
-										<b>执行</b> -- Gradle 确定在配置阶段中，创建和配置的要被执行的任务的子集。这个子集是由传递给 gradle
-										命令的任务名称参数和当前目录所决定的。然后 Gradle 执行每个选定的任务。
+										<b>执行</b> -- Gradle 确定在配置阶段中，创建和配置的要被执行的任务的子集。这个子集是由传递给 gradle 命令的任务名称参数和当前目录所决定的。然后 Gradle 执行每个选定的任务。
 									</p>
 								</li>
 							</ul>
@@ -485,13 +426,11 @@ project.afterEvaluate {}
 
 						<div class="sub-item">
 							<p>
-								<b>1.3 <a
-										href="docs/docs-gradle-1.12/javadoc/org/gradle/api/Script.html"
-										target="_blank" style="text-decoration: underline;">Script</a>
+								<b>1.3
+									<a href="docs/docs-gradle-1.12/javadoc/org/gradle/api/Script.html" target="_blank" style="text-decoration: underline;">Script</a>
 									对象
 								</b> -- 每个
-								<code>.gradle</code>
-								脚本都实现了 Script 接口，也就是说可以直接使用 Script 接口的属性与方法。
+								<code>.gradle</code> 脚本都实现了 Script 接口，也就是说可以直接使用 Script 接口的属性与方法。
 							</p>
 							<pre class="brush: groovy;">
 apply from: 'ask.gradle'
@@ -514,9 +453,8 @@ file('build.gradle')
 
 						<div class="sub-item">
 							<p>
-								<b>1.4 <a
-										href="docs/docs-gradle-1.12/dsl/org.gradle.api.invocation.Gradle.html"
-										target="_blank" style="text-decoration: underline;">Gradle</a>
+								<b>1.4
+									<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.invocation.Gradle.html" target="_blank" style="text-decoration: underline;">Gradle</a>
 									对象
 								</b> -- 构建初始化时创建 Gradle 对象，整个构建执行过程中只有这么一个对象。
 							</p>
@@ -563,18 +501,15 @@ gradle.buildFinished {
 
 						<div class="sub-item">
 							<p>
-								<b>1.5 <a
-										href="docs/docs-gradle-1.12/dsl/org.gradle.api.initialization.Settings.html"
-										target="_blank" style="text-decoration: underline;">Settings</a>
+								<b>1.5
+									<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.initialization.Settings.html" target="_blank" style="text-decoration: underline;">Settings</a>
 									对象
 								</b> -- Gradle 支持单项目及多项目的构建。在初始化阶段，Gradle 确定哪些项目是需要构建的，执行
-								<code>settings.gradle</code>
-								，创建 Settings 对象。
+								<code>settings.gradle</code> ，创建 Settings 对象。
 							</p>
 							<p>
 								这个配置文件会在初始化阶段执行。一个多项目的构建，必须在这个多项目的层次结构中的根目录下有一个
-								<code>settings.gradle</code>
-								文件。因为在这个设置文件中，会定义哪些项目会加入这个多项目构建。对于单项目的构建，有没有设置文件都可以。
+								<code>settings.gradle</code> 文件。因为在这个设置文件中，会定义哪些项目会加入这个多项目构建。对于单项目的构建，有没有设置文件都可以。
 							</p>
 							<pre class="brush: groovy;">
 // settings.gradle 文件
@@ -586,19 +521,16 @@ assert rootDir == settings.rootDir
 println 'settings-settings-dir: ' + settingsDir
 println 'settings-settings-dir: ' + settingsDir
 </pre>
-							<p>对于一个构建脚本，属性的访问和方法的调用会委派给一个 project
-								对象。同样，在设置文件中的属性访问和方法调用也会委托给一个 settings 对象。</p>
+							<p>对于一个构建脚本，属性的访问和方法的调用会委派给一个 project 对象。同样，在设置文件中的属性访问和方法调用也会委托给一个 settings 对象。</p>
 
 						</div>
 
 						<div class="sub-item">
 							<p>
-								<b>1.6 <a
-										href="docs/docs-gradle-1.12/dsl/org.gradle.api.Project.html"
-										target="_blank" style="text-decoration: underline;">Project</a>
+								<b>1.6
+									<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.Project.html" target="_blank" style="text-decoration: underline;">Project</a>
 									对象
-								</b> -- Settings 对象包含了构建要创建的 Project 对象信息，任何一个 Gradle 构建都是由一个或多个
-								projects 组成。
+								</b> -- Settings 对象包含了构建要创建的 Project 对象信息，任何一个 Gradle 构建都是由一个或多个 projects 组成。
 							</p>
 							<pre class="brush: groovy;">
 apply plugin: 'java'
@@ -673,13 +605,12 @@ task projectMethods {
 
 						<div class="sub-item">
 							<p>
-								<b>1.7 <a
-										href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html"
-										target="_blank" style="text-decoration: underline;">Task</a>
+								<b>1.7
+									<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html" target="_blank" style="text-decoration: underline;">Task</a>
 									对象
 								</b> -- 每个 Project 都由多个 tasks 组成。每个 task 都代表了构建执行过程中的一个原子性操作。
-							<p>
-							<pre class="brush: groovy;">
+								<p>
+									<pre class="brush: groovy;">
 apply plugin: 'java'
 
 group = 'cm.nate'
@@ -720,10 +651,8 @@ task taskMethods {
 					<div class="panel-body">
 						<p>
 							Gradle 安装成功后，在任意一个空目录下执行
-							<code>$ gradle tasks</code>
-							, 可以看到如下输出：两个 setup 任务和一些 help 任务。使用
-							<code>$ gradle help --task init</code>
-							可查看指定任务的帮助信息。
+							<code>$ gradle tasks</code> , 可以看到如下输出：两个 setup 任务和一些 help 任务。使用
+							<code>$ gradle help --task init</code> 可查看指定任务的帮助信息。
 						</p>
 						<p width="100%">
 							<img src="images/gradle-def-tasks.png" class="img-responsive">
@@ -733,12 +662,9 @@ task taskMethods {
 								<p>
 									<code>
 										<b>init</b>
-									</code>
-									-- 初始化一个新的 Gradle 构建。生成
-									<code>settings.gradle</code>
-									,
-									<code>build.gradle</code>
-									及 Wrapper 相关文件。
+									</code> -- 初始化一个新的 Gradle 构建。生成
+									<code>settings.gradle</code> ,
+									<code>build.gradle</code> 及 Wrapper 相关文件。
 								</p>
 								<pre class="brush: bash;">
 ## 在 gradle 4.0 的版本中，init 任务支持以下几种构建类型 ##
@@ -761,8 +687,7 @@ $ gradle help --task init			# 使用 help 查看 init 任务相关信息
 								<p>
 									<code>
 										<b>wrapper</b>
-									</code>
-									-- 生成 Wrapper 相关文件。
+									</code> -- 生成 Wrapper 相关文件。
 								</p>
 								<pre class="brush: bash;">
 # 不使用参数的 wrapper 任务，直接生成系统安装版本的 wrapper 相关文件
@@ -776,48 +701,42 @@ $ gradle wrapper --gradle-version 3.0
 								<p>
 									<code>
 										<b>tasks</b>
-									</code>
-									-- 显示所有可运行的任务。
+									</code> -- 显示所有可运行的任务。
 								</p>
 							</li>
 							<li>
 								<p>
 									<code>
 										<b>projects</b>
-									</code>
-									-- 显示所有加入构建的子项目。
+									</code> -- 显示所有加入构建的子项目。
 								</p>
 							</li>
 							<li>
 								<p>
 									<code>
 										<b>properties</b>
-									</code>
-									-- 获取项目属性列表 。
+									</code> -- 获取项目属性列表 。
 								</p>
 							</li>
 							<li>
 								<p>
 									<code>
 										<b>dependencies</b>
-									</code>
-									-- 获取依赖列表。
+									</code> -- 获取依赖列表。
 								</p>
 							</li>
 							<li>
 								<p>
 									<code>
 										<b>help</b>
-									</code>
-									-- 显示帮助信息。
+									</code> -- 显示帮助信息。
 								</p>
 							</li>
 							<li>
 								<p>
 									<code>
 										<b>model</b>
-									</code>
-									-- 显示模型配置。
+									</code> -- 显示模型配置。
 								</p>
 							</li>
 						</ul>
@@ -896,8 +815,7 @@ $ gradle [option...] [task...]
 						<div class="sub-item">
 							<p>
 								每个 Project 都由多个 Tasks 组成。每个
-								<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html"
-									target="_blank" style="text-decoration: underline;">Task</a>
+								<a href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html" target="_blank" style="text-decoration: underline;">Task</a>
 								都代表了构建执行过程中的一个原子性操作。
 							</p>
 
@@ -1022,7 +940,8 @@ D.dependsOn {
 								<li>一个任务聚合了某一特定类型的所有任务的结果：如，测试报告任务结合了所有执行的测试任务的输出。</li>
 							</ul>
 							<p>
-								有两种排序规则是可用的："必须在之后运行” 和 “应该在之后运行”。<b>注意:任务排序并不意味着任务执行</b>
+								有两种排序规则是可用的："必须在之后运行” 和 “应该在之后运行”。
+								<b>注意:任务排序并不意味着任务执行</b>
 							</p>
 							<pre class="brush: groovy;">
 defaultTasks 'taskZ', 'taskY', 'taskX'
@@ -1047,13 +966,11 @@ taskZ.mustRunAfter 'taskX'
 
 						<div class="sub-item">
 							<p>
-								<b>4.5 跳过处于最新状态的任务</b> -- 如果您使用 Gradle 自带的任务，如 Java
-								插件所添加的任务的话，你可能已经注意到 Gradle 将跳过处于最新状态的任务(标识为 up-to-date
-								的任务)。这种行在您自己定义的任务上也有效，而不仅仅是内置任务。
+								<b>4.5 跳过处于最新状态的任务</b> -- 如果您使用 Gradle 自带的任务，如 Java 插件所添加的任务的话，你可能已经注意到 Gradle 将跳过处于最新状态的任务(标识为 up-to-date 的任务)。这种行在您自己定义的任务上也有效，而不仅仅是内置任务。
 							</p>
 							<p>
-								一个没有定义输出的任务将 <u>永远不会</u> 被当作是最新的。对于任务的输出并不是文件的场景，或者是更复杂的场景，
-								TaskOutputs.upToDateWhen() 方法允许您以编程方式计算任务的输出是否应该被判断为最新状态。
+								一个没有定义输出的任务将
+								<u>永远不会</u> 被当作是最新的。对于任务的输出并不是文件的场景，或者是更复杂的场景， TaskOutputs.upToDateWhen() 方法允许您以编程方式计算任务的输出是否应该被判断为最新状态。
 							</p>
 							<p>一个只定义了输出的任务，如果自上一次构建以来它的输出没有改变，那么它会被判定为最新状态。</p>
 						</div>
@@ -1115,23 +1032,18 @@ disableMe.enabled = false
 							<p>
 								<b>5.1 Gradle 插件简介</b>
 							</p>
-							<p>Gradle 在它的核心中有意地提供了一些小但有用的功能，用于在真实世界中的自动化。所有有用的功能，例如以能够编译
-								Java 代码为例，都是通过 插件 进行添加的。插件添加了新任务（如 JavaCompile ），域对象（如 SourceSet
+							<p>Gradle 在它的核心中有意地提供了一些小但有用的功能，用于在真实世界中的自动化。所有有用的功能，例如以能够编译 Java 代码为例，都是通过 插件 进行添加的。插件添加了新任务（如 JavaCompile ），域对象（如 SourceSet
 								），约定（如主要的 Java 源代码是位于 src/main/java），以及扩展的核心对象和其他插件的对象。</p>
 							<p>
 								一个插件是任何实现了
-								<a
-									href="docs/docs-gradle-1.12/javadoc/org/gradle/api/Plugin.html"
-									target="_blank">
+								<a href="docs/docs-gradle-1.12/javadoc/org/gradle/api/Plugin.html" target="_blank">
 									<u>Plugin</u>
 								</a>
-								接口的简单的类。Gradle
-								提供了核心插件作为其发行包的一部分，所以简单地应用如上插件是你所需要做的。然而，对于第三方插件，你需要进行配置以使插件在构建类路径中可用。
+								接口的简单的类。Gradle 提供了核心插件作为其发行包的一部分，所以简单地应用如上插件是你所需要做的。然而，对于第三方插件，你需要进行配置以使插件在构建类路径中可用。
 							</p>
 							<p>
 								插件都认为是被应用，通过
-								<code>Project.apply()</code>
-								方法来完成。可以使用如下三种方式应用插件：
+								<code>Project.apply()</code> 方法来完成。可以使用如下三种方式应用插件：
 							</p>
 							<pre class="brush: groovy;">
 apply plugin: 'java'
@@ -1166,54 +1078,68 @@ apply plugin: org.gradle.api.plugins.JavaPlugin
 								</thead>
 								<tbody>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/java_plugin.html">
-												java </a></td>
-										<td><code>java-base</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/java_plugin.html">
+												java </a>
+										</td>
+										<td>
+											<code>java-base</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>
 												向一个项目添加 Java 编译、 测试和捆绑的能力。它是很多其他 Gradle 插件的基础服务。另请参阅
-												<a
-													href="docs/docs-gradle-1.12/userguide/tutorial_java_projects.html">
-													第 7 章， <i>Java 快速入门</i>
+												<a href="docs/docs-gradle-1.12/userguide/tutorial_java_projects.html">
+													第 7 章，
+													<i>Java 快速入门</i>
 												</a>
 												。
 											</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/groovy_plugin.html">
-												groovy </a></td>
-										<td><code>java</code> , <code>groovy-base</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/groovy_plugin.html">
+												groovy </a>
+										</td>
+										<td>
+											<code>java</code> ,
+											<code>groovy-base</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>
 												添加对 Groovy 项目构建的支持。另请参阅
-												<a
-													href="docs/docs-gradle-1.12/userguide/tutorial_groovy_projects.html">
-													第9章， <i>Groovy 快速入门</i>
+												<a href="docs/docs-gradle-1.12/userguide/tutorial_groovy_projects.html">
+													第9章，
+													<i>Groovy 快速入门</i>
 												</a>
 												。
 											</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/scala_plugin.html">
-												scala </a></td>
-										<td><code>java</code> , <code>scala-base</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/scala_plugin.html">
+												scala </a>
+										</td>
+										<td>
+											<code>java</code> ,
+											<code>scala-base</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>添加对 Scala 项目构建的支持。</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/antlr_plugin.html">
-												antlr </a></td>
-										<td><code>java</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/antlr_plugin.html">
+												antlr </a>
+										</td>
+										<td>
+											<code>java</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>
@@ -1240,74 +1166,95 @@ apply plugin: org.gradle.api.plugins.JavaPlugin
 								</thead>
 								<tbody>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/application_plugin.html">
-												application </a></td>
-										<td><code>java</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/application_plugin.html">
+												application </a>
+										</td>
+										<td>
+											<code>java</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>添加了一些任务，用于运行和捆绑一个Java项目作为命令行应用程序。</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/ear_plugin.html">
-												ear </a></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/ear_plugin.html">
+												ear </a>
+										</td>
 										<td>-</td>
-										<td><code>java</code></td>
+										<td>
+											<code>java</code>
+										</td>
 										<td>
 											<p>添加用于构建 J2EE 应用程序的支持。</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/jetty_plugin.html">
-												jetty </a></td>
-										<td><code>war</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/jetty_plugin.html">
+												jetty </a>
+										</td>
+										<td>
+											<code>war</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>
 												在构建中部署你的web程序到一个内嵌的Jetty web容器中。另请参阅
-												<a
-													href="docs/docs-gradle-1.12/userguide/web_project_tutorial.html">
-													第 10 章， <i>Web 应用程序快速入门</i>
+												<a href="docs/docs-gradle-1.12/userguide/web_project_tutorial.html">
+													第 10 章，
+													<i>Web 应用程序快速入门</i>
 												</a>
 												。
 											</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/maven_plugin.html">
-												maven </a></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/maven_plugin.html">
+												maven </a>
+										</td>
 										<td>-</td>
-										<td><code>java</code> , <code>war</code></td>
+										<td>
+											<code>java</code> ,
+											<code>war</code>
+										</td>
 										<td>
 											<p>添加用于将项目发布到 Maven 仓库的支持。</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/osgi_plugin.html">
-												osgi </a></td>
-										<td><code>java-base</code></td>
-										<td><code>java</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/osgi_plugin.html">
+												osgi </a>
+										</td>
+										<td>
+											<code>java-base</code>
+										</td>
+										<td>
+											<code>java</code>
+										</td>
 										<td>
 											<p>添加构建 OSGi 捆绑包的支持。</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/war_plugin.html">
-												war </a></td>
-										<td><code>java</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/war_plugin.html">
+												war </a>
+										</td>
+										<td>
+											<code>java</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>
 												添加用于组装 web 应用程序的 WAR 文件的支持。另请参阅
-												<a
-													href="docs/docs-gradle-1.12/userguide/web_project_tutorial.html">
-													第 10 章， <i>Web 应用程序快速入门</i>
+												<a href="docs/docs-gradle-1.12/userguide/web_project_tutorial.html">
+													第 10 章，
+													<i>Web 应用程序快速入门</i>
 												</a>
 												。
 											</p>
@@ -1330,9 +1277,10 @@ apply plugin: org.gradle.api.plugins.JavaPlugin
 								</thead>
 								<tbody>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/announce_plugin.html">
-												announce </a></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/announce_plugin.html">
+												announce </a>
+										</td>
 										<td>-</td>
 										<td>-</td>
 										<td>
@@ -1340,182 +1288,209 @@ apply plugin: org.gradle.api.plugins.JavaPlugin
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/build_announcements_plugin.html">
-												build-announcements </a></td>
-										<td><code>announce</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/build_announcements_plugin.html">
+												build-announcements </a>
+										</td>
+										<td>
+											<code>announce</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>在构建的生命周期中，把本地公告中有关你感兴趣的事件发送到你的桌面。</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/checkstyle_plugin.html">
-												checkstyle </a></td>
-										<td><code>java-base</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/checkstyle_plugin.html">
+												checkstyle </a>
+										</td>
+										<td>
+											<code>java-base</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>
 												使用
-												<a class="ulink"
-													href="http://checkstyle.sourceforge.net/index.html"
-													target="_top">Checkstyle</a>
+												<a class="ulink" href="http://checkstyle.sourceforge.net/index.html" target="_top">Checkstyle</a>
 												对您的项目的 Java 源文件执行质量检查并生成报告。
 											</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/codenarc_plugin.html">
-												codenarc </a></td>
-										<td><code>groovy-base</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/codenarc_plugin.html">
+												codenarc </a>
+										</td>
+										<td>
+											<code>groovy-base</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>
 												使用
-												<a class="ulink"
-													href="http://codenarc.sourceforge.net/index.html"
-													target="_top">CodeNarc</a>
+												<a class="ulink" href="http://codenarc.sourceforge.net/index.html" target="_top">CodeNarc</a>
 												对您的项目的 Groovy 源文件执行质量检查并生成报告。
 											</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/eclipse_plugin.html">
-												eclipse </a></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/eclipse_plugin.html">
+												eclipse </a>
+										</td>
 										<td>-</td>
-										<td><code>java</code> , <code>groovy</code> , <code>scala</code>
+										<td>
+											<code>java</code> ,
+											<code>groovy</code> ,
+											<code>scala</code>
 										</td>
 										<td>
 											<p>
 												生成
-												<a class="ulink" href="http://eclipse.org" target="_top">Eclipse
-													IDE</a>
+												<a class="ulink" href="http://eclipse.org" target="_top">Eclipse IDE
+												</a>
 												所用到的文件，从而使项目能够导入到 Eclipse。另请参阅
-												<a
-													href="docs/docs-gradle-1.12/userguide/tutorial_java_projects.html">
-													第 7 章， <i>Java 快速入门</i>
+												<a href="docs/docs-gradle-1.12/userguide/tutorial_java_projects.html">
+													第 7 章，
+													<i>Java 快速入门</i>
 												</a>
 												。
 											</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/eclipse_plugin.html">
-												eclipse-wtp </a></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/eclipse_plugin.html">
+												eclipse-wtp </a>
+										</td>
 										<td>-</td>
-										<td><code>ear</code> , <code>war</code></td>
+										<td>
+											<code>ear</code> ,
+											<code>war</code>
+										</td>
 										<td>
 											<p>
-												与 eclipse 插件一样，但它还生成 eclipse WTP （Web 工具平台）
-												的配置文件。你的war/ear项目在导入eclipse 后，应配置为能在 WTP 中使用。另请参阅
-												<a
-													href="docs/docs-gradle-1.12/userguide/tutorial_java_projects.html">
-													第 7 章， <i>Java 快速入门</i>
+												与 eclipse 插件一样，但它还生成 eclipse WTP （Web 工具平台） 的配置文件。你的war/ear项目在导入eclipse 后，应配置为能在 WTP 中使用。另请参阅
+												<a href="docs/docs-gradle-1.12/userguide/tutorial_java_projects.html">
+													第 7 章，
+													<i>Java 快速入门</i>
 												</a>
 												。
 											</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/findbugs_plugin.html">
-												findbugs </a></td>
-										<td><code>java-base</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/findbugs_plugin.html">
+												findbugs </a>
+										</td>
+										<td>
+											<code>java-base</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>
 												使用
-												<a class="ulink" href="http://findbugs.sourceforge.net"
-													target="_top">FindBugs</a>
+												<a class="ulink" href="http://findbugs.sourceforge.net" target="_top">FindBugs</a>
 												对您的项目的 Java 源文件执行质量检查并生成报告。
 											</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/idea_plugin.html">
-												idea </a></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/idea_plugin.html">
+												idea </a>
+										</td>
 										<td>-</td>
-										<td><code>java</code></td>
+										<td>
+											<code>java</code>
+										</td>
 										<td>
 											<p>
 												生成
-												<a class="ulink"
-													href="http://www.jetbrains.com/idea/index.html"
-													target="_top">Intellij IDEA IDE</a>
+												<a class="ulink" href="http://www.jetbrains.com/idea/index.html" target="_top">Intellij IDEA IDE</a>
 												所用到的文件，从而使项目能够导入到 IDEA。
 											</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/jdepend_plugin.html">
-												jdepend </a></td>
-										<td><code>java-base</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/jdepend_plugin.html">
+												jdepend </a>
+										</td>
+										<td>
+											<code>java-base</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>
 												使用
-												<a class="ulink"
-													href="http://clarkware.com/software/JDepend.html"
-													target="_top">JDepend</a>
+												<a class="ulink" href="http://clarkware.com/software/JDepend.html" target="_top">JDepend</a>
 												对您的项目的源文件执行质量检查并生成报告。
 											</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/pmd_plugin.html">
-												pmd </a></td>
-										<td><code>java-base</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/pmd_plugin.html">
+												pmd </a>
+										</td>
+										<td>
+											<code>java-base</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>
 												使用
-												<a class="ulink" href="http://pmd.sourceforge.net"
-													target="_top">PMD</a>
+												<a class="ulink" href="http://pmd.sourceforge.net" target="_top">PMD</a>
 												对您的项目的 Java 源文件执行质量检查并生成报告。
 											</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/project_reports_plugin.html">
-												project-report </a></td>
-										<td><code>reporting-base</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/project_reports_plugin.html">
+												project-report </a>
+										</td>
+										<td>
+											<code>reporting-base</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>生成关于Gradle构建中有用的信息的报告。</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/signing_plugin.html">
-												signing </a></td>
-										<td><code>base</code></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/signing_plugin.html">
+												signing </a>
+										</td>
+										<td>
+											<code>base</code>
+										</td>
 										<td>-</td>
 										<td>
 											<p>添加对生成的文件或构件进行数字签名的功能。</p>
 										</td>
 									</tr>
 									<tr>
-										<td><a
-												href="docs/docs-gradle-1.12/userguide/sonar_plugin.html">
-												sonar </a></td>
+										<td>
+											<a href="docs/docs-gradle-1.12/userguide/sonar_plugin.html">
+												sonar </a>
+										</td>
 										<td>-</td>
-										<td><code>java-base</code>, <code>java</code>, <code>jacoco</code></td>
+										<td>
+											<code>java-base</code>,
+											<code>java</code>,
+											<code>jacoco</code>
+										</td>
 										<td>
 											<p>
 												提供对
-												<a class="ulink" href="http://www.sonarsource.org"
-													target="_top">Sonar</a>
+												<a class="ulink" href="http://www.sonarsource.org" target="_top">Sonar</a>
 												代码质量平台的集成。由
-												<a
-													href="docs/docs-gradle-1.12/userguide/sonar_runner_plugin.html">
+												<a href="docs/docs-gradle-1.12/userguide/sonar_runner_plugin.html">
 													<code>sonar-runner</code>
 												</a>
 												插件取代。
@@ -1542,46 +1517,38 @@ apply plugin: org.gradle.api.plugins.JavaPlugin
 											<div class="itemizedlist">
 												<ul class="itemizedlist">
 													<li class="listitem">
-														添加构建 <em class="replaceable"> <code>ConfigurationName</code>
+														添加构建
+														<em class="replaceable">
+															<code>ConfigurationName</code>
 														</em>任务。这些任务组装成属于指定配置的构件。
 													</li>
 													<li class="listitem">
-														添加上传 <em class="replaceable"> <code>ConfigurationName</code>
+														添加上传
+														<em class="replaceable">
+															<code>ConfigurationName</code>
 														</em>任务。这些任务组装并上传属于指定的配置的构件。
 													</li>
 													<li class="listitem">
 														为所有归档任务配置合适的默认值（比如从
-														<a class="ulink"
-															href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.bundling.AbstractArchiveTask.html"
-															target="_top">
+														<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.bundling.AbstractArchiveTask.html" target="_top">
 															<code class="classname">AbstractArchiveTask</code>
 														</a>
 														继承来任务）。例如，以下类型的归档任务：
-														<a class="ulink"
-															href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.bundling.Jar.html"
-															target="_top">
+														<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.bundling.Jar.html" target="_top">
 															<code class="classname">Jar</code>
 														</a>
 														，
-														<a class="ulink"
-															href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.bundling.Tar.html"
-															target="_top">
+														<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.bundling.Tar.html" target="_top">
 															<code class="classname">Tar</code>
 														</a>
 														，
-														<a class="ulink"
-															href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.bundling.Zip.html"
-															target="_top">
+														<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.bundling.Zip.html" target="_top">
 															<code class="classname">Zip</code>
 														</a>
 														。特别是，归档任务的
-														<code class="literal">destinationDir</code>
-														、
-														<code class="literal">baseName</code>
-														和
-														<code class="literal">version</code>
-														属性被预先配置了默认值。这是非常有用的，因为它促进了跨项目的一致性
-														；完成了有关构件命名规范及构建之后的位置上的一致。
+														<code class="literal">destinationDir</code> 、
+														<code class="literal">baseName</code> 和
+														<code class="literal">version</code> 属性被预先配置了默认值。这是非常有用的，因为它促进了跨项目的一致性 ；完成了有关构件命名规范及构建之后的位置上的一致。
 													</li>
 												</ul>
 											</div>
@@ -1626,34 +1593,27 @@ apply plugin: org.gradle.api.plugins.JavaPlugin
 							<ul>
 								<li>
 									<p>
-										<code>Build script</code>
-										-- 直接写在
-										<code>build.gradle</code>
-										文件中，这样写插件的好处是自动编译和包含在类路径的构建脚本,你无须做任何事。然而,插件构建脚本之外是不可见的,所以你不能重用插件。此种方式还包括了把插件写在
-										<code>~/.gradle/init.grade</code>
-										文件中，如果是在此文件中，同样也是可重复使用的，此方式一般用于初始化项目。
+										<code>Build script</code> -- 直接写在
+										<code>build.gradle</code> 文件中，这样写插件的好处是自动编译和包含在类路径的构建脚本,你无须做任何事。然而,插件构建脚本之外是不可见的,所以你不能重用插件。此种方式还包括了把插件写在
+										<code>~/.gradle/init.grade</code> 文件中，如果是在此文件中，同样也是可重复使用的，此方式一般用于初始化项目。
 									</p>
 								</li>
 								<li>
 									<p>
-										<code>buildSrc project</code>
-										-- 在
-										<code>rootProjectDir/buildSrc/src/main/groovy</code>
-										目录下编写插件代码，Gradle 将照顾编译和测试插件的类路径,使其可以在构建脚本。
-										<code>Gradle 3.0</code>
-										源码编译也使用了这种方式。
+										<code>buildSrc project</code> -- 在
+										<code>rootProjectDir/buildSrc/src/main/groovy</code> 目录下编写插件代码，Gradle 将照顾编译和测试插件的类路径,使其可以在构建脚本。
+										<code>Gradle 3.0</code> 源码编译也使用了这种方式。
 									</p>
 								</li>
 								<li>
 									<p>
-										<code>Standalone project</code>
-										-- 一个独立的 Groovy 和 Java 项目，可以把这个项目打包成 Jar 文件包，一个 Jar
-										文件包还可以包含多个插件入口，将文件包发布到本地 maven 库或托管平台上，供以后使用。
+										<code>Standalone project</code> -- 一个独立的 Groovy 和 Java 项目，可以把这个项目打包成 Jar 文件包，一个 Jar 文件包还可以包含多个插件入口，将文件包发布到本地 maven 库或托管平台上，供以后使用。
 									</p>
 								</li>
 							</ul>
 							<p>
-								<b>5.3.1 <code>Build script</code> 方式编写插件：
+								<b>5.3.1
+									<code>Build script</code> 方式编写插件：
 								</b>
 							</p>
 							<pre class="brush: groovy;">
@@ -1677,7 +1637,8 @@ class SayHelloPlugin implements Plugin&lt;Project> {
 apply from: '../scripts/SayHelloPlugin.gradle'
 </pre>
 							<p>
-								<b>5.3.2 <code>buildSrc project</code> 方式编写插件：
+								<b>5.3.2
+									<code>buildSrc project</code> 方式编写插件：
 								</b>
 							</p>
 							<div class="row">
@@ -1686,10 +1647,9 @@ apply from: '../scripts/SayHelloPlugin.gradle'
 										<li>
 											<p>
 												插件编写：在项目根目录下新建
-												<code>buildSrc/src/main/groovy/</code>
-												目录，并编写实现代码。
-											<p>
-											<pre class="brush: groovy;">
+												<code>buildSrc/src/main/groovy/</code> 目录，并编写实现代码。
+												<p>
+													<pre class="brush: groovy;">
 /**
  * 此插件向项目添加 author 属性，包括作者信息
  * Author.groovy -- 封装数据
@@ -1728,14 +1688,10 @@ class AuthorPlugin implements Plugin&lt;Project> {
 										<li>
 											<p>
 												插件编写：创建
-												<code>buildSrc/src/main/resources/META-INF/gradle-plugins/author.properties</code>
-												文件，注意这个文件命名是自定义的，文件名称可当作插件的名字，如
-												<code>apply plugin: 'java'</code>
-												, 在这里的名字就是
-												<code>java</code>
-												。
-												<code>author.properties</code>
-												指定了插件的实现类，文件内容如下：
+												<code>buildSrc/src/main/resources/META-INF/gradle-plugins/author.properties</code> 文件，注意这个文件命名是自定义的，文件名称可当作插件的名字，如
+												<code>apply plugin: 'java'</code> , 在这里的名字就是
+												<code>java</code> 。
+												<code>author.properties</code> 指定了插件的实现类，文件内容如下：
 											</p>
 											<pre class="brush: groovy;">implementation-class=cm.plugin.AuthorPlugin</pre>
 										</li>
@@ -1761,7 +1717,8 @@ task showPerson {
 							</div>
 
 							<p>
-								<b>5.3.3 <code>Standalone project</code> 方式编写插件：
+								<b>5.3.3
+									<code>Standalone project</code> 方式编写插件：
 								</b>
 							</p>
 							<div class="row">
@@ -1770,10 +1727,9 @@ task showPerson {
 										<li>
 											<p>
 												插件编写：在项目根目录下新建
-												<code>src/main/groovy/</code>
-												目录，并编写实现代码。
-											<p>
-											<pre class="brush: groovy;">
+												<code>src/main/groovy/</code> 目录，并编写实现代码。
+												<p>
+													<pre class="brush: groovy;">
 /**
  * 此插件向项目添加 author 属性，包括作者信息
  * Author.groovy -- 封装数据
@@ -1812,14 +1768,10 @@ class AuthorPlugin implements Plugin&lt;Project> {
 										<li>
 											<p>
 												插件编写：创建
-												<code>src/main/resources/META-INF/gradle-plugins/author.properties</code>
-												文件，注意这个文件命名是自定义的，文件名称可当作插件的名字，如
-												<code>apply plugin: 'java'</code>
-												, 在这里的名字就是
-												<code>java</code>
-												。
-												<code>author.properties</code>
-												指定了插件的实现类，文件内容如下：
+												<code>src/main/resources/META-INF/gradle-plugins/author.properties</code> 文件，注意这个文件命名是自定义的，文件名称可当作插件的名字，如
+												<code>apply plugin: 'java'</code> , 在这里的名字就是
+												<code>java</code> 。
+												<code>author.properties</code> 指定了插件的实现类，文件内容如下：
 											</p>
 											<pre class="brush: groovy;">implementation-class=cm.plugin.AuthorPlugin</pre>
 										</li>
@@ -1841,8 +1793,7 @@ class AuthorPlugin implements Plugin&lt;Project> {
 										<li>
 											<p>
 												插件调用：在插件使用的构建脚本
-												<code>build.gradle</code>
-												文件中：
+												<code>build.gradle</code> 文件中：
 											</p>
 											<pre class="brush: bash;">
 
@@ -1881,8 +1832,7 @@ class AuthorPlugin implements Plugin&lt;Project> {
 								</li>
 								<li>
 									<p>
-										<em>对非管理依赖的支持</em>：如果你的依赖只是版本控制下或共享的驱动器中的文件，Gradle
-										也提供了强大的功能以支持这种情况。
+										<em>对非管理依赖的支持</em>：如果你的依赖只是版本控制下或共享的驱动器中的文件，Gradle 也提供了强大的功能以支持这种情况。
 									</p>
 								</li>
 								<li>
@@ -1897,21 +1847,18 @@ class AuthorPlugin implements Plugin&lt;Project> {
 								</li>
 								<li>
 									<p>
-										<em>完全兼容 Maven 和 Ivy </em>：如果你已经在 Maven POM 文件或 Ivy
-										文件中定义了依赖，Gradle 提供了一系列受欢迎的构建工具可以进行无缝集成。
+										<em>完全兼容 Maven 和 Ivy </em>：如果你已经在 Maven POM 文件或 Ivy 文件中定义了依赖，Gradle 提供了一系列受欢迎的构建工具可以进行无缝集成。
 									</p>
 								</li>
 								<li>
 									<p>
-										<em>与现有依赖管理基础结构的集成</em>：Gradle 兼容 Maven 和 Ivy 仓库。如果你使用
-										Archiva， Nexus，或者是 Artifactory, Gradle 100% 兼容所有仓库的格式。
+										<em>与现有依赖管理基础结构的集成</em>：Gradle 兼容 Maven 和 Ivy 仓库。如果你使用 Archiva， Nexus，或者是 Artifactory, Gradle 100% 兼容所有仓库的格式。
 									</p>
 								</li>
 							</ul>
-							<div class="alert alert-success">Apache Ivy 是 Apache Ant
-								的一个子项目，提供了一致、可重复、易于维护的方法，来管理项目的所有构建依赖项。</div>
-							<div class="alert alert-success">Maven 是一个项目管理和整合的工具，Maven
-								为开发者提供了一套完整的构建生命周期框架，而 Ivy 则完全着眼于依赖管理。</div>
+							<div class="alert alert-success">Apache Ivy 是 Apache Ant 的一个子项目，提供了一致、可重复、易于维护的方法，来管理项目的所有构建依赖项。
+							</div>
+							<div class="alert alert-success">Maven 是一个项目管理和整合的工具，Maven 为开发者提供了一套完整的构建生命周期框架，而 Ivy 则完全着眼于依赖管理。</div>
 
 						</div>
 
@@ -1921,11 +1868,10 @@ class AuthorPlugin implements Plugin&lt;Project> {
 							</p>
 							<p>
 								传递依赖管理是一种技术，让你的项目能够依赖那些反过来依赖其他库的库。这种递归模式传递依赖的结果是，在一个依赖树中，会包含你的项目的第一级依赖、第二级依赖，等等。如果你不把你的依赖作为层次结构树的第一级和第二级依赖的模型，那么在对未组织的依赖进行混乱的组装之后，就会很容易地失去控制。考虑
-								Gradle 项目本身，虽然 Gradle 仅有几个直接的第一级依赖，当 编译 Gradle
-								时在它的类路径上会需要超过一百个的依赖。</p>
+								Gradle 项目本身，虽然 Gradle 仅有几个直接的第一级依赖，当 编译 Gradle 时在它的类路径上会需要超过一百个的依赖。
+							</p>
 							<p>
-								<b>解决版本冲突的问题：</b> 相同的 jar
-								包的冲突版本应该被检测到，并且要么解决，要么抛出异常。如果你不使用传递依赖管理，版本冲突没被发现，那么在类路径中无法预测的顺序，将导致不知道会使用哪一个版本的依赖。
+								<b>解决版本冲突的问题：</b> 相同的 jar 包的冲突版本应该被检测到，并且要么解决，要么抛出异常。如果你不使用传递依赖管理，版本冲突没被发现，那么在类路径中无法预测的顺序，将导致不知道会使用哪一个版本的依赖。
 							</p>
 							<p>
 								<b>Gradle 提供了以下的冲突解决策略：</b>
@@ -1952,18 +1898,17 @@ class AuthorPlugin implements Plugin&lt;Project> {
 							<p>
 								<b>使用动态版本和变化的模块：</b>
 								有许多情况，是你想要使用一个特定依赖的最新版本，或者是某个版本范围内的最新版。这可以是在开发中需要，或者你可能正在开发一个库，它被设计为使用一个范围内的依赖版本。你可以通过使用动态版本很容易地依赖这些不断变化的依赖。一个动态的版本可以是一个版本范围（如
-								<code>2.+</code>
-								），也可以是表示可用的最新版本的占位符（如
-								<code>latest.integration</code>
-								）。
+								<code>2.+</code> ），也可以是表示可用的最新版本的占位符（如
+								<code>latest.integration</code> ）。
 							</p>
-							<p>另外，你请求的模块随着时间推移，即使是同一版本，有时也可能改变了。这种变化模块的类型的一个例子是 Maven
-								SNAPSHOT 模块，它总是指向最新发布的构件。换句话说，一个标准的 Maven snapshot
-								是一个这样的模块，它永远不会不变，可以说，它是 “不断变化的模块”。</p>
+							<p>另外，你请求的模块随着时间推移，即使是同一版本，有时也可能改变了。这种变化模块的类型的一个例子是 Maven SNAPSHOT 模块，它总是指向最新发布的构件。换句话说，一个标准的 Maven snapshot 是一个这样的模块，它永远不会不变，可以说，它是
+								“不断变化的模块”。</p>
 							<p>
-								<em>动态版本</em> 和 <em>变化模块</em> 的主要区别是，当你解析一个 <em>动态版本</em>
-								时，你会得到真正的、 静态的版本作为模块名称。当你解析一个 <em>变化模块</em> 时，这个 artifacts
-								使用你请求的版本进行命名，但下层的 artifacts 可能随时会有变化。
+								<em>动态版本</em> 和
+								<em>变化模块</em> 的主要区别是，当你解析一个
+								<em>动态版本</em>
+								时，你会得到真正的、 静态的版本作为模块名称。当你解析一个
+								<em>变化模块</em> 时，这个 artifacts 使用你请求的版本进行命名，但下层的 artifacts 可能随时会有变化。
 							</p>
 							<p>默认情况下，Gradle 对动态版本和变化模块的缓存时间是 24 小时。你可以使用命令行选项重写默认的缓存模式。</p>
 						</div>
@@ -1976,8 +1921,7 @@ class AuthorPlugin implements Plugin&lt;Project> {
 							<ul>
 								<li>
 									<p>
-										<a target="_blank"
-											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:module_dependencies">外部模块依赖</a>
+										<a target="_blank" href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:module_dependencies">外部模块依赖</a>
 										-- 对一些仓库中的外部模块的依赖
 									</p>
 									<pre class="brush: groovy;">
@@ -2000,8 +1944,7 @@ dependencies {
 								</li>
 								<li>
 									<p>
-										<a target="_blank"
-											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:project_dependencies">项目依赖</a>
+										<a target="_blank" href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:project_dependencies">项目依赖</a>
 										-- 在同一个构建中对另一个项目的依赖
 									</p>
 									<pre class="brush: groovy;">
@@ -2012,8 +1955,7 @@ dependencies {
 								</li>
 								<li>
 									<p>
-										<a target="_blank"
-											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:file_dependencies">文件依赖</a>
+										<a target="_blank" href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:file_dependencies">文件依赖</a>
 										-- 对本地文件系统中的一些文件的依赖
 									</p>
 									<pre class="brush: groovy;">
@@ -2025,10 +1967,8 @@ dependencies {
 								</li>
 								<li>
 									<p>
-										<a target="_blank"
-											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:client_module_dependencies">客户端模块依赖</a>
-										-- 对外部模块的依赖，该块部模块的 artifacts
-										存储于一些仓库中，但是模块的元数据由本地构建指定。当你想要重写模块的元数据时，你可以使用这种类型的依赖。
+										<a target="_blank" href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:client_module_dependencies">客户端模块依赖</a>
+										-- 对外部模块的依赖，该块部模块的 artifacts 存储于一些仓库中，但是模块的元数据由本地构建指定。当你想要重写模块的元数据时，你可以使用这种类型的依赖。
 									</p>
 									<pre class="brush: groovy;">
 dependencies {
@@ -2045,11 +1985,8 @@ dependencies {
 								</li>
 								<li>
 									<p>
-										<a target="_blank"
-											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:api_dependencies">Gradle
-											API 依赖</a>
-										-- 对当前的 Gradle 版本的 API 的依赖当你正在开发自定义的 Gradle
-										插件和任务类型时，你可以使用这种类型的依赖。
+										<a target="_blank" href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:api_dependencies">Gradle API 依赖</a>
+										-- 对当前的 Gradle 版本的 API 的依赖当你正在开发自定义的 Gradle 插件和任务类型时，你可以使用这种类型的依赖。
 									</p>
 									<pre class="brush: groovy;">
 dependencies {
@@ -2059,11 +1996,8 @@ dependencies {
 								</li>
 								<li>
 									<p>
-										<a target="_blank"
-											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:groovy_dependencies">本地的
-											Groovy 依赖</a>
-										-- 对当前的 Gradle 所使用的 Groovy 版本的依赖。当你正在开发自定义的 Gradle
-										插件和任务类型时，你可以使用这种类型的依赖。
+										<a target="_blank" href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:groovy_dependencies">本地的 Groovy 依赖</a>
+										-- 对当前的 Gradle 所使用的 Groovy 版本的依赖。当你正在开发自定义的 Gradle 插件和任务类型时，你可以使用这种类型的依赖。
 									</p>
 									<pre class="brush: groovy;">
 dependencies {
@@ -2081,9 +2015,8 @@ dependencies {
 							<ul>
 								<li>
 									<p>
-										<a target="_blank"
-											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:maven_central">Maven
-											中央仓库</a>
+										<a target="_blank" href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:maven_central">Maven 中央仓库
+										</a>
 										-- 一个会在 Maven 中央仓中查找依赖的预配置仓库。
 									</p>
 									<pre class="brush: groovy;">
@@ -2094,9 +2027,7 @@ repositories {
 								</li>
 								<li>
 									<p>
-										<a target="_blank"
-											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:maven_jcenter">Maven
-											JCenter 仓库</a>
+										<a target="_blank" href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:maven_jcenter">Maven JCenter 仓库</a>
 										-- 一个会在 Bintray 的 Jcenter 查找依赖的预配置仓库。
 									</p>
 									<pre class="brush: groovy;">
@@ -2107,9 +2038,8 @@ repositories {
 								</li>
 								<li>
 									<p>
-										<a target="_blank"
-											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:maven_local">Maven
-											本地仓库</a>
+										<a target="_blank" href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:maven_local">Maven 本地仓库
+										</a>
 										-- 一个会在本地 Maven 仓库中查找依赖的预配置仓库。
 									</p>
 									<pre class="brush: groovy;">
@@ -2120,9 +2050,8 @@ repositories {
 								</li>
 								<li>
 									<p>
-										<a target="_blank"
-											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:maven_repo">Maven
-											仓库</a>
+										<a target="_blank" href="docs/docs-gradle-1.12/userguide/dependency_management.html#sub:maven_repo">Maven 仓库
+										</a>
 										-- 一个 Maven 仓库。可以位于本地文件系统上，或在某个远程的位置。
 									</p>
 									<pre class="brush: groovy;">
@@ -2157,9 +2086,8 @@ repositories {
 								</li>
 								<li>
 									<p>
-										<a target="_blank"
-											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sec:ivy_repositories">Ivy
-											仓库</a>
+										<a target="_blank" href="docs/docs-gradle-1.12/userguide/dependency_management.html#sec:ivy_repositories">Ivy 仓库
+										</a>
 										-- 一个 Ivy 仓库可以位于本地文件系统上，或在某个远程的位置。
 									</p>
 									<pre class="brush: groovy;">
@@ -2217,9 +2145,8 @@ repositories {
 								</li>
 								<li>
 									<p>
-										<a target="_blank"
-											href="docs/docs-gradle-1.12/userguide/dependency_management.html#sec:flat_dir_resolver">Flat
-											目录仓库</a>
+										<a target="_blank" href="docs/docs-gradle-1.12/userguide/dependency_management.html#sec:flat_dir_resolver">Flat 目录仓库
+										</a>
 										-- 一个在本地文件系统上的简单的仓库。不支持任何元数据格式。
 									</p>
 									<pre class="brush: groovy;">
@@ -2247,14 +2174,12 @@ repositories {
 						<h3 class="panel-title">7. Java 插件</h3>
 					</div>
 					<div class="panel-body">
-						<p>Java 插件向 project 添加了 Java 编译、 测试和捆绑的能力。它是很多其他 Gradle
-							插件的基础服务。</p>
+						<p>Java 插件向 project 添加了 Java 编译、 测试和捆绑的能力。它是很多其他 Gradle 插件的基础服务。
+						</p>
 						<p>
-							Java 插件引入了一个 <b>源集</b> 的概念。一个源集只是一组用于编译并一起执行的源文件。这些源文件可能包括 Java
-							源代码文件和资源文件。其他有一些插件添加了在源集里包含 Groovy 和 Scala
-							的源代码文件的能力。一个源集有一个相关联的编译类路径和运行时类路径。Java 插件定义了两个标准的源集，分别是 main 和
-							test。 main 源集包含你产品的源代码，它们将被编译并组装成一个 JAR 文件。 test
-							源集包含你的单元测试的源代码，它们将被编译并使用 JUnit 或 TestNG 来执行。
+							Java 插件引入了一个
+							<b>源集</b> 的概念。一个源集只是一组用于编译并一起执行的源文件。这些源文件可能包括 Java 源代码文件和资源文件。其他有一些插件添加了在源集里包含 Groovy 和 Scala 的源代码文件的能力。一个源集有一个相关联的编译类路径和运行时类路径。Java
+							插件定义了两个标准的源集，分别是 main 和 test。 main 源集包含你产品的源代码，它们将被编译并组装成一个 JAR 文件。 test 源集包含你的单元测试的源代码，它们将被编译并使用 JUnit 或 TestNG 来执行。
 						</p>
 						<div class="sub-item">
 							<p>
@@ -2271,130 +2196,174 @@ repositories {
 								</thead>
 								<tbody>
 									<tr>
-										<td><code>compileJava</code></td>
-										<td>产生编译类路径中的所有任务。这包括了用于 <code>编译</code>配置中包含的项目依赖关系的 <code>jar</code>任务。
+										<td>
+											<code>compileJava</code>
 										</td>
-										<td><a class="ulink"
-												href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.compile.JavaCompile.html"
-												target="_blank">
+										<td>产生编译类路径中的所有任务。这包括了用于
+											<code>编译</code>配置中包含的项目依赖关系的
+											<code>jar</code>任务。
+										</td>
+										<td>
+											<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.compile.JavaCompile.html" target="_blank">
 												<code class="classname">JavaCompile</code>
-											</a></td>
+											</a>
+										</td>
 										<td>使用 javac 编译产品中的 Java 源文件。</td>
 									</tr>
 									<tr>
-										<td><code>processResources</code></td>
+										<td>
+											<code>processResources</code>
+										</td>
 										<td>-</td>
-										<td><a class="ulink"
-												href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Copy.html"
-												target="_blank">
+										<td>
+											<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Copy.html" target="_blank">
 												<code class="classname">Copy</code>
-											</a></td>
+											</a>
+										</td>
 										<td>把生产资源文件拷贝到生产的类目录中。</td>
 									</tr>
 									<tr>
-										<td><code>classes</code></td>
-										<td><code>compileJava</code>和 <code>processResources</code>。一些插件添加了额外的编译任务。</td>
-										<td><a class="ulink"
-												href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html"
-												target="_blank">
+										<td>
+											<code>classes</code>
+										</td>
+										<td>
+											<code>compileJava</code>和
+											<code>processResources</code>。一些插件添加了额外的编译任务。</td>
+										<td>
+											<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html" target="_blank">
 												<code class="classname">Task</code>
-											</a></td>
+											</a>
+										</td>
 										<td>组装生产的类目录。</td>
 									</tr>
 									<tr>
-										<td><code>compileTestJava</code></td>
-										<td><code>compile</code>，再加上所有能产生测试编译类路径的任务。</td>
-										<td><a class="ulink"
-												href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.compile.JavaCompile.html"
-												target="_blank">
+										<td>
+											<code>compileTestJava</code>
+										</td>
+										<td>
+											<code>compile</code>，再加上所有能产生测试编译类路径的任务。</td>
+										<td>
+											<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.compile.JavaCompile.html" target="_blank">
 												<code class="classname">JavaCompile</code>
-											</a></td>
+											</a>
+										</td>
 										<td>使用 javac 编译 Java 的测试源文件。</td>
 									</tr>
 									<tr>
-										<td><code>processTestResources</code></td>
+										<td>
+											<code>processTestResources</code>
+										</td>
 										<td>-</td>
-										<td><a class="ulink"
-												href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Copy.html"
-												target="_blank">
+										<td>
+											<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Copy.html" target="_blank">
 												<code class="classname">Copy</code>
-											</a></td>
+											</a>
+										</td>
 										<td>把测试的资源文件拷贝到测试的类目录中。</td>
 									</tr>
 									<tr>
-										<td><code>testClasses</code></td>
-										<td><code>compileTestJava</code>和 <code>processTestResources</code>。一些插件添加了额外的测试编译任务。</td>
-										<td><a class="ulink"
-												href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html"
-												target="_blank">
+										<td>
+											<code>testClasses</code>
+										</td>
+										<td>
+											<code>compileTestJava</code>和
+											<code>processTestResources</code>。一些插件添加了额外的测试编译任务。</td>
+										<td>
+											<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.Task.html" target="_blank">
 												<code class="classname">Task</code>
-											</a></td>
+											</a>
+										</td>
 										<td>组装测试的类目录。</td>
 									</tr>
 									<tr>
-										<td><code>jar</code></td>
-										<td><code>compile</code></td>
-										<td><a class="ulink"
-												href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.bundling.Jar.html"
-												target="_blank">
+										<td>
+											<code>jar</code>
+										</td>
+										<td>
+											<code>compile</code>
+										</td>
+										<td>
+											<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.bundling.Jar.html" target="_blank">
 												<code class="classname">Jar</code>
-											</a></td>
+											</a>
+										</td>
 										<td>组装 JAR 文件</td>
 									</tr>
 									<tr>
-										<td><code>javadoc</code></td>
-										<td><code>compile</code></td>
-										<td><a class="ulink"
-												href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.javadoc.Javadoc.html"
-												target="_blank">
+										<td>
+											<code>javadoc</code>
+										</td>
+										<td>
+											<code>compile</code>
+										</td>
+										<td>
+											<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.javadoc.Javadoc.html" target="_blank">
 												<code class="classname">Javadoc</code>
-											</a></td>
+											</a>
+										</td>
 										<td>使用 Javadoc 生成生产的 Java 源代码的API文档</td>
 									</tr>
 									<tr>
-										<td><code>test</code></td>
-										<td><code>compile</code>， <code>compileTest</code>，再加上所有产生测试运行时类路径的任务。</td>
-										<td><a class="ulink"
-												href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.testing.Test.html"
-												target="_blank">
+										<td>
+											<code>test</code>
+										</td>
+										<td>
+											<code>compile</code>，
+											<code>compileTest</code>，再加上所有产生测试运行时类路径的任务。</td>
+										<td>
+											<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.testing.Test.html" target="_blank">
 												<code class="classname">Test</code>
-											</a></td>
+											</a>
+										</td>
 										<td>使用 JUnit 或 TestNG运行单元测试。</td>
 									</tr>
 									<tr>
-										<td><code>uploadArchives</code></td>
-										<td>使用 <code>archives</code>的配置生成构件的任务，包括 <code>jar</code>。
+										<td>
+											<code>uploadArchives</code>
 										</td>
-										<td><a class="ulink"
-												href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Upload.html"
-												target="_blank">
+										<td>使用
+											<code>archives</code>的配置生成构件的任务，包括
+											<code>jar</code>。
+										</td>
+										<td>
+											<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Upload.html" target="_blank">
 												<code class="classname">Upload</code>
-											</a></td>
-										<td>使用 <code>archives</code>配置上传包括 JAR 文件的构件。
+											</a>
+										</td>
+										<td>使用
+											<code>archives</code>配置上传包括 JAR 文件的构件。
 										</td>
 									</tr>
 									<tr>
-										<td><code>clean</code></td>
+										<td>
+											<code>clean</code>
+										</td>
 										<td>-</td>
-										<td><a class="ulink"
-												href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Delete.html"
-												target="_blank">
+										<td>
+											<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Delete.html" target="_blank">
 												<code class="classname">Delete</code>
-											</a></td>
+											</a>
+										</td>
 										<td>删除项目的build目录。</td>
 									</tr>
 									<tr>
-										<td><code>
-												clean<em class="replaceable"><code>TaskName</code></em>
-											</code></td>
+										<td>
+											<code>
+												clean<em class="replaceable"><code>TaskName</code>
+											</em>
+											</code>
+										</td>
 										<td>-</td>
-										<td><a class="ulink"
-												href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Delete.html"
-												target="_blank">
+										<td>
+											<a class="ulink" href="docs/docs-gradle-1.12/dsl/org.gradle.api.tasks.Delete.html" target="_blank">
 												<code class="classname">Delete</code>
-											</a></td>
-										<td>删除由指定的任务所产生的输出文件。例如， <code>cleanJar</code>将删除由 <code>jar</code>任务中所创建的
-											JAR 文件， <code>cleanTest</code>将删除由 <code>test</code>任务所创建的测试结果。
+											</a>
+										</td>
+										<td>删除由指定的任务所产生的输出文件。例如，
+											<code>cleanJar</code>将删除由
+											<code>jar</code>任务中所创建的 JAR 文件，
+											<code>cleanTest</code>将删除由
+											<code>test</code>任务所创建的测试结果。
 										</td>
 									</tr>
 								</tbody>
@@ -2410,8 +2379,7 @@ repositories {
 
 						<div class="sub-item">
 							<p>
-								<b>7.2 属性</b> -- Java 插件向项目添加了许多常规属性，如下图所示。您可以在构建脚本中使用这些属性，就像它们是
-								project 对象的属性一样
+								<b>7.2 属性</b> -- Java 插件向项目添加了许多常规属性，如下图所示。您可以在构建脚本中使用这些属性，就像它们是 project 对象的属性一样
 							</p>
 							<pre class="brush: groovy;">
 task generalAttributes {
@@ -2450,6 +2418,157 @@ task sourceSetAttributes {
 }
 </pre>
 						</div>
+						<div class="sub-item">
+							<p>
+								<b>7.3 Java 应用程序项目标准结构图</b> --
+								<a href="demos/gradle-java-project.zip">gradle-java-project.zip</a>
+							</p>
+							<div class="row">
+								<div class="col-md-5">
+									<ul>
+										<li>
+											<p>项目结构：</p>
+											<p>
+												<code>java-project</code> -- 根项目</p>
+											<p>
+												<code>app</code> -- 主项目(运行类)</p>
+											<p>
+												<code>library</code> -- 库项目(主项目依赖库项目）</p>
+										</li>
+
+									</ul>
+
+								</div>
+								<div class="col-md-7">
+									<pre class="brush: bash;">
+java-project
+	├── app
+	│   ├── build.gradle
+	│   ├── libs
+	│	├── gradle.properties
+	│   └── src
+	│       ├── main
+	│       │   └── java
+	│       │       └── App.java
+	│       └── test
+	│           └── java
+	│               └── AppTest.java
+	├── build.gradle
+	├── gradle
+	│   └── wrapper
+	│       ├── gradle-wrapper.jar
+	│       └── gradle-wrapper.properties
+	├── gradlew
+	├── gradlew.bat
+	├── gradle.properties
+	├── local.properties
+	├── library
+	│   ├── build.gradle
+	│	├── gradle.properties
+	│   ├── libs
+	│   │   ├── commons-lang3-3.5.jar
+	│   │   ├── commons-logging-1.2.jar
+	│   │   └── log4j-1.2.17.jar
+	│   └── src
+	│       ├── main
+	│       │   └── java
+	│       │       └── cm
+	│       │           └── library
+	│       │               └── utils
+	│       │                   ├── HttpUtils.java
+	│       │                   └── Tools.java
+	│       └── test
+	│           └── java
+	└── settings.gradle
+</pre>
+								</div>
+							</div>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>7.4 Java Web 项目结构</b> --
+								<a href="demos/gradle-web-project.zip">gradle-web-project.zip</a>
+							</p>
+							<div class="row">
+								<div class="col-md-5">
+									<ul>
+										<li>
+											<p>项目结构：</p>
+											<p>
+												<code>web-project</code> -- 根项目</p>
+											<p>
+												<code>app</code> -- 主项目(java web 项目)</p>
+											<p>
+												<code>library</code> -- 库项目(主项目依赖库项目）</p>
+										</li>
+										<li>
+											<p>使用 jetty 运行：
+												<code>$ gradle jettyRun</code>
+											</p>
+											<p>
+												<a href="http://localhost:8080/app/" target="_blank">JSP 页面测试</a>
+											</p>
+											<p>
+												<a href="http://localhost:8080/app/TestServlet" target="_blank">Servlet 接口测试</a>
+											</p>
+										</li>
+									</ul>
+
+								</div>
+								<div class="col-md-7">
+									<pre class="brush: bash;">
+web-project
+	├── app
+	│   ├── build.gradle
+	│   ├── gradle-app.setting
+	│   ├── gradle.properties
+	│   └── src
+	│       ├── main
+	│       │   ├── java
+	│       │   │   └── cm
+	│       │   │       └── nate
+	│       │   │           └── web
+	│       │   │               └── TestServlet.java
+	│       │   ├── resources
+	│       │   └── webapp
+	│       │       ├── index.jsp
+	│       │       └── WEB-INF
+	│       │           └── web.xml
+	│       └── test
+	│           ├── java
+	│           └── resources
+	├── build.gradle
+	├── gradle
+	│   └── wrapper
+	│       ├── gradle-wrapper.jar
+	│       └── gradle-wrapper.properties
+	├── gradle.properties
+	├── gradlew
+	├── gradlew.bat
+	├── library
+	│   ├── build.gradle
+	│   ├── gradle.properties
+	│   ├── libs
+	│   │   ├── commons-lang3-3.5.jar
+	│   │   ├── commons-logging-1.2.jar
+	│   │   └── log4j-1.2.17.jar
+	│   └── src
+	│       ├── main
+	│       │   └── java
+	│       │       └── cm
+	│       │           └── library
+	│       │               └── utils
+	│       │                   ├── HttpUtils.java
+	│       │                   └── Tools.java
+	│       └── test
+	│           └── java
+	└── settings.gradle
+</pre>
+								</div>
+							</div>
+
+						</div>
 
 
 
@@ -2458,12 +2577,104 @@ task sourceSetAttributes {
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="gradle-"></a>
+				<a class="offset" id="gradle-android"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">8.Android 插件</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								<b>8.1 Android 项目标准结构图</b> --
+								<a href="demos/gradle-android-project.zip">gradle-android-project.zip</a>
+							</p>
+							<div class="row">
+								<div class="col-md-5">
+									<p>Android 项目要使用 gradle android 插件, 版本要对应。具体对应关系参见：
+										<a href="https://developer.android.google.cn/studio/releases/gradle-plugin.html"
+										 target="_blank">Gradle 版本与 Gradle Android 插件对应关系</a>
+										</a>
+									</p>
+									<p>
+										<b>Gradle 版本：</b> 3.0, 在根项目中的
+										<br>
+										<code>gradle-wrapper.properties</code>文件中</p>
+									<p>
+										<b>Gradle 插件版本：</b> 2.2.3, 在根项目中的
+										<code>build.gradle</code> 文件中
+										<pre class="brush: bash;">
+'com.android.tools.build:gradle:2.2.3'</pre>
+									</p>
+									<p>
+										<b>build-tools 版本： 23.0.3</b>， 在 android 项目中的
+										<code>build.gradle</code> 文件中.
+										<br>
+										<pre class="brush: bash;">buildToolsVersion '23.0.3'</pre>
+									</p>
+
+
+								</div>
+								<div class="col-md-7">
+									<pre class="brush: bash;gutter: false;">
+MyApplication
+	├── app
+	│   ├── build.gradle
+	│   ├── libs
+	│   ├── proguard-rules.pro
+	│   └── src
+	│       ├── androidTest
+	│       │   └── java
+	│       │       └── com
+	│       │           └── lesson1234
+	│       │               └── myapplication
+	│       │                   └── ExampleInstrumentedTest.java
+	│       ├── main
+	│       │   ├── AndroidManifest.xml
+	│       │   ├── java
+	│       │   │   └── com
+	│       │   │       └── lesson1234
+	│       │   │           └── myapplication
+	│       │   │               └── MainActivity.java
+	│       │   └── res
+	│       │       ├── drawable
+	│       │       │   └── ic_launcher_background.xml
+	│       │       ├── layout
+	│       │       │   └── activity_main.xml
+	│       │       ├── mipmap-hdpi
+	│       │       │   └── ic_launcher.png
+	│       │       ├── mipmap-mdpi
+	│       │       │   └── ic_launcher.png
+	│       │       ├── mipmap-xhdpi
+	│       │       │   └── ic_launcher.png
+	│       │       ├── mipmap-xxhdpi
+	│       │       │   └── ic_launcher.png
+	│       │       ├── mipmap-xxxhdpi
+	│       │       │   └── ic_launcher.png
+	│       │       └── values
+	│       │           ├── colors.xml
+	│       │           ├── strings.xml
+	│       │           └── styles.xml
+	│       └── test
+	│           └── java
+	│               └── com
+	│                   └── lesson1234
+	│                       └── myapplication
+	│                           └── ExampleUnitTest.java
+	├── build.gradle
+	├── gradle
+	│   └── wrapper
+	│       ├── gradle-wrapper.jar
+	│       └── gradle-wrapper.properties
+	├── gradle.properties
+	├── gradlew
+	├── gradlew.bat
+	├── local.properties
+	└── settings.gradle
+</pre>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -2482,13 +2693,10 @@ task sourceSetAttributes {
 	</div>
 
 	<div class="btn-group-vertical bottom-button">
-		<a href="#" type="button"
-			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
+		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
-		<a href="#" type="button"
-			class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup"> TOP </a>
+		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary" data-toggle="dropup"> TOP </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -2501,4 +2709,5 @@ task sourceSetAttributes {
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
+
 </html>
