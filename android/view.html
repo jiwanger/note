@@ -66,14 +66,15 @@
 					</div>
 					<div class="list-group">
 						<a href="#" class="list-group-item">概述</a>
-						<a href="#view-SurfaceView" class="list-group-item">SurfaceView</a>
-						<a href="#view-View" class="list-group-item">View 类</a>
+
 						<a href="#view-measure" class="list-group-item">View 框架的
 							measure 机制</a>
 						<a href="#view-layout" class="list-group-item">View 框架的 layout
 							机制</a>
 						<a href="#view-draw" class="list-group-item">View 框架的 draw 机制</a>
 						<a href="#view-event" class="list-group-item">View 框架的事件分发机制</a>
+						<a href="#view-View" class="list-group-item">View 类</a>
+						<a href="#view-Canvas" class="list-group-item">View 和 Canvas</a>
 						<a class="list-group-item active dropdown" data-toggle="collapse"
 							data-parent="#accordion" href="#view-view" aria-expanded="true">
 							常用的 View<span class="caret pull-right" style="margin-top: 5px;"></span>
@@ -81,9 +82,9 @@
 						<div id="view-view" class="panel-collapse collapse"
 							role="tabpanel">
 							<a href="#view-TextView" class="list-group-item">TextView</a>
-							<a href="#view-" class="list-group-item">ImageView</a>
-							<a href="#view-" class="list-group-item">EditText</a>
-							<a href="#view-" class="list-group-item">Button</a>
+							<a href="#view-ImageView" class="list-group-item">ImageView</a>
+							<a href="#view-EditText" class="list-group-item">EditText</a>
+							<a href="#view-Button" class="list-group-item">Button</a>
 							<a href="#view-" class="list-group-item">RadioButton</a>
 							<a href="#view-" class="list-group-item">CheckBox</a>
 							<a href="#view-" class="list-group-item">ProgressBar</a>
@@ -97,6 +98,7 @@
 							<a href="#view-" class="list-group-item">ScrollView</a>
 							<a href="#view-" class="list-group-item">Toast</a>
 						</div>
+						<a href="#view-SurfaceView" class="list-group-item">SurfaceView</a>
 						<a href="#view-ViewGroup" class="list-group-item">ViewGroup 类</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
 							data-parent="#accordion" href="#view-viewgroup"
@@ -106,11 +108,11 @@
 						</a>
 						<div id="view-viewgroup" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#view-layout-LinearLayout" class="list-group-item">LinearLayout</a>
-							<a href="#view-layout-FrameLayout" class="list-group-item">FrameLayout</a>
-							<a href="#view-layout-RelativeLayout" class="list-group-item">RelativeLayout</a>
-							<a href="#view-layout-AbsoluteLayout" class="list-group-item">AbsoluteLayout</a>
-							<a href="#view-layout-TableLayout" class="list-group-item">TableLayout</a>
+							<a href="#view-LinearLayout" class="list-group-item">LinearLayout</a>
+							<a href="#view-FrameLayout" class="list-group-item">FrameLayout</a>
+							<a href="#view-RelativeLayout" class="list-group-item">RelativeLayout</a>
+							<a href="#view-AbsoluteLayout" class="list-group-item">AbsoluteLayout</a>
+							<a href="#view-TableLayout" class="list-group-item">TableLayout</a>
 						</div>
 
 					</div>
@@ -146,370 +148,6 @@
 						<p>View 是所有 widget 类的基类，Widget 类用于创建交互式UI构件（按钮，输入框等）。</p>
 						<p>View 类的 ViewGroup 子类是 layout 的基类，Layout 是一个不可见的容器，它保存着
 							View（或 ViewGroup）并定义这些 View 的 layout 属性。</p>
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="view-SurfaceView"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">SurfaceView</h3>
-					</div>
-					<div class="panel-body">
-						<pre class="brush: java;">
-
-</pre>
-					</div>
-				</div>
-				<!-- item over -->
-
-				<!-- item start -->
-				<a class="offset" id="view-View"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">View 类</h3>
-					</div>
-					<div class="panel-body">
-						<div class="sub-item">
-							<p>
-								<b>View 类和其实现的接口</b>
-							</p>
-							<pre class="brush: java;">
-package android.view;
-
-public class View implements Drawable.Callback, Drawable.Callback2, KeyEvent.Callback, 
-                             AccessibilityEventSource {}
-
-/** Drawable.Callback 接口 */
-public void invalidateDrawable(Drawable who);
-public void scheduleDrawable(Drawable who, Runnable what, long when);
-public void unscheduleDrawable(Drawable who, Runnable what);
-/** Drawable.Callback2 接口 */
-public int getResolvedLayoutDirection(Drawable who);
-
-/** KeyEvent.Callback 接口 */
-boolean onKeyDown(int keyCode, KeyEvent event);
-boolean onKeyLongPress(int keyCode, KeyEvent event);
-boolean onKeyUp(int keyCode, KeyEvent event);
-boolean onKeyMultiple(int keyCode, int count, KeyEvent event);
-
-/** AccessibilityEventSource 接口 */
-public void sendAccessibilityEvent(int eventType);
-public void sendAccessibilityEventUnchecked(AccessibilityEvent event);
-</pre>
-						</div>
-
-						<div class="sub-item">
-							<p>
-								<b>View 类的 XML 属性</b>
-							</p>
-							<ul class="code-list">
-								<li>
-									<p>
-										<code>android:layout_width</code>
-										-- 宽度设置
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:layout_height</code>
-										-- 高度设置
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:background</code>
-										-- 设置背景色/背景图片。可以通过以下两种方法设置背景为透明：
-										<code>@android:color/transparent</code>
-										和
-										<code>@null</code>
-										。注意 TextView 默认是透明的，不用写此属性，但是 Button / ImageButton / ImageView
-										想透明的话就得写这个属性了。
-									</p>
-								</li>
-								<li>
-									<p><code>android:alpha</code> -- 透明度设置。</p>
-								</li>
-								<li>
-									<p>
-										<code>android:clickable</code>
-										-- 是否响应点击事件。
-									</p>
-								</li>
-								<li><p><code>android:theme</code> -- 主题设置</p>
-								<li>
-									<p>
-										<code>android:id</code>
-										-- 给当前 View 设置一个在当前 layout.xml 中的唯一编号，可 以通过调用
-										View.findViewById() 或 Activity.findViewById() 根据这个编号查找到对应的
-										View。不同的 layout.xml 之间 定义相同的 id 不会冲突。格式如
-										<code>@+id/btnName</code>
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:contentDescription</code>
-										-- 设置 View 的备注说明，作为一种辅助功能提供，为一些没 有文字描述的 View 提供说明，如
-										ImageButton。这里在界 面上不会有效果，自己在程序中控制，可临时放一点字符 串数据。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:drawingCacheQuality</code>
-										-- 设置绘图时半透明质量。有以下值可设置：auto（默认， 由框架决定）/ high（高质量，使用较高的颜色深度，消耗
-										更多的内存）/ low（低质量，使用较低的颜色深度，但是 用更少的内存）。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:duplicateParentState</code>
-										-- 如果设置此属性，将直接从父容器中获取绘图状态（光标， 按下等）。 见下面代码部分，注意根据目前测试情况仅仅是
-										获取绘图状态，而没有获取事件，也就是你点一下 LinearLayout 时 Button 有被点击的效果，但是不执行点击事
-										件。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:fadingEdge</code>
-										-- 设置拉滚动条时 ，边框渐变的放向。none（边框颜色不
-										变），horizontal（水平方向颜色变淡），vertical （垂直方向颜色变淡）。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:fadingEdgeLength</code>
-										-- 设置边框渐变的长度。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:fitsSystemWindows</code>
-										-- 设置布局调整时是否考虑系统窗口（如状态栏）
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:focusable</code>
-										-- 设置是否获得焦点。若有 requestFocus() 被调用时，后者 优先处理。注意在表单中想设置某一个如
-										EditText 获取焦 点，光设置这个是不行的，需要将这个 EditText 前面的 focusable 都设置为
-										false 才行。在 Touch 模式下获取焦点 需要设置 focusableInTouchMode 为 true。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:focusableInTouchMode</code>
-										-- 设置在Touch模式下View是否能取得焦点。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:hapticFeedbackEnabled</code>
-										-- 设置触感反馈。（按软键以及进行某些 UI 交互时振动）
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:isScrollContainer</code>
-										-- 设置当前 View 为滚动容器。这里没有测试出效果来， ListView/ GridView / ScrollView
-										根本就不用设置这个属性， 而 EdidText 设置 android:scrollbars 也能出滚动条。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:keepScreenOn</code>
-										-- View在可见的情况下是否保持唤醒状态。常在 LinearLayout 使用该属性，但是模拟器这里没有效果。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:longClickable</code>
-										-- 设置是否响应长按事件.
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:minHeight</code>
-										-- 设置视图最小高度
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:minWidth</code>
-										-- 设置视图最小宽度度
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:nextFocusDown</code>
-										-- 设置下方指定视图获得下一个焦点。焦点移动是基于一个 在给定方向查找最近邻居的算法。如果指定视图不存在，
-										移动焦点时将报运行时错误。可以设置 imeOptions=actionDone，这样输入完即跳到下一个焦点。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:nextFocusLeft</code>
-										-- 设置左边指定视图获得下一个焦点。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:nextFocusRight</code>
-										-- 设置右边指定视图获得下一个焦点。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:nextFocusUp</code>
-										-- 设置上方指定视图获得下一个焦点。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:onClick</code>
-										-- 点击时从上下文中调用指定的方法。这里指定一个方法名 称(
-										<code>android:onClick=”onClickButton”</code>
-										)，一般在 Activity 定义符合如下参数和返回值的函数并将 方法名字符串指定为该值即可：
-										<code> public void onClickButton(View view) {}</code>
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:padding</code>
-										-- 设置上下左右的边距，以像素为单位填充空白。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:paddingBottom</code>
-										-- 设置底部的边距，以像素为单位填充空白。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:paddingLeft</code>
-										-- 设置左边的边距，以像素为单位填充空白。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:paddingRight</code>
-										-- 设置右边的边距，以像素为单位填充空白。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:paddingTop</code>
-										-- 设置上方的边距，以像素为单位填充空白。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:saveEnabled</code>
-										-- 设置是否在窗口冻结时（如旋转屏幕）保存 View 的数据，默认为 true，但是前提是你需要设置 id 才能自动保存
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollX</code>
-										-- 以像素为单位设置水平方向滚动的的偏移值，在 GridView 中可看的这个效果。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollY</code>
-										-- 以像素为单位设置垂直方向滚动的的偏移值
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollbarAlwaysDrawHorizontalTrack</code>
-										-- 设置是否始终显示垂直滚动条。这里用 ScrollView、ListView 测试均没有效果。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollbarAlwaysDrawVerticalTrack</code>
-										-- 设置是否始终显示垂直滚动条。这里用 ScrollView、ListView 测试均没有效果。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollbarDefaultDelayBeforeFade</code>
-										-- 设置滚动条 N 毫秒后开始淡化，以毫秒为单位。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollbarFadeDuration</code>
-										-- 设置滚动条淡出效果（从有到慢慢的变淡直至消失）时间， 以毫秒为单位。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollbarSize</code>
-										-- 设置滚动条的宽度
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollbarStyle</code>
-										-- 设置滚动条的模式
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollbarThumbHorizontal</code>
-										-- 设置水平滚动条的 Drawable
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollbarThumbVertical</code>
-										-- 设置垂直滚动条的 Drawable
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollbarTrackHorizontal</code>
-										-- 设置水平滚动条背景（轨迹）的色 Drawable
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollbarTrackVertical</code>
-										-- 设置垂直滚动条背景（轨迹）的 Drawable
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:scrollbars</code>
-										-- 设置滚动条显示。none（隐藏），horizontal（水平），vertical （垂直）。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:soundEffectsEnabled</code>
-										-- 设置点击或触摸时是否有声音效果
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:tag</code>
-										-- 设置一个文本标签，通常用来保存数据。
-									</p>
-								</li>
-								<li>
-									<p>
-										<code>android:visibility</code>
-										-- 设置是否显示View。设置值：visible（默认值，显示），
-										invisible（不显示，但是仍然占用空间），gone （不显示，不占用空间）
-									</p>
-								</li>
-							</ul>
-
-						</div>
-
 					</div>
 				</div>
 				<!-- item over -->
@@ -895,6 +533,591 @@ public class MyListView exdents ListView {
 				<!-- item over -->
 
 				<!-- item start -->
+				<a class="offset" id="view-View"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">View 类</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								<b>View 类和其实现的接口</b>
+							</p>
+							<pre class="brush: java;">
+java.lang.Object
+	android.view.View
+public class View implements Drawable.Callback, Drawable.Callback2, KeyEvent.Callback, 
+                             AccessibilityEventSource {}
+
+/** Drawable.Callback 接口 */
+public void invalidateDrawable(Drawable who);
+public void scheduleDrawable(Drawable who, Runnable what, long when);
+public void unscheduleDrawable(Drawable who, Runnable what);
+/** Drawable.Callback2 接口 */
+public int getResolvedLayoutDirection(Drawable who);
+
+/** KeyEvent.Callback 接口 */
+boolean onKeyDown(int keyCode, KeyEvent event);
+boolean onKeyLongPress(int keyCode, KeyEvent event);
+boolean onKeyUp(int keyCode, KeyEvent event);
+boolean onKeyMultiple(int keyCode, int count, KeyEvent event);
+
+/** AccessibilityEventSource 接口 */
+public void sendAccessibilityEvent(int eventType);
+public void sendAccessibilityEventUnchecked(AccessibilityEvent event);
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>View 类的 XML 属性</b>
+							</p>
+							<ul class="code-list">
+								<li>
+									<p>
+										<code>android:layout_width</code>
+										-- 宽度设置
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:layout_height</code>
+										-- 高度设置
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:background</code>
+										-- 设置背景色/背景图片。可以通过以下两种方法设置背景为透明：
+										<code>@android:color/transparent</code>
+										和
+										<code>@null</code>
+										。注意 TextView 默认是透明的，不用写此属性，但是 Button / ImageButton / ImageView
+										想透明的话就得写这个属性了。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:alpha</code>
+										-- 透明度设置。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:clickable</code>
+										-- 是否响应点击事件。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:theme</code>
+										-- 主题设置
+									</p>
+								<li>
+									<p>
+										<code>android:id</code>
+										-- 给当前 View 设置一个在当前 layout.xml 中的唯一编号，可 以通过调用
+										View.findViewById() 或 Activity.findViewById() 根据这个编号查找到对应的
+										View。不同的 layout.xml 之间 定义相同的 id 不会冲突。格式如
+										<code>@+id/btnName</code>
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:contentDescription</code>
+										-- 设置 View 的备注说明，作为一种辅助功能提供，为一些没 有文字描述的 View 提供说明，如
+										ImageButton。这里在界 面上不会有效果，自己在程序中控制，可临时放一点字符 串数据。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:drawingCacheQuality</code>
+										-- 设置绘图时半透明质量。有以下值可设置：auto（默认， 由框架决定）/ high（高质量，使用较高的颜色深度，消耗
+										更多的内存）/ low（低质量，使用较低的颜色深度，但是 用更少的内存）。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:duplicateParentState</code>
+										-- 如果设置此属性，将直接从父容器中获取绘图状态（光标， 按下等）。 见下面代码部分，注意根据目前测试情况仅仅是
+										获取绘图状态，而没有获取事件，也就是你点一下 LinearLayout 时 Button 有被点击的效果，但是不执行点击事
+										件。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:fadingEdge</code>
+										-- 设置拉滚动条时 ，边框渐变的放向。none（边框颜色不
+										变），horizontal（水平方向颜色变淡），vertical （垂直方向颜色变淡）。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:fadingEdgeLength</code>
+										-- 设置边框渐变的长度。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:fitsSystemWindows</code>
+										-- 设置布局调整时是否考虑系统窗口（如状态栏）
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:focusable</code>
+										-- 设置是否获得焦点。若有 requestFocus() 被调用时，后者 优先处理。注意在表单中想设置某一个如
+										EditText 获取焦 点，光设置这个是不行的，需要将这个 EditText 前面的 focusable 都设置为
+										false 才行。在 Touch 模式下获取焦点 需要设置 focusableInTouchMode 为 true。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:focusableInTouchMode</code>
+										-- 设置在Touch模式下View是否能取得焦点。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:hapticFeedbackEnabled</code>
+										-- 设置触感反馈。（按软键以及进行某些 UI 交互时振动）
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:isScrollContainer</code>
+										-- 设置当前 View 为滚动容器。这里没有测试出效果来， ListView/ GridView / ScrollView
+										根本就不用设置这个属性， 而 EdidText 设置 android:scrollbars 也能出滚动条。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:keepScreenOn</code>
+										-- View在可见的情况下是否保持唤醒状态。常在 LinearLayout 使用该属性，但是模拟器这里没有效果。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:longClickable</code>
+										-- 设置是否响应长按事件.
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:minHeight</code>
+										-- 设置视图最小高度
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:minWidth</code>
+										-- 设置视图最小宽度度
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:nextFocusDown</code>
+										-- 设置下方指定视图获得下一个焦点。焦点移动是基于一个 在给定方向查找最近邻居的算法。如果指定视图不存在，
+										移动焦点时将报运行时错误。可以设置 imeOptions=actionDone，这样输入完即跳到下一个焦点。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:nextFocusLeft</code>
+										-- 设置左边指定视图获得下一个焦点。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:nextFocusRight</code>
+										-- 设置右边指定视图获得下一个焦点。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:nextFocusUp</code>
+										-- 设置上方指定视图获得下一个焦点。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:onClick</code>
+										-- 点击时从上下文中调用指定的方法。这里指定一个方法名 称(
+										<code>android:onClick=”onClickButton”</code>
+										)，一般在 Activity 定义符合如下参数和返回值的函数并将 方法名字符串指定为该值即可：
+										<code> public void onClickButton(View view) {}</code>
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:padding</code>
+										-- 设置上下左右的边距，以像素为单位填充空白。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:paddingBottom</code>
+										-- 设置底部的边距，以像素为单位填充空白。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:paddingLeft</code>
+										-- 设置左边的边距，以像素为单位填充空白。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:paddingRight</code>
+										-- 设置右边的边距，以像素为单位填充空白。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:paddingTop</code>
+										-- 设置上方的边距，以像素为单位填充空白。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:saveEnabled</code>
+										-- 设置是否在窗口冻结时（如旋转屏幕）保存 View 的数据，默认为 true，但是前提是你需要设置 id 才能自动保存
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollX</code>
+										-- 以像素为单位设置水平方向滚动的的偏移值，在 GridView 中可看的这个效果。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollY</code>
+										-- 以像素为单位设置垂直方向滚动的的偏移值
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollbarAlwaysDrawHorizontalTrack</code>
+										-- 设置是否始终显示垂直滚动条。这里用 ScrollView、ListView 测试均没有效果。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollbarAlwaysDrawVerticalTrack</code>
+										-- 设置是否始终显示垂直滚动条。这里用 ScrollView、ListView 测试均没有效果。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollbarDefaultDelayBeforeFade</code>
+										-- 设置滚动条 N 毫秒后开始淡化，以毫秒为单位。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollbarFadeDuration</code>
+										-- 设置滚动条淡出效果（从有到慢慢的变淡直至消失）时间， 以毫秒为单位。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollbarSize</code>
+										-- 设置滚动条的宽度
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollbarStyle</code>
+										-- 设置滚动条的模式
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollbarThumbHorizontal</code>
+										-- 设置水平滚动条的 Drawable
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollbarThumbVertical</code>
+										-- 设置垂直滚动条的 Drawable
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollbarTrackHorizontal</code>
+										-- 设置水平滚动条背景（轨迹）的色 Drawable
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollbarTrackVertical</code>
+										-- 设置垂直滚动条背景（轨迹）的 Drawable
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:scrollbars</code>
+										-- 设置滚动条显示。none（隐藏），horizontal（水平），vertical （垂直）。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:soundEffectsEnabled</code>
+										-- 设置点击或触摸时是否有声音效果
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:tag</code>
+										-- 设置一个文本标签，通常用来保存数据。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:visibility</code>
+										-- 设置是否显示View。设置值：visible（默认值，显示），
+										invisible（不显示，但是仍然占用空间），gone （不显示，不占用空间）
+									</p>
+								</li>
+							</ul>
+
+						</div>
+
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="view-Canvas"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">View 和 Canvas</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="view-TextView"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">TextView</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.view.View
+		android.widget.TextView
+public class TextView extends View implements ViewTreeObserver.OnPreDrawListener {}
+
+/** ViewTreeObserver.OnPreDrawListener 接口 */
+public boolean onPreDraw();
+</pre>
+						<div class="sub-item">
+							<p>
+								<b>TextView 类的 XML 属性</b>
+							</p>
+							<ul class="code-list">
+								<li>
+									<p>
+										<code>android:singleLine</code>
+										-- 设置单行显示。和 layout_width 一起使用，当文本不能全部显示时，后面用“…”来表示。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:lines</code>
+										-- 设置行间距的倍数。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:maxLines</code>
+										设置文本的最大显示行数，超出部分自动换行，超出行数将不显示。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:minLines</code>
+										-- 设置文本的最小行数，与lines类似。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:lineSpacingMultiplier</code>
+										-- 设置行间距的倍数
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:lineSpacingExtra</code>
+										-- 设置行间距。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:ems</code>
+										-- 设置TextView的宽度为N个字符的宽度。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:maxEms</code>
+										-- 设置TextView的宽度为最长为N个字符的宽度。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:minEms</code>
+										-- 设置TextView的宽度为最短为N个字符的宽度。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:maxLength</code>
+										-- 限制显示的文本长度，超出部分不显示。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:shadowColor</code>
+										-- 指定文本阴影的颜色，需要与shadowRadius一起使用。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:shadowRadius</code>
+										-- 设置阴影的半径。设置为0.1就变成字体的颜色了，一般设置为3.0的效果比较好。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:shadowDx</code>
+										-- 设置阴影横向坐标开始位置。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:shadowDy</code>
+										-- 设置阴影纵向坐标开始位置。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:drawableLeft/drawableRight/drawableTop/drawableBottom</code>
+										-- 设置 text 的左/右/上/下的 drawable。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:drawablePadding</code>
+										-- 设置 text 与 drawable (图片)的间隔。
+									</p>
+								</li>
+								<li>
+									<p>
+										<code>android:autoLink</code>
+										-- 设置是否当文本为URL链接/email/电话号码/map时，文本显示为可点击的链接。
+									</p>
+								</li>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="view-ImageView"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">ImageView</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="view-EditText"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">EditText</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="view-Button"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Button</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="view-SurfaceView"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">SurfaceView</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="view-ViewGroup"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">ViewGroup</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="view-LinearLayout"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">LinearLayout</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
 				<a class="offset" id="view-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -919,6 +1142,9 @@ public class MyListView exdents ListView {
 		<a href="#" type="button"
 			class="btn btn-default dropdown-toggle btn-primary"
 			data-toggle="dropup"> TOP </a>
+		<a href="docs/reference/index.html" type="button"
+			class="btn btn-default dropdown-toggle btn-primary" target="_blank"
+			data-toggle="dropup"> DOCS </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

@@ -83,6 +83,7 @@
 						</div>
 						<a href="#android-handler" class="list-group-item">Handler 机制</a>
 						<a href="#android-theme" class="list-group-item">Theme 和 Style</a>
+						<a href="#android-size" class="list-group-item">尺寸单位和换算</a>
 						<a href="#android-image" class="list-group-item">图片加载及框架</a>
 						<a href="#android-fragment" class="list-group-item">Fragment
 							使用</a>
@@ -366,7 +367,7 @@ $ android create project --target TARGET-ID --name MyApp \
 										<pre class="brush: bash;">$ adb install bin/MyApp-debug.apk</pre>
 									</li>
 								</ol>
-								
+
 								<p class="h5 text-primary">2. 使用 gradle 创建</p>
 								<ol>
 									<li></li>
@@ -1624,27 +1625,34 @@ public class PersonObserver extends ContentObserver {
 								线程启动后会进入一个无限的循环体之中，每循环一次，从其内部的消息队列中取出一个消息，然后回调相应的消息处理函数，执行完成一个消息后则继续循环。若消息队列为空，线程则会阻塞等待。
 							</p>
 							<p class="alert alert-success">
-								<b>Looer.loop() 方法可能会引起主线程的阻塞，但只要它的消息循环没有被阻塞，能一直处理事件就不会产生 ANR 异常。
-								</b>
+								<b>Looer.loop() 方法可能会引起主线程的阻塞，但只要它的消息循环没有被阻塞，能一直处理事件就不会产生
+									ANR 异常。 </b>
 							</p>
 
 							<p>
-								<b>Looper:</b> 将 Looper 对象和线程绑定，能够确保线程持续存活并且可以不断的从任务队列中获取任务并进行执行；
+								<b>Looper:</b> 将 Looper
+								对象和线程绑定，能够确保线程持续存活并且可以不断的从任务队列中获取任务并进行执行；
 							</p>
-							<p><b>ThreadLocal:</b> ThreadLocal 其实是一个 Map，其 key 为一个线程；</p>
 							<p>
-								<b>MessageQueue:</b> MessageQueue 有个 LinkedBlockingQueue 队列，此队列的出队方法为阻塞式，没有消息则一直等待。
+								<b>ThreadLocal:</b> ThreadLocal 其实是一个 Map，其 key 为一个线程；
+							</p>
+							<p>
+								<b>MessageQueue:</b> MessageQueue 有个 LinkedBlockingQueue
+								队列，此队列的出队方法为阻塞式，没有消息则一直等待。
 							</p>
 							<p>
 								<b>Handler:</b>
 								能够帮助实现队列任务的管理，不仅仅能够把任务插入到队列的头部，尾部，还可以按照一定的时间延迟来确保任务从队列中能够来得及被取消掉；
 							</p>
-							<p><b>Message:</b> 对象包装消息，并绑定到一个 Handler 实例；</p>
+							<p>
+								<b>Message:</b> 对象包装消息，并绑定到一个 Handler 实例；
+							</p>
 							<p>
 								<b>HandlerThread:</b> 把上面组件打包到一起进行协作。
 							</p>
-							
-							<p><b>Handler 机制流程：</b>
+
+							<p>
+								<b>Handler 机制流程：</b>
 							<pre class="brush: java;">
 1. Looper 初始化, 先调用 Looper.prepare() 方法，将 Looper 对象和主线程绑定(因为在主线程调用此方法)，执行以下操作：
     1.1 ThreadLocal.get() 是否为空，ThreadLocal 其实是一个 Map, map.get(Thread.currentThread()) 是否为空；
@@ -1918,9 +1926,23 @@ public class Main {
 					</div>
 					<div class="panel-body">
 						<div class="sub-item">
-							<p><b>主题 Theme</b></p>
-							<p>在 <code>Androidmenifast.xml</code> 文件中，通过 <code>application</code> 节点的 <code>android:theme="xxx"</code> 属性可以引入应用使用的主题，统一控制应用的风格。</p>
-							<p><b>1. 系统主题</b> -- Android 系统自带了很多主题，通过 <code>android:theme="@android:style/xxx"</code> 引入。</p>
+							<p>
+								<b>主题 Theme</b>
+							</p>
+							<p>
+								在
+								<code>Androidmenifast.xml</code>
+								文件中，通过
+								<code>application</code>
+								节点的
+								<code>android:theme="xxx"</code>
+								属性可以引入应用使用的主题，统一控制应用的风格。
+							</p>
+							<p>
+								<b>1. 系统主题</b> -- Android 系统自带了很多主题，通过
+								<code>android:theme="@android:style/xxx"</code>
+								引入。
+							</p>
 							<p>不同 Android 版本引入了很多不同的主题：</p>
 							<pre class="brush: java;">
 API 1:
@@ -1952,6 +1974,176 @@ Theme.AppCompat.Black 兼容主题的黑色主题
 Theme.AppCompat.Light 兼容主题的白色主题
 </pre>
 						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="android-size"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">尺寸单位和换算</h3>
+					</div>
+					<div class="panel-body">
+						<p>
+							<b>Android 常见的尺寸单位有：</b>
+						</p>
+						<ul>
+							<li>
+								<p>
+									<code>px</code>
+									-- 是 pixel 的缩写，意为像素，屏幕上的点。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>in</code>
+									-- 表示英寸，是屏幕的物理尺寸。每英寸等于2.54厘米。这些尺寸是屏幕的对角线长度。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>dp / dip</code>
+									-- 是 device independent pixels 的缩写，设备独立像素，Android 特有的单位，在屏幕密度
+									dpi = 160 屏幕上，1dp = 1px。
+								</p>
+							</li>
+							<li>
+								<p>
+									<code>sp</code>
+									-- 和 dp 很类似，一般用来设置字体大小，和 dp 的区别是它可以根据用户的字体大小偏好来缩放。
+								</p>
+							</li>
+						</ul>
+						<p>
+							<b>另外还有两个参数和尺寸单位相关：</b>
+						</p>
+						<ul>
+							<li>
+								<p>
+									<b>dpi</b> -- 是 Dots Per Inch 的缩写, 每英寸点数，即每英寸包含像素个数。如果一个
+									<code>320 * 480</code>
+									分辨率的手机，宽 2 英寸，高 3 英寸, 每英寸包含的像素点的数量为
+									<code>320 / 2 = 160dpi</code>
+									（横向）或
+									<code>480 / 3 = 160dpi</code>
+									（纵向），160 就是这部手机的 dpi，横向和纵向的这个值都是相同的，原因是大部分手机屏幕使用正方形的像素点。
+								</p>
+							</li>
+							<li>
+								<p>
+									<b>density</b> -- 屏幕密度，屏幕上每平方英寸（2.54 平方厘米）中含有的像素点数量。
+								</p>
+							</li>
+						</ul>
+						<p><b>另外，关于图片在不同的 <code>drawable</code> 目录下的缩放比例请查看：<a href="drawable.html#drawable-dir">drawable 目录</a></b></p>
+						<p>
+							<b>dip 和 px 转换</b>
+						</p>
+						<pre class="brush: bash;">
+# 以一个 4.95 英寸 1920 * 1080 的 nexus5 手机设备为例：
+
+# 1.计算对角线的像素(勾股定理)
+1920^2 + 1080^2 = 2202^2
+
+# 2.计算 DPI(对角线像素 / 屏幕的物理尺寸)
+2202 / 4.95 = 445
+
+# 3.计算像素 px = dip * dpi / 160
+1 * 445 / 160 = 2.78
+
+# 4.通过上面的计算可以看出在此设备上 1 dip = 2.78 px, 事实并不是如此，其中的关键值 dpi 并不是我们算出来的 445,见下文：
+</pre>
+						<p>Android 中内置了几个默认的 Dpi ，在特定的分辨率下自动调用，也可以手动在配置文件中修改。</p>
+						<table class="table table-bordered table-responsive">
+							<thead>
+								<tr>
+									<th></th>
+									<th>ldpi</th>
+									<th>mdpi</th>
+									<th>hdpi</th>
+									<th>xhdpi</th>
+									<th>xxhdpi</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>分辨率</td>
+									<td>240x320</td>
+									<td>320x480</td>
+									<td>480x800</td>
+									<td>720x1280</td>
+									<td>1080x1920</td>
+								</tr>
+								<tr>
+									<td>系统dpi</td>
+									<td>120</td>
+									<td>160</td>
+									<td>240</td>
+									<td>320</td>
+									<td>480</td>
+								</tr>
+								<tr>
+									<td>基准比例</td>
+									<td>0.75</td>
+									<td>1</td>
+									<td>1.5</td>
+									<td>2</td>
+									<td>3</td>
+								</tr>
+							</tbody>
+						</table>
+						<p>因此，在 1920*1080 分辨率的手机上默认就使用 480 的 dpi
+							，不管的你的尺寸是多大都是这样，除非厂家手动修改了配置文件：</p>
+						<pre class="brush: bash;">
+# 5.因此默认　1920*1080　分辨率的手机上默认就使用 480 的 dpi
+1 dip * 480 / 160 = 3 px
+
+# 6.配置文件路径：/system/build.prop，指定了设备所使用的 dpi
+ro.sf.lcd_density=480
+
+# 7.如果更改上面的配置文件: ro.sf.lcd_density=320
+1 dip * 320 / 160 = 2 px
+</pre>
+						<p>
+							<b>实际应用:</b>
+						</p>
+						<pre class="brush: java;">
+DisplayMetrics dm = new DisplayMetrics();
+getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+dm.widthPixels;		// 获取屏幕宽度的像素数量
+dm.heightPixels;	// 获取屏幕高度的像素数量
+
+dm.ydpi;     // 得到物理屏幕上 Y 轴方向每英寸的像素(dip)
+dm.xdpi;     // 得到物理屏幕上 X 轴方向每英寸的像素(dip)
+
+dm.density;			// 获取当前设备的基准比例
+dm.densityDpi;		// 获取系统 dpi，随着 build.prop 文件中的代码而改变。
+
+/** 附几个常用的方法 */
+public static int getScreenWidth(Activity cx) {
+	DisplayMetrics dm = new DisplayMetrics();
+	cx.getWindowManager().getDefaultDisplay().getMetrics(dm);
+	return dm.widthPixels;
+}
+
+public static int getScreenHeight(Activity cx) {
+	DisplayMetrics dm = new DisplayMetrics();
+	cx.getWindowManager().getDefaultDisplay().getMetrics(dm);
+	return dm.heightPixels;
+}
+
+public static int dip2px(Context cx, float dipValue) {
+	float scale = cx.getResources().getDisplayMetrics().density;
+	return (int) (dipValue * scale + 0.5f);
+}
+
+public static int px2dip(Context cx, float pxValue) {
+	float scale = cx.getResources().getDisplayMetrics().density;
+	return (int) (pxValue / scale + 0.5f);
+}
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -2389,10 +2581,12 @@ gridView.setOnScrollListener(new PauseOnScrollListener(imageLoader, pauseOnScrol
 						<h3 class="panel-title">Fragment 使用</h3>
 					</div>
 					<div class="panel-body">
-						<p>Android 在 3.0 中引入了 fragments 的概念,主要目的是用在大屏幕设备上--例如平板电脑上,支持更加动态和灵活的UI设计.
-							平板电脑的屏幕要比手机的大得多,有更多的空间来放更多的UI组件,并且这些组件之间会产生更多的交互. Fragment 允许这样的一种设计,而不需要你亲自来管理 view
-							hierarchy 的复杂变化. 通过将 activity 的布局分散到 fragment 中, 你可以在运行时修改 activity 的外观,
-							并在由 activity 管理的 back stack 中保存那些变化.</p>
+						<p>Android 在 3.0 中引入了 fragments
+							的概念,主要目的是用在大屏幕设备上--例如平板电脑上,支持更加动态和灵活的UI设计.
+							平板电脑的屏幕要比手机的大得多,有更多的空间来放更多的UI组件,并且这些组件之间会产生更多的交互. Fragment
+							允许这样的一种设计,而不需要你亲自来管理 view hierarchy 的复杂变化. 通过将 activity 的布局分散到
+							fragment 中, 你可以在运行时修改 activity 的外观, 并在由 activity 管理的 back stack
+							中保存那些变化.</p>
 
 						<div class="sub-item">
 							<h5 class="text-primary">Fragment生命周期</h5>
@@ -2676,7 +2870,8 @@ fragmentTransaction.add(fragment, tag);
 
 						<h3>5.启动优化</h3>
 						<h4>为什么?</h4>
-						<p>启动优化看起来并不是那么必要,但从心理学角度而言,越快的启动速度往往给及将发送者和接收者解耦。 用户以性能好,高效可靠的心理暗示,这就很容易让用户对其产生好感,为你后面打动用户留下了余地.</p>
+						<p>启动优化看起来并不是那么必要,但从心理学角度而言,越快的启动速度往往给及将发送者和接收者解耦。
+							用户以性能好,高效可靠的心理暗示,这就很容易让用户对其产生好感,为你后面打动用户留下了余地.</p>
 
 						<h4>如何检测?</h4>
 
@@ -2804,6 +2999,9 @@ fragmentTransaction.add(fragment, tag);
 			<a href="#" type="button"
 				class="btn btn-default dropdown-toggle btn-primary"
 				data-toggle="dropup"> TOP </a>
+			<a href="docs/reference/index.html" type="button"
+			class="btn btn-default dropdown-toggle btn-primary" target="_blank"
+			data-toggle="dropup"> DOCS </a>
 		</div>
 
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

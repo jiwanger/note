@@ -65,30 +65,39 @@
 						<h3 class="panel-title">DRAWABLE</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">简介</a>
+						<a href="#" class="list-group-item">Drawable 简介</a>
+						<a href="#drawable-canvas" class="list-group-item">
+							Drawable 和 Canvas
+						</a>
+						<a href="#drawable-dir" class="list-group-item">
+							<code>drawable</code>
+							目录
+						</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#drawable-sub" aria-expanded="true">
-							Drawable 子类<span class="caret pull-right" style="margin-top: 5px;"></span>
+							data-parent="#accordion" href="#drawable-sub"
+							aria-expanded="true">
+							Drawable 子类<span class="caret pull-right"
+								style="margin-top: 5px;"></span>
 						</a>
 						<div id="drawable-sub" class="panel-collapse collapse in"
 							role="tabpanel">
-							 <a href="#" class="list-group-item">BitmapDrawable</a>
-							 <a href="#" class="list-group-item">ClipDrawable</a>
-							 <a href="#" class="list-group-item">ColorDrawable</a>
-							 <a href="#" class="list-group-item">DrawableContainer</a>
-							 <a href="#" class="list-group-item">GradientDrawable</a>
-							 <a href="#" class="list-group-item">InsetDrawable</a>
-							 <a href="#" class="list-group-item">LayerDrawable</a>
-							 <a href="#" class="list-group-item">NinePatchDrawable</a>
-							 <a href="#" class="list-group-item">PictureDrawable</a>
-							 <a href="#" class="list-group-item">RotateDrawable</a>
-							 <a href="#" class="list-group-item">ScaleDrawable</a>
-							 <a href="#" class="list-group-item">ShapeDrawable</a>
-							 <a href="#" class="list-group-item">AnimationDrawable</a>
-							 <a href="#" class="list-group-item">LevelListDrawable</a>
-							 <a href="#" class="list-group-item">PaintDrawable</a>
-							 <a href="#" class="list-group-item">StateListDrawable</a>
-							 <a href="#" class="list-group-item">TransitionDrawable</a>
+							<a href="#BitmapDrawable" class="list-group-item">BitmapDrawable</a>
+							<a href="#ClipDrawable" class="list-group-item">ClipDrawable</a>
+							<a href="#ColorDrawable" class="list-group-item">ColorDrawable</a>
+							<a href="#DrawableContainer" class="list-group-item">DrawableContainer</a>
+							<a href="#GradientDrawable" class="list-group-item">GradientDrawable</a>
+							<a href="#InsetDrawable" class="list-group-item">InsetDrawable</a>
+							<a href="#LayerDrawable" class="list-group-item">LayerDrawable</a>
+							<a href="#NinePatchDrawable" class="list-group-item">NinePatchDrawable</a>
+							<a href="#PictureDrawable" class="list-group-item">PictureDrawable</a>
+							<a href="#RotateDrawable" class="list-group-item">RotateDrawable</a>
+							<a href="#ScaleDrawable" class="list-group-item">ScaleDrawable</a>
+							<a href="#ShapeDrawable" class="list-group-item">ShapeDrawable</a>
+							<a href="#AnimationDrawable" class="list-group-item">AnimationDrawable</a>
+							<a href="#LevelListDrawable" class="list-group-item">LevelListDrawable</a>
+							<a href="#PaintDrawable" class="list-group-item">PaintDrawable</a>
+							<a href="#StateListDrawable" class="list-group-item">StateListDrawable</a>
+							<a href="#TransitionDrawable" class="list-group-item">TransitionDrawable</a>
 						</div>
 						<a href="#java-class-loader" class="list-group-item">...</a>
 					</div>
@@ -105,25 +114,340 @@
 				<!-- item start -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">简介</h3>
+						<h3 class="panel-title">Drawable 简介</h3>
 					</div>
 					<div class="panel-body">
-						<h5 class="text-primary">Drawable的用法：</h5>
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+	
+public abstract class Drawable {}
+</pre>
+						<p><a href="docs/reference/android/graphics/drawable/Drawable.html" target="_blank">Drawable</a> 一般抽象为“能被绘制的东西”。相比于 View，并不需要去考虑 measure、layout，仅仅只要去考虑如何 draw（canavs）。</p>
+						<h5 class="text-primary">Drawable 的用法：</h5>
 						<ul>
 							<li>
-								<b>自定义Drawable</b> -- 相比View来说，Drawable
-								属于轻量级的、使用也很简单。以后自定义实现一个效果的时候，可以改变 View first 的思想，尝试下 Drawable
-								first。
+								<p>
+									<b>自定义Drawable</b> -- 相比View来说，Drawable
+									属于轻量级的、使用也很简单。以后自定义实现一个效果的时候，可以改变 View first 的思想，尝试下 Drawable
+									first。
+								</p>
 							</li>
 							<li>
-								<b>自定义状态</b> -- 相信大家对于State Drawable都不陌生，但是有没有尝试过去自定义一个状态呢？
+								<p>
+									<b>自定义状态</b> -- 相信大家对于State Drawable都不陌生，但是有没有尝试过去自定义一个状态呢？
+								</p>
 							</li>
 
 							<li>
-								<b>UI Perfermance</b> -- 利用 Drawable 提升我们的 UI Perfermance， 如何利用
-								Drawable 去提升我们的UI的性能。
+								<p>
+									<b>UI Perfermance</b> -- 利用 Drawable 提升我们的 UI Perfermance， 如何利用
+									Drawable 去提升我们的UI的性能。
+								</p>
 							</li>
 						</ul>
+						<p>一般情况下，除了直接使用放在 drawable 下的图片，其实的 Drawable 的用法都和 xml
+							相关，我们可以使用 shape、layer-list 等标签绘制一些背景，还可以通过 selector 标签定义 View
+							的状态的效果等。当然了基本每个标签都对应于一个真正的实体类，关系如下：</p>
+						<p>
+							<img src="res/drawable_type.png"
+								class="img-responsive center-block">
+						</p>
+
+
+					</div>
+				</div>
+				<!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="drawable-canvas"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Drawable 和 Canvas</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+Bitmap b = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
+Canvas c = new Canvas(b);
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="drawable-dir"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<code>drawable</code>
+							目录
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>
+								<b>应用程序 ICON 尺寸表</b>
+							</p>
+							<table class="table table-bordered table-responsive">
+								<thead>
+									<tr>
+										<th>密度</th>
+										<th>建议尺寸</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>mipmap-mdpi</td>
+										<td>48 * 48</td>
+									</tr>
+									<tr>
+										<td>mipmap-hdpi</td>
+										<td>72 * 72</td>
+									</tr>
+									<tr>
+										<td>mipmap-xhdpi</td>
+										<td>96 * 96</td>
+									</tr>
+									<tr>
+										<td>mipmap-xxhdpi</td>
+										<td>144 * 144</td>
+									</tr>
+									<tr>
+										<td>mipmap-xxxhdpi</td>
+										<td>192 * 192</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>DPI 与 drawable 目录对应表</b>
+							</p>
+							<table class="table table-bordered table-responsive">
+								<thead>
+									<tr>
+										<th>dpi范围</th>
+										<th>密度</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>0dpi ~ 120dpi</td>
+										<td>ldpi</td>
+									</tr>
+									<tr>
+										<td>120dpi ~ 160dpi</td>
+										<td>mdpi</td>
+									</tr>
+									<tr>
+										<td>160dpi ~ 240dpi</td>
+										<td>hdpi</td>
+									</tr>
+									<tr>
+										<td>240dpi ~ 320dpi</td>
+										<td>xhdpi</td>
+									</tr>
+									<tr>
+										<td>320dpi ~ 480dpi</td>
+										<td>xxhdpi</td>
+									</tr>
+									<tr>
+										<td>480dpi ~ 640dpi</td>
+										<td>xxxhdpi</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="sub-item">
+							<p>
+								<b>Android 从 drawable 目录下寻找图片的规则(假设屏幕为: xxhdpi)：</b>
+							</p>
+							<ul>
+								<li>
+									<p>
+										1. 从设备 DPI 适配的对应 drawable 目录下寻找(因为设备为 xxhdpi, 对应目录为
+										<code>drawable-xxhdpi</code>
+										)；
+									</p>
+								</li>
+								<li>
+									<p>
+										2. 从更高 DPI 的对应 drawable 目录下寻找(
+										<code>drawable-xxxhdpi</code>
+										)；
+									</p>
+								</li>
+								<li>
+									<p>
+										3. 从无 DPI 的对应 drawable 目录下寻找(
+										<code>drawable</code>
+										)；
+									</p>
+								</li>
+								<li>
+									<p>
+										4. 从相对低 DPI 的对应 drawable 目录下寻找(
+										<code>drawable-xhpi</code>
+										)。
+									</p>
+								</li>
+							</ul>
+							<p>
+								综上所述：假设屏幕为:
+								<code>xxhdpi</code>
+								，那么系统寻找图片的顺序为：
+								<code>drawable-xxhdpi</code>
+								->
+								<code>drawable-xxxhdpi</code>
+								->
+								<code>drawable</code>
+								->
+								<code>drawable-xhdpi</code>
+								->
+								<code>drawable-hdpi</code>
+								->
+								<code>drawable-mdpi</code>
+								->
+								<code>drawable-ldpi</code>
+							</p>
+							<p>
+								<b><code>drawable</code></b> 和 <b><code>mipmap</code>
+									目录对图片尺寸的影响</b>
+							</p>
+							<p>
+								当能在设备屏幕 DPI 对应的
+								<code>drawable</code>
+								目录下找到图片时，图片不会变形；当图片放置于比设备屏幕 DPI 低的目录下时，显示的图片会相应放大；当图片放置于比设备屏幕
+								DPI 高的目录下时，显示的图片会相应缩小；具体如下：
+							</p>
+							<p>
+								每一种密度的 DPI 范围都有一个最大值，这个最大值之间的比例就是图片会被系统自动放大的比例。 图片在不同的
+								<code>drawable</code>
+								目录下的缩放规则：
+							</p>
+							<ul>
+								<li>
+									<p>
+										1. 图片原始像素：
+										<code>270 : 480</code>
+										，图片位置：
+										<code>drawable-xxhdpi</code>
+										，运行设备：
+										<code>xxhdpi</code>
+										，图片不会变形。
+									</p>
+								</li>
+								<li>
+									<p>
+										2. 将图片位置改变到：
+										<code>drawable-xxxhdpi</code>
+										，其它情景不变，图片变小，从 DPI 与 drawable 目录对应表可以查到，缩放比例:
+										<code>480 / 640 = 0.75</code>
+										，最终显示尺寸：
+										<code>270 * 0.75 : 480 * 0.75</code>
+									</p>
+								<li>
+									<p>
+										3. 将图片位置改变到：
+										<code>drawable-xhdpi</code>
+										，其它情景不变，图片变大，从 DPI 与 drawable 目录对应表可以查到，缩放比例:
+										<code>480 / 320 = 1.5</code>
+										，最终显示尺寸：
+										<code>270 * 1.5 : 480 * 1.5</code>
+									</p>
+								<li>
+									<p>
+										4. 将图片位置改变到：
+										<code>drawable-hdpi</code>
+										，其它情景不变，图片变大，从 DPI 与 drawable 目录对应表可以查到，缩放比例:
+										<code>480 / 240 = 2</code>
+										，最终显示尺寸：
+										<code>270 * 2 : 480 * 2</code>
+									</p>
+							</ul>
+							<div class="alert alert-success" style="font-size: 14px;">
+								<p>
+									<b>说了这么多，图片应该怎么放最好呢？</b>
+								</p>
+								<p>根据 Android 的开发建议, 图片资源时尽量应该给每种密度的设备都准备一套。</p>
+								<p>
+									<b>如果只有一套图片，那么放在哪里比较合适呢？</b>
+								</p>
+								<p>如果将一张图片放在低密度文件夹下，那么在高密度设备上显示图片时就会被自动放大；而如果将一张图片放在高密度文件夹下，那么在低密度设备上显示图片时就会被自动缩小。</p>
+								<p>原图片被缩小了之后显示并没有什么副作用，但一张原图片被放大了之后显示就意味着要占用更多的内存了。</p>
+								<p>
+									图片资源应该尽量放在高密度文件夹下，这样可以节省图片的内存开支，而 UI
+									在设计图片的时候也应该尽量面向高密度屏幕的设备来进行设计。<b>就目前来讲，最佳放置图片资源的文件夹就是 <code>drawable-xxhdpi</code></b>。那么有的朋友可能会问了，不是还有更高密度的
+									<code>drawable-xxxhdpi</code>
+									吗？干吗不放在这里？这是因为，市面上 480dpi 到 640dpi
+									的设备实在是太少了，如果针对这种级别的屏幕密度来设计图片，图片在不缩放的情况下本身就已经很大了，基本也起不到节省内存开支的作用了。
+								</p>
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="BitmapDrawable"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">BitmapDrawable</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.BitmapDrawable
+		
+public class BitmapDrawable extends Drawable {}
+</pre>
+						<p>
+							<b>XML 属性</b>
+						</p>
+						<pre class="brush:xml;">
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;bitmap
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@drawable/drawable_resource"
+    android:antialias=["true" | "false"]		<!-- 设置是否开启抗锯齿 -->
+    <!-- 设置是否抖动，图片与屏幕的像素配置不同时会用到，比如图片是 ARGB 8888 的，而屏幕是 RGB565 -->
+    android:dither=["true" | "false"]	
+    <!-- 设置是否允许对图片进行滤波，对图片进行收缩或者延展使用滤波可以获得平滑的外观效果 -->
+    android:filter=["true" | "false"]
+    <!-- 重力方向, 多个取值可以用 | 分隔 -->
+    android:gravity=["top" | "bottom" | "left" | "right" | "center_vertical" |
+                      "fill_vertical" | "center_horizontal" | "fill_horizontal" |
+                      "center" | "fill" | "clip_vertical" | "clip_horizontal"]
+<!-- 
+  top 图片放于容器顶部，不改变图片大小
+  bottom 图片放于容器底部，不改变图片大小
+  left 图片放于容器左边，不改变图片大小
+  right 图片放于容器右边，不改变图片大小
+  center 图片放于容器中心位置，包括水平和垂直方向，不改变图片大小
+  fill 拉伸整张图片以填满容器的整个高度和宽度，默认值
+  center_vertical 图片放于容器垂直方向的中心位置，不改变图片大小
+  center_horizontal 图片放于容器水平方向的中心位置，不改变图片大小
+  fill_vertical 在垂直方向上拉伸图片以填满容器的整个高度
+  fill_horizontal 在水平方向上拉伸图片以填满容器的整个宽度
+  clip_vertical 裁剪基于垂直方向的gravity设置，设置top时会裁剪底部，设置bottom时会裁剪顶部，其他情况会同时裁剪顶部和底部
+  clip_horizontal 裁剪基于水平方向的gravity设置，设置left时会裁剪右侧，设置right时会裁剪左侧，其他情况会同时裁剪左右两侧
+-->
+    android:mipMap=["true" | "false"]
+<!-- 平铺模式, tileMode 启用，gravity 将失效。比如用于 background 属性时有用。
+  disable 不做任何平铺，默认设置
+  repeat 图片重复铺满
+  mirror 使用交替镜像的方式重复图片的绘制
+  clamp 复制图片边缘的颜色来填充容器剩下的空白部分
+-->
+    android:tileMode=["disabled" | "clamp" | "repeat" | "mirror"]
+    <!-- 下面两个属性 api 21 才有用 -->
+    android:tileModeX=["disabled" | "clamp" | "repeat" | "mirror"]
+    android:tileModeY=["disabled" | "clamp" | "repeat" | "mirror"] />
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -134,7 +458,15 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">...</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.BitmapDrawable
+		
+public class BitmapDrawable extends Drawable {}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -144,7 +476,15 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">...</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.
+		
+public class Drawable extends Drawable {}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -154,7 +494,15 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">...</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.
+		
+public class Drawable extends Drawable {}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -164,7 +512,15 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">...</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.
+		
+public class Drawable extends Drawable {}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 
@@ -174,7 +530,123 @@
 					<div class="panel-heading">
 						<h3 class="panel-title">...</h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.
+		
+public class Drawable extends Drawable {}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.
+		
+public class Drawable extends Drawable {}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.
+		
+public class Drawable extends Drawable {}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.
+		
+public class Drawable extends Drawable {}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.
+		
+public class Drawable extends Drawable {}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.
+		
+public class Drawable extends Drawable {}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="..."></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.
+		
+public class Drawable extends Drawable {}
+</pre>
+					</div>
 				</div>
 				<!-- item over -->
 			</div>
@@ -189,6 +661,9 @@
 		<a href="#" type="button"
 			class="btn btn-default dropdown-toggle btn-primary"
 			data-toggle="dropup"> TOP </a>
+		<a href="docs/reference/index.html" type="button"
+			class="btn btn-default dropdown-toggle btn-primary" target="_blank"
+			data-toggle="dropup"> DOCS </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -196,7 +671,8 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
