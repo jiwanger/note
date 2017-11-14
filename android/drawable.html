@@ -66,8 +66,8 @@
 					</div>
 					<div class="list-group">
 						<a href="#" class="list-group-item">Drawable 简介</a>
-						<a href="#drawable-canvas" class="list-group-item">
-							Drawable 和 Canvas
+						<a href="#drawable-custom" class="list-group-item">
+							自定义 Drawable
 						</a>
 						<a href="#drawable-dir" class="list-group-item">
 							<code>drawable</code>
@@ -160,15 +160,103 @@ public abstract class Drawable {}
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="drawable-canvas"></a>
+				<a class="offset" id="drawable-custom"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">Drawable 和 Canvas</h3>
+						<h3 class="panel-title">自定义 Drawable</h3>
 					</div>
 					<div class="panel-body">
+                        <p>自定义圆角　Drawable:</p>
+                        <ul>
+                            <li><p><code>public void draw(Canvas canvas)</code> -- <b>必须实现</b>，使用 Canvas 绘制图形</p></li>
+                            <li><p><code>public void setColorFilter(ColorFilter cf)</code> -- <b>必须实现</b>，指定一个色彩过滤器</p></li>
+                            <li><p><code>public void setAlpha(int alpha)</code> -- <b>必须实现</b>，设置 alpha 值</p></li>
+                            <li><p><code>public int getOpacity()</code> -- <b>必须实现</b>，返回不透明度/透明度。</p></li>
+                            <li><p><code>public void setBounds(int left, int top, int right, int bottom)</code> -- 设置绘制的范围</p></li>
+                            <li><p><code>public int getIntrinsicWidth()</code> -- View 使用 wrap_content 的时候，提供一下宽度尺寸</p></li>
+                            <li><p><code>public int getIntrinsicHeight()</code> -- View　使用　wrap_content　的时候，提供一下高度尺寸</p></li>
+                        </ul>
 						<pre class="brush: java;">
-Bitmap b = Bitmap.createBitmap(100, 100, Bitmap.Config.ARGB_8888);
-Canvas c = new Canvas(b);
+package com.lesson1234.myapplication;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapShader;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
+import android.graphics.RectF;
+import android.graphics.Shader;
+import android.graphics.drawable.Drawable;
+
+public class CircleConerDrawable extends Drawable {
+    private Paint mPaint;
+    private Bitmap mBitmap;
+
+    private RectF rectF;
+
+    public CircleConerDrawable(Bitmap bitmap) {
+        mBitmap = bitmap;
+        BitmapShader bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP,
+                Shader.TileMode.CLAMP);
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);
+        mPaint.setShader(bitmapShader);
+    }
+
+    @Override
+    public void setBounds(int left, int top, int right, int bottom) {
+        super.setBounds(left, top, right, bottom);
+        rectF = new RectF(left, top, right, bottom);
+    }
+
+    @Override
+    public void draw(Canvas canvas) {
+        canvas.drawRoundRect(rectF, 30, 30, mPaint);
+    }
+
+    @Override
+    public int getIntrinsicWidth() {
+        return mBitmap.getWidth();
+    }
+
+    @Override
+    public int getIntrinsicHeight() {
+        return mBitmap.getHeight();
+    }
+
+    @Override
+    public void setAlpha(int alpha) {
+        mPaint.setAlpha(alpha);
+    }
+
+    @Override
+    public void setColorFilter(ColorFilter cf) {
+        mPaint.setColorFilter(cf);
+    }
+
+    @Override
+    public int getOpacity() {
+        return PixelFormat.TRANSLUCENT;
+    }
+}
+</pre>
+                        <p>使用这个 CircleConerDrawable:</p>
+                        <pre class="brush: xml;">
+Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bjx);
+Drawable dw = new CircleConerDrawable(bitmap);
+mImageview.setImageDrawable(dw);
+
+<!-- XML　文件中使用 Drawable 类, API 24 -->
+&lt;com.myapp.MyCustomDrawable
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="#ffff0000" />
+
+<!-- 内部 Drawable 类, API 24 -->
+&lt;drawable
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    class="com.myapp.MyTopLevelClass$InnerCustomDrawable"
+    android:color="#ffff0000" />
 </pre>
 					</div>
 				</div>
