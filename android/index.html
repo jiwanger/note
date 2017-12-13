@@ -2134,14 +2134,24 @@ public static int getScreenHeight(Activity cx) {
 	return dm.heightPixels;
 }
 
-public static int dip2px(Context cx, float dipValue) {
-	float scale = cx.getResources().getDisplayMetrics().density;
-	return (int) (dipValue * scale + 0.5f);
+public static int convertDip2Px(Context context, int dip) {
+	float scale = context.getResources().getDisplayMetrics().density;
+	return (int)(dip * scale + 0.5f * (dip >= 0 ? 1 : -1));
 }
 
-public static int px2dip(Context cx, float pxValue) {
-	float scale = cx.getResources().getDisplayMetrics().density;
-	return (int) (pxValue / scale + 0.5f);
+public static int convertPx2Dip(Context context, int px) {
+	float scale = context.getResources().getDisplayMetrics().density;
+	return (int)(px / scale + 0.5f * (px >= 0 ? 1 : -1));
+}
+
+public static int sp2px(Context context, float spValue) {
+	float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+	return (int) (spValue * fontScale + 0.5f);
+}
+
+public static int px2sp(Context context, float pxValue) {
+	float fontScale = context.getResources().getDisplayMetrics().scaledDensity;
+	return (int) (pxValue / fontScale + 0.5f);
 }
 </pre>
 					</div>
