@@ -66,6 +66,9 @@
 					</div>
 					<div class="list-group">
 						<a href="#" class="list-group-item">Drawable 简介</a>
+						<a href="#drawable-Drawable" class="list-group-item">
+							Drawable 类
+						</a>
 						<a href="#drawable-custom" class="list-group-item">
 							自定义 Drawable
 						</a>
@@ -117,12 +120,6 @@
 						<h3 class="panel-title">Drawable 简介</h3>
 					</div>
 					<div class="panel-body">
-						<pre class="brush: java;">
-java.lang.Object
-	android.graphics.drawable.Drawable
-	
-public abstract class Drawable {}
-</pre>
 						<p><a href="docs/reference/android/graphics/drawable/Drawable.html" target="_blank">Drawable</a> 一般抽象为“能被绘制的东西”。相比于 View，并不需要去考虑 measure、layout，仅仅只要去考虑如何 draw（canavs）。</p>
 						<h5 class="text-primary">Drawable 的用法：</h5>
 						<ul>
@@ -155,6 +152,80 @@ public abstract class Drawable {}
 						</p>
 
 
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="drawable-Drawable"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Drawable 类</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+
+public abstract class Drawable {}
+
+/** 内部类 */
+public static interface Drawable.Callback {}
+public static abstract class ConstantState {}
+</pre></div>
+
+						<div  class="sub-item">
+							<p><a href="docs/reference/android/graphics/drawable/Drawable.html">Drawable</a> 常用方法：</p>
+							<ol type="I">
+								<li>
+									Drawable 抽象方法:
+									<ol>
+										<li><p><code>abstract void draw(Canvas canvas)</code> -- </p></li>
+										<li><p><code>abstract void setAlpha(int alpha)</code> -- </p></li>
+										<li><p><code>abstract int getOpacity()</code> -- </p></li>
+										<li><p><code>abstract void setColorFilter(ColorFilter colorFilter)</code> -- </p></li>
+									</ol>
+								</li>
+								<li>
+									Drawable 常用方法:
+									<ol start="5">
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+									</ol>
+								</li>
+								<li>
+									Drawable 其它方法:
+									<ol start="20">
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+									</ol>
+								</li>
+								<li>
+									Drawable 相关类:
+									<ul>
+										<li><a href=""></a> -- </li>
+										<li><a href=""></a> -- </li>
+										<li><a href=""></a> -- </li>
+									</ul>
+								</li>
+							</ol>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
@@ -316,33 +387,33 @@ mImageview.setImageDrawable(dw);
 								<thead>
 									<tr>
 										<th>dpi范围</th>
-										<th>密度</th>
+										<th>目录</th>
 									</tr>
 								</thead>
 								<tbody>
 									<tr>
 										<td>0dpi ~ 120dpi</td>
-										<td>ldpi</td>
+										<td>drawable-ldpi</td>
 									</tr>
 									<tr>
 										<td>120dpi ~ 160dpi</td>
-										<td>mdpi</td>
+										<td>drawable-mdpi / drawable</td>
 									</tr>
 									<tr>
 										<td>160dpi ~ 240dpi</td>
-										<td>hdpi</td>
+										<td>drawable-hdpi</td>
 									</tr>
 									<tr>
 										<td>240dpi ~ 320dpi</td>
-										<td>xhdpi</td>
+										<td>drawable-xhdpi</td>
 									</tr>
 									<tr>
 										<td>320dpi ~ 480dpi</td>
-										<td>xxhdpi</td>
+										<td>drawable-xxhdpi</td>
 									</tr>
 									<tr>
 										<td>480dpi ~ 640dpi</td>
-										<td>xxxhdpi</td>
+										<td>drawable-xxxhdpi</td>
 									</tr>
 								</tbody>
 							</table>
@@ -370,7 +441,7 @@ mImageview.setImageDrawable(dw);
 								<li>
 									<p>
 										3. 从无 DPI 的对应 drawable 目录下寻找(
-										<code>drawable</code>
+										<code>drawable-nodpi</code>
 										)；
 									</p>
 								</li>
@@ -390,13 +461,13 @@ mImageview.setImageDrawable(dw);
 								->
 								<code>drawable-xxxhdpi</code>
 								->
-								<code>drawable</code>
+								<code>drawable-nodpi</code>
 								->
 								<code>drawable-xhdpi</code>
 								->
 								<code>drawable-hdpi</code>
 								->
-								<code>drawable-mdpi</code>
+								<code>drawable-mdpi / drawable</code>
 								->
 								<code>drawable-ldpi</code>
 							</p>

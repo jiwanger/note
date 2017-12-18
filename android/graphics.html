@@ -110,6 +110,44 @@
                     <p>Android Framework 为 2D 和 3D 提供了多种多样的图形渲染 API，这些 API 与厂商实现的 graphics drivers
                         交互，所以了解这些 API 在更高层次是如何工作的是很重要的。</p>
                     <p><b>应用开发者绘制图像到屏幕上有两种方法：使用 Canvas 或者 OpenGL。</b></p>
+                    <p>此文涉及的类汇总：</p>
+                    <table class="table table-responsive table-bordered">
+                        <tr>
+                            <td><a href="#graphics-Canvas">Canvas</a></td>
+                            <td><a href="#graphics-Rect">Rect</a></td>
+                            <td><a href="#graphics-Color">Color</a></td>
+                            <td><a href="#graphics-PorterDuff">PorterDuff.Mode</a></td>
+                            <td><a href="#graphics-Picture">Picture</a></td>
+                            <td><a href="#graphics-Path">Path</a></td>
+                            <td><a href="#graphics-Region">Region</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="#graphics-Paint">Paint</a></td>
+                            <td><a href="#graphics-MaskFilter">MaskFilter 及子类:<br> BlurMaskFilter, EmbossMaskFilter</a></td>
+                            <td><a href="#graphics-ColorFilter">ColorFilter 及子类:<br>ColorMatrixColorFilter, LightingColorFilter, PorterDuffColorFilter</a></td>
+                            <td><a href="#graphics-ColorMatrix">ColorMatrix</a></td>
+                            <td><a href="#graphics-PathEffect">PathEffect 及子类:<br>CornerPathEffect, DiscretePathEffect, DashPathEffect, PathDashPathEffect, ComposePathEffect, SumPathEffect</a></td>
+                            <td><a href="#graphics-Shader">Shader 及子类:<br>BitmapShader, LinearGradient, RadialGradient, SweepGradient, ComposeShader</a></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><a href="#graphics-Bitmap">Bitmap</a></td>
+                            <td><a href="#graphics-BitmapFactory">BitmapFactor</a></td>
+                            <td><a href="#graphics-TypedValue">TypedValue</a></td>
+                            <td><a href="#graphics-DisplayMetrics">DisplayMetrics</a></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><a href="#graphics-Drawable">Drawable</a></td>
+                            <td><a href="#graphics-Matrix">Matrix</a></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
                     <p><code>android.graphics.Canvas</code> 是一个 2D 的图形 API，而且是开发者中最流行的图形 API。</p>
                     <p>从 Android 4.0 开始，硬件加速 Canvas 是默认打开的。因此，在 Android4.0 以及之后的版本上，支持 OpenGl ES 2.0
                         的硬件 GPU 都是强制必需的。</p>
@@ -136,9 +174,13 @@
 java.lang.Object
 	android.graphics.Canvas
 
-public class Canvas {}
+public class Canvas {
+    public Canvas() {}
+    public Canvas(Bitmap bitmap) {}
+}
 
-
+enum Canvas.EdgeType {}
+enum Canvas.VertexMode {}
 </pre>
                         <p><b>请务必记住：</b></p>
                         <ul>
@@ -1466,10 +1508,10 @@ static void RGBToHSV(int red, int green, int blue, float[] hsv)     // rgb 表�
  */
 static void colorToHSV(int color, float[] hsv)      // int 表示的颜色转换为 HSV
 
-static int alpha(int color)         // 颜色值的 alpha 部分
-static int red(int color)           // 颜色值的 red 部分
-static int green(int color)         // 颜色值的 green 部分
-static int blue(int color)          // 颜色值的 blue 部分
+static int alpha(int color)         // 获取颜色值的 alpha 部分, 可以为 0xAARRGGBB, 0xRRGGBB
+static int red(int color)           // 获取颜色值的 red 部分, 可以为 0xAARRGGBB, 0xRRGGBB
+static int green(int color)         // 获取颜色值的 green 部分, 可以为 0xAARRGGBB, 0xRRGGBB
+static int blue(int color)          // 获取颜色值的 blue 部分, 可以为 0xAARRGGBB, 0xRRGGBB
 
 static int argb(int alpha, int red, int green, int blue)   // argb 表示的颜色转换为　int 表示
 static int rgb(int red, int green, int blue)        // rgb 表示的颜色转换为　int 表示
@@ -1880,11 +1922,11 @@ private void curve(Canvas canvas) {
 java.lang.Object
     android.graphics.Paint
 
-public class Paint {}
-
-public Paint() {}
-public Paint(int flags) {}      // 同 setFlags(int flags)
-public Paint(Paint paint) {}    // 同 set(Paint src)
+public class Paint {
+    public Paint() {}
+    public Paint(int flags) {}      // 同 setFlags(int flags)
+    public Paint(Paint paint) {}    // 同 set(Paint src)
+}
 
 /** 内部类 */
 public enum Style {}        // 填充和描边样式
@@ -2747,10 +2789,20 @@ enum Bitmap.Config            // 像素的存储方式: ARGB_8888, RGB565, ALPHA
                         <ul>
                             <li><p><code>Bitmap.Config.ALPHA_8</code> -- 8 位的 Alpha 通道, 单一透明色</p></li>
                             <li><p><code>Bitmap.Config.ARGB_4444</code> -- API 13 后不再使用，A,R,G,B 各 4 位</p></li>
-                            <li><p><code>Bitmap.Config.ARGB_8888</code> -- 32 位存储每个像素，A,R,G,B 各 8 位</p></li>
+                            <li><p><code>Bitmap.Config.ARGB_8888</code> -- 默认模式，32 位存储每个像素，A,R,G,B 各 8 位</p></li>
                             <li><p><code>Bitmap.Config.RGB_565</code> -- 16 位存储每个像素， 只的 R, G, B， 分别为 5, 6, 5 位</p></li>
                         </ul>
-                        <p><b>Bitmap 大小计算：</b><code>字节 = widthPixels * heightPixels * 位深度 / 8</code></p>
+                        <p><b>Bitmap 占用内存大小计算：</b></p>
+                        <pre class="brush: java;">
+/** 1.可以直接使用此方法获取占用内存大小 */
+bitmap.getByteCount();
+
+/** 2.计算原图(未缩放) */
+bytes = widthPixels * heightPixels * 位深度 / 8
+
+/** 3.计算缩放图(如图片在不同的 dpi 下显示) */
+bytes = Math.round(widthPixels * scale) * Math.round(heightPixels * scale) * 位深度 / 8
+</pre>
                     </div>
 
                     <div class="sub-item">
@@ -2795,7 +2847,7 @@ canvas.drawBitmap(bitmap, 200, 0, mPaint);
                                 <ol start="11">
                                     <li><p><code>final int getWidth()</code> -- 获取宽度，并不一定等于图片的宽度像素，是根据 dpi 缩放后真实要显示的宽度</p></li>
                                     <li><p><code>final int getHeight()</code> -- 获取高度，并不一定等于图片的高度像素，是根据 dpi 缩放后真实要显示的高度</p></li>
-                                    <li><p><code>void setWidth(int width)</code> -- 设置宽度，BitmapFactory.Options　的 <code>inMutable = true</code> 才能更改这个宽度，一般不使用此方法，用 <code>reconfigure(int, int, Config)</code></p></li>
+                                    <li><p><code>void setWidth(int width)</code> -- 设置宽度，BitmapFactory.Options 的 <code>inMutable = true</code> 才能更改这个宽度，一般不使用此方法，用 <code>reconfigure(int, int, Config)</code></p></li>
                                     <li><p><code>void setHeight(int height)</code> -- 设置高度，BitmapFactory.Options 的 <code>inMutable = true</code> 才能更改这个高度，一般不使用此方法，用 <code>reconfigure(int, int, Config)</code></p></li>
                                     <li><p><code>void reconfigure(int width, int height, Bitmap.Config config)</code> -- 使用新配置设置宽高</p></li>
                                     <li><p><code>final boolean isMutable()</code> -- 是否可更改</p></li>
@@ -2822,14 +2874,77 @@ canvas.drawBitmap(bitmap, 200, 0, mPaint);
                                     <li><p><code>void setPixels(int[] pixels, int offset, int stride, int x, int y, int width, int height) </code> -- 设置多个点的颜色值，可以指定偏移量和跨度<code>pixels.length >= width * height</code></p></li>
                                     <li><p><code>int getPixel(int x, int y)</code> -- 返回 (x,y) 点的颜色值</p></li>
                                     <li><p><code>void getPixels(int[] pixels, int offset, int stride, int x, int y, int width, int height) </code> -- 获取多个点的颜色值，写入 pixels, 可以指定偏移量和跨度<code>pixels.length >= width * height</code></p></li>
-                                    <li><p><code></code> -- </p></li>
-                                    <li><p><code></code> -- </p></li>
-                                    <li><p><code></code> -- </p></li>
-                                    <li><p><code></code> -- </p></li>
-                                    <li><p><code></code> -- </p></li>
-                                    <li><p><code></code> -- </p></li>
-                                    <li><p><code></code> -- </p></li>
-                                    <li><p><code></code> -- </p></li>
+                                    <li><p><code>Bitmap extractAlpha()</code> -- 返回一个新的 bitmap，该 bitmap 包含了目标 bitmap 的所有 ARGB 中的 A 值, 其它颜色不见了，它可以通过 Canvas.drawBitmap() 画出来</p>
+                                    <pre class="brush: java;">
+private void gernaral(Canvas canvas) {
+    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(),R.drawable.img_200_300);
+    canvas.drawBitmap(bitmap, 0, 0, null);// 原图
+
+    bitmap = getAlphaBitmap(bitmap, 100);// 这张图片的每个像素 alpha 设为 100
+
+    canvas.drawBitmap(bitmap, 200, 0, mPaint);// 图片变透明了
+
+    /** 使用 mPaint 的颜色绘制了 bitmap, 但这个  bitmap 只有 alpha 了
+     * 相当于使用 mPaint 的颜色绘制 bitmap 的区域，但每个像素的 alpha 为 bitmap 的 alpha
+     */
+    canvas.drawBitmap(bitmap.extractAlpha(), 400, 0, mPaint);
+}
+
+/**
+* 指定 Bitmap 的每个像素 alpha 值，返回这个新的 bitmap
+* @param bmp 源图
+* @param alpha 指定的 alpha 值
+* @return 目标图
+*/
+private Bitmap getAlphaBitmap(Bitmap bmp, int alpha){
+    Bitmap temp = Bitmap.createBitmap(bmp.getWidth(), bmp.getHeight(), Config.ARGB_8888);
+    int[] oldPixes = new int[bmp.getWidth() * bmp.getHeight()];
+    int[] newPls = new int[bmp.getWidth() * bmp.getHeight()];
+    bmp.getPixels(oldPixes, 0, bmp.getWidth(), 0, 0, bmp.getWidth(), bmp.getHeight());
+    for(int i = 1; i < oldPixes.length; i++){
+        int color = oldPixes[i];
+        newPls[i] = Color.argb(alpha, Color.red(color), Color.green(color), Color.blue(color));
+    }
+    tempBmp.setPixels(newPls, 0, temp.getWidth(), 0, 0, temp.getWidth(), temp.getHeight());
+    return tempBmp;
+}
+                                    </pre>
+                                    </li>
+                                    <li><p><code>Bitmap extractAlpha(Paint paint, int[] offsetXY)</code> -- 同上，但 paint 会影响 alpha 值， offsetXY 可以跳过一些像素</p></li>
+                                    <li><p><code>void eraseColor(int color)</code> -- 用指定的 color 填充　bitmap，　BitmapFactory.Options 的 <code>inMutable = true</code> 才能调用此方法</p></li>
+                                    <li><p><code>int describeContents()</code> -- 返回一个标志位</p></li>
+                                    <li><p><code>final int getAllocationByteCount()</code> -- 返回用于存储位图像素的分配内存的大小，如果位图不可修改，这个值同下；如果 调用了 setWidth, reconfigure...那么这个值比 getByteCount 大</p></li>
+                                    <li><p><code>final int getByteCount() </code> -- 返回有多少字节用来存储该 bitmap 的点, 图片是否被缩放也相关</p>
+                                    <pre class="brush:java;">
+/** 原图为: 200 * 300
+ * 手机 dpi 为: 320, 那么对应图片目录为： xhdpi
+ * 图片颜色工使用: ARGB_8888, 就是 32 位表示一个像素
+ * 此时占用内存大小为: 200 * 300 * 32 / 8 = 240000
+ *
+ * 如果将图片放到: hdpi, dpi = 240
+ * 此时占用内存大小为: scale = 320 / 240;
+ * byte = Math.round(200 * scale) * Math.round(300 * scale) * 32 / 8 = 427200
+ *
+ * 如果将图片放到: xxhdpi, dpi = 480
+ * 此时占用内存大小为: scale = 320 / 480;
+ * byte = Math.round(200 * scale) * Math.round(300 * scale) * 32 / 8 = 106400
+ */
+</pre>
+                                    </li>
+                                    <li><p><code>final int getRowBytes()</code> -- 返回位图像素中各行之间的字节数<code>getByteCount() / getHeight()</code></p></li>
+
+                                    <li><p><code>Bitmap copy(Bitmap.Config config, boolean isMutable)</code> -- 按 Bitmap 的尺寸创建一个新的 Bitmap, 指定新的颜色模式和是否可更改</p></li>
+                                    <li><p><code>void copyPixelsFromBuffer(Buffer src)</code> -- 从 buffer 中复制点到 Bitmap 中，并且从初始位置开始会覆盖掉 Bitmap 中原来的点</p></li>
+                                    <li><p><code>void copyPixelsToBuffer(Buffer dst)</code> -- 将 Bitmap 中的点复制到指定的 buffer 当中</p></li>
+                                    <li><p><code>int getGenerationId()</code> -- 获取 bitmap 的当前 id, 当 bitmap 发生改变时，当前 id 会同时发生改变</p></li>
+                                    <li><p><code>byte[] getNinePatchChunk()</code> -- 返回私有数据可选阵列，由 UI 系统调用，不应该调用此方法</p></li>
+                                    <li><p><code>final void setHasMipMap(boolean hasMipMap)</code> -- 如果您知道您将以小于原来大小的50%绘制此位图，则可以通过打开此属性来获得更高的质量</p></li>
+                                    <li><p><code>final boolean hasMipMap()</code> -- 是否开启 hasMipMap</p></li>
+                                    <li><p><code>final void setPremultiplied(boolean premultiplied)</code> -- 设置位图是否应该预处理其数据</p></li>
+                                    <li><p><code>final boolean isPremultiplied()</code> -- 是否已经预处理</p></li>
+                                    <li><p><code>void prepareToDraw()</code> -- 重建与用于绘制它的位图相关联的任何高速缓存</p></li>
+                                    <li><p><code>boolean sameAs(Bitmap other)</code> -- 判断该 bitmap 是否与 other 拥有相同的尺寸，颜色模式，点数据</p></li>
+                                    <li><p><code>void writeToParcel(Parcel p, int flags)</code> -- 将位图及其像素写入 Parcel，写入后可以再读出来<code>Bitmap.CREATOR.createFromParcel(Parcel source)</code></p></li>
                                 </ol>
                             </li>
                         </ol>
@@ -3018,7 +3133,16 @@ dm.densityDpi;      // 获取系统 dpi，随着 build.prop 文件中的代码�
                     <h3 class="panel-title">Drawable 及相关类</h3>
                 </div>
                 <div class="panel-body">
+<pre class="brush: java;">
+java.lang.Object
+    android.graphics.drawable.Drawable
 
+public abstract class Drawable {}
+
+interface Drawable.Callback {}
+class Drawable.ConstantState {}
+</pre>
+                    <p><b>关于 Drawable 请查看 <a href="drawable.html">Drawable</a></b></p>
                 </div>
             </div>
             <!-- item over -->
@@ -3031,6 +3155,17 @@ dm.densityDpi;      // 获取系统 dpi，随着 build.prop 文件中的代码�
                 </div>
                 <div class="panel-body">
                     <div class="sub-item">
+                        <pre class="brush: java;">
+java.lang.Object
+    android.graphics.Matrix
+
+public class Matrix {
+    Matrix() {}
+    Matrix(Matrix src) {}
+}
+
+enum Matrix.ScaleToFit {}
+</pre>
                         <p><a
                                 href="docs/reference/android/graphics/Matrix.html">Matrix</a>
                             -- Matrix 叫做矩阵，并且是一个　3 * 3 的矩阵，主要用于对图像的图形处理. 如下图所示：
@@ -3810,32 +3945,6 @@ matrix.mapPoints(src2);
                                         则是仿射矩阵</p></li>
                                     <li><p><code>boolean isIdentity()</code> -- 是否为初始化矩阵</p></li>
                                 </ol>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <a data-toggle="collapse" data-parent="#accordion"
-                                           href="#graphics-Matrix-example-02"
-                                           aria-expanded="true"
-                                           class="code-header">
-                                            <span class="glyphicon glyphicon-plus"></span>
-                                            View
-                                            Code
-                                        </a>
-                                    </div>
-                                    <div id="graphics-Matrix-example-02"
-                                         class="panel-collapse collapse"
-                                         style="" aria-expanded="true">
-                                        <div class="row">
-                                            <div class="col-md-8" style="padding-left: 20px;">
-                                                <pre class="brush: java; gutter: false;">
-
-</pre>
-                                            </div>
-                                            <div class="col-md-4" style="padding-left: 0px;"><img
-                                                    src="res/graphics-Matrix-01.png"
-                                                    class="img-responsive"></div>
-                                        </div>
-                                    </div>
-                                </div>
                             </li>
                         </ol>
                     </div>
@@ -3857,17 +3966,7 @@ matrix.mapPoints(src2);
 
             <!-- item over -->
 
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"></h3>
-                </div>
-                <div class="panel-body">
 
-                </div>
-            </div>
-            <!-- item over -->
 
             <!-- item start -->
             <a class="offset" id="..."></a>
@@ -3881,89 +3980,7 @@ matrix.mapPoints(src2);
             </div>
             <!-- item over -->
 
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"></h3>
-                </div>
-                <div class="panel-body">
 
-                </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"></h3>
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"></h3>
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"></h3>
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"></h3>
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"></h3>
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title"></h3>
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-            <!-- item over -->
         </div>
     </div>
 </div>
