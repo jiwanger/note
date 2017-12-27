@@ -168,11 +168,12 @@
 java.lang.Object
 	android.graphics.drawable.Drawable
 
-public abstract class Drawable {}
+public abstract class Drawable {
+	/** 内部类 */
+	public static interface Drawable.Callback {}
+	public static abstract class ConstantState {}
+}
 
-/** 内部类 */
-public static interface Drawable.Callback {}
-public static abstract class ConstantState {}
 </pre></div>
 
 						<div  class="sub-item">
@@ -774,18 +775,38 @@ public class Drawable extends Drawable {}
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="StateListDrawable"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">StateListDrawable</h3>
 					</div>
 					<div class="panel-body">
 						<pre class="brush: java;">
 java.lang.Object
 	android.graphics.drawable.Drawable
-		android.graphics.drawable.
+		android.graphics.drawable.StateListDrawable
 		
-public class Drawable extends Drawable {}
+public class StateListDrawable extends Drawable {}
+</pre>
+<p class="alert alert-success">请记住，<b>状态列表中与对象当前状态匹配的第一个项目将被应用。</b>因此，如果列表中的第一个项目不包含下面的状态属性，那么它将每次都被应用，这就是为什么您的默认值应该始终保持不变。比如：将 <code>state_focused</code> 放置于 <code>state_pressed</code> 前，那么 <code>state_pressed</code> 将不会执行，因为它也是 <code>state_focused</code> 状态。</p>
+						<pre class="brush: xml">
+<?xml version="1.0" encoding="utf-8"?>
+&lt;selector xmlns:android="http://schemas.android.com/apk/res/android"
+	android:constantSize=["true" | "false"]
+	android:dither=["true" | "false"]
+	android:variablePadding=["true" | "false"] >
+	&lt;item
+		android:drawable="@[package:]drawable/drawable_resource"
+		android:state_pressed=["true" | "false"]
+		android:state_focused=["true" | "false"]
+		android:state_hovered=["true" | "false"]
+		android:state_selected=["true" | "false"]
+		android:state_checkable=["true" | "false"]
+		android:state_checked=["true" | "false"]
+		android:state_enabled=["true" | "false"]
+		android:state_activated=["true" | "false"]
+		android:state_window_focused=["true" | "false"] />
+&lt;/selector>
 </pre>
 					</div>
 				</div>

@@ -177,10 +177,11 @@ java.lang.Object
 public class Canvas {
     public Canvas() {}
     public Canvas(Bitmap bitmap) {}
+
+    enum Canvas.EdgeType {}
+    enum Canvas.VertexMode {}
 }
 
-enum Canvas.EdgeType {}
-enum Canvas.VertexMode {}
 </pre>
                         <p><b>请务必记住：</b></p>
                         <ul>
@@ -1926,15 +1927,15 @@ public class Paint {
     public Paint() {}
     public Paint(int flags) {}      // 同 setFlags(int flags)
     public Paint(Paint paint) {}    // 同 set(Paint src)
-}
 
-/** 内部类 */
-public enum Style {}        // 填充和描边样式
-public enum Cap {}          // 线条的末端处理，线帽
-public enum Join {}         // 多线条连接拐角弧度的处理
-public enum Align {}        // 将指定 DrawText 对齐方式
-public class FontMetrics {}     // 用于描述给定文本大小的字体的各种度量, 参见下面的文本绘制方法
-public class FontMetricsInt {}  // 用 int 来描述给定文本大小的字体的各种度量
+    /** 内部类 */
+    public enum Style {}        // 填充和描边样式
+    public enum Cap {}          // 线条的末端处理，线帽
+    public enum Join {}         // 多线条连接拐角弧度的处理
+    public enum Align {}        // 将指定 DrawText 对齐方式
+    public class FontMetrics {}     // 用于描述给定文本大小的字体的各种度量, 参见下面的文本绘制方法
+    public class FontMetricsInt {}  // 用 int 来描述给定文本大小的字体的各种度量
+}
 </pre>
                         <p><a href="docs/reference/android/graphics/Paint.html">Paint</a>
                             类保存有关于如何绘制的样式和颜色信息，可以画几何图形，文本和 Bitmap。</p>
@@ -2777,11 +2778,12 @@ canvas.drawRect(new Rect(0, 0, 300, 450), mPaint);
 java.lang.Object
     android.graphics.Bitmap
 
-public final class Bitmap implements Parcelable {}
+public final class Bitmap implements Parcelable {
+    /** 私有构造方法, 两个内部类 */
+    enum Bitmap.CompressFormat    // 图片的压缩格式: PNG，JPEG，WEBP
+    enum Bitmap.Config            // 像素的存储方式: ARGB_8888, RGB565, ALPHA_8, ARGB_4444
+}
 
-/** 私有构造方法, 两个内部类 */
-enum Bitmap.CompressFormat    // 图片的压缩格式: PNG，JPEG，WEBP
-enum Bitmap.Config            // 像素的存储方式: ARGB_8888, RGB565, ALPHA_8, ARGB_4444
 </pre>
                         <p><b>Bitmap: </b>图片在内存中展开就是 <a href="docs/reference/android/graphics/Bitmap.html">Bitmap</a> 格式的, Bitmap 是最原始的保存着图片所有的信息。</p>
                         <p><b>像素点: </b>图片由像素点组成，像素点组成： R(RED), G(Green), B(Blue), A(Alpha) 组成, Alpha 不一定有，要看图片格式。</p>
@@ -3137,10 +3139,10 @@ dm.densityDpi;      // 获取系统 dpi，随着 build.prop 文件中的代码�
 java.lang.Object
     android.graphics.drawable.Drawable
 
-public abstract class Drawable {}
-
-interface Drawable.Callback {}
-class Drawable.ConstantState {}
+public abstract class Drawable {
+    interface Drawable.Callback {}
+    class Drawable.ConstantState {}
+}
 </pre>
                     <p><b>关于 Drawable 请查看 <a href="drawable.html">Drawable</a></b></p>
                 </div>
@@ -3162,9 +3164,9 @@ java.lang.Object
 public class Matrix {
     Matrix() {}
     Matrix(Matrix src) {}
-}
 
-enum Matrix.ScaleToFit {}
+    enum Matrix.ScaleToFit {}
+}
 </pre>
                         <p><a
                                 href="docs/reference/android/graphics/Matrix.html">Matrix</a>
