@@ -1330,6 +1330,41 @@ public abstract class PackageManager {}
                             <ol type="I">
                                 <li>PackageManager 常用方法：
                                     <ol>
+                                        <li><p><code>List<ApplicationInfo> getInstalledApplications(int flags)</code> -- 返回安装在设备上的所有应用程序包的列表</p>
+                                        <pre class="brush: java;">
+GET_UNINSTALLED_PACKAGES
+GET_META_DATA --
+GET_SHARED_LIBRARY_FILES --
+
+MATCH_SYSTEM_ONLY -- API 24 添加，只包括从标有 FLAG_SYSTEM 应用组件
+MATCH_UNINSTALLED_PACKAGES -- API 24 添加，应用卸载，选择保留数据的应用
+</pre>
+                                        </li>
+                                        <li><p><code>List<PackageInfo> getInstalledPackages(int flags)</code> -- 返回安装在设备上的所有包的列表</p>
+                                            <pre class="brush: java;">
+GET_ACTIVITIES
+GET_CONFIGURATIONS
+GET_GIDS
+GET_INSTRUMENTATION
+GET_INTENT_FILTERS
+GET_META_DATA
+GET_PERMISSIONS
+GET_PROVIDERS
+GET_RECEIVERS
+GET_SERVICES
+GET_SHARED_LIBRARY_FILES
+GET_SIGNATURES
+GET_URI_PERMISSION_PATTERNS
+MATCH_DISABLED_COMPONENTS
+MATCH_DISABLED_UNTIL_USED_COMPONENTS
+MATCH_UNINSTALLED_PACKAGES
+</pre></li>
+                                        <li><p><code></code> -- </p></li>
+                                        <li><p><code></code> -- </p></li>
+                                        <li><p><code></code> -- </p></li>
+                                        <li><p><code></code> -- </p></li>
+                                        <li><p><code></code> -- </p></li>
+                                        <li><p><code></code> -- </p></li>
                                         <li><p><code></code> -- </p></li>
                                         <li><p><code></code> -- </p></li>
                                     </ol>
@@ -1430,6 +1465,7 @@ public class Intent implements Parcelable, Cloneable {
                         <h3 class="panel-title">Activity</h3>
                     </div>
                     <div class="panel-body">
+                        <div class="sub-item">
 <pre class="brush: java;">
 java.lang.Object
     android.content.Context
@@ -1441,6 +1477,174 @@ public class Activity extends ContextThemeWrapper implements LayoutInflater.Fact
                 Window.Callback, KeyEvent.Callback,
                 View.OnCreateContextMenuListener, ComponentCallbacks2 {}
 </pre>
+
+                        </div>
+
+                        <div class="sub-item">
+                            <ol type="I">
+                                <li><p>实现的接口:</p>
+                                    <p><a href="docs/reference/android/view/LayoutInflater.Factory2.html">LayoutInflater.Factory2</a> -- <code>setContentView</code> 调用后回调下面的两个方法，解析布局文件的每个 xml 标签的时候都会调用一次下面的方法，可以获取 xml 的所有的属性。</p>
+                                    <ol>
+                                        <li><p><code>View onCreateView(String name, Context context, AttributeSet attrs)</code> -- 解析使用的布局文件的时候调用，来自父类 <a href="docs/reference/android/view/LayoutInflater.Factory.html">LayoutInflater.Factory</a></p></li>
+                                        <li><p><code>View onCreateView(View parent, String name, Context context, AttributeSet attrs)</code> -- 同上，API 11 添加</p></li>
+                                    </ol>
+                                    <pre class="brush: java;">
+/** 在解析的布局 xml 前还有 Window 的标签: LinearLayout -> ViewStub -> FrameLayout
+ * 后面才是自己的布局文件： RelativeLayout -> ...
+ * name -- 解析布局文件的标签(RelativeLayout, ImageView ...)，每次解析一个 tag 都调用一次此方法
+ * attrs -- 对应标签的属性集
+ */
+public View onCreateView(String name, Context context, AttributeSet attrs) {
+    for (int i = 0; i < attrs.getAttributeCount(); i++) {
+        Log.d(TAG, name + ":" + attrs.getAttributeName(i) + "=" + attrs.getAttributeValue(i));
+    }
+    return super.onCreateView(name, context, attrs);
+}
+</pre>
+                                    <p><a href="docs/reference/android/view/KeyEvent.Callback.html">KeyEvent.Callback</a> -- 按键事件处理，View 和 Activity 都实现了这个接口。</p>
+                                    <ol start="3">
+                                        <li><p><code>boolean onKeyDown(int keyCode, KeyEvent event)</code> -- 键按下时调用</p></li>
+                                        <li><p><code>boolean onKeyLongPress(int keyCode, KeyEvent event)</code> -- 长按时调用</p></li>
+                                        <li><p><code>boolean onKeyMultiple(int keyCode, int count, KeyEvent event)</code> -- 当接连发生同一个键的多个 按下/弹起 动作时调用</p></li>
+                                        <li><p><code>boolean onKeyUp(int keyCode, KeyEvent event)</code> -- 键弹起时调用</p></li>
+                                    </ol>
+                                    <p><a href="docs/reference/android/content/ComponentCallbacks2.html">ComponentCallbacks2</a> -- API 14 添加，前两个方法来自父类 <code>ComponentCallbacks</code>, Service, Activity, Application, ContentProvider 都实现了此接口。</p>
+                                    <ol start="7">
+                                        <li><p><code>void onConfigurationChanged(Configuration newConfig)</code> -- 正在运行时设备配置发生变化时系统调用该方法，如横竖屏切换</p></li>
+                                        <li><p><code>void onLowMemory()</code> -- 当整个系统内存不足时，回调此方法，进程应该主动处理以降低内存使用</p></li>
+                                        <li><p><code>void onTrimMemory(int level)</code> -- 系统确定有进程不使用的内存时，调用此方法。API 14 添加</p></li>
+                                    </ol>
+                                    <p><a href="docs/reference/android/view/View.OnCreateContextMenuListener.html">View.OnCreateContextMenuListener</a> -- </p>
+                                    <ol start="10">
+                                        <li><p><code>void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo)</code> -- 在构建此视图的上下文菜单时调用</p>
+                                        <pre class="brush: java;">
+/** ContextMenu 和 OptionsMenu
+ * ContextMenu -- 要绑定到 View, 默认长按 view 时显示，每次调用重新创建:
+ *   绑定到 view -- registerForContextMenu(view);
+ *   主动调用为 -- view.showContextMenu();
+ * OptionsMenu -- 不用绑定，默认按菜单按键时显示，只第一次调用时创建:
+ *   主动调用为 -- openOptionsMenu();
+ */
+@Override
+public void onCreateContextMenu(ContextMenu menu,View v,ContextMenu.ContextMenuInfo menuInfo) {
+    Log.d(TAG, "== onCreateContextMenu ==");
+    getMenuInflater().inflate(R.menu.menu, menu);
+    super.onCreateContextMenu(menu, v, menuInfo);
+}
+
+@Override
+public boolean onContextItemSelected(MenuItem item) {
+    Log.d(TAG, "== onContextItemSelected ==");
+    return super.onContextItemSelected(item);
+}
+
+@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+    Log.d(TAG, "== onCreateOptionsMenu ==");
+    getMenuInflater().inflate(R.menu.menu, menu);
+    return super.onCreateOptionsMenu(menu);
+}
+
+@Override
+public boolean onOptionsItemSelected(MenuItem item) {
+    Log.d(TAG, "== onOptionsItemSelected ==");
+    return super.onOptionsItemSelected(item);
+}
+</pre>
+                                        </li>
+                                    </ol>
+                                    <p><a href="docs/reference/android/view/Window.Callback.html">Window.Callback</a> -- 主要是各种 Activity 和各种 Dialog 实现了此接口。</p>
+                                    <ol start="11">
+                                        <li><p><code>void onAttachedToWindow()</code> -- 当与 Activity 关联的主窗口被附加到窗口管理器时调用, 在 <code>onResume</code> 以后。View 也有此方法，且每个 view 只会被调用一次，父 view 的调用在前，不论 view 的 visibility 状态都会被调用，适合做些 view 特定的初始化操作。</p></li>
+                                        <li><p><code>void onDetachedFromWindow()</code> -- 与 Activity 关联的主窗口已从窗口管理器分离时调用, 在 <code>onDestory</code> 以后</p></li>
+                                        <li><p><code>void onContentChanged()</code> -- Window 的内容改变时调用，比如：在 <code>setContentView</code> 以后</p></li>
+                                        <li><p><code>void onActionModeStarted(ActionMode mode)</code> -- 当 ActionMode 完成时调用, 参见: <a href="#android-view-ActionMode">ActionMode</a></p></li>
+                                        <li><p><code>void onActionModeFinished(ActionMode mode)</code> -- 当 ActionMode 启动时调用, 参见: <a href="#android-view-ActionMode">ActionMode</a></p></li>
+                                        <li><p><code>boolean onCreatePanelMenu(int featureId, Menu menu)</code> -- </p></li>
+                                        <li><p><code>View onCreatePanelView(int featureId)</code> -- </p></li>
+                                        <li><p><code>boolean onMenuItemSelected(int featureId, MenuItem item)</code> -- </p></li>
+                                        <li><p><code>boolean onMenuOpened(int featureId, Menu menu)</code> -- </p></li>
+                                        <li><p><code>void onPanelClosed(int featureId, Menu menu)</code> -- </p></li>
+                                        <li><p><code>boolean onPreparePanel(int featureId, View view, Menu menu)</code> -- </p></li>
+                                        <li><p><code>void onProvideKeyboardShortcuts(List<KeyboardShortcutGroup> data, Menu menu, int deviceId)</code> -- </p></li>
+                                        <li><p><code>boolean onSearchRequested()</code> -- </p></li>
+                                        <li><p><code>boolean onSearchRequested(SearchEvent searchEvent)</code> -- </p></li>
+                                        <li><p><code>void onWindowAttributesChanged(WindowManager.LayoutParams attrs) </code> -- </p></li>
+                                        <li><p><code>void onWindowFocusChanged(boolean hasFocus)</code> -- </p></li>
+                                        <li><p><code>ActionMode onWindowStartingActionMode(ActionMode.Callback callback)</code> -- </p></li>
+                                        <li><p><code>ActionMode onWindowStartingActionMode(ActionMode.Callback callback, int type)</code> -- </p></li>
+                                        <li><p><code>boolean dispatchGenericMotionEvent(MotionEvent event)</code> -- </p></li>
+                                        <li><p><code>boolean dispatchKeyEvent(KeyEvent event)</code> -- </p></li>
+                                        <li><p><code>boolean dispatchKeyShortcutEvent(KeyEvent event)</code> -- </p></li>
+                                        <li><p><code>boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event)</code> -- </p></li>
+                                        <li><p><code>boolean dispatchTouchEvent(MotionEvent event)</code> -- </p></li>
+                                        <li><p><code>boolean dispatchTrackballEvent(MotionEvent event) </code> -- </p></li>
+                                    </ol>
+
+                                </li>
+                                <li>生命周期回调方法:
+                                    <ol start="35">
+                                        <li><p><code>void onCreate(Bundle savedInstanceState)</code> -- </p></li>
+                                        <li><p><code>void onStart()</code> -- </p></li>
+                                        <li><p><code>void onResume()</code> -- </p></li>
+                                        <li><p><code>void onPause()</code> -- </p></li>
+                                        <li><p><code>void onPause()</code> -- </p></li>
+                                        <li><p><code>void onStop()</code> -- </p></li>
+                                        <li><p><code>void onDestory()</code> -- </p></li>
+                                    </ol>
+                                </li>
+                                <li>其它回调方法:
+                                    <ol start="42">
+                                        <li><p><code>void attachBaseContext(Context base)</code> -- 此方法来自 Context 类的抽象方法，但 ContextWrapper 类重写了，真正实现在 ContextImpl 类，此方法调用后，Context 才能使用。</p>
+                                        <pre class="brush: java;">
+// 重写 attachBaseContext 方法
+@Override
+protected void attachBaseContext(Context newBase) {
+    Configuration newConfig = newBase.getResources().getConfiguration();
+    Locale locale = new Locale("en");
+    newConfig.setLocale(locale);// 修改 Configuration 的 Locale 为英语
+    Context newContext = newBase.createConfigurationContext(newConfig);
+    super.attachBaseContext(newContext);
+
+    Log.d(TAG, getString(R.string.app_name));// 读取 values-en 下的 strings.xml
+}
+</pre>
+                                        </li>
+                                        <li><p><code>void onActivityResult(int requestCode, int resultCode, Intent data)</code> -- </p></li>
+                                        <li><p><code>void onNewIntent(Intent intent)</code> -- </p></li>
+                                        <li><p><code>void onAttachFragment(Fragment fragment)</code> -- </p></li>
+                                        <li><p><code>void onRestoreInstanceState(Bundle savedInstanceState)</code> -- </p></li>
+                                        <li><p><code>void onPostCreate(Bundle savedInstanceState)</code> -- </p></li>
+                                        <li><p><code>void onPostResume()</code> -- </p></li>
+                                        <li><p><code></code> -- </p></li>
+                                        <li><p><code></code> -- </p></li>
+                                        <li><p><code></code> -- </p></li>
+                                    </ol>
+                                </li>
+                                <li>方法:
+                                    <ol start="">
+                                        <li><p><code></code> -- </p></li>
+                                        <li><p><code></code> -- </p></li>
+                                        <li><p><code></code> -- </p></li>
+                                    </ol>
+                                </li>
+
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <p>Activity 相关类：</p>
+                            <ul>
+                                <li><p><a href="">Window</a> -- </p></li>
+                                <li><p><a href="">KeyEvent</a> -- </p></li>
+                                <li><p><a href="">MotionEvent</a> -- </p></li>
+                                <li><p><a id="android-view-ActionMode" class="offset"></a><a href="docs/reference/android/view/ActionMode.html">ActionMode</a> -- 是 3.0 之后不同于 ContextMenu 的另一种上下文操作的实现，经常在文本编辑或列表选择的操作中使用</p></li>
+                                <li><p><a href=""></a> -- </p></li>
+                                <li><p><a href=""></a> -- </p></li>
+                                <li><p><a href=""></a> -- </p></li>
+                                <li><p><a href=""></a> -- </p></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <!-- item over -->
