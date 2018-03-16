@@ -122,7 +122,7 @@
                     <div id="android-os" class="panel-collapse collapse"
                          role="tabpanel">
                         <a href="#android-os-AsyncTask" class="list-group-item">AsyncTask</a>
-                        <a href="#" class="list-group-item">...</a>
+                        <a href="#android-os-Handler" class="list-group-item">Handler 机制</a>
                         <a href="#" class="list-group-item">...</a>
                     </div>
 
@@ -2835,6 +2835,133 @@ protected void attachBaseContext(Context newBase) {
             <!-- item over -->
 
             <!-- item start -->
+            <a class="offset" id="android-os-AsyncTask"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">AsyncTask</h3>
+                </div>
+                <div class="panel-body">
+                    <pre class="brush: java;">
+java.lang.Object
+    android.os.AsyncTask&lt;Params, Progress, Result>
+
+/** Params：doInBackground 方法的参数类型；
+ *  Progress：AsyncTask 所执行的后台任务的进度类型；
+ *  Result：后台任务的返回结果类型。
+ */
+public abstract class AsyncTask&lt;Params, Progress, Result> {
+    enum AsyncTask.Status {
+        PENDING,    // 准备
+        RUNNING,    // 运行
+        FINISHED,   // 完成
+    }
+}
+                    </pre>
+                    <p><a href="docs/reference/android/os/AsyncTask.html" target="_blank">AsyncTask</a> 是对 Handler 与线程池的封装。使用它的方便之处在于能够更新用户界面，当然这里更新用户界面的操作还是在主线程中完成的，但是由于 AsyncTask 内部包含一个 Handler，所以可以发送消息给主线程让它更新 UI。</p>
+                    <p>另外，<a href="docs/reference/android/os/AsyncTask.html" target="_blank">AsyncTask</a> 内还包含了一个线程池，使用线程池的主要原因是避免不必要的创建及销毁线程的开销。</p>
+                    <p><a href="docs/reference/android/os/AsyncTask.html" target="_blank">AsyncTask</a> 是一个抽象类，我们在使用时需要定义一个它的派生类并重写相关方法。</p>
+                    <p><b>AsyncTask 的局限性:</b></p>
+                    <p class="alert alert-success"><b>1.一个 AsyncTask 对象只能调用一次 execute 方法;<br />2.在 Android 4.1 版本之前，AsyncTask 类必须在主线程中加载，在 Android 4.1 以及以上版本则不存在这一限制;</b></p>
+                    <p><a href="docs/reference/android/os/AsyncTask.html" target="_blank">AsyncTask</a> 的主要方法：</p>
+                    <ol>
+                        <li><p><code>public final AsyncTask&lt;Params, Progress, Result> execute(Params... params)</code> -- 触发执行异步任务</p></li>
+                        <li><p><code>protected void onPreExecute()</code> -- 可以执行初始化操作</p></li>
+                        <li><p><code>protected Result doInBackground(Params... params) {</code> -- 工作线程</p></li>
+                        <li><p><code>protected void publishProgress(Progress... values)</code> -- 在 doInBackground 中调用，会执行 onProgressUpdate 方法</p></li>
+                        <li><p><code>protected void onProgressUpdate(Progress... values)</code> -- 进度回调</p></li>
+                        <li><p><code>protected void onPostExecute(Result result)</code> -- 执行完成回调</p></li>
+                        <li><p><code>protected void onCancelled()</code> -- 取消回调</p></li>
+                        <li><p><code>public void cancel(boolean mayInterruptIfRunning)</code> -- 取消</p></li>
+                        <li><p><code>public final boolean isCancelled()</code> -- 是否取消</p></li>
+                        <li><p><code>public final AsyncTask.Status getStatus()</code> -- 获取状态</p></li>
+                    </ol>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <a class="offset" id="android-os-Handler"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Handler 机制</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="sub-item">
+                        <p><b>Handler</b></p>
+                        <pre class="brush: java;">
+
+                        </pre>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><b>Looper</b></p>
+                        <pre class="brush: java;">
+
+                        </pre>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><b>MessageQueue</b></p>
+                        <pre class="brush: java;">
+
+                        </pre>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><b>ThreadLocal</b></p>
+                        <pre class="brush: java;">
+
+                        </pre>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><b>Message</b></p>
+                        <pre class="brush: java;">
+
+                        </pre>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><b>HandlerThread</b></p>
+                    <pre class="brush: java;">
+java.lang.Object
+    java.lang.Thread
+  	    android.os.HandlerThread
+
+public class HandlerThread extends Thread {
+    public MyHandlerThread(String name) {}
+    public HandlerThread(String name, int priority) {}
+}
+                    </pre>
+                    <p><a href="docs/reference/android/os/HandlerThread.html" target="_blank">HandlerThread</a> </p>
+                </div>
+
+
+                </div>
+            </div>
+            <!-- item over -->
+
+            <a class="offset" id="..."></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">...</h3>
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+            <!-- item over -->
+
+            <a class="offset" id="..."></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">...</h3>
+                </div>
+                <div class="panel-body">
+
+                </div>
+            </div>
+            <!-- item over -->
+
             <a class="offset" id="..."></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
