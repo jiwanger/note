@@ -125,6 +125,19 @@
                         <a href="#android-os-Handler" class="list-group-item">Handler 机制</a>
                         <a href="#" class="list-group-item">...</a>
                     </div>
+                    <a class="list-group-item active dropdown" data-toggle="collapse"
+                       data-parent="#accordion" href="#android-net" aria-expanded="true"
+                       style="border-top: 1px solid #DDDDDD;">
+                        <code>android.net</code><span class="caret pull-right"
+                                              style="margin-top: 5px;"></span>
+                    </a>
+                    <div id="android-net" class="panel-collapse collapse"
+                         role="tabpanel">
+                        <a href="#android-net-wifi-WifiManager" class="list-group-item">WifiManager</a>
+                        <a href="#" class="list-group-item">...</a>
+                        <a href="#" class="list-group-item">...</a>
+                    </div>
+                    
 
                     <a class="list-group-item active dropdown" data-toggle="collapse"
                        data-parent="#accordion" href="#android-support-v4" aria-expanded="true"
@@ -341,6 +354,11 @@
                                 <code>Settings</code>, <code>DocumentsProvider</code>, <code>DocumentsContract</code>,
                                 <code>ContactsContract</code>, <code>CalendarContract</code> ...</p>
                             </li>
+                            <li><p><a href="docs/reference/android/net/package-summary.html">android.net</a>
+                                -- 网络相关，以及 <code>android.net.wifi</code> 下为 WIFI 相关代码。包括的类和接口：<code>Network</code>, <code>NetworkInfo</code>, <code>Uri</code>, 
+                                <code>VpnService</code>, <code>Proxy</code>, <code>ProxyInfo</code>, <code>WifiInfo</code>, <code>WifiManager</code>, <code>ScanResult</code>, <code>WifiConfiguration</code> ...</p>
+                            </li>
+
                             <li><p><a href="docs/reference/android/hardware/package-summary.html">android.hardware</a>
                                 -- 要是原来主要是 Camara 相关类，API 21 不再使用。包括的类和接口：<code>Sensor</code>,
                                 <code>SensorManager</code>, <code>SensorEvent</code>, <code>TriggerEvent</code>,
@@ -2940,6 +2958,148 @@ public class HandlerThread extends Thread {
             </div>
             <!-- item over -->
 
+            <!-- item start -->
+            <a class="offset" id="android-net-wifi-WifiManager"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">WifiManager</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="sub-item">
+                        <pre class="brush: java;">
+java.lang.Object
+    android.net.wifi.WifiManager
+
+public class WifiManager {
+    public class MulticastLock {}
+    public class WifiLock {}
+    public class WpsCallback {}
+}
+                        </pre>
+                        <p><a href="docs/reference/android/net/wifi/WifiManager.html">WifiManager</a> 是 Android 暴露给开发者使用的一个系统服务管理类, 其中包含对 WiFi 的响应的操作函数; 其隐藏掉的系统服务类为 IWifiService, 为 Android 私有的, 其具体实现, 未暴露给用户; 只需要使用 WifiManager 进行函数操作完成 UI, 监听对应的广播消息, 就可完成功能了. 换言之, WifiManager 会调用 Service 和 Framework 层, 驱动层进行函数调用, 然后驱动层会回调至上层, 以广播的形式实现通知。</p>
+                        <pre class="brush: java;">
+private WifiManager wifiManager;
+
+private void setupView() {
+    // 1.打开 / 关闭 Wifi
+    wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+    wifiManager.setWifiEnabled(true);
+
+    // 2.Wifi 状态
+    int wifiState = wifiManager.getWifiState();
+    switch (wifiState) {
+        case WifiManager.WIFI_STATE_DISABLED: // 已经完全关闭的状态
+
+            break;
+        case WifiManager.WIFI_STATE_DISABLING: // 正要关闭的状态
+
+            break;
+        case WifiManager.WIFI_STATE_ENABLED: // 已经完全开启的状态
+
+            break;
+        case WifiManager.WIFI_STATE_ENABLING: // 正要开启的状态
+
+            break;
+        case WifiManager.WIFI_STATE_UNKNOWN: // 未知的状态
+
+            break;
+    }
+
+    // 3.获取扫描到的 WiFi 热点的结果
+    wifiManager.startScan();
+    List&lt;ScanResult> scanResults = wifiManager.getScanResults();
+
+    /** 4.取配置好的 WiFi 信息
+        * Android 的 WiFi 连接, 大概可以分为如下两种情况:
+        * a.无密码的, 可直接连接, 连接过程中, 此热点一直有, 不管最后是否需要其他方式进行验证操作, 但凡连接成功, 即刻进行了对此热点的配置进行保存;
+        * b.有密码的, 暂且不论何种加密手段, 只要用户输入密码, 点击连接, 如果连接途中, 此热点一直有, 不论连接成功还是失败, 都即刻对此热点的配置进行了保存操作;
+        * c.连接多个WiFi成功之后, 然后关闭WiFi, 下次开启WiFi的时候, 它会主动帮你连接这其中配置好的其中一个WiFi;
+        */
+    List&lt;WifiConfiguration> wifiConfigurations = wifiManager.getConfiguredNetworks();
+    if (wifiConfigurations == null || wifiConfigurations.isEmpty()) {
+        return;
+    }
+    for (WifiConfiguration configuration : wifiConfigurations) {
+        Log.v("Wifi", "configuration = " + configuration.toString());
+    }
+
+    // 5.连接 WiFi, 有两个函数:
+
+}
+
+private static final int WIFICIPHER_NOPASS = 0;
+private static final int WIFICIPHER_WEP = 1;
+private static final int WIFICIPHER_WPA = 2;
+
+private WifiConfiguration createWifiConfig(String ssid, String password, int type) {
+    //初始化WifiConfiguration
+    WifiConfiguration config = new WifiConfiguration();
+    config.allowedAuthAlgorithms.clear();
+    config.allowedGroupCiphers.clear();
+    config.allowedKeyManagement.clear();
+    config.allowedPairwiseCiphers.clear();
+    config.allowedProtocols.clear();
+
+    //指定对应的SSID
+    config.SSID = "\"" + ssid + "\"";
+
+    //如果之前有类似的配置
+    WifiConfiguration tempConfig = isExist(ssid);
+    if (tempConfig != null) {
+        //则清除旧有配置
+        wifiManager.removeNetwork(tempConfig.networkId);
+    }
+
+    //不需要密码的场景
+    if (type == WIFICIPHER_NOPASS) {
+        config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        //以WEP加密的场景
+    } else if (type == WIFICIPHER_WEP) {
+        config.hiddenSSID = true;
+        config.wepKeys[0] = "\"" + password + "\"";
+        config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+        config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
+        config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        config.wepTxKeyIndex = 0;
+        //以WPA加密的场景，自己测试时，发现热点以WPA2建立时，同样可以用这种配置连接
+    } else if (type == WIFICIPHER_WPA) {
+        config.preSharedKey = "\"" + password + "\"";
+        config.hiddenSSID = true;
+        config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+        config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+        config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+        config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+        config.status = WifiConfiguration.Status.ENABLED;
+    }
+
+    return config;
+}
+
+private WifiConfiguration isExist(String ssid) {
+    List&lt;WifiConfiguration> configs = wifiManager.getConfiguredNetworks();
+
+    for (WifiConfiguration config : configs) {
+        if (config.SSID.equals("\"" + ssid + "\"")) {
+            return config;
+        }
+    }
+    return null;
+}
+                        </pre>
+                    </div>
+
+
+                    <div class="sub-item">
+
+
+                    </div>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
             <a class="offset" id="..."></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -2951,6 +3111,7 @@ public class HandlerThread extends Thread {
             </div>
             <!-- item over -->
 
+            <!-- item start -->
             <a class="offset" id="..."></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -2962,17 +3123,7 @@ public class HandlerThread extends Thread {
             </div>
             <!-- item over -->
 
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">...</h3>
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-            <!-- item over -->
-
+            <!-- item start -->
             <a class="offset" id="..."></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
