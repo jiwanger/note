@@ -2978,6 +2978,18 @@ public class WifiManager {
                         </pre>
                         <p><a href="docs/reference/android/net/wifi/WifiManager.html">WifiManager</a> 是 Android 暴露给开发者使用的一个系统服务管理类, 其中包含对 WiFi 的响应的操作函数; 其隐藏掉的系统服务类为 IWifiService, 为 Android 私有的, 其具体实现, 未暴露给用户; 只需要使用 WifiManager 进行函数操作完成 UI, 监听对应的广播消息, 就可完成功能了. 换言之, WifiManager 会调用 Service 和 Framework 层, 驱动层进行函数调用, 然后驱动层会回调至上层, 以广播的形式实现通知。</p>
                         <pre class="brush: java;">
+<!-- Wifi 相关的几个权限 -->
+&lt;uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+&lt;uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+&lt;uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+&lt;uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+&lt;uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+&lt;uses-permission android:name="android.permission.INTERNET" />
+
+&lt;uses-permission android:name="android.permission.WRITE_SETTINGS" />
+
+
 private WifiManager wifiManager;
 
 private void setupView() {
@@ -3011,8 +3023,10 @@ private void setupView() {
 
     /** 4.取配置好的 WiFi 信息
         * Android 的 WiFi 连接, 大概可以分为如下两种情况:
-        * a.无密码的, 可直接连接, 连接过程中, 此热点一直有, 不管最后是否需要其他方式进行验证操作, 但凡连接成功, 即刻进行了对此热点的配置进行保存;
-        * b.有密码的, 暂且不论何种加密手段, 只要用户输入密码, 点击连接, 如果连接途中, 此热点一直有, 不论连接成功还是失败, 都即刻对此热点的配置进行了保存操作;
+        * a.无密码的, 可直接连接, 连接过程中, 此热点一直有, 不管最后是否需要其他方式进行验证操作, 但凡连接成功, 
+        *   即刻进行了对此热点的配置进行保存;
+        * b.有密码的, 暂且不论何种加密手段, 只要用户输入密码, 点击连接, 如果连接途中, 此热点一直有, 
+        *   不论连接成功还是失败, 都即刻对此热点的配置进行了保存操作;
         * c.连接多个WiFi成功之后, 然后关闭WiFi, 下次开启WiFi的时候, 它会主动帮你连接这其中配置好的其中一个WiFi;
         */
     List&lt;WifiConfiguration> wifiConfigurations = wifiManager.getConfiguredNetworks();
@@ -3032,7 +3046,7 @@ private static final int WIFICIPHER_WEP = 1;
 private static final int WIFICIPHER_WPA = 2;
 
 private WifiConfiguration createWifiConfig(String ssid, String password, int type) {
-    //初始化WifiConfiguration
+    // 初始化 WifiConfiguration
     WifiConfiguration config = new WifiConfiguration();
     config.allowedAuthAlgorithms.clear();
     config.allowedGroupCiphers.clear();
@@ -3040,20 +3054,20 @@ private WifiConfiguration createWifiConfig(String ssid, String password, int typ
     config.allowedPairwiseCiphers.clear();
     config.allowedProtocols.clear();
 
-    //指定对应的SSID
+    // 指定对应的SSID
     config.SSID = "\"" + ssid + "\"";
 
-    //如果之前有类似的配置
+    // 如果之前有类似的配置
     WifiConfiguration tempConfig = isExist(ssid);
     if (tempConfig != null) {
-        //则清除旧有配置
+        // 则清除旧有配置
         wifiManager.removeNetwork(tempConfig.networkId);
     }
 
-    //不需要密码的场景
+    // 不需要密码的场景
     if (type == WIFICIPHER_NOPASS) {
         config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-        //以WEP加密的场景
+        // 以 WEP 加密的场景
     } else if (type == WIFICIPHER_WEP) {
         config.hiddenSSID = true;
         config.wepKeys[0] = "\"" + password + "\"";
@@ -3061,7 +3075,7 @@ private WifiConfiguration createWifiConfig(String ssid, String password, int typ
         config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
         config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
         config.wepTxKeyIndex = 0;
-        //以WPA加密的场景，自己测试时，发现热点以WPA2建立时，同样可以用这种配置连接
+        //以 WPA 加密的场景，自己测试时，发现热点以 WPA2 建立时，同样可以用这种配置连接
     } else if (type == WIFICIPHER_WPA) {
         config.preSharedKey = "\"" + password + "\"";
         config.hiddenSSID = true;
@@ -3087,13 +3101,128 @@ private WifiConfiguration isExist(String ssid) {
     }
     return null;
 }
+
+/** 获取热点的加密类型 */
+private int getType(ScanResult scanResult) {
+    if (scanResult.capabilities.contains("WPA"))
+        type = WIFICIPHER_WPA;
+    else if (scanResult.capabilities.contains("WEP"))
+        type = WIFICIPHER_WEP;
+    else
+        type = WIFICIPHER_NOPASS;
+    return type;
+}
+
+public static final String WIFI_HOTSPOT_SSID = "Robot";
+
+/** 创建 Wifi 热点
+ * 在开启热点的时候，我们需要确保 WiFi 是关闭状态，因为大部分手机都是不支持热点和 WiFi是同时开启的。
+ *    接着就需要创建 WifiConfiguration 这个类，由于配置我们所要创建的热点的属性。这里我们所需注意的主要是
+ *    SSID、preSharedKey 和 KeyMgmt。 分别对应热点的名称、密码和加密方式。
+ */
+private void createWifiHotspot() {
+    if (wifiManager.isWifiEnabled()) {
+        // 如果 wifi 处于打开状态，则关闭 wifi
+        wifiManager.setWifiEnabled(false);
+    }
+    WifiConfiguration config = new WifiConfiguration();
+    config.SSID = WIFI_HOTSPOT_SSID;
+    config.preSharedKey = "123456789";
+    config.hiddenSSID = true;
+    config.allowedAuthAlgorithms
+            .set(WifiConfiguration.AuthAlgorithm.OPEN);//开放系统认证
+    config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+    config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+    config.allowedPairwiseCiphers
+            .set(WifiConfiguration.PairwiseCipher.TKIP);
+    config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+    config.allowedPairwiseCiphers
+            .set(WifiConfiguration.PairwiseCipher.CCMP);
+    config.status = WifiConfiguration.Status.ENABLED;
+    // 通过反射调用设置热点
+    try {
+        Method method = wifiManager.getClass().getMethod(
+                "setWifiApEnabled", WifiConfiguration.class, Boolean.TYPE);
+        boolean enable = (Boolean) method.invoke(wifiManager, config, true);
+        if (enable) {
+            Log.i("Wifi", "热点已开启 SSID:" + WIFI_HOTSPOT_SSID + " password:123456789");
+        } else {
+            Log.i("Wifi", "创建热点失败");
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        Log.i("Wifi", "创建热点失败");
+    }
+}
+
+/** 关闭 WiFi热点 */
+public void closeWifiHotspot() {
+    try {
+        Method method = wifiManager.getClass().getMethod("getWifiApConfiguration");
+        method.setAccessible(true);
+        WifiConfiguration config = (WifiConfiguration) method.invoke(wifiManager);
+        Method method2 = wifiManager.getClass().getMethod(
+            "setWifiApEnabled", WifiConfiguration.class, boolean.class);
+        method2.invoke(wifiManager, config, false);
+    } catch (NoSuchMethodException e) {
+        e.printStackTrace();
+    } catch (IllegalArgumentException e) {
+        e.printStackTrace();
+    } catch (IllegalAccessException e) {
+        e.printStackTrace();
+    } catch (InvocationTargetException e) {
+        e.printStackTrace();
+    }
+}
                         </pre>
                     </div>
 
 
                     <div class="sub-item">
+                        <p><b>WifiManager</b> 方法</p>
+                        <ol>
+                            <li><p><code>boolean isWifiEnabled()</code> -- </p></li>
+                            <li><p><code>boolean setWifiEnabled(boolean enabled) </code> -- </p></li>
+                            <li><p><code>int getWifiState()</code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                            <li><p><code>List<WifiConfiguration> getConfiguredNetworks()</code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                            <li><p><code>WifiInfo getConnectionInfo()</code> -- </p></li>
+                            <li><p><code>boolean startScan()</code> -- </p></li>
+                            <li><p><code>List<ScanResult> getScanResults()</code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                            <li><p><code></code> -- </p></li>
+                        </ol>
+                    </div>
 
+                    <div class="sub-item">
+                        <p><b>WifiManager</b> 相关类</p>
+                        <ul>
+                            <li><p><a href="docs/reference/android/net/wifi/WifiConfiguration.html" target="_blank">WifiConfiguration</a> -- WiFi 的配置信息</p>
+                            <pre class="brush: java;">
 
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/net/wifi/ScanResult.html" target="_blank">ScanResult</a> -- 扫描到的 WiFi 热点的结果</p>
+                                <pre class="brush: java;">
+
+</pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/net/wifi/WifiInfo.html" target="_blank">WifiInfo</a> -- 描述处于活动状态或正在设置过程中的任何WiFi连接的状态</p>
+                                <pre class="brush: java;">
+
+</pre>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
