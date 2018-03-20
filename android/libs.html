@@ -1882,7 +1882,7 @@ class GreyTransformation implements Transformation {
                             </li>
                             <li><p><b>使用第三方的 Transformation</b> -- <a
                                     href="https://github.com/wasabeef/picasso-transformations">picasso-transformations</a>
-                                是一个 Picasso 图片转换的库，其实就是对 Bitmap 进行变化操作，因此可以同时时候多个 tranform 方法进行变换操作。
+                                是一个 Picasso 图片转换的库，其实就是对 Bitmap 进行变化操作，因此可以同时有多个 tranform 方法进行变换操作。
                             </p>
                                 <div class="row">
                                     <div class="col-md-8"><pre class="brush: java; gutter: false;">
@@ -2586,16 +2586,50 @@ Observable.just(1, 2, 3, 4, 5, 6)
     });
 </pre>
                             </li>
-                            <li><p><code>timer</code> -- 相当于一个定时任务。在 1.x 中它还可以执行间隔逻辑，但在 2.x 中此功能被交给了
-                                interval，下一个会介绍。但需要注意的是，timer 和 interval 均默认在新线程。</p>
+                            <li><p><code>timer</code> -- 相当于一个定时任务。发送一个 0，timer 和 interval 均默认在新线程。</p>
                                 <pre class="brush: java;">
-/** ??? */
+Observable.timer(1, TimeUnit.SECONDS)
+    .observeOn(AndroidSchedulers.mainThread())      // 切换到主线程
+    .subscribe(new Consumer&lt;Long>() {
+        @Override
+        public void accept(Long aLong) throws Exception {
+            AppUtil.logDebug("=========" + Thread.currentThread().getName());
+        }
+    });
+
+/** 延时 1s 执行一个网络逻辑 */
+Observable.timer(1, TimeUnit.SECONDS)
+    .map(new Function&lt;Long, String>() {
+        @Override
+        public String apply(Long aLong) throws Exception {
+            return OkHttpUtil.getInstance().syncGettring("url");
+        }
+    }).observeOn(AndroidSchedulers.mainThread())
+    .subscribe(new Consumer&lt;String>() {
+        @Override
+        public void accept(String s) throws Exception {
+            AppUtil.logDebug(s);
+        }
+    });
 </pre>
                             </li>
                             <li><p><code>interval</code> --
                                 用于间隔时间执行某个操作，其接受三个参数，分别是第一次发送延迟，间隔时间，时间单位。</p>
                                 <pre class="brush: java;">
-/** ??? */
+/** 第一次延时 0s, 每隔 3s 执行一个网络逻辑 */
+Observable.interval(0, 3, TimeUnit.SECONDS)
+    .map(new Functiom&lt;Long, String>() {
+        @Override
+        public String apply(Long aLong) throws Exception {
+             return OkHttpUtil.getInstance().syncGettring(url);
+        }
+    }).observeOn(AndroidSchedulers.mainThread())
+    .subscribe(new Consumer&lt;String>() {
+        @Override
+        public void accept(String s) throws Exception {
+            AppUtil.logDebug("===" + s);
+        }
+    });
 </pre>
                             </li>
                             <li><p><code>doOnNext</code> -- 让订阅者在接收到数据之前执行一些操作。</p>
@@ -3258,10 +3292,8 @@ FlowManager.init(this);
                     <div class="sub-item">
                         <p><b>DBFlow 使用</b></p>
                         <ul>
-                            <li><p>单表的增，删，改，查</p>
+                            <li><p>简单的增，删，改，查</p>
                             <pre class="brush: java;">
-
-
 /** 1.创建数据库，指定 DB 的名字和版本 */
 @Database(name = DBFlowDatabase.NAME, version = DBFlowDatabase.VERSION)
 public class DBFlowDatabase {
@@ -3305,7 +3337,7 @@ for (Book item: books) {
     AppUtil.logDebug(item.id + ":" + item.name + ":" + item.subject);
 }
 
-// 查询 id = 1 的 Book, Book_Table 为自动生成的类
+// 查询 id = 1 的 Book, Book_Table 为自动生成的类, 必须先 'Make Project' 生成这个类
 Book query = SQLite.select().from(Book.class).where(Book_Table.id.eq(1L)).querySingle();
 if(null != query) {
     AppUtil.logDebug("id = 1:" + query.id + ":" + query.name + ":" + query.subject);
@@ -3325,6 +3357,83 @@ if(null != query) {
         AppUtil.logDebug("after delete:" + item.id + ":" + item.name + ":" + item.subject);
     }
 }
+</pre>
+                            </li>
+                            <li><p>数据库中查找数据</p>
+                                <pre class="brush: java;">
+// 查询列表
+SQLite.select().from(SomeTable.class).queryList();
+SQLite.select().from(SomeTable.class).where(conditions).queryList();
+
+// 查询单个数据
+SQLite.select().from(SomeTable.class).querySingle();
+SQLite.select().from(SomeTable.class).where(conditions).querySingle();
+
+// 异步操作
+SQLite.select().from(Menu.class).async().queryListResultCallback(
+                                    new QueryTransaction.QueryResultListCallback&lt;Menu>() {
+    @Override
+    public void onListQueryResult(QueryTransaction transaction, @NonNull List&lt;Menu> tResult) {
+
+    }
+});
+
+// Query a Table List and Cursor List
+SQLite.select().from(SomeTable.class).where(conditions).queryTableList();
+SQLite.select().from(SomeTable.class).where(conditions).queryCursorList();
+
+// SELECT methods
+SQLite.select().distinct().from(table).queryList();
+SQLite.select().from(table).queryList();
+SQLite.select(Method.avg(SomeTable_Table.salary)).from(SomeTable.class).queryList();
+SQLite.select(Method.max(SomeTable_Table.salary)).from(SomeTable.class).queryList();
+
+// Oeder By: true 为'ASC'正序, false 为'DESC'反序
+SQLite.select().from(table).where().orderBy(Customer_Table.customer_id, true).queryList();
+
+// LIMIT + OFFSET (分页)
+SQLite.select().from(table).limit(3).offset(2).queryList();
+                                </pre>
+                            </li>
+                            <li><p>事务处理, 当数据太多时，应该使用事务处理</p>
+                            <pre class="brush: java;">
+ArrayList&lt;User> users = new ArrayList<>();
+
+FlowManager.getDatabase(AppDatabase.class)
+    .beginTransactionAsync(new ProcessModelTransaction.Builder<>(
+    new ProcessModelTransaction.ProcessModel&lt;User>() {
+        @Override
+        public void processModel(User user) {
+            // do work here -- i.e. user.delete() or user.update()
+            user.save();
+        }
+    }).addAll(users).build())  // add elements (can also handle multiple)
+    .error(new Transaction.Error() {
+        @Override
+        public void onError(Transaction transaction, Throwable error) {
+
+        }
+    })
+    .success(new Transaction.Success() {
+        @Override
+        public void onSuccess(Transaction transaction) {
+
+        }
+    }).build().execute();
+</pre>
+                            </li>
+                            <li><p>结合 RxJava2 使用</p>
+                            <pre class="brush: java;">
+
+
+RXSQLite.rx(SQLite.select().from(Book.class))
+    .queryList()
+    .subscribe(new Consumer&lt;List&lt;Book>>() {
+        @Override
+        public void accept(List&lt;Book> books) throws Exception {
+
+        }
+    });
 </pre>
                             </li>
                         </ul>
@@ -3654,11 +3763,12 @@ EventBus.builder().addIndex(new MyEventBusIndex()).installDefaultEventBus();
                     <h3 class="panel-title">ButterKnife</h3>
                 </div>
                 <div class="panel-body">
-                    <p>Butter Knife，专门为 Android View 设计的绑定注解，专业解决各种 <code>findViewById</code>。项目主页为：<a
+                    <p>Butter Knife，专门为 Android View 设计的绑定注解，专业解决各种 <code>findViewById</code> 和 <code>OnClickListener</code>。项目主页为：<a
                             href="http://jakewharton.github.io/butterknife/">http://jakewharton.github.io/butterknife/</a>
                     </p>
                     <pre class="brush: java;">
-// 引入 butterknife
+// 引入 butterknife，还需要 butterknife 的注解处理器
+compile 'com.jakewharton:butterknife:8.4.0'
 annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
 class ExampleActivity extends Activity {
@@ -3678,8 +3788,14 @@ class ExampleActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.simple_activity);
-        ButterKnife.bind(this);
+        ButterKnife.bind(this);     // Activity 中初始化 ButterKnife
     }
+
+    @OnClick(R.id.button)           // onClick 事件
+    public void onClick(View v) {}
+
+    @OnClick({R.id.btn1, R.id.btn2})    // 多个 View 的 onClick 事件
+    public void onClick(View v) {}
 }
 
 public class FancyFragment extends Fragment {
@@ -3689,7 +3805,7 @@ public class FancyFragment extends Fragment {
     @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 								Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fancy_fragment, container, false);
-        ButterKnife.bind(this, view);
+        ButterKnife.bind(this, view);   // Fragment 中初始化
 
         return view;
     }
