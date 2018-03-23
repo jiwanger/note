@@ -96,7 +96,7 @@
                        data-parent="#accordion" href="#android-view" aria-expanded="true"
                        style="border-top: 1px solid #DDDDDD;">
                         <code>android.view</code><span class="caret pull-right"
-                                                      style="margin-top: 5px;"></span>
+                                                       style="margin-top: 5px;"></span>
                     </a>
                     <div id="android-view" class="panel-collapse collapse"
                          role="tabpanel">
@@ -111,7 +111,8 @@
                         <a href="#android-view-ActionMode" class="list-group-item">ActionMode</a>
                         <a href="#android-view-LayoutInflater" class="list-group-item">LayoutInflater</a>
                         <a href="#android-view-Menu" class="list-group-item">Menu</a>
-                        <a href="#android-view-MenuInflater" class="list-group-item">MenuInflater</a>
+                        <a href="#android-view-MenuInflater"
+                           class="list-group-item">MenuInflater</a>
                     </div>
                     <a class="list-group-item active dropdown" data-toggle="collapse"
                        data-parent="#accordion" href="#android-os" aria-expanded="true"
@@ -129,15 +130,18 @@
                        data-parent="#accordion" href="#android-net" aria-expanded="true"
                        style="border-top: 1px solid #DDDDDD;">
                         <code>android.net</code><span class="caret pull-right"
-                                              style="margin-top: 5px;"></span>
+                                                      style="margin-top: 5px;"></span>
                     </a>
                     <div id="android-net" class="panel-collapse collapse"
                          role="tabpanel">
-                        <a href="#android-net-wifi-WifiManager" class="list-group-item">WifiManager</a>
-                        <a href="#" class="list-group-item">...</a>
-                        <a href="#" class="list-group-item">...</a>
+                        <a href="#android-net-wifi-WifiManager"
+                           class="list-group-item">WifiManager 及相关类</a>
+                        <a href="#android-net-wifi-WifiConfiguration" class="list-group-item">WifiConfiguration</a>
+                        <a href="#android-net-ConnectivityManager" class="list-group-item">ConnectivityManager
+                            及相关类</a>
+                        <a href="#android-net-Uri" class="list-group-item">Uri</a>
                     </div>
-                    
+
 
                     <a class="list-group-item active dropdown" data-toggle="collapse"
                        data-parent="#accordion" href="#android-support-v4" aria-expanded="true"
@@ -355,8 +359,11 @@
                                 <code>ContactsContract</code>, <code>CalendarContract</code> ...</p>
                             </li>
                             <li><p><a href="docs/reference/android/net/package-summary.html">android.net</a>
-                                -- 网络相关，以及 <code>android.net.wifi</code> 下为 WIFI 相关代码。包括的类和接口：<code>Network</code>, <code>NetworkInfo</code>, <code>Uri</code>, 
-                                <code>VpnService</code>, <code>Proxy</code>, <code>ProxyInfo</code>, <code>WifiInfo</code>, <code>WifiManager</code>, <code>ScanResult</code>, <code>WifiConfiguration</code> ...</p>
+                                -- 网络相关，以及 <code>android.net.wifi</code> 下为 WIFI 相关代码。包括的类和接口：<code>ConnectivityManager</code>,
+                                <code>Network</code>, <code>NetworkInfo</code>, <code>Uri</code>,
+                                <code>VpnService</code>, <code>Proxy</code>, <code>ProxyInfo</code>,
+                                <code>WifiInfo</code>, <code>WifiManager</code>,
+                                <code>ScanResult</code>, <code>WifiConfiguration</code> ...</p>
                             </li>
 
                             <li><p><a href="docs/reference/android/hardware/package-summary.html">android.hardware</a>
@@ -1270,10 +1277,10 @@ public class Resources {
                                                    target="_blank">Animation</a></p>
                                 <pre class="brush: xml;">
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 属性动画 xml 支持 4 个标签(标签可单独使用): animator, objectAnimator, set, selector
+                                    &lt;!-- 属性动画 xml 支持 4 个标签(标签可单独使用): animator, objectAnimator, set, selector
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:animation="@anim/fade" />
-    <item android:animation="@anim/fade" />
+    <item android:state_pressed="true" android:animation="@anim/fade"/>
+    <item android:animation="@anim/fade"/>
 </selector>
 -->
 &lt;set           <!-- 对应 android.animation.AnimatorSet  -->
@@ -1333,7 +1340,7 @@ public class Resources {
                                                    target="_blank">Animation</a></p>
                                 <pre class="brush: xml;">
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 补间动画 xml 支持的标签(标签可单独使用): alpha, translate, scale, rotate, set, ...
+                                    &lt;!-- 补间动画 xml 支持的标签(标签可单独使用): alpha, translate, scale, rotate, set, ...
     Animation 支持的属性为公有属性
     不同的 sdk 版本还运行一些不同的标签，如：layoutAnimation, gridLayoutAnimation,
     linearInterpolator, cycleInterpolator, pathInterpolator, overshootInterpolator,
@@ -1348,14 +1355,14 @@ public class Resources {
     android:shareInterpolator="true|false"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-<!-- android.view.animation.AlphaAnimation -->
+                                    <!-- android.view.animation.AlphaAnimation -->
     &lt;alpha
         android:interpolator="@android:anim/accelerate_interpolator"
         android:fromAlpha="0.0"
         android:toAlpha="1.0"
         android:duration="100"/>
 
-<!-- android.view.animation.ScaleAnimation -->
+                                    <!-- android.view.animation.ScaleAnimation -->
     &lt;scale
         android:fromXScale="1.0"
         android:toXScale="2.0"
@@ -1365,7 +1372,7 @@ public class Resources {
         android:duration="100"
         android:pivotY="10"/>
 
-<!-- android.view.animation.TranslateAnimation -->
+                                    <!-- android.view.animation.TranslateAnimation -->
     &lt;translate
         android:fromXDelta="0"
         android:toXDelta="100"
@@ -1373,7 +1380,7 @@ public class Resources {
         android:duration="100"
         android:toYDelta="200"/>
 
-<!-- android.view.animation.RotateAnimation -->
+                                    <!-- android.view.animation.RotateAnimation -->
     &lt;rotate
         android:fromDegrees="0"
         android:toDegrees="60"
@@ -1738,7 +1745,7 @@ float result_p = res.getFraction(R.fraction.offset_p, 1, 3);// 1.5, 和 base 无
                                 </ol>
                                 <pre class="brush: xml;">
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+                                    <resources>
     <bool name="Sbool">false</bool>
 
     <integer name="Sint">20</integer>
@@ -1757,7 +1764,7 @@ float result_p = res.getFraction(R.fraction.offset_p, 1, 3);// 1.5, 和 base 无
         <item quantity="one">Only one song found.</item>
         <item quantity="other">Many songs found.</item>
     </plurals>
-    <!-- plurals 使用, 英语对 1 和　其它数量 处理不一样， 比如 1 book, 如果是其它数量就为 books
+    &lt;!-- plurals 使用, 英语对 1 和　其它数量 处理不一样， 比如 1 book, 如果是其它数量就为 books
     Resources res = getResources();
     Configuration config = res.getConfiguration();
     config.setLocale(new Locale("en"));// 将语言修改为英语
@@ -1784,7 +1791,7 @@ float result_p = res.getFraction(R.fraction.offset_p, 1, 3);// 1.5, 和 base 无
         <item>28</item>
         <item>0xFF0000</item>
     </array>
-    <!-- array 使用
+    &lt;!-- array 使用
         Resources res = getResources();
         TypedArray array = res.obtainTypedArray(R.array.Sarray);
         Drawable mDrawable = array.getDrawable(0);
@@ -1970,11 +1977,11 @@ array.recycle();
         android:state_window_focused=["true" | "false"] />
 </selector>
 
-<!-- Java 代码构建　ColorStateList
-    int[][] states = {{android.R.attr.state_pressed}, {android.R.attr.state_enabled}, {}};
-    int[] colors = {Color.RED, Color.BLACK, Color.GRAY};
-    ColorStateList csl = new ColorStateList(states, colors);
--->
+    &lt;!-- Java 代码构建　ColorStateList
+        int[][] states = {{android.R.attr.state_pressed}, {android.R.attr.state_enabled}, {}};
+        int[] colors = {Color.RED, Color.BLACK, Color.GRAY};
+        ColorStateList csl = new ColorStateList(states, colors);
+    -->
 </pre>
                             </li>
                             <li><p><a id="android-util-TypedValue" class="offset"></a><a
@@ -2412,10 +2419,12 @@ public boolean onCreatePanelMenu(int featureId, Menu menu) {
                                 </ol>
 
                             </li>
-                            <li>来自于 ContextThemeWrapper 的方法(来自 Context 和 ContextWrapper 的方参见：<a href="#android-content-Context">Context</a>)：
+                            <li>来自于 ContextThemeWrapper 的方法(来自 Context 和 ContextWrapper 的方参见：<a
+                                    href="#android-content-Context">Context</a>)：
                                 <ol start="35">
-                                    <li><p><code>void attachBaseContext(Context newBase)</code> -- 将 ContextImpl 的实例赋值到 ContextWrapper</p>
-                                    <pre class="brush: java;">
+                                    <li><p><code>void attachBaseContext(Context newBase)</code> -- 将
+                                        ContextImpl 的实例赋值到 ContextWrapper</p>
+                                        <pre class="brush: java;">
 @Override
 protected void attachBaseContext(Context newBase) {
     Configuration newConfig = newBase.getResources().getConfiguration();
@@ -2428,8 +2437,13 @@ protected void attachBaseContext(Context newBase) {
 }
 </pre>
                                     </li>
-                                    <li><p><code>void onApplyThemeResource(Resources.Theme theme, int resId, boolean first)</code> -- 此方法在 <code>onCreate</code> 前执行，用于设置主题，application 标签指定了应用的主题；调用 setTheme 方法，此方法会再次执行。</p></li>
-                                    <li><p><code>void applyOverrideConfiguration(Configuration overrideConfiguration)</code> -- 只能调用一次，要在 getResources 和 getAssets 前</p></li>
+                                    <li><p><code>void onApplyThemeResource(Resources.Theme theme,
+                                        int resId, boolean first)</code> -- 此方法在
+                                        <code>onCreate</code> 前执行，用于设置主题，application 标签指定了应用的主题；调用
+                                        setTheme 方法，此方法会再次执行。</p></li>
+                                    <li><p><code>void applyOverrideConfiguration(Configuration
+                                        overrideConfiguration)</code> -- 只能调用一次，要在 getResources 和
+                                        getAssets 前</p></li>
                                 </ol>
                             </li>
                             <li>简单生命周期回调方法:
@@ -2459,65 +2473,140 @@ protected void attachBaseContext(Context newBase) {
                             </li>
                             <li>其它回调方法和关联方法:
                                 <ol start="45">
-                                    <li><p><code>void onCreate(Bundle savedInstanceState, PersistableBundle persistentState)</code> -- API 21 添加，同 <code>onCreate(Bundle savedInstanceState);</code></p></li>
-                                    <li><p><code>void onBackPressed()</code> -- 返回键按下，在 Activity 的 onKeyDown 调用</p></li>
-                                    <li><p><code>void onActivityResult(int requestCode, int resultCode, Intent data)</code> -- 此方法 <code>startActivityForResult</code> 返回时调用，用于接收子 Activity 操作后的数据</p></li>
-                                    <li><p><code>void startActivityForResult(Intent intent, int requestCode)</code> -- 启动一个请求参数的 Activity</p></li>
-                                    <li><p><code>void startActivityForResult(Intent intent, int requestCode, Bundle options)</code> -- 启动一个请求参数的 Activity, 并使用 Bundle 数据为参数</p></li>
-                                    <li><p><code>final void setResult(int resultCode)</code> -- 设置返回码，<code>onActivityResult</code> 接收</p></li>
-                                    <li><p><code>final void setResult(int resultCode, Intent data)</code> -- 设置返回码和数据，<code>onActivityResult</code> 接收</p></li>
-                                    <li><p><code>void onNewIntent(Intent intent)</code> -- 当 Activity 的 <code>launchMode</code> 为 <code>singleTask | singleInstance | singleTop</code>, 不要再启动一个新的 Activity 时调用</p></li>
-                                    <li><p><code>void onAttachFragment(Fragment fragment)</code> -- Fragment 被附加到 Activity 时调用(每个 Fragment  被附加都调用一次)</p></li>
-                                    <li><p><code>FragmentManager getFragmentManager()</code> -- 获取 Fragment 管理器</p></li>
-                                    <li><p><code>void onSaveInstanceState(Bundle outState)</code> -- 保存用户数据，在 <code>onPause</code> 和 <code>onStop</code> 间调用</p></li>
-                                    <li><p><code>void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState)</code> -- 同上，API 21 添加</p></li>
-                                    <li><p><code>void onRestoreInstanceState(Bundle savedInstanceState)</code> -- 恢复用户数据，只有 Activity 被系统回收，重新创建 Activity 的情况下才会被调用，在 <code>onStart</code> 和 <code>onResume</code> 间调用。在 <code>onCreate</code> 中也有 <code>savedInstanceState</code> 的数据，但它有可能为空；此方法中不会为空。</p></li>
-                                    <li><p><code>void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState)</code> -- 同上，API 21 添加</p></li>
-                                    <li><p><code>void onPostCreate(Bundle savedInstanceState)</code> -- 应用程序一般不会实现此方法,它是用于系统类在应用程序代码运行之后进行最终初始化的</p></li>
-                                    <li><p><code>void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState)</code> -- 同上，API 21 添加</p></li>
-                                    <li><p><code>void onPostResume()</code> -- 应用程序一般不会实现此方法,它是用于系统类在应用程序代码运行之后进行最终初始化的</p></li>
-                                    <li><p><code>void onTitleChanged(CharSequence title, int color)</code> -- 第一次调用在获取到 title 时调用(onStart 后)，<code>setTitle</code> 和 <code>setTitleColor</code> 方法会回调此方法</p></li>
-                                    <li><p><code>final CharSequence getTitle()</code> -- 获取　title</p></li>
-                                    <li><p><code>final int getTitleColor()</code> -- 获取　title color</p></li>
-                                    <li><p><code>void setTitle(CharSequence title)</code> -- 设置 title</p></li>
-                                    <li><p><code>void setTitle(int titleId)</code> -- 设置 title</p></li>
-                                    <li><p><code>void setTitleColor(int textColor)</code> -- API 21 后不推荐使用</p></li>
-                                    <li><p><code>void onChildTitleChanged(Activity childActivity, CharSequence title)</code> -- 子 Activity 标题改变调用</p></li>
-                                    <li><p><code>void onUserInteraction()</code> -- 任何一个 KeyEvent, MotionEvent 事件都会触发一次此方法</p></li>
-                                    <li><p><code>void onUserLeaveHint()</code> -- 用户手动离开当前 Activity，会调用该方法；来电，灭屏等不会调用此方法</p></li>
-                                    <li><p><code>boolean onCreateOptionsMenu(Menu menu)</code> -- 菜单按钮按下时调用，只在第一次创建的时候调用</p></li>
-                                    <li><p><code>boolean onPrepareOptionsMenu(Menu menu)</code> -- 显示 OptionsMenu 时调用</p></li>
-                                    <li><p><code>boolean onOptionsItemSelected(MenuItem item)</code> -- 条目被选中调用</p></li>
-                                    <li><p><code>void onOptionsMenuClosed(Menu menu)</code> -- 关闭 OptionsMenu 时调用</p></li>
-                                    <li><p><code>void openOptionsMenu()</code> -- 打开 OptionsMenu(此方法在 AppCompatActivity 中无效)</p></li>
-                                    <li><p><code>void closeOptionsMenu()</code> -- 关闭 OptionsMenu</p></li>
-                                    <li><p><code>void invalidateOptionsMenu()</code> -- 声明选项菜单已更改，因此应该重新创建</p></li>
-                                    <li><p><code>void registerForContextMenu(View view)</code> -- 为一个 View 注册一个 ContextMenu, 然后在 <code>onCreateContextMenu</code> 创建视图</p></li>
-                                    <li><p><code>void unregisterForContextMenu(View view)</code> -- 反注册 ContextMenu</p></li>
-                                    <li><p><code>void openContextMenu(View view)</code> -- 打开 ContextMenu</p></li>
-                                    <li><p><code>boolean onContextItemSelected(MenuItem item)</code> -- 条目被选中调用</p></li>
-                                    <li><p><code>void closeContextMenu()</code> -- 关闭 ContextMenu</p></li>
-                                    <li><p><code>void onContextMenuClosed(Menu menu)</code> -- 关闭 ContextMenu 时调用</p></li>
-                                    <li><p><code>CharSequence onCreateDescription()</code> -- 创建 Activity 的描述信息, 在 <code>onPause</code> 后执行</p></li>
-                                    <li><p><code>void onEnterAnimationComplete()</code> -- 进入动画完成回调，API 21 添加</p></li>
-                                    <li><p><code>void startPostponedEnterTransition()</code> -- ，API 21 添加</p></li>
-                                    <li><p><code>void postponeEnterTransition()</code> -- ，API 21 添加</p></li>
-                                    <li><p><code>void overridePendingTransition(int enterAnim, int exitAnim)</code> -- Activity 的跳转动画，此方法必须在 startActivity 后马上执行</p></li>
-                                    <li><p><code>void setEnterSharedElementCallback(SharedElementCallback callback)</code> -- ，API 21 添加</p></li>
-                                    <li><p><code>void setExitSharedElementCallback(SharedElementCallback callback)</code> -- ，API 21 添加</p></li>
-                                    <li><p><code>boolean onKeyShortcut(int keyCode, KeyEvent event)</code> --组合键按下</p></li>
-                                    <li><p><code>void onLocalVoiceInteractionStarted()</code> -- </p></li>
-                                    <li><p><code>void onLocalVoiceInteractionStopped()</code> -- </p></li>
-                                    <li><p><code>void onMultiWindowModeChanged(boolean isInMultiWindowMode)</code> -- </p></li>
+                                    <li><p><code>void onCreate(Bundle savedInstanceState,
+                                        PersistableBundle persistentState)</code> -- API 21 添加，同
+                                        <code>onCreate(Bundle savedInstanceState);</code></p></li>
+                                    <li><p><code>void onBackPressed()</code> -- 返回键按下，在 Activity 的
+                                        onKeyDown 调用</p></li>
+                                    <li><p><code>void onActivityResult(int requestCode, int
+                                        resultCode, Intent data)</code> -- 此方法 <code>startActivityForResult</code>
+                                        返回时调用，用于接收子 Activity 操作后的数据</p></li>
+                                    <li><p><code>void startActivityForResult(Intent intent, int
+                                        requestCode)</code> -- 启动一个请求参数的 Activity</p></li>
+                                    <li><p><code>void startActivityForResult(Intent intent, int
+                                        requestCode, Bundle options)</code> -- 启动一个请求参数的 Activity,
+                                        并使用 Bundle 数据为参数</p></li>
+                                    <li><p><code>final void setResult(int resultCode)</code> --
+                                        设置返回码，<code>onActivityResult</code> 接收</p></li>
+                                    <li><p><code>final void setResult(int resultCode, Intent
+                                        data)</code> -- 设置返回码和数据，<code>onActivityResult</code> 接收
+                                    </p></li>
+                                    <li><p><code>void onNewIntent(Intent intent)</code> -- 当
+                                        Activity 的 <code>launchMode</code> 为 <code>singleTask |
+                                            singleInstance | singleTop</code>, 不要再启动一个新的 Activity
+                                        时调用</p></li>
+                                    <li><p><code>void onAttachFragment(Fragment fragment)</code> --
+                                        Fragment 被附加到 Activity 时调用(每个 Fragment 被附加都调用一次)</p></li>
+                                    <li><p><code>FragmentManager getFragmentManager()</code> -- 获取
+                                        Fragment 管理器</p></li>
+                                    <li><p><code>void onSaveInstanceState(Bundle outState)</code> --
+                                        保存用户数据，在 <code>onPause</code> 和 <code>onStop</code> 间调用</p>
+                                    </li>
+                                    <li><p><code>void onSaveInstanceState(Bundle outState,
+                                        PersistableBundle outPersistentState)</code> -- 同上，API 21 添加
+                                    </p></li>
+                                    <li><p><code>void onRestoreInstanceState(Bundle
+                                        savedInstanceState)</code> -- 恢复用户数据，只有 Activity 被系统回收，重新创建
+                                        Activity 的情况下才会被调用，在 <code>onStart</code> 和
+                                        <code>onResume</code> 间调用。在 <code>onCreate</code> 中也有 <code>savedInstanceState</code>
+                                        的数据，但它有可能为空；此方法中不会为空。</p></li>
+                                    <li><p><code>void onRestoreInstanceState(Bundle
+                                        savedInstanceState, PersistableBundle
+                                        persistentState)</code> -- 同上，API 21 添加</p></li>
+                                    <li><p><code>void onPostCreate(Bundle savedInstanceState)</code>
+                                        -- 应用程序一般不会实现此方法,它是用于系统类在应用程序代码运行之后进行最终初始化的</p></li>
+                                    <li><p><code>void onPostCreate(@Nullable Bundle
+                                        savedInstanceState, @Nullable PersistableBundle
+                                        persistentState)</code> -- 同上，API 21 添加</p></li>
+                                    <li><p><code>void onPostResume()</code> --
+                                        应用程序一般不会实现此方法,它是用于系统类在应用程序代码运行之后进行最终初始化的</p></li>
+                                    <li><p><code>void onTitleChanged(CharSequence title, int
+                                        color)</code> -- 第一次调用在获取到 title 时调用(onStart 后)，<code>setTitle</code>
+                                        和 <code>setTitleColor</code> 方法会回调此方法</p></li>
+                                    <li><p><code>final CharSequence getTitle()</code> -- 获取　title
+                                    </p></li>
+                                    <li><p><code>final int getTitleColor()</code> -- 获取　title color
+                                    </p></li>
+                                    <li><p><code>void setTitle(CharSequence title)</code> -- 设置
+                                        title</p></li>
+                                    <li><p><code>void setTitle(int titleId)</code> -- 设置 title</p>
+                                    </li>
+                                    <li><p><code>void setTitleColor(int textColor)</code> -- API 21
+                                        后不推荐使用</p></li>
+                                    <li><p><code>void onChildTitleChanged(Activity childActivity,
+                                        CharSequence title)</code> -- 子 Activity 标题改变调用</p></li>
+                                    <li><p><code>void onUserInteraction()</code> -- 任何一个 KeyEvent,
+                                        MotionEvent 事件都会触发一次此方法</p></li>
+                                    <li><p><code>void onUserLeaveHint()</code> -- 用户手动离开当前
+                                        Activity，会调用该方法；来电，灭屏等不会调用此方法</p></li>
+                                    <li><p><code>boolean onCreateOptionsMenu(Menu menu)</code> --
+                                        菜单按钮按下时调用，只在第一次创建的时候调用</p></li>
+                                    <li><p><code>boolean onPrepareOptionsMenu(Menu menu)</code> --
+                                        显示 OptionsMenu 时调用</p></li>
+                                    <li><p><code>boolean onOptionsItemSelected(MenuItem item)</code>
+                                        -- 条目被选中调用</p></li>
+                                    <li><p><code>void onOptionsMenuClosed(Menu menu)</code> -- 关闭
+                                        OptionsMenu 时调用</p></li>
+                                    <li><p><code>void openOptionsMenu()</code> -- 打开
+                                        OptionsMenu(此方法在 AppCompatActivity 中无效)</p></li>
+                                    <li><p><code>void closeOptionsMenu()</code> -- 关闭 OptionsMenu
+                                    </p></li>
+                                    <li><p><code>void invalidateOptionsMenu()</code> --
+                                        声明选项菜单已更改，因此应该重新创建</p></li>
+                                    <li><p><code>void registerForContextMenu(View view)</code> --
+                                        为一个 View 注册一个 ContextMenu, 然后在
+                                        <code>onCreateContextMenu</code> 创建视图</p></li>
+                                    <li><p><code>void unregisterForContextMenu(View view)</code> --
+                                        反注册 ContextMenu</p></li>
+                                    <li><p><code>void openContextMenu(View view)</code> -- 打开
+                                        ContextMenu</p></li>
+                                    <li><p><code>boolean onContextItemSelected(MenuItem item)</code>
+                                        -- 条目被选中调用</p></li>
+                                    <li><p><code>void closeContextMenu()</code> -- 关闭 ContextMenu
+                                    </p></li>
+                                    <li><p><code>void onContextMenuClosed(Menu menu)</code> -- 关闭
+                                        ContextMenu 时调用</p></li>
+                                    <li><p><code>CharSequence onCreateDescription()</code> -- 创建
+                                        Activity 的描述信息, 在 <code>onPause</code> 后执行</p></li>
+                                    <li><p><code>void onEnterAnimationComplete()</code> --
+                                        进入动画完成回调，API 21 添加</p></li>
+                                    <li><p><code>void startPostponedEnterTransition()</code> -- ，API
+                                        21 添加</p></li>
+                                    <li><p><code>void postponeEnterTransition()</code> -- ，API 21 添加
+                                    </p></li>
+                                    <li><p><code>void overridePendingTransition(int enterAnim, int
+                                        exitAnim)</code> -- Activity 的跳转动画，此方法必须在 startActivity
+                                        后马上执行</p></li>
+                                    <li><p><code>void
+                                        setEnterSharedElementCallback(SharedElementCallback
+                                        callback)</code> -- ，API 21 添加</p></li>
+                                    <li><p><code>void
+                                        setExitSharedElementCallback(SharedElementCallback
+                                        callback)</code> -- ，API 21 添加</p></li>
+                                    <li><p><code>boolean onKeyShortcut(int keyCode, KeyEvent
+                                        event)</code> --组合键按下</p></li>
+                                    <li><p><code>void onLocalVoiceInteractionStarted()</code> --
+                                    </p></li>
+                                    <li><p><code>void onLocalVoiceInteractionStopped()</code> --
+                                    </p></li>
+                                    <li><p><code>void onMultiWindowModeChanged(boolean
+                                        isInMultiWindowMode)</code> -- </p></li>
 
-                                    <li><p><code>void onPictureInPictureModeChanged(boolean isInPictureInPictureMode)</code> -- </p></li>
+                                    <li><p><code>void onPictureInPictureModeChanged(boolean
+                                        isInPictureInPictureMode)</code> -- </p></li>
 
-                                    <li><p><code>void onProvideAssistContent(AssistContent outContent)</code> -- </p></li>
-                                    <li><p><code>void onProvideAssistData(Bundle data)</code> -- </p></li>
-                                    <li><p><code>void onActivityReenter(int resultCode, Intent data)</code> -- </p></li>
+                                    <li><p><code>void onProvideAssistContent(AssistContent
+                                        outContent)</code> -- </p></li>
+                                    <li><p><code>void onProvideAssistData(Bundle data)</code> --
+                                    </p></li>
+                                    <li><p><code>void onActivityReenter(int resultCode, Intent
+                                        data)</code> -- </p></li>
                                     <li><p><code>Uri onProvideReferrer()</code> -- </p></li>
-                                    <li><p><code>void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)</code> -- </p></li>
-                                    <li><p><code>Object onRetainNonConfigurationInstance()</code> -- </p></li>
+                                    <li><p><code>void onRequestPermissionsResult(int requestCode,
+                                        String[] permissions, int[] grantResults)</code> -- </p>
+                                    </li>
+                                    <li><p><code>Object onRetainNonConfigurationInstance()</code> --
+                                    </p></li>
                                     <li><p><code>void onStateNotSaved()</code> -- </p></li>
 
                                     <li><p><code>void onVisibleBehindCanceled()</code> -- </p></li>
@@ -2526,148 +2615,253 @@ protected void attachBaseContext(Context newBase) {
                             <li>Activity 其它常用方法:
                                 <ol start="78">
 
-                                    <li><p><code>PendingIntent createPendingResult(int requestCode, Intent data, int flags)</code> -- </p></li>
-                                    <li><p><code>void enterPictureInPictureMode()</code> -- </p></li>
+                                    <li><p><code>PendingIntent createPendingResult(int requestCode,
+                                        Intent data, int flags)</code> -- </p></li>
+                                    <li><p><code>void enterPictureInPictureMode()</code> -- </p>
+                                    </li>
                                     <li><p><code>View findViewById(int id)</code> -- </p></li>
                                     <li><p><code>void finish()</code> -- </p></li>
                                     <li><p><code>void finishAffinity()</code> -- </p></li>
                                     <li><p><code>void finishAfterTransition()</code> -- </p></li>
                                     <li><p><code>void finishAndRemoveTask()</code> -- </p></li>
-                                    <li><p><code>void finishFromChild(Activity child)</code> -- </p></li>
-                                    <li><p><code>void finishActivity(int requestCode)</code> -- </p></li>
-                                    <li><p><code>void finishActivityFromChild(Activity child, int requestCode)</code> -- </p></li>
+                                    <li><p><code>void finishFromChild(Activity child)</code> -- </p>
+                                    </li>
+                                    <li><p><code>void finishActivity(int requestCode)</code> -- </p>
+                                    </li>
+                                    <li><p><code>void finishActivityFromChild(Activity child, int
+                                        requestCode)</code> -- </p></li>
 
                                     <li><p><code>ActionBar getActionBar()</code> -- </p></li>
-                                    <li><p><code>void setActionBar(Toolbar toolbar)</code> -- </p></li>
-                                    <li><p><code>final Application getApplication()</code> -- </p></li>
-                                    <li><p><code>ComponentName getCallingActivity()</code> -- </p></li>
+                                    <li><p><code>void setActionBar(Toolbar toolbar)</code> -- </p>
+                                    </li>
+                                    <li><p><code>final Application getApplication()</code> -- </p>
+                                    </li>
+                                    <li><p><code>ComponentName getCallingActivity()</code> -- </p>
+                                    </li>
                                     <li><p><code>String getCallingPackage()</code> -- </p></li>
                                     <li><p><code>int getChangingConfigurations()</code> -- </p></li>
-                                    <li><p><code>Object getLastNonConfigurationInstance()</code> -- </p></li>
-                                    <li><p><code>ComponentName getComponentName()</code> -- </p></li>
+                                    <li><p><code>Object getLastNonConfigurationInstance()</code> --
+                                    </p></li>
+                                    <li><p><code>ComponentName getComponentName()</code> -- </p>
+                                    </li>
                                     <li><p><code>Scene getContentScene()</code> -- </p></li>
-                                    <li><p><code>TransitionManager getContentTransitionManager()</code> -- </p></li>
-                                    <li><p><code>void setContentTransitionManager(TransitionManager tm)</code> -- </p></li>
+                                    <li><p><code>TransitionManager
+                                        getContentTransitionManager()</code> -- </p></li>
+                                    <li><p><code>void setContentTransitionManager(TransitionManager
+                                        tm)</code> -- </p></li>
                                     <li><p><code>View getCurrentFocus()</code> -- </p></li>
 
-                                    <li><p><code>LayoutInflater getLayoutInflater()</code> -- </p></li>
+                                    <li><p><code>LayoutInflater getLayoutInflater()</code> -- </p>
+                                    </li>
                                     <li><p><code>MenuInflater getMenuInflater()</code> -- </p></li>
-                                    <li><p><code>LoaderManager getLoaderManager()</code> -- </p></li>
+                                    <li><p><code>LoaderManager getLoaderManager()</code> -- </p>
+                                    </li>
                                     <li><p><code>String getLocalClassName()</code> -- </p></li>
-                                    <li><p><code>final MediaController getMediaController()</code> -- </p></li>
+                                    <li><p><code>final MediaController getMediaController()</code>
+                                        -- </p></li>
                                     <li><p><code>final Activity getParent()</code> -- </p></li>
-                                    <li><p><code>Intent getParentActivityIntent()</code> -- </p></li>
-                                    <li><p><code>SharedPreferences getPreferences(int mode)</code> -- </p></li>
+                                    <li><p><code>Intent getParentActivityIntent()</code> -- </p>
+                                    </li>
+                                    <li><p><code>SharedPreferences getPreferences(int mode)</code>
+                                        -- </p></li>
                                     <li><p><code>Uri getReferrer()</code> -- </p></li>
                                     <li><p><code>int getRequestedOrientation()</code> -- </p></li>
-                                    <li><p><code>final SearchEvent getSearchEvent()</code> -- </p></li>
-                                    <li><p><code>Object getSystemService(String name)</code> -- </p></li>
+                                    <li><p><code>final SearchEvent getSearchEvent()</code> -- </p>
+                                    </li>
+                                    <li><p><code>Object getSystemService(String name)</code> -- </p>
+                                    </li>
                                     <li><p><code>int getTaskId()</code> -- </p></li>
-                                    <li><p><code>VoiceInteractor getVoiceInteractor()</code> -- </p></li>
-                                    <li><p><code>final int getVolumeControlStream()</code> -- </p></li>
-                                    <li><p><code>final void setVolumeControlStream(int streamType)</code> -- </p></li>
+                                    <li><p><code>VoiceInteractor getVoiceInteractor()</code> -- </p>
+                                    </li>
+                                    <li><p><code>final int getVolumeControlStream()</code> -- </p>
+                                    </li>
+                                    <li><p><code>final void setVolumeControlStream(int
+                                        streamType)</code> -- </p></li>
                                     <li><p><code>Window getWindow()</code> -- </p></li>
-                                    <li><p><code>WindowManager getWindowManager()</code> -- </p></li>
-                                    <li><p><code>void addContentView(View view, ViewGroup.LayoutParams params)</code> -- </p></li>
-                                    <li><p><code>void setContentView(View view, ViewGroup.LayoutParams params)</code> -- </p></li>
+                                    <li><p><code>WindowManager getWindowManager()</code> -- </p>
+                                    </li>
+                                    <li><p><code>void addContentView(View view,
+                                        ViewGroup.LayoutParams params)</code> -- </p></li>
+                                    <li><p><code>void setContentView(View view,
+                                        ViewGroup.LayoutParams params)</code> -- </p></li>
                                     <li><p><code>void setContentView(View view)</code> -- </p></li>
-                                    <li><p><code>void setContentView(int layoutResID)</code> -- </p></li>
-                                    <li><p><code>final void setDefaultKeyMode(int mode)</code> -- </p></li>
+                                    <li><p><code>void setContentView(int layoutResID)</code> -- </p>
+                                    </li>
+                                    <li><p><code>final void setDefaultKeyMode(int mode)</code> --
+                                    </p></li>
 
-                                    <li><p><code>final void setFeatureDrawable(int featureId, Drawable drawable)</code> -- </p></li>
-                                    <li><p><code>final void setFeatureDrawableAlpha(int featureId, int alpha)</code> -- </p></li>
-                                    <li><p><code>final void setFeatureDrawableResource(int featureId, int resId)</code> -- </p></li>
-                                    <li><p><code>final void setFeatureDrawableUri(int featureId, Uri uri)</code> -- </p></li>
-                                    <li><p><code>void setFinishOnTouchOutside(boolean finish)</code> -- </p></li>
+                                    <li><p><code>final void setFeatureDrawable(int featureId,
+                                        Drawable drawable)</code> -- </p></li>
+                                    <li><p><code>final void setFeatureDrawableAlpha(int featureId,
+                                        int alpha)</code> -- </p></li>
+                                    <li><p><code>final void setFeatureDrawableResource(int
+                                        featureId, int resId)</code> -- </p></li>
+                                    <li><p><code>final void setFeatureDrawableUri(int featureId, Uri
+                                        uri)</code> -- </p></li>
+                                    <li><p><code>void setFinishOnTouchOutside(boolean finish)</code>
+                                        -- </p></li>
                                     <li><p><code>void setImmersive(boolean i)</code> -- </p></li>
-                                    <li><p><code>void setIntent(Intent newIntent)</code> -- </p></li>
-                                    <li><p><code>final void setMediaController(MediaController controller)</code> -- </p></li>
-                                    <li><p><code>final void setProgress(int progress)</code> -- </p></li>
-                                    <li><p><code>final void setProgressBarIndeterminate(boolean indeterminate)</code> -- </p></li>
-                                    <li><p><code>final void setProgressBarIndeterminateVisibility(boolean visible)</code> -- </p></li>
-                                    <li><p><code>final void setProgressBarVisibility(boolean visible)</code> -- </p></li>
-                                    <li><p><code>void setRequestedOrientation(int requestedOrientation)</code> -- </p></li>
-                                    <li><p><code>final void setSecondaryProgress(int secondaryProgress)</code> -- </p></li>
-                                    <li><p><code>void setTaskDescription(ActivityManager.TaskDescription taskDescription)</code> -- </p></li>
+                                    <li><p><code>void setIntent(Intent newIntent)</code> -- </p>
+                                    </li>
+                                    <li><p><code>final void setMediaController(MediaController
+                                        controller)</code> -- </p></li>
+                                    <li><p><code>final void setProgress(int progress)</code> -- </p>
+                                    </li>
+                                    <li><p><code>final void setProgressBarIndeterminate(boolean
+                                        indeterminate)</code> -- </p></li>
+                                    <li><p><code>final void
+                                        setProgressBarIndeterminateVisibility(boolean
+                                        visible)</code> -- </p></li>
+                                    <li><p><code>final void setProgressBarVisibility(boolean
+                                        visible)</code> -- </p></li>
+                                    <li><p><code>void setRequestedOrientation(int
+                                        requestedOrientation)</code> -- </p></li>
+                                    <li><p><code>final void setSecondaryProgress(int
+                                        secondaryProgress)</code> -- </p></li>
+                                    <li><p><code>void
+                                        setTaskDescription(ActivityManager.TaskDescription
+                                        taskDescription)</code> -- </p></li>
                                     <li><p><code>void setTheme(int resid)</code> -- </p></li>
-                                    <li><p><code>void setVisible(boolean visible)</code> -- </p></li>
-                                    <li><p><code>void setVrModeEnabled(boolean enabled, ComponentName requestedComponent)</code> -- </p></li>
+                                    <li><p><code>void setVisible(boolean visible)</code> -- </p>
+                                    </li>
+                                    <li><p><code>void setVrModeEnabled(boolean enabled,
+                                        ComponentName requestedComponent)</code> -- </p></li>
 
 
                                     <li><p><code>boolean hasWindowFocus()</code> -- </p></li>
 
-                                    <li><p><code>boolean isChangingConfigurations()</code> -- </p></li>
+                                    <li><p><code>boolean isChangingConfigurations()</code> -- </p>
+                                    </li>
                                     <li><p><code>final boolean isChild()</code> -- </p></li>
                                     <li><p><code>boolean isDestroyed()</code> -- </p></li>
                                     <li><p><code>boolean isFinishing()</code> -- </p></li>
                                     <li><p><code>boolean isImmersive()</code> -- </p></li>
                                     <li><p><code>boolean isInMultiWindowMode()</code> -- </p></li>
-                                    <li><p><code>boolean isInPictureInPictureMode()</code> -- </p></li>
-                                    <li><p><code>boolean isLocalVoiceInteractionSupported()</code> -- </p></li>
+                                    <li><p><code>boolean isInPictureInPictureMode()</code> -- </p>
+                                    </li>
+                                    <li><p><code>boolean isLocalVoiceInteractionSupported()</code>
+                                        -- </p></li>
                                     <li><p><code>boolean isTaskRoot()</code> -- </p></li>
                                     <li><p><code>boolean isVoiceInteraction()</code> -- </p></li>
-                                    <li><p><code>boolean isVoiceInteractionRoot()</code> -- </p></li>
-                                    <li><p><code>final Cursor managedQuery(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder)</code> -- </p></li>
-                                    <li><p><code>boolean moveTaskToBack(boolean nonRoot)</code> -- </p></li>
+                                    <li><p><code>boolean isVoiceInteractionRoot()</code> -- </p>
+                                    </li>
+                                    <li><p><code>final Cursor managedQuery(Uri uri, String[]
+                                        projection, String selection, String[] selectionArgs, String
+                                        sortOrder)</code> -- </p></li>
+                                    <li><p><code>boolean moveTaskToBack(boolean nonRoot)</code> --
+                                    </p></li>
 
 
                                     <li><p><code>boolean releaseInstance()</code> -- </p></li>
-                                    <li><p><code>final boolean requestWindowFeature(int featureId)</code> -- </p></li>
-                                    <li><p><code>final void runOnUiThread(Runnable action)</code> -- </p></li>
-                                    <li><p><code>boolean requestVisibleBehind(boolean visible)</code> -- </p></li>
-                                    <li><p><code>final void requestShowKeyboardShortcuts()</code> -- </p></li>
-                                    <li><p><code>final void requestPermissions(String[] permissions, int requestCode)</code> -- </p></li>
-                                    <li><p><code>DragAndDropPermissions requestDragAndDropPermissions(DragEvent event)</code> -- </p></li>
+                                    <li><p><code>final boolean requestWindowFeature(int
+                                        featureId)</code> -- </p></li>
+                                    <li><p><code>final void runOnUiThread(Runnable action)</code> --
+                                    </p></li>
+                                    <li><p><code>boolean requestVisibleBehind(boolean
+                                        visible)</code> -- </p></li>
+                                    <li><p><code>final void requestShowKeyboardShortcuts()</code> --
+                                    </p></li>
+                                    <li><p><code>final void requestPermissions(String[] permissions,
+                                        int requestCode)</code> -- </p></li>
+                                    <li><p><code>DragAndDropPermissions
+                                        requestDragAndDropPermissions(DragEvent event)</code> --
+                                    </p></li>
                                     <li><p><code>void reportFullyDrawn()</code> -- </p></li>
                                     <li><p><code>void recreate()</code> -- </p></li>
-                                    <li><p><code>boolean shouldShowRequestPermissionRationale(String permission)</code> -- </p></li>
-                                    <li><p><code>boolean shouldUpRecreateTask(Intent targetIntent)</code> -- </p></li>
+                                    <li><p><code>boolean shouldShowRequestPermissionRationale(String
+                                        permission)</code> -- </p></li>
+                                    <li><p><code>boolean shouldUpRecreateTask(Intent
+                                        targetIntent)</code> -- </p></li>
                                     <li><p><code>boolean showAssist(Bundle args)</code> -- </p></li>
-                                    <li><p><code>final boolean showDialog(int id, Bundle args)</code> -- </p></li>
-                                    <li><p><code>void showLockTaskEscapeMessage()</code> -- </p></li>
-                                    <li><p><code>void startActivityFromChild(Activity child, Intent intent, int requestCode)</code> -- </p></li>
-                                    <li><p><code>void startActivityFromChild(Activity child, Intent intent, int requestCode, Bundle options)</code> -- </p></li>
-                                    <li><p><code>void startActivityFromFragment(Fragment fragment, Intent intent, int requestCode, Bundle options)</code> -- </p></li>
-                                    <li><p><code> void startActivityFromFragment(Fragment fragment, Intent intent, int requestCode)</code> -- </p></li>
-                                    <li><p><code>boolean startActivityIfNeeded(Intent intent, int requestCode, Bundle options)</code> -- </p></li>
-                                    <li><p><code>boolean startActivityIfNeeded(Intent intent, int requestCode)</code> -- </p></li>
-                                    <li><p><code>void startIntentSenderForResult(IntentSender intent, int requestCode, Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags)</code> -- </p></li>
-                                    <li><p><code>void startIntentSenderForResult(IntentSender intent, int requestCode, Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags, Bundle options)</code> -- </p></li>
-                                    <li><p><code>void startIntentSenderFromChild(Activity child, IntentSender intent, int requestCode, Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags, Bundle options)</code> -- </p></li>
-                                    <li><p><code>void startIntentSenderFromChild(Activity child, IntentSender intent, int requestCode, Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags)</code> -- </p></li>
-                                    <li><p><code>void startLocalVoiceInteraction(Bundle privateOptions)</code> -- </p></li>
+                                    <li><p><code>final boolean showDialog(int id, Bundle
+                                        args)</code> -- </p></li>
+                                    <li><p><code>void showLockTaskEscapeMessage()</code> -- </p>
+                                    </li>
+                                    <li><p><code>void startActivityFromChild(Activity child, Intent
+                                        intent, int requestCode)</code> -- </p></li>
+                                    <li><p><code>void startActivityFromChild(Activity child, Intent
+                                        intent, int requestCode, Bundle options)</code> -- </p></li>
+                                    <li><p><code>void startActivityFromFragment(Fragment fragment,
+                                        Intent intent, int requestCode, Bundle options)</code> --
+                                    </p></li>
+                                    <li><p><code> void startActivityFromFragment(Fragment fragment,
+                                        Intent intent, int requestCode)</code> -- </p></li>
+                                    <li><p><code>boolean startActivityIfNeeded(Intent intent, int
+                                        requestCode, Bundle options)</code> -- </p></li>
+                                    <li><p><code>boolean startActivityIfNeeded(Intent intent, int
+                                        requestCode)</code> -- </p></li>
+                                    <li><p><code>void startIntentSenderForResult(IntentSender
+                                        intent, int requestCode, Intent fillInIntent, int flagsMask,
+                                        int flagsValues, int extraFlags)</code> -- </p></li>
+                                    <li><p><code>void startIntentSenderForResult(IntentSender
+                                        intent, int requestCode, Intent fillInIntent, int flagsMask,
+                                        int flagsValues, int extraFlags, Bundle options)</code> --
+                                    </p></li>
+                                    <li><p><code>void startIntentSenderFromChild(Activity child,
+                                        IntentSender intent, int requestCode, Intent fillInIntent,
+                                        int flagsMask, int flagsValues, int extraFlags, Bundle
+                                        options)</code> -- </p></li>
+                                    <li><p><code>void startIntentSenderFromChild(Activity child,
+                                        IntentSender intent, int requestCode, Intent fillInIntent,
+                                        int flagsMask, int flagsValues, int extraFlags)</code> --
+                                    </p></li>
+                                    <li><p><code>void startLocalVoiceInteraction(Bundle
+                                        privateOptions)</code> -- </p></li>
                                     <li><p><code>void startLockTask()</code> -- </p></li>
-                                    <li><p><code>void startManagingCursor(Cursor c)</code> -- </p></li>
-                                    <li><p><code>boolean startNextMatchingActivity(Intent intent, Bundle options)</code> -- </p></li>
-                                    <li><p><code>boolean startNextMatchingActivity(Intent intent)</code> -- </p></li>
+                                    <li><p><code>void startManagingCursor(Cursor c)</code> -- </p>
+                                    </li>
+                                    <li><p><code>boolean startNextMatchingActivity(Intent intent,
+                                        Bundle options)</code> -- </p></li>
+                                    <li><p><code>boolean startNextMatchingActivity(Intent
+                                        intent)</code> -- </p></li>
 
-                                    <li><p><code>void startSearch(String initialQuery, boolean selectInitialQuery, Bundle appSearchData, boolean globalSearch)</code> -- </p></li>
-                                    <li><p><code>void stopLocalVoiceInteraction()</code> -- </p></li>
+                                    <li><p><code>void startSearch(String initialQuery, boolean
+                                        selectInitialQuery, Bundle appSearchData, boolean
+                                        globalSearch)</code> -- </p></li>
+                                    <li><p><code>void stopLocalVoiceInteraction()</code> -- </p>
+                                    </li>
                                     <li><p><code>void stopLockTask()</code> -- </p></li>
-                                    <li><p><code>void stopManagingCursor(Cursor c)</code> -- </p></li>
+                                    <li><p><code>void stopManagingCursor(Cursor c)</code> -- </p>
+                                    </li>
                                     <li><p><code>void takeKeyEvents(boolean get)</code> -- </p></li>
-                                    <li><p><code>void triggerSearch(String query, Bundle appSearchData)</code> -- </p></li>
+                                    <li><p><code>void triggerSearch(String query, Bundle
+                                        appSearchData)</code> -- </p></li>
 
-                                    <li><p><code>final void dismissKeyboardShortcutsHelper()</code> -- </p></li>
-                                    <li><p><code>void dump(String prefix, FileDescriptor fd, PrintWriter writer, String[] args)</code> -- </p></li>
+                                    <li><p><code>final void dismissKeyboardShortcutsHelper()</code>
+                                        -- </p></li>
+                                    <li><p><code>void dump(String prefix, FileDescriptor fd,
+                                        PrintWriter writer, String[] args)</code> -- </p></li>
                                 </ol>
                             </li>
                             <li>Activity 其它方法:
                                 <ol start="78">
-                                    <li><p><code>final void showDialog(int id)</code> -- API 13 后不推荐使用</p></li>
-                                    <li><p><code>Dialog onCreateDialog(int id)</code> -- API 8 后不推荐使用</p></li>
-                                    <li><p><code>Dialog onCreateDialog(int id, Bundle args)</code> -- API 13 后不推荐使用</p></li>
-                                    <li><p><code>void onPrepareDialog(int id, Dialog dialog)</code> -- API 8 后不推荐使用</p></li>
-                                    <li><p><code>void onPrepareDialog(int id, Dialog dialog, Bundle args)</code> -- API 13 后不推荐使用</p></li>
-                                    <li><p><code>final void dismissDialog(int id)</code> -- API 13 后不推荐使用</p></li>
-                                    <li><p><code>final void removeDialog(int id)</code> -- API 13 后不推荐使用</p></li>
-                                    <li><p><code>void onCreateNavigateUpTaskStack(TaskStackBuilder builder)</code> -- API 16 添加</p></li>
-                                    <li><p><code>void onPrepareNavigateUpTaskStack(TaskStackBuilder builder)</code> -- API 16 添加</p></li>
-                                    <li><p><code>boolean navigateUpTo(Intent upIntent)</code> -- API 16 添加</p></li>
-                                    <li><p><code>boolean navigateUpToFromChild(Activity child, Intent upIntent)</code> -- API 16 添加</p></li>
+                                    <li><p><code>final void showDialog(int id)</code> -- API 13
+                                        后不推荐使用</p></li>
+                                    <li><p><code>Dialog onCreateDialog(int id)</code> -- API 8
+                                        后不推荐使用</p></li>
+                                    <li><p><code>Dialog onCreateDialog(int id, Bundle args)</code>
+                                        -- API 13 后不推荐使用</p></li>
+                                    <li><p><code>void onPrepareDialog(int id, Dialog dialog)</code>
+                                        -- API 8 后不推荐使用</p></li>
+                                    <li><p><code>void onPrepareDialog(int id, Dialog dialog, Bundle
+                                        args)</code> -- API 13 后不推荐使用</p></li>
+                                    <li><p><code>final void dismissDialog(int id)</code> -- API 13
+                                        后不推荐使用</p></li>
+                                    <li><p><code>final void removeDialog(int id)</code> -- API 13
+                                        后不推荐使用</p></li>
+                                    <li><p><code>void onCreateNavigateUpTaskStack(TaskStackBuilder
+                                        builder)</code> -- API 16 添加</p></li>
+                                    <li><p><code>void onPrepareNavigateUpTaskStack(TaskStackBuilder
+                                        builder)</code> -- API 16 添加</p></li>
+                                    <li><p><code>boolean navigateUpTo(Intent upIntent)</code> -- API
+                                        16 添加</p></li>
+                                    <li><p><code>boolean navigateUpToFromChild(Activity child,
+                                        Intent upIntent)</code> -- API 16 添加</p></li>
                                     <li><p><code>boolean onNavigateUp()</code> -- API 16 添加</p></li>
-                                    <li><p><code>boolean onNavigateUpFromChild(Activity child)</code> -- API 16 添加</p></li>
-                                    <li><p><code>boolean onCreateThumbnail(Bitmap outBitmap, Canvas canvas)</code> -- 生成一个略缩图(此方法好像不工作)</p></li>
+                                    <li><p><code>boolean onNavigateUpFromChild(Activity
+                                        child)</code> -- API 16 添加</p></li>
+                                    <li><p><code>boolean onCreateThumbnail(Bitmap outBitmap, Canvas
+                                        canvas)</code> -- 生成一个略缩图(此方法好像不工作)</p></li>
 
                                 </ol>
                             </li>
@@ -2711,7 +2905,7 @@ protected void attachBaseContext(Context newBase) {
                 </div>
             </div>
             <!-- item over -->
-            
+
             <!-- item start -->
             <a class="offset" id="android-view-Fragment"></a>
             <div class="panel panel-default">
@@ -2875,23 +3069,37 @@ public abstract class AsyncTask&lt;Params, Progress, Result> {
     }
 }
                     </pre>
-                    <p><a href="docs/reference/android/os/AsyncTask.html" target="_blank">AsyncTask</a> 是对 Handler 与线程池的封装。使用它的方便之处在于能够更新用户界面，当然这里更新用户界面的操作还是在主线程中完成的，但是由于 AsyncTask 内部包含一个 Handler，所以可以发送消息给主线程让它更新 UI。</p>
-                    <p>另外，<a href="docs/reference/android/os/AsyncTask.html" target="_blank">AsyncTask</a> 内还包含了一个线程池，使用线程池的主要原因是避免不必要的创建及销毁线程的开销。</p>
-                    <p><a href="docs/reference/android/os/AsyncTask.html" target="_blank">AsyncTask</a> 是一个抽象类，我们在使用时需要定义一个它的派生类并重写相关方法。</p>
+                    <p><a href="docs/reference/android/os/AsyncTask.html"
+                          target="_blank">AsyncTask</a> 是对 Handler
+                        与线程池的封装。使用它的方便之处在于能够更新用户界面，当然这里更新用户界面的操作还是在主线程中完成的，但是由于 AsyncTask 内部包含一个
+                        Handler，所以可以发送消息给主线程让它更新 UI。</p>
+                    <p>另外，<a href="docs/reference/android/os/AsyncTask.html" target="_blank">AsyncTask</a>
+                        内还包含了一个线程池，使用线程池的主要原因是避免不必要的创建及销毁线程的开销。</p>
+                    <p><a href="docs/reference/android/os/AsyncTask.html"
+                          target="_blank">AsyncTask</a> 是一个抽象类，我们在使用时需要定义一个它的派生类并重写相关方法。</p>
                     <p><b>AsyncTask 的局限性:</b></p>
-                    <p class="alert alert-success"><b>1.一个 AsyncTask 对象只能调用一次 execute 方法;<br />2.在 Android 4.1 版本之前，AsyncTask 类必须在主线程中加载，在 Android 4.1 以及以上版本则不存在这一限制;</b></p>
-                    <p><a href="docs/reference/android/os/AsyncTask.html" target="_blank">AsyncTask</a> 的主要方法：</p>
+                    <p class="alert alert-success"><b>1.一个 AsyncTask 对象只能调用一次 execute 方法;<br/>2.在
+                        Android 4.1 版本之前，AsyncTask 类必须在主线程中加载，在 Android 4.1 以及以上版本则不存在这一限制;</b></p>
+                    <p><a href="docs/reference/android/os/AsyncTask.html"
+                          target="_blank">AsyncTask</a> 的主要方法：</p>
                     <ol>
-                        <li><p><code>public final AsyncTask&lt;Params, Progress, Result> execute(Params... params)</code> -- 触发执行异步任务</p></li>
+                        <li><p><code>public final AsyncTask&lt;Params, Progress, Result>
+                            execute(Params... params)</code> -- 触发执行异步任务</p></li>
                         <li><p><code>protected void onPreExecute()</code> -- 可以执行初始化操作</p></li>
-                        <li><p><code>protected Result doInBackground(Params... params) {</code> -- 工作线程</p></li>
-                        <li><p><code>protected void publishProgress(Progress... values)</code> -- 在 doInBackground 中调用，会执行 onProgressUpdate 方法</p></li>
-                        <li><p><code>protected void onProgressUpdate(Progress... values)</code> -- 进度回调</p></li>
-                        <li><p><code>protected void onPostExecute(Result result)</code> -- 执行完成回调</p></li>
+                        <li><p><code>protected Result doInBackground(Params... params) {</code> --
+                            工作线程</p></li>
+                        <li><p><code>protected void publishProgress(Progress... values)</code> -- 在
+                            doInBackground 中调用，会执行 onProgressUpdate 方法</p></li>
+                        <li><p><code>protected void onProgressUpdate(Progress... values)</code> --
+                            进度回调</p></li>
+                        <li><p><code>protected void onPostExecute(Result result)</code> -- 执行完成回调
+                        </p></li>
                         <li><p><code>protected void onCancelled()</code> -- 取消回调</p></li>
-                        <li><p><code>public void cancel(boolean mayInterruptIfRunning)</code> -- 取消</p></li>
+                        <li><p><code>public void cancel(boolean mayInterruptIfRunning)</code> -- 取消
+                        </p></li>
                         <li><p><code>public final boolean isCancelled()</code> -- 是否取消</p></li>
-                        <li><p><code>public final AsyncTask.Status getStatus()</code> -- 获取状态</p></li>
+                        <li><p><code>public final AsyncTask.Status getStatus()</code> -- 获取状态</p>
+                        </li>
                     </ol>
                 </div>
             </div>
@@ -2940,7 +3148,7 @@ public abstract class AsyncTask&lt;Params, Progress, Result> {
 
                     <div class="sub-item">
                         <p><b>HandlerThread</b></p>
-                    <pre class="brush: java;">
+                        <pre class="brush: java;">
 java.lang.Object
     java.lang.Thread
   	    android.os.HandlerThread
@@ -2950,8 +3158,9 @@ public class HandlerThread extends Thread {
     public HandlerThread(String name, int priority) {}
 }
                     </pre>
-                    <p><a href="docs/reference/android/os/HandlerThread.html" target="_blank">HandlerThread</a> 是 <code>Thread</code> 的子类，将 Looper,  Handler, Thread 封装在一起。</p>
-                </div>
+                        <p><a href="docs/reference/android/os/HandlerThread.html" target="_blank">HandlerThread</a>
+                            是 <code>Thread</code> 的子类，将 Looper, Handler, Thread 封装在一起。</p>
+                    </div>
 
 
                 </div>
@@ -2971,12 +3180,33 @@ java.lang.Object
     android.net.wifi.WifiManager
 
 public class WifiManager {
-    public class MulticastLock {}
+    /** 手机屏幕关闭之后，并且其他的应用程序没有在使用 wifi 的时候，系统在一段时间之后，会关闭 wifi，
+     * 使得 wifi 处于睡眠状态。有利于电源能量的节省和延长电池寿命等。
+     * 通过 WifiLock 来锁定 wifi 网络，使其一直保持连接，直到这个锁定被释放。主要有两个方法：
+     * acquire() -- 锁定 Wifi
+     * release() -- 释放 Wifi
+     */
     public class WifiLock {}
-    public class WpsCallback {}
+
+    /** 组播锁，默认情况下，应用是不接收组播报文信息的，要打开组播锁，主要还是同上面的两个方法，还需要权限：
+     * android.permission.CHANGE_WIFI_MULTICAST_STATE
+     */
+    public class MulticastLock {}
+
+    /** 启动 WPS 连接时的回调接口 */
+    public static abstract class WpsCallback {
+        abstract void onFailed(int reason);
+        abstract void onStarted(String pin);
+        abstract void onSucceeded();
+    }
 }
                         </pre>
-                        <p><a href="docs/reference/android/net/wifi/WifiManager.html">WifiManager</a> 是 Android 暴露给开发者使用的一个系统服务管理类, 其中包含对 WiFi 的响应的操作函数; 其隐藏掉的系统服务类为 IWifiService, 为 Android 私有的, 其具体实现, 未暴露给用户; 只需要使用 WifiManager 进行函数操作完成 UI, 监听对应的广播消息, 就可完成功能了. 换言之, WifiManager 会调用 Service 和 Framework 层, 驱动层进行函数调用, 然后驱动层会回调至上层, 以广播的形式实现通知。</p>
+                        <p>
+                            <a href="docs/reference/android/net/wifi/WifiManager.html">WifiManager</a>
+                            是 Android 暴露给开发者使用的一个系统服务管理类, 其中包含对 WiFi 的响应的操作函数; 其隐藏掉的系统服务类为
+                            IWifiService, 为 Android 私有的, 其具体实现, 未暴露给用户; 只需要使用 WifiManager 进行函数操作完成
+                            UI, 监听对应的广播消息, 就可完成功能了. 换言之, WifiManager 会调用 Service 和 Framework 层,
+                            驱动层进行函数调用, 然后驱动层会回调至上层, 以广播的形式实现通知。</p>
                         <pre class="brush: java;">
 <!-- Wifi 相关的几个权限 -->
 &lt;uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -2986,6 +3216,8 @@ public class WifiManager {
 &lt;uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 &lt;uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
 &lt;uses-permission android:name="android.permission.INTERNET" />
+                            <!-- 组播锁权限 -->
+&lt;uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
 
 &lt;uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
@@ -3037,8 +3269,9 @@ private void setupView() {
         Log.v("Wifi", "configuration = " + configuration.toString());
     }
 
-    // 5.连接 WiFi, 有两个函数:
-
+    // 5.连接 WiFi
+    WifiConfiguration mConfig = createWifiConfig("ILESSON", "ilesson@2017", WIFICIPHER_WPA);
+    mWifiManager.addNetwork(mConfig);
 }
 
 private static final int WIFICIPHER_NOPASS = 0;
@@ -3054,7 +3287,7 @@ private WifiConfiguration createWifiConfig(String ssid, String password, int typ
     config.allowedPairwiseCiphers.clear();
     config.allowedProtocols.clear();
 
-    // 指定对应的SSID
+    // 指定对应的 SSID
     config.SSID = "\"" + ssid + "\"";
 
     // 如果之前有类似的配置
@@ -3104,6 +3337,7 @@ private WifiConfiguration isExist(String ssid) {
 
 /** 获取热点的加密类型 */
 private int getType(ScanResult scanResult) {
+    int type = WIFICIPHER_NOPASS;
     if (scanResult.capabilities.contains("WPA"))
         type = WIFICIPHER_WPA;
     else if (scanResult.capabilities.contains("WEP"))
@@ -3177,50 +3411,291 @@ public void closeWifiHotspot() {
                         </pre>
                     </div>
 
-
                     <div class="sub-item">
                         <p><b>WifiManager</b> 方法</p>
                         <ol>
-                            <li><p><code>boolean isWifiEnabled()</code> -- </p></li>
-                            <li><p><code>boolean setWifiEnabled(boolean enabled) </code> -- </p></li>
-                            <li><p><code>int getWifiState()</code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
-                            <li><p><code>List<WifiConfiguration> getConfiguredNetworks()</code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
-                            <li><p><code>WifiInfo getConnectionInfo()</code> -- </p></li>
-                            <li><p><code>boolean startScan()</code> -- </p></li>
-                            <li><p><code>List<ScanResult> getScanResults()</code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
-                            <li><p><code></code> -- </p></li>
+                            <li><p><code>boolean isWifiEnabled()</code> -- Wifi 是否打开</p></li>
+                            <li><p><code>boolean setWifiEnabled(boolean enabled) </code> -- 开启或关闭
+                                Wifi, 需要 <code>WRITE_SETTINGS</code> 权限</p></li>
+                            <li><p><code>int getWifiState()</code> -- 获取 Wifi 状态: 打开，正在打开，关闭，正在关闭，未知
+                            </p></li>
+                            <li><p><code><a href="#WifiInfo">WifiInfo</a> getConnectionInfo()</code>
+                                -- 获取已经连接的 Wifo 信息</p></li>
+                            <li><p><code>boolean isScanAlwaysAvailable()</code> -- 检查扫描是否始终可用</p>
+                            </li>
+                            <li><p><code>boolean startScan()</code> --
+                                开始扫描热点，立即返回，结果的可用性稍后通过扫描完成后发送的异步事件而知道。</p></li>
+                            <li><p><code>List&lt;<a href="#ScanResult">ScanResult</a>>
+                                getScanResults()</code> -- 获取扫描到的热点列表信息</p></li>
+
+                            <li><p><code>List&lt;<a href="#android-net-wifi-WifiConfiguration">WifiConfiguration</a>>
+                                getConfiguredNetworks()</code> -- 获取已经配置的 WifiConfiguration 信息列表</p>
+                            </li>
+                            <li><p><code>int addNetwork(<a
+                                    href="#android-net-wifi-WifiConfiguration">WifiConfiguration</a>
+                                config)</code> -- 通过 config 配置一个网络（配置，不是连接）</p></li>
+                            <li><p><code>int updateNetwork(<a
+                                    href="#android-net-wifi-WifiConfiguration">WifiConfiguration</a>
+                                config)</code> -- 通过 config 更新 一个网络</p></li>
+                            <li><p><code>boolean enableNetwork(int netId, boolean
+                                disableOthers)</code> -- 根据 netId 启动一个网络</p></li>
+                            <li><p><code>boolean removeNetwork(int netId)</code> -- 根据 netId 删除一个网络
+                            </p></li>
+
+                            <li><p><code>boolean saveConfiguration()</code> -- 保存配置</p></li>
+                            <li><p><code>boolean reconnect()</code> -- 重新连接</p></li>
+                            <li><p><code>boolean disconnect()</code> -- 断开连接</p></li>
+                            <li><p><code>boolean reassociate()</code> -- 重新连接 WIFI 网络，即使该网络是已经被连接上的
+                            </p></li>
+                            <li><p><code><a href="#DhcpInfo">DhcpInfo</a> getDhcpInfo()</code> --
+                                DhcpInfo 保存了当前连接的网络信息，包括 IP, 网关，掩码，DNS 等...不限于 Wifi。</p></li>
+                            <li><p><code>void startWps(<a href="#WpsInfo">WpsInfo</a> config,
+                                WifiManager.WpsCallback listener)</code> -- 启动 Wps 连接</p></li>
+                            <li><p><code>void cancelWps(WifiManager.WpsCallback listener)</code> --
+                                取消 Wps 连接</p></li>
+                            <li><p><code>static int calculateSignalLevel(int rssi, int
+                                numLevels)</code> -- 根据 rssi 返回信号强度等级</p>
+                                <pre class="brush: java;">
+/** 返回的等级为 0 ~ (numLevels - 1),
+ * rssi 可以从 mScanResult.level 和 mWifiInfo.getRssi() 获取，其方法实现为：
+ */
+if (rssi <= MIN_RSSI) { // MIN_RSSI = -100
+    return 0;
+} else if (rssi >= MAX_RSSI) {  // MAX_RSSI = -55
+    return numLevels - 1;
+} else {
+    float inputRange = (MAX_RSSI - MIN_RSSI);
+    float outputRange = (numLevels - 1);
+    return (int)((float)(rssi - MIN_RSSI) * outputRange / inputRange);
+}
+</pre>
+                            </li>
+                            <li><p><code>static int compareSignalLevel(int rssiA, int rssiB)</code>
+                                -- 对比网络A和网络B的信号强度</p></li>
+
+                            <li><p><code>WifiManager.WifiLock createWifiLock(int lockType, String
+                                tag)</code> -- 创建 WIFI 锁，锁定当前的 WIFI 连接</p>
+                                <pre class="brush:java;">
+/** 有 3 种 lockType:
+ * WIFI_MODE_FULL -- Wi-Fi 将保持活跃，并将正常工作
+ * WIFI_MODE_SCAN_ONLY -- 工作在高性能与最低的丢包率和低分组延迟，当没有从硬件的支持时同上
+ * WIFI_MODE_FULL_HIGH_PERF -- 唯一支持的操作是启动扫描，以及随后对扫描结果的报告
+ */
+                            </pre>
+                            </li>
+                            <li><p><code>WifiManager.WifiLock createWifiLock(String tag) </code> --
+                                使用 <code>WIFI_MODE_FULL</code> 模式创建
+                            </p></li>
+                            <li><p><code>WifiManager.MulticastLock createMulticastLock(String
+                                tag)</code> -- 创建组播锁，可以允许接受组播报文</p></li>
+                            <li><p><code>boolean is5GHzBandSupported()</code> -- 是否支持 5 GHz 频段</p>
+                            </li>
+                            <li><p><code>boolean isDeviceToApRttSupported()</code> -- 是否支持
+                                Device-to-AP RTT</p></li>
+                            <li><p><code>boolean isEnhancedPowerReportingSupported()</code> --
+                                是否支持高级电源/性能计数器</p>
+                            </li>
+                            <li><p><code>boolean isP2pSupported()</code> -- 是否支持 P2P 连接</p></li>
+                            <li><p><code>boolean isPreferredNetworkOffloadSupported()</code> --
+                                是否支持卸载连接扫描</p>
+                            </li>
+                            <li><p><code>boolean isTdlsSupported()</code> -- 是否支持 TDLS</p></li>
+                            <li><p><code>boolean pingSupplicant()</code> -- 是否相应 ping</p></li>
+
+                            <li><p><code>void setTdlsEnabled(InetAddress remoteIPAddress, boolean
+                                enable)</code> -- IP 地址打开/关闭 TDLS</p></li>
+                            <li><p><code>void setTdlsEnabledWithMacAddress(String remoteMacAddress,
+                                boolean enable)</code> -- Mac 地址打开/关闭 TDLS</p></li>
                         </ol>
                     </div>
 
                     <div class="sub-item">
                         <p><b>WifiManager</b> 相关类</p>
                         <ul>
-                            <li><p><a href="docs/reference/android/net/wifi/WifiConfiguration.html" target="_blank">WifiConfiguration</a> -- WiFi 的配置信息</p>
-                            <pre class="brush: java;">
-
-                            </pre>
-                            </li>
-                            <li><p><a href="docs/reference/android/net/wifi/ScanResult.html" target="_blank">ScanResult</a> -- 扫描到的 WiFi 热点的结果</p>
+                            <li><a id="ScanResult" class="offset"></a>
+                                <p><a href="docs/reference/android/net/wifi/ScanResult.html"
+                                      target="_blank">ScanResult</a> -- 扫描到的 WiFi 热点的结果</p>
                                 <pre class="brush: java;">
+/** 扫描得到所有的热点列表 */
+List&lt;ScanResult> scanResults = mWifiManager.getScanResults();
+if(null == scanResults || scanResults.isEmpty()) {
+    // 如果没有数据，那么应该扫描，此扫描完成会由一个广播 WifiManager.SCAN_RESULTS_AVAILABLE_ACTION
+    mWifiManager.startScan();// 扫描应该放在系统的 wifi 状态改变时候，看下面代码
+
+
+    IntentFilter filter = new IntentFilter();
+    filter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+    filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION); // wifi 状态改变, 加这个貌似会快
+
+    registerReceiver(new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            // wifi 已成功扫描到可用 wifi。
+            if (action.equals(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)) {
+                Log.d(TAG, "接收到" +DateUtils.getCurrentDateString());
+                mScanResults = mWifiManager.getScanResults();
+                Log.d(TAG, "mScanResults.size()===" + mScanResults.size());
+
+            } else if (action.equals(WifiManager.WIFI_STATE_CHANGED_ACTION)) { // 系统 wifi 的状态
+                int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, 0);
+                switch (wifiState) {
+                    case WifiManager.WIFI_STATE_ENABLED:
+                        Log.d(TAG, "WiFi已启用" + DateUtils.getCurrentTime());
+                        mWifiManager.startScan();
+                        break;
+                    case WifiManager.WIFI_STATE_DISABLED:
+                        Log.d(TAG, "Wifi已关闭" + DateUtils.getCurrentTime());
+                        break;
+                }
+            }
+        }
+    },  filter);
+}
+
+/** 根据信号强弱排序 */
+Collections.sort(scanResults, new Comparator&lt;ScanResult>() {
+    @Override
+    public int compare(ScanResult lhs, ScanResult rhs) {
+        return rhs.level - lhs.level;
+    }
+});
+
+/** ScanResult 的字段:
+ * SSID -- Wifi 的名字
+ * BSSID -- 接入点的 Mac 地址
+ * level -- 信号强度 -0 ~ -100, 一般认为使用 WifiManger.calculateSignalLevel(level, NumberLevel) 计算等级
+ * capabilities -- 支持的加密方式
+ * frequency -- 当前 WIFI 设备附近热点的频率
+ * ...
+ */
 
 </pre>
                             </li>
-                            <li><p><a href="docs/reference/android/net/wifi/WifiInfo.html" target="_blank">WifiInfo</a> -- 描述处于活动状态或正在设置过程中的任何WiFi连接的状态</p>
+                            <li><a id="WifiInfo" class="offset"></a>
+                                <p><a href="docs/reference/android/net/wifi/WifiInfo.html"
+                                      target="_blank">WifiInfo</a> -- 描述处于活动状态或正在设置过程中的任何 WiFi 连接的状态
+                                </p>
                                 <pre class="brush: java;">
-
+WifiInfo info = mWifiManager.getConnectionInfo();
+/** WifiInfo 主要有以下方法：
+ * getSSID() -- 网络名称
+ * getBSSID() -- 网络 Mac 地址
+ * getRssi() -- 型号强度
+ * getHiddenSSID() -- 是否是隐藏网络
+ * getMacAddress()  -- MacAddress
+ * getNetworkId() -- 网络 id
+ * getSupplicantState() -- 返回枚举类型，当前连接的状态
+ * getLinkSpeed() -- 连接速度
+ */
 </pre>
+                            </li>
+                            <li><a id="DhcpInfo" class="offset"></a>
+                                <p><a href="docs/reference/android/net/DhcpInfo.html"
+                                      target="_blank">DhcpInfo</a> -- 保存了当前连接的网络信息，包括 IP, 网关，掩码，DNS
+                                    等...不限于 Wifi。</p>
+                                <pre class="brush: java;">
+public int 	dns1;
+public int 	dns2;
+public int 	gateway;
+public int 	ipAddress
+public int 	leaseDuration;
+public int 	netmask;
+public int 	serverAddress;
+</pre>
+                            </li>
+                            <li><a id="WpsInfo" class="offset"></a>
+                                <p><a href="docs/reference/android/net/wifi/WpsInfo.html"
+                                      target="_blank">WpInfo</a> -- 当热点端启动 WPS 连接时，连接端只需要点击 WPS
+                                    按钮即可连接(连接端的 Wifi 连接，高级可看到 WPS 连接); 当热点端选择从对等设备获取 pin 码时，连接机的 WPS
+                                    PIN 输入，会弹出一个 PIN 码，这个时候在个人热点端输入相应数字即可连接。</p>
+                                <pre class="brush: java;">
+WpsInfo config = new WpsInfo();
+if (mWpsMode == PUSH_BUTTON) {
+    config.setup = WpsInfo.PBC;
+    config.BSSID = "any";
+} else if (mWpsMode == PIN_FROM_CLIENT) {
+    // PIN 码参数
+    config.setup = WpsInfo.DISPLAY;
+    config.pin = "1234";
+}
+mWifiManager.startApWps(config, new WifiManager.WpsCallback() {...});
+</pre>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sub-item">
+                        <p>Wifi 状态监听：</p>
+                        <ul>
+                            <li><p>Wifi 状态变化：</p>
+                                <pre class="brush: java;">
+BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+        if(WifiManager.WIFI_STATE_CHANGED_ACTION.equals(action)) {
+            int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, -1);
+            AppUtil.logDebug("== state: " + wifiState);
+            switch (wifiState) {
+                case WifiManager.WIFI_STATE_DISABLING: // 正要关闭的状态
+                    break;
+                case WifiManager.WIFI_STATE_DISABLED: // 已经完全关闭的状态
+                    break;
+                case WifiManager.WIFI_STATE_ENABLING: // 正要开启的状态
+                    break;
+                case WifiManager.WIFI_STATE_ENABLED: // 已经完全开启的状态
+                    break;
+                case WifiManager.WIFI_STATE_UNKNOWN: // 未知的状态
+                    break;
+            }
+        }
+    }
+};
+
+IntentFilter wifiFilter = new IntentFilter();
+wifiFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+// wifiFilter.addAction(WifiManager.NETWORK_STATE_CHANGED_ACTION); // 触发 NetworkInfo.State 枚举类型
+registerReceiver(wifiReceiver, wifiFilter);
+                        </pre>
+                            </li>
+                            <li><p>Wifi 热点扫描结果：(一般来说，Wifi 启动后自动扫描热点，并每隔一段时间自动再次扫描，不用调用 WifiManager 的
+                                <code>startScan()</code> 方法。)</p>
+                                <pre class="brush: java;">
+BroadcastReceiver wifiReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+        if(WifiManager.WIFI_STATE_CHANGED_ACTION.equals(action)) {
+            int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, -1);
+            AppUtil.logDebug("== state: " + wifiState);
+            switch (wifiState) {
+                case WifiManager.WIFI_STATE_DISABLING: // 正要关闭的状态
+                    break;
+                case WifiManager.WIFI_STATE_DISABLED: // 已经完全关闭的状态
+                    break;
+                case WifiManager.WIFI_STATE_ENABLING: // 正要开启的状态
+                    break;
+                case WifiManager.WIFI_STATE_ENABLED: // 已经完全开启的状态
+                    break;
+                case WifiManager.WIFI_STATE_UNKNOWN: // 未知的状态
+                    break;
+            }
+        }
+
+        if (WifiManager.SCAN_RESULTS_AVAILABLE_ACTION.equals(action)) {
+            List&lt;ScanResult> list = mWifiManager.getScanResults();
+            for (ScanResult scanResult : list) {
+                AppUtil.logDebug(scanResult.SSID + "==\n");
+            }
+        }
+    }
+};
+IntentFilter wifiFilter = new IntentFilter();
+wifiFilter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
+wifiFilter.addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION);
+registerReceiver(wifiReceiver, wifiFilter);
+                        </pre>
                             </li>
                         </ul>
                     </div>
@@ -3229,13 +3704,480 @@ public void closeWifiHotspot() {
             <!-- item over -->
 
             <!-- item start -->
-            <a class="offset" id="..."></a>
+            <a class="offset" id="android-net-wifi-WifiConfiguration"></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">...</h3>
+                    <h3 class="panel-title">WifiConfiguration</h3>
                 </div>
                 <div class="panel-body">
+                    <div class="sub-item">
+<pre class="brush: java;">
+java.lang.Object
+    android.net.wifi.WifiConfiguration
 
+public class WifiConfiguration implements Parcelable {
+    // 公认的 IEEE 802.11 认证算法
+    public static class WifiConfiguration.AuthAlgorithm {}
+    // 公认的组加密
+    public static class WifiConfiguration.GroupCipher {}
+    // 公认的密钥管理方案
+    public static class WifiConfiguration.KeyMgmt {}
+    // 公认的 WPA 识别的对偶密码
+    public static class WifiConfiguration.PairwiseCipher {}
+    // 公认的安全协议
+    public static class WifiConfiguration.Protocol {}
+    // 网络配置的可能状态
+    public static class WifiConfiguration.Status {}
+}
+
+</pre>
+                        <p><a href="docs/reference/android/net/wifi/WifiConfiguration.html"
+                              target="_blank">WifiConfiguration</a> 表示配置的 Wi-Fi
+                            网络的类，包括安全配置。可用于产看已经配置的 Wifi 和 配置新的网络。</p>
+                        <p>不论是配置 Wifi 还是创建移动热点，都要用到此类，主要是一些字段和内部类。</p>
+                        <ul>
+                            <li><p>配置 Wifi:</p>
+                                <pre class="brush:java;">
+/** 连接到一个指定的 Wifi */
+WifiConfiguration mConfig = createWifiConfig("ILESSON", "ilesson@2017", WIFICIPHER_WPA);
+int netId = mWifiManager.addNetwork(mConfig);
+mWifiManager.enableNetwork(netId, true);
+
+private static final int WIFICIPHER_NOPASS = 0; // 无密码
+private static final int WIFICIPHER_WEP = 1; // WEP 加密
+private static final int WIFICIPHER_WPA = 2; // WPA 加密
+
+private WifiConfiguration createWifiConfig(String ssid, String password, int type) {
+    // 初始化 WifiConfiguration
+    WifiConfiguration config = new WifiConfiguration();
+    config.allowedAuthAlgorithms.clear();
+    config.allowedGroupCiphers.clear();
+    config.allowedKeyManagement.clear();
+    config.allowedPairwiseCiphers.clear();
+    config.allowedProtocols.clear();
+
+    // 指定对应的 SSID
+    config.SSID = "\"" + ssid + "\"";
+
+    // 如果之前有类似的配置，则清除旧有配置
+    WifiConfiguration tempConfig = isExist(ssid);
+    if (tempConfig != null) {
+        wifiManager.removeNetwork(tempConfig.networkId);
+    }
+
+    // 不需要密码的场景
+    if (type == WIFICIPHER_NOPASS) {
+        config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+    } else if (type == WIFICIPHER_WEP) { // 以 WEP 加密的场景
+        config.hiddenSSID = true;
+        config.wepKeys[0] = "\"" + password + "\"";
+        config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+        config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
+        config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        config.wepTxKeyIndex = 0;
+
+    } else if (type == WIFICIPHER_WPA) { // 以 WPA / WPA2 加密的场景
+        config.preSharedKey = "\"" + password + "\"";
+        config.hiddenSSID = true;
+        config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+        config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+        config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+        config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+        config.status = WifiConfiguration.Status.ENABLED;
+    }
+
+    return config;
+}
+
+private WifiConfiguration isExist(String ssid) {
+    List&lt;WifiConfiguration> configs = wifiManager.getConfiguredNetworks();
+
+    for (WifiConfiguration config : configs) {
+        if (config.SSID.equals("\"" + ssid + "\"")) {
+            return config;
+        }
+    }
+    return null;
+}
+
+/** 获取热点的加密类型 */
+private int getType(ScanResult scanResult) {
+    int type = WIFICIPHER_NOPASS;
+    if (scanResult.capabilities.contains("WPA"))
+        type = WIFICIPHER_WPA;
+    else if (scanResult.capabilities.contains("WEP"))
+        type = WIFICIPHER_WEP;
+    else
+        type = WIFICIPHER_NOPASS;
+    return type;
+}
+</pre>
+                            </li>
+                            <li><p>创建移动热点:(4.4 测试成功；7.0 热点创建成功，但是不能获得 IP)</p>
+                                <pre class="brush:java;">
+/** WifiManager 的 setWifiApEnabled 要使用反射才能调用 */
+public void startAp(WifiManager wifiManager, WifiConfiguration config, boolean startOrStop) {
+    try {
+        Method method = wifiManager.getClass().getMethod("setWifiApEnabled",
+                WifiConfiguration.class, boolean.class);
+        ret = (Boolean) method.invoke(wifiManager, config, startOrStop);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+private static final int WIFICIPHER_NOPASS = 0; // 无密码
+private static final int WIFICIPHER_WEP = 1; // WEP 加密
+private static final int WIFICIPHER_WPA = 2; // WPA 加密
+
+/** 创建 Ap 的 WifiConfiguration */
+public static WifiConfiguration createApConfig(String ssid, String password, int paramInt) {
+    WifiConfiguration config = new WifiConfiguration();
+    config.allowedAuthAlgorithms.clear();
+    config.allowedGroupCiphers.clear();
+    config.allowedKeyManagement.clear();
+    config.allowedPairwiseCiphers.clear();
+    config.allowedProtocols.clear();
+
+    config.SSID = ssid;
+
+    if (paramInt == WIFICIPHER_NOPASS) {
+        config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        return config;
+    }
+    if (paramInt == WIFICIPHER_WEP) {
+        config.hiddenSSID = true;
+        config.wepKeys[0] = password;
+        config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.SHARED);
+        config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP40);
+        config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.WEP104);
+        config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+        config.wepTxKeyIndex = 0;
+        return config;
+    }
+    if (paramInt == WIFICIPHER_WPA) {
+        config.preSharedKey = password;
+        config.hiddenSSID = true;
+        config.allowedAuthAlgorithms.set(WifiConfiguration.AuthAlgorithm.OPEN);
+        config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.TKIP);
+        config.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.WPA_PSK);
+        config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.TKIP);
+        // config.allowedProtocols.set(WifiConfiguration.Protocol.WPA);
+        config.allowedGroupCiphers.set(WifiConfiguration.GroupCipher.CCMP);
+        config.allowedPairwiseCiphers.set(WifiConfiguration.PairwiseCipher.CCMP);
+        config.status = WifiConfiguration.Status.ENABLED;
+        return config;
+    }
+    return null; // 返回 null，创建热点失败
+}
+                                </pre>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="android-net-ConnectivityManager"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">ConnectivityManager</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="sub-item">
+                        <pre class="brush: java;">
+java.lang.Object
+    android.net.ConnectivityManager
+
+public class ConnectivityManager {
+    public static class ConnectivityManager.NetworkCallback {}
+
+    public static interface ConnectivityManager.OnNetworkActiveListener {
+        abstract void onNetworkActive();
+    }
+}
+
+&lt;uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+&lt;uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+&lt;uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+&lt;uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+</pre>
+                        <p><a href="docs/reference/android/net/ConnectivityManager.html" target="_blank">ConnectivityManager</a> 是网络连接相关的管理器，它主要用于查询网络状态并在网络发生改变时发出状态变化通知。</p>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><a href="docs/reference/android/net/ConnectivityManager.html" target="_blank">ConnectivityManager</a> 方法：</p>
+                        <ol>
+                            <li><p><code><a href="#NetworkInfo">NetworkInfo</a> getActiveNetworkInfo()</code> -- 获取当前活跃的 NetworkInfo，没有返回 NULL</p></li>
+                            <li><p><code><a href="#NetworkInfo">NetworkInfo</a> getNetworkInfo(int networkType)</code> -- API 23 后使用下面的方法，获取特定网络类型的状态信息</p></li>
+                            <li><p><code><a href="#NetworkInfo">NetworkInfo</a> getNetworkInfo(Network network)</code> -- API 21, 获取特定网络状态信息</p></li>
+                            <li><p><code>boolean isDefaultNetworkActive()</code> -- 默认网络是否活跃</p></li>
+                            <li><p><code><a href="#Network">Network</a> getActiveNetwork()</code> -- API 23，当前的 Network</p></li>
+                            <li><p><code><a href="#Network">Network</a>[] getAllNetworks()</code> -- API 21，所有的 Networks</p></li>
+                            <li><p><code>boolean bindProcessToNetwork(<a href="#Network">Network</a> network)</code> -- API 23, 将当前进程绑定到网络</p></li>
+                            <li><p><code><a href="#Network">Network</a> getBoundNetworkForProcess()</code> -- API 23，获取当强进程绑定的网络</p></li>
+                            <li><p><code>void reportNetworkConnectivity(<a href="#Network">Network</a> network, boolean hasConnectivity)</code> -- 向 Framework 报告网络是否具有工作连通性，为系统提供了一个提示，作为回应，Framework 可能重新评估网络的连通性，并可能随后采取进一步行动。</p></li>
+                            <li><p><code>boolean requestBandwidthUpdate(<a href="#Network">Network</a> network)</code> -- 请求对一个给定的网络带宽更新,，返回是否更新请求被接受</p></li>
+                            <li><p><code>void requestNetwork(<a href="#NetworkRequest">NetworkRequest</a> request, PendingIntent operation)</code> -- 请求建立某种类型的网络</p></li>
+                            <li><p><code>void releaseNetworkRequest(PendingIntent operation)</code> -- 释放网络请求</p></li>
+                            <li><p><code>void requestNetwork(<a href="#NetworkRequest">NetworkRequest</a> request, ConnectivityManager.NetworkCallback networkCallback)</code> -- 同上，但有一个回调</p></li>
+                            <li><p><code><a href="#LinkProperties">LinkProperties</a> getLinkProperties(<a href="#Network">Network</a> network)</code> -- API 21，获取一个指定网络的属性，包括: DNSs, IPs, ROUTEs, Proxy...</p></li>
+                            <li><p><code><a href="#NetworkCapabilities">NetworkCapabilities</a> getNetworkCapabilities(<a href="#Network">Network</a> network) </code> -- API 21，获取 NetworkCapabilities</p></li>
+                            <li><p><code><a href="#ProxyInfo">ProxyInfo</a> getDefaultProxy()</code> -- 获取代理，Wifi > 高级 里面可以设置代理</p></li>
+                            <li><p><code>boolean isActiveNetworkMetered()</code> -- API 16，查询是否开启流量节省模式</p></li>
+                            <li><p><code>int getRestrictBackgroundStatus()</code> -- API 24 添加，确定后台运行时候是否受到流量限制</p>
+                            <pre class="brush: java;">
+/** 在设置中可以打开任何一个 APP，移动数据中由：后台允许使用流量和任意使用流量两个选项
+ * RESTRICT_BACKGROUND_STATUS_DISABLED -- 设备不限制计量网络活动
+ * RESTRICT_BACKGROUND_STATUS_ENABLED -- 在这种状态下，应用程序不应该在后台运行时使用网络，因为它将被拒绝
+ * RESTRICT_BACKGROUND_STATUS_WHITELISTED -- 当应用程序在后台运行时，设备限制了计量网络活动，但应用程序可以绕过它
+ *      应用程序应该采取措施减轻计量网络访问。例如，音乐流应用程序应该切换到低带宽的比特率。
+ */
+
+                            </pre>
+                            </li>
+                            <li><p><code>void addDefaultNetworkActiveListener(ConnectivityManager.OnNetworkActiveListener l) </code> -- 监听默认网络连接是否激活</p></li>
+                            <li><p><code>void removeDefaultNetworkActiveListener(ConnectivityManager.OnNetworkActiveListener l)</code> -- 移除监听</p></li>
+                            <li><p><code>void registerDefaultNetworkCallback(ConnectivityManager.NetworkCallback networkCallback) </code> -- 监听默认网络连接的状态</p></li>
+                            <li><p><code>void registerNetworkCallback(<a href="#NetworkRequest">NetworkRequest</a> request, ConnectivityManager.NetworkCallback networkCallback)</code> -- 监听某个网络请求的状态，可用时进行回调</p></li>
+                            <li><p><code>void unregisterNetworkCallback(ConnectivityManager.NetworkCallback networkCallback)</code> -- 移除监听</p></li>
+                            <li><p><code>void registerNetworkCallback(<a href="#NetworkRequest">NetworkRequest</a> request, PendingIntent operation)</code> -- 监听某个网络请求的状态</p></li>
+                            <li><p><code>void unregisterNetworkCallback(PendingIntent operation)</code> -- 移除监听</p></li>
+                        </ol>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><a href="docs/reference/android/net/ConnectivityManager.html" target="_blank">ConnectivityManager</a> 相关类：</p>
+                        <ul>
+                            <li><a class="offset" id="NetworkInfo"></a><p><a href="docs/reference/android/net/NetworkInfo.html" target="_blank">NetworkInfo</a> -- 网络状态，网络是否连接等。</p>
+                            <pre class="brush: java;">
+java.lang.Object
+    android.net.NetworkInfo
+
+public class NetworkInfo implements Parcelable {
+    public enum State {     // 状态
+        CONNECTING, CONNECTED, SUSPENDED, DISCONNECTING, DISCONNECTED, UNKNOWN
+    }
+
+    public enum DetailedState {} // 详细状态
+}
+/** getType() / getTypeName() -- 网络类型，来自 ConnectivityManager 常量，下面几种使用最多
+ *      TYPE_MOBILE -- 移动网络
+ *      TYPE_WIFI -- WIFI 网络
+ *      TYPE_VPN -- VPN 网络
+ *      TYPE_BLUETOOTH -- 蓝牙连接
+ *      TYPE_ETHERNET -- 以太网数据连接
+ *      ...
+ * getState() / getDetailedState() -- 网络状态，看两个内部枚举类
+ * getSubType() / getSybTypeName() -- 子类型，移动网络有，如：subType:13, subTypeName:LTE
+ * getExtraInfo() -- 附加信息，一般为网络的名字
+ * isConnected() -- 是否已连接
+ * isAvailable() -- 是否可达
+ * isRoaming() -- 网络漫游
+ * getReason() -- 如果数据网络连接可用，但是连接失败，可获得尝试链接失败的原因
+ */
+                            </pre>
+                            </li>
+                            <li><a class="offset" id="Network"></a><p><a href="docs/reference/android/net/Network.html" target="_blank">Network</a> -- API 21 加入的类，标识一个网络，被用来引导流量到指定的网络。</p>
+                                <pre class="brush: java;">
+Network active = cm.getActiveNetwork();
+// 多数是将 Network 当网络标识，作为参数使用
+LinkProperties properties = cm.getLinkProperties(active);
+                            </pre>
+                            </li>
+                            <li><a class="offset" id="ProxyInfo"></a><p><a href="docs/reference/android/net/ProxyInfo.html" target="_blank">ProxyInfo</a> -- 网络代理</p>
+                                <pre class="brush: java;">
+/** 三个静态构造方法，用于构造 ProxyInfo，三个参数：IP, 端口，排除列表
+ * 在设置中：WIFI > 指定 WIFI > 修改网络 > 高级选项，可看到参数的配置
+ */
+static ProxyInfo buildDirectProxy(String host, int port, List&lt;String> exclList)
+static ProxyInfo buildDirectProxy(String host, int port)
+static ProxyInfo buildPacProxy(Uri pacUri)
+
+java.net.Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("192.168.1.1", 9000));
+// OkHttp 设置代理
+OkHttpClient.Builder builder = new OkHttpClient().newBuilder();
+builder.proxy(proxy);
+
+// HttpURLConnection 设置代理
+java.net.Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("10.0.0.172", 80));
+URL url = new URL("http://www.baidu.com");
+HttpURLConnection connection = (HttpURLConnection) url.openConnection(proxy);
+                            </pre>
+                            </li>
+                            <li><a class="offset" id="LinkProperties"></a><p><a href="docs/reference/android/net/LinkProperties.html" target="_blank">LinkProperties</a> -- 只是一个网络信息的封装类，包括: DNSs, ROUTEs, IPs, Proxy...</p>
+                                <pre class="brush: java;">
+LinkProperties properties = cm.getLinkProperties(cm.getActiveNetwork());
+properties.getDnsServers();
+properties.getRoutes();
+properties.getLinkAddresses();
+properties.getDomains();
+properties.getHttpProxy();
+                            </pre>
+                            </li>
+                            <li><a class="offset" id="NetworkCapabilities"></a><p><a href="docs/reference/android/net/NetworkCapabilities.html" target="_blank">NetworkCapabilities</a> -- 表示网络功能的类，指定某种网络能力和传输类型</p>
+                                <pre class="brush: java;">
+/** 此类可查看网络类型 */
+NetworkCapabilities capabilities = cm.getNetworkCapabilities(cm.getActiveNetwork());
+/** 主要有两个方法，由很多常量，分为 CAPABILITY(网络能力) 和 TRANSPORT(传输类型) 两种：
+ * NET_CAPABILITY_CAPTIVE_PORTAL --
+ * NET_CAPABILITY_CBS -- 网络可以接收基站广播消息
+ * NET_CAPABILITY_DUN -- 网络支持拨号的方式接入
+ * NET_CAPABILITY_EIMS -- 能够到达紧急状态的 IMS 服务器或其他服务的网络
+ * NET_CAPABILITY_FOTA -- 网络可以使用 FOTA 服务器进行软件升级
+ * NET_CAPABILITY_IA -- 能够到达载波的初始附加服务器的网络
+ * NET_CAPABILITY_IMS -- 网络可以使用多媒体系统服务
+ * NET_CAPABILITY_INTERNET -- 网络支持互联网访问
+ * NET_CAPABILITY_MMS -- 表示网络可以通过 MMSC 发送 MMS（彩信）
+ * NET_CAPABILITY_NOT_METERED -- 非计量网络
+ * NET_CAPABILITY_NOT_RESTRICTED -- 不受限制的网络
+ * NET_CAPABILITY_NOT_VPN -- 非 VPN 网络
+ * NET_CAPABILITY_RCS -- 载波的 RCS 服务器，用于富通信服务
+ * NET_CAPABILITY_SUPL -- 网络可以使用基站进行辅助 GPS 定位
+ * NET_CAPABILITY_TRUSTED -- 可信任的网络
+ * NET_CAPABILITY_VALIDATED -- 网络连接被成功验证
+ * NET_CAPABILITY_WIFI_P2P -- 网络支持 WIFI 直连
+ * NET_CAPABILITY_XCAP -- 载波的 XCAP 服务器的能力，用于配置和控制
+ *
+ * TRANSPORT_BLUETOOTH -- 蓝牙传输
+ * TRANSPORT_CELLULAR -- 蜂窝网络
+ * TRANSPORT_ETHERNET -- 以太网传输
+ * TRANSPORT_VPN -- VPN 传输
+ * TRANSPORT_WIFI -- WIFI 传输
+ */
+boolean internet = capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET);
+
+boolean bluetooth = capabilities.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH);
+                            </pre>
+                            </li>
+                            <li><a class="offset" id="NetworkRequest"></a><p><a href="docs/reference/android/net/NetworkRequest.html" target="_blank">NetworkRequest</a> -- 定义一个网络请求(用内部 Builder 构造，可以指定 Capability 和 Transport)，用于请求一个网络，或者监听网络的变化。</p>
+                                <pre class="brush: java;">
+ConnectivityManager cm = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+
+/** 监听网络可用（WIFI或者移动数据）的变化 */
+NetworkRequest.Builder builder = new NetworkRequest.Builder();
+NetworkRequest request = builder
+    .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+    .addTransportType(NetworkCapabilities.TRANSPORT_WIFI) // 添加 WIFI 传输类型
+    .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR) // 添加蜂窝传输类型
+    .build();
+
+cm.requestNetwork(request, new ConnectivityManager.NetworkCallback() {
+    @Override
+    public void onAvailable(Network network) {
+        super.onAvailable(network);
+        AppUtil.logDebug("onAvailable");
+    }
+
+    @Override
+    public void onLosing(Network network, int maxMsToLive) {
+        super.onLosing(network, maxMsToLive);
+        AppUtil.logDebug("onLosing");
+    }
+
+    @Override
+    public void onLost(Network network) {
+        super.onLost(network);
+        AppUtil.logDebug("onLost");
+    }
+
+    @Override
+    public void onCapabilitiesChanged(Network network, NetworkCapabilities networkCapabilities) {
+        super.onCapabilitiesChanged(network, networkCapabilities);
+        AppUtil.logDebug("onCapabilitiesChanged");
+    }
+
+    @Override
+    public void onLinkPropertiesChanged(Network network, LinkProperties linkProperties) {
+        super.onLinkPropertiesChanged(network, linkProperties);
+        AppUtil.logDebug("onLinkPropertiesChanged");
+    }
+});
+                            </pre>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="android-net-Uri"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">android.net.Uri / java.net.URI</h3>
+                </div>
+                <div class="panel-body">
+<pre class="brush: java;">
+java.lang.Object
+    android.net.Uri
+
+public abstract class Uri implements Parcelable, Comparable&lt;Uri> {
+    public static final class Builder {}
+}
+</pre>
+                    <p><a href="docs/reference/android/net/Uri.html" target="_blank">Uri</a> 通用资源标志符。Java 也由一个 <a href="docs/reference/java/net/URI.html" target="_blank">URI</a> 类，两者差别不大。</p>
+                    <p><a href="docs/reference/java/net/URL.html" target="_blank">URL</a> 通用资源定位符。URI 是一种宽泛的含义更广的定义，而 URL 则是 URI 的一个子集，就是说 URL 是 URI 的一部分。</p>
+                    <pre class="brush: java;">
+&lt;scheme>://&lt;authority>&lt;path>?&lt;query>#&lt;fragment>
+
+content://com.example.project:8080/folder/subfolder/etc?name=bqt&age=28#android
+|------|  |------------------||---||-------------------||--------------|-------|
+ scheme           host         port         path              query     fragment
+          |-----------------------|
+                 authority
+
+/** 完整的 Uri 组成如下： */
+&lt;scheme>://&lt;user>:&lt;password>@&lt;host>:&lt;port>/&lt;path>;&lt;params>?&lt;query>#&lt;fragment>
+/** 一共由 9 个参数组成，
+ * scheme -- 获取资源使用的协议，例如http、ftp等
+ * user:password -- 用户名与密码，这个是一个特殊的存在，一般访问 ftp 时会用到
+ * host -- 主机，访问那台主机
+ * port -- 端口，访问主机时的端口
+ * path -- 路径
+ * params -- 这个很少见，主要作用就是向服务器提供额外的参数
+ * query -- 查询参数，如通过 get 方式请求的参数
+ * fragment -- 片段，比如 HTML 定义锚点
+ */
+
+String url = "content://nate:123456@lesson.com:8080/folder/subfolder/etc?name=bqt&age=28#android";
+
+/** android.net.Uri 处理，类似的: java.net.URI */
+Uri uri = Uri.parse(url);
+uri.getScheme();        // -> content
+uri.getUserInfo();      // -> nate:123456
+uri.getHost();          // -> lesson.com
+uri.getPort();          // -> 8080
+uri.getPath();          // -> /folder/subfolder/etc
+uri.getQuery();         // -> name=bqt&age=28
+uri.getFragment();      // -> android
+
+uri.getSchemeSpecificPart();    // -> nate:123456@lesson.com:8080/folder/subfolder/etc?name=bqt&age=28
+uri.getAuthority();             // -> nate:123456@lesson.com:8080
+
+/** java.net.URL 处理也差不多，但是支持的 Scheme 只有： http, https, ftp, file, jar */
+                    </pre>
+                    <p><a href="docs/reference/android/net/Uri.html" target="_blank">Uri</a> 类的 API:</p>
+                    <ol>
+                        <li><p><code>static Uri parse(String uriString)</code> -- 从 String 得到一个 Uri 实例.</p></li>
+                        <li><p><code>static String encode(String s)</code> -- 进行 Uri 编码</p></li>
+                        <li><p><code>static String encode(String s, String allow)</code> -- Uri 编码时排除 allow 中的字符</p></li>
+                        <li><p><code>static String decode(String s)</code> -- 进行 Uri 反编码</p></li>
+                        <li><p><code>boolean isAbsolute()</code> -- 是否为绝对 Uri(以 Scheme 开头)</p></li>
+                        <li><p><code>abstract boolean isRelative()</code> -- 是否为相对 Uri</p></li>
+                        <li><p><code>boolean isOpaque()</code> -- SchemeSpecificPart 部分不以 ‘/’ 开头</p></li>
+                        <li><p><code>abstract boolean isHierarchical()</code> -- SchemeSpecificPart 部分以 ‘/’ 开头</p></li>
+                        <li><p><code>String getQueryParameter(String key)</code> -- 查询 Query 部分参数</p></li>
+                        <li><p><code>List&lt;String> getQueryParameters(String key)</code> -- 查询 Query 部分参数列表</p></li>
+                        <li><p><code>boolean getBooleanQueryParameter(String key, boolean defaultValue)</code> -- 查询 boolean 类型参数，没有返回默认值</p></li>
+                    </ol>
                 </div>
             </div>
             <!-- item over -->
