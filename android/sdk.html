@@ -137,6 +137,7 @@
                         <a href="#android-net-wifi-WifiManager"
                            class="list-group-item">WifiManager 及相关类</a>
                         <a href="#android-net-wifi-WifiConfiguration" class="list-group-item">WifiConfiguration</a>
+                        <a href="#android-net-wifi-p2p-WifiP2pManager" class="list-group-item">WifiP2pManager 及相关类</a>
                         <a href="#android-net-ConnectivityManager" class="list-group-item">ConnectivityManager
                             及相关类</a>
                         <a href="#android-net-Uri" class="list-group-item">Uri</a>
@@ -3875,6 +3876,328 @@ public static WifiConfiguration createApConfig(String ssid, String password, int
     return null; // 返回 null，创建热点失败
 }
                                 </pre>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="android-net-wifi-p2p-WifiP2pManager"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">WifiP2pManager</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="sub-item">
+                    <pre class="brush: java;">
+java.lang.Object
+    android.net.wifi.p2p.WifiP2pManager
+
+public class WifiP2pManager {
+    // P2P 使用的通道，多数 P2P 操作都需要一个通道作为参数
+    public static class WifiP2pManager.Channel {}
+    // P2P 连接回调接口
+    public static interface WifiP2pManager.ActionListener {
+        public void onSuccess();
+        // reason: BUSY(繁忙), ERROR(错误), P2P_UNSUPPORTED(不支持), NO_SERVICE_REQUESTS(无服务)
+        public void onFailure(int reason);
+    }
+    // P2P 通道丢失的监听接口
+    public static interface WifiP2pManager.ChannelListener {
+        public void onChannelDisconnected();
+    }
+    // P2P 当连接信息可用时进行回调的接口
+    public static interface WifiP2pManager.ConnectionInfoListener {
+        public void onConnectionInfoAvailable(WifiP2pInfo info);
+    }
+    // 发现 Upnp 或 DnsSd 响应时回调
+    public static interface WifiP2pManager.ServiceResponseListener {
+        public void onServiceAvailable(int protocolType, byte[] responseData, WifiP2pDevice srcDevice);
+    }
+    // Upnp 服务可达时响应接口
+    public static interface WifiP2pManager.UpnpServiceResponseListener {
+        public void onUpnpServiceAvailable(List&lt;String> uniqueServiceNames, WifiP2pDevice srcDevice);
+    }
+    // DnsSd 服务可达时响应接口
+    public static interface WifiP2pManager.DnsSdServiceResponseListener {
+        public void onDnsSdServiceAvailable(String instanceName,
+                        String registrationType, WifiP2pDevice srcDevice);
+    }
+    // DnsSd
+    public static interface WifiP2pManager.DnsSdTxtRecordListener {
+        public void onDnsSdTxtRecordAvailable(String fullDomainName,
+                Map&lt;String, String> txtRecordMap, WifiP2pDevice srcDevice);
+    }
+    // 组信息(相当于AP)可达时回调
+    public static interface WifiP2pManager.GroupInfoListener {
+        public void onGroupInfoAvailable(WifiP2pGroup group);
+    }
+    // 接受到 P2P 设备成员列表时回调
+    public static interface WifiP2pManager.PeerListListener {
+        public void onPeersAvailable(WifiP2pDeviceList peers);
+    }
+}
+                    </pre>
+                        <p>WiFi P2P/ Wi-Fi Direct 是 Wi-Fi 联盟推出的在没有 AP 的情况下设备相互连接的技术规范。</p>
+                        <p>真实处理的是系统服务中的 <code>WifiP2pService</code> 类。</p>
+                        <p>WiFi P2P/ Wi-Fi Direct 可以支持一对一直连，也可以实现多台设备同时连接。</p>
+                        <p>P2P 架构中定义了三个组件:</p>
+                        <ul>
+                            <li><p><b>P2P Device</b> -- P2P 设备，组建 P2P Group 之前， 智能终端都是 P2P Device；</p></li>
+                            <li><p><b>P2P Group Owner(GO)</b> -- 组拥有者，当这些 P2P Device 设备之间完成 P2P 协商后， 其中将有一个并且只能有一个 Device 来扮演 Owner 的角色，相当于 AP；</p></li>
+                            <li><p><b>P2P Client(GC)</b> -- 客户端，P2P Group 中的所有设备，除去 P2P Group Owner，而其他 Device 来扮演 Client 的角色。</p></li>
+                        </ul>
+                        <pre class="brush: java;">
+1.如何确定谁是 GO,谁是 GC ?
+GO 还是 GC 的身份是随机的。可以使用 P2pConfig 的 groupOwnerIntent 做建议
+
+2.如果一定要确定谁是 GO，谁是 GC，怎么办?
+GO 端先调用 WifiP2pManger.createGroup() 方法
+
+3.如何断开连接？
+WifiP2pManger.removeGroup() 是移除 Group，断开连接。
+WifiP2pManger.cancelConnect() 断开一个正在进行的连接。
+
+4.那么如何保证本机一直处于搜索状态呢？
+一般情况下，本机 Scan 一次，能够保持在线状态为几十秒到几分钟不等，取决于手机性能或者 WIFI 芯片；
+如果保证一直处于搜索状态，方案就是如果搜索结束，就重启一次搜索。
+
+5.如何把一个文件非常方便的发送给多个设备？
+发送方做 GO，接收方全部做 GC，即可。
+
+6.如何进行 Socket 通信？
+因为 GC 可以知道 GO 的地址，而 GO 是不知道 GC 的地址的。
+一般的 Socket 编程思路是，GO 做 Server 端，GC 做 Client 端。
+                        </pre>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><b><a href="docs/reference/android/net/wifi/p2p/WifiP2pManager.html" target="_blank">WifiP2pManager</a> 基础 API:</b></p>
+                        <ol>
+                            <li><p><code>WifiP2pManager.Channel initialize(Context srcContext, Looper srcLooper, WifiP2pManager.ChannelListener listener)</code> -- 通过 Wi-Fi 框架对应用来进行注册</p></li>
+                            <li><p><code>void discoverPeers(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- 初始化对等设备的发现</p></li>
+                            <li><p><code>void stopPeerDiscovery(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- 停止对等设备的发现</p></li>
+                            <li><p><code>void requestPeers(WifiP2pManager.Channel c, WifiP2pManager.PeerListListener listener)</code> -- 获取当前发现的对等设备列表</p></li>
+
+                            <li><p><code>void connect(WifiP2pManager.Channel c, WifiP2pConfig config, WifiP2pManager.ActionListener listener)</code> -- 连接一个设备</p></li>
+                            <li><p><code>void cancelConnect(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- 取消一个正在进行的连接</p></li>
+
+                            <li><p><code>void requestConnectionInfo(WifiP2pManager.Channel c, WifiP2pManager.ConnectionInfoListener listener)</code> -- 获取连接信息，连接成功后才能获取到</p></li>
+                            <li><p><code>void requestGroupInfo(WifiP2pManager.Channel c, WifiP2pManager.GroupInfoListener listener)</code> -- 获取连接组信息</p></li>
+
+                            <li><p><code>void createGroup(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- 以当前设备为组拥有者来创建一个点对点连接组</p></li>
+                            <li><p><code>void removeGroup(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- 移除当前的点对点连接组</p></li>
+                        </ol>
+                        <pre class="brush: java;">
+WifiP2pManager wm = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
+
+/** 1.先注册一个关般处理事件 */
+BroadcastReceiver directReceiver = new BroadcastReceiver() {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        String action = intent.getAction();
+        if(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION.equals(action)) {
+            AppUtil.logDebug("WIFI_P2P_STATE_CHANGED_ACTION" + intent.getExtras());
+            int state = intent.getIntExtra(WifiP2pManager.EXTRA_WIFI_STATE, -1);
+            if (state == WifiP2pManager.WIFI_P2P_STATE_ENABLED) {
+                AppUtil.logDebug("WIFI_P2P_STATE_ENABLED");
+            } else {
+                AppUtil.logDebug("WIFI_P2P_STATE_DISABLED");
+            }
+        }
+        if(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION.equals(action)) {
+            AppUtil.logDebug("WIFI_P2P_PEERS_CHANGED_ACTION" + intent.getExtras());
+        }
+        if(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION.equals(action)) {
+            if (wm == null) { return; }
+            NetworkInfo networkInfo = intent.getParcelableExtra(WifiP2pManager.EXTRA_NETWORK_INFO);
+            if (networkInfo.isConnected()) { // 连接成功，在这里获取到 GO 的信息
+                wm.requestConnectionInfo(mChannel, new WifiP2pManager.ConnectionInfoListener() {
+                    @Override
+                    public void onConnectionInfoAvailable(WifiP2pInfo info) {
+                        AppUtil.logDebug("info:"+info.toString());
+                    }
+                });
+            } else {
+
+            }
+        }
+        if(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION.equals(action)) {
+            AppUtil.logDebug("WIFI_P2P_THIS_DEVICE_CHANGED_ACTION" + intent.getExtras());
+        }
+    }
+};
+
+IntentFilter filter = new IntentFilter();
+// 当设备的 Wifi 直连功能打开或关闭时进行广播
+filter.addAction(WifiP2pManager.WIFI_P2P_STATE_CHANGED_ACTION);
+// 当调用 discoverPeers() 方法的时候进行广播
+filter.addAction(WifiP2pManager.WIFI_P2P_PEERS_CHANGED_ACTION);
+// 当设备的 Wi-Fi P2P 连接信息状态改变时候进行广播
+filter.addAction(WifiP2pManager.WIFI_P2P_CONNECTION_CHANGED_ACTION);
+// 当当前设备的详细信息改变的时候进行广播
+filter.addAction(WifiP2pManager.WIFI_P2P_THIS_DEVICE_CHANGED_ACTION);
+
+registerReceiver(directReceiver, filter);
+
+/** 2.通过 Wi-Fi 框架对应用来进行注册，得到 Channel */
+Channel mChannel = wm.initialize(MainActivity.this, getMainLooper(),
+                            new WifiP2pManager.ChannelListener() {
+    @Override
+    public void onChannelDisconnected() {
+        AppUtil.logDebug("== onChannelDisconnected == ");
+    }
+});
+
+/** 3.初始化对等设备的发现 */
+wm.discoverPeers(mChannel, new WifiP2pManager.ActionListener() {
+    @Override
+    public void onSuccess() {
+        // 也会触发这个广播 Action: WIFI_P2P_PEERS_CHANGED_ACTION
+        text.setText("发现成功！");
+    }
+
+    @Override
+    public void onFailure(int reason) {
+        AppUtil.logDebug("onFailure(" + reason + ")");
+    }
+});
+
+/** 4.获取当前发现的对等设备列表 */
+wm.requestPeers(mChannel, new WifiP2pManager.PeerListListener() {
+    @Override
+    public void onPeersAvailable(WifiP2pDeviceList peers) {
+        for (WifiP2pDevice wifiP2pDevice : peers.getDeviceList()) {
+            mWifiP2pDevice = wifiP2pDevice;
+            AppUtil.logDebug(wifiP2pDevice.toString());
+        }
+    }
+});
+
+/** 5.连接到一个指定的对等设备 */
+WifiP2pConfig config = new WifiP2pConfig();
+config.deviceAddress = mWifiP2pDevice.deviceAddress;
+wm.connect(mChannel, config, new WifiP2pManager.ActionListener() {
+    @Override
+    public void onSuccess() {
+        text.setText("连接成功！");
+    }
+
+    @Override
+    public void onFailure(int reason) {
+        AppUtil.logDebug("content:onFailure(" + reason + ")");
+    }
+});
+
+/** 6.连接成功后可以传输数据，不论是使用 Socket, Http 等
+ * WiFi Direct 连接成功后，可以接受到广播，调用：
+ * requestConnectionInfo 方法，得到 Group Owner 的 IP 等信息
+ * 注意：Client 可以知道 Group Owner 的地址；反过来不行；
+ * 因此，Socket 变成时，Group Owner 为 ServerSocket
+ */
+</pre>
+                        <p><b><a href="docs/reference/android/net/wifi/p2p/WifiP2pManager.html" target="_blank">WifiP2pManager</a> API -- Service Discovery 搜索特定网络设备的搜索方式：</b></p>
+                        <p>在进行 Wifi Direct 搜索时，会搜索到到附近所有处于 Wifi Direct 搜索状态的网络设备，而这些设备中不一定都是你想进行连接的。</p>
+                        <p>Android WifiDirect API 提供了一个仅搜索特定网络设备的搜索方式，叫做 <b>Service Discovery</b>，它 是Wi-Fi Direct API 在 Android 4.1 中被增强以支持在 WifiP2pManager 中的预先关联服务发现。这允许在连接之前使用 Wi-Fi Direct 通过服务(Service)发现和筛选周围的设备。</p>
+                        <p>Android 已经提供了两种 Service，一种是 <b>Bonjour Service</b>，一种是 <b>Upnp Service</b>，开发者也可以自己设计一套 Service，一般情况下，这两种 Service 已经足够用了。</p>
+                        <p><b>Service Discovery 基本使用方法:</b></p>
+                            <p>为了广播你的应用作为一个 Wi-Fi 上的服务，以便于其他设备能够发现并连接你的应用，需要调用 <code>addLocalService()</code> 方法并传输一个 <code>WifiP2pServiceInfo</code> 对象。这个对象描述了你的应用服务。</p>
+                        <p>为了通过 Wi-Fi 开始发现附近的设备，首先你应当决定使用 <b>Bonjour Service</b> 还是 <b>Upnp Service</b> 实现通信。如果使用 <b>Bonjour</b>，首先要用 <code>setDnsSdResponseListeners()</code> 设置好一些回调监听器，这个方法需要 <code>WifiP2pManager.DnsSdServiceResponseListener</code> 和 <code>DnsSdTxtRecordListener</code> 两个作参数；如果使用 <b>Upnp</b>，则要调用 <code>setUpnpServiceResponseListener()</code>，这个方法需要 <code>UpnpServiceResponseListener</code> 作为参数。</p>
+                        <p>在你开始发现本地设备上的服务之前，你也需要调用 <code>addServiceRequest()</code> 方法。当你传递给这个方法的接口 <code>ActionListener</code> 收到一个成功的回调，接着你可以通过调用 <code>discoverServices()</code> 开始探索在本地设备上的服务。</p>
+                        <p>当本地服务被发现，你会收到一个回调，来自 <code>WifiP2pManager.DnsSdServiceResponseListener</code> 或者 <code>WifiP2pManager.UpnpServiceResponseListener</code>，这个取决于你注册使用的是 <b>Bonjour</b> 还是 <b>Upnp</b>。收到的回调都会包含一个 <code>WifiP2pDevice</code> 对象，代表了对应的设备。</p>
+                        <ol start="11">
+                            <li><p><code>void setServiceResponseListener(WifiP2pManager.Channel c, WifiP2pManager.ServiceResponseListener listener)</code> -- </p></li>
+                            <li><p><code>void setUpnpServiceResponseListener(WifiP2pManager.Channel c, WifiP2pManager.UpnpServiceResponseListener listener)</code> -- </p></li>
+                            <li><p><code>void setDnsSdResponseListeners(WifiP2pManager.Channel c, WifiP2pManager.DnsSdServiceResponseListener servListener, WifiP2pManager.DnsSdTxtRecordListener txtListener)</code> -- </p></li>
+
+                            <li><p><code>void discoverServices(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- </p></li>
+                            <li><p><code>void addServiceRequest(WifiP2pManager.Channel c, WifiP2pServiceRequest req, WifiP2pManager.ActionListener listener)</code> -- </p></li>
+                            <li><p><code>void removeServiceRequest(WifiP2pManager.Channel c, WifiP2pServiceRequest req, WifiP2pManager.ActionListener listener)</code> -- </p></li>
+                            <li><p><code>void clearServiceRequests(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- </p></li>
+
+                            <li><p><code>void addLocalService(WifiP2pManager.Channel c, WifiP2pServiceInfo servInfo, WifiP2pManager.ActionListener listener)</code> -- </p></li>
+                            <li><p><code>void removeLocalService(WifiP2pManager.Channel c, WifiP2pServiceInfo servInfo, WifiP2pManager.ActionListener listener)</code> -- </p></li>
+                            <li><p><code>void clearLocalServices(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- </p></li>
+                        </ol>
+
+                    </div>
+
+                    <div class="sub-item">
+                        <p><a href="">WifiP2pManager</a> 相关类:</p>
+                        <ul>
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/WifiP2pDevice.html" target="_blank">WifiP2pDevice</a> -- 表示 Wifi Direct 框架中的 设备，在获取当前发现的对等设备列表时，回调接口返回 Device 列表</p>
+                                <pre class="brush: java;">
+/** 主要有以下属性和方法:
+ * deviceAddress -- 设备的 MAC 地址
+ * deviceName -- P2P 设备名
+ * primaryDeviceType -- 主设备类型标识设备的类型
+ * status -- 状态， 有：AVAILABLE，CONNECTED，FAILED， INVITED， UNAVAILABLE
+ * isGroupOwner() -- 是否为 GO
+ * isServiceDiscoveryCapable() -- 是否有 Service Discovery 能力
+ */
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/WifiP2pDeviceList.html" target="_blank">WifiP2pDeviceList</a> -- 存储 WifiP2pDevice 列表，多数方法为 <code>@hide</code></p>
+                                <pre class="brush: java;">
+/** 公有方法只有这两个 */
+WifiP2pDevice get(String deviceAddress) -- 使用 deviceAddress 查找指定的 WifiP2pDevice
+Collection&lt;WifiP2pDevice> getDeviceList() -- 获取 WifiP2pDevice 列表
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/WifiP2pInfo.html" target="_blank">WifiP2pInfo</a> -- 只有三个字段，连接成功后，调用 <code>requestConnectionInfo</code> 方法，可以拿到 GO 的地址</p>
+                                <pre class="brush: java;">
+boolean groupFormed -- P2P 是否已经形成
+boolean isGroupOwner -- 是否为 Group Owner
+InetAddress groupOwnerAddress -- GO 的地址
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/WifiP2pGroup.html" target="_blank">WifiP2pGroup</a> -- 表示 Wi-Fi P2P 组的类，连接成功后，调用 <code>requestGroupInfo</code> 方法，获取组信息。P2P 组由单个组所有者和一个或多个客户机组成。</p>
+                                <pre class="brush: java;">
+String getNetworkName() -- P2P 组名，一般由 GO 自动生成
+boolean isGroupOwner() -- 是否为 GO
+WifiP2pDevice getOwner() -- 获取 GO
+Collection&lt;WifiP2pDevice> getClientList() -- 获取所有 GX 列表
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/WifiP2pConfig.html" target="_blank">WifiP2pConfig</a> -- 配置连接，<code>connect</code> 方法需要它作参数，并指定 deviceAddress</p>
+                            <pre class="brush: java;">
+String deviceAddress -- 指定要连接的设备 Mac 地址
+int groupOwnerIntent -- 表示建议做 GO 的倾向，0-15，值越大，越建议做 GO
+WpsInfo wps -- WPS 配置
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pServiceRequest.html" target="_blank">WifiP2pServiceRequest</a> -- </p>
+                                <pre class="brush: java;">
+
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pServiceInfo.html" target="_blank">WifiP2pServiceInfo</a> -- </p>
+                                <pre class="brush: java;">
+
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pUpnpServiceRequest.html" target="_blank">WifiP2pUpnpServiceRequest</a> -- </p>
+                                <pre class="brush: java;">
+
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pUpnpServiceInfo.html" target="_blank">WifiP2pUpnpServiceInfo</a> -- </p>
+                                <pre class="brush: java;">
+
+                            </pre>
+                            </li>
+
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pDnsSdServiceRequest.html" target="_blank">WifiP2pDnsSdServiceRequest</a> -- </p>
+                                <pre class="brush: java;">
+
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pDnsSdServiceInfo.html" target="_blank">WifiP2pDnsSdServiceInfo</a> -- </p>
+                                <pre class="brush: java;">
+
+                            </pre>
                             </li>
                         </ul>
                     </div>
