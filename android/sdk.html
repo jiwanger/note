@@ -3898,43 +3898,44 @@ java.lang.Object
 public class WifiP2pManager {
     // P2P 使用的通道，多数 P2P 操作都需要一个通道作为参数
     public static class WifiP2pManager.Channel {}
-    // P2P 连接回调接口
+    // P2P 连接回调接口，这个很多方法都要用到，主要返回操作是否成功
     public static interface WifiP2pManager.ActionListener {
         public void onSuccess();
         // reason: BUSY(繁忙), ERROR(错误), P2P_UNSUPPORTED(不支持), NO_SERVICE_REQUESTS(无服务)
         public void onFailure(int reason);
     }
-    // P2P 通道丢失的监听接口
+    // P2P 通道丢失的监听接口，initialize 方法使用
     public static interface WifiP2pManager.ChannelListener {
         public void onChannelDisconnected();
     }
-    // P2P 当连接信息可用时进行回调的接口
-    public static interface WifiP2pManager.ConnectionInfoListener {
-        public void onConnectionInfoAvailable(WifiP2pInfo info);
-    }
-    // 发现 Upnp 或 DnsSd 响应时回调
-    public static interface WifiP2pManager.ServiceResponseListener {
-        public void onServiceAvailable(int protocolType, byte[] responseData, WifiP2pDevice srcDevice);
-    }
-    // Upnp 服务可达时响应接口
+    // Upnp 服务可达时响应接口， setUpnpServiceResponseListener 方法使用
     public static interface WifiP2pManager.UpnpServiceResponseListener {
         public void onUpnpServiceAvailable(List&lt;String> uniqueServiceNames, WifiP2pDevice srcDevice);
     }
-    // DnsSd 服务可达时响应接口
+    // DnsSd 服务可达时响应接口，setDnsSdResponseListeners 方法使用
     public static interface WifiP2pManager.DnsSdServiceResponseListener {
         public void onDnsSdServiceAvailable(String instanceName,
                         String registrationType, WifiP2pDevice srcDevice);
     }
-    // DnsSd
+    // DnsSd 回调传输数据的接口，setDnsSdResponseListeners 方法使用
     public static interface WifiP2pManager.DnsSdTxtRecordListener {
         public void onDnsSdTxtRecordAvailable(String fullDomainName,
                 Map&lt;String, String> txtRecordMap, WifiP2pDevice srcDevice);
     }
-    // 组信息(相当于AP)可达时回调
+    // 这个为不使用 upnp 和 dnssd 协议响应回调，主要是第三方
+    public static interface WifiP2pManager.ServiceResponseListener {
+        public void onServiceAvailable(int protocolType, byte[] responseData, WifiP2pDevice srcDevice);
+    }
+
+    // P2P 当连接信息可用时进行回调的接口，requestConnectionInfo 方法使用
+    public static interface WifiP2pManager.ConnectionInfoListener {
+        public void onConnectionInfoAvailable(WifiP2pInfo info);
+    }
+    // 组信息(相当于AP)回调，requestGroupInfo 方法使用
     public static interface WifiP2pManager.GroupInfoListener {
         public void onGroupInfoAvailable(WifiP2pGroup group);
     }
-    // 接受到 P2P 设备成员列表时回调
+    // 接受到 P2P 设备成员列表时回调，requestPeers 方法使用
     public static interface WifiP2pManager.PeerListListener {
         public void onPeersAvailable(WifiP2pDeviceList peers);
     }
@@ -3993,7 +3994,7 @@ WifiP2pManger.cancelConnect() 断开一个正在进行的连接。
                         <pre class="brush: java;">
 WifiP2pManager wm = (WifiP2pManager) getSystemService(Context.WIFI_P2P_SERVICE);
 
-/** 1.先注册一个关般处理事件 */
+/** 1.先注册一个广播处理事件 */
 BroadcastReceiver directReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -4108,20 +4109,96 @@ wm.connect(mChannel, config, new WifiP2pManager.ActionListener() {
                         <p>在你开始发现本地设备上的服务之前，你也需要调用 <code>addServiceRequest()</code> 方法。当你传递给这个方法的接口 <code>ActionListener</code> 收到一个成功的回调，接着你可以通过调用 <code>discoverServices()</code> 开始探索在本地设备上的服务。</p>
                         <p>当本地服务被发现，你会收到一个回调，来自 <code>WifiP2pManager.DnsSdServiceResponseListener</code> 或者 <code>WifiP2pManager.UpnpServiceResponseListener</code>，这个取决于你注册使用的是 <b>Bonjour</b> 还是 <b>Upnp</b>。收到的回调都会包含一个 <code>WifiP2pDevice</code> 对象，代表了对应的设备。</p>
                         <ol start="11">
-                            <li><p><code>void setServiceResponseListener(WifiP2pManager.Channel c, WifiP2pManager.ServiceResponseListener listener)</code> -- </p></li>
-                            <li><p><code>void setUpnpServiceResponseListener(WifiP2pManager.Channel c, WifiP2pManager.UpnpServiceResponseListener listener)</code> -- </p></li>
-                            <li><p><code>void setDnsSdResponseListeners(WifiP2pManager.Channel c, WifiP2pManager.DnsSdServiceResponseListener servListener, WifiP2pManager.DnsSdTxtRecordListener txtListener)</code> -- </p></li>
+                            <li><p><code>void addLocalService(WifiP2pManager.Channel c, WifiP2pServiceInfo servInfo, WifiP2pManager.ActionListener listener)</code> -- 向 Service Discovery 注册一个本地服务</p></li>
+                            <li><p><code>void removeLocalService(WifiP2pManager.Channel c, WifiP2pServiceInfo servInfo, WifiP2pManager.ActionListener listener)</code> -- 移除 servInfo 指定的本地服务</p></li>
+                            <li><p><code>void clearLocalServices(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- 清除 Channel 所有的的本地服务</p></li>
 
-                            <li><p><code>void discoverServices(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- </p></li>
-                            <li><p><code>void addServiceRequest(WifiP2pManager.Channel c, WifiP2pServiceRequest req, WifiP2pManager.ActionListener listener)</code> -- </p></li>
-                            <li><p><code>void removeServiceRequest(WifiP2pManager.Channel c, WifiP2pServiceRequest req, WifiP2pManager.ActionListener listener)</code> -- </p></li>
-                            <li><p><code>void clearServiceRequests(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- </p></li>
+                            <li class="group"><p><code>void discoverServices(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- 初始化 Service Discovery</p></li>
 
-                            <li><p><code>void addLocalService(WifiP2pManager.Channel c, WifiP2pServiceInfo servInfo, WifiP2pManager.ActionListener listener)</code> -- </p></li>
-                            <li><p><code>void removeLocalService(WifiP2pManager.Channel c, WifiP2pServiceInfo servInfo, WifiP2pManager.ActionListener listener)</code> -- </p></li>
-                            <li><p><code>void clearLocalServices(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- </p></li>
+                            <li class="group"><p><code>void addServiceRequest(WifiP2pManager.Channel c, WifiP2pServiceRequest req, WifiP2pManager.ActionListener listener)</code> -- 添加服务请求</p></li>
+                            <li><p><code>void removeServiceRequest(WifiP2pManager.Channel c, WifiP2pServiceRequest req, WifiP2pManager.ActionListener listener)</code> -- 移除服务请求</p></li>
+                            <li><p><code>void clearServiceRequests(WifiP2pManager.Channel c, WifiP2pManager.ActionListener listener)</code> -- 清除所有注册的服务请求</p></li>
+
+                            <li class="group"><p><code>void setServiceResponseListener(WifiP2pManager.Channel c, WifiP2pManager.ServiceResponseListener listener)</code> -- 设置服务响应监听</p></li>
+                            <li><p><code>void setUpnpServiceResponseListener(WifiP2pManager.Channel c, WifiP2pManager.UpnpServiceResponseListener listener)</code> -- 设置 Upnp 服务响应监听</p></li>
+                            <li><p><code>void setDnsSdResponseListeners(WifiP2pManager.Channel c, WifiP2pManager.DnsSdServiceResponseListener servListener, WifiP2pManager.DnsSdTxtRecordListener txtListener)</code> -- 设置 Bonjour 服务响应监听</p></li>
                         </ol>
+<pre class="brush: java;">
+/** 连接到一个指定的服务，关键在第三步，可以发现服务是否为想要连接的，并返回了 P2pDevice */
 
+// 1.设备-A: 通过 Wi-Fi 框架对应用来进行注册
+mChannel = wm.initialize(MainActivity.this, getMainLooper(), new WifiP2pManager.ChannelListener() {
+    @Override
+    public void onChannelDisconnected() {
+        AppUtil.logDebug("== onChannelDisconnected == ");
+    }
+});
+
+// 2.设备-A: 向 Service Discovery 注册一个本地服务
+Map&lt;String, String> map = new HashMap<>();
+map.put("ip", "192.168.1.100");
+map.put("port", "1028");
+info = WifiP2pDnsSdServiceInfo.newInstance("nate", "_presence._tcp", map);
+wm.addLocalService(mChannel, info, new WifiP2pManager.ActionListener() {
+    @Override
+    public void onSuccess() {
+        AppUtil.logDebug("=== addLocalService:onSuccess ===");
+    }
+
+    @Override
+    public void onFailure(int reason) {
+        AppUtil.logDebug("=== addLocalService:onFailure(" + reason + ") ===");
+    }
+});
+
+// 3.设备-B: 注册响应回调，这之前，也要通过 Wi-Fi 框架对应用来进行注册
+wm.setDnsSdResponseListeners(mChannel, new WifiP2pManager.DnsSdServiceResponseListener() {
+    @Override
+    public void onDnsSdServiceAvailable(String instanceName, String registrationType,
+                                        WifiP2pDevice srcDevice) {
+        /** instanceName -- 第二部中的 'nate'
+         * registrationType -- 也是第二部加了个后缀 '_presence._tcp.local.'
+         * srcDevice -- 设备
+         */
+    }
+}, new WifiP2pManager.DnsSdTxtRecordListener() {
+    @Override
+    public void onDnsSdTxtRecordAvailable(String fullDomainName, Map&lt;String, String> txtRecordMap,
+                                          WifiP2pDevice srcDevice) {
+        /** fullDomainName -- 'nate._presence._tcp.local.'
+         * txtRecordMap -- 第二步中的 map: '{ip=192.168.1.100, port=1028}'
+         * srcDevice -- 设备
+         */
+    }
+});
+
+// 4.设备-B: 创建服务请求
+req = WifiP2pDnsSdServiceRequest.newInstance();
+wm.addServiceRequest(mChannel, req, new WifiP2pManager.ActionListener() {
+    @Override
+    public void onSuccess() {
+        AppUtil.logDebug("=== addServiceRequest:onSuccess ===");
+    }
+
+    @Override
+    public void onFailure(int reason) {
+        AppUtil.logDebug("=== addServiceRequest:onFailure(" + reason + ") ===");
+    }
+});
+
+// 5.设备-B: 寻找服务
+wm.discoverServices(mChannel, new WifiP2pManager.ActionListener() {
+    @Override
+    public void onSuccess() {
+        AppUtil.logDebug("=== discoverServices:onSuccess ===");
+    }
+
+    @Override
+    public void onFailure(int reason) {
+        AppUtil.logDebug("=== discoverServices:onFailure(" + reason + ") ===");
+    }
+});
+</pre>
                     </div>
 
                     <div class="sub-item">
@@ -4168,37 +4245,51 @@ int groupOwnerIntent -- 表示建议做 GO 的倾向，0-15，值越大，越建
 WpsInfo wps -- WPS 配置
                             </pre>
                             </li>
-                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pServiceRequest.html" target="_blank">WifiP2pServiceRequest</a> -- </p>
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pServiceInfo.html" target="_blank">WifiP2pServiceInfo</a> -- 请求服务的信息，具体看两个子类：<a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pUpnpServiceInfo.html" target="_blank">WifiP2pUpnpServiceInfo</a> 和 <a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pDnsSdServiceInfo.html" target="_blank">WifiP2pDnsSdServiceInfo</a></p>
                                 <pre class="brush: java;">
+/** 此类本身只有几个常量，表示服务的类型：
+ * int SERVICE_TYPE_ALL -- 所有协议
+ * int SERVICE_TYPE_BONJOUR -- 基于 DNS 的服务发现协议
+ * int SERVICE_TYPE_UPNP -- UPnP 协议
+ * int SERVICE_TYPE_VENDOR_SPECIFIC -- 供应商特定的协议
+ */
+
+/** 两个子类各有一个静态构造方法:
+ **** WifiP2pUpnpServiceInfo 构造方法:
+ * WifiP2pUpnpServiceInfo newInstance(String uuid, String device, List&lt;String> services)
+ *
+ **** WifiP2pDnsSdServiceInfo 构造方法:
+ *     instanceName：服务的实例名称
+ *     serviceType：服务的类型，这个好像可以自定义，反正我用的是自己定义的名称
+ *     txtMap：服务携带的信息，在被发现的时候可以由对方获取，很有用！比如讲 IP 和端口 附加到 txtMap 中
+ * WifiP2pDnsSdServiceInfo newInstance(String instanceName, String type, Map&lt;String, String> txtMap)
+ */
 
                             </pre>
                             </li>
-                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pServiceInfo.html" target="_blank">WifiP2pServiceInfo</a> -- </p>
+                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pServiceRequest.html" target="_blank">WifiP2pServiceRequest</a> -- 服务发现请求，具体看两个子类：<a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pUpnpServiceRequest.html" target="_blank">WifiP2pUpnpServiceRequest</a> 和 <a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pDnsSdServiceRequest.html" target="_blank">WifiP2pDnsSdServiceRequest</a></p>
                                 <pre class="brush: java;">
+/** 此类本身只有两个静态构造方法：
+ **** 类型为: SERVICE_TYPE_ALL 或 SERVICE_TYPE_VENDOR_SPECIFIC, 否则使用其子类
+ * static WifiP2pServiceRequest newInstance(int protocolType)
+ **** queryData 可为 null, 否则为供应商特别指定的值
+ * static WifiP2pServiceRequest newInstance(int protocolType, String queryData)
+ */
 
+/** 两个子类也只有静态构造方法:
+ **** WifiP2pDnsSdServiceRequest 构造方法：
+ * static WifiP2pDnsSdServiceRequest newInstance()
+ * static WifiP2pDnsSdServiceRequest newInstance(String serviceType)
+ * static WifiP2pDnsSdServiceRequest newInstance(String instanceName, String serviceType)
+ *
+ **** WifiP2pUpnpServiceRequest 构造方法：
+ * static WifiP2pUpnpServiceRequest newInstance()
+ * static WifiP2pUpnpServiceRequest newInstance(String st)
+ */
                             </pre>
                             </li>
-                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pUpnpServiceRequest.html" target="_blank">WifiP2pUpnpServiceRequest</a> -- </p>
-                                <pre class="brush: java;">
 
-                            </pre>
-                            </li>
-                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pUpnpServiceInfo.html" target="_blank">WifiP2pUpnpServiceInfo</a> -- </p>
-                                <pre class="brush: java;">
 
-                            </pre>
-                            </li>
-
-                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pDnsSdServiceRequest.html" target="_blank">WifiP2pDnsSdServiceRequest</a> -- </p>
-                                <pre class="brush: java;">
-
-                            </pre>
-                            </li>
-                            <li><p><a href="docs/reference/android/net/wifi/p2p/nsd/WifiP2pDnsSdServiceInfo.html" target="_blank">WifiP2pDnsSdServiceInfo</a> -- </p>
-                                <pre class="brush: java;">
-
-                            </pre>
-                            </li>
                         </ul>
                     </div>
                 </div>
