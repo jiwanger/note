@@ -1167,6 +1167,22 @@ $ myemulator -kernel ./prebuilt/android-arm/kernel/kernel-qemu \
 	-ramdisk ./out/target/product/generic/ramdisk.img
 </pre>
 								</li>
+                                <li>
+                            android-7.0.0_r3 编译(先下载源码，和前面 android-2.3.1_r1 一样) 
+<pre class="brush: bash;">
+$ cd android-7.0.0_r3
+$ source build/envsetup.sh  # 初始化编译环境
+$ lunch aosp_arm64-eng      # 选择编译目标
+$ make -j4
+
+# 编译成功后，运行模拟器
+$ source build/envsetup.sh
+$ lunch aosp_arm64-eng
+### 使用的内核默认为: android-7.0.0_r3/prebuilds/qemu-kernel/arm/kernel-qemu
+###   使用的编译出来的镜像文件为: android-7.0.0_r3/out/target/product/generic_arm64/ 下的:
+###   system.img, userdata.img, ramdisk.img
+$ emulator                  
+</pre>
 							</ol>
 						</div>
 
