@@ -315,7 +315,7 @@ function initExpandableNavItems(rootTag) {
 function highlightSidenav() {
   // if something is already highlighted, undo it. This is for dynamic navigation (Samples index)
   if ($("ul#nav li.selected").length) {
-    unHighlightSidenav();
+     unHighlightSidenav();
   }
   // look for URL in sidenav, including the hash
   var $selNavLink = $('#nav').find('a[href="' + mPagePath + location.hash + '"]');
