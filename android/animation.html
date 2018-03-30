@@ -73,14 +73,11 @@
 						</a>
 						<div id="animation-tools" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item">Animation</a>
-                            <a href="#" class="list-group-item">TranslateAnimation</a>
-                            <a href="#" class="list-group-item">ScaleAnimation</a>
-                            <a href="#" class="list-group-item">RotateAnimation</a>
-                            <a href="#" class="list-group-item">AlphaAnimation</a>
-                            <a href="#" class="list-group-item">AnimationSet</a>
-                            <a href="#" class="list-group-item">AnimationUtils</a>
-                            <a href="#" class="list-group-item">Interpolator 及子类</a>
+							<a href="#android-view-animation-Animation" class="list-group-item">Animation 及子类</a>
+                            <a href="#android-view-animation-AnimationUtils" class="list-group-item">AnimationUtils</a>
+                            <a href="#android-view-animation-Interpolator" class="list-group-item">Interpolator 及子类</a>
+                            <a href="#android-view-animation-Transformation" class="list-group-item">Transformation</a>
+                            <a href="#android-view-animation-LayoutAnimationController" class="list-group-item">LayoutAnimationController 及子类</a>
 						</div>
 						<a class="list-group-item active dropdown" data-toggle="collapse"
 						   data-parent="#accordion" href="#animation-frame" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
@@ -170,46 +167,376 @@
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="android-view-animation-Animation"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">Animation</h3>
 					</div>
 					<div class="panel-body">
-						
+						<div class="sub-item">
+						<pre class="brush: java;">
+java.lang.Object
+	android.view.animation.Animation
+
+public abstract class Animation implements Cloneable {
+	// 动画监听器
+	public static interface AnimationListener {
+		void onAnimationStart(Animation animation);
+		void onAnimationEnd(Animation animation);
+        void onAnimationRepeat(Animation animation);
+	}
+}
+
+/** XML 属性 */
+android:duration -- 动画时长
+android:fillAfter -- 应用于 AnimationSet，动画完成后停留在最后一帧
+android:fillBefore -- 应用于 AnimationSet，动画完成后停留在第一帧
+android:fillEnabled -- 是否开启
+android:interpolator -- 插值器
+android:repeatCount -- 重复次数
+android:repeatMode -- 重复模式，RESTART | REVERSE
+android:startOffset -- 动画开始前延迟时长
+android:zAdjustment -- 设置动画的内容运行时在 Z 轴上的位置(层):ZORDER_NORMAL:-0, ZORDER_TOP:1, ZORDER_BOTTOM: -1
+android:detachWallpaper -- 窗口动画的特殊选项：如果这个窗口在墙纸的顶部，是否用它来装饰墙纸。
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><a href="" target="_blank">Animation</a> API</p>
+							<ol>
+                                <li><p><code>Interpolator getInterpolator()</code> -- 获取插入器</p></li>
+								<li><p><code>void setInterpolator(Context context, int resID)</code> -- 设置插入器</p></li>
+								<li><p><code>void setInterpolator(Interpolator i)</code> -- 设置插入器</p></li>
+
+                                <li class="group"><p><code>int getRepeatCount()</code> -- 重复次数</p></li>
+								<li><p><code>void setRepeatCount(int repeatCount)</code> -- 设置重复次数</p></li>
+                                <li><p><code>void reset()</code> -- 重置动画</p></li>
+
+                                <li class="group"><p><code>int getRepeatMode()</code> -- 重复模式</p></li>
+								<li><p><code>void setRepeatMode(int repeatMode)</code> -- 设置重复模式</p></li>
+								<li class="group"><p><code>void start()</code> -- 启动动画</p></li>
+								<li><p><code>void startNow()</code> -- 立即启动动画</p></li>
+								<li><p><code>void cancel()</code> -- 取消动画</p></li>
+                                <li class="group"><p><code>boolean getFillAfter()</code> -- 是否 fillAfter</p></li>
+                                <li><p><code>boolean getFillBefore()</code> -- 是否 fillBefore</p></li>
+                                <li><p><code>boolean isFillEnabled()</code> -- 是否开启 Fill</p></li>
+                                <li><p><code>void setFillAfter(boolean fillAfter)</code> -- 应用于 AnimationSet, 若为 true, 结束后停留最后一帧</p></li>
+                                <li><p><code>void setFillBefore(boolean fillBefore)</code> -- 应用于 AnimationSet, 若为 true, 结束后停留第一帧</p></li>
+                                <li><p><code>void setFillEnabled(boolean fillEnabled)</code> -- 开启 / 关闭 Fill</p></li>
+                                <li class="group"><p><code>boolean hasEnded()</code> -- 是否已结束</p></li>
+                                <li><p><code>boolean hasStarted()</code> -- 是否已开始</p></li>
+                                <li><p><code>void setAnimationListener(Animation.AnimationListener listener)</code> -- 设置动画监听器</p></li>
+
+                                <li class="group"><p><code>void setDuration(long durationMillis)</code> -- 设置时长</p></li>
+                                <li><p><code>long getDuration()</code> -- 获取动画时长</p></li>
+                                <li><p><code>void scaleCurrentDuration(float scale)</code> -- 比列更改动画时长(duration * scale)</p></li>
+                                <li><p><code>void restrictDuration(long durationMillis)</code> -- 确保该动画将运行时间不超过指定的时间</p></li>
+								<li><p><code>long computeDurationHint()</code> -- 计算动画总时长，可能由多个动画同时执行，或者执行次数为多次</p></li>
+
+                                <li class="group"><p><code>long getStartOffset()</code> -- 获取延迟时间</p></li>
+                                <li><p><code>void setStartOffset(long startOffset)</code> -- 设置延迟时间</p></li>
+
+                                <li class="group"><p><code>long getStartTime()</code> -- 获取开始时间，View 的 <code>setAnimation()</code> 方法</p></li>
+                                <li><p><code>void setStartTime(long startTimeMillis)</code> -- 设置开始时间，View 的 <code>setAnimation()</code> 方法</p></li>
+
+                                <li><p><code>int getZAdjustment()</code> -- 获取动画层次</p></li>
+                                <li><p><code>void setZAdjustment(int zAdjustment)</code> -- 设置层次(ZORDER_TOP:0, ZORDER_NORMAL:1, ZORDER_BOTTOM:-1)</p></li>
+
+								<li class="group"><p><code>int getBackgroundColor()</code> -- 无效，获取背景</p></li>
+                                <li><p><code>void setBackgroundColor(int bg)</code> -- 无效，设置背景</p></li>
+
+								<li class="group"><p><code>boolean getDetachWallpaper()</code> -- 获取选项</p></li>
+                                <li><p><code>void setDetachWallpaper(boolean detachWallpaper)</code> -- 窗口动画的特殊选项：如果这个窗口在墙纸的顶部，是否用它来装饰墙纸。</p></li>
+
+								<li class="group"><p><code>void initialize(int width, int height, int parentWidth, int parentHeight)</code> -- 本身只调用 reset(), 将 initialized 设置为 true，看子类的实现</p></li>
+								<li><p><code>boolean isInitialized()</code> -- 是否已经初始化</p></li>
+
+                                <li class="group"><p><code>boolean getTransformation(long currentTime, Transformation outTransformation, float scale)</code> -- 获取在指定时间点应用的转换</p></li>
+                                <li><p><code>boolean getTransformation(long currentTime, Transformation outTransformation)</code> -- 获取在指定时间点应用的转换</p></li>
+
+								<li class="group"><p><code>boolean willChangeBounds()</code> -- 指示此动画是否会影响动画视图的边界</p></li>
+								<li><p><code>boolean willChangeTransformationMatrix()</code> -- 指示此动画是否会影响转换矩阵</p></li>
+							</ol>
+						</div>
+
+                        <div class="sub-item">
+                            <p>Animation 子类</p>
+                            <ul>
+                                <li><p><a href="docs/reference/android/view/animation/AlphaAnimation.html" target="_blank">AlphaAnimation</a> -- 透明动画，不会影响动画视图的边界和改变转换矩阵</p>
+                                <pre class="brush: java;">
+/** AlphaAnimation 值得关注的只有两个属性：
+ * fromAlpha -- 开始透明度
+ * toAlpha; -- 结束透明度
+ */
+AlphaAnimation(float fromAlpha, float toAlpha)
+AlphaAnimation(Context context, AttributeSet attrs)
+</pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/view/animation/TranslateAnimation.html" target="_blank">TranslateAnimation</a> -- 移动动画</p>
+                                    <pre class="brush: java;">
+TranslateAnimation(Context context, AttributeSet attrs)
+/** 使用绝对位置指定动画开始和结束的位置 */
+TranslateAnimation(float fromXDelta, float toXDelta, float fromYDelta, float toYDelta)
+
+/** 提供了参考点， Type 的类型有三种：
+ * Animation.ABSOLUTE -- 默认，绝对位置，直接使用像素为单位
+ * Animation.RELATIVE_TO_SELF -- 相对自身, value 为一个比列值，如： fromX = width * fromXValue ...
+ * Animation.RELATIVE_TO_PARENT -- 相对父布局, value 为一个比列值，如： fromX = parentWidth * xValue ...
+ */
+TranslateAnimation(int fromXType, float fromXValue, int toXType, float toXValue,
+                   int fromYType, float fromYValue, int toYType, float toYValue)
+</pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/view/animation/RotateAnimation.html" target="_blank">RotateAnimation</a> -- 旋转动画</p>
+                                    <pre class="brush: java;">
+/** Type 同 TranslateAnimation，指定角度和旋转中心点 */
+RotateAnimation(float fromDegrees, float toDegrees)
+RotateAnimation(float fromDegrees, float toDegrees, float pivotX, float pivotY)
+RotateAnimation(float fromDegrees, float toDegrees, int pivotXType, float pivotXValue,
+                                        int pivotYType, float pivotYValue)
+</pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/view/animation/ScaleAnimation.html" target="_blank">ScaleAnimation</a> -- 缩放动画</p>
+                                    <pre class="brush: java;">
+/** Type 同 TranslateAnimation，指定缩放中心点和缩放因子 */
+ScaleAnimation(Context context, AttributeSet attrs)
+ScaleAnimation(float fromX, float toX, float fromY, float toY)
+ScaleAnimation(float fromX, float toX, float fromY, float toY, float pivotX, float pivotY)
+ScaleAnimation(float fromX, float toX, float fromY, float toY, int pivotXType,
+                                        float pivotXValue, int pivotYType, float pivotYValue)
+</pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/view/animation/AnimationSet.html" target="_blank">AnimationSet</a> -- 组合动画，每个动画的变换被组合成一个单一的变换。</p>
+                                    <pre class="brush: java;">
+AnimationSet(Context context, AttributeSet attrs)
+/** 参数为是否所有动画共享一个插值器 */
+AnimationSet(boolean shareInterpolator)
+</pre>
+                                </li>
+                            </ul>
+                        </div>
+					</div>
+				</div>
+				<!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="android-view-animation-AnimationUtils"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">AnimationUtils</h3>
+                    </div>
+                    <div class="panel-body">
+                        <p><a href="docs/reference/android/view/animation/AnimationUtils.html">AnimationUtils</a> 有一些静态方法，用来生成动画。</p>
+                        <ul>
+                            <li><p><code>static Animation loadAnimation(Context context, int id)</code> -- 从 <code>res/anim</code> 加载动画</p></li>
+                            <li><p><code>static Interpolator loadInterpolator(Context context, int id) </code> -- 从 <code>res/interpolator</code> 加载插值器</p></li>
+                            <li><p><code>static LayoutAnimationController loadLayoutAnimation(Context context, int id)</code> -- 从 <code>res/anim</code> 加载布局动画</p></li>
+                            <li><p><code>static Animation makeInAnimation(Context c, boolean fromLeft)</code> -- 从 <code>com.android.internal.R.anim</code> 加载动画</p></li>
+                            <li><p><code>static Animation makeInChildBottomAnimation(Context c)</code> -- 同上</p></li>
+                            <li><p><code>static Animation makeOutAnimation(Context c, boolean toRight)</code> -- 同上</p></li>
+                            <li><p><code>static long currentAnimationTimeMillis()</code> -- 这个时间应用于 <code>Animation.setStartTime(millis)</code></p></li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="android-view-animation-Interpolator"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Interpolator 及子类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <pre class="brush: java;">
+android.animation.TimeInterpolator
+    android.view.animation.Interpolator
+        android.view.animation.BaseInterpolator
+            AccelerateInterpolator  PathInterpolator .....
+
+public interface TimeInterpolator {
+    // 不断调用这个方法，来实现速度变化
+    float getInterpolation(float input);
+}
+                        </pre>
+
+                        <p><a href="ocs/reference/android/view/animation/Interpolator.html" target="_blank">Interpolator</a> 用于控制动画的速度变化。只有一个方法，来自于: <a href="docs/reference/android/animation/TimeInterpolator.html" target="_blank">TimeInterpolator</a>。直接来看其子类：</p>
+                        <ul>
+                            <li><p><a href="docs/reference/android/view/animation/AccelerateInterpolator.html" target="_blank">AccelerateInterpolator</a> -- 加速</p>
+                            <pre class="brush: java;">
+/** 加速速度和 factor 相关：
+ * factor >= 1 时，值越大，加速越快；
+ * 0 < factor < 1 时，实际为减速，值越小，减速越快。
+ */
+AccelerateInterpolator()    //  factor = 1.0f
+AccelerateInterpolator(float factor)
+AccelerateInterpolator(Context context, AttributeSet attrs)
+
+public float getInterpolation(float input) {
+    if (mFactor == 1.0f) {
+        return input * input;
+    } else {
+        return (float)Math.pow(input, mDoubleFactor);   // mDoubleFactor = 2 * mFactor;
+    }
+}
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/view/animation/DecelerateInterpolator.html" target="_blank">DecelerateInterpolator</a> -- 减速</p>
+                                <pre class="brush: java;">
+/** 减速速度和 factor 相关：
+ * factor >= 1 时，值越大，减速越快；
+ * 0 < factor < 1 时，实际为加速，值越小，加速越快。
+ */
+DecelerateInterpolator()    //  factor = 1.0f
+DecelerateInterpolator(float factor)
+DecelerateInterpolator(Context context, AttributeSet attrs)
+
+public float getInterpolation(float input) {
+    float result;
+    if (mFactor == 1.0f) {
+        result = (float)(1.0f - (1.0f - input) * (1.0f - input));
+    } else {
+        result = (float)(1.0f - Math.pow((1.0f - input), 2 * mFactor));
+    }
+    return result;
+}
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/view/animation/AccelerateDecelerateInterpolator.html" target="_blank">AccelerateDecelerateInterpolator</a> -- 先加速，后加速</p>
+                                <pre class="brush: java;">
+AccelerateDecelerateInterpolator()
+AccelerateDecelerateInterpolator(Context context, AttributeSet attrs)
+
+public float getInterpolation(float input) {
+    return (float)(Math.cos((input + 1) * Math.PI) / 2.0f) + 0.5f;
+}
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/view/animation/AnticipateInterpolator.html" target="_blank">AnticipateInterpolator</a> -- 开始的时候向后，然后向前甩</p>
+                                <pre class="brush: java;">
+AnticipateInterpolator()    //  tension = 2.0f
+AnticipateInterpolator(float tension)
+AnticipateInterpolator(Context context, AttributeSet attrs)
+
+public float getInterpolation(float t) {
+    return t * t * ((mTension + 1) * t - mTension);
+}
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/view/animation/AnticipateOvershootInterpolator.html" target="_blank">AnticipateOvershootInterpolator</a> -- 开始的时候向后，然后向前甩一定值，再返回最后的值</p>
+                                <pre class="brush: java;">
+AnticipateOvershootInterpolator() { mTension = 2.0f * 1.5f; }
+AnticipateOvershootInterpolator(float tension) { mTension = tension * 1.5f; }
+AnticipateOvershootInterpolator(float tension, float extraTension) {
+    mTension = tension * extraTension;
+}
+AnticipateOvershootInterpolator(Context context, AttributeSet attrs)
+
+private static float a(float t, float s) {
+    return t * t * ((s + 1) * t - s);
+}
+
+private static float o(float t, float s) {
+    return t * t * ((s + 1) * t + s);
+}
+
+public float getInterpolation(float t) {
+    if (t < 0.5f) return 0.5f * a(t * 2.0f, mTension);
+    else return 0.5f * (o(t * 2.0f - 2.0f, mTension) + 2.0f);
+}
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/view/animation/BounceInterpolator.html" target="_blank">BounceInterpolator</a> -- 动画结束的时候弹起</p>
+                                <pre class="brush: java;">
+BounceInterpolator()
+BounceInterpolator(Context context, AttributeSet attrs)
+
+private static float bounce(float t) {
+    return t * t * 8.0f;
+}
+
+public float getInterpolation(float t) {
+    t *= 1.1226f;
+    if (t < 0.3535f) return bounce(t);
+    else if (t < 0.7408f) return bounce(t - 0.54719f) + 0.7f;
+    else if (t < 0.9644f) return bounce(t - 0.8526f) + 0.9f;
+    else return bounce(t - 1.0435f) + 0.95f;
+}
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/view/animation/CycleInterpolator.html" target="_blank">CycleInterpolator</a> -- 动画循环播放特定的次数，速率改变沿着正弦曲线</p>
+                                <pre class="brush: java;">
+CycleInterpolator(float cycles)
+CycleInterpolator(Context context, AttributeSet attrs)
+
+public float getInterpolation(float input) {
+    return (float)(Math.sin(2 * mCycles * Math.PI * input));
+}
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/view/animation/LinearInterpolator.html" target="_blank">LinearInterpolator</a> -- 以常量速率改变</p>
+                                <pre class="brush: java;">
+LinearInterpolator()
+LinearInterpolator(Context context, AttributeSet attrs)
+
+public float getInterpolation(float input) {
+    return input;
+}
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/view/animation/OvershootInterpolator.html" target="_blank">OvershootInterpolator</a> -- 向前甩一定值后再回到原来位置</p>
+                                <pre class="brush: java;">
+OvershootInterpolator()     // tension = 2.0f
+OvershootInterpolator(float tension)
+OvershootInterpolator(Context context, AttributeSet attrs)
+
+public float getInterpolation(float t) {
+    t -= 1.0f;
+    return t * t * ((mTension + 1) * t + mTension) + 1.0f;
+}
+                            </pre>
+                            </li><li><p><a href="docs/reference/android/view/animation/PathInterpolator.html" target="_blank">PathInterpolator</a> -- 贝塞尔曲线控制速度，API 21 添加</p>
+                            <pre class="brush: java;">
+PathInterpolator(Path path)
+PathInterpolator(float controlX, float controlY)    // 一个控制点的贝塞尔曲线
+// 两个控制点的贝塞尔曲线
+PathInterpolator(float controlX1, float controlY1, float controlX2, float controlY2)
+PathInterpolator(Context context, AttributeSet attrs)
+                            </pre>
+                        </li>
+
+                        </ul>
+
+                    </div>
+                </div>
+                <!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="android-view-animation-Transformation"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Transformation</h3>
+					</div>
+					<div class="panel-body">
+                        <pre class="brush: java;">
+java.lang.Object
+    android.view.animation.Transformation
+
+public class Transformation {
+
+}
+                        </pre>
+                        <p><a href="docs/reference/android/view/animation/Transformation.html" target="_blank">Transformation</a> 定义要在动画的某个时间点应用的转换。</p>
 					</div>
 				</div>
 				<!-- item over -->
 				
-				<!-- item start -->
-				<a class="offset" id="..."></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
+
 				
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="android-view-animation-LayoutAnimationController"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="..."></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">LayoutAnimationController 及子类</h3>
 					</div>
 					<div class="panel-body">
 						
@@ -374,7 +701,7 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
