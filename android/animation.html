@@ -85,7 +85,7 @@
 						</a>
 						<div id="animation-frame" class="panel-collapse collapse"
 							 role="tabpanel">
-							<a href="#" class="list-group-item">AnimationDrawable</a>
+							<a href="#anim-AnimationDrawable" class="list-group-item">AnimationDrawable</a>
 						</div>
 						<a class="list-group-item active dropup" data-toggle="collapse"
 						   data-parent="#accordion" href="#animation-attr" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
@@ -93,13 +93,15 @@
 						</a>
 						<div id="animation-attr" class="panel-collapse collapse in"
 							 role="tabpanel">
-							<a href="#" class="list-group-item">Animator</a>
-                            <a href="#" class="list-group-item">ValueAnimator</a>
-                            <a href="#" class="list-group-item">ObjectAnimator</a>
-                            <a href="#" class="list-group-item">AnimatorSet</a>
-                            <a href="#" class="list-group-item">AnimatorInflater</a>
-                            <a href="#" class="list-group-item">PropertyValuesHolder</a>
-                            <a href="#" class="list-group-item">...</a>
+							<a href="#android-animation-Animator" class="list-group-item">Animator</a>
+                            <a href="#android-animation-AnimatorSet" class="list-group-item">AnimatorSet</a>
+                            <a href="#android-animation-ValueAnimator" class="list-group-item">ValueAnimator</a>
+                            <a href="#android-animation-PropertyValuesHolder" class="list-group-item">PropertyValuesHolder</a>
+                            <a href="#android-animation-ObjectAnimator" class="list-group-item">ObjectAnimator</a>
+                            <a href="#android-animation-TimeAnimator" class="list-group-item">TimeAnimator</a>
+                            <a href="#android-animation-TypeEvaluator" class="list-group-item">TypeEvaluator 及子类</a>
+                            <a href="#android-animation-LayoutTransition" class="list-group-item">LayoutTransition</a>
+                            <a href="#android-animation-example" class="list-group-item">属性动画实例</a>
                         </div>
 						<a class="list-group-item active dropup" data-toggle="collapse"
 						   data-parent="#accordion" href="#android-transition" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
@@ -138,7 +140,15 @@
 							<li><p><b>属性动画</b> -- 通过改变任何一个对象的属性实现动画效果，API 11 添加。</p></li>
 						</ul>
 						<p>另外，还有一种 <b>转场动画</b>，在 Android 4.4 就已经引入，但在 5.0 才得以真正的实现。</p>
-					</div>
+                        <p>补间动画有两个缺陷：</p>
+
+                        <ul>
+                            <li><p>补间动画只能对 View 设置动画，对非 View 的对象不能设置动画；</p></li>
+                            <li><p>补间动画只是改变了 View 的显示效果而没有真正的改变 View 的属性。例如，我们想使用补间动画将一个按钮从一个位置移动到一个新的位置，那么当移动完成之后我们点击这个按钮，是不会触发其点击事件的，而当我们点击移动前的位置时，会触发其点击事件，即补间动画只是在另一个地方重新绘制了这个 View，其他的东西都没有改变。
+                            </p></li>
+                        </ul>
+
+                    </div>
 				</div>
 				<!-- item over -->
 				
@@ -522,15 +532,27 @@ java.lang.Object
     android.view.animation.Transformation
 
 public class Transformation {
-
+    protected Matrix mMatrix;
+    protected float mAlpha;
+    protected int mTransformationType;
 }
                         </pre>
-                        <p><a href="docs/reference/android/view/animation/Transformation.html" target="_blank">Transformation</a> 定义要在动画的某个时间点应用的转换。</p>
+                        <p><a href="docs/reference/android/view/animation/Transformation.html" target="_blank">Transformation</a> 定义要在动画的某个时间点应用的转换。每个 Animation 的子类都重载了其 <code>applyTransformation(float interpolatedTime, Transformation t)</code> 方法，接收一个 Transformation 作为参数。</p>
+                        <p><a href="docs/reference/android/view/animation/Transformation.html" target="_blank">Transformation</a> 有一个透明度变化的 <code>mAlpha</code> 和应用变化的 <code>mMatrix</code> 矩阵。</p>
+                        <p></p>
+                        <ol>
+                            <li><p><code>Matrix getMatrix()</code> -- 获取变换矩阵</p></li>
+                            <li><p><code>float getAlpha()</code> -- 获取透明度值</p></li>
+                            <li><p><code>void setAlpha(float alpha)</code> -- 设置透明度值</p></li>
+                            <li><p><code>void set(Transformation t)</code> -- 重置为 t 变换</p></li>
+                            <li><p><code>void setTransformationType(int type)</code> -- 变换类型: <code>TYPE_ALPHA</code>, <code>TYPE_IDENTITY</code>, <code>TYPE_MATRIX</code>, <code>TYPE_BOTH</code></p></li>
+                            <li><p><code>int getTransformationType()</code> -- 获取变换类型</p></li>
+                            <li><p><code>void compose(Transformation t)</code> -- 将此转换应用于现有的转换，例如将缩放效果应用于已经旋转的内容。 </p></li>
+                            <li><p><code>void clear()</code> -- 重置变换</p></li>
+                        </ol>
 					</div>
 				</div>
 				<!-- item over -->
-				
-
 				
 				<!-- item start -->
 				<a class="offset" id="android-view-animation-LayoutAnimationController"></a>
@@ -539,130 +561,1008 @@ public class Transformation {
 						<h3 class="panel-title">LayoutAnimationController 及子类</h3>
 					</div>
 					<div class="panel-body">
-						
+                        <div class="sub-item">
+						<pre class="brush: java;">
+java.lang.Object
+    android.view.animation.LayoutAnimationController
+
+public class LayoutAnimationController {
+    protected Animation mAnimation;
+    protected Interpolator mInterpolator;
+    protected Random mRandomizer;
+
+    LayoutAnimationController(Context context, AttributeSet attrs) {}
+    LayoutAnimationController(Animation animation) {}
+    LayoutAnimationController(Animation animation, float delay) {}
+
+    public static class AnimationParameters {
+        public int count;// ViewGroup 中的 View 个数
+        public int index;// ViewGroup 中的 View 索引
+    }
+}
+
+/** XML 属性 */
+android:animation // 动画的名称
+android:animationOrder // 动画播放顺序
+android:delay // 延迟时间
+android:interpolator // 动画的插值，有加速，减速等
+</pre>
+                            <p><a href="docs/reference/android/view/animation/LayoutAnimationController.html" target="_blank">LayoutAnimationController</a> 用于一个 ViewGroup 的动画控制器，它能够让每个子 View 在不同的时间点分别执行相同的动画，ViewGroup 通过 LayoutAnimationController 计算每个子 View 的动画开始的时间间隔，这个时间的间隔是通过某种规律特点进行计算，比如它在 ViewGroup 中的 index 顺序。</p>
+                            <p>间隔时间的计算是通过 View 在 Viewgroup 的 index 顺序乘以单位时间间隔计算得出。它的子类应该重写：</p>
+                            <ul>
+                                <li><p><code>long getDelayForView(View view)</code> -- 实现一种不同的计算 delay 的延迟时间方式。例如子类: GridLayoutAnimationController，它基于 child view 的 column 和 row 值来计算延迟。</p></li>
+                            </ul>
+                            <p><a href="docs/reference/android/view/animation/LayoutAnimationController.html" target="_blank">LayoutAnimationController</a> 类中对应的播放顺序：</p>
+                            <pre class="brush: java;">
+                                ORDER_NORMAL: 按照 View 添加到 ViewGroup 中的顺序进行播放动画展示;
+                                ORDER_REVERSE: 按照 View 添加到 ViewGroup中倒叙进行播放动画展示;
+                                ORDER_RANDOM: 随机顺序播放 View 的动画。
+                            </pre>
+                            <ol>
+                                <li><p><code>void setAnimation(Animation animation)</code> -- 设置动画</p></li>
+                                <li><p><code>void setAnimation(Context context, int resourceID)</code> -- 设置动画</p></li>
+                                <li><p><code>Animation getAnimation()</code> -- 获取动画</p></li>
+                                <li><p><code>void setInterpolator(Context context, int resourceID)</code> -- 设置动画速度控制器</p></li>
+                                <li><p><code>void setInterpolator(Interpolator interpolator)</code> -- 设置动画速度控制器</p></li>
+                                <li><p><code>Interpolator getInterpolator()</code> -- 获取动画速度控制器</p></li>
+                                <li><p><code>void setOrder(int order)</code> -- 顺序：<code>ORDER_NORMAL</code>, <code>ORDER_REVERSE</code>, <code>ORDER_RANDOM</code></p></li>
+                                <li><p><code>int getOrder()</code> -- 获取顺序</p></li>
+                                <li><p><code>void start()</code> -- 开始，应该使用：<code>layout.startLayoutAnimation()</code></p></li>
+                                <li><p><code>boolean isDone()</code> -- 是否完成</p></li>
+                                <li><p><code>void setDelay(float delay)</code> -- 设置延时</p></li>
+                                <li><p><code>float getDelay()</code> -- 获取延时</p></li>
+                                <li><p><code>final Animation getAnimationForView(View view)</code> -- 从 View 中获取动画</p></li>
+                                <li><p><code>boolean willOverlap()</code> -- 指示子 View 的动画是否会重叠</p></li>
+                            </ol>
+
+                        </div>
+
+                        <div class="sub-item">
+                            <p><a href="docs/reference/android/view/animation/LayoutAnimationController.html" target="_blank">LayoutAnimationController</a> 实例：</p>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <p><b>I. 子 View 顺序飞入效果:</b></p>
+<pre class="brush: java;gutter: false;">
+/** 实现思路：
+ *   1. 先把展开后样式布局好，然后隐藏；
+ *   2. 点击按钮时，先设置布局可见，然后开启动画；
+ * 注意：退出时，不用设置 layout 为不可见，
+ *   因为 Animation.fillBefore 为 true；
+ * !!!问题：右下角按钮为 ImageButton 可行，为 ImageView 就是不行，未找到原因!!!
+ */
+
+if(visiable) {  // 标识是否可见
+    layout.setVisibility(View.VISIBLE)
+    Animation animation = AnimationUtils.loadAnimation(getApplication(),
+                    R.anim.botton_out); // translate 动画
+    LayoutAnimationController c = new LayoutAnimationController(animation);
+    layout.setLayoutAnimation(c);
+    content.startLayoutAnimation();
+    visiable = false;
+} else {
+    Animation animation = AnimationUtils.loadAnimation(getApplication(),
+                    R.anim.botton_out); // translate 动画
+    // 创建一个 LayoutAnimationController 对象
+    LayoutAnimationController controller = new LayoutAnimationController(animation);
+    // 设置 Order 顺序
+    controller.setOrder(LayoutAnimationController.ORDER_REVERSE);
+    // 将 controller 赋值给 ViewGroup
+    content.setLayoutAnimation(controller);
+    // 开启动画
+    content.startLayoutAnimation();
+    visiable = true;
+}
+</pre>
+                                </div>
+                                <div class="col-md-3"><img src="images/LayoutAnimationController-1.gif" class="img-responsive"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <p><b>II. ListView 的 Item 飞入效果:</b></p>
+<pre class="brush: java;">
+String[] datas = {"item 1", "item 2", "item 3", "item 4", "item 5"};
+
+ListView listView = (ListView) findViewById(R.id.listView);
+listView.setAdapter(new ArrayAdapter&lt;String>(this,
+    android.R.layout.simple_expandable_list_item_1, datas));
+
+AnimationUtils.loadAnimation(getApplication(), R.anim.right_in)
+LayoutAnimationController controller = new LayoutAnimationController();
+listView.setLayoutAnimation(controller);
+listView.startLayoutAnimation();
+</pre>
+                                </div>
+                                <div class="col-md-3"><img src="images/LayoutAnimationController-2.gif" class="img-responsive"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <p><b>III. GridView 动画效果:</b></p>
+                                    <p>子类 <a href="docs/reference/android/view/animation/GridLayoutAnimationController.html">GridLayoutAnimationController</a> 专门为 GridView 的加载动画。</p>
+<pre class="brush: java;">
+/** XML 属性 */
+android:columnDelay -- 列延迟
+android:direction -- 方向
+android:directionPriority -- 方向优先级
+android:rowDelay -- 行延迟
+
+/** 可以同时设置多个方向进行操作 */
+DIRECTION_LEFT_TO_RIGHT -- 从左到右
+DIRECTION_RIGHT_TO_LEFT -- 从右到左
+DIRECTION_TOP_TO_BOTTOM -- 从上到下
+DIRECTION_BOTTOM_TO_TOP -- 从下到上
+DIRECTION_HORIZONTAL_MASK -- 水平方向
+DIRECTION_VERTICAL_MASK -- 竖直方向
+
+/** 行列优先级, 调用此方法: setDirectionPriority(int directionPriority) */
+PRIORITY_NONE -- 行列同级，默认值
+PRIORITY_COLUMN  -- 列优先
+PRIORITY_ROW -- 行优先
+
+/** 实例: */
+String[] datas = {
+    "item 1", "item 2", "item 3",
+    "item 4", "item 5", "item 6",
+    "item 7", "item 8", "item 9",
+    "item 10", "item 11", "item 12",
+};
+
+GridView gridView = (GridView) findViewById(R.id.gridView);
+gridView.setAdapter(new ArrayAdapter&lt;String>(this,
+    android.R.layout.simple_expandable_list_item_1, datas));
+
+GridLayoutAnimationController c = new GridLayoutAnimationController(
+    AnimationUtils.loadAnimation(getApplication(), R.anim.bottom_in));
+// 设置动画播放顺序
+c.setOrder(LayoutAnimationController.ORDER_NORMAL);
+// 设置动画播放方向
+c.setDirection(GridLayoutAnimationController.DIRECTION_LEFT_TO_RIGHT);
+// 设置动画播放顺序的优先级
+c.setDirectionPriority(GridLayoutAnimationController.PRIORITY_NONE);
+
+gridView.setLayoutAnimation(controller);
+gridView.startLayoutAnimation();
+</pre>
+                                </div>
+                                <div class="col-md-3"><img src="images/LayoutAnimationController-3.gif" class="img-responsive" style="margin-top: 20px;"></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-7">
+                                    <p><b>IV. 自定义 LayoutAnimationController:</b></p>
+<pre class="brush: java;gutter: false;">
+&lt;scale
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="100"
+    android:fromXScale="0"
+    android:toXScale="1"
+    android:fromYScale="0"
+    android:toYScale="1"
+    android:fillAfter="true"
+    android:pivotX="50%"
+    android:pivotY="50%" />
+</pre>
+                                </div>
+                                <div class="col-md-5"><img src="images/LayoutAnimationController-4.gif" class="img-responsive"></div>
+<pre class="brush: java;">
+public class MyLayoutAnimationController extends LayoutAnimationController {
+    public static final int ORDER_CUSTOM  = 6;
+
+    public MyLayoutAnimationController(Animation anim) {
+        super(anim);
+    }
+    public MyLayoutAnimationController(Animation anim, float delay) {
+        super(anim, delay);
+    }
+    public MyLayoutAnimationController(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    protected int getTransformedIndex(AnimationParameters params) {
+        if(getOrder() == ORDER_CUSTOM){//view顺序以1开头
+            if(params.index == 2) return 4;
+            else if(params.index == 3) return 5;
+            else if(params.index == 4) return 2;
+            else if(params.index == 5) return 6;
+            else if(params.index == 6) return 3;
+            else return params.index;
+        } else {
+            return super.getTransformedIndex(params);
+        }
+    }
+}
+</pre>
+
+                            </div>
+                        </div>
 					</div>
 				</div>
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="anim-AnimationDrawable"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">AnimationDrawable</h3>
 					</div>
 					<div class="panel-body">
-						
+						<p><a href="docs/reference/android/graphics/drawable/AnimationDrawable.html" target="_blank">AnimationDrawable</a> 实现了 Android 的逐帧动画，请查看：<a href="drawable.html" target="_blank">DRAWABLE</a></p>
+                        <pre class="brush: xml">
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;animation-list android:id="@+id/selected" android:oneshot="false">
+    &lt;item android:drawable="@drawable/wheel0" android:duration="50" />
+    &lt;item android:drawable="@drawable/wheel1" android:duration="50" />
+    &lt;item android:drawable="@drawable/wheel2" android:duration="50" />
+    &lt;item android:drawable="@drawable/wheel3" android:duration="50" />
+    &lt;item android:drawable="@drawable/wheel4" android:duration="50" />
+    &lt;item android:drawable="@drawable/wheel5" android:duration="50" />
+&lt;/animation-list>
+                        </pre>
 					</div>
 				</div>
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="android-animation-Animator"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">Animator</h3>
 					</div>
 					<div class="panel-body">
-						
+                        <div class="sub-item">
+<pre class="brush: java;">
+java.lang.Object
+    android.animation.Animator
+        ├── AnimatorSet
+        └── ValueAnimator
+            ├── ObjectAnimator
+            └──TimeAnimator
+
+public abstract class Animator implements Cloneable {
+    /** 动画监听器，AnimatorListenerAdapter 实现了此接口，可以只监听感兴趣的状态 */
+    public static interface AnimatorListener {
+        void onAnimationCancel(Animator animation);
+        void onAnimationEnd(Animator animation);
+        void onAnimationRepeat(Animator animation);
+        void onAnimationStart(Animator animation);
+    }
+
+    /** 暂停/恢复监听器，AnimatorListenerAdapter 实现了此接口，可以只监听感兴趣的状态 */
+    public static interface AnimatorPauseListener {
+        void onAnimationPause(Animator animation);
+        void onAnimationResume(Animator animation);
+    }
+}
+</pre>
+                            <p><a href="docs/reference/android/animation/Animator.html" target="_blank">Animator</a> 属性动画，在属性动画中，我们不仅可以像补间动画那样设置控件的透明度、缩放、平移或旋转的动画，还可以做到将这些动画联合起来播放、将一组动画按顺序播放、控制动画的播放速度，甚至可以对非 View 设置动画等等。</p>
+                        <p><a href="docs/reference/android/animation/Animator.html" target="_blank">Animator</a> API:</p>
+                            <ol>
+                                <li><p><code>void addListener(Animator.AnimatorListener listener)</code> -- 添加动画监听器，<code>AnimatorListenerAdapter</code> 实现了此接口，可以只监听感兴趣的状态。</p></li>
+                                <li><p><code>void removeListener(Animator.AnimatorListener listener)</code> -- 移除监听器</p></li>
+                                <li><p><code>ArrayList&lt;Animator.AnimatorListener> getListeners()</code> -- 获取所有监听器</p></li>
+                                <li><p><code>void removeAllListeners()</code> -- 移除所有监听器</p></li>
+                                <li><p><code>void addPauseListener(Animator.AnimatorPauseListener listener)</code> -- 添加停/恢复监听器，<code>AnimatorListenerAdapter</code> 实现了此接口，可以只监听感兴趣的状态。</p></li>
+                                <li><p><code>void removePauseListener(Animator.AnimatorPauseListener listener)</code> -- 移除停/恢复监听器</p></li>
+                                <li class="group"><p><code>abstract Animator setDuration(long duration)</code> -- 设置动画时长</p></li>
+                                <li><p><code>abstract long getDuration()</code> -- 获取动画时长</p></li>
+                                <li><p><code>long getTotalDuration()</code> -- 动画总时长</p></li>
+                                <li><p><code>abstract void setStartDelay(long startDelay)</code> -- 设置延时</p></li>
+                                <li><p><code>abstract long getStartDelay()</code> -- 获取延时时间</p></li>
+                                <li class="group"><p><code>abstract void setInterpolator(TimeInterpolator value)</code> -- 设置插值器</p></li>
+                                <li><p><code>TimeInterpolator getInterpolator()</code> -- 获取插值器</p></li>
+                                <li class="group"><p><code>void start()</code> -- 开始动画</p></li>
+                                <li><p><code>void pause()</code> -- 暂停动画</p></li>
+                                <li><p><code>void resume()</code> -- 恢复动画</p></li>
+                                <li><p><code>void cancel()</code> -- 取消动画</p></li>
+                                <li><p><code>void end()</code> -- 结束动画</p></li>
+                                <li><p><code>boolean isPaused()</code> -- 是否暂停</p></li>
+                                <li><p><code>abstract boolean isRunning()</code> -- 是否正在运行</p></li>
+                                <li><p><code>boolean isStarted()</code> -- 是否已经开始</p></li>
+                                <li class="group"><p><code>Animator clone()</code> -- 复制动画，但不包括监听器</p></li>
+                                <li><p><code>void setTarget(Object target)</code> -- 设置作用目标</p></li>
+                                <li><p><code>void setupEndValues()</code> -- 告诉对象使用适当的信息提取动画的结束值</p></li>
+                                <li><p><code>void setupStartValues()</code> -- 告诉对象使用适当的信息来提取动画的起始值</p></li>
+                            </ol>
+                    </div>
+                        <div class="sub-item">
+                            <p><a href="docs/reference/android/animation/AnimatorInflater.html" target="_blank">AnimatorInflater</a> 用于将动画 XML 文件实例化为动画对象。</p>
+                            <ol>
+                                <li><p><code>static Animator loadAnimator(Context context, int id)</code> -- 从资源加载动画</p></li>
+                                <li><p><code>static StateListAnimator loadStateListAnimator(Context context, int id)</code> -- 从资源加载状态动画</p></li>
+                            </ol>
+                        </div>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="android-animation-AnimatorSet"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">AnimatorSet</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush:java;">
+java.lang.Object
+    android.animation.Animator
+  	    android.animation.AnimatorSet
+
+public final class AnimatorSet extends Animator {
+    public AnimatorSet() {}
+
+    public class Builder {
+        AnimatorSet.Builder after(long delay) {}
+        AnimatorSet.Builder after(Animator anim) {}
+        AnimatorSet.Builder before(Animator anim) {}
+        AnimatorSet.Builder with(Animator anim) {}
+    }
+}
+                        </pre>
+                        <p><a href="docs/reference/android/animation/AnimatorSet.html" target="_blank">AnimatorSet</a> 以指定的顺序播放一组动画对象。</p>
+                        <ol>
+                            <li><p><code>void playSequentially(List&lt;Animator> items)</code> -- 顺序播放</p></li>
+                            <li><p><code>void playSequentially(Animator... items)</code> -- 顺序播放</p></li>
+                            <li><p><code>void playTogether(Collection&lt;Animator> items)</code> -- 同时播放</p></li>
+                            <li><p><code>void playTogether(Animator... items)</code> -- 同时播放</p></li>
+                            <li class="group"><p><code>void start()</code> -- 开始所有动画</p></li>
+                            <li><p><code>void pause()</code> -- 挂起所有动画</p></li>
+                            <li><p><code>void resume()</code> -- 恢复所有动画</p></li>
+                            <li><p><code>void cancel()</code> -- 取消所有动画</p></li>
+                            <li><p><code>void end()</code> -- 结束所有动画</p></li>
+                            <li><p><code>boolean isRunning()</code> -- 是否处于运行状态</p></li>
+                            <li><p><code>boolean isStarted()</code> -- 是否开始</p></li>
+
+                            <li class="group"><p><code>long getDuration()</code> -- 动画时长</p></li>
+                            <li><p><code>AnimatorSet setDuration(long duration)</code> -- 设置时长</p></li>
+                            <li><p><code>TimeInterpolator getInterpolator()</code> -- 获取插值器</p></li>
+                            <li><p><code>void setInterpolator(TimeInterpolator interpolator)</code> -- 设置插值器</p></li>
+                            <li><p><code>long getStartDelay()</code> -- 获取延时时间</p></li>
+                            <li><p><code>void setStartDelay(long startDelay)</code> -- 设置延时</p></li>
+                            <li><p><code>long getTotalDuration()</code> -- 动画总时长</p></li>
+
+                            <li class="group"><p><code>ArrayList&lt;Animator> getChildAnimations()</code> -- 获取所有子动画</p></li>
+                            <li><p><code>void setTarget(Object target)</code> -- 设置作用目标</p></li>
+                            <li><p><code>void setupEndValues()</code> -- 诉对象使用适当的信息提取动画的结束值</p></li>
+                            <li><p><code>void setupStartValues()</code> --  告诉对象使用适当的信息来提取动画的起始值</p></li>
+                            <li><p><code>AnimatorSet clone()</code> -- 复制</p></li>
+                            <li><p><code>AnimatorSet.Builder play(Animator anim)</code> -- 返回 Builder，动画不为空： <code>new Builder(anim)</code></p></li>
+                        </ol>
 					</div>
 				</div>
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="android-animation-ValueAnimator"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">ValueAnimator</h3>
 					</div>
 					<div class="panel-body">
-						
+						<pre class="brush: java;">
+java.lang.Object
+    android.animation.Animator
+  	    android.animation.ValueAnimator
+
+public class ValueAnimator extends Animator implements AnimationHandler.AnimationFrameCallback {
+    // 动画更新回调
+    public static interface AnimatorUpdateListener {
+        void onAnimationUpdate(ValueAnimator animation);
+    }
+}
+                        </pre>
+                        <p><a href="docs/reference/android/animation/ValueAnimator.html" target="_blank">ValueAnimator</a> 提供了一个运行动画的简单时间引擎，它计算动画值并将其设置在目标对象上。</p>
+                        <p>默认情况下，<a href="docs/reference/android/animation/ValueAnimator.html" target="_blank">ValueAnimator</a> 采用非线性时域插值，通过 AccelerateDecelerateInterpolator 类，加速和减速的动画。动画可以从代码或资源文件中创建，位置为: <code>res/animator/</code>。</p>
+                        <pre class="brush: java;">
+&lt;animator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="1000"
+    android:valueFrom="1"
+    android:valueTo="0"
+    android:valueType="floatType"
+    android:repeatCount="1"
+    android:repeatMode="reverse"/>
+</pre>
+                        <p>ValueAnimator 是整个属性动画最核心的类，<a href="#android-animation-ObjectAnimator">ObjectAnimator</a> 类就是 ValueAnimator 类的一个子类。属性动画的原理就是通过不断改变对象的属性值来实现过渡的，而这种过渡就是通过 ValueAnimator 类来负责计算的。除此之外，ValueAnimator 还负责管理动画的播放次数、播放模式和动画监听等。</p>
+                        <p>ValueAnimator 的使用方法和 ObjectAnimator 的使用方法基本类似，不同的是 ValueAnimator 中不能指定运行动画的对象，因此 ValueAnimator 往往需要设置一个动画监听，通过不断监听当前动画运行到的属性值来动态的进行处理。代码如下：</p>
+                        <pre class="brush: java;">
+ValueAnimator animator = ValueAnimator.ofInt(0, 100); // 产生一个从 0 到 100 变化的整数的动画
+animator.setDuration(2000);
+animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+    @Override
+    public void onAnimationUpdate(ValueAnimator animation) {
+        Integer value = (Integer) animation.getAnimatedValue(); // 动态的获取当前运行到的属性值
+        ((Button) view).setText(value + "");
+    }
+});
+animator.start(); // 开始播放动画
+                        </pre>
+                        <ol>
+                            <li><p><code>static ValueAnimator ofInt(int... values)</code> -- 生成一个指定开始和结束值的 ValueAnimator，一般使用两个参数</p></li>
+                            <li><p><code>static ValueAnimator ofFloat(float... values)</code> -- 生成一个指定开始和结束值的 ValueAnimator</p></li>
+                            <li><p><code>static ValueAnimator ofArgb(int... values)</code> -- 生成一个指定开始和结束值的 ValueAnimator</p></li>
+                            <li><p><code>static ValueAnimator ofObject(TypeEvaluator evaluator, Object... values)</code> -- 使用自定也的 TypeEvaluator</p></li>
+                            <li><p><code>static ValueAnimator ofPropertyValuesHolder(PropertyValuesHolder... values)</code> -- 直接使用 PropertyValuesHolder</p></li>
+                            <li class="group"><p><code>static void setFrameDelay(long frameDelay)</code> -- 设置每个帧之间的时间</p></li>
+                            <li><p><code>static long getFrameDelay()</code> -- 获取每个帧之间的时间</p></li>
+                            <li class="group"><p><code>void setFloatValues(float... values)</code> -- 指定开始和结束值</p></li>
+                            <li><p><code>void setIntValues(int... values)</code> -- 指定开始和结束值</p></li>
+                            <li><p><code>void setObjectValues(Object... values)</code> -- 指定开始和结束值</p></li>
+                            <li><p><code>void setValues(PropertyValuesHolder... values)</code> -- 指定 PropertyValuesHolder</p></li>
+                            <li class="group"><p><code>void addUpdateListener(ValueAnimator.AnimatorUpdateListener listener)</code> -- 添加动画监听器</p></li>
+                            <li><p><code>void removeUpdateListener(ValueAnimator.AnimatorUpdateListener listener)</code> -- 移除指定监听器</p></li>
+                            <li><p><code>void removeAllUpdateListeners()</code> -- 移除所有监听器</p></li>
+                            <li class="group"><p><code>float getAnimatedFraction()</code> -- 获取当前分量</p></li>
+                            <li><p><code>void setCurrentFraction(float fraction)</code> -- 设置当前分量，属性值会被设置为当前分量上的值</p></li>
+                            <li class="group"><p><code>Object getAnimatedValue()</code> -- 获取当前值</p></li>
+                            <li><p><code>Object getAnimatedValue(String propertyName)</code> -- 获取当前指定属性上的值</p></li>
+                            <li class="group"><p><code>long getCurrentPlayTime()</code> -- 获取当前播放时间</p></li>
+                            <li><p><code>void setCurrentPlayTime(long playTime)</code> -- 设置当前播放时间</p></li>
+                            <li class="group"><p><code>int getRepeatCount()</code> -- 获取重复次数</p></li>
+                            <li><p><code>void setRepeatCount(int value)</code> -- 设置重复次数</p></li>
+                            <li><p><code>int getRepeatMode()</code> -- 获取重复模式</p></li>
+                            <li><p><code>void setRepeatMode(int value)</code> -- 重复模式：<code>RESTART</code>, <code>REVERSE</code></p></li>
+                            <li class="group"><p><code>void reverse()</code> -- 反转动画</p></li>
+                            <li class="group"><p><code>void setEvaluator(TypeEvaluator value)</code> -- 设置动画值使用的类型计算器</p></li>
+
+                        </ol>
+					</div>
+				</div>
+				<!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="android-animation-PropertyValuesHolder"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">PropertyValuesHolder</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+<pre class="brush: java;">
+java.lang.Object
+    android.animation.PropertyValuesHolder
+
+public class PropertyValuesHolder implements Cloneable {
+    /** 这几个类为其 */
+    static class IntPropertyValuesHolder extends PropertyValuesHolder {}
+    static class FloatPropertyValuesHolder extends PropertyValuesHolder {}
+    static class MultiIntValuesHolder extends PropertyValuesHolder {}
+    static class MultiFloatValuesHolder extends PropertyValuesHolder {}
+
+    public static class PropertyValues {}
+}
+</pre>
+                            <p><a href="docs/reference/android/animation/PropertyValuesHolder.html" target="_blank">PropertyValuesHolder</a> 是用来保存某个属性 <code>property</code> 对应的一组值，这些值对应了一个动画周期中的所有关键帧。</p>
+                            <p>动画说到底是由动画帧组成的，Animator 可以设定并保存整个动画周期中的关键帧，然后根据这些关键帧计算出动画周期中任一时间点对应的动画帧的动画数据，而每一帧的动画数据里都包含了一个时间点属性 <code>fraction</code> 以及一个动画值 <code>mValue</code>，从而实现根据当前的时间点计算当前的动画值，然后用这个动画值去更新 property 对应的属性，这也是为什么 Animator 被称为属性动画的原因，因为它的整个动画过程实际上就是不断计算并更新对象的属性。
+                            </p>
+                            <p><code>PropertyValuesHolder</code> 由 <code>Property</code> 及 <code>Keyframes</code> 组成，其中 <code>Property</code> 用于描述属性的特征：如属性名以及属性类型，并提供 set 及 get 方法用于获取及设定给定 Target 的对应属性值；<code>Keyframes</code> 由一组关键帧 <code>Keyframe</code> 组成，每一个关键帧由 fraction 及 value 来定量描述，
+                                于是 <code>Keyframes</code> 可以根据给定的 fraction 定位到两个关键帧，这两个关键帧的 fraction 组成的区间包含给定的 fraction，然后根据定位到的两个关键帧以及设定插间器及求值器就可以计算出给定 fraction 对应的 value。</p>
+                            <p>于是，
+                                <code>PropertyValuesHolder</code> 的整个工作流程也就呼之欲出了，首先通过 <code>setObjectValues</code> 等函数来初始化关键帧组 <code>mKeyframes</code>，必要的情况下（如: <code>ObjectAnimator</code>）可以通过
+                                <code>setStartValue</code> 及 <code>setEndValue</code> 来设定第一帧及最末帧的 value，以上工作只是完成了 <code>PropertyValuesHolder</code> 的初始化，之后就可以由 <code>Animator</code> 在绘制动画帧的时候通过 fraction 来调用 <code>calculateValue</code> 计算该 fraction 对应的 value（实际上是由 <code>mKeyframes</code> 的 <code>getValue</code> 方法做出最终计算），
+                                获得对应的 value 之后，一方面可以通过 <code>getAnimatedValue</code> 提供给 <code>Animator</code> 使用，另一方面也可以通过 <code>setAnimatedValue</code> 方法直接将该值设定到相应 Target 中去，这样 <code>PropertyValuesHolder</code> 的职责也就完成了。</p>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><b>PropertyValuesHolder</b> API:</p>
+                            <p class="text-warning">注意： 如果下面的可变长参数的只有一个值，这个值将作为结束值，而不是开始值。比如：</p>
+                            <pre class="brush: java;">
+/** 这个动画的运行为：
+ * translationX -- X 轴由 0f 在 2 秒内移动到 200f(不是一直保持在 200f);
+ * translationY -- Y 轴由 0f 在 2 秒内先移动到 100f, 再回到 0f;
+ * translationY -- Y 轴由 0f 在 2 秒内先缩放 0.5f, 再回到 0f;
+ * alpha -- 由 1f 在 2 秒内透明度变为 0.8f, 再回到 1f;
+ */
+ObjectAnimator mObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(image,
+    PropertyValuesHolder.ofFloat("translationX", 200f),
+    PropertyValuesHolder.ofFloat("translationY", 0f, 100f, 0f),
+    PropertyValuesHolder.ofFloat("alpha", 1f, 0.8f, 1f));
+
+mObjectAnimator.setDuration(2000);
+mObjectAnimator.start();
+                            </pre>
+
+                            <ol>
+                                <li><p><code>static PropertyValuesHolder ofInt(String propertyName, int... values)</code> -- 属性名和 int 值构造</p></li>
+                                <li><p><code>static PropertyValuesHolder ofFloat(String propertyName, float... values)</code> -- 属性名和 float 值构造</p></li>
+                                <li><p><code>static PropertyValuesHolder ofKeyframe(String propertyName, Keyframe... values)</code> -- 属性名和 Keyframe 值构造</p></li>
+                                <li><p><code>static PropertyValuesHolder ofObject(String propertyName, TypeEvaluator evaluator, Object... values)</code> -- 属性名和自定义对象构造，需要指定对象的变换计算方法</p>
+                                    <pre class="brush: java;">
+Person p1 = new Person("001", "aaa", 0);
+Person p2 = new Person("002", "bbb", 80);
+Person p3 = new Person("003", "ccc", 0);
+
+PropertyValuesHolder holder = PropertyValuesHolder.ofObject("translationX",
+                                new TypeEvaluator&lt;Person>() {
+    @Override
+    public Person evaluate(float fraction, Person startValue, Person endValue) {
+        Person p = new Person();
+        // 下面两行为 IntEvaluate 的代码
+        int startInt = startValue.age;
+        p.age = (int)(startInt + fraction * (endValue.age - startInt));
+        return p;
+    }
+}, p1, p2, p3);
+
+/** 必须设置一个转换器 */
+holder.setConverter(new TypeConverter&lt;Person, Integer>(Person.class, Integer.class) {
+    @Override
+    public Integer convert(Person value) {
+        return value.age;
+    }
+});
+
+mObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(image, holder);
+mObjectAnimator.setDuration(3000);
+mObjectAnimator.start();
+
+                                </pre>
+                                </li>
+                                <li class="group"><p><code>static PropertyValuesHolder ofInt(Property&lt;?, Integer> property, int... values)</code> -- <code>?</code> 属性作用对象的类型，如果要让 ImageView 移动，操作的是 <code>setTranslateX()</code> 方法，这个方法是 View 类的，那么这个 <code>? == View</code></p></li>
+                                <li><p><code>static PropertyValuesHolder ofFloat(Property&lt;?, Float> property, float... values)</code> -- 同上/p></li>
+                                <li><p><code>static PropertyValuesHolder ofKeyframe(Property property, Keyframe... values)</code> -- 参见下面的 KeyFrame 类</p></li>
+                                <li><p><code>static &lt;V> PropertyValuesHolder ofObject(Property property, TypeEvaluator&lt;V> evaluator, V... values)</code> -- 见下面的实例</p></li>
+                                <li><p><code>static &lt;T, V> PropertyValuesHolder ofObject(Property&lt;?, V> property, TypeConverter&lt;T, V> converter, TypeEvaluator&lt;T> evaluator, T... values)</code> -- 见下面的实例:</p>
+                                    <pre class="brush: java;">
+Person p1 = new Person("001", "aaa", 0);
+Person p2 = new Person("002", "bbb", 200);
+Person p3 = new Person("003", "ccc", 0);
+
+Property&lt;View, Integer> property = new Property&lt;View, Integer>(Integer.class, "translationX") {
+    @Override
+    public void set(View object, Integer value) {
+        object.setTranslationX(value);
+    }
+
+    @Override
+    public Integer get(View object) {
+        return (int)object.getTranslationX();
+    }
+};
+
+TypeConverter&lt;Person, Integer> cvt = new TypeConverter&lt;Person, Integer>(Person.class,
+                                        Integer.class) {
+    @Override
+    public Integer convert(Person value) {
+        return value.age;
+    }
+};
+
+TypeEvaluator&lt;Person> evaluator = new TypeEvaluator&lt;Person>() {
+    @Override
+    public Person evaluate(float fraction, Person startValue, Person endValue) {
+        Person p = new Person();
+        int startInt = startValue.age;
+        p.age = (int)(startInt + fraction * (endValue.age - startInt));
+        return p;
+    }
+};
+
+PropertyValuesHolder holder = PropertyValuesHolder.ofObject(property, cvt, evaluator, p1, p2, p3);
+
+mObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(image, holder);
+mObjectAnimator.setDuration(3000);
+mObjectAnimator.start();
+                                    </pre>
+                                </li>
+
+                                <li class="group"><p><code>static PropertyValuesHolder ofMultiInt(String propertyName, int[][] values)</code> -- propertyName 类型为 int[][] 数组</p></li>
+                                <li><p><code>static PropertyValuesHolder ofMultiFloat(String propertyName, float[][] values)</code> -- propertyName 类型为 float[][] 数组</p>
+                                    <pre class="brush: java;">
+/** 产生一个多维度同时变换的 PropertyValuesHolder */
+float[][] arr = {{0, 0}, {300, 100}, {500, 0}, {0, 0}};
+
+PropertyValuesHolder holder = PropertyValuesHolder.ofMultiFloat("move", arr);
+
+mValueAnimator = ValueAnimator.ofPropertyValuesHolder(holder);
+mValueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+    @Override
+    public void onAnimationUpdate(ValueAnimator animation) {
+        float[] arr = (float[]) animation.getAnimatedValue();
+        image.setTranslationX(arr[0]); // arr 数组的第一维： 0 - 300 - 500 - 0
+        image.setTranslationY(arr[1]); // arr 数组的第二维： 0 - 100 - 0 - 0
+    }
+});
+mValueAnimator.setDuration(3000);
+mValueAnimator.start();
+                                </pre>
+                                </li>
+
+                                <li class="group"><p><code>static PropertyValuesHolder ofMultiInt(String propertyName, Path path)</code> -- 参见下面的实例</p></li>
+                                <li><p><code>static PropertyValuesHolder ofMultiFloat(String propertyName, Path path)</code> -- 参见下面的实例</p></li>
+                                <li><p><code>static PropertyValuesHolder ofObject(String propertyName, TypeConverter&lt;PointF, ?> converter, Path path)</code> -- 参见下面的实例</p></li>
+                                <li><p><code>static &lt;V> PropertyValuesHolder ofObject(Property&lt;?, V> property, TypeConverter&lt;PointF, V> converter, Path path)</code> -- 参见下面的实例</p>
+                                    <pre class="brush: java;">
+/** Path 不能使用 add... 方法，因为没有起点和终点 */
+Path path = new Path();
+path.quadTo(200,400, 600, 200);
+path.close();
+
+path.rLineTo(600, 0);
+path.rLineTo(0, 400);
+path.close();
+
+PropertyValuesHolder holder = PropertyValuesHolder.ofMultiFloat("path", path);
+
+mObjectAnimator = ValueAnimator.ofPropertyValuesHolder(holder);
+
+mObjectAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+    @Override
+    public void onAnimationUpdate(ValueAnimator animation) {
+        float[] arr = (float[]) animation.getAnimatedValue(); // 不断返回路径上的坐标
+        image.setTranslationX(arr[0]);
+        image.setTranslationY(arr[1]);
+    }
+});
+
+mObjectAnimator.setDuration(6000);
+mObjectAnimator.start();
+</pre>
+                                </li>
+
+
+
+                                <li class="group"><p><code>static &lt;T> PropertyValuesHolder ofMultiFloat(String propertyName, TypeConverter&lt;T, float[]> converter, TypeEvaluator&lt;T> evaluator, Keyframe... values)</code> -- Keyframe 类型</p></li>
+                                <li><p><code>static &lt;T> PropertyValuesHolder ofMultiInt(String propertyName, TypeConverter&lt;T, int[]> converter, TypeEvaluator&lt;T> evaluator, Keyframe... values)</code> -- Keyframe 类型</p></li>
+
+                                <li class="group"><p><code>static &lt;V> PropertyValuesHolder ofMultiFloat(String propertyName, TypeConverter&lt;V, float[]> converter, TypeEvaluator&lt;V> evaluator, V... values)</code> -- 自定义类型</p></li>
+                                <li><p><code>static &lt;V> PropertyValuesHolder ofMultiInt(String propertyName, TypeConverter&lt;V, int[]> converter, TypeEvaluator&lt;V> evaluator, V... values)</code> -- 自定义类型</p></li>
+
+                                <li class="group"><p><code>void setFloatValues(float... values)</code> -- 设置 float 值</p></li>
+                                <li><p><code>void setIntValues(int... values)</code> -- 设置 int 值</p></li>
+                                <li><p><code>void setKeyframes(Keyframe... values)</code> -- 设置 Keyframe 值</p></li>
+                                <li><p><code>void setObjectValues(Object... values)</code> -- 设置 Object 值</p></li>
+                                <li class="group"><p><code>void setConverter(TypeConverter converter)</code> -- 设置转换器</p></li>
+                                <li><p><code>void setEvaluator(TypeEvaluator evaluator)</code> -- 设置计算方法</p></li>
+                                <li class="group"><p><code>void setProperty(Property property)</code> -- 设置属性</p></li>
+                                <li><p><code>void setPropertyName(String propertyName)</code> -- 设置属性名</p></li>
+                                <li><p><code>String getPropertyName()</code> -- 获取属性名</p></li>
+                                <li><p><code>PropertyValuesHolder clone()</code> -- 复制</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><b>PropertyValuesHolder 相关类：</b></p>
+                            <ul>
+                                <li><p><a href="docs/reference/android/animation/Keyframe.html" target="_blank">Keyframe</a> -- 保存一个 <b>时间点/值</b> 对。</p>
+                                    <pre class="brush: java;">
+/** float 类型的 mFraction 表示时间，每个 Value 类型为其 Class
+ * float mFraction; // 时间点
+ * Class mValueType; // 值类型
+ * abstract Object getValue() / setValue(Object value); // 值由其子类实现
+ * 定义了三个默认保护静态内部类(自身的子类)：
+ */
+static class IntKeyframe extends Keyframe {...}
+static class FloatKeyframe extends Keyframe {...}
+static class ObjectKeyframe extends Keyframe {...}
+
+/** 提供了静态方法用于构造： */
+static Keyframe ofFloat(float fraction);
+static Keyframe ofFloat(float fraction, float value);
+
+static Keyframe ofInt(float fraction, int value);
+static Keyframe ofInt(float fraction);
+
+static Keyframe ofObject(float fraction, Object value);
+static Keyframe ofObject(float fraction);
+</pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/util/Property.html" target="_blank">Property</a> -- 用于描述属性的特征,如:属性名以及属性类型，并提供 set 及 get 方法用于获取及设定给定 Target 的对应属性值。</p>
+                                </li>
+                                <li><p><a href="docs/reference/android/animation/TypeConverter.html" target="_blank">TypeConverter</a> -- 抽象基类，用于将转换类型 T 到另一类型 V，当动画中的值类型与属性类型不同时，这是必要的。</p>
+                                    <pre class="brush: java;">
+public TypeConverter(Class&lt;T> fromClass, Class&lt;V> toClass) {}
+
+/** 只有一个抽象方法 */
+abstract V convert(T value) {}
+
+/** 有一个子类: BidirectionalTypeConverter */
+abstract T convertBack(V value) {}
+BidirectionalTypeConverter&lt;V, T> invert() {}
+</pre>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+				
+				<!-- item start -->
+				<a class="offset" id="android-animation-ObjectAnimator"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">ObjectAnimator</h3>
+					</div>
+					<div class="panel-body">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+java.lang.Object
+    android.animation.Animator
+        android.animation.ValueAnimator
+  	  	    android.animation.ObjectAnimator
+
+public final class ObjectAnimator extends ValueAnimator {}
+</pre>
+                            <p><a href="docs/reference/android/animation/ObjectAnimator.html" target="_blank">ObjectAnimator</a> 为 ValueAnimator 的子类，它能直接绑定一个 Object，并通过反射修改绑定对象的属性。</p>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><a href="docs/reference/android/animation/ObjectAnimator.html" target="_blank">ObjectAnimator</a> API:</p>
+                            <ol>
+
+                                <li><p><code>static ObjectAnimator ofInt(Object target, String propertyName, int... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static ObjectAnimator ofFloat(Object target, String propertyName, float... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static ObjectAnimator ofArgb(Object target, String propertyName, int... values)</code> -- 调用 <code>ofInt</code>, 但是使用的为: <a href="docs/reference/android/animation/ArgbEvaluator.html" target="_blank">ArgbEvaluator</a></p></li>
+                                <li><p><code>static &lt;T> ObjectAnimator ofArgb(T target, Property&lt;T, Integer> property, int... values)</code> -- 同上，自定义 <code>Property</code></p></li>
+
+                                <li class="group"><p><code>static ObjectAnimator ofFloat(Object target, String xPropertyName, String yPropertyName, Path path)</code> -- 将 <code>Path</code> 上的 x 应用到 <code>xPropertyName</code>,  y 应用到 <code>yPropertyName</code>, </p></li>
+                                <li><p><code>static ObjectAnimator ofInt(Object target, String xPropertyName, String yPropertyName, Path path)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> ObjectAnimator ofFloat(T target, Property&lt;T, Float> xProperty, Property&lt;T, Float> yProperty, Path path)</code> -- 参少上面</p></li>
+                                <li><p><code>static &lt;T> ObjectAnimator ofInt(T target, Property&lt;T, Integer> xProperty, Property&lt;T, Integer> yProperty, Path path)</code> -- 参少上面</p></li>
+                                <li><p><code>static &lt;T> ObjectAnimator ofFloat(T target, Property&lt;T, Float> property, float... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static &lt;T> ObjectAnimator ofInt(T target, Property&lt;T, Integer> property, int... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+
+                                <li class="group"><p><code>static ObjectAnimator ofMultiFloat(Object target, String propertyName, float[][] values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static ObjectAnimator ofMultiFloat(Object target, String propertyName, Path path)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static &lt;T> ObjectAnimator ofMultiFloat(Object target, String propertyName, TypeConverter&lt;T, float[]> converter, TypeEvaluator&lt;T> evaluator, T... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static ObjectAnimator ofMultiInt(Object target, String propertyName, int[][] values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static ObjectAnimator ofMultiInt(Object target, String propertyName, Path path)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static &lt;T> ObjectAnimator ofMultiInt(Object target, String propertyName, TypeConverter&lt;T, int[]> converter, TypeEvaluator&lt;T> evaluator, T... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+
+                                <li class="group"><p><code>static &lt;T, V> ObjectAnimator ofObject(T target, Property&lt;T, V> property, TypeEvaluator&lt;V> evaluator, V... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static ObjectAnimator ofObject(Object target, String propertyName, TypeConverter&lt;PointF, ?> converter, Path path)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static &lt;T, V> ObjectAnimator ofObject(T target, Property&lt;T, V> property, TypeConverter&lt;PointF, V> converter, Path path)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static &lt;T, V, P> ObjectAnimator ofObject(T target, Property&lt;T, P> property, TypeConverter&lt;V, P> converter, TypeEvaluator&lt;V> evaluator, V... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static ObjectAnimator ofObject(Object target, String propertyName, TypeEvaluator evaluator, Object... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+
+                                <li class="group"><p><code>static ObjectAnimator ofPropertyValuesHolder(Object target, PropertyValuesHolder... values)</code> -- 参照 <code>ValueAnimator</code></p></li>
+
+                                <li class="group"><p><code>void setProperty(Property property)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>void setPropertyName(String propertyName)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>String getPropertyName()</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>void setTarget(Object target)</code> -- 设置作用目标</p></li>
+                                <li><p><code>Object getTarget()</code> -- 获取作用目标</p></li>
+                                <li class="group"><p><code>void setAutoCancel(boolean cancel)</code> -- 其他具有相同的目标和属性的任何其他 Objectanimator 开始时，是否自动取消本身</p></li>
+                            </ol>
+                        </div>
 					</div>
 				</div>
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="android-animation-TimeAnimator"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">TimeAnimator</h3>
 					</div>
 					<div class="panel-body">
-						
+						<pre class="brush: java;">
+java.lang.Object
+    android.animation.Animator
+  	    android.animation.ValueAnimator
+  	  	    android.animation.TimeAnimator
+
+public class TimeAnimator extends ValueAnimator {
+    public TimeAnimator() {}
+
+    public static interface TimeListener {
+        /** animation -- 发出通知的动画
+         * totalTime -- 动画开始以来的总时间
+         * deltaTime -- 从前一帧到现在的运行时间
+         */
+        void onTimeUpdate(TimeAnimator animation, long totalTime, long deltaTime);
+    }
+}
+                        </pre>
+                        <p><a href="docs/reference/android/animation/TimeAnimator.html" target="_blank">TimeAnimator</a> 提供了一个简单的回调机制，通过 <code>TimeAnimator.TimeListener</code>，在动画的每一帧处通知你。</p>
+
+                        <ol>
+                            <li><p><code>void setCurrentPlayTime(long playTime)</code> -- 将动画的位置设置为指定的时间点</p></li>
+                            <li><p><code>void setTimeListener(TimeAnimator.TimeListener listener)</code> -- 注册回调接口</p></li>
+                            <li><p><code>void start()</code> -- 开始动画</p></li>
+                        </ol>
 					</div>
 				</div>
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="android-animation-TypeEvaluator"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">TypeEvaluator</h3>
 					</div>
 					<div class="panel-body">
-						
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    android.animation.TypeEvaluator
+
+public interface TypeEvaluator&lt;T> {
+    T evaluate(float fraction, T startValue, T endValue);
+}
+</pre>
+                            <p><a href="docs/reference/android/animation/TypeEvaluator.html" target="_blank">TypeEvaluator</a> 允许开发人员在任意属性类型上创建动画，允许它们为那些未被动画系统自动理解和使用的类型提供定制的计算方法。</p>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><a href="docs/reference/android/animation/TypeEvaluator.html" target="_blank">TypeEvaluator</a> 实现类：</p>
+                            <ul>
+                                <li><p><a href="docs/reference/android/animation/ArgbEvaluator.html" target="_blank">ArgbEvaluator</a> -- 计算的十六进制值颜色属性的默认计算器</p>
+                                <pre class="brush: java;">
+public Object evaluate(float fraction, Object startValue, Object endValue) {
+    int startInt = (Integer) startValue;
+    int startA = (startInt >> 24) & 0xff;
+    int startR = (startInt >> 16) & 0xff;
+    int startG = (startInt >> 8) & 0xff;
+    int startB = startInt & 0xff;
+
+    int endInt = (Integer) endValue;
+    int endA = (endInt >> 24) & 0xff;
+    int endR = (endInt >> 16) & 0xff;
+    int endG = (endInt >> 8) & 0xff;
+    int endB = endInt & 0xff;
+
+    return (int)((startA + (int)(fraction * (endA - startA))) << 24) |
+            (int)((startR + (int)(fraction * (endR - startR))) << 16) |
+            (int)((startG + (int)(fraction * (endG - startG))) << 8) |
+            (int)((startB + (int)(fraction * (endB - startB))));
+}
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/animation/FloatEvaluator.html" target="_blank">FloatEvaluator</a> -- 计算 float 属性值的默认计算器。</p>
+                                    <pre class="brush: java;">
+public Float evaluate(float fraction, Number startValue, Number endValue) {
+    float startFloat = startValue.floatValue();
+    return startFloat + fraction * (endValue.floatValue() - startFloat);
+}
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/animation/FloatArrayEvaluator.html" target="_blank">FloatArrayEvaluator</a> -- 计算 float 数组属性值的默认计算器。</p>
+                                    <pre class="brush: java;">
+public float[] evaluate(float fraction, float[] startValue, float[] endValue) {
+    float[] array = mArray; // mArray 为构造方法传入参数
+    if (array == null) {
+        array = new float[startValue.length];
+    }
+
+    for (int i = 0; i < array.length; i++) {
+        float start = startValue[i];
+        float end = endValue[i];
+        array[i] = start + (fraction * (end - start));
+    }
+    return array;
+}
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/animation/IntEvaluator.html" target="_blank">IntEvaluator</a> -- 计算 int 属性值的默认计算器。</p>
+                                    <pre class="brush: java;">
+public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
+    int startInt = startValue;
+    return (int)(startInt + fraction * (endValue - startInt));
+}
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/animation/IntArrayEvaluator.html" target="_blank">IntArrayEvaluator</a> -- 计算 int 数组属性值的默认计算器。</p>
+                                    <pre class="brush: java;">
+public int[] evaluate(float fraction, int[] startValue, int[] endValue) {
+    int[] array = mArray; // mArray 为构造方法传入参数
+    if (array == null) {
+        array = new int[startValue.length];
+    }
+    for (int i = 0; i < array.length; i++) {
+        int start = startValue[i];
+        int end = endValue[i];
+        array[i] = (int) (start + (fraction * (end - start)));
+    }
+    return array;
+}
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/animation/PointFEvaluator.html" target="_blank">PointFEvaluator</a> -- 进行类型之间的插值 PointF 值计算器。</p>
+                                    <pre class="brush: java;">
+public PointF evaluate(float fraction, PointF startValue, PointF endValue) {
+    float x = startValue.x + (fraction * (endValue.x - startValue.x));
+    float y = startValue.y + (fraction * (endValue.y - startValue.y));
+
+    if (mPoint != null) { // mPoint 为构造方法传入参数
+        mPoint.set(x, y);
+        return mPoint;
+    } else {
+        return new PointF(x, y);
+    }
+}
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/animation/RectEvaluator.html" target="_blank">RectEvaluator</a> -- 进行类型之间的插值 Rect 值计算器。</p>
+                                    <pre class="brush: java;">
+public Rect evaluate(float fraction, Rect startValue, Rect endValue) {
+    int left = startValue.left + (int) ((endValue.left - startValue.left) * fraction);
+    int top = startValue.top + (int) ((endValue.top - startValue.top) * fraction);
+    int right = startValue.right + (int) ((endValue.right - startValue.right) * fraction);
+    int bottom = startValue.bottom + (int) ((endValue.bottom - startValue.bottom) * fraction);
+
+    if (mRect == null) { // mRect 为构造方法传入参数
+        return new Rect(left, top, right, bottom);
+    } else {
+        mRect.set(left, top, right, bottom);
+        return mRect;
+    }
+}
+                                </pre>
+                                </li>
+                            </ul>
+                        </div>
 					</div>
 				</div>
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="android-animation-LayoutTransition"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">LayoutTransition</h3>
 					</div>
 					<div class="panel-body">
-						
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    android.animation.LayoutTransition
+
+public class LayoutTransition {
+    public interface TransitionListener {
+        void startTransition(LayoutTransition trans, ViewGroup container, View view, int transitionType);
+
+        void endTransition(LayoutTransition trans, ViewGroup container, View view, int transitionType);
+    }
+}
+</pre>
+                            <p><a href="docs/reference/android/animation/LayoutTransition.html" target="_blank">LayoutTransition</a> 和补间动画的 <a href="#android-view-animation-LayoutAnimationController">LayoutAnimationController</a> 一样，用于一个 ViewGroup 的动画控制器。</p>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><a href="docs/reference/android/animation/LayoutTransition.html" target="_blank">LayoutTransition</a> API:</p>
+                            <ol>
+
+                                <li><p><code>void addChild(ViewGroup parent, View child)</code> -- </p></li>
+                                <li><p><code>void addTransitionListener(LayoutTransition.TransitionListener listener)</code> -- </p></li>
+                                <li><p><code>void disableTransitionType(int transitionType)</code> -- </p></li>
+                                <li><p><code>void enableTransitionType(int transitionType)</code> -- </p></li>
+                                <li><p><code>Animator getAnimator(int transitionType)</code> -- </p></li>
+                                <li><p><code>long getDuration(int transitionType)</code> -- </p></li>
+                                <li><p><code>TimeInterpolator getInterpolator(int transitionType)</code> -- </p></li>
+                                <li><p><code>long getStagger(int transitionType)</code> -- </p></li>
+                                <li><p><code>long getStartDelay(int transitionType)</code> -- </p></li>
+                                <li><p><code>List&lt;LayoutTransition.TransitionListener> getTransitionListeners()</code> -- </p></li>
+                                <li><p><code>void hideChild(ViewGroup parent, View child)</code> -- </p></li>
+                                <li><p><code>void hideChild(ViewGroup parent, View child, int newVisibility)</code> -- </p></li>
+                                <li><p><code>boolean isChangingLayout()</code> -- </p></li>
+                                <li><p><code>boolean isRunning()</code> -- </p></li>
+                                <li><p><code>boolean isTransitionTypeEnabled(int transitionType)</code> -- </p></li>
+                                <li><p><code>void removeChild(ViewGroup parent, View child)</code> -- </p></li>
+                                <li><p><code>void removeTransitionListener(LayoutTransition.TransitionListener listener)</code> -- </p></li>
+                                <li><p><code>void setAnimateParentHierarchy(boolean animateParentHierarchy)</code> -- </p></li>
+                                <li><p><code>void setAnimator(int transitionType, Animator animator)</code> -- </p></li>
+                                <li><p><code>void setDuration(int transitionType, long duration)</code> -- </p></li>
+                                <li><p><code>void setDuration(long duration)</code> -- </p></li>
+                                <li><p><code>void setInterpolator(int transitionType, TimeInterpolator interpolator)</code> -- </p></li>
+                                <li><p><code>void setStagger(int transitionType, long duration)</code> -- </p></li>
+                                <li><p><code>void setStartDelay(int transitionType, long delay)</code> -- </p></li>
+                                <li><p><code>void showChild(ViewGroup parent, View child)</code> -- </p></li>
+                                <li><p><code>void showChild(ViewGroup parent, View child, int oldVisibility)</code> -- </p></li>
+                        </div>
 					</div>
 				</div>
 				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="..."></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="..."></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="..."></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
-				
-				<!-- item start -->
-				<a class="offset" id="..."></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
-					</div>
-					<div class="panel-body">
-						
-					</div>
-				</div>
-				<!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="android-animation-example"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">属性动画实例</h3>
+                    </div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+                <!-- item over -->
 				
 				<!-- item start -->
 				<a class="offset" id="..."></a>
@@ -702,6 +1602,7 @@ public class Transformation {
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
+    <script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
