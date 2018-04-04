@@ -67,11 +67,11 @@
 					<div class="list-group">
 						<a href="#" class="list-group-item">简介</a>
 						<a href="#animation-Activity" class="list-group-item">Activity 跳转动画</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
+						<a class="list-group-item active dropdown" data-toggle="collapse"
 							data-parent="#accordion" href="#animation-tools" aria-expanded="true">
 							补间动画<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="animation-tools" class="panel-collapse collapse in"
+						<div id="animation-tools" class="panel-collapse collapse"
 							role="tabpanel">
 							<a href="#android-view-animation-Animation" class="list-group-item">Animation 及子类</a>
                             <a href="#android-view-animation-AnimationUtils" class="list-group-item">AnimationUtils</a>
@@ -87,11 +87,11 @@
 							 role="tabpanel">
 							<a href="#anim-AnimationDrawable" class="list-group-item">AnimationDrawable</a>
 						</div>
-						<a class="list-group-item active dropup" data-toggle="collapse"
+						<a class="list-group-item active dropdown" data-toggle="collapse"
 						   data-parent="#accordion" href="#animation-attr" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
 							属性动画<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="animation-attr" class="panel-collapse collapse in"
+						<div id="animation-attr" class="panel-collapse collapse"
 							 role="tabpanel">
 							<a href="#android-animation-Animator" class="list-group-item">Animator</a>
                             <a href="#android-animation-AnimatorSet" class="list-group-item">AnimatorSet</a>
@@ -109,12 +109,11 @@
 						</a>
 						<div id="android-transition" class="panel-collapse collapse in"
 							 role="tabpanel">
-							<a href="#" class="list-group-item">TransitionManager</a>
-							<a href="#" class="list-group-item">Transition</a>
-							<a href="#" class="list-group-item">TransitionSet</a>
-							<a href="#" class="list-group-item">TransitionValues</a>
-							<a href="#" class="list-group-item">Explode</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#android-transition-TransitionManager" class="list-group-item">TransitionManager</a>
+							<a href="#android-transition-Transition" class="list-group-item">Transition 及子类</a>
+                            <a href="#android-transition-Scene" class="list-group-item">Scene</a>
+							<a href="#android-transition-" class="list-group-item">...</a>
+
 						</div>
 					</div>
 				</div>
@@ -896,7 +895,7 @@ public final class AnimatorSet extends Animator {
         AnimatorSet.Builder with(Animator anim) {}
     }
 }
-                        </pre>
+</pre>
                         <p><a href="docs/reference/android/animation/AnimatorSet.html" target="_blank">AnimatorSet</a> 以指定的顺序播放一组动画对象。</p>
                         <ol>
                             <li><p><code>void playSequentially(List&lt;Animator> items)</code> -- 顺序播放</p></li>
@@ -924,7 +923,16 @@ public final class AnimatorSet extends Animator {
                             <li><p><code>void setupEndValues()</code> -- 诉对象使用适当的信息提取动画的结束值</p></li>
                             <li><p><code>void setupStartValues()</code> --  告诉对象使用适当的信息来提取动画的起始值</p></li>
                             <li><p><code>AnimatorSet clone()</code> -- 复制</p></li>
-                            <li><p><code>AnimatorSet.Builder play(Animator anim)</code> -- 返回 Builder，动画不为空： <code>new Builder(anim)</code></p></li>
+                            <li><p><code>AnimatorSet.Builder play(Animator anim)</code> -- 返回 Builder，动画不为空： <code>new Builder(anim)</code></p>
+                            <pre class="brush: java;">
+AnimatorSet s = new AnimatorSet();
+s.play(anim1).with(anim2);
+s.play(anim2).before(anim3);
+s.play(anim4).after(anim3);
+
+s.start();
+</pre>
+                            </li>
                         </ol>
 					</div>
 				</div>
@@ -1165,10 +1173,10 @@ mValueAnimator.start();
                                 </pre>
                                 </li>
 
-                                <li class="group"><p><code>static PropertyValuesHolder ofMultiInt(String propertyName, Path path)</code> -- 参见下面的实例</p></li>
-                                <li><p><code>static PropertyValuesHolder ofMultiFloat(String propertyName, Path path)</code> -- 参见下面的实例</p></li>
-                                <li><p><code>static PropertyValuesHolder ofObject(String propertyName, TypeConverter&lt;PointF, ?> converter, Path path)</code> -- 参见下面的实例</p></li>
-                                <li><p><code>static &lt;V> PropertyValuesHolder ofObject(Property&lt;?, V> property, TypeConverter&lt;PointF, V> converter, Path path)</code> -- 参见下面的实例</p>
+                                <li class="group"><p><code>static PropertyValuesHolder ofMultiInt(String propertyName, <a href="graphics.html#graphics-Path" target="_blank">Path</a> path)</code> -- 参见下面的实例</p></li>
+                                <li><p><code>static PropertyValuesHolder ofMultiFloat(String propertyName, <a href="graphics.html#graphics-Path" target="_blank">Path</a> path)</code> -- 参见下面的实例</p></li>
+                                <li><p><code>static PropertyValuesHolder ofObject(String propertyName, TypeConverter&lt;PointF, ?> converter, <a href="graphics.html#graphics-Path" target="_blank">Path</a> path)</code> -- 参见下面的实例</p></li>
+                                <li><p><code>static &lt;V> PropertyValuesHolder ofObject(Property&lt;?, V> property, TypeConverter&lt;PointF, V> converter, <a href="graphics.html#graphics-Path" target="_blank">Path</a> path)</code> -- 参见下面的实例</p>
                                     <pre class="brush: java;">
 /** Path 不能使用 add... 方法，因为没有起点和终点 */
 Path path = new Path();
@@ -1293,23 +1301,23 @@ public final class ObjectAnimator extends ValueAnimator {}
                                 <li><p><code>static ObjectAnimator ofArgb(Object target, String propertyName, int... values)</code> -- 调用 <code>ofInt</code>, 但是使用的为: <a href="docs/reference/android/animation/ArgbEvaluator.html" target="_blank">ArgbEvaluator</a></p></li>
                                 <li><p><code>static &lt;T> ObjectAnimator ofArgb(T target, Property&lt;T, Integer> property, int... values)</code> -- 同上，自定义 <code>Property</code></p></li>
 
-                                <li class="group"><p><code>static ObjectAnimator ofFloat(Object target, String xPropertyName, String yPropertyName, Path path)</code> -- 将 <code>Path</code> 上的 x 应用到 <code>xPropertyName</code>,  y 应用到 <code>yPropertyName</code>, </p></li>
-                                <li><p><code>static ObjectAnimator ofInt(Object target, String xPropertyName, String yPropertyName, Path path)</code> -- 同上</p></li>
-                                <li><p><code>static &lt;T> ObjectAnimator ofFloat(T target, Property&lt;T, Float> xProperty, Property&lt;T, Float> yProperty, Path path)</code> -- 参少上面</p></li>
-                                <li><p><code>static &lt;T> ObjectAnimator ofInt(T target, Property&lt;T, Integer> xProperty, Property&lt;T, Integer> yProperty, Path path)</code> -- 参少上面</p></li>
+                                <li class="group"><p><code>static ObjectAnimator ofFloat(Object target, String xPropertyName, String yPropertyName, <a href="graphics.html#graphics-Path" target="_blank">Path</a> path)</code> -- 将 <code>Path</code> 上的 x 应用到 <code>xPropertyName</code>,  y 应用到 <code>yPropertyName</code>, </p></li>
+                                <li><p><code>static ObjectAnimator ofInt(Object target, String xPropertyName, String yPropertyName, <a href="graphics.html#graphics-Path" target="_blank">Path</a> path)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> ObjectAnimator ofFloat(T target, Property&lt;T, Float> xProperty, Property&lt;T, Float> yProperty, <a href="graphics.html#graphics-Path" target="_blank">Path</a> path)</code> -- 参少上面</p></li>
+                                <li><p><code>static &lt;T> ObjectAnimator ofInt(T target, Property&lt;T, Integer> xProperty, Property&lt;T, Integer> yProperty, <a href="graphics.html#graphics-Path" target="_blank">Path</a> path)</code> -- 参少上面</p></li>
                                 <li><p><code>static &lt;T> ObjectAnimator ofFloat(T target, Property&lt;T, Float> property, float... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
                                 <li><p><code>static &lt;T> ObjectAnimator ofInt(T target, Property&lt;T, Integer> property, int... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
 
                                 <li class="group"><p><code>static ObjectAnimator ofMultiFloat(Object target, String propertyName, float[][] values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
-                                <li><p><code>static ObjectAnimator ofMultiFloat(Object target, String propertyName, Path path)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static ObjectAnimator ofMultiFloat(Object target, String propertyName, <a href="graphics.html#graphics-Path" target="_blank">Path</a> path)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
                                 <li><p><code>static &lt;T> ObjectAnimator ofMultiFloat(Object target, String propertyName, TypeConverter&lt;T, float[]> converter, TypeEvaluator&lt;T> evaluator, T... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
                                 <li><p><code>static ObjectAnimator ofMultiInt(Object target, String propertyName, int[][] values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
                                 <li><p><code>static ObjectAnimator ofMultiInt(Object target, String propertyName, Path path)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
                                 <li><p><code>static &lt;T> ObjectAnimator ofMultiInt(Object target, String propertyName, TypeConverter&lt;T, int[]> converter, TypeEvaluator&lt;T> evaluator, T... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
 
                                 <li class="group"><p><code>static &lt;T, V> ObjectAnimator ofObject(T target, Property&lt;T, V> property, TypeEvaluator&lt;V> evaluator, V... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
-                                <li><p><code>static ObjectAnimator ofObject(Object target, String propertyName, TypeConverter&lt;PointF, ?> converter, Path path)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
-                                <li><p><code>static &lt;T, V> ObjectAnimator ofObject(T target, Property&lt;T, V> property, TypeConverter&lt;PointF, V> converter, Path path)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static ObjectAnimator ofObject(Object target, String propertyName, TypeConverter&lt;PointF, ?> converter, <a href="graphics.html#graphics-Path" target="_blank">Path</a> path)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
+                                <li><p><code>static &lt;T, V> ObjectAnimator ofObject(T target, Property&lt;T, V> property, TypeConverter&lt;PointF, V> converter, <a href="graphics.html#graphics-Path" target="_blank">Path</a> path)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
                                 <li><p><code>static &lt;T, V, P> ObjectAnimator ofObject(T target, Property&lt;T, P> property, TypeConverter&lt;V, P> converter, TypeEvaluator&lt;V> evaluator, V... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
                                 <li><p><code>static ObjectAnimator ofObject(Object target, String propertyName, TypeEvaluator evaluator, Object... values)</code> -- 参照 <a href="#android-animation-PropertyValuesHolder">PropertyValuesHolder</a></p></li>
 
@@ -1507,6 +1515,15 @@ java.lang.Object
     android.animation.LayoutTransition
 
 public class LayoutTransition {
+    /** transitionType: */
+    int APPEARING -- 容器中出现一个视图时的动画
+    int DISAPPEARING -- 容器中消失一个视图时的动画
+    int CHANGING -- 布局改变导致某个视图随之改变时的动画时的动画，例如调整大小，但不包括添加或者移除视图
+    int CHANGE_APPEARING -- 其他视图的出现导致某个视图改变时的动画
+    int CHANGE_DISAPPEARING -- 其他视图的消失导致某个视图改变时的动画
+
+    public LayoutTransition() {}
+
     public interface TransitionListener {
         void startTransition(LayoutTransition trans, ViewGroup container, View view, int transitionType);
 
@@ -1515,38 +1532,46 @@ public class LayoutTransition {
 }
 </pre>
                             <p><a href="docs/reference/android/animation/LayoutTransition.html" target="_blank">LayoutTransition</a> 和补间动画的 <a href="#android-view-animation-LayoutAnimationController">LayoutAnimationController</a> 一样，用于一个 ViewGroup 的动画控制器。</p>
+                            <p>只要在布局文件的 <code>ViewGroup</code> 中加上 <code>android:animateLayoutChanges="true"</code> 属性，就会有一个 渐入/渐出 的默认动画。比如：添加一个子 View 会出现渐入动画，移除一个子 View  会出现渐出动画，而周围的视图则会平滑地填充移除时的空隙。 </p>
                         </div>
 
                         <div class="sub-item">
                             <p><a href="docs/reference/android/animation/LayoutTransition.html" target="_blank">LayoutTransition</a> API:</p>
                             <ol>
 
-                                <li><p><code>void addChild(ViewGroup parent, View child)</code> -- </p></li>
-                                <li><p><code>void addTransitionListener(LayoutTransition.TransitionListener listener)</code> -- </p></li>
-                                <li><p><code>void disableTransitionType(int transitionType)</code> -- </p></li>
-                                <li><p><code>void enableTransitionType(int transitionType)</code> -- </p></li>
-                                <li><p><code>Animator getAnimator(int transitionType)</code> -- </p></li>
-                                <li><p><code>long getDuration(int transitionType)</code> -- </p></li>
-                                <li><p><code>TimeInterpolator getInterpolator(int transitionType)</code> -- </p></li>
-                                <li><p><code>long getStagger(int transitionType)</code> -- </p></li>
-                                <li><p><code>long getStartDelay(int transitionType)</code> -- </p></li>
-                                <li><p><code>List&lt;LayoutTransition.TransitionListener> getTransitionListeners()</code> -- </p></li>
-                                <li><p><code>void hideChild(ViewGroup parent, View child)</code> -- </p></li>
-                                <li><p><code>void hideChild(ViewGroup parent, View child, int newVisibility)</code> -- </p></li>
-                                <li><p><code>boolean isChangingLayout()</code> -- </p></li>
-                                <li><p><code>boolean isRunning()</code> -- </p></li>
-                                <li><p><code>boolean isTransitionTypeEnabled(int transitionType)</code> -- </p></li>
-                                <li><p><code>void removeChild(ViewGroup parent, View child)</code> -- </p></li>
-                                <li><p><code>void removeTransitionListener(LayoutTransition.TransitionListener listener)</code> -- </p></li>
-                                <li><p><code>void setAnimateParentHierarchy(boolean animateParentHierarchy)</code> -- </p></li>
-                                <li><p><code>void setAnimator(int transitionType, Animator animator)</code> -- </p></li>
-                                <li><p><code>void setDuration(int transitionType, long duration)</code> -- </p></li>
-                                <li><p><code>void setDuration(long duration)</code> -- </p></li>
-                                <li><p><code>void setInterpolator(int transitionType, TimeInterpolator interpolator)</code> -- </p></li>
-                                <li><p><code>void setStagger(int transitionType, long duration)</code> -- </p></li>
-                                <li><p><code>void setStartDelay(int transitionType, long delay)</code> -- </p></li>
-                                <li><p><code>void showChild(ViewGroup parent, View child)</code> -- </p></li>
-                                <li><p><code>void showChild(ViewGroup parent, View child, int oldVisibility)</code> -- </p></li>
+                                <li><p><code>void addChild(ViewGroup parent, View child)</code> -- 添加一个 child 到 parent 中</p></li>
+                                <li><p><code>void removeChild(ViewGroup parent, View child)</code> -- 从 parent 中移除一个 child</p></li>
+                                <li><p><code>void showChild(ViewGroup parent, View child)</code> -- 显示 child</p></li>
+                                <li><p><code>void showChild(ViewGroup parent, View child, int oldVisibility)</code> -- 显示 child</p></li>
+                                <li><p><code>void hideChild(ViewGroup parent, View child)</code> -- 隐藏 child</p></li>
+                                <li><p><code>void hideChild(ViewGroup parent, View child, int newVisibility)</code> -- 隐藏 child</p></li>
+
+                                <li class="group"><p><code>void addTransitionListener(LayoutTransition.TransitionListener listener)</code> -- 添加监听器</p></li>
+                                <li><p><code>void removeTransitionListener(LayoutTransition.TransitionListener listener)</code> -- 移除监听器</p></li>
+                                <li><p><code>List&lt;LayoutTransition.TransitionListener> getTransitionListeners()</code> -- 获取监听器列表</p></li>
+
+                                <li class="group"><p><code>void disableTransitionType(int transitionType)</code> -- 关闭某种类型的动画</p></li>
+                                <li><p><code>void enableTransitionType(int transitionType)</code> -- 开启某种类型的动画</p></li>
+                                <li><p><code>boolean isTransitionTypeEnabled(int transitionType)</code> -- 获取指定类型的状态</p></li>
+
+                                <li class="group"><p><code>Animator getAnimator(int transitionType)</code> -- 获取指定类型的动画</p></li>
+                                <li><p><code>void setAnimator(int transitionType, Animator animator)</code> -- 设置指定类型的动画</p></li>
+
+                                <li class="group"><p><code>long getDuration(int transitionType)</code> -- 获取动画时长</p></li>
+                                <li><p><code>void setDuration(int transitionType, long duration)</code> -- 设置指定类型的动画时长</p></li>
+                                <li><p><code>void setDuration(long duration)</code> -- 设置时长</p></li>
+                                <li><p><code>long getStartDelay(int transitionType)</code> -- 获取指定类型的动画延迟</p></li>
+                                <li><p><code>void setStartDelay(int transitionType, long delay)</code> -- 设置指定类型的动画延迟</p></li>
+                                <li><p><code>long getStagger(int transitionType)</code> -- 获取在更改动画期间启动每个动画之间的延迟时间长度</p></li>
+                                <li><p><code>void setStagger(int transitionType, long duration)</code> -- 设置在启动每个动画之间的延迟时间长度</p></li>
+
+                                <li class="group"><p><code>void setInterpolator(int transitionType, TimeInterpolator interpolator)</code> -- 设置插值器</p></li>
+                                <li><p><code>TimeInterpolator getInterpolator(int transitionType)</code> -- 获取插值器</p></li>
+
+                                <li class="group"><p><code>boolean isChangingLayout()</code> -- 是否会改变布局</p></li>
+                                <li><p><code>boolean isRunning()</code> -- 是否运行状态</p></li>
+                                <li><p><code>void setAnimateParentHierarchy(boolean animateParentHierarchy)</code> -- 是否允许改变父级层次</p></li>
+                            </ol>
                         </div>
 					</div>
 				</div>
@@ -1559,22 +1584,279 @@ public class LayoutTransition {
                         <h3 class="panel-title">属性动画实例</h3>
                     </div>
                     <div class="panel-body">
+                        <ol>
+                            <li><p><b>Java 代码实现补间动画的 平移，缩放，旋转，透明效果：</b></p>
+                            <pre class="brush: java;">
+/** 1.Alpha */
+Animator alpha = ObjectAnimator.ofFloat(image, "alpha",  1f, 0.2f, 1f).setDuration(3000);
 
+/** 2.Translate */
+PropertyValuesHolder x_trans = PropertyValuesHolder.ofFloat("translationX", 0, 500, 0);
+PropertyValuesHolder y_trans = PropertyValuesHolder.ofFloat("translationY", 0, 100, 0);
+Animator translate = ObjectAnimator.ofPropertyValuesHolder(image, x_trans, y_trans).setDuration(3000);
+
+/** 3.Scale: 中心点缩放 */
+PropertyValuesHolder x_scale = PropertyValuesHolder.ofFloat("scaleX", 1f, 0.5f, 1f);
+PropertyValuesHolder y_scale = PropertyValuesHolder.ofFloat("scaleY", 1f, 0.5f, 1f);
+Animator scale = ObjectAnimator.ofPropertyValuesHolder(image, x_scale, y_scale).setDuration(3000);
+
+/** 4.Ratotion: 中心点旋转 */
+Animator rotation = ObjectAnimator.ofFloat(image, "rotation", 0, 60f, -60f, 30f, -30f, 0f)
+                                .setDuration(3000);
+
+/** 5.Scale: 定点缩放，在动画开始的时候设置为右上角，为了不影响后面的动画，在动画结束后还原为默认位置 */
+Animator scale_xy = ObjectAnimator.ofPropertyValuesHolder(image, x_scale, y_scale).setDuration(3000);
+
+/** 获取 缩放/旋转 的参考点，默认为 View 的中心点 */
+final float pivotX = image.getPivotX();
+final float pivotY = image.getPivotY();
+scale_xy.addListener(new AnimatorListenerAdapter() {
+    @Override
+    public void onAnimationStart(Animator animation) {
+        super.onAnimationStart(animation);
+        // 设置参考点为右上角
+        image.setPivotX(pivotX * 2);
+        image.setPivotY(0);
+    }
+
+    @Override
+    public void onAnimationEnd(Animator animation) {
+        super.onAnimationEnd(animation);
+        // 为了不影响后面的动画，还原为默认位置
+        image.setPivotX(pivotX);
+        image.setPivotY(pivotY);
+    }
+});
+
+/** 6.Ratotion: X 轴旋转 */
+Animator rotation_X = ObjectAnimator.ofFloat(image, "rotationX", 0, 60f, -60f, 0).setDuration(3000);
+/** 7.Ratotion: Y 轴旋转 */
+Animator rotation_Y = ObjectAnimator.ofFloat(image, "rotationY", 0, 30f, -30f, 0).setDuration(3000);
+
+AnimatorSet mAnimatorSet = new AnimatorSet();
+// 顺序播放
+mAnimatorSet.playSequentially(alpha, translate, scale, rotation, scale_xy, rotation_X, rotation_Y);
+mAnimatorSet.start();
+                            </pre>
+                            </li>
+                            <li><p><b>XML 实现补间动画的 平移，缩放，旋转，透明效果：</b></p>
+                                <pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;set xmlns:android="http://schemas.android.com/apk/res/android"  &lt;!-- set 可嵌套 -->
+    android:ordering="sequentially"> &lt;!-- 顺序播放 -->
+    &lt;!-- Alpha -->
+    &lt;objectAnimator android:duration="3000">
+        &lt;propertyValuesHolder android:propertyName="alpha">
+            &lt;keyframe android:fraction="0" android:value="1" />
+            &lt;keyframe android:fraction="0.5" android:value="0.2" />
+            &lt;keyframe android:fraction="1" android:value="1" />
+        &lt;/propertyValuesHolder>
+    &lt;/objectAnimator>
+
+    &lt;!-- Translate -->
+    &lt;objectAnimator android:duration="3000">
+        &lt;propertyValuesHolder android:propertyName="x">
+            &lt;keyframe android:fraction="0" android:value="0" />
+            &lt;keyframe android:fraction="0.5" android:value="500" />
+            &lt;keyframe android:fraction="1" android:value="0" />
+        &lt;/propertyValuesHolder>
+        &lt;propertyValuesHolder android:propertyName="y">
+            &lt;keyframe android:fraction="0" android:value="0" />
+            &lt;keyframe android:fraction="0.5" android:value="100" />
+            &lt;keyframe android:fraction="1" android:value="0" />
+        &lt;/propertyValuesHolder>
+    &lt;/objectAnimator>
+
+    &lt;!-- Scale: 中心点缩放 -->
+    &lt;objectAnimator android:duration="3000">
+        &lt;propertyValuesHolder android:propertyName="scaleX">
+            &lt;keyframe android:fraction="0" android:value="1" />
+            &lt;keyframe android:fraction="0.5" android:value="0.5" />
+            &lt;keyframe android:fraction="1" android:value="1" />
+        &lt;/propertyValuesHolder>
+        &lt;propertyValuesHolder android:propertyName="scaleY">
+            &lt;keyframe android:fraction="0" android:value="1" />
+            &lt;keyframe android:fraction="0.5" android:value="0.5" />
+            &lt;keyframe android:fraction="1" android:value="1" />
+        &lt;/propertyValuesHolder>
+    &lt;/objectAnimator>
+
+    &lt;!-- Ratotion: 中心点旋转 -->
+    &lt;objectAnimator android:duration="3000">
+        &lt;propertyValuesHolder android:propertyName="rotation">
+            &lt;keyframe android:fraction="0" android:value="0" />
+            &lt;keyframe android:fraction=".2" android:value="60" />
+            &lt;keyframe android:fraction=".4" android:value="-60" />
+            &lt;keyframe android:fraction=".6" android:value="30" />
+            &lt;keyframe android:fraction=".8" android:value="-30" />
+            &lt;keyframe android:fraction="1" android:value="0" />
+        &lt;/propertyValuesHolder>
+    &lt;/objectAnimator>
+&lt;/set>
+                            </pre>
+                            </li>
+                            <li><p><b>动画沿着路径走</b></p>
+                                <pre class="brush: java;">
+/** V 形正弦曲线，注意: 不能使用 Path 的 addXX 方法，因为不知道哪里是起点，哪里是终点 */
+Path path = new Path();
+path.moveTo(0, 0);
+path.quadTo(50, 0, 100, 100);
+path.quadTo(150, 200, 200, 200);
+path.quadTo(250, 200, 300, 100);
+path.quadTo(350, 0, 400, 0);
+path.close(); // 回到原位
+
+// 动画沿着路径走
+ObjectAnimator mAnimator = ObjectAnimator.ofFloat(image, "x", "y", path);
+mAnimator.setDuration(5000);
+
+mAnimator.start();
+                            </pre>
+                            </li>
+
+                        </ol>
                     </div>
                 </div>
                 <!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="android-transition-TransitionManager"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title">TransitionManager</h3>
 					</div>
 					<div class="panel-body">
-						
+						<div class="sub-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    android.transition.TransitionManager
+
+public class TransitionManager {}
+                            </pre>
+                            <p>Android Transition 框架有三个核心的类，分别是 <b>Scene</b>、<b>Transition</b> 和 <b>TransitionManager</b>。</p>
+                            <p><a href="docs/reference/android/transition/Scene.html" target="_blank">Scene</a> 是场景，用于保存布局中所有 View 的属性值。</p>
+                            <p><a href="docs/reference/android/transition/Transition.html" target="_blank">Transition</a> 是对这些属性值的改变定义过渡的效果。</p>
+                            <p><a href="docs/reference/android/transition/TransitionManager.html" target="_blank">TransitionManager</a> 用于将 Scene 和 Transition 联系起来，它提供了一系列的方法指明起始场景和结束场景，他们的过渡动画是什么? 到指定的场景所使用的过渡动画是什么? 在当前场景到下一帧的过渡效果是什么?</p>
+                            <ol>
+
+                                <li><p><code>static void beginDelayedTransition(ViewGroup sceneRoot, Transition transition)</code> -- </p></li>
+                                <li><p><code>static void beginDelayedTransition(ViewGroup sceneRoot)</code> -- </p></li>
+                                <li class="group"><p><code>static void endTransitions(ViewGroup sceneRoot)</code> -- </p></li>
+                                <li><p><code>static void go(Scene scene, Transition transition)</code> -- </p></li>
+                                <li><p><code>static void go(Scene scene)</code> -- </p></li>
+                                <li class="group"><p><code>void setTransition(Scene scene, Transition transition)</code> -- </p></li>
+                                <li><p><code>void setTransition(Scene fromScene, Scene toScene, Transition transition)</code> -- </p></li>
+                                <li><p><code>void transitionTo(Scene scene)</code> -- </p></li>
+
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+
+                        </div>
 					</div>
 				</div>
 				<!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="android-transition-Transition"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Transition 及子类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    android.transition.Transition
+
+public abstract class Transition implements Cloneable {
+    public Transition() {}
+    public Transition(Context context, AttributeSet attrs) {}
+
+    public static abstract class EpicenterCallback {
+        public abstract Rect onGetEpicenter(Transition transition);
+    }
+
+    public static interface TransitionListener {
+        void onTransitionCancel(Transition transition);
+        void onTransitionEnd(Transition transition);
+        void onTransitionPause(Transition transition);
+        void onTransitionResume(Transition transition);
+        void onTransitionStart(Transition transition);
+    }
+}
+</pre>
+                            <p><a href="docs/reference/android/transition/Transition.html" target="_blank">Transition</a> 是对这些属性值的改变定义过渡的效果。</p>
+                        </div>
+
+                        <div class="sub-item">
+
+                        </div>
+
+                        <div class="sub-item">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="android-transition-Scene"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Scene</h3>
+                    </div>
+                    <div class="panel-body">
+<pre class="brush: java;">
+java.lang.Object
+    android.transition.Scene
+
+public final class Scene {
+    public Scene(ViewGroup sceneRoot) {}
+    public Scene(ViewGroup sceneRoot, View layout) {}
+}
+</pre>
+                        <p><a href="docs/reference/android/transition/Scene.html" target="_blank">Scene</a> 是场景，用于保存布局中所有 View 的属性值。</p>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="android-transition-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                    </div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="android-transition-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                    </div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="android-transition-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"></h3>
+                    </div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+                <!-- item over -->
 			</div>
 		</div>
 	</div>
