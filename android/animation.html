@@ -112,8 +112,9 @@
 							<a href="#android-transition-TransitionManager" class="list-group-item">TransitionManager</a>
 							<a href="#android-transition-Transition" class="list-group-item">Transition 及子类</a>
                             <a href="#android-transition-Scene" class="list-group-item">Scene</a>
-							<a href="#android-transition-" class="list-group-item">...</a>
-
+							<a href="#android-transition-PathMotion" class="list-group-item">PathMotion 及子类</a>
+                            <a href="#android-transition-TransitionPropagation" class="list-group-item">TransitionPropagation 及子类</a>
+                            <a href="#android-transition-example" class="list-group-item">转场动画实例</a>
 						</div>
 					</div>
 				</div>
@@ -1734,25 +1735,41 @@ java.lang.Object
 public class TransitionManager {}
                             </pre>
                             <p>Android Transition 框架有三个核心的类，分别是 <b>Scene</b>、<b>Transition</b> 和 <b>TransitionManager</b>。</p>
+                            <p><img src="images/android-transition.png" class="img-responsive center-block"></p>
                             <p><a href="docs/reference/android/transition/Scene.html" target="_blank">Scene</a> 是场景，用于保存布局中所有 View 的属性值。</p>
                             <p><a href="docs/reference/android/transition/Transition.html" target="_blank">Transition</a> 是对这些属性值的改变定义过渡的效果。</p>
                             <p><a href="docs/reference/android/transition/TransitionManager.html" target="_blank">TransitionManager</a> 用于将 Scene 和 Transition 联系起来，它提供了一系列的方法指明起始场景和结束场景，他们的过渡动画是什么? 到指定的场景所使用的过渡动画是什么? 在当前场景到下一帧的过渡效果是什么?</p>
+                            <p>可以以 XML 的形式保存在 <code>res/transition</code> 目录下。下面为一个实例：</p>
+                            <pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;transitionManager xmlns:android="http://schemas.android.com/apk/res/android">
+    &lt;transition android:fromScene="@layout/transition_scene1"
+                android:toScene="@layout/transition_scene2"
+                android:transition="@transition/changebounds"/>
+    &lt;transition android:fromScene="@layout/transition_scene2"
+                android:toScene="@layout/transition_scene1"
+                android:transition="@transition/changebounds"/>
+&lt;/transitionManager>
+                            </pre>
+                            <p><a href="docs/reference/android/transition/TransitionInflater.html" target="_blank">TransitionInflater</a> 用于从资源文件中(<code>res/transition</code>)解析变换，有以下几个方法：</p>
+                            <ol>
+                                <li><p><code>static TransitionInflater from(Context context)</code> -- 获得 TransitionInflater</p></li>
+                                <li><p><code>Transition inflateTransition(int resource)</code> -- 从资源加载一个 Transition</p></li>
+                                <li><p><code>TransitionManager inflateTransitionManager(int resource, ViewGroup sceneRoot)</code> -- 从资源加载一个 TransitionManager</p></li>
+                            </ol>
+                            <p><a href="docs/reference/android/transition/TransitionManager.html" target="_blank">TransitionManager</a> API:</p>
                             <ol>
 
-                                <li><p><code>static void beginDelayedTransition(ViewGroup sceneRoot, Transition transition)</code> -- </p></li>
-                                <li><p><code>static void beginDelayedTransition(ViewGroup sceneRoot)</code> -- </p></li>
-                                <li class="group"><p><code>static void endTransitions(ViewGroup sceneRoot)</code> -- </p></li>
-                                <li><p><code>static void go(Scene scene, Transition transition)</code> -- </p></li>
-                                <li><p><code>static void go(Scene scene)</code> -- </p></li>
-                                <li class="group"><p><code>void setTransition(Scene scene, Transition transition)</code> -- </p></li>
-                                <li><p><code>void setTransition(Scene fromScene, Scene toScene, Transition transition)</code> -- </p></li>
-                                <li><p><code>void transitionTo(Scene scene)</code> -- </p></li>
+                                <li><p><code>static void beginDelayedTransition(ViewGroup sceneRoot, Transition transition)</code> -- 指定当前场景到下一帧的过渡效果</p></li>
+                                <li><p><code>static void beginDelayedTransition(ViewGroup sceneRoot)</code> -- 指定当前场景到下一帧的过渡效果为默认 Transition(<a href="docs/reference/android/transition/AutoTransition.html" target="_blank">AutoTransition</a>)</p></li>
+                                <li class="group"><p><code>static void endTransitions(ViewGroup sceneRoot)</code> -- 结束 sceneRoot 上的所有挂起和正在进行的转换</p></li>
+                                <li><p><code>static void go(Scene scene, Transition transition)</code> -- 到指定的场景所使用的过渡动画</p></li>
+                                <li><p><code>static void go(Scene scene)</code> -- 使用默认的 Transition(<a href="docs/reference/android/transition/AutoTransition.html" target="_blank">AutoTransition</a>) 到指定的场景</p></li>
+                                <li class="group"><p><code>void setTransition(Scene scene, Transition transition)</code> -- 为一个场景指定变换</p></li>
+                                <li><p><code>void setTransition(Scene fromScene, Scene toScene, Transition transition)</code> -- 指明起始场景和结束场景</p></li>
+                                <li><p><code>void transitionTo(Scene scene)</code> -- 使用适当的过渡在这个给定的场景变化，如：指定 TransitionManager 已有的变换，如果 TransitionManager 没有指定变换则使用默认的 Transition(<a href="docs/reference/android/transition/AutoTransition.html" target="_blank">AutoTransition</a>)</p></li>
 
                             </ol>
-                        </div>
-
-                        <div class="sub-item">
-
                         </div>
 					</div>
 				</div>
@@ -1774,10 +1791,12 @@ public abstract class Transition implements Cloneable {
     public Transition() {}
     public Transition(Context context, AttributeSet attrs) {}
 
+    // 变换中心回调
     public static abstract class EpicenterCallback {
-        public abstract Rect onGetEpicenter(Transition transition);
+        Rect onGetEpicenter(Transition transition);
     }
 
+    // 变换回调
     public static interface TransitionListener {
         void onTransitionCancel(Transition transition);
         void onTransitionEnd(Transition transition);
@@ -1786,16 +1805,194 @@ public abstract class Transition implements Cloneable {
         void onTransitionStart(Transition transition);
     }
 }
+
+/** XML 属性
+ * android:duration
+ * android:interpolator
+ * android:startDelay
+ */
 </pre>
                             <p><a href="docs/reference/android/transition/Transition.html" target="_blank">Transition</a> 是对这些属性值的改变定义过渡的效果。</p>
+                            <p><a href="docs/reference/android/transition/TransitionValues.html" target="_blank">TransitionValues</a> 为转换保存缓存值的数据结构。保存变换的 View 和其属性。</p>
+                            <pre class="brush: java;">
+public class TransitionValues {
+    public TransitionValues() {}
+
+    public final Map&lt;String, Object> values;
+    public View view;
+}
+                            </pre>
+                            <p><a href="docs/reference/android/transition/Transition.html" target="_blank">Transition</a> API:</p>
+                            <ol>
+
+                                <li><p><code>Transition addListener(Transition.TransitionListener listener)</code> -- 添加变换监听器</p></li>
+                                <li><p><code>Transition removeListener(Transition.TransitionListener listener)</code> -- 一处变换监听器</p></li>
+
+                                <li class="group"><p><code>long getStartDelay()</code> -- 获取延迟</p></li>
+                                <li><p><code>Transition setStartDelay(long startDelay)</code> -- 设置延迟</p></li>
+                                <li><p><code>long getDuration()</code> -- 获取时长</p></li>
+                                <li><p><code>Transition setDuration(long duration)</code> -- 设置时长</p></li>
+                                <li><p><code>TimeInterpolator getInterpolator()</code> -- 获取时间插值器</p></li>
+                                <li><p><code>Transition setInterpolator(TimeInterpolator interpolator)</code> -- 设置时间插值器</p></li>
+
+                                <li class="group"><p><code>Transition addTarget(View target)</code> -- 添加作用对象</p></li>
+                                <li><p><code>Transition removeTarget(View target)</code> -- 移除作用对象</p></li>
+                                <li><p><code>Transition addTarget(int targetId)</code> -- 添加作用对象</p></li>
+                                <li><p><code>Transition removeTarget(int targetId)</code> -- 移除作用对象</p></li>
+                                <li><p><code>Transition addTarget(Class targetType)</code> -- 添加作用对象</p></li>
+                                <li><p><code>Transition removeTarget(Class target)</code> -- 移除作用对象</p></li>
+                                <li><p><code>Transition addTarget(String targetName)</code> -- 添加作用对象</p></li>
+                                <li><p><code>Transition removeTarget(String targetName)</code> -- 移除作用对象</p></li>
+                                <li><p><code>List&lt;Integer> getTargetIds()</code> -- 获取作用对象的 ID</p></li>
+                                <li><p><code>List&lt;String> getTargetNames()</code> -- 获取作用对象的 Name</p></li>
+                                <li><p><code>List&lt;Class> getTargetTypes()</code> -- 获取作用对象的 Type</p></li>
+                                <li><p><code>List&lt;View> getTargets()</code> -- 获取作用对象</p></li>
+
+                                <li class="group"><p><code>Transition excludeChildren(int targetId, boolean exclude)</code> -- 是否排除指定目标的子对象</p></li>
+                                <li><p><code>Transition excludeChildren(Class type, boolean exclude)</code> -- 是否排除指定目标的子对象</p></li>
+                                <li><p><code>Transition excludeChildren(View target, boolean exclude)</code> -- 是否排除指定目标的子对象</p></li>
+                                <li><p><code>Transition excludeTarget(View target, boolean exclude)</code> -- 是否排除作用对象</p></li>
+                                <li><p><code>Transition excludeTarget(Class type, boolean exclude)</code> -- 是否排除作用对象</p></li>
+                                <li><p><code>Transition excludeTarget(String targetName, boolean exclude)</code> -- 是否排除作用对象</p></li>
+                                <li><p><code>Transition excludeTarget(int targetId, boolean exclude)</code> -- 是否排除作用对象</p></li>
+
+                                <li class="group"><p><code>PathMotion getPathMotion()</code> -- 参见: <a href="#android-transition-PathMotion">PathMotion</a></p></li>
+                                <li><p><code>void setPathMotion(PathMotion pathMotion)</code> -- 参见: <a href="#android-transition-PathMotion">PathMotion</a></p></li>
+                                <li><p><code>TransitionPropagation getPropagation()</code> -- 参见: <a href="#android-transition-TransitionPropagation">TransitionPropagation</a></p></li>
+                                <li><p><code>void setPropagation(TransitionPropagation transitionPropagation)</code> -- 参见: <a href="#android-transition-TransitionPropagation">TransitionPropagation</a></p></li>
+
+                                <li class="group"><p><code>Animator createAnimator(ViewGroup sceneRoot, TransitionValues startValues, TransitionValues endValues)</code> -- 从 <code>TransitionValues</code> 创建属性动画</p></li>
+                                <li><p><code>TransitionValues getTransitionValues(View view, boolean start)</code> -- 获取指定 View 的 <code>TransitionValues</code></p></li>
+                                <li><p><code>abstract void captureEndValues(TransitionValues transitionValues)</code> -- 捕获结束场景中该转换监视器的属性值</p></li>
+                                <li><p><code>abstract void captureStartValues(TransitionValues transitionValues)</code> -- 捕获起始场景中该转换监视器的属性值</p></li>
+                                <li><p><code>boolean isTransitionRequired(TransitionValues startValues, TransitionValues endValues)</code> -- 变换是否应该创建一个 Animator</p></li>
+                                <li><p><code>String[] getTransitionProperties()</code> -- 获取变换使用的所有属性值</p></li>
+
+                                <li class="group"><p><code>void setEpicenterCallback(Transition.EpicenterCallback epicenterCallback)</code> -- 设置变换中心回调</p></li>
+                                <li><p><code>Transition.EpicenterCallback getEpicenterCallback()</code> -- 返回用于查找转换中心的回调</p></li>
+                                <li><p><code>Rect getEpicenter()</code> -- 获取变换中心</p></li>
+
+                                <li class="group"><p><code>void setMatchOrder(int... matches)</code> -- 设置转换与视图起始值和结束值匹配的顺序</p></li>
+                                <li><p><code>String getName()</code> -- 返回此转换的名称，这个名称在内部用于区分不同的转换，以确定何时中断转换重叠</p></li>
+                                <li><p><code>boolean canRemoveViews()</code> -- 是否可以移除 View</p></li>
+                                <li><p><code>Transition clone()</code> -- 复制</p></li>
+
+
+                            </ol>
                         </div>
 
                         <div class="sub-item">
+                            <p><a href="docs/reference/android/transition/Transition.html" target="_blank">Transition</a> 的子类和间接子类：</p>
+                            <ol>
+                                <li><p><a href="docs/reference/android/transition/ChangeBounds.html" target="_blank">ChangeBounds</a> -- 根据前后布局界限的变化执行动画。</p>
+                                <pre class="brush: java;">
+/** XML 属性
+ * android:resizeClip="true" -- 通过调整剪辑边界来调整视图的大小，而不是改变视图本身的尺寸。默认为 'false'
+ */
+/** 1. 当 image 在可见和不可间间切换时，container 中元素自动平移 */
+TransitionSet trans = new TransitionSet();
+trans.setOrdering(TransitionSet.ORDERING_TOGETHER);
+trans.addTransition(new Fade(Fade.OUT)); // 淡出
+trans.addTransition(new ChangeBounds()); // 改变边界(可见时，下面的元素向下推；不可见时，下面的元素向上推。)
+trans.addTransition(new Fade(Fade.IN)); // 淡入
 
-                        </div>
+TransitionManager.beginDelayedTransition(container, trans);
 
-                        <div class="sub-item">
+if (image.getVisibility() != View.VISIBLE) {
+    image.setVisibility(View.VISIBLE);
+} else {
+    image.setVisibility(View.GONE);
+}
 
+/** 2. 改变子 View 在 layout 中的位置，icon 会有一个移动动画 */
+&lt;FrameLayout
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="120dp">
+    &lt;ImageView
+        android:id="@+id/icon"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:contentDescription="@string/app_name"
+        android:padding="5dp"
+        android:src="@drawable/ic_launcher_android" />
+&lt;/FrameLayout>
+
+TransitionManager.beginDelayedTransition(layout, new ChangeBounds());
+FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) icon.getLayoutParams();
+if ((lp.gravity & Gravity.START) == Gravity.START) {
+    lp.gravity = Gravity.BOTTOM | Gravity.END;
+} else {
+    lp.gravity = Gravity.TOP | Gravity.START;
+}
+icon.setLayoutParams(lp);
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/transition/ChangeClipBounds.html" target="_blank">ChangeClipBounds</a> -- 捕捉对象：View 的 <code>getClipBounds()</code> 属性值，根据这个值的改变前后变化执行动画。</p>
+                                    <pre class="brush: java;">
+/** 裁剪 ImageView，会有一个裁剪动画，感觉从边界一直裁剪到  Rect 区域 */
+Rect BOUNDS = new Rect(400, 200, 700, 400); // 裁剪中心区域
+TransitionManager.beginDelayedTransition(container, new ChangeClipBounds());
+if (BOUNDS.equals(ViewCompat.getClipBounds(image))) {
+    ViewCompat.setClipBounds(image, null);
+} else {
+    ViewCompat.setClipBounds(image, BOUNDS);
+}
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/transition/ChangeImageTransform.html" target="_blank">ChangeImageTransform</a> -- 捕捉对象：ImageView 的 <code>matrix</code>属性值。</p>
+                                    <pre class="brush: java;">
+
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/transition/ChangeScroll.html" target="_blank">ChangeScroll</a> -- 捕捉对象：View 的 <code>scroll</code> 属性值。</p>
+                                    <pre class="brush: java;">
+
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/transition/ChangeTransform.html" target="_blank">ChangeTransform</a> -- 捕捉对象：View 的 <code>scale</code> 和 <code>rotation</code> 属性值。</p>
+                                    <pre class="brush: java;">
+
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/transition/TransitionSet.html" target="_blank">TransitionSet</a> -- 变换组合，可以指定其中的变换为同时或顺序播放。</p>
+                                    <pre class="brush: java;">
+
+                                </pre>
+                                </li><li><p><a href="docs/reference/android/transition/Visibility.html" target="_blank">Visibility</a> -- </p>
+                                <pre class="brush: java;">
+
+                                </pre>
+                            </li>
+                                <li class="group"><p><a href="docs/reference/android/transition/AutoTransition.html" target="_blank">AutoTransition</a> -- 是 <code>TransitionSet</code> 的子类，其实是以下几个动画组合顺序执行：</p>
+                                    <pre class="brush: xml;">
+&lt;transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+               android:transitionOrdering="sequential">
+    &lt;fade android:fadingMode="fade_out" />
+    &lt;changeBounds />
+    &lt;fade android:fadingMode="fade_in" />
+&lt;/transitionSet>
+                                </pre>
+                                </li>
+
+                                <li><p><a href="docs/reference/android/transition/Explode.html" target="_blank">Explode</a> -- 是 <code>Visibility</code> 的子类，作用对象：View 的 <code>Visibility</code> 属性值。</p>
+                                    <pre class="brush: java;">
+
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/transition/Fade.html" target="_blank">Fade</a> -- 是 <code>Visibility</code> 的子类，作用对象：View 的 <code>Visibility</code> 属性值。可以在初始化是指定 IN 或者 OUT 分别对应淡入和淡出，若不指定默认为淡入淡出效果。</p>
+                                    <pre class="brush: java;">
+
+                                </pre>
+                                </li>
+                                <li><p><a href="docs/reference/android/transition/Slide.html" target="_blank">Slide</a> -- 是 <code>Visibility</code> 的子类，作用对象：View 的 <code>Visibility</code> 属性值。</p>
+                                    <pre class="brush: java;">
+
+                                </pre>
+                                </li>
+
+                            </ol>
                         </div>
                     </div>
                 </div>
@@ -1823,10 +2020,26 @@ public final class Scene {
                 <!-- item over -->
 
                 <!-- item start -->
-                <a class="offset" id="android-transition-"></a>
+                <a class="offset" id="android-transition-PathMotion"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"></h3>
+                        <h3 class="panel-title">PathMotion 及子类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <pre class="brush: java;">
+
+                        </pre>
+                        <p><a href="docs/reference/android/transition/PathMotion.html" target="_blank">PathMotion</a>是 Transition 的辅助工具，以 Path 的方式指定过渡效果，两个具体实现类 <b>ArcMotion</b> 和 <b>PatternPathMotion</b>。</p>
+
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="android-transition-TransitionPropagation"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">TransitionPropagation  及子类</h3>
                     </div>
                     <div class="panel-body">
 
@@ -1835,22 +2048,10 @@ public final class Scene {
                 <!-- item over -->
 
                 <!-- item start -->
-                <a class="offset" id="android-transition-"></a>
+                <a class="offset" id="android-transition-example"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"></h3>
-                    </div>
-                    <div class="panel-body">
-
-                    </div>
-                </div>
-                <!-- item over -->
-
-                <!-- item start -->
-                <a class="offset" id="android-transition-"></a>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title"></h3>
+                        <h3 class="panel-title">转场动画实例</h3>
                     </div>
                     <div class="panel-body">
 
