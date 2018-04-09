@@ -60,7 +60,7 @@
 			<!-- left-menu start -->
 			<div class="col-md-3">
 				<div class="panel panel-default"
-					style="position: fixed; top: 70px; width: 260px; height: 85%; overflow: auto; float: left;">
+                     id="left_menu_modify">
 					<div class="panel-heading">
 						<h3 class="panel-title">ANIMATION</h3>
 					</div>
@@ -1813,6 +1813,23 @@ public abstract class Transition implements Cloneable {
  */
 </pre>
                             <p><a href="docs/reference/android/transition/Transition.html" target="_blank">Transition</a> 是对这些属性值的改变定义过渡的效果。</p>
+                            <p>除了系统内置的 Transition，我们还可以自定义 Transition 效果。</p>
+                            <ol>
+                                <li><p>需要继承 Transition;</p></li>
+                                <li><p>其工作原理是在 <code>captureStartValues()</code> 和 <code>captureEndValues()</code> 中分别记录 View 的属性值，官网建议确保属性值不冲突，属性值的命名格式参考：</p>
+                                    <pre class="brush: java;">package_name:transition_name:property_name</pre>
+                                </li>
+                                 <li><p>在 <code>createAnimator()</code> 中创建动画，对比属性值的改变执行动画效果。</p></li>
+                            </ol>
+                            <p><b>注意事项：</b></p>
+                            <ol>
+                                <li><p>Android 版本在 4.0 到 4.4.2 要使用 Android Support Library's；</p></li>
+                                <li><p>对于 SurfaceView 可能不起效果，因为 SurfaceView 的实例是在非UI线程更新的，因此会造成和其他视图动画不同步；</p></li>
+                                <li><p>某些特定的转换类型在应用到 TextView 时可能不会产生所需的动画效果；</p></li>
+                                <li><p>继承自 AdapterView 的如 ListView，与该框架不兼容</p></li>
+                                <li><p>不要对包含文本的视图的大小进行动画；</p></li>
+                                <li><p>一些效果可能需要硬件加速的支持，如下面的 ChangeTransform 实例。</p></li>
+                            </ol>
                             <p><a href="docs/reference/android/transition/TransitionValues.html" target="_blank">TransitionValues</a> 为转换保存缓存值的数据结构。保存变换的 View 和其属性。</p>
                             <pre class="brush: java;">
 public class TransitionValues {
@@ -1882,6 +1899,41 @@ public class TransitionValues {
                         </div>
 
                         <div class="sub-item">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="images/transition-ChangBounds.gif" class="img-responsive">
+                                    <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">ChangeBounds</span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <img src="images/transition-ChangClipBounds.gif" class="img-responsive">
+                                    <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">ChangeClipBounds</span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <img src="images/transition-ChangeImageTransform.gif" class="img-responsive">
+                                    <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">ChangeImageTransform</span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <img src="images/transition-ChangeScoll.gif" class="img-responsive">
+                                    <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">ChangeScoll</span></p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="images/transition-ChangeTransform.gif" class="img-responsive">
+                                    <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">ChangeTransform</span></p>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <img src="images/transition-AutoTransition.gif" class="img-responsive">
+                                    <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">AutoTransition</span></p>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <img src="images/transition-Visibility.gif" class="img-responsive">
+                                    <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">Explode / Fade / Slide</span></p>
+                                </div>
+                            </div>
+
                             <p><a href="docs/reference/android/transition/Transition.html" target="_blank">Transition</a> 的子类和间接子类：</p>
                             <ol>
                                 <li><p><a href="docs/reference/android/transition/ChangeBounds.html" target="_blank">ChangeBounds</a> -- 根据前后布局界限的变化执行动画。</p>
@@ -1889,22 +1941,7 @@ public class TransitionValues {
 /** XML 属性
  * android:resizeClip="true" -- 通过调整剪辑边界来调整视图的大小，而不是改变视图本身的尺寸。默认为 'false'
  */
-/** 1. 当 image 在可见和不可间间切换时，container 中元素自动平移 */
-TransitionSet trans = new TransitionSet();
-trans.setOrdering(TransitionSet.ORDERING_TOGETHER);
-trans.addTransition(new Fade(Fade.OUT)); // 淡出
-trans.addTransition(new ChangeBounds()); // 改变边界(可见时，下面的元素向下推；不可见时，下面的元素向上推。)
-trans.addTransition(new Fade(Fade.IN)); // 淡入
-
-TransitionManager.beginDelayedTransition(container, trans);
-
-if (image.getVisibility() != View.VISIBLE) {
-    image.setVisibility(View.VISIBLE);
-} else {
-    image.setVisibility(View.GONE);
-}
-
-/** 2. 改变子 View 在 layout 中的位置，icon 会有一个移动动画 */
+/** 改变子 View 在 layout 中的位置，icon 会有一个移动动画 */
 &lt;FrameLayout
     android:id="@+id/layout"
     android:layout_width="match_parent"
@@ -1943,52 +1980,123 @@ if (BOUNDS.equals(ViewCompat.getClipBounds(image))) {
                                 </li>
                                 <li><p><a href="docs/reference/android/transition/ChangeImageTransform.html" target="_blank">ChangeImageTransform</a> -- 捕捉对象：ImageView 的 <code>matrix</code>属性值。</p>
                                     <pre class="brush: java;">
+/** 注意，要达到图三的效果，ImageView 的宽高要比图片大 */
+Transition transition = new ChangeImageTransform();
+TransitionManager.beginDelayedTransition(container, transition);
 
+// image.setScaleType(ImageView.ScaleType.FIT_XY);
+// image.setScaleType(ImageView.ScaleType.CENTER);
+// image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+// image.setScaleType(ImageView.ScaleType.FIT_START);
+// image.setScaleType(ImageView.ScaleType.FIT_END);
+image.setScaleType(ImageView.ScaleType.MATRIX);
+final Matrix matrix = new Matrix();
+matrix.setRotate(30);
+matrix.postTranslate(200, 0);
+image.setImageMatrix(matrix);
                                 </pre>
                                 </li>
                                 <li><p><a href="docs/reference/android/transition/ChangeScroll.html" target="_blank">ChangeScroll</a> -- 捕捉对象：View 的 <code>scroll</code> 属性值。</p>
                                     <pre class="brush: java;">
+TransitionManager.beginDelayedTransition(mRoot, new ChangeScroll());
+image.scrollBy(-60, -100);
 
+// 回退
+image.scrollBy(60, 100);
                                 </pre>
                                 </li>
-                                <li><p><a href="docs/reference/android/transition/ChangeTransform.html" target="_blank">ChangeTransform</a> -- 捕捉对象：View 的 <code>scale</code> 和 <code>rotation</code> 属性值。</p>
+                                <li><p><a href="docs/reference/android/transition/ChangeTransform.html" target="_blank">ChangeTransform</a> -- 捕捉对象：View 的 <code>scale</code> 和 <code>rotation</code> 属性值。<span class="text-warning"><b>注意：这个动画需要硬件加速的支持。</b></span></p>
                                     <pre class="brush: java;">
+/** XML 属性
+ * android:reparent -- 是否允许目标 View 切换 Parent，默认为 true；如果为 false，则动画在 Parent 切换后再开始
+ * android:reparentWithOverlay -- 默认为 true，如果为 false，则动画在 Parent 切换后才能看到
+ */
+/** ImageView 在两个 ViewGroup 中产生移动的动画效果 */
+TransitionManager.beginDelayedTransition(container, mTransition);
+if (mContainer2.getChildCount() > 0) {
+    mContainer2.removeAllViews();
+    change(mContainer1);
+} else {
+    mContainer1.removeAllViews();
+    change(mContainer2);
+    mContainer2.getChildAt(0).setRotation(45);
+}
 
+private void change(ViewGroup container) {
+    final View view = LayoutInflater.from(this).inflate(R.layout.image, container, false);
+    container.addView(view);
+}
                                 </pre>
                                 </li>
                                 <li><p><a href="docs/reference/android/transition/TransitionSet.html" target="_blank">TransitionSet</a> -- 变换组合，可以指定其中的变换为同时或顺序播放。</p>
                                     <pre class="brush: java;">
-
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+               android:transitionOrdering="together" >
+    &lt;fade android:fadingMode="fade_out" />
+    &lt;changeBounds android:resizeClip="true" />
+    &lt;fade android:fadingMode="fade_in" />
+&lt;/transitionSet>
                                 </pre>
-                                </li><li><p><a href="docs/reference/android/transition/Visibility.html" target="_blank">Visibility</a> -- </p>
+                                </li>
+                                <li><p><a href="docs/reference/android/transition/Visibility.html" target="_blank">Visibility</a> -- 是一个抽象类，针对其可见行的动画，看下面的几个子类。</p>
                                 <pre class="brush: java;">
-
+/** XML 属性
+ * android:transitionVisibilityMode="mode_in|mode_out" -- 可见模式为进入或退出
+ */
                                 </pre>
                             </li>
                                 <li class="group"><p><a href="docs/reference/android/transition/AutoTransition.html" target="_blank">AutoTransition</a> -- 是 <code>TransitionSet</code> 的子类，其实是以下几个动画组合顺序执行：</p>
-                                    <pre class="brush: xml;">
+                                    <pre class="brush: java;">
 &lt;transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
                android:transitionOrdering="sequential">
     &lt;fade android:fadingMode="fade_out" />
     &lt;changeBounds />
     &lt;fade android:fadingMode="fade_in" />
 &lt;/transitionSet>
+
+/** 当 image 在可见和不可间间切换时，container 中元素自动平移 */
+TransitionSet trans = new TransitionSet();
+trans.setOrdering(TransitionSet.ORDERING_TOGETHER);
+trans.addTransition(new Fade(Fade.OUT)); // 淡出
+trans.addTransition(new ChangeBounds()); // 改变边界(可见时，下面的元素向下推；不可见时，下面的元素向上推。)
+trans.addTransition(new Fade(Fade.IN)); // 淡入
+
+TransitionManager.beginDelayedTransition(container, trans);
+
+if (image.getVisibility() != View.VISIBLE) {
+    image.setVisibility(View.VISIBLE);
+} else {
+    image.setVisibility(View.GONE);
+}
                                 </pre>
                                 </li>
-
-                                <li><p><a href="docs/reference/android/transition/Explode.html" target="_blank">Explode</a> -- 是 <code>Visibility</code> 的子类，作用对象：View 的 <code>Visibility</code> 属性值。</p>
+                                <li><p><a href="docs/reference/android/transition/Explode.html" target="_blank">Explode</a> -- 爆炸效果，爆炸中心点为 container 的中心点。 是 <code>Visibility</code> 的子类，作用对象：View 的 <code>Visibility</code> 属性值。</p>
                                     <pre class="brush: java;">
+/** 如果爆炸中心点刚好由 View，那么它的方向是随机的 */
+TransitionManager.beginDelayedTransition(container, new Explode());
+// TransitionManager.beginDelayedTransition(container, new Fade());
+// TransitionManager.beginDelayedTransition(container, new Slide());
 
+// container 为 ViewGroup，包括了如图三个色快
+int visiable = container.getChildAt(0).getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
+for (int i = 0; i < container.getChildCount(); i++) {
+    container.getChildAt(i).setVisibility(visiable);
+}
                                 </pre>
                                 </li>
-                                <li><p><a href="docs/reference/android/transition/Fade.html" target="_blank">Fade</a> -- 是 <code>Visibility</code> 的子类，作用对象：View 的 <code>Visibility</code> 属性值。可以在初始化是指定 IN 或者 OUT 分别对应淡入和淡出，若不指定默认为淡入淡出效果。</p>
+                                <li><p><a href="docs/reference/android/transition/Fade.html" target="_blank">Fade</a> -- 透明度效果，是 <code>Visibility</code> 的子类，作用对象：View 的 <code>Visibility</code> 属性值。可以在初始化是指定 IN 或者 OUT 分别对应淡入和淡出，若不指定默认为淡入淡出效果。</p>
                                     <pre class="brush: java;">
-
+/** XML 属性
+ * android:fadingMode="fade_in|fade_out|fade_in_out"
+ */
                                 </pre>
                                 </li>
-                                <li><p><a href="docs/reference/android/transition/Slide.html" target="_blank">Slide</a> -- 是 <code>Visibility</code> 的子类，作用对象：View 的 <code>Visibility</code> 属性值。</p>
+                                <li><p><a href="docs/reference/android/transition/Slide.html" target="_blank">Slide</a> -- 下滑效果，是 <code>Visibility</code> 的子类，作用对象：View 的 <code>Visibility</code> 属性值。</p>
                                     <pre class="brush: java;">
-
+/** XML 属性
+ * android:slideEdge="left|right|top|bottom|start|end" -- 下滑方向
+ */
                                 </pre>
                                 </li>
 
