@@ -1825,7 +1825,7 @@ public abstract class Transition implements Cloneable {
                             <ol>
                                 <li><p>Android 版本在 4.0 到 4.4.2 要使用 Android Support Library's；</p></li>
                                 <li><p>对于 SurfaceView 可能不起效果，因为 SurfaceView 的实例是在非UI线程更新的，因此会造成和其他视图动画不同步；</p></li>
-                                <li><p>某些特定的转换类型在应用到 TextView 时可能不会产生所需的动画效果；</p></li>
+                                <li><p>某些特定的转换类型在应用到 TextureView 时可能不会产生所需的动画效果；</p></li>
                                 <li><p>继承自 AdapterView 的如 ListView，与该框架不兼容</p></li>
                                 <li><p>不要对包含文本的视图的大小进行动画；</p></li>
                                 <li><p>一些效果可能需要硬件加速的支持，如下面的 ChangeTransform 实例。</p></li>
@@ -1936,7 +1936,7 @@ public class TransitionValues {
 
                             <p><a href="docs/reference/android/transition/Transition.html" target="_blank">Transition</a> 的子类和间接子类：</p>
                             <ol>
-                                <li><p><a href="docs/reference/android/transition/ChangeBounds.html" target="_blank">ChangeBounds</a> -- 根据前后布局界限的变化执行动画。</p>
+                                <li><p><a href="docs/reference/android/transition/ChangeBounds.html" target="_blank">ChangeBounds</a> -- 检测 View 的位置边界创建移动和缩放动画(关注布局边界的变化)</p>
                                 <pre class="brush: java;">
 /** XML 属性
  * android:resizeClip="true" -- 通过调整剪辑边界来调整视图的大小，而不是改变视图本身的尺寸。默认为 'false'
@@ -1996,7 +1996,7 @@ matrix.postTranslate(200, 0);
 image.setImageMatrix(matrix);
                                 </pre>
                                 </li>
-                                <li><p><a href="docs/reference/android/transition/ChangeScroll.html" target="_blank">ChangeScroll</a> -- 捕捉对象：View 的 <code>scroll</code> 属性值。</p>
+                                <li><p><a href="docs/reference/android/transition/ChangeScroll.html" target="_blank">ChangeScroll</a> -- 捕捉对象：View 的 <code>scroll</code> 属性值。创建移动动画。</p>
                                     <pre class="brush: java;">
 TransitionManager.beginDelayedTransition(mRoot, new ChangeScroll());
 image.scrollBy(-60, -100);
@@ -2005,7 +2005,7 @@ image.scrollBy(-60, -100);
 image.scrollBy(60, 100);
                                 </pre>
                                 </li>
-                                <li><p><a href="docs/reference/android/transition/ChangeTransform.html" target="_blank">ChangeTransform</a> -- 捕捉对象：View 的 <code>scale</code> 和 <code>rotation</code> 属性值。<span class="text-warning"><b>注意：这个动画需要硬件加速的支持。</b></span></p>
+                                <li><p><a href="docs/reference/android/transition/ChangeTransform.html" target="_blank">ChangeTransform</a> -- 检测对象：View 的 <code>scale</code> 和 <code>rotation</code> 属性值。创建缩放和旋转动画。<span class="text-warning"><b>注意：这个动画需要硬件加速的支持。</b></span></p>
                                     <pre class="brush: java;">
 /** XML 属性
  * android:reparent -- 是否允许目标 View 切换 Parent，默认为 true；如果为 false，则动画在 Parent 切换后再开始
@@ -2123,6 +2123,15 @@ public final class Scene {
 }
 </pre>
                         <p><a href="docs/reference/android/transition/Scene.html" target="_blank">Scene</a> 是场景，用于保存布局中所有 View 的属性值。</p>
+                        <p>场景代表层次结构中各种属性在场景应用时所具有的值集合。场景可以被配置为在应用时自动运行转换，这将激活场景变化期间发生的各种属性更改。</p>
+                        <ol>
+                            <li><p><code>static Scene getSceneForLayout(ViewGroup sceneRoot, int layoutId, Context context)</code> -- 获取 Scene 对象</p></li>
+                            <li><p><code>void setEnterAction(Runnable action)</code> -- 设置进入回调</p></li>
+                            <li><p><code>void setExitAction(Runnable action)</code> -- 设置退出回调</p></li>
+                            <li><p><code>void enter()</code> -- 进入，先清空 sceneRoot，再将 layoutId 对应的 View 加入 sceneRoot, 如果设置了 EnterAction, 则调用其 <code>run()</code> 方法</p></li>
+                            <li><p><code>void exit()</code> -- 退出，如果设置了 ExitAction, 则调用其 <code>run()</code> 方法</p></li>
+                            <li><p><code>ViewGroup getSceneRoot()</code> -- 获取 sceneRoot</p></li>
+                        </ol>
                     </div>
                 </div>
                 <!-- item over -->
@@ -2135,9 +2144,118 @@ public final class Scene {
                     </div>
                     <div class="panel-body">
                         <pre class="brush: java;">
+java.lang.Object
+    android.transition.PathMotion
 
+public abstract class PathMotion {
+    public PathMotion() {}
+    public PathMotion(Context context, AttributeSet attrs) {}
+
+    public abstract Path getPath(float startX, float startY, float endX, float endY);
+}
                         </pre>
-                        <p><a href="docs/reference/android/transition/PathMotion.html" target="_blank">PathMotion</a>是 Transition 的辅助工具，以 Path 的方式指定过渡效果，两个具体实现类 <b>ArcMotion</b> 和 <b>PatternPathMotion</b>。</p>
+                        <p><a href="docs/reference/android/transition/PathMotion.html" target="_blank">PathMotion</a> 是 Transition 的辅助工具，以 Path 的方式指定过渡效果，两个具体实现类 <b>ArcMotion</b> 和 <b>PatternPathMotion</b>。</p>
+                        <p><a href="docs/reference/android/transition/PathMotion.html" target="_blank">PathMotion</a> 可以在 XML 文件出现：</p>
+                        <pre class="brush: xml;">
+&lt;changeBounds>
+    &lt;pathMotion class="my.app.transition.MyPathMotion"/>
+&lt;/changeBounds>
+                        </pre>
+                        <div class="row">
+                            <div class="col-md-3 col-md-push-2"><img src="images/transition-ArcPathMotion.gif" class="img-responsive">
+                                <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">ArcPathMotion</span></p>
+                            </div>
+                            <div class="col-md-3 col-md-push-4"><img src="images/transition-PatternPathMotion.gif" class="img-responsive">
+                                <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">PatternPathMotion</span></p>
+                            </div>
+                        </div>
+                        <ul>
+                            <li>
+                                <p><a href="docs/reference/android/transition/ArcMotion.html" target="_blank">ArcMotion</a> 是曲线路径，将会有一个曲线移动效果；如果点之间的水平距离小于垂直距离，那么圆的中心点将与端点水平对齐。如果垂直距离小于水平距离，则圆的中心点将与终点垂直对齐。(已知两个点和一条直线，那么圆弧是确定的)</p>
+                                <p>当两点接近水平或垂直时，运动曲线将变小，因为圆的中心将远离这两点。如果要强制改变路径曲率，则使用 <code>setMinimumHorizontalAngle(float)</code> 或 <code>setMinimumVerticalAngle(float)</code> 设置两点之间弧的最小角度。</p>
+                            <pre class="brush: xml;">
+<!-- XML 属性，对应三个 get / set 方法 -->
+&lt;changeBounds>
+   &lt;arcMotion
+        <!-- 以下三个值： 0 < value < 90，意味着最大接近 1/4 个圆 -->
+       android:minimumHorizontalAngle="15" <!-- 两点水平时，起点和终点之间的弧角。(圆心在两点中线垂直方向) -->
+       android:minimumVerticalAngle="0" <!-- 两点垂直时，起点和终点之间的弧角。(圆心在两点中线水平方向) -->
+       android:maximumAngle="90" /> <!-- 在起始点和结束点之间的弧角(不知什么用)，默认为 70 -->
+&lt;/changeBounds>
+                            </pre>
+                                <pre class="brush: java;">
+Transition arcTransition = new AutoTransition();
+ArcMotion arcMotion = new ArcMotion();
+arcMotion.setMinimumHorizontalAngle(89.99f);
+arcMotion.setMinimumVerticalAngle(89.99f);
+arcTransition.setPathMotion(arcMotion);
+TransitionManager.beginDelayedTransition(container, arcTransition);
+
+FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) image.getLayoutParams();
+switch (v.getId()) {
+    case R.id.explode:// 左上 -- 右下
+        if ((lp.gravity & Gravity.START) == Gravity.START) {
+            lp.gravity = Gravity.END | Gravity.BOTTOM;
+        } else {
+            lp.gravity = Gravity.START;
+        }
+        break;
+    case R.id.fade: // 左 -- 右
+        if ((lp.gravity & Gravity.START) == Gravity.START) {
+            lp.gravity = Gravity.END;
+        } else {
+            lp.gravity = Gravity.START;
+        }
+        break;
+    case R.id.slide: // 上 -- 下
+        if ((lp.gravity & Gravity.TOP) == Gravity.TOP) {
+            lp.gravity = Gravity.BOTTOM;
+        } else {
+            lp.gravity = Gravity.TOP;
+        }
+        break;
+}
+image.setLayoutParams(lp);
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/transition/PatternPathMotion.html" target="_blank">PatternPathMotion</a> 是模式路径，可以使用模式指定路径；路径的起始点将被移动到原点，终点将被缩放和旋转，使之与目标端点匹配。(这句话比较难理解，比如(M0 0 L100 100), 那么这个位置是相对的，终点在 100, 100 的位置， 如果要在中间加值,如(M0 0 L0 50 L100 100), 那么这个效果就是在动画的 50% 分量处有一个转折。还有一点要注意，在缩放的时候，左上角为 (0,0),右下角为(100, 100),这里没有计算 View 本身的宽度和高度)</p>
+                                <pre class="brush: xml;">
+<!-- XML 属性，对应一个 get / set 方法 -->
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+               android:transitionOrdering="sequential">
+    &lt;fade android:fadingMode="fade_out" />
+    &lt;changeBounds>
+        <!-- 这里的写法相当于 moveto(0, 0), lineTo(0, 50), lineto(100, 100)  -->
+        &lt;patternPathMotion android:patternPathData="M0 0 L0 50 L100 100" />
+    &lt;/changeBounds>
+    &lt;fade android:fadingMode="fade_in" />
+&lt;/transitionSet>
+                                </pre>
+                                <pre class="brush: java;">
+/** 下面的写法和上面的 xml 是一样的效果 */
+Transition changeBounds = new ChangeBounds();
+
+PatternPathMotion pathMotion = new PatternPathMotion();
+Path path = new Path();
+path.moveTo(0, 0);
+path.lineTo(0, 50); // 如果去掉这一句，就相当于直线移动了
+path.lineTo(100, 100);
+pathMotion.setPatternPath(path);
+
+changeBounds.setPathMotion(pathMotion);
+
+TransitionSet transition = new TransitionSet();
+transition.addTransition(new Fade(Fade.OUT));
+transition.addTransition(changeBounds);
+transition.addTransition(new Fade(Fade.IN));
+TransitionManager.beginDelayedTransition(container, transition);
+
+... // 省略的代码同 ArcPathMotion
+                            </pre>
+                            </li>
+                        </ul>
+
 
                     </div>
                 </div>
@@ -2150,7 +2268,97 @@ public final class Scene {
                         <h3 class="panel-title">TransitionPropagation  及子类</h3>
                     </div>
                     <div class="panel-body">
+<pre class="brush: java;">
+java.lang.Object
+    android.transition.TransitionPropagation
+        └── android.transition.VisibilityPropagation
+            ├── android.transition.CircularPropagation
+            └── android.transition.SidePropagation
 
+public abstract class TransitionPropagation {
+    // sceneRoot 中参与动画的每个子 View 都有一次计算
+    public abstract long getStartDelay(ViewGroup sceneRoot, Transition transition,
+            TransitionValues startValues, TransitionValues endValues);
+
+    public abstract String[] getPropagationProperties();
+
+    public abstract void captureValues(TransitionValues transitionValues);
+}
+</pre>
+                        <p><a href="docs/reference/android/transition/TransitionPropagation.html" target="_blank">TransitionPropagation</a> 用于计算 sceneRoot 中每个<b>子 View 的相对启动延时。</b></p>
+                        <p>Explode 变换默认使用了 <a href="docs/reference/android/transition/CircularPropagation.html" target="_blank">CircularPropagation</a>。</p>
+                        <p>Slide 变换默认使用了 <a href="docs/reference/android/transition/SidePropagation.html" target="_blank">SidePropagation</a>。</p>
+                        <ul>
+                            <li><p><a href="docs/reference/android/transition/VisibilityPropagation.html" target="_blank">VisibilityPropagation</a> -- 提供了获取位置和可见性的方法</p>
+                            <pre class="brush: java;">
+/** VisibilityPropagation 方法，可以根据其位置计算延时
+ * int getViewVisibility(TransitionValues values) -- 获取 View 的可见性
+ * int getViewX(TransitionValues values) -- 获取 View 在 sceneRoot 中的 X 位置
+ * int getViewY(TransitionValues values) -- 获取 View 在 sceneRoot 中的 Y 位置
+ */
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/transition/CircularPropagation.html" target="_blank">CircularPropagation</a> -- 可以根据其到 sceneRoot 中心点的位置计算延时</p>
+                                <pre class="brush: java;">
+/** CircularPropagation 方法
+ * void setPropagationSpeed(float propagationSpeed) -- 设置速度
+ */
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/transition/SidePropagation.html" target="_blank">SidePropagation</a> 可以根据其方向计算延时</p>
+                                <pre class="brush: java;">
+/** SidePropagation 方法
+ * void setPropagationSpeed(float propagationSpeed) -- 设置速度
+ * void setSide(int side) -- 设置其方向，Gravity.LEFT, Gravity.TOP...
+ */
+                            </pre>
+                            </li>
+                        </ul>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <p><b>自定义一个 VisibilityPropagation，不同的子 View 返回一个不同的延时：</b></p>
+<pre class="brush: java;">
+public class MyVisibilityPropagation extends VisibilityPropagation {
+    @Override
+    public long getStartDelay(ViewGroup sceneRoot, Transition transition,
+        TransitionValues startValues, TransitionValues endValues) {
+        // 如果计算的是左上角的 ImageView，则返回 100；否则返回 500;
+        if(startValues.view.equals(image)) {
+            return 100;
+        } else {
+            return 200;
+        }
+    }
+}
+
+// Explode
+Explode explode = new Explode();
+explode.setPropagation(new MyVisibilityPropagation());
+TransitionManager.beginDelayedTransition(container, explode);
+
+// Fade
+Fade fade = new Fade();
+fade.setPropagation(new MyVisibilityPropagation());
+TransitionManager.beginDelayedTransition(container, fade);
+
+// Slide
+Slide slide = new Slide();
+slide.setPropagation(new MyVisibilityPropagation());
+TransitionManager.beginDelayedTransition(container, slide);
+
+if(image.getVisibility() == View.GONE) {
+    image.setVisibility(View.VISIBLE);
+    icon.setVisibility(View.GONE);
+} else {
+    image.setVisibility(View.GONE);
+    icon.setVisibility(View.VISIBLE);
+}
+</pre>
+                            </div>
+                            <div class="col-md-3">
+                                <img class="img-responsive" src="images/transition-TransitionPropagation.gif">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- item over -->
