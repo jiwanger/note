@@ -1023,11 +1023,25 @@ ColorStateList primary_text_dark = getResources().getColorStateList(
 nt color = getResources().getColor(android.R.color.holo_blue_bright, getTheme());
                         </pre>
                         </li>
-                        <li class="group"><p><a href="docs/reference/android/R.style.html" target="_blank">R.style</a> -- 样式和主题，<code>sdk/platforms/android-[VERSION]/data/res/values/styles.xml</code></p></li>
-                        <li><p><a href="docs/reference/android/R.attr.html" target="_blank">R.attr</a> -- 属性，目录：<code>sdk/platforms/android-[VERSION]/data/res/values/attrs.xml</code></p>
+                        <li class="group"><p><a href="docs/reference/android/R.style.html" target="_blank">R.style</a> -- 内部样式和主题，<code>sdk/platforms/android-[VERSION]/data/res/values/styles.xml</code></p>
+                        <pre class="brush: xml;">
+<!-- 内部定义的主题和样式，一般主题以 Theme 开头的，供 application 和 activity 使用；其他供控件使用 -->
+                        </pre>
+                        </li>
+                        <li><p><a href="docs/reference/android/R.attr.html" target="_blank">R.attr</a> -- 内部属性，定义样式的时候可以使用，目录：<code>sdk/platforms/android-[VERSION]/data/res/values/attrs.xml</code></p>
+                            <pre class="brush: xml;">
+&lt;style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!-- 以 android:xxx 开头的都是系统提供的属性值，来自 android.R.attr.xx；自定义 xml 属性，这里不做介绍 -->
+    &lt;item name="android:windowFullscreen">false&lt;/item>
+    &lt;item name="colorPrimary">@color/colorPrimary&lt;/item>
+    &lt;item name="colorPrimaryDark">@color/colorPrimaryDark&lt;/item>
+    &lt;item name="colorAccent">@color/colorAccent&lt;/item>
+&lt;/style>
+                            </pre>
                             </li>
-                        <li><p><a href="docs/reference/android/R.styleable.html" target="_blank">R.styleable</a> -- 注意: <code>android.R.styleable</code> 不再使用，使用应用的 styleable，比如: <code>appcompat-v7</code>，它的 <code>res/values/values.xml</code> 中就有很多 styleable 可用。</p>
+                        <li><p><a href="docs/reference/android/R.styleable.html" target="_blank">R.styleable</a> -- 用于自定义样式属性，注意: <code>android.R.styleable</code> 不再使用，使用应用的 styleable，比如: <code>appcompat-v7</code>，它的 <code>res/values/values.xml</code> 中就有很多 styleable 可用。</p>
                             <pre class="brush: java;">
+<!-- 通过这样的方式定义的属性，可以给全局主题和样式使用 -->
 &lt;declare-styleable name="ActionBar">
     &lt;attr name="navigationMode">
          &lt;enum name="normal" value="0"/>
@@ -2543,7 +2557,7 @@ public abstract class PackageManager {}
                                 <ol>
                                     <li>
                                         <p><code>List
-                                            <ApplicationInfo> getInstalledApplications(int flags)
+                                            &lt;ApplicationInfo> getInstalledApplications(int flags)
                                         </code> -- 返回安装在设备上的所有应用程序包的列表
                                         </p>
                                         <pre class="brush: java;">
@@ -2557,7 +2571,7 @@ MATCH_UNINSTALLED_PACKAGES -- API 24 添加，应用卸载，选择保留数据�
                                     </li>
                                     <li>
                                         <p><code>List
-                                            <PackageInfo> getInstalledPackages(int flags)
+                                            <&lt;PackageInfo> getInstalledPackages(int flags)
                                         </code> -- 返回安装在设备上的所有包的列表
                                         </p>
                                         <pre class="brush: java;">
