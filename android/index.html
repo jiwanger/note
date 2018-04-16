@@ -1936,6 +1936,7 @@ public class Main {
 							<ol>
 								<li><p>主题和样式的继承有两种方式：<code>... parent="xxx"</code> 或者 <code>name="x.y"</code></p></li>
 								<li><p>主题和样式只允许单继承：<code>x.y.z</code> 继承自 <code>x.y</code>; 如果指定了 <code>parent</code>,那么样式名字不再具备继承功能,比如:<code>&lt;style name="x.y.z" parent="m"></code> 這個主題繼承自 m,不再繼承 x.y</p></li>
+								<li><p>通过 <code>.</code> 的方式,只能继承同一进程的样式,比如不能继承系统的样式.</p></li>
 							</ol>
 							<p>
 								<b>1. 系统主题</b> -- Android 系统自带了很多主题，通过
@@ -1944,34 +1945,44 @@ public class Main {
 							</p>
 							<p>不同 Android 版本引入了很多不同的主题：</p>
 							<pre class="brush: java;">
-API 1:
+API 1-10:
 android:Theme 根主题
-android:Theme.Black 背景黑色
-android:Theme.Light 背景白色
-android:Theme.Wallpaper 以桌面墙纸为背景
-android:Theme.Translucent 透明背景
-android:Theme.Panel 平板风格
-android:Theme.Dialog 对话框风格
+// 一般一个主题还会有以下样式的子主题:
+XXX.Black 背景黑色
+XXX.Light 背景白色
+XXX.Wallpaper 以桌面墙纸为背景
+XXX.Translucent 透明背景
+XXX.Panel 平板风格
+XXX.Dialog 对话框风格
 
-API 11:
-android:Theme.Holo Holo根主题
-android:Theme.Holo.Black Holo黑主题
-android:Theme.Holo.Light Holo白主题
+API 11-13:
+android:Theme.Holo 主要特点是轻快的颜色、适当的阴影、卡片化布局、方角矩形。
 
-API 14:
+API 14-20:
 Theme.DeviceDefault 设备默认根主题
-Theme.DeviceDefault.Black 设备默认黑主题
-Theme.DeviceDefault.Light 设备默认白主题
 
-API 21: (Android Material Design 就是要用这种主题)
-Theme.Material Material根主题
-Theme.Material.Light Material白主题
-
-兼容包 v7 中带的主题：
-Theme.AppCompat 兼容主题的根主题
-Theme.AppCompat.Black 兼容主题的黑色主题
-Theme.AppCompat.Light 兼容主题的白色主题
+API 21+:
+Theme.Material 平面主题
 </pre>
+
+							<p>
+								<b>2. 自定义主题(包括 v7 兼容包)</b> -- v7 包中的主题和自定义主题是一样的.通过
+								<code>android:theme="@style/xxx"</code>
+								引入。
+							</p>
+							<pre class="brush: java;">
+Theme.AppCompat 这个主题的表现要看引入包的版本
+appcompat-v7:21+ -- api 21 以上为 Theme.Material
+appcompat-v7:20- -- api 21 以下为 Theme.Holo
+							</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><b>style 常用属性</b></p>
+							<pre class="brush: xml;">
+
+								
+							</pre>
 						</div>
 					</div>
 				</div>
