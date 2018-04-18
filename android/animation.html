@@ -164,13 +164,254 @@
                             <li><p>当调用 startActivity 方法的时候启动一个新的 Activity，这时候就涉及到了旧的 Activity 的退出动画和新的 Activity 的显示动画；</p></li>
                             <li><p>当调用 finish 方法的时候，销毁当前 Acitivity，就涉及到了当前 Activity 的退出动画和前一个 Activity 的显示动画。</p></li>
                         </ul>
-                        <p><b>实现 Activity 跳转动画的五种方式:</b> <a href="http://blog.csdn.net/qq_23547831/article/details/51821159">参照此文</a></p>
+                        <p><b>实现 Activity 跳转动画的几种方式:</b></p>
+                        <div class="row">
+                            <div class="col-md-3 col-md-push-1">
+                                <img src="images/Activity-Animation.gif" class="img-responsive">
+                                <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">Animation(I/II)</span></p>
+                            </div>
+                            <div class="col-md-3 col-md-push-1">
+                                <img src="images/Activity-Transition-Slide.gif" class="img-responsive">
+                                <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">Transition-Slide(III)</span></p>
+                            </div>
+                            <div class="col-md-3 col-md-push-1">
+                                <img src="images/Activity-ShareElement.gif" class="img-responsive">
+                                <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">ShareElement(IV)</span></p>
+                            </div>
+                        </div>
                         <ol type="I">
-                            <li><p>使用 overridePendingTransition 方法实现 Activity 跳转动画;</p></li>
-                            <li><p>使用 style 的方式定义 Activity 的切换动画;</p></li>
-                            <li><p>使用 ActivityOptions 切换动画实现 Activity 跳转动画;</p></li>
-                            <li><p>使用 ActivityOptions 之后内置的动画效果通过 style 的方式;</p></li>
-                            <li><p>使用 ActivityOptions 动画共享组件的方式实现跳转 Activity 动画.</p></li>
+                            <li><p><b>使用 overridePendingTransition 方法实现 Activity 跳转动画，需要在 startAtivity 方法或者是 finish 方法调用之后立即执行；</b></p>
+<pre class="brush: java;">
+/** Activity-A 启动 Activity-B: */
+Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+intent.putExtra("url", planet.url);
+startActivity(intent);
+
+// 值为 0，则没有动画
+overridePendingTransition(R.anim.right_in, R.anim.left_out); // 使用右入，左出
+
+/** Activity-B 退出，监听返回按钮 */
+@Override
+public void onBackPressed() {
+    super.onBackPressed();
+
+    overridePendingTransition(R.anim.left_in, R.anim.right_out);  // 使用左入，右出
+}
+</pre>
+                                <p>使用的四个 <code>res/anim</code> 下的 xml 文件：</p>
+                                <pre class="brush: xml;">
+<!-- res/anim/right_in.xml -->
+&lt;set xmlns:android="http://schemas.android.com/apk/res/android" android:fillAfter="false">
+    &lt;translate android:duration="400" android:fromXDelta="100%p" android:toXDelta="0" />
+    &lt;alpha android:duration="400" android:fromAlpha="0" android:toAlpha="1.0" />
+&lt;/set>
+
+<!-- res/anim/left_out.xml -->
+&lt;set xmlns:android="http://schemas.android.com/apk/res/android" android:fillAfter="false">
+    &lt;translate android:duration="400" android:fromXDelta="0" android:toXDelta="-100%p" />
+    &lt;alpha android:duration="400" android:fromAlpha="1.0" android:toAlpha="0" />
+&lt;/set>
+
+<!-- res/anim/left_in.xml -->
+&lt;set xmlns:android="http://schemas.android.com/apk/res/android" android:fillAfter="false">
+    &lt;translate android:duration="400" android:fromXDelta="-100%p" android:toXDelta="0" />
+    &lt;alpha android:duration="400" android:fromAlpha="0" android:toAlpha="1.0" />
+&lt;/set>
+
+<!-- res/anim/right_out.xml -->
+&lt;set xmlns:android="http://schemas.android.com/apk/res/android" android:fillAfter="false">
+    &lt;translate android:duration="400" android:fromXDelta="0" android:toXDelta="100%p" />
+    &lt;alpha android:duration="400" android:fromAlpha="1.0" android:toAlpha="0" />
+&lt;/set>
+                                </pre>
+                            </li>
+                            <li><p><b>使用 style 的方式定义 Activity 的切换动画;</b></p>
+                            <pre class="brush: xml;">
+<!-- 1.在应用主题指定： windowAnimationStyle -->
+&lt;style name="MyAnimTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    &lt;item name="android:windowAnimationStyle">@style/activityAnimation&lt;/item>
+&lt;/style>
+
+<!-- 2.还是使用上面的 4 个 xml 文件，达到一样的效果 -->
+&lt;style name="activityAnimation">
+    <!-- ActivityA 启动下一个 ActivityB, ActivityB 的进入动画 -->
+    &lt;item name="android:activityOpenEnterAnimation">@anim/right_in&lt;/item>
+    <!-- ActivityA 启动下一个 ActivityB, ActivityA 的退出动画 -->
+    &lt;item name="android:activityOpenExitAnimation">@anim/left_out&lt;/item>
+    <!-- ActivityB 退出, ActivityA 的进入动画 -->
+    &lt;item name="android:activityCloseEnterAnimation">@anim/left_in&lt;/item>
+    <!-- ActivityB 退出动画 -->
+    &lt;item name="android:activityCloseExitAnimation">@anim/right_out&lt;/item>
+&lt;/style>
+                            </pre>
+                            </li>
+                            <li><p><b>使用 ActivityOptions 切换动画实现 Activity 跳转动画;</b></p>
+                                <p><b>先理解这些 API:</b></p>
+<pre class="brush: java;">
+    /** 返回覆盖，在返回是允许遮盖 */
+    getWindow().setAllowReturnTransitionOverlap(true);
+    getWindow().getAllowReturnTransitionOverlap();
+    /** 进入覆盖，进入时允许遮盖 */
+    getWindow().setAllowEnterTransitionOverlap(true);
+    getWindow().getAllowEnterTransitionOverlap();
+    /** 共享元素覆盖，true 表示共享元素应该用 Overlay 转换，false 表示在正常的 View 层次结构中转换 */
+    getWindow().setSharedElementsUseOverlay(true);
+    getWindow().getSharedElementsUseOverlay();
+
+    /** 很多主题，这两个属性默认设置了 */
+    requestWindowFeature(Window.FEATURE_ACTIVITY_TRANSITIONS);
+    requestWindowFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+
+    /** Activity 的动画 */
+    getWindow().setExitTransition(transition); // ActivityA 不设置默认为 NULL
+    getWindow().setEnterTransition(transition); // ActivityB 不设置默认为 Fade
+    getWindow().setReturnTransition(transition); // ActivityB 不设置默认为 EnterTransition
+    getWindow().setReenterTransition(transition); // ActivityA 不设置默认为 ExitTransition
+
+    /** 延时加载 */
+    postponeEnterTransition(); // 不会进入新的 Activity，必须调用下面的方法才会开始转换
+    startPostponedEnterTransition();
+
+    /** 共享元素的动画 */
+    getWindow().setSharedElementEnterTransition(transition);
+    getWindow().setSharedElementExitTransition(transition);
+    getWindow().setSharedElementReturnTransition(transition);
+    getWindow().setSharedElementReenterTransition(transition);
+</pre>
+                                <p><b>Java 代码实现：</b></p>
+                                <pre class="brush: java;">
+/** 设置进场和退场变换，一般只用设置这两个，其他两个会自动设置（看上面），具体看需求 */
+public void setUpTransition() {
+    Transition exit = new Slide(Gravity.START);
+    exit.excludeTarget(android.R.id.navigationBarBackground, true);
+    exit.excludeTarget(android.R.id.statusBarBackground, true);
+    exit.excludeTarget(R.id.action_bar_container, true);
+    getWindow().setExitTransition(exit);
+
+    Transition enter = new Slide(Gravity.END);
+    enter.excludeTarget(android.R.id.navigationBarBackground, true);
+    enter.excludeTarget(android.R.id.statusBarBackground, true);
+    enter.excludeTarget(R.id.action_bar_container, true);
+    getWindow().setEnterTransition(enter);
+}
+
+/** 启动新的 Activity */
+public void staticActivity(Activity activity, Intent intent) {
+    List&lt;Pair&lt;View, String>> pairs = TransitionUtil.shareStatusBarAndNavigationBar(activity);
+    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(activity,
+            pairs.toArray(new Pair[pairs.size()]));
+    activity.startActivity(intent, options.toBundle());
+}
+
+/** 此方法用于将 statusBar 和 navigationBar 的状态加入共享元素，应为在 7.x 系统上，
+ * 就算把这两个元素排除在变换外，也会产生一个闪烁效果，这是 7.x 系统上的 Bug
+ */
+public static List&lt;Pair&lt;View, String>> shareStatusBarAndNavigationBar(Activity context) {
+    View statusBar = context.findViewById(android.R.id.statusBarBackground);
+    View navigationBar = context.findViewById(android.R.id.navigationBarBackground);
+
+
+    List&lt;Pair&lt;View, String>> pairs = new ArrayList<>();
+    if (statusBar != null) {
+        pairs.add(Pair.create(statusBar, Window.STATUS_BAR_BACKGROUND_TRANSITION_NAME));
+    }
+    if (navigationBar != null) {
+        pairs.add(Pair.create(navigationBar, Window.NAVIGATION_BAR_BACKGROUND_TRANSITION_NAME));
+    }
+    return pairs;
+}
+
+/** 还有一个地方要注意的，就是延时加载，比如下面的 image 要从网络加载图片，等 image 展开再进行变换 */
+public void delayLoad() {
+    postponeEnterTransition();
+    image.getViewTreeObserver().addOnPreDrawListener(
+            new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    image.getViewTreeObserver().removeOnPreDrawListener(this);
+                    startPostponedEnterTransition();
+                    return true;
+                }
+            }
+    );
+}
+                                </pre>
+                                <p><b>XML 代码实现：</b></p>
+                                <pre class="brush: xml;">
+<!-- 主题文件中设置进场和退场变换，注意：statusBar 和 navigationBar 还是要照上面处理 -->
+&lt;style name="MyAnimTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    &lt;item name="android:windowActivityTransitions">true&lt;/item>
+    &lt;item name="android:windowContentTransitions">true&lt;/item>
+    &lt;item name="android:windowAllowReturnTransitionOverlap">true&lt;/item>
+    &lt;item name="android:windowAllowEnterTransitionOverlap">true&lt;/item>
+    &lt;item name="android:windowExitTransition">@transition/left_out&lt;/item>
+    &lt;item name="android:windowEnterTransition">@transition/right_in&lt;/item>
+&lt;/style>
+
+<!-- res/transition/left_out.xml -->
+&lt;transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+    android:transitionOrdering="together">
+    &lt;slide android:slideEdge="start">
+        <!-- 7.x 版本下有 bug，家了以下代码也无用，还必须把这两个元素加入共享 -->
+        &lt;targets>
+            &lt;target android:excludeId="@android:id/statusBarBackground" />
+            &lt;target android:excludeId="@android:id/navigationBarBackground" />
+            &lt;target android:excludeId="@id/action_bar_container" />
+        &lt;/targets>
+    &lt;/slide>
+&lt;/transitionSet>
+
+<!-- res/transition/right_in.xml -->
+&lt;transitionSet xmlns:android="http://schemas.android.com/apk/res/android"
+    android:transitionOrdering="together">
+    &lt;slide android:slideEdge="end">
+        <!-- 7.x 版本下有 bug，家了以下代码也无用，还必须把这两个元素加入共享 -->
+        &lt;targets>
+            &lt;target android:excludeId="@android:id/statusBarBackground" />
+            &lt;target android:excludeId="@android:id/navigationBarBackground" />
+            &lt;target android:excludeId="@id/action_bar_container" />
+        &lt;/targets>
+    &lt;/slide>
+&lt;/transitionSet>
+                                </pre>
+                            </li>
+                            <li><p><b>使用 ActivityOptions 动画共享元素的方式实现跳转 Activity 动画。(同样可以写在 xml 中，参照上面)</b></p>
+                            <pre class="brush: java;">
+/** ActivityA 同前面一样，区别只是加了点击的 image 为共享元素 */
+Intent intent = new Intent(this, SecondActivity.class);
+intent.putExtra("url", planet.url);
+
+List&lt;Pair&lt;View, String>> pairs = TransitionUtil.shareStatusBarAndNavigationBar(this);
+// 添加点击的 image 为共享元素
+pairs.add(Pair.create(sharedImage, getString(R.string.planet_transition_item)));
+
+ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this,
+                                pairs.toArray(new Pair[pairs.size()]));
+startActivity(intent, options.toBundle());
+
+/** ============================================================================= */
+
+/** ActivityB 可以只加延时加载，默认的 EnterTransition 为 Fade，为了更要的演示效果，改变进场变换如下： */
+public void setupTransition() {
+    TransitionSet transition = new TransitionSet();
+
+    // 上半部分往下滑动，image_container 为 image 的 ViewGroup
+    Slide down = new Slide(Gravity.TOP);
+    down.addTarget(R.id.image_container);
+
+    // 下半部分往上滑动，content_container 为 image 的下面的 ViewGroup
+    Slide up = new Slide(Gravity.BOTTOM);
+    up.addTarget(R.id.content_container);
+
+    transition.addTransition(down);
+    transition.addTransition(up);
+    // 排除掉 ActionBar
+    transition.excludeTarget(R.id.action_bar_container, true);
+
+    getWindow().setEnterTransition(transition);
+}
+                            </pre>
+                            </li>
                         </ol>
 					</div>
 				</div>
@@ -2370,6 +2611,45 @@ if(image.getVisibility() == View.GONE) {
                         <h3 class="panel-title">转场动画实例</h3>
                     </div>
                     <div class="panel-body">
+                        <div class="sub-item">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <img src="images/transition-TransitionActivity.gif" class="img-responsive">
+                                    <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">Activity 共享元素变换</span></p>
+                                </div>
+                                <!--
+                                <div class="col-md-3">
+                                    <img src="images/transition-TransitionActivity.gif" class="img-responsive">
+                                    <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">Activity 的滑动退出</span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <img src="images/transition-TransitionActivity.gif" class="img-responsive">
+                                    <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">TransitionActivity</span></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <img src="images/transition-TransitionActivity.gif" class="img-responsive">
+                                    <p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">TransitionActivity</span></p>
+                                </div>
+                                -->
+                            </div>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><b>1. Activity 跳转变换(加入了共享元素)：</b></p>
+                            <p>具体实现参照前面：<a href="#animation-Activity">Activity 跳转动画</a></p>
+                            <p>从图上看，好像图片是从一个 ActivityA 传递到另一个 ActivityB，实际上真正负责绘制都发生在 ActivityB 上：</p>
+                            <ol>
+                                <li><p>ActivityA 调用 startActivity() 后 ActivityB 处于透明状态；</p></li>
+                                <li><p>Transition 收集 ActivityA 中共享 View 的初始状态，并传递给 ActivityB；</p></li>
+                                <li><p>Transition 收集 ActivityB 中共享 View 的最终状态；</p></li>
+                                <li><p>Transition 根据状态改变创建动画；</p></li>
+                                <li><p>Transition 隐藏 ActivityA，随着 ActivityB 的共享 View 运动到指定位置，ActivityB 的背景在 ActivityA 上淡入，并随着动画完成而完全可见。</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><b>2. Activity 的滑动退出</b></p>
+                        </div>
 
                     </div>
                 </div>
