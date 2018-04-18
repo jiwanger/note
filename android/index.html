@@ -1980,12 +1980,83 @@ appcompat-v7:20- -- api 21 以下为 Theme.Holo
 						<div class="sub-item">
 							<p><b>Style 常用属性</b> -- 这里只研究公有属性,关于 View 的属性参考: <a href="view.html#view-View" target="_blank">View 类的 XML 属性</a></p>
 							<pre class="brush: xml;">
+<!-- 注意：以下属性分为 android: 前缀和无前缀，要看具体使用情况：
+    如果使用的是库实现，比如使用 AppCompat 主题，一些属性可能不用前缀;
+    如果使用的是系统实现，则需要前缀；
+    下面的为 AppCompat 主题用法： -->
+
+<!-- AppCompat 包属性 -->
 colorPrimary				-- 基础色值,ActionBar 默认使用这个颜色为背景
 colorPrimaryDark			-- 基础色值黑暗变型,StatusBar 默认使用这个颜色为背景
 colorAccent					-- 基础色值亮色变型,EditText 这用这个颜色作为有焦点时候的光标色值
+windowActionBar			    -- 是否使用 ActionBar
+windowNoTitle               -- 是否使用标题，如果为 true, ActionBar 也不可见
 
-android:windowBackground	-- 窗体的背景颜色,引用类型,可以为 @drawable / @color
-windowActionBar				-- 是否使用 ActionBar
+<!-- Window -->
+android:windowBackground	        -- 窗体的背景颜色,引用类型,可以为 @drawable / @color
+android:windowNoTitle               -- 这个是系统的标题栏，AppCompat 的 ActionBar 与它无关，也就是说可能同时存在
+android:actionBarSize               -- ActionBar 高度
+android:windowFullscreen 	        -- 是否为全屏模式，无状态栏
+android:windowTranslucentNavigation -- 半透明导航栏，半透明显示 android:windowBackground 的颜色
+android:windowTranslucentStatus     -- 半透明状态栏，半透明显示 android:windowBackground 的颜色
+android:statusBarColor              -- 状态栏颜色
+android:navigationBarColor          -- 导航栏颜色
+android:windowLightStatusBar        -- 状态栏还存在，但是图标全部消失, API 23
+android:windowIsFloating            -- Dialog 样式的 Activity, 无标题栏和 ActionBar
+android:windowCloseOnTouchOutside   -- 和上面同时使用有效果，点击 Window 外围，Activity 退出
+android:windowSoftInputMode         -- 输入法模式
+android:resizeableActivity          -- 分屏, API 24 才支持
+
+<!-- Animation -->
+android:windowAnimationStyle            -- 指定窗体动画样式名字，参见 Animation 的 Activity 跳转动画 下面的几种：
+android:activityOpenEnterAnimation      -- ActivityA 启动下一个 ActivityB, ActivityB 的进入动画
+android:activityOpenExitAnimation       -- ActivityA 启动下一个 ActivityB, ActivityA 的退出动画
+android:activityCloseEnterAnimation     -- ActivityB 退出, ActivityA 的进入动画
+android:activityCloseExitAnimation      -- ActivityB 退出动画
+android:windowHideAnimation             -- 当窗口从 VISIBLE 到 INVISIBLE 时使用的动画
+android:windowShowAnimation             -- 当窗口从 INVISIBLE 到 VISIBLE 时使用的动画
+android:windowEnterAnimation            -- 当窗口被添加动画
+android:windowExitAnimation             -- 当窗口被移除动画
+<!-- Fragment Animation -->
+android:fragmentOpenEnterAnimation      --
+android:fragmentOpenExitAnimation       --
+android:fragmentCloseEnterAnimation     --
+android:fragmentCloseExitAnimation      --
+android:fragmentFadeEnterAnimation      --
+android:fragmentFadeExitAnimation       --
+<!-- Task Animation -->
+android:taskOpenEnterAnimation          --
+android:taskOpenExitAnimation           --
+android:taskCloseEnterAnimation         --
+android:taskCloseExitAnimation          --
+android:taskToBackEnterAnimation        --
+android:taskToBackExitAnimation         --
+android:taskToFrontEnterAnimation       --
+android:taskToFrontExitAnimation        --
+
+<!-- Transition -->
+android:windowActivityTransitions               -- Window 是否允许 Activity 变换
+android:windowContentTransitions                -- Window 是否允许 Content 变换
+android:windowAllowReturnTransitionOverlap      -- 是否允许下一个 Activity 变换覆盖
+android:windowAllowEnterTransitionOverlap       -- 是否允许将回到的 Activity 变换覆盖
+android:windowContentOverlay                    -- Content 是否使用 Overlay 变换
+android:windowActionBarOverlay                  -- ActionBar 是否使用 Overlay 变换
+android:windowActionModeOverlay                 -- ActionMode 是否使用 Overlay 变换
+<!-- Fragment Transition -->
+android:fragmentAllowEnterTransitionOverlap     --
+android:fragmentAllowReturnTransitionOverlap    --
+android:fragmentEnterTransition                 --
+android:fragmentExitTransition                  --
+android:fragmentReenterTransition               --
+android:fragmentReturnTransition                --
+<!-- SharedElement Transition -->
+android:windowSharedElementEnterTransition      --
+android:windowSharedElementExitTransition       --
+android:windowSharedElementReenterTransition    --
+android:windowSharedElementReturnTransition     --
+android:windowSharedElementsUseOverlay          --
+fragmentSharedElementEnterTransition            --
+fragmentSharedElementReturnTransition           --
 							</pre>
 						</div>
 					</div>

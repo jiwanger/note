@@ -1037,22 +1037,41 @@ nt color = getResources().getColor(android.R.color.holo_blue_bright, getTheme())
     &lt;item name="colorPrimaryDark">@color/colorPrimaryDark&lt;/item>
     &lt;item name="colorAccent">@color/colorAccent&lt;/item>
 &lt;/style>
+
+<!-- attr 定义和使用 -->
+&lt;attr name="x" format="enum">
+    &lt;enum name="x1" value="1" />
+    &lt;enum name="x2" value="2" />
+&lt;/attr>
+
+&lt;declare-styleable name="CustomStyle">
+    &lt;attr name="x" />
+&lt;/declare-styleable>
                             </pre>
                             </li>
-                        <li><p><a href="docs/reference/android/R.styleable.html" target="_blank">R.styleable</a> -- 用于自定义样式属性，注意: <code>android.R.styleable</code> 不再使用，使用应用的 styleable，比如: <code>appcompat-v7</code>，它的 <code>res/values/values.xml</code> 中就有很多 styleable 可用。</p>
-                            <pre class="brush: java;">
-<!-- 通过这样的方式定义的属性，可以给全局主题和样式使用 -->
-&lt;declare-styleable name="ActionBar">
-    &lt;attr name="navigationMode">
-         &lt;enum name="normal" value="0"/>
-         &lt;enum name="listMode" value="1"/>
-         &lt;enum name="tabMode" value="2"/>
+                        <li><p><a href="docs/reference/android/R.styleable.html" target="_blank">R.styleable</a> -- 用于自定义属性名和类型，注意: <code>android.R.styleable</code> 为内部使用</p>
+                            <pre class="brush: xml;">
+<!-- 1.定义属性名和类型 -->
+&lt;declare-styleable name="CustomStyle">
+    &lt;attr name="x" format="enum">
+        &lt;enum name="x1" value="1" />
+        &lt;enum name="x2" value="2" />
     &lt;/attr>
-    &lt;attr name="displayOptions">
-        &lt;flag name="none" value="0"/>
-        &lt;flag name="useLogo" value="0x1"/>
-    &lt;/attr>
+    &lt;attr name="y" format="color" />
 &lt;/declare-styleable>
+
+<!-- 2.在 layout 文件使用，使用前要引入命名空间：xmlns:app="http://schemas.android.com/apk/res-auto" -->
+&lt;com.lesson1234.myapplication.anim.MyPathImageView
+        android:layout_width="match_parent"
+        app:x="x1"
+        app:y="#FF0000"
+        android:layout_height="wrap_content" />
+
+<!-- 3. 在 View 中解析属性 -->
+TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CustomStyle);
+int color = a.getColor(R.styleable.CustomStyle_y, Color.RED); // CustomStyle_y 为根据第一步自动生成
+a.recycle();
+
                         </pre></li>
                         <li><p><a href="docs/reference/android/R.array.html" target="_blank">R.array</a> -- 数组，目录：<code>sdk/platforms/android-[VERSION]/data/res/values/arrays.xml</code></p>
                             </li>
