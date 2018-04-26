@@ -111,7 +111,6 @@
 							<a href="#view-LinearLayout" class="list-group-item">LinearLayout</a>
 							<a href="#view-FrameLayout" class="list-group-item">FrameLayout</a>
 							<a href="#view-RelativeLayout" class="list-group-item">RelativeLayout</a>
-							<a href="#view-AbsoluteLayout" class="list-group-item">AbsoluteLayout</a>
 							<a href="#view-TableLayout" class="list-group-item">TableLayout</a>
 						</div>
 
@@ -546,9 +545,103 @@ public class MyListView exdents ListView {
 							<pre class="brush: java;">
 java.lang.Object
 	android.view.View
+
 public class View implements Drawable.Callback, Drawable.Callback2, KeyEvent.Callback, 
                              AccessibilityEventSource {
+	/** 点击 */
+	public interface OnClickListener { 
+        void onClick(View v);
+	}
+	
+	/** 长按 */
+	public interface OnLongClickListener {
+        boolean onLongClick(View v);
+	}
+	
+	/** 按键 */
+	public interface OnKeyListener {
+        boolean onKey(View v, int keyCode, KeyEvent event);
+	}
+	
+	/** 触摸 */
+	public interface OnTouchListener {
+        boolean onTouch(View v, MotionEvent event);
+	}
+	
+	/** 鼠标划过 */
+	public interface OnHoverListener {
+        boolean onHover(View v, MotionEvent event);
+	}
+	
+	/** 手势 */
+	public interface OnGenericMotionListener {
+        boolean onGenericMotion(View v, MotionEvent event);
+	}
+	
+	/** 拖动 */
+	public interface OnDragListener {
+        boolean onDrag(View v, DragEvent event);
+	}
 
+	/** 滑动位置改变 */
+	public interface OnScrollChangeListener {
+        void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY);
+    }
+	
+	/** 焦点改变 */
+	public interface OnFocusChangeListener {
+        void onFocusChange(View v, boolean hasFocus);
+	}
+
+	/** ContextMenu 点击 */
+	public interface OnContextClickListener {
+        boolean onContextClick(View v);
+	}
+	
+	/** 创建 ContextMenu */
+	public interface OnCreateContextMenuListener {
+        void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo);
+	}
+	
+	/** 状态栏可见性改变 */
+	public interface OnSystemUiVisibilityChangeListener {
+        public void onSystemUiVisibilityChange(int visibility);
+	}
+	
+	/** View 被添加到 Window 或者 从 Window 移除 */
+	public interface OnAttachStateChangeListener {
+        public void onViewAttachedToWindow(View v);
+        public void onViewDetachedFromWindow(View v);
+	}
+	
+	/** 监听器,参见:WindowInsets */
+	public interface OnApplyWindowInsetsListener {
+        public WindowInsets onApplyWindowInsets(View v, WindowInsets insets);
+	}
+	
+	/** 布局边界改变 */
+	public interface OnLayoutChangeListener {
+        void onLayoutChange(View v, int left, int top, int right, int bottom,
+            int oldLeft, int oldTop, int oldRight, int oldBottom);
+	}
+
+	/** 尺寸及尺寸模式 */
+	public static class MeasureSpec {}
+
+	/** 拖曳阴影构建器 */
+	public static class DragShadowBuilder {};
+	
+	/** 基本状体存储 */
+	public static class BaseSavedState extends AbsSavedState {}
+
+	/** 该类表示可以在视图中注册的委托，以通过构造函数而不是继承来增强可访问性支持 */
+	public static class AccessibilityDelegate {}
+
+	/** 构造函数 */
+	public View(Context context) {}
+	public View(Context context, AttributeSet attrs) {}
+	public View(Context context, AttributeSet attrs, int defStyleAttr) {}
+	public View(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {} 
 }
 
 /** Drawable.Callback 接口 */
@@ -594,8 +687,7 @@ public void sendAccessibilityEventUnchecked(AccessibilityEvent event);
 										<code>@android:color/transparent</code>
 										和
 										<code>@null</code>
-										。注意 TextView 默认是透明的，不用写此属性，但是 Button / ImageButton / ImageView
-										想透明的话就得写这个属性了。
+										。
 									</p>
 								</li>
 								<li>
@@ -695,7 +787,7 @@ public void sendAccessibilityEventUnchecked(AccessibilityEvent event);
 								<li>
 									<p>
 										<code>android:keepScreenOn</code>
-										-- View在可见的情况下是否保持唤醒状态。常在 LinearLayout 使用该属性，但是模拟器这里没有效果。
+										-- View 在可见的情况下是否保持唤醒状态.
 									</p>
 								</li>
 								<li>
@@ -885,6 +977,66 @@ public void sendAccessibilityEventUnchecked(AccessibilityEvent event);
 								</li>
 							</ul>
 
+						</div>
+
+						<div class="sub-item">
+							<p><b>View</b> 类的 API:(从 XML 属性来分类)</p>
+							<ol type="I">
+								<li><p><b><code>layout_</code> 开头的属性,都是告诉 Parent 自己的大小和边距</b></p>
+									<pre class="brush: xml;">
+<!-- ViewGroup.LayoutParams,不同的 ViewGroup 下的 View 可以使用不同的属性 -->
+android:layout_width
+android:layout_height
+
+<!-- 以下这些属性外部通过 xml 设置,要在代码中设置就只能通过 Parent 的 LayoutParams 设置:
+LinearLayout.LayoutParams, FrameLayout.LayoutParams, RelativeLayout.LayoutParams... -->
+android:layout_margin
+android:layout_marginHorizontal
+android:layout_marginVertical
+android:layout_marginStart
+android:layout_marginTop
+android:layout_marginEnd
+android:layout_marginBottom
+</pre>
+									<ol>
+										<li><p><code>final int getWidth()</code> -- </p></li>
+										<li><p><code>final int getHeight()</code> -- </p></li>
+										<li><p><code>final int getMeasuredWidth()</code> -- </p></li>
+										<li><p><code>final int getMeasuredHeight()</code> -- </p></li>
+										<li><p><code>final int getMeasuredWidthAndState()</code> -- </p></li>
+										<li><p><code>final int getMeasuredHeightAndState()</code> -- </p></li>
+										<li><p><code>final int getMeasuredState()</code> -- </p></li>
+										<li><p><code>final void measure(int widthMeasureSpec, int heightMeasureSpec)</code> -- </p></li>
+										<li><p><code>ViewGroup.LayoutParams getLayoutParams()</code> -- </p></li>
+										<li><p><code>void setLayoutParams(ViewGroup.LayoutParams params)</code> -- </p></li>
+									</ol>
+								</li>
+								<li><p><b>常用属性</b></p>
+									<ol start="11">
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code>int getMinimumWidth()</code> -- </p></li>
+										<li><p><code>void setMinimumWidth(int minWidth)</code> -- </p></li>
+										<li><p><code>int getMinimumHeight()</code> -- </p></li>
+										<li><p><code>void setMinimumHeight(int minHeight)</code> -- </p></li>
+									</ol>
+								</li>
+								<li><p><b>c</b></p>
+									<ol start="10">
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+									</ol>
+								</li>
+								<li><p><b>d</b></p>
+									<ol start="10">
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+									</ol>
+								</li>
+							</ol>
 						</div>
 
 					</div>
@@ -1104,9 +1256,75 @@ public boolean onPreDraw();
 						<h3 class="panel-title">ViewGroup</h3>
 					</div>
 					<div class="panel-body">
-						<pre class="brush: java;">
+						<div class="sub-item">
+							<pre class="brush: java;">
+java.lang.Object
+	android.view.View
+		android.view.ViewGroup 
 
+public abstract class ViewGroup extends View implements ViewParent, ViewManager {
+
+}
 </pre>
+						</div>
+
+						<div class="sub-item">
+								<div class="row">
+										<div class="col-md-3 col-md-push-1">
+											<img src="images/ViewGroup-sample.png" class="img-responsive">
+											<p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">ViewGroup</span></p>
+										</div>
+										<div class="col-md-3 col-md-push-1">
+											<img src="images/ViewGroup-sample.png" class="img-responsive">
+											<p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">ViewGroup</span></p>
+										</div>
+										<div class="col-md-3 col-md-push-1">
+											<img src="images/ViewGroup-sample.png" class="img-responsive">
+											<p class="text-center" style="margin: 15px;"><span style="border-bottom: 2px dashed #FDD;">ViewGroup</span></p>
+										</div>
+									</div>
+
+<pre class="brush: java;">
+/** ViewGroup 可以只重写以下两个方法,这样的写法 ViewGroup 的宽高为 wrap_conent 不会生效 */
+@Override
+protected void onLayout(boolean changed, int l, int t, int r, int b) {
+	int count = getChildCount();
+	View child = null;
+	int left = 0;
+	int top = 0;
+	for (int i = 0; i &lt; count; i++) {
+		child = getChildAt(i);
+		int right = left + child.getMeasuredWidth();
+		int bottom = top + child.getMeasuredHeight();
+		/** 这个方法指定子 View 的位置和大小 */
+		child.layout(left, top, right, bottom);
+		left = (left + right) / 2;
+		top = (top + bottom) / 2;
+	}
+}
+
+@Override
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+	super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+	measureChildren(widthMeasureSpec, heightMeasureSpec);
+}
+
+/** 向 ViewGroup 中添加 View */
+ImageView image = null;
+ViewGroup.LayoutParams params = null;
+
+for (String img : Value.Image.Icon.J256x256) {
+	image = new ImageView(getContext());
+	params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, 
+			ViewGroup.LayoutParams.WRAP_CONTENT);
+	image.setLayoutParams(params);
+
+	myViewGroup.addView(image);
+
+	Picasso.with(getContext()).load(img).into(image);
+}
+</pre>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
@@ -1163,7 +1381,7 @@ public boolean onPreDraw();
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
