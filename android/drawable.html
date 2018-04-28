@@ -85,22 +85,22 @@
                     <div id="drawable-sub" class="panel-collapse collapse in"
                          role="tabpanel">
                         <a href="#BitmapDrawable" class="list-group-item">BitmapDrawable</a>
-                        <a href="#ClipDrawable" class="list-group-item">ClipDrawable</a>
                         <a href="#ColorDrawable" class="list-group-item">ColorDrawable</a>
-                        <a href="#DrawableContainer" class="list-group-item">DrawableContainer</a>
+                        <a href="#ShapeDrawable" class="list-group-item">ShapeDrawable 及子类</a>
                         <a href="#GradientDrawable" class="list-group-item">GradientDrawable</a>
-                        <a href="#InsetDrawable" class="list-group-item">InsetDrawable</a>
-                        <a href="#LayerDrawable" class="list-group-item">LayerDrawable</a>
                         <a href="#NinePatchDrawable" class="list-group-item">NinePatchDrawable</a>
                         <a href="#PictureDrawable" class="list-group-item">PictureDrawable</a>
-                        <a href="#RotateDrawable" class="list-group-item">RotateDrawable</a>
-                        <a href="#ScaleDrawable" class="list-group-item">ScaleDrawable</a>
-                        <a href="#ShapeDrawable" class="list-group-item">ShapeDrawable</a>
-                        <a href="#AnimationDrawable" class="list-group-item">AnimationDrawable</a>
-                        <a href="#LevelListDrawable" class="list-group-item">LevelListDrawable</a>
-                        <a href="#PaintDrawable" class="list-group-item">PaintDrawable</a>
-                        <a href="#StateListDrawable" class="list-group-item">StateListDrawable</a>
+
+                        <a href="#LayerDrawable" class="list-group-item">LayerDrawable</a>
+
                         <a href="#TransitionDrawable" class="list-group-item">TransitionDrawable</a>
+                        <a href="#AnimationDrawable" class="list-group-item">AnimationDrawable</a>
+
+                        <a href="#DrawableWrapper" class="list-group-item">DrawableWrapper 及子类</a>
+                        <a href="#DrawableContainer" class="list-group-item">DrawableContainer 及子类</a>
+
+                        <a href="#VectorDrawable" class="list-group-item">VectorDrawable</a>
+                        <a href="#AnimatedVectorDrawable" class="list-group-item">AnimatedVectorDrawable</a>
                     </div>
                     <a href="#java-class-loader" class="list-group-item">...</a>
                 </div>
@@ -179,6 +179,8 @@ public abstract class Drawable {
 		public void scheduleDrawable(Drawable who, Runnable what, long when);
 		public void unscheduleDrawable(Drawable who, Runnable what);
 	}
+
+    /**  */
 	public static abstract class ConstantState {
 		public boolean canApplyTheme();
 		public abstract int getChangingConfigurations();
@@ -262,8 +264,8 @@ PixelFormat.TRANSLUCENT：半透明
                                     <li><p><code>ColorFilter getColorFilter()</code> -- 获取颜色过滤器</p></li>
                                     <li><p><code>void clearColorFilter()</code> -- 清除颜色过滤器</p></li>
 
-                                    <li><p><code>int getIntrinsicHeight()</code> -- 看子类实现，获取绘制对象的实际高度</p></li>
-                                    <li><p><code>int getIntrinsicWidth()</code> -- 看子类实现，获取绘制对象的实际宽度</p></li>
+                                    <li><p><code>int getIntrinsicHeight()</code> -- 看子类实现，获取绘制对象的实际高度；如果 ImageView 的高度为 <code>wrap_content</code>，将会读取这个值为高度</p></li>
+                                    <li><p><code>int getIntrinsicWidth()</code> -- 看子类实现，获取绘制对象的实际宽度；如果 ImageView 的宽度为 <code>wrap_content</code>，将会读取这个值为宽度</p></li>
                                     <li><p><code>int getMinimumHeight()</code> -- 看子类实现，获取绘制对象的最小高度</p></li>
                                     <li><p><code>int getMinimumWidth()</code> -- 看子类实现，获取绘制对象的最小宽度</p></li>
                                     <li><p><code>boolean getPadding(Rect padding)</code> -- 看子类实现，获取填充值</p></li>
@@ -272,7 +274,7 @@ PixelFormat.TRANSLUCENT：半透明
                                     <li><p><code>void inflate(Resources r, XmlPullParser parser, AttributeSet attrs)</code> -- 将 parser 的数据解析到 attrs 中</p></li>
                                     <li><p><code>void inflate(Resources r, XmlPullParser parser, AttributeSet attrs, Resources.Theme theme)</code> -- 同上</p></li>
 
-                                    <li><p><code>void setAutoMirrored(boolean mirrored)</code> -- 设置自动镜像</p></li>
+                                    <li><p><code>void setAutoMirrored(boolean mirrored)</code> -- 设置自动镜像，看子类实现</p></li>
                                     <li><p><code>boolean isAutoMirrored()</code> -- 是否自动镜像</p></li>
 
                                     <li><p><code>final boolean isVisible()</code> -- 返回绘制的内容是否可见</p></li>
@@ -302,7 +304,7 @@ PixelFormat.TRANSLUCENT：半透明
 
                                     <li><p><code>static int resolveOpacity(int op1, int op2)</code> -- 从 op1 和 op2 的值返回一个恰当值，具体看实现</p></li>
 
-                                    <li><p><code>void applyTheme(Resources.Theme t)</code> -- 未实现，API 21 添加，应用主题</p></li>
+                                    <li><p><code>void applyTheme(Resources.Theme t)</code> -- 看子类实现，API 21 添加，应用主题</p></li>
                                     <li><p><code>boolean canApplyTheme()</code> -- API 21 添加，是否可应用主题，默认返回 false</p></li>
 
                                     <li><p><code>boolean isFilterBitmap()</code> -- API 23 添加，默认返回 false</p></li>
@@ -341,6 +343,16 @@ PixelFormat.TRANSLUCENT：半透明
                         <li><p><code>public int getIntrinsicHeight()</code> --
                             View　使用　wrap_content　的时候，提供一下高度尺寸</p></li>
                     </ul>
+
+                    <pre class="brush: xml;">
+&lt;!-- API 24 可以将自定义的 Drawable 写在 res/drawble 下的文件中 -->
+&lt;com.myapp.MyCustomDrawable xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:color="#ffff0000" />
+&lt;!-- 或者这样写 -->
+&lt;drawable xmlns:android="http://schemas.android.com/apk/res/android"
+          class="com.myapp.MyTopLevelClass$InnerCustomDrawable"
+          android:color="#ffff0000" />
+</pre>
                     <pre class="brush: java;">
 package com.lesson1234.myapplication;
 
@@ -669,7 +681,52 @@ public class BitmapDrawable extends Drawable {
     BitmapDrawable(Resources res)                   // API 18 过时
 }
 </pre>
-                        <p><a href="docs/reference/android/graphics/drawable/BitmapDrawable.html" target="_blank">BitmapDrawable</a> 为位图可绘制类。在构造时指定一个 Bitmap 对象或者一个位图文件。位图显示时需要指定：<b>像素和设备尺寸的映射</b>，<b>显示的位置</b>，<b>显示模式</b>三种属性。</p>
+                        <p><a href="docs/reference/android/graphics/drawable/BitmapDrawable.html" target="_blank">BitmapDrawable</a> 可在 <code>res/drawable</code> 下使用 XML 定义：</p>
+                        <pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;bitmap
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:src="@drawable/drawable_resource"
+    android:antialias=["true" | "false"]        &lt;!-- 设置是否开启抗锯齿 -->
+    &lt;!-- 设置是否抖动，图片与屏幕的像素配置不同时会用到，比如图片是 ARGB 8888 的，而屏幕是 RGB565 -->
+    android:dither=["true" | "false"]
+    &lt;!-- 过时，设置是否允许对图片进行滤波，对图片进行收缩或者延展使用滤波可以获得平滑的外观效果 -->
+    android:filter=["true" | "false"]
+    android:autoMirrored="true|false" &lt;!-- 布局方向为RTL（右到左）时自动镜像 -->
+    &lt;!-- 重力方向, 多个取值可以用 | 分隔
+        top 图片放于容器顶部，不改变图片大小
+        bottom 图片放于容器底部，不改变图片大小
+        left 图片放于容器左边，不改变图片大小
+        right 图片放于容器右边，不改变图片大小
+        center 图片放于容器中心位置，包括水平和垂直方向，不改变图片大小
+        fill 拉伸整张图片以填满容器的整个高度和宽度，默认值
+        center_vertical 图片放于容器垂直方向的中心位置，不改变图片大小
+        center_horizontal 图片放于容器水平方向的中心位置，不改变图片大小
+        fill_vertical 在垂直方向上拉伸图片以填满容器的整个高度
+        fill_horizontal 在水平方向上拉伸图片以填满容器的整个宽度
+        clip_vertical 裁剪基于垂直方向的gravity，设置top时会裁剪底部，设置bottom时会裁剪顶部，其他同时裁剪顶部和底部
+        clip_horizontal 裁剪基于水平方向的gravity，设置left时会裁剪右侧，设置right时会裁剪左侧，其他同时裁剪左右两侧
+    -->
+    android:gravity=["top" | "bottom" | "left" | "right" | "center_vertical" |
+                      "fill_vertical" | "center_horizontal" | "fill_horizontal" |
+                      "center" | "fill" | "clip_vertical" | "clip_horizontal"]
+
+    android:mipMap=["true" | "false"]
+    android:alpha="0-255"
+    android:tint="@color/colorPrimary"  &lt;!-- 图形混合 -->
+    android:tintMode="src_over|src_in|src_atop|screen|add|multiply" &lt;-- 混合模式 -->
+                            <!-- 平铺模式, tileMode 启用，gravity 将失效。比如用于 background 属性时有用。
+                              disable 不做任何平铺，默认设置
+                              repeat 图片重复铺满
+                              mirror 使用交替镜像的方式重复图片的绘制
+                              clamp 复制图片边缘的颜色来填充容器剩下的空白部分
+                            -->
+    android:tileMode=["disabled" | "clamp" | "repeat" | "mirror"]
+                            <!-- 下面两个属性 api 21 才有用 -->
+    android:tileModeX=["disabled" | "clamp" | "repeat" | "mirror"]
+    android:tileModeY=["disabled" | "clamp" | "repeat" | "mirror"] />
+                        </pre>
+                        <p><a href="docs/reference/android/graphics/drawable/BitmapDrawable.htmltarget="_blank">BitmapDrawable</a> 为位图可绘制类。在构造时指定一个 Bitmap 对象或者一个位图文件。位图显示时需要指定：<b>像素和设备尺寸的映射</b>，<b>显示的位置</b>，<b>显示模式</b>三种属性。</p>
                         <ol>
                             <li><p><b>像素和设备尺寸的映射: </b>位图里面的像素是一个抽象的概念他没有具体的物理尺寸，而设备的像素则是物理的，他有大小。因此需要有一个方法来指定位图像素转化为物理像素的映射关系，这样位图的像素才可以真正的显示在设备上。下面就是提供的三种映射设置方法：</p>
                             <pre class="brush: java;">
@@ -701,169 +758,285 @@ public void setTileModeX(Shader.TileMode mode)
                                 <li><p><code>BitmapDrawable(Resources res, Bitmap bitmap)</code> -- 从 Bitmap 构造</p></li>
                                 <li><p><code>BitmapDrawable(Resources res, String filepath)</code> -- 从文件构造</p></li>
                                 <li><p><code>BitmapDrawable(Resources res, InputStream is)</code> -- 从输入流构造</p></li>
-                                <li><p><code>BitmapDrawable()</code> -- API 4 过时</p></li>
-                                <li><p><code>BitmapDrawable(Bitmap bitmap)</code> -- API 4 过时</p></li>
-                                <li><p><code>BitmapDrawable(String filepath)</code> -- API 5 过时</p></li>
-                                <li><p><code>BitmapDrawable(InputStream is)</code> -- API 5 过时</p></li>
-                                <li><p><code>BitmapDrawable(Resources res)</code> -- API 18 过时</p></li>
                             </ol>
                         </li>
                         <li>
                             <p>常用方法</p>
-                            <ol start="9">
-                                <li><p><code></code> -- </p></li>
-                                <li><p><code></code> -- </p></li>
-                                <li><p><code></code> -- </p></li>
-                            </ol>
-                        </li>
-                        <li>
-                            <p>其他方法</p>
-                            <ol start="">
-                                <li><p><code></code> -- </p></li>
-                                <li><p><code></code> -- </p></li>
-                                <li><p><code></code> -- </p></li>
+                            <ol start="4">
+                                <li><p><code>final Bitmap getBitmap()</code> -- 获取 Bitmap</p></li>
+                                <li><p><code>final Paint getPaint()</code> -- 获取 Paint</p></li>
+                                <li><p><code>void setTargetDensity(int density)</code> -- 画布上的密度比值</p></li>
+                                <li><p><code>void setTargetDensity(DisplayMetrics metrics)</code> -- 当前屏幕的密度比值</p></li>
+                                <li><p><code>void setTargetDensity(int density)</code> -- 指定密度比值, DisplayMetrics 中的 DENSITY_XXX。</p></li>
+                                <li><p><code>int getIntrinsicHeight()</code> -- 获取高度</p></li>
+                                <li><p><code>int getIntrinsicWidth()</code> -- 获取宽度</p></li>
+
+                                <li class="group"><p><code>Shader.TileMode getTileModeX()</code> -- X 平铺方式</p></li>
+                                <li><p><code>Shader.TileMode getTileModeY()</code> -- Y 平铺方式</p></li>
+                                <li><p><code>void setTileModeX(Shader.TileMode mode)</code> -- X 平铺方式</p></li>
+                                <li><p><code>final void setTileModeY(Shader.TileMode mode) </code> -- Y 平铺方式</p></li>
+                                <li><p><code>void setTileModeXY(Shader.TileMode xmode, Shader.TileMode ymode)</code> -- XY 平铺方式</p></li>
+
+                                <li class="group"><p><code>int getGravity()</code> -- 位置</p></li>
+                                <li><p><code>void setGravity(int gravity)</code> -- 位置</p></li>
+                                <li><p><code>ColorFilter getColorFilter()</code> -- 颜色过滤</p></li>
+                                <li><p><code>void setColorFilter(ColorFilter colorFilter)</code> -- 颜色过滤</p></li>
+                                <li><p><code>final Drawable.ConstantState getConstantState()</code> -- 状态</p></li>
+                                <li><p><code>boolean isStateful()</code> -- 状态</p></li>
+                                <li><p><code>boolean hasAntiAlias()</code> -- 抗锯齿</p></li>
+                                <li><p><code>void setAntiAlias(boolean aa) </code> -- 抗锯齿</p></li>
+                                <li><p><code>void setAlpha(int alpha)</code> -- 透明度</p></li>
+                                <li><p><code> int getAlpha()</code> -- 透明度</p></li>
+                                <li><p><code>final boolean isAutoMirrored()</code> -- 布局方向为RTL（右到左）时自动镜像</p></li>
+                                <li><p><code>void setAutoMirrored(boolean mirrored)</code> -- 布局方向为RTL（右到左）时自动镜像</p></li>
+                                <li><p><code>void setTintList(ColorStateList tint)</code> -- 图形混合</p></li>
+                                <li><p><code>void setTintMode(PorterDuff.Mode tintMode)</code> -- 图形混合模式</p></li>
+
+                                <li class="group"><p><code>protected void onBoundsChange(Rect bounds)</code> -- 边界改变</p></li>
+                                <li><p><code>protected boolean onStateChange(int[] stateSet)</code> -- 状态改变</p></li>
                             </ol>
                         </li>
                     </ol>
-
-
                 </div>
 
-                <div class="sub-item">
-                    <p>
-                        <b>XML 属性</b>
-                    </p>
-                    <pre class="brush:xml;">
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="ColorDrawable"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">ColorDrawable</h3>
+                </div>
+                <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.ColorDrawable
+		
+public class ColorDrawable extends Drawable {
+    public ColorDrawable() {}
+    public ColorDrawable(int color) {}
+
+    protected boolean onStateChange(int[] stateSet) {}
+}
+</pre>
+                    <p><a href="docs/reference/android/graphics/drawable/ColorDrawable.html" target="_blank">ColorDrawable</a> 很简单，用一个颜色生成一个 Drawable, 一般用于设置背景。</p>
+                    <pre class="brush: xml;">
 &lt;?xml version="1.0" encoding="utf-8"?>
-&lt;bitmap
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/drawable_resource"
-    android:antialias=["true" | "false"]        <!-- 设置是否开启抗锯齿 -->
-                        <!-- 设置是否抖动，图片与屏幕的像素配置不同时会用到，比如图片是 ARGB 8888 的，而屏幕是 RGB565 -->
-    android:dither=["true" | "false"]
-                        <!-- 设置是否允许对图片进行滤波，对图片进行收缩或者延展使用滤波可以获得平滑的外观效果 -->
-    android:filter=["true" | "false"]
-                        <!-- 重力方向, 多个取值可以用 | 分隔 -->
-    android:gravity=["top" | "bottom" | "left" | "right" | "center_vertical" |
-                      "fill_vertical" | "center_horizontal" | "fill_horizontal" |
-                      "center" | "fill" | "clip_vertical" | "clip_horizontal"]
-                        <!--
-                          top 图片放于容器顶部，不改变图片大小
-                          bottom 图片放于容器底部，不改变图片大小
-                          left 图片放于容器左边，不改变图片大小
-                          right 图片放于容器右边，不改变图片大小
-                          center 图片放于容器中心位置，包括水平和垂直方向，不改变图片大小
-                          fill 拉伸整张图片以填满容器的整个高度和宽度，默认值
-                          center_vertical 图片放于容器垂直方向的中心位置，不改变图片大小
-                          center_horizontal 图片放于容器水平方向的中心位置，不改变图片大小
-                          fill_vertical 在垂直方向上拉伸图片以填满容器的整个高度
-                          fill_horizontal 在水平方向上拉伸图片以填满容器的整个宽度
-                          clip_vertical 裁剪基于垂直方向的gravity设置，设置top时会裁剪底部，设置bottom时会裁剪顶部，其他情况会同时裁剪顶部和底部
-                          clip_horizontal 裁剪基于水平方向的gravity设置，设置left时会裁剪右侧，设置right时会裁剪左侧，其他情况会同时裁剪左右两侧
-                        -->
-    android:mipMap=["true" | "false"]
-                        <!-- 平铺模式, tileMode 启用，gravity 将失效。比如用于 background 属性时有用。
-                          disable 不做任何平铺，默认设置
-                          repeat 图片重复铺满
-                          mirror 使用交替镜像的方式重复图片的绘制
-                          clamp 复制图片边缘的颜色来填充容器剩下的空白部分
-                        -->
-    android:tileMode=["disabled" | "clamp" | "repeat" | "mirror"]
-                        <!-- 下面两个属性 api 21 才有用 -->
-    android:tileModeX=["disabled" | "clamp" | "repeat" | "mirror"]
-    android:tileModeY=["disabled" | "clamp" | "repeat" | "mirror"] />
-</pre>
-                </div>
+&lt;color android:color="@color/colorAccent"
+       xmlns:android="http://schemas.android.com/apk/res/android" />
+
+&lt;!-- 在一些情况，能直接将一个颜色当作 Drawable 使用，比如： -->
+&lt;selector xmlns:android="http://schemas.android.com/apk/res/android">
+    &lt;item android:drawable="@drawable/bg_active" android:state_pressed="true" />
+    &lt;item android:drawable="@color/colorAccent" />  &lt;!-- 这里的值为 color 类型，会自动转化为 Drawable -->
+&lt;/selector>
+                    </pre>
                 </div>
             </div>
             <!-- item over -->
 
             <!-- item start -->
-            <a class="offset" id="..."></a>
+            <a class="offset" id="ShapeDrawable"></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">...</h3>
+                    <h3 class="panel-title">ShapeDrawable 及子类</h3>
                 </div>
                 <div class="panel-body">
+                    <div class="sub-item">
 						<pre class="brush: java;">
 java.lang.Object
 	android.graphics.drawable.Drawable
-		android.graphics.drawable.BitmapDrawable
+		android.graphics.drawable.ShapeDrawable
 		
-public class BitmapDrawable extends Drawable {}
+public class ShapeDrawable extends Drawable {
+    public static abstract class ShaderFactory {
+        public abstract Shader resize(int width, int height);
+    }
+
+    public ShapeDrawable() {}
+    public ShapeDrawable(Shape shape) {}
+
+    protected void onBoundsChange(Rect bounds) {}
+    protected boolean onStateChange(int[] stateSet) {}
+}
 </pre>
+                <p><a href="docs/reference/android/graphics/drawable/ShapeDrawable.html" target="_blank">ShapeDrawable</a> 使用图形生成一个 Drawable, 有一个子类: <a href="docs/reference/android/graphics/drawable/PaintDrawable.html" target="_blank">PaintDrawable</a></p>
+                        <p><b>下面的 XML 代码最总转化得到的是一个 <code>GradientDrawable</code>，官方文档也是这样写的，<code>ShapeDrawable</code> 只能通过代码的方式实现。</b></p>
+                    <pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;shape xmlns:android="http://schemas.android.com/apk/res/android"
+    &lt;!-- 图形类型，android.graphics.drawable.shapes 包下,分别为： 矩形 | 椭圆形 | 线 | 环形-->
+    android:shape="rectangle | oval | line | ring"
+    android:tint=""         &lt;!-- 参照 Drawable -->
+    android:tintMode=""     &lt;!-- 参照 Drawable -->
+    android:visible="true|false"    &lt;!-- 可见性 -->
+    &lt;!-- 以下属性只有在 shape="ring" 才有效 -->
+    android:innerRadius="" &lt;!-- 内环的半径 -->
+    android:innerRadiusRatio="" &lt;!-- 以环的宽度比率来表示内环的半径 -->
+    android:useLevel="true|false"
+    android:thickness=""    &lt;!-- 环的厚度，是一个尺寸值或尺寸的资源 -->
+    android:thicknessRatio="" > &lt;!-- 环的厚度的比例 -->
+
+    &lt;solid android:color="@color/colorAccent" /> &lt;!-- 实心，单一颜色填充 -->
+    &lt;stroke          &lt;!-- 空心，也可以叫边框，可以使用虚线 -->
+        android:width=""    &lt;!-- 粗细 -->
+        android:color=""    &lt;!-- 颜色 -->
+        android:dashGap=""  &lt;!-- 实线的间隔长度 -->
+        android:dashWidth="" />  &lt;!-- 实线的长度 -->
+
+    &lt;corners         &lt;!-- 圆角 -->
+        android:radius=""           &lt;!-- 圆角的半径 -->
+        android:topLeftRadius=""    &lt;!-- 左上圆角的半径 -->
+        android:topRightRadius=""   &lt;!-- 右上圆角的半径 -->
+        android:bottomLeftRadius="" &lt;!-- 左下圆角的半径 -->
+        android:bottomRightRadius="" />     &lt;!-- 右下圆角的半径 -->
+
+    &lt;gradient                &lt;!-- 此标签对应 android.graphics.Shader 的子类 -->
+        android:type="sweep|radial|linear" &lt;!-- 扫描|径向|线性, SweepGradient|RadialGradient|LinearGradient -->
+        android:angle=""        &lt;!-- 渐变的角度。 0 代表从左到右。90 代表下到上。必须是45的倍数 -->
+        android:startColor=""   &lt;!-- 开始颜色值 -->
+        android:endColor=""     &lt;!-- 结束的颜色值 -->
+        android:centerColor=""  &lt;!-- 中间色 -->
+        android:centerX=""      &lt;!-- 渐变中心的相对X坐标，在0到1.0之间 -->
+        android:centerY=""      &lt;!-- 渐变中心的相对Y坐标，在0到1.0之间 -->
+        android:gradientRadius=""   &lt;!-- 渐变的半径。只有在 android:type="radial"才使用 -->
+        android:useLevel="true|false" /> &lt;!-- 如果在 LevelListDrawable 中使用，则为 true -->
+
+    &lt;padding                 &lt;!-- 内容与视图边界的距离 -->
+        android:left=""         &lt;!-- 左边填充距离 -->
+        android:top=""          &lt;!-- 顶部填充距离 -->
+        android:right=""        &lt;!-- 右边填充距离 -->
+        android:bottom="" />    &lt;!-- 底部填充距离 -->
+
+    &lt;!-- shape 的大小 -->
+    &lt;size android:width="" android:height="" />
+
+&lt;/shape>
+</pre>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><a href="docs/reference/android/graphics/drawable/ShapeDrawable.html" target="_blank">ShapeDrawable</a> 重要 API:</p>
+                        <ol>
+                            <li><p><code>Paint getPaint()</code> -- 获取用于绘制的 Paint</p></li>
+                            <li><p><code>ShapeDrawable.ShaderFactory getShaderFactory()</code> -- 获取 ShaderFactory</p></li>
+                            <li><p><code>void setShaderFactory(ShapeDrawable.ShaderFactory fact)</code> -- 设置 ShaderFactory</p></li>
+                            <li><p><code>Shape getShape()</code> -- 获取图形</p></li>
+                            <li><p><code>void setShape(Shape s)</code> -- 设置图形</p></li>
+                            <li><p><code>void setIntrinsicHeight(int height)</code> -- 设置高度</p></li>
+                            <li><p><code>void setIntrinsicWidth(int width)</code> -- 设置宽度</p></li>
+                            <li><p><code>void setPadding(Rect padding)</code> -- 设置填充</p></li>
+                            <li><p><code>void setPadding(int left, int top, int right, int bottom)</code> -- 设置填充</p></li>
+                            <li><p><code>boolean getPadding(Rect padding)</code> -- 获取填充</p>
+                            <li><p><code>void inflate(Resources r, XmlPullParser parser, AttributeSet attrs, Resources.Theme theme)</code> -- 从 XML 加载属性</p></li>
+                        </ol>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><a href="docs/reference/android/graphics/drawable/ShapeDrawable.html" target="_blank">ShapeDrawable</a> 子类和相关类:</p>
+                        <ul>
+                            <li><p><a href="docs/reference/android/graphics/drawable/PaintDrawable.html" target="_blank">PaintDrawable</a> 使用给定的 Paint 绘制边界，可以使用圆角。</p>
+                                <pre class="brush: java;">
+java.lang.Object
+    android.graphics.drawable.Drawable
+  	    android.graphics.drawable.ShapeDrawable
+  	  	    android.graphics.drawable.PaintDrawable
+
+public class PaintDrawable extends ShapeDrawable {
+    public PaintDrawable() {}
+    public PaintDrawable(int color) {}
+
+    public void setCornerRadii(float[] radii) {}
+    public void setCornerRadius(float radius) {}
+}
+
+                            </pre>
+                            </li>
+                            <li><p><a href="docs/reference/android/graphics/drawable/shapes/package-summary.html" target="_blank">android.graphics.drawable.shapes</a> 包下的类，可以指定图形：</p>
+                            <pre class="brush: java;">
+java.lang.Object
+    android.graphics.drawable.shapes.Shape
+        ├── PathShape
+        └── RectShape
+            ├── ArcShape
+            ├── OvalShape
+            └── RoundRectShape
+
+public abstract class Shape implements Cloneable {
+    abstract void draw(Canvas canvas, Paint paint);
+    final float getHeight() {}
+    void getOutline(Outline outline) {}
+    final float getWidth() {}
+    boolean hasAlpha() {}
+    final void resize(float width, float height) {}
+    Shape clone() {}
+
+    protected void onResize(float width, float height) {}
+}
+
+public class PathShape extends Shape {
+    public PathShape(Path path, float stdWidth, float stdHeight) {}
+}
+
+public class RectShape extents Shape {
+    final RectF rect() {}
+}
+
+public class ArcShape extents RectShape {
+    public ArcShape(float startAngle, float sweepAngle) {}
+}
+
+public class RoundRectShape extents RectShape {
+    public RoundRectShape(float[] outerRadii, RectF inset, float[] innerRadii) {}
+}
+</pre>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sub-item">
+                        <p>ShapeDrawable / GradientDrawable 实例</p>
+
+                    </div>
                 </div>
             </div>
             <!-- item over -->
 
             <!-- item start -->
-            <a class="offset" id="..."></a>
+            <a class="offset" id="GradientDrawable"></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">...</h3>
+                    <h3 class="panel-title">GradientDrawable</h3>
                 </div>
                 <div class="panel-body">
 						<pre class="brush: java;">
 java.lang.Object
 	android.graphics.drawable.Drawable
-		android.graphics.drawable.
-		
-public class Drawable extends Drawable {}
-</pre>
-                </div>
-            </div>
-            <!-- item over -->
+		android.graphics.drawable.GradientDrawable
 
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">...</h3>
-                </div>
-                <div class="panel-body">
-						<pre class="brush: java;">
-java.lang.Object
-	android.graphics.drawable.Drawable
-		android.graphics.drawable.
-		
-public class Drawable extends Drawable {}
-</pre>
-                </div>
-            </div>
-            <!-- item over -->
+public class GradientDrawable extends Drawable {
 
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">...</h3>
-                </div>
-                <div class="panel-body">
-						<pre class="brush: java;">
-java.lang.Object
-	android.graphics.drawable.Drawable
-		android.graphics.drawable.
-		
-public class Drawable extends Drawable {}
+}
 </pre>
-                </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">...</h3>
-                </div>
-                <div class="panel-body">
-						<pre class="brush: java;">
-java.lang.Object
-	android.graphics.drawable.Drawable
-		android.graphics.drawable.
-		
-public class Drawable extends Drawable {}
-</pre>
+                    <p><a href="docs/reference/android/graphics/drawable/GradientDrawable.html" target="_blank">GradientDrawable</a> 同样使用 <code>shape</code> 标签定义，同样使用 <code>ShapeDrawabe</code> 里面的属性。比较奇葩的是 <a href="#ShapeDrawable">ShapeDrawable</a> 的 <code>XML</code> 标签转转完成后得到的类型是 <code>GradientDrawable</code>。</p>
+                    <ol>
+                        <li><p><code></code> -- </p></li>
+                        <li><p><code></code> -- </p></li>
+                        <li><p><code></code> -- </p></li>
+                        <li><p><code></code> -- </p></li>
+                        <li><p><code></code> -- </p></li>
+                        <li><p><code></code> -- </p></li>
+                        <li><p><code></code> -- </p></li>
+                        <li><p><code></code> -- </p></li>
+                        <li><p><code></code> -- </p></li>
+                        <li><p><code></code> -- </p></li>
+                        <li><p><code></code> -- </p></li>
+                        <li><p><code></code> -- </p></li>
+                        <li><p><code></code> -- </p></li>
+                    </ol>
                 </div>
             </div>
             <!-- item over -->
@@ -994,6 +1167,47 @@ java.lang.Object
 		
 public class Drawable extends Drawable {}
 </pre>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="DrawableWrapper"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">DrawableWrapper 及子类</h3>
+                </div>
+                <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    android.graphics.drawable.Drawable
+  	    android.graphics.drawable.DrawableWrapper
+
+public class DrawableWrapper extends Drawable {
+
+}
+</pre>
+                    <p><a href="docs/reference/android/graphics/drawable/DrawableWrapper.html" target="_blank">DrawableWrapper</a> 有以下下子类：<a href="docs/reference/android/graphics/drawable/ClipDrawable.html" target="_blank">ClipDrawable</a>, <a href="docs/reference/android/graphics/drawable/InsetDrawable.html" target="_blank">InsetDrawable</a>, <a href="docs/reference/android/graphics/drawable/RotateDrawable.html" target="_blank">RotateDrawable</a>, <a href="docs/reference/android/graphics/drawable/ScaleDrawable.html" target="_blank">ScaleDrawable</a></p>
+
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="DrawableContainer"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">DrawableContainer 及子类</h3>
+                </div>
+                <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.DrawableContainer
+
+public class DrawableContainer extends Drawable {}
+</pre>
+                    <p><a href="docs/reference/android/graphics/drawable/DrawableContainer.html" target="_blank">DrawableContainer</a> 有以下下子类：<a href="docs/reference/android/graphics/drawable/AnimationDrawable.html" target="_blank">AnimationDrawable</a>, <a href="docs/reference/android/graphics/drawable/LevelListDrawable.html" target="_blank">LevelListDrawable</a>, <a href="docs/reference/android/graphics/drawable/StateListDrawable.html" target="_blank">StateListDrawable</a>, <a href="docs/reference/android/graphics/drawable/AnimatedStateListDrawable.html" target="_blank">AnimatedStateListDrawable</a></p>
                 </div>
             </div>
             <!-- item over -->
