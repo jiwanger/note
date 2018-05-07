@@ -991,16 +991,51 @@ android:layout_height
 <!-- 以下这些属性外部通过 xml 设置,要在代码中设置就只能通过 Parent 的 LayoutParams 设置:
 LinearLayout.LayoutParams, FrameLayout.LayoutParams, RelativeLayout.LayoutParams... -->
 android:layout_margin
-android:layout_marginHorizontal
-android:layout_marginVertical
+android:layout_marginHorizontal		api 26
+android:layout_marginVertical		api 26
 android:layout_marginStart
 android:layout_marginTop
 android:layout_marginEnd
 android:layout_marginBottom
+
+<!-- LinearLayout.LayoutParams, FrameLayout.LayoutParams -->
+android:layout_gravity
+
+<!-- LayoutWeight.LayoutParams -->
+android:layout_weight
+
+<!-- RelativeLayout.LayoutParams -->
+android:layout_alignStart
+android:layout_alignEnd
+android:layout_alignBottom
+android:layout_alignTop
+android:layout_alignBaseline
+android:layout_alignParentStart
+android:layout_alignParentEnd
+android:layout_alignParentTop
+android:layout_alignParentBottom
+android:layout_alignWithParentIfMissing
+android:layout_above
+android:layout_below
+android:layout_toStartOf
+android:layout_toEndOf
+android:layout_centerVertical
+android:layout_centerHorizontal
+android:layout_centerInParent
 </pre>
 									<ol>
 										<li><p><code>final int getWidth()</code> -- </p></li>
-										<li><p><code>final int getHeight()</code> -- </p></li>
+										<li><p><code>final int getHeight()</code> -- </p>
+										<pre class="brush: java;">
+											/** 要得到 View 的宽度和高度,最好使用以下方法: */
+											view.post(new Runnable() {
+												@Override
+												public void run() {
+													AppUtil.debug(view.getWidth(), view.getHeight());
+												}
+											});
+										</pre>
+										</li>
 										<li><p><code>final int getMeasuredWidth()</code> -- </p></li>
 										<li><p><code>final int getMeasuredHeight()</code> -- </p></li>
 										<li><p><code>final int getMeasuredWidthAndState()</code> -- </p></li>
@@ -1012,7 +1047,58 @@ android:layout_marginBottom
 									</ol>
 								</li>
 								<li><p><b>常用属性</b></p>
+									<pre class="brush: xml;">
+android:theme
+android:id
+android:background
+android:tag
+android:alpha
+android:visibility
+android:clickable
+android:focusable
+android:longClickable
+android:minWidth
+android:minHeight
+android:onClick
+android:padding
+android:paddingStart
+android:paddingEnd
+android:paddingTop
+android:paddingBottom
+android:paddingVertical
+android:paddingHorizontal
+</pre>
 									<ol start="11">
+										<li><p><code>void setId(@IdRes int id)</code> -- </p></li>
+										<li><p><code>int getId()</code> -- </p></li>
+										<li><p><code><T extends View> T findViewById(@IdRes int id)</code> -- </p></li>
+										<li><p><code>void setBackground(Drawable background)</code> -- </p></li>
+										<li><p><code>void setBackgroundColor(int color)</code> -- </p></li>
+										<li><p><code>void setBackgroundResource(@DrawableRes int resid)</code> -- </p></li>
+										<li><p><code>void setBackgroundTintList(@Nullable ColorStateList tint)</code> -- </p></li>
+										<li><p><code>void setBackgroundTintMode(@Nullable PorterDuff.Mode tintMode)</code> -- </p></li>
+										<li><p><code>Drawable getBackground()</code> -- </p></li>
+										<li><p><code>ColorStateList getBackgroundTintList()</code> -- </p></li>
+										<li><p><code>PorterDuff.Mode getBackgroundTintMode()</code> -- </p></li>
+										<li><p><code>Object getTag()</code> -- </p></li>
+										<li><p><code>void setTag(final Object tag)</code> -- </p></li>
+										<li><p><code>Object getTag(int key)</code> -- </p></li>
+										<li><p><code>void setTag(int key, final Object tag)</code> -- </p></li>
+										<li><p><code>float getAlpha()</code> -- </p></li>
+										<li><p><code>void setAlpha(float alpha)</code> -- </p></li>
+										<li><p><code>void setVisibility(@Visibility int visibility)</code> -- </p></li>
+										<li><p><code>int getVisibility()</code> -- </p></li>
+										<li><p><code>void setClickable(boolean clickable)</code> -- </p></li>
+										<li><p><code>boolean isClickable()</code> -- </p></li>
+										<li><p><code>void setOnClickListener(@Nullable OnClickListener l)</code> -- </p></li>
+										<li><p><code>boolean performClick()</code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
+										<li><p><code></code> -- </p></li>
 										<li><p><code></code> -- </p></li>
 										<li><p><code></code> -- </p></li>
 										<li><p><code></code> -- </p></li>
@@ -1023,6 +1109,16 @@ android:layout_marginBottom
 									</ol>
 								</li>
 								<li><p><b>c</b></p>
+									<pre class="brush: xml;">
+android:rotation
+android:rotationX
+android:rotationY
+android:scaleX
+android:scaleY
+android:translationX
+android:translationY
+android:translationZ
+</pre>
 									<ol start="10">
 										<li><p><code></code> -- </p></li>
 										<li><p><code></code> -- </p></li>
@@ -1030,6 +1126,24 @@ android:layout_marginBottom
 									</ol>
 								</li>
 								<li><p><b>d</b></p>
+									<pre class="brush: xml;">
+android:stateListAnimator
+android:transitionName
+android:transformPivotX
+android:transformPivotY
+android:scrollbars
+android:scrollX
+android:scrollY
+android:scrollbarStyle
+android:scrollbarSize
+android:fadeScrollbars
+android:scrollbarThumbHorizontal
+android:scrollbarThumbVertical
+android:scrollIndicators
+android:scrollbarFadeDuration
+android:scrollbarDefaultDelayBeforeFade
+android:verticalScrollbarPosition
+									</pre>
 									<ol start="10">
 										<li><p><code></code> -- </p></li>
 										<li><p><code></code> -- </p></li>
