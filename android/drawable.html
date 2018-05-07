@@ -91,9 +91,8 @@
                         <a href="#NinePatchDrawable" class="list-group-item">NinePatchDrawable</a>
                         <a href="#PictureDrawable" class="list-group-item">PictureDrawable</a>
 
-                        <a href="#LayerDrawable" class="list-group-item">LayerDrawable</a>
+                        <a href="#LayerDrawable" class="list-group-item">LayerDrawable 及子类</a>
 
-                        <a href="#TransitionDrawable" class="list-group-item">TransitionDrawable</a>
                         <a href="#AnimationDrawable" class="list-group-item">AnimationDrawable</a>
 
                         <a href="#DrawableWrapper" class="list-group-item">DrawableWrapper 及子类</a>
@@ -895,8 +894,9 @@ public class ShapeDrawable extends Drawable {
         android:bottomRightRadius="" />     &lt;!-- 右下圆角的半径 -->
 
     &lt;gradient                &lt;!-- 此标签对应 android.graphics.Shader 的子类 -->
-        android:type="sweep|radial|linear" &lt;!-- 扫描|径向|线性, SweepGradient|RadialGradient|LinearGradient -->
-        android:angle=""        &lt;!-- 渐变的角度。 0 代表从左到右。90 代表下到上。必须是45的倍数 -->
+       android:type="sweep|radial|linear"&lt;!-- 扫描|径向|线性, SweepGradient|RadialGradient|LinearGradient -->
+        &lt;!-- 渐变的角度。 0 代表从左到右。90 代表下到上。必须是45的倍数, 对应为 GradientDrawable.Orientation -->
+        android:angle=""
         android:startColor=""   &lt;!-- 开始颜色值 -->
         android:endColor=""     &lt;!-- 结束的颜色值 -->
         android:centerColor=""  &lt;!-- 中间色 -->
@@ -998,7 +998,215 @@ public class RoundRectShape extents RectShape {
                     </div>
 
                     <div class="sub-item">
-                        <p>ShapeDrawable / GradientDrawable 实例</p>
+                        <p><b>ShapeDrawable / GradientDrawable 实例，硬件加速可能会有影响</b></p>
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p><b>1. 实线</b></p>
+                            <pre class="brush: xml; gutter: false;">
+&lt;shape android:shape="line"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    &lt;stroke android:width="2dp" android:color="@color/colorAccent" />
+&lt;/shape>
+                            </pre>
+
+                                <p><b>2. 虚线</b></p>
+                                <pre class="brush: xml;gutter: false;">
+&lt;shape android:shape="line" android:useLevel="true"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    &lt;stroke android:width="2dp" android:color="#FF4081"
+        android:dashWidth="10dp" android:dashGap="5dp"/>
+&lt;/shape>
+
+                            </pre>
+
+                                <p><b>3. 实线边框无填充</b></p>
+                                <pre class="brush: xml;gutter: false;">
+&lt;shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" android:useLevel="true">
+    &lt;stroke android:width="2dp" android:color="#ffff0000" />
+&lt;/shape>
+
+                            </pre>
+
+                                <p><b>4. 虚线边框无填充</b></p>
+                                <pre class="brush: xml;gutter: false;">
+&lt;shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle" android:useLevel="true">
+    &lt;stroke android:width="2dp" android:color="#ffff0000"
+        android:dashWidth="10dp" android:dashGap="2dp"/>
+&lt;/shape>
+                            </pre>
+                            </div>
+                            <div class="col-md-4"><img src="images/shape-gradient.png" class="img-responsive"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><b>5. 实线边框有填充</b></p>
+                                <pre class="brush: xml;gutter: false;" >
+&lt;shape xmlns:android="..."
+       android:shape="rectangle"
+       android:useLevel="true" />
+    &lt;stroke android:width="2dp"
+        android:color="#ffff0000" />
+    &lt;solid android:color="..." />
+&lt;/shape>
+                            </pre>
+                            </div>
+                            <div class="col-md-6" style="padding: 0px;">
+                                <p><b>6. 虚线边框有填充</b></p>
+                                <pre class="brush: xml;gutter: false;">
+&lt;shape xmlns:android="..."
+    android:shape="rectangle" android:useLevel="true"
+    &lt;stroke
+        android:width="2dp" android:color="#ffff0000"
+        android:dashWidth="10dp" android:dashGap="2dp"/>
+    &lt;solid android:color="..." />
+&lt;/shape>
+                            </pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><b>7. 圆角边框无填充</b></p>
+                                <pre class="brush: xml;gutter: false;">
+&lt;shape xmlns:android="..."
+    android:shape="rectangle"
+    android:useLevel="true">
+    &lt;stroke android:width="2dp"
+        android:color="#ffff0000" />
+    &lt;corners android:radius="5dp" />
+&lt;/shape>
+                            </pre>
+                            </div>
+                            <div class="col-md-6" style="padding: 0px;">
+                                <p><b>8. 圆角虚线边框无填充</b></p>
+                                <pre class="brush: xml;gutter: false;">
+&lt;shape xmlns:android="..."
+    android:shape="rectangle"
+    android:useLevel="true">
+    &lt;stroke android:width="2dp" android:color="#ffff0000"
+        android:dashWidth="10dp" android:dashGap="2dp"/>
+    &lt;corners android:radius="5dp" />
+&lt;/shape>
+                            </pre>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><b>9. 圆角填充无边框</b></p>
+                                <pre class="brush: xml;gutter: false;">
+&lt;shape xmlns:android="..."
+    android:shape="rectangle"
+    android:useLevel="true">
+
+    &lt;solid
+        android:width="2dp"
+        android:color="..." />
+
+    &lt;corners android:radius="5dp" />
+
+&lt;/shape>
+                            </pre>
+                            </div>
+                            <div class="col-md-6" style="padding: 0px;">
+                                <p><b>10. 半圆弧圆角填充无边框</b></p>
+                                <pre class="brush: xml;gutter: false;">
+&lt;shape xmlns:android="..."
+    android:shape="rectangle" android:useLevel="true">
+    <!-- 需要注意的是: 如果 View 的高度为 wrap_content, 将以
+        这个高度为 View 的高度； 如果 View 的高度为固定值， 那么
+        这个半圆角的高度和圆角半径会等比缩放，结果还是半圆角。 -->
+    &lt;size android:height="40dp" />
+    <!-- radius 为 大于高度的一半 -->
+    &lt;corners android:radius="20dp" />
+    &lt;solid android:width="2dp"
+        android:color="@android:color/holo_blue_light" />
+&lt;/shape>
+                            </pre>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><b>11. 上部圆角填充无边框</b></p>
+                                <pre class="brush: xml;gutter: false;">
+&lt;shape xmlns:android="..."
+    android:shape="rectangle"
+    android:useLevel="true">
+    &lt;solid
+        android:width="2dp"
+        android:color="..." />
+    &lt;corners android:topLeftRadius="5dp"
+        android:topRightRadius="5dp" />
+&lt;/shape>
+                            </pre>
+                            </div>
+                            <div class="col-md-6" style="padding: 0px;">
+                                <p><b>12. 下部圆角填充无边框</b></p>
+                                <pre class="brush: xml;gutter: false;">
+&lt;shape xmlns:android="..."
+    android:shape="rectangle" android:useLevel="true">
+    &lt;solid
+        android:width="2dp"
+        android:color="@android:color/holo_blue_light" />
+    &lt;corners
+        android:bottomLeftRadius="5dp"
+        android:bottomRightRadius="5dp" />
+&lt;/shape>
+                            </pre>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p><b>13. 圆形填充边框渐变(最后 6 个图形相似，左下)</b></p>
+                                <pre class="brush: xml;gutter: false;">
+&lt;shape xmlns:android="..."
+    android:shape="rectangle" android:useLevel="true">
+<!-- 需要注意的是: 如果 View 的高度为 wrap_content, 将以这
+    个高度为 View 的高度； 如果 View 的高度为固定值，那个这
+    个圆的高度和圆角半径会等比缩放，结构还是圆。 -->
+    &lt;size android:height="40dp"
+        android:width="40dp"/>
+    <!-- radius 为 大于宽度和高度的一半 -->
+    &lt;corners android:radius="20dp" />
+    &lt;stroke android:width="1dp" android:color="..."/>
+    &lt;solid android:color="..." />
+    &lt;gradient
+        android:centerX="0.5" android:centerY="0.5"
+        android:startColor="..."
+        android:endColor="@color/colorAccent"
+        android:gradientRadius="30dp"
+        android:type="radial" />
+&lt;/shape>
+                            </pre>
+                            </div>
+                            <div class="col-md-6" style="padding: 0px;">
+                                <p><b>14. 上下两边半圆弧填充(最后 6 个图形相似，右下)</b></p>
+                                <pre class="brush: xml;gutter: false;">
+&lt;shape xmlns:android="..."
+    android:shape="rectangle" android:useLevel="true">
+    <!-- 同上面的圆形背景填充，只是宽高比变了。 -->
+    &lt;size android:height="40dp
+        android:width="20dp" />
+    <!-- radius 为 大于宽度和高度的一半 -->
+    &lt;corners android:radius="20dp" />
+    &lt;stroke android:width="1dp"
+        android:color="..." />
+    &lt;solid android:color="..." />
+    &lt;gradient
+        android:centerX="0.5"
+        android:centerY="0.5"
+        android:startColor="@android:color/holo_blue_dark"
+        android:endColor="@color/colorAccent"
+        android:gradientRadius="30dp"
+        android:type="radial" />
+&lt;/shape>
+                            </pre>
+                            </div>
+                        </div>
+
 
                     </div>
                 </div>
@@ -1018,43 +1226,346 @@ java.lang.Object
 		android.graphics.drawable.GradientDrawable
 
 public class GradientDrawable extends Drawable {
+    // 渐变方向，45度角的倍数，一个 360 / 45 = 8 个
+    public enum Orientation {
+        TOP_BOTTOM, // 上下，默认
+        BOTTOM_TOP, // 下上
+        LEFT_RIGHT, // 左右
+        RIGHT_LEFT, // 右左
+        TR_BL,      // 右上 -- 左下
+        BR_TL,      // 右下 -- 左上
+        BL_TR,      // 左下 -- 右上
+        TL_BR       // 左上 -- 右下
+    }
 
+    public GradientDrawable() {}
+    public GradientDrawable(GradientDrawable.Orientation orientation, int[] colors) {}
 }
 </pre>
                     <p><a href="docs/reference/android/graphics/drawable/GradientDrawable.html" target="_blank">GradientDrawable</a> 同样使用 <code>shape</code> 标签定义，同样使用 <code>ShapeDrawabe</code> 里面的属性。比较奇葩的是 <a href="#ShapeDrawable">ShapeDrawable</a> 的 <code>XML</code> 标签转转完成后得到的类型是 <code>GradientDrawable</code>。</p>
                     <ol>
-                        <li><p><code></code> -- </p></li>
-                        <li><p><code></code> -- </p></li>
-                        <li><p><code></code> -- </p></li>
-                        <li><p><code></code> -- </p></li>
-                        <li><p><code></code> -- </p></li>
-                        <li><p><code></code> -- </p></li>
-                        <li><p><code></code> -- </p></li>
-                        <li><p><code></code> -- </p></li>
-                        <li><p><code></code> -- </p></li>
-                        <li><p><code></code> -- </p></li>
-                        <li><p><code></code> -- </p></li>
-                        <li><p><code></code> -- </p></li>
-                        <li><p><code></code> -- </p></li>
+                        <li><p><code>void setCornerRadii(float[] radii)</code> -- 数组长度为 8，分为 4 对，分别指定 4 个角的 x 和 y 长度。顺序为  top-left, top-right, bottom-right, bottom-left。指定图形为矩形才适用。</p></li>
+                        <li><p><code>float[] getCornerRadii()</code> -- 获取圆角设置数组</p></li>
+                        <li><p><code>void setCornerRadius(float radius)</code> -- 设置统一的圆角半径</p></li>
+                        <li><p><code>float getCornerRadius()</code> -- 获取统一的圆角半径</p></li>
+                        <li><p><code>void setGradientCenter(float x, float y)</code> -- 设置渐变中心</p></li>
+                        <li><p><code>float getGradientCenterX()</code> -- 获取渐变中心 X</p></li>
+                        <li><p><code>float getGradientCenterY()</code> -- 获取渐变中心 Y</p></li>
+                        <li><p><code>void setGradientRadius(float gradientRadius)</code> -- 设置渐变半径</p></li>
+                        <li><p><code>float getGradientRadius()</code> -- 获取渐变半径</p></li>
+                        <li><p><code>void setGradientType(int gradient)</code> -- 设置渐变类型， LINEAR_GRADIENT， RADIAL_GRADIENT， SWEEP_GRADIENT</p></li>
+                        <li><p><code>int getGradientType()</code> -- 获取渐变类型</p></li>
+                        <li><p><code>void setOrientation(GradientDrawable.Orientation orientation)</code> -- 设置渐变方向，对应 XML 为 <code>angle</code></p></li>
+                        <li><p><code>GradientDrawable.Orientation getOrientation()</code> -- 获取渐变方向</p></li>
+                        <li><p><code>void setShape(int shape)</code> -- 指定绘制形状，LINE, OVAL, RECTANGLE, RING</p></li>
+                        <li><p><code>int getShape()</code> -- 获取绘制形状</p></li>
+                        <li><p><code>void setSize(int width, int height)</code> -- 设置大小</p></li>
+                        <li><p><code>void setColors(int[] colors)</code> -- 设置渐变数组</p></li>
+                        <li><p><code>int[] getColors()</code> -- 获取渐变数组</p></li>
+                    </ol>
+
+                    <p><b>使用 <code>XML</code> 实现 <a href="docs/reference/android/graphics/drawable/GradientDrawable.html" target="_blank">GradientDrawable</a> 同 <a href="#ShapeDrawable">ShapeDrawable</a> 是一样的，现在使用 <code>Java</code> 代码实现：</b></p>
+                    <pre class="brush: java;">
+/** 效果图参见 ShapeDrawable， 更多的效果参见 API 文档 */
+
+/** 1. 实线边框 */
+public Drawable createSolideBorderDrawable() {
+    GradientDrawable drawable = new GradientDrawable();
+    // 默认为 RECTANGLE
+    drawable.setShape(GradientDrawable.RECTANGLE);
+
+    // 实现边框
+    int width = Tools.dip2px(this, 1);
+    int color = getResources().getColor(R.color.colorAccent);
+    drawable.setStroke(width, color);
+
+    return drawable;
+}
+
+/** 2. 虚线边框 */
+public Drawable createDashStokeDrawable() {
+    GradientDrawable drawable = new GradientDrawable();
+    // 虚线边框
+    int width = Tools.dip2px(this, 1);
+    int color = getResources().getColor(R.color.colorAccent);
+    int dashWidth = Tools.dip2px(this, 10);
+    int dashGap = Tools.dip2px(this, 2);
+    drawable.setStroke(width, color, dashWidth, dashGap);
+
+    return drawable;
+}
+
+/** 3. 实心填充 */
+public Drawable createSolideDrawable() {
+    GradientDrawable drawable = new GradientDrawable();
+
+    // 填充
+    int solid_color = getResources().getColor(android.R.color.holo_blue_light);
+    drawable.setColor(solid_color);
+
+    return drawable;
+}
+
+/** 4. 统一圆角 */
+public Drawable createCornerDrawable() {
+    GradientDrawable drawable = new GradientDrawable();
+
+    // 颜色填充
+    int solid_color = getResources().getColor(android.R.color.holo_blue_light);
+    drawable.setColor(solid_color);
+
+    // 4个角为统一圆角
+    int corner = Tools.dip2px(this, 5);
+    drawable.setCornerRadius(corner);
+
+    return drawable;
+}
+
+/** 5. 分别设置 4 个圆角 */
+public Drawable createDiffCornerDrawable() {
+    GradientDrawable drawable = new GradientDrawable();
+
+    // 颜色填充
+    int solid_color = getResources().getColor(android.R.color.holo_blue_light);
+    drawable.setColor(solid_color);
+
+    /** 分别设置 4 个， 圆角数组长度为 8，分为 4 对，分别指定 4 个角的 x 和 y 长度。
+     * 顺序为 top-left, top-right, bottom-right, bottom-left。指定图形为矩形才适用。
+     */
+    float[] corners = {30, 10, 30, 10, 0, 0, 0, 0, 0};
+    drawable.setCornerRadii(corners);
+    return drawable;
+}
+
+/** 6. 渐变 */
+public Drawable createGradientDrawable() {
+    GradientDrawable drawable = new GradientDrawable();
+
+    // 渐变, 默认为 LINEAR_GRADIENT
+    drawable.setGradientType(GradientDrawable.LINEAR_GRADIENT);
+    // 设置渐变方向，默认为 TOP_BOTTOM
+    drawable.setOrientation(GradientDrawable.Orientation.TOP_BOTTOM);
+    drawable.setGradientCenter(0.5f, 0.5f);
+    int start = getResources().getColor(android.R.color.holo_blue_dark);
+    int end = getResources().getColor(R.color.colorAccent);
+    // 颜色数组长度至少为 2 才有渐变效果，可以有多个，第一个为 start, 最后一个为 end
+    int[] colors = {start, end};
+    drawable.setColors(colors);
+
+    return drawable;
+}
+                    </pre>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="NinePatchDrawable"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">NinePatchDrawable</h3>
+                </div>
+                <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.NinePatchDrawable
+		
+public class NinePatchDrawable extends Drawable {
+    // 使用 NinePatch 构造
+    public NinePatchDrawable(Resources res, NinePatch patch) {}
+    // 两个构造方法其实一样，后面的三个参数用于构造一个 NinePatch
+    public NinePatchDrawable(Resources res, Bitmap bitmap, byte[] chunk, Rect padding, String srcName) {}
+}
+</pre>
+
+                    <p><a href="docs/reference/android/graphics/drawable/NinePatchDrawable.html" target="_blank">NinePatchDrawable</a> 格式的图片在 android 环境下具有自适应调节大小的能力，可以实现 PNG 图片的部分拉伸。</p>
+                    <p>一个 <code>.9.png</code> 图片是一个标准的 PNG 图像，它包括四个边各一个额外的 1 像素宽的边界(如果使用 png 制作，那么它的实际宽度和高度各要加上 2px，但是绘制的还是原来大小)。边界用于定义图像的可伸展区域和静态区域。</p>
+                    <p>在 Android Studio 中使用 <code>.9.png</code> 图片：</p>
+                    <ul>
+                        <li><p><code>.9.png</code> 图片每个边都必须有黑线标记；</p></li>
+                        <li><p><code>.9.png</code> 图片每个边只能一条黑线标记；</p></li>
+                        <li><p><code>.9.png</code> 图片左侧和上方的黑线交叉的部分即可扩展区域，右侧和下方的黑线交叉的部分即内容显示区域；</p></li>
+                        <li><p>另外，在 Android Studio 中要制作 <code>.9.png</code> 图片，只要将普通 PNG 图片复制到 <code>drawable</code>, 直接打开即可。</p></li>
+                    </ul>
+                    <p><b>扩展区域</b> 和 <b>内容显示区域</b> 的理解：</p>
+                    <ul>
+                        <li><p>扩展区域 -- 左边和上边标记的线为扩展区域。如果宽度伸缩，那么只是上边标线区域的位置进行伸缩；如果高度伸缩，那么只是左边标线区域的位置进行伸缩。</p></li>
+                        <li><p>内容显示区域 -- 有点类似 padding 功能。当 <code>.9.png</code> 作为 TextView 背景时，文字显示的左上角(开始位置)始终为底部标线和右边标线相交的开始位置(矩形的左上角)，右下角(结束位置)始终为底部标线和右边标线相交的结束位置(矩形的右下角)，和是否伸缩无关。在绘制 <code>.9.png</code> 的时候已经确定，如果宽度或者高度不够，将不能显示完整文字。</p></li>
+                    </ul>
+
+
+                    <p><a href="docs/reference/android/graphics/drawable/NinePatchDrawable.html" target="_blank">NinePatchDrawable</a> 最重要的构造方法里面的 <a href="docs/reference/android/graphics/NinePatch.html" target="_blank">NinePatch</a> 类:</p>
+                    <pre class="brush: java;">
+java.lang.Object
+    android.graphics.NinePatch
+
+public class NinePatch {
+    public NinePatch(Bitmap bitmap, byte[] chunk) {}
+    public NinePatch(Bitmap bitmap, byte[] chunk, String srcName) {}
+}
+                    </pre>
+                    <p>可以使用马甲让一个非 <code>.9.png</code> 图片进行局部拉升，但是测试过程其内容展示区域失效。</p>
+                    <pre class="brush: java;">
+/** 让一张非 .9.png 图片局部拉伸 */
+Resources res = getResources();
+// ninepatch 是一张 .9.png 图片
+Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.ninepatch);
+// 得到 ninepatch 这张图片的 chunk，包含了拉伸位置信息
+byte[] chunk = bitmap.getNinePatchChunk();
+
+// nine 这张图片非 .9.png， 但是使用了 ninepatch 这张图片的 chunk 构建 NinePatch 对象
+NinePatch ninePatch = new NinePatch(BitmapFactory.decodeResource(res, R.drawable.nine), chunk);
+NinePatchDrawable drawable = new NinePatchDrawable(res, ninePatch);
+view.setBackground(drawable);
+                    </pre>
+
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="PictureDrawable"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">PictureDrawable</h3>
+                </div>
+                <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	android.graphics.drawable.Drawable
+		android.graphics.drawable.PictureDrawable
+		
+public class PictureDrawable extends Drawable {
+    public PictureDrawable(Picture picture) {}
+}
+</pre>
+                    <p><a href="docs/reference/android/graphics/drawable/PictureDrawable.html" target="_blank">PictureDrawable</a> 使用 Picture 进行绘制，要关闭硬件加速。</p>
+                    <p><a href="graphics.html#graphics-Picture">Picture</a> 可以记录在 Canvas 上每个绘制操作(通过 beginRecording 返回的 Canvas)，然后回放每个绘图操作。同时也支持将 Picture 中的内容写到 Stream 中，并支持从 Stream 恢复 Picture。这些功能使用 Bitmap 也能实现。但 Picture 只是记录绘图操作而不是绘制后的像素结果，因此存储大小比同样大小的 Bitmap 要小得多。</p>
+                    <ol>
+                        <li><p><code><a href="docs/reference/android/graphics/Picture.html" target="_blank">Picture</a> getPicture()</code> -- 获取 Picture</p></li>
+                        <li><p><code>void setPicture(<a href="docs/reference/android/graphics/Picture.html" target="_blank">Picture</a> picture)</code> -- 设置 Picture</p></li>
                     </ol>
                 </div>
             </div>
             <!-- item over -->
 
             <!-- item start -->
-            <a class="offset" id="..."></a>
+            <a class="offset" id="LayerDrawable"></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">...</h3>
+                    <h3 class="panel-title">LayerDrawable</h3>
                 </div>
                 <div class="panel-body">
 						<pre class="brush: java;">
 java.lang.Object
 	android.graphics.drawable.Drawable
-		android.graphics.drawable.
+		android.graphics.drawable.LayerDrawable
 		
-public class Drawable extends Drawable {}
+public class LayerDrawable extends Drawable {
+
+}
 </pre>
+                    <p><a href="docs/reference/android/graphics/drawable/LayerDrawable.html" target="_blank">LayerDrawable</a> 以数组的顺序绘制的 Drawable，因此最大索引的元素将被绘制在顶部。有两个子类： <a href="docs/reference/android/graphics/drawable/RippleDrawable.html" target="_blank">RippleDrawable</a>, <a href="docs/reference/android/graphics/drawable/TransitionDrawable.html"  target="_blank">TransitionDrawable</a>。</p>
+                    <pre class="brush: xml;">
+&lt;layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:paddingStart=""
+    android:paddingTop=""
+    android:paddingEnd=""
+    android:paddingBottom=""
+    android:paddingLeft=""
+    android:paddingRight=""
+    android:paddingMode="stack|nest"
+    android:opacity="transparent|translucent|opaque"
+    android:autoMirrored="">
+
+    &lt;item
+        android:id=""
+        android:drawable=""
+        android:width=""
+        android:height=""
+        android:gravity="$Gravity"
+        android:bottom=""
+        android:top=""
+        android:start=""
+        android:end=""
+        android:left=""
+        android:right="" />
+
+    &lt;item ... />
+&lt;/layer-list>
+                    </pre>
+                    <ul>
+                        <li><p><code>int 	addLayer(Drawable dr) </code></p></li>
+
+                        <li><p><code>int 	getLayerWidth(int index)</code></p></li>
+                        <li><p><code>int 	getLayerHeight(int index)</code></p></li>
+                        <li><p><code>void 	setLayerHeight(int index, int h)</code></p></li>
+                        <li><p><code></code></p></li>
+
+                        <li><p><code>int 	getLayerInsetBottom(int index)</code></p></li>
+                        <li><p><code>int 	getLayerInsetEnd(int index)</code></p></li>
+                        <li><p><code>int 	getLayerInsetLeft(int index)</code></p></li>
+                        <li><p><code>int 	getLayerInsetRight(int index) </code></p></li>
+                        <li><p><code>int 	getLayerInsetStart(int index) </code></p></li>
+                        <li><p><code>int 	getLayerInsetTop(int index) </code></p></li>
+                        <li><p><code>void 	setLayerInsetBottom(int index, int b) </code></p></li>
+                        <li><p><code>void 	setLayerInset(int index, int l, int t, int r, int b) </code></p></li>
+                        <li><p><code>void 	setLayerInsetEnd(int index, int e) </code></p></li>
+                        <li><p><code>void 	setLayerInsetLeft(int index, int l) </code></p></li>
+                        <li><p><code>void 	setLayerInsetRelative(int index, int s, int t, int e, int b)</code></p></li>
+                        <li><p><code>void 	setLayerInsetRight(int index, int r) </code></p></li>
+                        <li><p><code>void 	setLayerInsetStart(int index, int s) </code></p></li>
+                        <li><p><code>void 	setLayerInsetTop(int index, int t) </code></p></li>
+                        <li><p><code>void 	setLayerSize(int index, int w, int h) </code></p></li>
+
+                        <li><p><code>void 	setDrawable(int index, Drawable drawable)</code></p></li>
+                        <li><p><code> Drawable 	getDrawable(int index) </code></p></li>
+                        <li><p><code> Drawable 	findDrawableByLayerId(int id)</code></p></li>
+                        <li><p><code>boolean 	setDrawableByLayerId(int id, Drawable drawable)</code></p></li>
+                        <li><p><code>int 	getId(int index)</code></p></li>
+                        <li><p><code>void 	setId(int index, int id)</code></p></li>
+                        <li><p><code>int 	findIndexByLayerId(int id)</code></p></li>
+
+                        <li><p><code></code></p></li>
+                        <li><p><code>int 	getLayerGravity(int index)</code></p></li>
+                        <li><p><code>void 	setLayerGravity(int index, int gravity) </code></p></li>
+                        <li><p><code>boolean 	setVisible(boolean visible, boolean restart) </code></p></li>
+                        <li><p><code></code></p></li>
+                        <li><p><code></code></p></li>
+                        <li><p><code>int 	getNumberOfLayers() </code></p></li>
+                        <li><p><code></code></p></li>
+                        <li><p><code></code></p></li>
+                        <li><p><code>void 	setLayerHeight(int index, int h)</code></p></li>
+                        <li><p><code></code></p></li>
+                        <li><p><code></code></p></li>
+                        <li><p><code>void 	setOpacity(int opacity) </code></p></li>
+                        <li><p><code></code></p></li>
+                        <li><p><code>boolean 	onLayoutDirectionChanged(int layoutDirection)</code></p></li>
+                        <li><p><code>void 	scheduleDrawable(Drawable who, Runnable what, long when)</code></p></li>
+                        <li><p><code>void 	unscheduleDrawable(Drawable who, Runnable what)</code></p></li>
+                        <li><p><code></code></p></li>
+
+
+
+                        <li class="group"><p><code>int 	getStartPadding()</code></p></li>
+                        <li><p><code>int 	getTopPadding() </code></p></li>
+                        <li><p><code>int 	getBottomPadding()</code></p></li>
+                        <li><p><code>int 	getEndPadding()</code></p></li>
+                        <li><p><code>int 	getLeftPadding()</code></p></li>
+                        <li><p><code>int 	getRightPadding()</code></p></li>
+                        <li><p><code>int 	getPaddingMode()</code></p></li>
+                        <li><p><code>boolean 	getPadding(Rect padding) </code></p></li>
+                        <li><p><code>void 	setPadding(int left, int top, int right, int bottom) </code></p></li>
+                        <li><p><code>void 	setPaddingMode(int mode) </code></p></li>
+                        <li><p><code>void 	setPaddingRelative(int start, int top, int end, int bottom) </code></p></li>
+                        <li><p><code></code></p></li>
+                        <li><p><code></code></p></li>
+                        <li><p><code></code></p></li>
+                        <li><p><code>void 	setHotspot(float x, float y)</code></p></li>
+                        <li><p><code>void 	setHotspotBounds(int left, int top, int right, int bottom)</code></p></li>
+                        <li><p><code>void 	getHotspotBounds(Rect outRect)</code></p></li>
+                    </ul>
                 </div>
             </div>
             <!-- item over -->
@@ -1073,42 +1584,7 @@ java.lang.Object
 		
 public class Drawable extends Drawable {}
 </pre>
-                </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">...</h3>
-                </div>
-                <div class="panel-body">
-						<pre class="brush: java;">
-java.lang.Object
-	android.graphics.drawable.Drawable
-		android.graphics.drawable.
-		
-public class Drawable extends Drawable {}
-</pre>
-                </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="..."></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">...</h3>
-                </div>
-                <div class="panel-body">
-						<pre class="brush: java;">
-java.lang.Object
-	android.graphics.drawable.Drawable
-		android.graphics.drawable.
-		
-public class Drawable extends Drawable {}
-</pre>
+                    <p><a href="docs/reference/android/graphics/drawable/PictureDrawable.html" target="_blank">PictureDrawable</a></p>
                 </div>
             </div>
             <!-- item over -->
@@ -1131,8 +1607,8 @@ public class StateListDrawable extends Drawable {}
                         <code>state_focused</code> 放置于 <code>state_pressed</code> 前，那么 <code>state_pressed</code>
                         将不会执行，因为它也是 <code>state_focused</code> 状态。</p>
                     <pre class="brush: xml">
-<?xml version="1.0" encoding="utf-8"?>
-                        &lt;selector xmlns:android="http://schemas.android.com/apk/res/android"
+&lt;?xml version="1.0" encoding="utf-8"?>
+&lt;selector xmlns:android="http://schemas.android.com/apk/res/android"
 	android:constantSize=["true" | "false"]
 	android:dither=["true" | "false"]
 	android:variablePadding=["true" | "false"] >
