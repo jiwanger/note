@@ -189,8 +189,55 @@ public abstract class Drawable {
                         <p>
                             图形图像的绘制需要在画布上进行操作和处理，但是绘制需要了解很多细节以及可能要进行一些复杂的处理，这样就会增加学习和使用的成本，因此系统提供了一个被称之为 <a href="docs/reference/android/graphics/drawable/Drawable.html">Drawable</a> 的类来进行绘制处理。</p>
                         <p>通过 <a href="docs/reference/android/graphics/drawable/Drawable.html">Drawable</a> 类可以减少我们的绘制工作和使用成本，同时系统也提供了众多的 <a href="docs/reference/android/graphics/drawable/Drawable.html">Drawable</a> 的派生类比如单色、图形、位图、裁剪、动画等等来完成一些常见的绘制需求。<a href="docs/reference/android/graphics/drawable/Drawable.html">Drawable</a> 是一个抽象的可绘制类。</p>
-                        <p><a href="docs/reference/android/graphics/drawable/Drawable.html">Drawable</a> 类主要是提供了一个可绘制的区域 bound 属性以及一个 draw 成员函数，不同的派生类通过重载 draw 函数的实现而产生不同的绘制结果。
-                        </p>
+                        <p><a href="docs/reference/android/graphics/drawable/Drawable.html">Drawable</a> 类主要是提供了一个可绘制的区域 bound 属性以及一个 draw 成员函数，不同的派生类通过重载 draw 函数的实现而产生不同的绘制结果。</p>
+                        <p><a href="docs/reference/android/graphics/drawable/Drawable.html">Drawable</a> 解析使用了一个 <code>@hide</code> 类：<code>DrawableInflater</code>，支持以下标签：</p>
+                        <pre class="brush: java;">
+private Drawable inflateFromTag(@NonNull String name) {
+    switch (name) {
+        case "selector":
+            return new StateListDrawable();
+        case "animated-selector":
+            return new AnimatedStateListDrawable();
+        case "level-list":
+            return new LevelListDrawable();
+        case "layer-list":
+            return new LayerDrawable();
+        case "transition":
+            return new TransitionDrawable();
+        case "ripple":
+            return new RippleDrawable();
+        case "adaptive-icon":
+            return new AdaptiveIconDrawable();
+        case "color":
+            return new ColorDrawable();
+        case "shape":
+            return new GradientDrawable();
+        case "vector":
+            return new VectorDrawable();
+        case "animated-vector":
+            return new AnimatedVectorDrawable();
+        case "scale":
+            return new ScaleDrawable();
+        case "clip":
+            return new ClipDrawable();
+        case "rotate":
+            return new RotateDrawable();
+        case "animated-rotate":
+            return new AnimatedRotateDrawable();
+        case "animation-list":
+            return new AnimationDrawable();
+        case "inset":
+            return new InsetDrawable();
+        case "bitmap":
+            return new BitmapDrawable();
+        case "nine-patch":
+            return new NinePatchDrawable();
+        default:
+            return null;
+    }
+}
+
+                        </pre>
                     </div>
 
                     <div class="sub-item">
@@ -226,7 +273,7 @@ PixelFormat.TRANSLUCENT：半透明
                                     <li><p><code>static Drawable createFromStream(InputStream is, String srcName)</code> -- 从 InputStream 创建 Drawable，实际调用了 <code>BitmapFactory.decodeResourceStream(res, value, is, pad, opts);</code>, 再从 Bitmap 创建 BitmapDrawable</p></li>
                                     <li><p><code>static Drawable createFromResourceStream(Resources res, TypedValue value, InputStream is, String srcName)</code> -- 同上</p></li>
                                     <li><p><code>static Drawable createFromResourceStream(Resources res, TypedValue value, InputStream is, String srcName, BitmapFactory.Options opts)</code> -- 同上</p></li>
-                                    <li><p><code>static Drawable createFromXml(Resources r, XmlPullParser parser)</code> -- 从 xml 文件中创建 Drawable, 参见：<a href="#drawable-Drawable-xml">Drawable 支持的 xml 标签</a></p></li>
+                                    <li><p><code>static Drawable createFromXml(Resources r, XmlPullParser parser)</code> -- 从 xml 文件中创建 Drawable</p></li>
                                     <li><p><code>static Drawable createFromXml(Resources r, XmlPullParser parser, Resources.Theme theme)</code> -- 从 xml 文件中创建 Drawable</p></li>
                                     <li><p><code>static Drawable createFromXmlInner(Resources r, XmlPullParser parser, AttributeSet attrs, Resources.Theme theme)</code> -- 从 xml 文件中创建 Drawable</p></li>
                                     <li><p><code>static Drawable createFromXmlInner(Resources r, XmlPullParser parser, AttributeSet attrs)</code> -- 从 xml 文件中创建 Drawable</p></li>
@@ -246,11 +293,11 @@ PixelFormat.TRANSLUCENT：半透明
                                     <li><p><code>void setHotspot(float x, float y)</code> -- Drawable 并未实现，看子类的实现</p></li>
                                     <li><p><code>protected void onBoundsChange(Rect bounds)</code> -- 调用 <code>setBounds</code> 方法会触发此方法回调。在 <code>draw</code> 方法调用前，布局文件将会传入 View 的边界信息，同样会触发此方法。</p></li>
 
-                                    <li><p><code>final boolean setLevel(int level)</code> -- 设置显示的级别，以便进行一些绘制时的区间和条件控制，参见：<a href="#LevelListDrawable">LevelListDrawable</a></p></li>
+                                    <li><p><code>final boolean setLevel(int level)</code> -- 设置显示的级别，以便进行一些绘制时的区间和条件控制</p></li>
                                     <li><p><code>final int getLevel()</code> -- 获取显示的级别</p></li>
                                     <li><p><code>protected boolean onLevelChange(int level)</code> -- 调用 <code>setLevel</code> 方法会触发此方法回调</p></li>
 
-                                    <li><p><code>boolean setState(int[] stateSet)</code> -- 设置状态信息，参见：<a href="#StateListDrawable">StateListDrawable</a></p></li>
+                                    <li><p><code>boolean setState(int[] stateSet)</code> -- 设置状态信息</p></li>
                                     <li><p><code>int[] getState()</code> -- 获取状态信息</p></li>
                                     <li><p><code>boolean isStateful()</code> -- 指示是否可改变状态，默认返回 false, StateListDrawable 返回 true</p></li>
                                     <li><p><code>void jumpToCurrentState()</code> -- 跳转到当前状态</p></li>
@@ -1454,115 +1501,183 @@ public class PictureDrawable extends Drawable {
                     <h3 class="panel-title">LayerDrawable</h3>
                 </div>
                 <div class="panel-body">
+                    <div class="sub-item">
 						<pre class="brush: java;">
 java.lang.Object
 	android.graphics.drawable.Drawable
 		android.graphics.drawable.LayerDrawable
 		
-public class LayerDrawable extends Drawable {
-
+public class LayerDrawable extends Drawable implements Drawable.Callback {
+    public LayerDrawable(Drawable[] layers) {}
 }
 </pre>
                     <p><a href="docs/reference/android/graphics/drawable/LayerDrawable.html" target="_blank">LayerDrawable</a> 以数组的顺序绘制的 Drawable，因此最大索引的元素将被绘制在顶部。有两个子类： <a href="docs/reference/android/graphics/drawable/RippleDrawable.html" target="_blank">RippleDrawable</a>, <a href="docs/reference/android/graphics/drawable/TransitionDrawable.html"  target="_blank">TransitionDrawable</a>。</p>
                     <pre class="brush: xml;">
 &lt;layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    &lt;!-- 填充 -->
     android:paddingStart=""
     android:paddingTop=""
     android:paddingEnd=""
     android:paddingBottom=""
     android:paddingLeft=""
     android:paddingRight=""
-    android:paddingMode="stack|nest"
+    android:paddingMode="nest|stack" &lt;!-- 默认，将每个层嵌套在前一层的填充物中|在前一层上直接堆叠每个层 -->
     android:opacity="transparent|translucent|opaque"
     android:autoMirrored="">
 
     &lt;item
-        android:id=""
-        android:drawable=""
+        android:id=""               &lt;!-- 标识 drawable -->
+        android:drawable=""         &lt;!-- 必须 -->
         android:width=""
         android:height=""
-        android:gravity="$Gravity"
+        android:gravity="$Gravity"  &lt;!-- 重力方向 -->
+        &lt;!-- 相当于 margin -->
         android:bottom=""
         android:top=""
         android:start=""
         android:end=""
         android:left=""
-        android:right="" />
+        android:right="">
+
+        &lt;... />                  &lt;!-- 可以嵌入各种 drawable -->
+
+    &lt;/item>
 
     &lt;item ... />
 &lt;/layer-list>
                     </pre>
-                    <ul>
-                        <li><p><code>int 	addLayer(Drawable dr) </code></p></li>
+                </div>
+                    <div class="sub-item">
+                        <p><a href="docs/reference/android/graphics/drawable/LayerDrawable.html" target="_blank">LayerDrawable</a> API:</p>
+                    <ol>
+                        <li><p><code>int addLayer(Drawable dr)</code> -- 添加一个 Drawable，返回起索引</p></li>
+                        <li><p><code>void setDrawable(int index, Drawable drawable)</code> -- 替换指定 INDEX 上的 Drawable</p></li>
+                        <li><p><code>boolean setDrawableByLayerId(int id, Drawable drawable)</code>-- 替换指定 ID 的 Drawable</p></li>
+                        <li><p><code>Drawable getDrawable(int index)</code> -- 返回指定 INDEX 的 Drawable</p></li>
+                        <li><p><code>Drawable findDrawableByLayerId(int id)</code> -- 返回指定 ID 的 Drawable</p></li>
+                        <li><p><code>int findIndexByLayerId(int id)</code> -- 返回指定 ID 的索引</p></li>
+                        <li><p><code>int getId(int index)</code> -- 指定 INDEX 对应 Drawable 的 ID</p></li>
+                        <li><p><code>void setId(int index, int id)</code> -- 指定 INDEX 对应 Drawable 的 ID</p></li>
+                        <li><p><code>int getNumberOfLayers()</code> -- 获取数量</p></li>
 
-                        <li><p><code>int 	getLayerWidth(int index)</code></p></li>
-                        <li><p><code>int 	getLayerHeight(int index)</code></p></li>
-                        <li><p><code>void 	setLayerHeight(int index, int h)</code></p></li>
-                        <li><p><code></code></p></li>
+                        <li class="group"><p><code>void setLayerSize(int index, int w, int h)</code> -- 指定 INDEX 对应 Drawable 的大小</p></li>
+                        <li><p><code>int getLayerWidth(int index)</code> -- 指定 INDEX 对应 Drawable 的宽度</p></li>
+                        <li><p><code>void setLayerWidth(int index, int w)</code> -- 指定 INDEX 对应 Drawable 的宽度</p></li>
+                        <li><p><code>int getLayerHeight(int index)</code> -- 指定 INDEX 对应 Drawable 的高度</p></li>
+                        <li><p><code>void setLayerHeight(int index, int h)</code> -- 指定 INDEX 对应 Drawable 的高度</p></li>
 
-                        <li><p><code>int 	getLayerInsetBottom(int index)</code></p></li>
-                        <li><p><code>int 	getLayerInsetEnd(int index)</code></p></li>
-                        <li><p><code>int 	getLayerInsetLeft(int index)</code></p></li>
-                        <li><p><code>int 	getLayerInsetRight(int index) </code></p></li>
-                        <li><p><code>int 	getLayerInsetStart(int index) </code></p></li>
-                        <li><p><code>int 	getLayerInsetTop(int index) </code></p></li>
-                        <li><p><code>void 	setLayerInsetBottom(int index, int b) </code></p></li>
-                        <li><p><code>void 	setLayerInset(int index, int l, int t, int r, int b) </code></p></li>
-                        <li><p><code>void 	setLayerInsetEnd(int index, int e) </code></p></li>
-                        <li><p><code>void 	setLayerInsetLeft(int index, int l) </code></p></li>
-                        <li><p><code>void 	setLayerInsetRelative(int index, int s, int t, int e, int b)</code></p></li>
-                        <li><p><code>void 	setLayerInsetRight(int index, int r) </code></p></li>
-                        <li><p><code>void 	setLayerInsetStart(int index, int s) </code></p></li>
-                        <li><p><code>void 	setLayerInsetTop(int index, int t) </code></p></li>
-                        <li><p><code>void 	setLayerSize(int index, int w, int h) </code></p></li>
+                        <li class="group"><p><code>void setPaddingMode(int mode)</code> -- 填充模式: 	PADDING_MODE_NEST(默认)， PADDING_MODE_STACK</p></li>
+                        <li><p><code>int getPaddingMode()</code> -- 获取填充模式</p></li>
+                        <li><p><code>int getStartPadding()</code> -- 起始填充(LTR, RTL)</p></li>
+                        <li><p><code>int getTopPadding()</code> -- 顶部填充</p></li>
+                        <li><p><code>int getBottomPadding()</code> -- 底部填充</p></li>
+                        <li><p><code>int getEndPadding()</code> -- 结束填充(LTR, RTL)</p></li>
+                        <li><p><code>int getLeftPadding()</code> -- 左侧填充</p></li>
+                        <li><p><code>int getRightPadding()</code> -- 右侧填充</p></li>
+                        <li><p><code>boolean getPadding(Rect padding)</code> -- 填充保存到 Rect 中</p></li>
+                        <li><p><code>void setPadding(int left, int top, int right, int bottom)</code> -- 设置填充</p></li>
+                        <li><p><code>void setPaddingRelative(int start, int top, int end, int bottom)</code> -- 在原始填充基础上相加</p></li>
 
-                        <li><p><code>void 	setDrawable(int index, Drawable drawable)</code></p></li>
-                        <li><p><code> Drawable 	getDrawable(int index) </code></p></li>
-                        <li><p><code> Drawable 	findDrawableByLayerId(int id)</code></p></li>
-                        <li><p><code>boolean 	setDrawableByLayerId(int id, Drawable drawable)</code></p></li>
-                        <li><p><code>int 	getId(int index)</code></p></li>
-                        <li><p><code>void 	setId(int index, int id)</code></p></li>
-                        <li><p><code>int 	findIndexByLayerId(int id)</code></p></li>
+                        <li class="group"><p><code>int getLayerInsetStart(int index)</code> -- 开始边距(LTR, RTL)</p></li>
+                        <li><p><code>void setLayerInsetStart(int index, int s)</code> -- 开始边距(LTR, RTL)</p></li>
+                        <li><p><code>int getLayerInsetBottom(int index)</code> -- 底部边距</p></li>
+                        <li><p><code>void setLayerInsetBottom(int index, int b)</code> -- 底部边距</p></li>
+                        <li><p><code>int getLayerInsetEnd(int index)</code> -- 结束边距(LTR, RTL)</p></li>
+                        <li><p><code>void setLayerInsetEnd(int index, int e)</code> -- 结束边距(LTR, RTL)</p></li>
+                        <li><p><code>int getLayerInsetTop(int index)</code> -- 顶部边距</p></li>
+                        <li><p><code>void setLayerInsetTop(int index, int t)</code> -- 顶部边距</p></li>
+                        <li><p><code>int getLayerInsetLeft(int index)</code> -- 左侧边距</p></li>
+                        <li><p><code>void setLayerInsetLeft(int index, int l)</code> -- 左侧边距</p></li>
+                        <li><p><code>int getLayerInsetRight(int index)</code> -- 右侧边距</p></li>
+                        <li><p><code>void setLayerInsetRight(int index, int r)</code> -- 右侧边距</p></li>
+                        <li><p><code>void setLayerInset(int index, int l, int t, int r, int b)</code> -- 设置边距</p></li>
+                        <li><p><code>void setLayerInsetRelative(int index, int s, int t, int e, int b)</code> -- 设置相对于 INDEX 对应 Drawable 边距</p></li>
 
-                        <li><p><code></code></p></li>
-                        <li><p><code>int 	getLayerGravity(int index)</code></p></li>
-                        <li><p><code>void 	setLayerGravity(int index, int gravity) </code></p></li>
-                        <li><p><code>boolean 	setVisible(boolean visible, boolean restart) </code></p></li>
-                        <li><p><code></code></p></li>
-                        <li><p><code></code></p></li>
-                        <li><p><code>int 	getNumberOfLayers() </code></p></li>
-                        <li><p><code></code></p></li>
-                        <li><p><code></code></p></li>
-                        <li><p><code>void 	setLayerHeight(int index, int h)</code></p></li>
-                        <li><p><code></code></p></li>
-                        <li><p><code></code></p></li>
-                        <li><p><code>void 	setOpacity(int opacity) </code></p></li>
-                        <li><p><code></code></p></li>
-                        <li><p><code>boolean 	onLayoutDirectionChanged(int layoutDirection)</code></p></li>
-                        <li><p><code>void 	scheduleDrawable(Drawable who, Runnable what, long when)</code></p></li>
-                        <li><p><code>void 	unscheduleDrawable(Drawable who, Runnable what)</code></p></li>
-                        <li><p><code></code></p></li>
+                        <li class="group"><p><code>int getLayerGravity(int index)</code> -- 指定 INDEX 对应 Drawable 的重力方向</p></li>
+                        <li><p><code>void setLayerGravity(int index, int gravity)</code> -- 重力方向</p></li>
+                        <li><p><code>boolean setVisible(boolean visible, boolean restart)</code> -- 可见性</p></li>
 
+                        <li class="group"><p><code>boolean onLayoutDirectionChanged(int layoutDirection)</code> -- 横竖屏切换回调</p></li>
+                        <li><p><code>void scheduleDrawable(Drawable who, Runnable what, long when)</code> -- ?</p></li>
+                        <li><p><code>void unscheduleDrawable(Drawable who, Runnable what)</code> -- ?</p></li>
 
+                        <li class="group"><p><code>void setHotspot(float x, float y)</code> -- 指定可绘制区域内的热点</p></li>
+                        <li><p><code>void setHotspotBounds(int left, int top, int right, int bottom)</code> -- 设置热点限制的边界，如果它们与可绘制边界不同</p></li>
+                        <li><p><code>void getHotspotBounds(Rect outRect)</code> -- 获取热区边界</p></li>
+                    </ol>
+                    </div>
 
-                        <li class="group"><p><code>int 	getStartPadding()</code></p></li>
-                        <li><p><code>int 	getTopPadding() </code></p></li>
-                        <li><p><code>int 	getBottomPadding()</code></p></li>
-                        <li><p><code>int 	getEndPadding()</code></p></li>
-                        <li><p><code>int 	getLeftPadding()</code></p></li>
-                        <li><p><code>int 	getRightPadding()</code></p></li>
-                        <li><p><code>int 	getPaddingMode()</code></p></li>
-                        <li><p><code>boolean 	getPadding(Rect padding) </code></p></li>
-                        <li><p><code>void 	setPadding(int left, int top, int right, int bottom) </code></p></li>
-                        <li><p><code>void 	setPaddingMode(int mode) </code></p></li>
-                        <li><p><code>void 	setPaddingRelative(int start, int top, int end, int bottom) </code></p></li>
-                        <li><p><code></code></p></li>
-                        <li><p><code></code></p></li>
-                        <li><p><code></code></p></li>
-                        <li><p><code>void 	setHotspot(float x, float y)</code></p></li>
-                        <li><p><code>void 	setHotspotBounds(int left, int top, int right, int bottom)</code></p></li>
-                        <li><p><code>void 	getHotspotBounds(Rect outRect)</code></p></li>
-                    </ul>
+                    <div class="sub-item">
+                        <p><a href="docs/reference/android/graphics/drawable/LayerDrawable.html" target="_blank">LayerDrawable</a> 子类：</p>
+                        <p><a href="docs/reference/android/graphics/drawable/RippleDrawable.html" target="_blank">RippleDrawable</a> -- 用于产生一个触发反馈效果，比如在 Button 上点击，会有一个水波纹效果。</p>
+                        <pre class="brush: xml;">
+&lt;ripple xmlns:android="http://schemas.android.com/apk/res/android"
+        android:color="@color/colorAccent"
+        android:radius="@dimen/dimen_20_dp">
+
+        &lt;item
+            android:id=""               &lt;!-- 标识 drawable -->
+            android:drawable=""         &lt;!-- 必须 -->
+            android:width=""
+            android:height=""
+            android:gravity="$Gravity"  &lt;!-- 重力方向 -->
+            &lt;!-- 相当于 margin -->
+            android:bottom=""
+            android:top=""
+            android:start=""
+            android:end=""
+            android:left=""
+            android:right="">
+
+            &lt;... />                  &lt;!-- 可以嵌入各种 drawable -->
+        &lt;/item>
+
+        &lt;item ... />
+&lt;/ripple>
+                        </pre>
+                        <p><a href="docs/reference/android/graphics/drawable/TransitionDrawable.html" target="_blank">TransitionDrawable</a> -- 用于在两个 Drawable 之间平滑切换。构造方法接受的 Drawable 数组长度只能为 2。</p>
+                        <ul>
+                            <li><p><code>void startTransition(int durationMillis)</code> -- 切换到第二个 Drawable</p></li>
+                            <li><p><code>void reverseTransition(int duration)</code> -- 恢复到第一个 Drawable</p></li>
+                            <li><p><code>void resetTransition()</code> -- 恢复到第一个 Drawable</p></li>
+                            <li><p><code>void setCrossFadeEnabled(boolean enabled)</code> -- 是否开启透明渐变，默认不开启</p></li>
+                            <li><p><code>boolean isCrossFadeEnabled()</code> -- 是否开启了透明渐变</p></li>
+                        </ul>
+                        <pre class="brush: xml;">
+&lt;transition xmlns:android="http://schemas.android.com/apk/res/android"
+    &lt;!-- 填充 -->
+    android:paddingStart=""
+    android:paddingTop=""
+    android:paddingEnd=""
+    android:paddingBottom=""
+    android:paddingLeft=""
+    android:paddingRight=""
+    android:paddingMode="nest|stack" &lt;!-- 默认，将每个层嵌套在前一层的填充物中|在前一层上直接堆叠每个层 -->
+    android:opacity="transparent|translucent|opaque"
+    android:autoMirrored="">
+
+    &lt;item
+        android:id=""               &lt;!-- 标识 drawable -->
+        android:drawable=""         &lt;!-- 必须 -->
+        android:width=""
+        android:height=""
+        android:gravity="$Gravity"  &lt;!-- 重力方向 -->
+        &lt;!-- 相当于 margin -->
+        android:bottom=""
+        android:top=""
+        android:start=""
+        android:end=""
+        android:left=""
+        android:right="">
+
+        &lt;... />                  &lt;!-- 可以嵌入各种 drawable -->
+
+    &lt;/item>
+
+    &lt;item ... />
+&lt;/transition>
+                        </pre>
+                    </div>
                 </div>
             </div>
             <!-- item over -->
@@ -1579,11 +1694,82 @@ java.lang.Object
     android.graphics.drawable.Drawable
   	    android.graphics.drawable.DrawableWrapper
 
-public class DrawableWrapper extends Drawable {
-
+public abstract DrawableWrapper extends Drawable implements Drawable.Callback {
+    public DrawableWrapper(Drawable dr) {}
 }
 </pre>
-                    <p><a href="docs/reference/android/graphics/drawable/DrawableWrapper.html" target="_blank">DrawableWrapper</a> 有以下下子类：<a href="docs/reference/android/graphics/drawable/ClipDrawable.html" target="_blank">ClipDrawable</a>, <a href="docs/reference/android/graphics/drawable/InsetDrawable.html" target="_blank">InsetDrawable</a>, <a href="docs/reference/android/graphics/drawable/RotateDrawable.html" target="_blank">RotateDrawable</a>, <a href="docs/reference/android/graphics/drawable/ScaleDrawable.html" target="_blank">ScaleDrawable</a></p>
+                    <p><a href="docs/reference/android/graphics/drawable/DrawableWrapper.html" target="_blank">DrawableWrapper</a> 有以下子类：<a href="docs/reference/android/graphics/drawable/ClipDrawable.html" target="_blank">ClipDrawable</a>, <a href="docs/reference/android/graphics/drawable/InsetDrawable.html" target="_blank">InsetDrawable</a>, <a href="docs/reference/android/graphics/drawable/RotateDrawable.html" target="_blank">RotateDrawable</a>, <a href="docs/reference/android/graphics/drawable/ScaleDrawable.html" target="_blank">ScaleDrawable</a></p>
+
+                    <p><a href="docs/reference/android/graphics/drawable/ClipDrawable.html" target="_blank">ClipDrawable</a> -- 可以根据 level 裁剪不同的部分，以达到展示图片不同部分的效果。</p>
+                    <pre class="brush: xml;">
+&lt;clip xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable=""
+    android:gravity="$Gravity"
+    android:clipOrientation="vertical|horizontal" />
+                </pre>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <pre class="brush: java;">
+/** Gravity 要和 Orientation 生成 ClipDrawable */
+public ClipDrawable newClipDrawable(int gravity, int orientation) {
+    Drawable image = getResources().getDrawable(R.drawable.jpg_480x320);
+    return new ClipDrawable(image, gravity, orientation);
+}
+
+// 调用每个 ClipDrawable 的 setLevel 方法
+for (ImageView imageView : views) {
+    imageView.getDrawable().setLevel(progress);
+}
+
+/** 构建不同的 ClipDrawable, Gravity 要和 Orientation 配套 */
+views[0]...(newClipDrawable(Gravity.START, ClipDrawable.HORIZONTAL));
+views[1]...(newClipDrawable(Gravity.TOP, ClipDrawable.VERTICAL));
+views[2]...(newClipDrawable(Gravity.CENTER, ClipDrawable.HORIZONTAL));
+views[3]...(newClipDrawable(Gravity.CENTER, ClipDrawable.VERTICAL));
+views[4]...(newClipDrawable(Gravity.END, ClipDrawable.HORIZONTAL));
+views[5]...(newClipDrawable(Gravity.BOTTOM, ClipDrawable.VERTICAL));
+/** Gravity 和 Orientation 可以有多个 */
+views[6]...(newClipDrawable(Gravity.START|Gravity.TOP,
+    ClipDrawable.HORIZONTAL|ClipDrawable.VERTICAL));
+views[7]...(newClipDrawable(Gravity.CENTER,
+    ClipDrawable.HORIZONTAL|ClipDrawable.VERTICAL));
+                            </pre>
+
+                        </div>
+                        <div class="col-md-3"><img src="images/ClipDrawable.gif" class="img-responsive"/></div>
+                    </div>
+
+                    <p><a href="docs/reference/android/graphics/drawable/InsetDrawable.html" target="_blank">InsetDrawable</a></p>
+                    <pre class="brush: xml;">
+&lt;inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable=""
+    android:visible="true|false"
+    android:inset=""
+    android:insetLeft=""
+    android:insetTop=""
+    android:insetRight=""
+    android:insetBottom="" />
+                    </pre>
+                    <p><a href="docs/reference/android/graphics/drawable/RotateDrawable.html" target="_blank">RotateDrawable</a></p>
+                    <pre class="brush: xml;">
+&lt;rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:visible="true|false"
+    android:drawable=""
+    android:pivotX=""
+    android:pivotY=""
+    android:fromDegrees=""
+    android:toDegrees="" />
+                    </pre>
+                    <p><a href="docs/reference/android/graphics/drawable/ScaleDrawable.html" target="_blank">ScaleDrawable</a></p>
+                    <pre class="brush: xml;">
+&lt;scale xmlns:android="http://schemas.android.com/apk/res/android"
+       android:drawable=""
+       android:level=""
+       android:scaleWidth=""
+       android:scaleHeight=""
+       android:scaleGravity="$Gravity"
+       android:useIntrinsicSizeAsMinimum="true|false" />
+                    </pre>
 
                 </div>
             </div>
