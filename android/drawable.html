@@ -98,7 +98,7 @@
                         <a href="#VectorDrawable" class="list-group-item">VectorDrawable</a>
                         <a href="#AnimatedVectorDrawable" class="list-group-item">AnimatedVectorDrawable</a>
                     </div>
-                    <a href="#java-class-loader" class="list-group-item">...</a>
+                    <a href="#Examples" class="list-group-item">Examples</a>
                 </div>
             </div>
         </div>
@@ -331,7 +331,7 @@ PixelFormat.TRANSLUCENT：半透明
                                     <li><p><code>void unscheduleSelf(Runnable what)</code> -- 主要用于动画处理</p></li>
 
                                     <li><p><code>Drawable.ConstantState getConstantState()</code> -- 对于有些可绘制对象可以共享其中的资源而不需要有多个副本，因此可以通过如下方法来得到一个内部的保存的常量状态</p></li>
-                                    <li><p><code>Drawable mutate()</code> -- 要单独制作一份不共享的可绘制对象</p></li>
+                                    <li><p><code>Drawable mutate()</code> -- 要单独制作一份不共享的可绘制对象。<b>从同一个资源文件中加载出来的 Drawable 会共享状态，如果你加载出来多个 Drawable，当改变了其中一个的状态时，其他 Drawable 的状态也会相应改变。调用此方法后将不会再共享同一个状态，这个操作是不可逆转的。</b></p></li>
 
                                     <li><p><code>void setChangingConfigurations(int configs)</code> -- 这个 configs 参数由 <code>ActivityInfo</code> 定义</p></li>
                                     <li><p><code>int getChangingConfigurations()</code> -- 获取值</p></li>
@@ -717,11 +717,6 @@ public class BitmapDrawable extends Drawable {
     BitmapDrawable(Resources res, Bitmap bitmap)
     BitmapDrawable(Resources res, String filepath)
     BitmapDrawable(Resources res, InputStream is)
-    BitmapDrawable()                                // API 4 过时
-    BitmapDrawable(Bitmap bitmap)                   // API 4 过时
-    BitmapDrawable(String filepath)                 // API 5 过时
-    BitmapDrawable(InputStream is)                  // API 5 过时
-    BitmapDrawable(Resources res)                   // API 18 过时
 }
 </pre>
                         <p><a href="docs/reference/android/graphics/drawable/BitmapDrawable.html" target="_blank">BitmapDrawable</a> 可在 <code>res/drawable</code> 下使用 XML 定义：</p>
@@ -769,7 +764,7 @@ public class BitmapDrawable extends Drawable {
     android:tileModeX=["disabled" | "clamp" | "repeat" | "mirror"]
     android:tileModeY=["disabled" | "clamp" | "repeat" | "mirror"] />
                         </pre>
-                        <p><a href="docs/reference/android/graphics/drawable/BitmapDrawable.htmltarget="_blank">BitmapDrawable</a> 为位图可绘制类。在构造时指定一个 Bitmap 对象或者一个位图文件。位图显示时需要指定：<b>像素和设备尺寸的映射</b>，<b>显示的位置</b>，<b>显示模式</b>三种属性。</p>
+                        <p><a href="docs/reference/android/graphics/drawable/BitmapDrawable.html" target="_blank">BitmapDrawable</a> 为位图可绘制类。在构造时指定一个 Bitmap 对象或者一个位图文件。位图显示时需要指定：<b>像素和设备尺寸的映射</b>，<b>显示的位置</b>，<b>显示模式</b>三种属性。</p>
                         <ol>
                             <li><p><b>像素和设备尺寸的映射: </b>位图里面的像素是一个抽象的概念他没有具体的物理尺寸，而设备的像素则是物理的，他有大小。因此需要有一个方法来指定位图像素转化为物理像素的映射关系，这样位图的像素才可以真正的显示在设备上。下面就是提供的三种映射设置方法：</p>
                             <pre class="brush: java;">
@@ -1739,7 +1734,7 @@ views[7]...(newClipDrawable(Gravity.CENTER,
                         <div class="col-md-3"><img src="images/ClipDrawable.gif" class="img-responsive"/></div>
                     </div>
 
-                    <p><a href="docs/reference/android/graphics/drawable/InsetDrawable.html" target="_blank">InsetDrawable</a></p>
+                    <p><a href="docs/reference/android/graphics/drawable/InsetDrawable.html" target="_blank">InsetDrawable</a> -- 相当于给 Drawable 加 Padding 值，区别在于 Padding 是内容与边框的距离，Inset 是 Drawable 与边框的距离。</p>
                     <pre class="brush: xml;">
 &lt;inset xmlns:android="http://schemas.android.com/apk/res/android"
     android:drawable=""
@@ -1750,7 +1745,7 @@ views[7]...(newClipDrawable(Gravity.CENTER,
     android:insetRight=""
     android:insetBottom="" />
                     </pre>
-                    <p><a href="docs/reference/android/graphics/drawable/RotateDrawable.html" target="_blank">RotateDrawable</a></p>
+                    <p><a href="docs/reference/android/graphics/drawable/RotateDrawable.html" target="_blank">RotateDrawable</a> -- 可以根据 level 旋转不同的角度。<code>fromDegrees</code> 和 <code>toDegrees</code> 决定角度，level 改变只是更改比率。</p>
                     <pre class="brush: xml;">
 &lt;rotate xmlns:android="http://schemas.android.com/apk/res/android"
     android:visible="true|false"
@@ -1760,7 +1755,43 @@ views[7]...(newClipDrawable(Gravity.CENTER,
     android:fromDegrees=""
     android:toDegrees="" />
                     </pre>
-                    <p><a href="docs/reference/android/graphics/drawable/ScaleDrawable.html" target="_blank">ScaleDrawable</a></p>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <pre class="brush: java;">
+public RotateDrawable newRotateDrawable(float from, float to,
+                                float x, float y) {
+    RotateDrawable drawable = (RotateDrawable) getDrawable(R.drawable.layer);
+    if(null == drawable) {
+        return null;
+    }
+    drawable.mutate();// 从 xml 加载要不共享状态，需要调用此方法
+    drawable.setFromDegrees(from);
+    drawable.setToDegrees(to);
+    drawable.setPivotX(x);
+    drawable.setPivotY(y);
+    return drawable;
+}
+
+// 调用每个 RotateDrawable 的 setLevel 方法
+for (ImageView imageView : views) {
+    imageView.getDrawable().setLevel(progress);
+}
+
+/** 构建不同的 ClipDrawable, Gravity 要和 Orientation 配套 */
+views[0].setImageDrawable(newRotateDrawable(0, 180, .5f, .5f));
+views[1].setImageDrawable(newRotateDrawable(180, 0, .5f, .5f));
+views[2].setImageDrawable(newRotateDrawable(0, 180, 0f, 0f));
+views[3].setImageDrawable(newRotateDrawable(0, 180, 1f, 1f));
+views[4].setImageDrawable(newRotateDrawable(0, 360, .5f, .5f));
+views[5].setImageDrawable(newRotateDrawable(360, 0, .5f, .5f));
+views[6].setImageDrawable(newRotateDrawable(0, 360, .5f, 0f));
+views[7].setImageDrawable(newRotateDrawable(360, 0, 0f, .5f));
+                            </pre>
+
+                        </div>
+                        <div class="col-md-3"><img src="images/RotateDrawable.gif" class="img-responsive"/></div>
+                    </div>
+                    <p><a href="docs/reference/android/graphics/drawable/ScaleDrawable.html" target="_blank">ScaleDrawable</a>  -- 可以根据 level 进行缩放。</p>
                     <pre class="brush: xml;">
 &lt;scale xmlns:android="http://schemas.android.com/apk/res/android"
        android:drawable=""
@@ -1770,7 +1801,37 @@ views[7]...(newClipDrawable(Gravity.CENTER,
        android:scaleGravity="$Gravity"
        android:useIntrinsicSizeAsMinimum="true|false" />
                     </pre>
+                    <div class="row">
+                        <div class="col-md-9">
+                            <pre class="brush: java;">
+/** 生成 ScaleDrawable */
+public ScaleDrawable newScaleDrawable(int gravity,
+                                float width, float height) {
+    Drawable image = getResources().getDrawable(R.drawable.jpg_480x320);
+    return new ScaleDrawable(image, gravity, width, height);
+}
 
+// 调用每个 ScaleDrawable 的 setLevel 方法
+for (ImageView imageView : views) {
+    imageView.getDrawable().setLevel(progress);
+}
+
+/** 构建不同的 ScaleDrawable */
+views[0].setImageDrawable(newScaleDrawable(Gravity.START, 1f, 1f));
+views[1].setImageDrawable(newScaleDrawable(Gravity.START, .5f, .5f));
+views[2].setImageDrawable(newScaleDrawable(Gravity.CENTER, 1f, 1f));
+views[3].setImageDrawable(newScaleDrawable(Gravity.CENTER, .5f, .5f));
+views[4].setImageDrawable(newScaleDrawable(Gravity.CENTER, 2f, 2f));
+views[5].setImageDrawable(newScaleDrawable(Gravity.CENTER, 2f, .5f));
+views[6].setImageDrawable(
+    newScaleDrawable(Gravity.TOP|Gravity.START, 1f, 1f));
+views[7].setImageDrawable(
+    newScaleDrawable(Gravity.BOTTOM|Gravity.END, 1f, 1f));
+                            </pre>
+
+                        </div>
+                        <div class="col-md-3"><img src="images/ScaleDrawable.gif" class="img-responsive"/></div>
+                    </div>
                 </div>
             </div>
             <!-- item over -->
@@ -1782,95 +1843,282 @@ views[7]...(newClipDrawable(Gravity.CENTER,
                     <h3 class="panel-title">DrawableContainer 及子类</h3>
                 </div>
                 <div class="panel-body">
-                    <div class="sub-item">
 						<pre class="brush: java;">
 java.lang.Object
 	android.graphics.drawable.Drawable
 		android.graphics.drawable.DrawableContainer
 
-public class DrawableContainer extends Drawable {}
+public class DrawableContainer extends Drawable implements Drawable.Callback {
+    public abstract static class DrawableContainerState extends ConstantState {}
+
+    public DrawableContainer() {}
+}
 </pre>
-                    <p><a href="docs/reference/android/graphics/drawable/DrawableContainer.html" target="_blank">DrawableContainer</a> 有以下下子类：<a href="docs/reference/android/graphics/drawable/AnimationDrawable.html" target="_blank">AnimationDrawable</a>, <a href="docs/reference/android/graphics/drawable/LevelListDrawable.html" target="_blank">LevelListDrawable</a>, <a href="docs/reference/android/graphics/drawable/StateListDrawable.html" target="_blank">StateListDrawable</a>, <a href="docs/reference/android/graphics/drawable/AnimatedStateListDrawable.html" target="_blank">AnimatedStateListDrawable</a></p>
+                        <p><a href="docs/reference/android/graphics/drawable/DrawableContainer.html" target="_blank">DrawableContainer</a> 是一个辅助类，包括多个 Drawable，可以根据条件选择使用哪一个。有以下下子类：</p>
+                        <p><a href="docs/reference/android/graphics/drawable/StateListDrawable.html" target="_blank">StateListDrawable</a> -- 可以更具状态自动选择 Drawable。</p>
+                        <p class="alert alert-success"><b>使用最先匹配法则，而非最优匹配法则。</b>请记住，<b>状态列表中与对象当前状态匹配的第一个项目将被应用。</b>因此，如果列表中的第一个项目不包含下面的状态属性，那么它将每次都被应用，这就是为什么您的默认值应该始终保持不变。比如：将
+                            <code>state_focused</code> 放置于 <code>state_pressed</code> 前，那么 <code>state_pressed</code>
+                            将不会执行，因为它也是 <code>state_focused</code> 状态。</p>
+                        <p>状态属性查看：<a href="docs/reference/android/R.attr.html" target="_blank">R.attr</a> 类。</p>
+                        <pre class="brush: xml;">
+&lt;!-- selector 作为 drawable 资源时，item 指定 android:drawable 属性，并放于 res/drawable 目录下；
+     selector 作为 color 资源时，item 指定 android:color 属性，并放于 res/color 目录下； -->
 
-                    </div>
+&lt;selector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:visible="true|false"
+    android:enterFadeDuration=""        &lt;!-- 状态改变时，新状态展示时的淡入时间 -->
+    android:exitFadeDuration=""         &lt;!-- 状态改变时，旧状态消失时的淡出时间 -->
+    android:autoMirrored="true|false"
+    android:dither=""
+    android:variablePadding="true|false" &lt;!-- 如果为 true，则允许基于选中的当前状态改变填充值 -->
+    android:constantSize="true|false"> &lt;!-- 如果为 true，Drawable 内部大小将保持不变，为所有状态的最大值。 -->
 
-                    <div class="sub-item">
-                            <pre class="brush: java;">
-                                    java.lang.Object
-                                        android.graphics.drawable.Drawable
-                                            android.graphics.drawable.StateListDrawable
-                                            
-                                    public class StateListDrawable extends Drawable {}
-                                    </pre>
-                                                        <p class="alert alert-success">请记住，<b>状态列表中与对象当前状态匹配的第一个项目将被应用。</b>因此，如果列表中的第一个项目不包含下面的状态属性，那么它将每次都被应用，这就是为什么您的默认值应该始终保持不变。比如：将
-                                                            <code>state_focused</code> 放置于 <code>state_pressed</code> 前，那么 <code>state_pressed</code>
-                                                            将不会执行，因为它也是 <code>state_focused</code> 状态。</p>
-                                                        <pre class="brush: xml">
-                                    &lt;?xml version="1.0" encoding="utf-8"?>
-                                    &lt;selector xmlns:android="http://schemas.android.com/apk/res/android"
-                                        android:constantSize=["true" | "false"]
-                                        android:dither=["true" | "false"]
-                                        android:variablePadding=["true" | "false"] >
-                                        &lt;item
-                                            android:drawable="@[package:]drawable/drawable_resource"
-                                            android:state_pressed=["true" | "false"]
-                                            android:state_focused=["true" | "false"]
-                                            android:state_hovered=["true" | "false"]
-                                            android:state_selected=["true" | "false"]
-                                            android:state_checkable=["true" | "false"]
-                                            android:state_checked=["true" | "false"]
-                                            android:state_enabled=["true" | "false"]
-                                            android:state_activated=["true" | "false"]
-                                            android:state_window_focused=["true" | "false"] />
-                                    &lt;/selector>
-                                    </pre>
-                    </div>
+    &lt;!-- 这些状态来自 android.R.attr 类的常量 -->
+    &lt;item
+        android:drawable=""             &lt;!-- 必须 -->
+        android:state_enabled=""        &lt;!-- View 的 isEnabled() 状态 -->
+        android:state_selected=""       &lt;!-- View 的 isSelected() 状态 -->
+        android:state_pressed=""        &lt;!-- View 的 isPressed() 状态 -->
+        android:state_focused=""        &lt;!-- View 的 isFocused() 状态，非触摸模式下获得焦点时显示图片 -->
+        android:state_activated=""      &lt;!-- View 或 父 View 的 isActivated() 状态 -->
+        android:state_hovered=""        &lt;!-- View 的 isHovered() 状态，鼠标移动到该位置时图片 -->
+        android:state_checked=""        &lt;!-- View 的 isChecked() 状态 -->
+        android:state_drag_hovered=""   &lt;!-- 表示在拖拽操作中， 有 View 正在位于自己的上方 -->
+        android:state_accelerated=""    &lt;!-- View 的 isHardwareAccelerated() 状态，硬件加速 -->
+        android:state_checkable=""      &lt;!-- CheckBox 是否能使用的状态 -->
+        android:state_active=""         &lt;!-- 是否接受 active 动作 -->
+        android:state_drag_can_accept=""&lt;!-- 是否接受 drag 动作 -->
+        android:state_window_focused="" &lt;!-- Window 的前台状态，当通知栏拖下时，Window 就不再是前台状态 -->
+        android:state_first=""          &lt;!-- ? -->
+        android:state_middle=""         &lt;!-- ? -->
+        android:state_last=""           &lt;!-- ? -->
+        android:state_single="" />      &lt;!-- ? -->
 
-                    <div class="sub-item">
+    &lt;item ... />
+&lt;/selector>
+                        </pre>
+                        <p><a href="docs/reference/android/graphics/drawable/AnimationDrawable.html" target="_blank">AnimationDrawable</a> -- 逐帧动画的实现，按时间播放。</p>
+                        <ul>
+                            <li><p><code>void start()</code> -- 不会自动播放，调用此方法才会开始</p></li>
+                            <li><p><code>void stop()</code> -- 停止</p></li>
+                            <li><p><code>boolean isOneShot()</code> -- 是否只播放一次</p></li>
+                            <li><p><code>void setOneShot(boolean oneShot) </code> -- 设置是否单次</p></li>
+                            <li><p><code>boolean isRunning()</code> -- 是否已运行</p></li>
+                            <li><p><code>void addFrame(Drawable frame, int duration)</code> -- 添加桢</p></li>
+                            <li><p><code>int getDuration(int index)</code> -- 获取第 index 桢时长</p></li>
+                            <li><p><code>int getNumberOfFrames()</code> -- 总帧数</p></li>
+                            <li><p><code>Drawable getFrame(int index)</code> -- 获取第 index 桢</p></li>
+                        </ul>
+                        <pre class="brush: xml;">
+&lt;animation-list xmlns:android="http://schemas.android.com/apk/res/android"
+    android:oneshot="true|false"            &lt;!-- 是否只播放一次，默认 false -->
+    android:variablePadding="true|false"    &lt;!-- 如果为 true，则允许基于选中的当前状态改变填充值 -->
+    android:visible="true|false">
 
-                    </div>
+    &lt;item android:drawable="" android:duration="" />
+    &lt;item ... />
+&lt;/animation-list>
+                        </pre>
+                        <p><a href="docs/reference/android/graphics/drawable/LevelListDrawable.html" target="_blank">LevelListDrawable</a> -- 使用 level 管理多个 Drawable 资源。使用最接近的，但不大于 level 值对应的 Drawable。比如：(d1, m20), (d2, m40), (d3, m60), d1,d2,d3 分别对应 maxLevel 为 20, 40, 60 的 Drawable；level <= 20 时，显示 d1, 20 < level <= 40 时，显示 d2, 40 < level <= 60 时，显示 d3, level > 60 时，无显示。</p>
+                        <pre class="brush: xml;">
+&lt;!-- Drawable 调用 setLevel(int) 更改图片，ImageView 有一个 setImageLevel(int) 方法 -->
+&lt;level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    &lt;item android:drawable="" android:maxLevel="" android:minLevel="" />
+    &lt;item ... />
+&lt;/level-list>
+
+                        </pre>
+
+                        <p><a href="docs/reference/android/graphics/drawable/AnimatedStateListDrawable.html" target="_blank">AnimatedStateListDrawable</a> -- 是 <code>StateListDrawable</code> 子类，除了可以指定不同状态下对应的 Drawable,还可以为状态的改变设置过渡效果。</p>
+                        <pre class="brush: xml;">
+&lt;animated-selector xmlns:android="http://schemas.android.com/apk/res/android"
+    ...>  &lt;!-- 参见 StateListDrawable 属性 -->
+
+    &lt;item ...>  &lt;!-- 参见 StateListDrawable 属性 />
+
+    &lt;item android:id="@+id/pressed" android:state_pressed="true" android:drawable="@drawable/ninepatch" />
+    &lt;item android:id="@+id/normal" android:drawable="@drawable/jpg_480x320" />
+
+    &lt;!-- 从 ID 为 normal 状态到 ID 为 pressed 状态，执行逐帧动画 -->
+    &lt;transition
+        android:drawable=""
+        android:reversible=""
+        android:fromId="@id/normal"
+        android:toId="@id/pressed">
+        &lt;animation-list>
+            &lt;item android:drawable="" android:duration="" />
+            &lt;item android:drawable="" android:duration="" />
+        &lt;/animation-list>
+    &lt;/transition>
+
+&lt;/animated-selector>
+                        </pre>
                 </div>
             </div>
             <!-- item over -->
 
-<!-- item start -->
-<a class="offset" id="VectorDrawable"></a>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">VectorDrawable</h3>
-    </div>
-    <div class="panel-body">
-            <pre class="brush: java;">
+            <!-- item start -->
+            <a class="offset" id="VectorDrawable"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">VectorDrawable</h3>
+                </div>
+                <div class="panel-body">
+                    <pre class="brush: java;">
 java.lang.Object
 android.graphics.drawable.Drawable
 android.graphics.drawable.VectorDrawable
 
 public class VectorDrawable extends Drawable {}
 </pre>
-        <p><a href="docs/reference/android/graphics/drawable/VectorDrawable.html" target="_blank">VectorDrawable</a></p>
-    </div>
-</div>
-<!-- item over -->
+                    <p><a href="docs/reference/android/graphics/drawable/VectorDrawable.html" target="_blank">VectorDrawable</a> 是 API 21 引入，用于支持矢量图。目前并没有支持所有的 SVG 规范，只支持 PathData 和有限的 Group 功能。</p>
+                    <p>Android Studio 内置了丰富的图片资源:右击你的 <code>Module</code> -> <code>new</code> -> <code>Vector Asset</code>，点击 ICON，可以看到许多矢量图，生成的 xml 如下：</p>
+                    <pre class="brush: xml;">
+&lt;vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
 
+    &lt;!-- pathData 格式: 注意：以下所有命令均允许小写字母。大写表示绝对定位，小写表示相对定位。
+        M = moveto
+        L = lineto
+        H = horizontal lineto
+        V = vertical lineto
+        C = curveto， 三次贝塞尔曲线
+        Q = quadratic Bézier curve, 二次贝塞尔曲线
+        S = smooth curveto
+        T = smooth quadratic Bézier curveto
+        A = elliptical Arc， 圆弧
+        Z = closepath
+    -->
+    &lt;path
+        android:fillColor="#FF000000"
+        android:pathData="M19,12h-2v3h-3v2h5v-5zM7,9h3L10,7L5,7v5h2L7,9zM21,3L3,3c-1.1,0 -2,0.9 -2,2v14c0,
+        1.1 0.9,2 2,2h18c1.1,0 2,-0.9 2,-2L23,5c0,-1.1 -0.9,-2 -2,-2zM21,19.01L3,19.01L3,4.99h18v14.02z"/>
+&lt;/vector>
+</pre>
 
-<!-- item start -->
-<a class="offset" id="AnimatedVectorDrawable"></a>
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <h3 class="panel-title">AnimatedVectorDrawable</h3>
-    </div>
-    <div class="panel-body">
-            <pre class="brush: java;">
+                    <p><a href="docs/reference/android/graphics/drawable/VectorDrawable.html" target="_blank">VectorDrawable</a> 支持的 XML 如下：</p>
+                    <pre class="brush: xml;">
+&lt;vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:name="
+    android:width=""            &lt;!-- Drawable 的宽度 -->
+    android:height=""           &lt;!-- Drawable 的高度 -->
+    android:viewportWidth=""    &lt;!-- 矢量图里面的画布宽度 -->
+    android:viewportHeight=""   &lt;!-- 矢量图里面的画布高度 -->
+    android:tint=""
+    android:tintMode=""
+    android:alpha=""
+    android:autoMirrored="">
+
+    &lt;path
+        android:name=""         &lt;!-- 定义该 path 的名字，这样在其他地方可以通过名字来引用这个路径 -->
+        android:pathData=""     &lt;!-- 路径信息，这个最重要，绘制什么图形就看这个属性 -->
+        android:fillAlpha=""    &lt;!-- 填充路径颜色的透明度 -->
+        android:fillColor=""    &lt;!-- 填充路径的颜色 -->
+        android:fillType="evenOdd|nonZero"  &lt;!-- 参见 Path 类 -->
+        android:strokeAlpha=""  &lt;!-- 路径边框的透明度 -->
+        android:strokeColor=""  &lt;!-- 路径边框的颜色 -->
+        android:strokeWidth=""          &lt;!-- 路径边框的粗细尺寸 -->
+        android:strokeLineCap="square|round|butt"   &lt;!-- 路径线帽的形状 -->
+        android:strokeLineJoin="miter|bevel|round"  &lt;!-- 路径交界处的连接方式 -->
+        android:strokeMiterLimit=""     &lt;!-- 设置斜角的上限 -->
+        android:trimPathStart=""        &lt;!-- 路径起始位置截断路径的比率，取值范围从 0 到 1 -->
+        android:trimPathEnd=""          &lt;!-- 路径结束位置截断路径的比率，取值范围从 0 到 1 -->
+        android:trimPathOffset="" />    &lt;!-- 设置路径截取的范围，取值范围从 0 到 1 -->
+
+    &lt;clip-path                       &lt;!-- 剪切路径 -->
+        android:name=""
+        android:pathData="" />
+
+    &lt;group
+        android:name=""
+        android:pivotX=""       &lt;!-- 旋转和缩放中心点 X -->
+        android:pivotY=""       &lt;!-- 旋转和缩放中心点 Y  -->
+        android:rotation=""     &lt;!-- 旋转角度 -->
+        android:scaleX=""       &lt;!-- X 方向缩放比率 -->
+        android:scaleY=""       &lt;!-- Y 方向缩放比率 -->
+        android:translateX=""   &lt;!-- X 方向平移 -->
+        android:translateY="">  &lt;!-- Y 方向平移 -->
+
+        &lt;!-- 支持嵌套 -->
+        &lt;path ... />
+        &lt;group ...  />
+        &lt;clip-path ... />
+
+    &lt;/group>
+&lt;/vector>
+        </pre>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="AnimatedVectorDrawable"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">AnimatedVectorDrawable</h3>
+                </div>
+                <div class="panel-body">
+                    <pre class="brush: java;">
 java.lang.Object
 android.graphics.drawable.Drawable
 android.graphics.drawable.AnimatedVectorDrawable
 
-public class AnimatedVectorDrawable extends Drawable {}
+public class AnimatedVectorDrawable extends Drawable implements Animatable2 {
+
+}
 </pre>
-        <p><a href="docs/reference/android/graphics/drawable/AnimatedVectorDrawable.html" target="_blank">AnimatedVectorDrawable</a></p>
-    </div>
-</div>
-<!-- item over -->
+                    <p><a href="docs/reference/android/graphics/drawable/AnimatedVectorDrawable.html" target="_blank">AnimatedVectorDrawable</a> -- 使用 <code>ObjectAnimator</code> 和 <code>AnimatorSet</code> 作用于 <code>VectorDrawable</code> 的属性，产生动画效果。</p>
+                    <pre class="brush: xml;">
+&lt;!-- 1.先定义一个 VectorDrawable -->
+&lt;vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:height="64dp"
+    android:width="64dp"
+    android:viewportHeight="600"
+    android:viewportWidth="600" >
+    &lt;group
+        android:name="rotationGroup"
+        android:pivotX="300.0"
+        android:pivotY="300.0"
+        android:rotation="45.0" >
+        &lt;path
+            android:name="v"
+            android:fillColor="#000000"
+            android:pathData="M300,70 l 0,-70 70,70 0,0 -70,70z" />
+     &lt;/group>
+&lt;/vector>
+
+&lt;!-- 2. AnimatedVectorDrawable 作用于先前定义的 VectorDrawable -->
+&lt;animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/vectordrawable" >
+    &lt;target
+        android:name="rotationGroup"
+        android:animation="@anim/rotation" />
+    &lt;target
+        android:name="v"
+        android:animation="@anim/path_morph" />
+&lt;/animated-vector>
+        </pre>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="Examples"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Examples</h3>
+                </div>
+                <div class="panel-body">
+                    <p><b>Drawable 实例：</b></p>
+                    <ul>
+                        <li></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- item over -->
 
         </div>
     </div>
