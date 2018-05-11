@@ -78,6 +78,7 @@
                         <a href="#graphics-Bitmap" class="list-group-item">Bitmap 及相关类</a>
                         <a href="#graphics-Drawable" class="list-group-item">Drawable 及相关类</a>
                         <a href="#graphics-Matrix" class="list-group-item">Matrix 类</a>
+                        <a href="#graphics-Path" class="list-group-item">Path 类</a>
                     </div>
                     <a class="list-group-item active dropup" data-toggle="collapse"
                        data-parent="#accordion" href="#graphics-opengl" aria-expanded="true"
@@ -1716,184 +1717,7 @@ void writeToStream(OutputStream stream)                 // 写入到输出流中
                                     </div>
                                 </div>
                             </li>
-                            <li>
-                                <p><a id="graphics-Path" class="offset"></a><a
-                                        href="docs/reference/android/graphics/Path.html">Path</a> --
-                                    主要用于绘制复杂的图形轮廓，比如折线，圆弧以及各种复杂图案
-                                </p>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading">
-                                        <a data-toggle="collapse" data-parent="#accordion"
-                                           href="#graphics-Path-example" aria-expanded="true"
-                                           class="code-header">
-                                            <span class="glyphicon glyphicon-plus"></span> View
-                                            Code
-                                        </a>
-                                    </div>
-                                    <div id="graphics-Path-example"
-                                         class="panel-collapse collapse"
-                                         style="" aria-expanded="true">
-                                        <table class="table table-bordered table-responsive">
-                                            <tr>
-                                                <td><b>代码</b></td>
-                                                <td><b>效果图</b></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                            <pre class="brush: java; gutter: false;">
-/** 构造方法 */
-Path()
-Path(Path src)
 
-/** 重置与清除 */
-void reset()  // 清除掉 path 里的线条和曲线，但是不会改变它的 fill-type
-void rewind() // 清除掉 path 里的线条和曲线，但是会保留内部的数据结构以便重用
-void set(Path src)           // 用 src 的内容替换原 path 的内容
-
-/** 绘制右图的两个三角形
- * 三角形: {(0, 0), (100, 100), (200, 0)}
- */
-Path path = new Path();
-path.moveTo(0, 0);          // 移到到点
-path.lineTo(100, 100);      // 连接到点
-path.lineTo(200, 0);
-path.close();                       // 如果可能，封闭图形（连接终点到起点）
-
-canvas.drawPath(path, mPaint);
-
-path.reset();
-// 移动到一个相对位置, 相当于: moveto(xLast + dx, yLast + dy)
-path.rMoveTo(0, 100);
-// 连接到相对上一个偏移这个向量的位置: lineto(x + 200, y + 0)
-path.rLineTo(200, 0);
-path.rLineTo(-100,  100);
-mPaint.setStyle(Paint.Style.FILL);
-path.close();
-canvas.drawPath(path, mPaint);
-</pre>
-                                                </td>
-                                                <td><img src="res/graphics-Path-01.png"
-                                                         class="img-responsive"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                            <pre class="brush: java; gutter: false;">
-private void arcByPath(Canvas canvas) {
-    RectF rect = new RectF(0, 0, 300, 200);
-    mPaint.setColor(Color.GRAY);
-    canvas.drawRect(rect, mPaint);
-
-    Path path = new Path();
-    path.moveTo(0, 100);
-    path.rLineTo(150, -100);
-    path.rLineTo(150, 100);
-    /** 绘制 rect 对应椭圆上的圆弧, 后面两个参数同绘制圆弧
-     * arcTo 与 addArc 区别：
-     *     arcTo -- 如果起点不在圆弧起点上，还有绘制一条起点到圆弧起点的线
-     *     addArc -- 直接加入圆弧
-     * arcTo(RectF oval, float startAngle, float sweepAngle)
-     * arcTo(RectF oval, float startAngle, float sweepAngle,
-                                boolean forceMoveTo)
-     * arcTo(float left, float top, float right, float bottom,
-             float startAngle, float sweepAngle, boolean forceMoveTo)
-     *
-     * addArc(RectF oval, float startAngle, float sweepAngle)
-     * addArc(float left, float top, float right, float bottom,
-                                float startAngle, float sweepAngle)
-      */
-    path.arcTo(rect, 0, 90);
-    path.addArc(rect, 180, 90);
-
-    mPaint.setColor(Color.BLUE);
-    canvas.drawPath(path, mPaint);
-}
-</pre>
-                                                </td>
-                                                <td><img src="res/graphics-Path-02.png"
-                                                         class="img-responsive"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                            <pre class="brush: java; gutter: false;">
-/** Path.Diection 用于指定方向
- * Diection.CW -- 顺时针方向
- * Diection.CCW -- 逆时针方向
- *
- * addCircle(float x, float y, float radius, Path.Direction dir)
- *
- * addOval(RectF oval, Path.Direction dir)
- * addOval(float left, float top, float right, float bottom,
-                                Path.Direction dir)
- *
- * addRect(RectF rect, Path.Direction dir)
- * addRect(float left, float top, float right, float bottom,
-                                Path.Direction dir)
- *
- * addRoundRect(RectF rect, float rx, float ry, Path.Direction dir)
- * addRoundRect(RectF rect, float[] radii, Path.Direction dir)
- * addRoundRect(float left, float top, float right, float bottom,
-                                float[] radii, Path.Direction dir)
- * addRoundRect(float left, float top, float right, float bottom,
-                            float rx, float ry, Path.Direction dir)
- */
-private void circleByPath(Canvas canvas) {
-    Path path = new Path();
-    path.addCircle(200,  200,  200, Path.Direction.CW);
-
-    RectF rect = new RectF(100,  0, 300, 400);
-    path.addOval(rect,  Path.Direction.CW);
-
-    path.addRoundRect(new RectF(100, 100, 300, 300), 0, 0,
-                                Path.Direction.CW);
-
-    canvas.drawPath(path,  mPaint);
-}
-</pre>
-                                                </td>
-                                                <td><img src="res/graphics-Path-03.png"
-                                                         class="img-responsive"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                            <pre class="brush: java; gutter: false;">
-/**
- * 用于绘制圆滑曲线，即贝塞尔曲线。(x1, y1) 为控制点，(x2, y2) 为结束点
- * quadTo(float x1, float y1, float x2, float y2)
- * rQuadTo(float dx1, float dy1, float dx2, float dy2)
- * 贝塞尔曲线，(x1, y1)，(x2, y2) 都为控制点，(x3, y3) 为结束点
- * cubicTo(float x1, float y1, float x2, float y2, float x3, float y3)
- * rCubicTo(float x1, float y1, float x2, float y2, float x3, float y3)
- */
-private void curve(Canvas canvas) {
-    mPaint.setColor(Color.LTGRAY);
-    canvas.drawLines(new float[]{0,  300,  200, 0,
-                     200, 0, 500, 400, 400, 0, 500, 400}, mPaint);
-
-    Path path = new Path();
-    path.moveTo(0, 300);
-    /** 只有一个控制点，起点和终点的切线过这个点
-     * (0,  300,  200, 0)
-     */
-    path.quadTo(200,0, 500, 400);
-
-    path.moveTo(0, 300);
-    /** 两个个控制点，起点的切线：(0,  300,  200, 0),
-     * 终点的切线(400, 0, 500, 400)
-     */
-    path.cubicTo(200, 0,  400, 0, 500, 400);
-
-    mPaint.setColor(Color.BLUE);
-    canvas.drawPath(path, mPaint);
-}
-</pre>
-                                                </td>
-                                                <td><img src="res/graphics-Path-04.png"
-                                                         class="img-responsive"></td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                            </li>
                             <li>
                                 <p><a id="graphics-Region" class="offset"></a><a
                                         href="docs/reference/android/graphics/Region.html">Region /
@@ -3946,6 +3770,274 @@ matrix.mapPoints(src2);
                         </ol>
                     </div>
 
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="graphics-Path"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Path 及相关类</h3>
+                </div>
+                <div class="panel-body">
+                    <pre class="brush: java;">
+java.lang.Object
+    android.graphics.Path
+
+public class Path {
+    /** 比较路径时使用什么方式 */
+    public enum Op {
+        DIFFERENCE,         //
+        INTERSECT,          //
+        UNION,              //
+        XOR,                //
+        REVERSE_DIFFERENCE  //
+    }
+
+    /** 用于添加封闭路径时，确定方向 */
+    public enum Direction {
+        CW  (0),    // 顺时针方向
+        CCW (1);    // 逆时针方向
+    }
+
+    /** 路径填充类型 */
+    public enum FillType {
+        WINDING         (0),    //
+        EVEN_ODD        (1),    //
+        INVERSE_WINDING (2),    //
+        INVERSE_EVEN_ODD(3);    //
+    }
+
+    public Path() {}
+    public Path(Path src) {}
+}
+                    </pre>
+                    <p><a href="docs/reference/android/graphics/Path.html" target="_blank">Path</a> --
+                            主要用于绘制复杂的图形轮廓，比如折线，圆弧以及各种复杂图案。
+                        </p>
+                    <ol>
+                        <li><p><code>void close()</code> -- 如果可能，封闭图形（连接终点到起点）</p></li>
+                        <li><p><code>void reset()</code> -- 除掉 path 里的线条和曲线，但是不会改变它的 fill-type</p></li>
+                        <li><p><code>void rewind()</code> -- 清除掉 path 里的线条和曲线，但是会保留内部的数据结构以便重用</p></li>
+                        <li class="group"><p><code>void setFillType(Path.FillType ft)</code> -- 设置填充类型</p></li>
+                        <li><p><code>Path.FillType getFillType()</code> -- 获取填充类型</p></li>
+                        <li><p><code>boolean isInverseFillType()</code> -- 是否为可逆填充类型</p></li>
+                        <li><p><code>void toggleInverseFillType()</code> -- 在两种可逆填充类型间切换</p></li>
+                        <li class="group"><p><code>void moveTo(float x, float y)</code> -- 移到到指定点</p></li>
+                        <li><p><code>void rMoveTo(float dx, float dy)</code> -- 移到到相对点</p></li>
+                        <li><p><code>void setLastPoint(float dx, float dy)</code> -- 设置结束点</p></li>
+                        <li><p><code>void lineTo(float x, float y)</code> -- 连接到指定点</p></li>
+                        <li><p><code>void rLineTo(float dx, float dy)</code> -- 连接到相对点</p></li>
+                        <li class="group"><p><code>void arcTo(RectF oval, float startAngle, float sweepAngle)</code> -- 使用矩形绘制圆弧</p></li>
+                        <li><p><code>void arcTo(RectF oval, float startAngle, float sweepAngle, boolean forceMoveTo)</code> -- 使用矩形绘制圆弧</p></li>
+                        <li><p><code>void arcTo(float left, float top, float right, float bottom, float startAngle, float sweepAngle, boolean forceMoveTo)</code> -- 使用矩形绘制圆弧</p></li>
+                        <li class="group"><p><code>void quadTo(float x1, float y1, float x2, float y2)</code> -- 二次贝赛尔曲线</p></li>
+                        <li><p><code>void rQuadTo(float dx1, float dy1, float dx2, float dy2)</code> -- 二次贝赛尔曲线</p></li>
+                        <li><p><code>void cubicTo(float x1, float y1, float x2, float y2, float x3, float y3)</code> -- 三次贝赛尔曲线</p></li>
+                        <li><p><code>void rCubicTo(float x1, float y1, float x2, float y2, float x3, float y3)</code> -- 三次贝赛尔曲线</p></li>
+
+                        <li class="group"><p><code>void addArc(RectF oval, float startAngle, float sweepAngle)</code> -- 添加一段圆弧</p></li>
+                        <li><p><code>void addArc(float left, float top, float right, float bottom, float startAngle, float sweepAngle)</code> -- 添加一段圆弧</p></li>
+                        <li><p><code>void addCircle(float x, float y, float radius, Path.Direction dir)</code> -- 添加一个圆</p></li>
+                        <li><p><code>void addOval(RectF oval, Path.Direction dir)</code> -- 添加一个椭圆</p></li>
+                        <li><p><code>void addOval(float left, float top, float right, float bottom, Path.Direction dir)</code> -- 添加一个椭圆</p></li>
+                        <li class="group"><p><code>void addPath(Path src)</code> -- 添加一个路径</p></li>
+                        <li><p><code>void addPath(Path src, float dx, float dy)</code> -- 添加一个平移后的路径</p></li>
+                        <li><p><code>void addPath(Path src, Matrix matrix)</code> -- 添加一个变换后的路径</p></li>
+                        <li><p><code>void addRect(RectF rect, Path.Direction dir)</code> -- 添加一个矩形</p></li>
+                        <li><p><code>void addRect(float left, float top, float right, float bottom, Path.Direction dir)</code> -- 添加一个矩形</p></li>
+                        <li><p><code>void addRoundRect(RectF rect, float rx, float ry, Path.Direction dir)</code> -- 添加一个圆角矩形</p></li>
+                        <li><p><code>void addRoundRect(RectF rect, float[] radii, Path.Direction dir)</code> -- 添加一个圆角矩形</p></li>
+                        <li><p><code>void addRoundRect(float left, float top, float right, float bottom, float[] radii, Path.Direction dir)</code> -- 添加一个圆角矩形</p></li>
+                        <li><p><code>void addRoundRect(float left, float top, float right, float bottom, float rx, float ry, Path.Direction dir)</code> -- 添加一个圆角矩形</p></li>
+
+                        <li class="group"><p><code>void offset(float dx, float dy)</code> -- 将整个 Path 平移</p></li>
+                        <li><p><code>void offset(float dx, float dy, Path dst)</code> -- 并不是真的平移，将平移数据保存到 dst 中</p></li>
+                        <li><p><code>void transform(Matrix matrix)</code> -- 矩阵变换路径</p></li>
+                        <li><p><code>void transform(Matrix matrix, Path dst)</code> -- 并不变换原来的路径，将变换后的路径写入 dst 中</p></li>
+
+                        <li class="group"><p><code>boolean isRect(RectF rect)</code> -- </p></li>
+                        <li><p><code>boolean isConvex()</code> -- </p></li>
+                        <li><p><code>boolean isEmpty()</code> -- </p></li>
+                        <li><p><code>void computeBounds(RectF bounds, boolean exact)</code> -- </p></li>
+                        <li><p><code>void incReserve(int extraPtCount)</code> -- </p></li>
+                        <li class="group"><p><code>void set(Path src)</code> -- </p></li>
+                        <li><p><code>boolean op(Path path, Path.Op op)</code> -- </p></li>
+                        <li><p><code>boolean op(Path path1, Path path2, Path.Op op)</code> -- </p></li>
+                    </ol>
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion"
+                            href="#graphics-Path-example" aria-expanded="true"
+                            class="code-header">
+                                <span class="glyphicon glyphicon-plus"></span> View
+                                Code
+                            </a>
+                            </div>
+                            <div id="graphics-Path-example"
+                                 class="panel-collapse collapse"
+                                 style="" aria-expanded="true">
+                                <table class="table table-bordered table-responsive">
+                                    <tr>
+                                        <td><b>代码</b></td>
+                                        <td><b>效果图</b></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                            <pre class="brush: java; gutter: false;">
+/** 构造方法 */
+Path()
+Path(Path src)
+
+/** 重置与清除 */
+void reset()  // 清除掉 path 里的线条和曲线，但是不会改变它的 fill-type
+void rewind() // 清除掉 path 里的线条和曲线，但是会保留内部的数据结构以便重用
+void set(Path src)           // 用 src 的内容替换原 path 的内容
+
+/** 绘制右图的两个三角形
+ * 三角形: {(0, 0), (100, 100), (200, 0)}
+ */
+Path path = new Path();
+path.moveTo(0, 0);          // 移到到点
+path.lineTo(100, 100);      // 连接到点
+path.lineTo(200, 0);
+path.close();                       // 如果可能，封闭图形（连接终点到起点）
+
+canvas.drawPath(path, mPaint);
+
+path.reset();
+// 移动到一个相对位置, 相当于: moveto(xLast + dx, yLast + dy)
+path.rMoveTo(0, 100);
+// 连接到相对上一个偏移这个向量的位置: lineto(x + 200, y + 0)
+path.rLineTo(200, 0);
+path.rLineTo(-100,  100);
+mPaint.setStyle(Paint.Style.FILL);
+path.close();
+canvas.drawPath(path, mPaint);
+</pre>
+                                        </td>
+                                        <td><img src="res/graphics-Path-01.png"
+                                                 class="img-responsive"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                            <pre class="brush: java; gutter: false;">
+private void arcByPath(Canvas canvas) {
+    RectF rect = new RectF(0, 0, 300, 200);
+    mPaint.setColor(Color.GRAY);
+    canvas.drawRect(rect, mPaint);
+
+    Path path = new Path();
+    path.moveTo(0, 100);
+    path.rLineTo(150, -100);
+    path.rLineTo(150, 100);
+    /** 绘制 rect 对应椭圆上的圆弧, 后面两个参数同绘制圆弧
+     * arcTo 与 addArc 区别：
+     *     arcTo -- 如果起点不在圆弧起点上，还有绘制一条起点到圆弧起点的线
+     *     addArc -- 直接加入圆弧
+     * arcTo(RectF oval, float startAngle, float sweepAngle)
+     * arcTo(RectF oval, float startAngle, float sweepAngle,
+                                boolean forceMoveTo)
+     * arcTo(float left, float top, float right, float bottom,
+             float startAngle, float sweepAngle, boolean forceMoveTo)
+     *
+     * addArc(RectF oval, float startAngle, float sweepAngle)
+     * addArc(float left, float top, float right, float bottom,
+                                float startAngle, float sweepAngle)
+      */
+    path.arcTo(rect, 0, 90);
+    path.addArc(rect, 180, 90);
+
+    mPaint.setColor(Color.BLUE);
+    canvas.drawPath(path, mPaint);
+}
+</pre>
+                                        </td>
+                                        <td><img src="res/graphics-Path-02.png"
+                                                 class="img-responsive"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                            <pre class="brush: java; gutter: false;">
+/** Path.Diection 用于指定方向
+ * Diection.CW -- 顺时针方向
+ * Diection.CCW -- 逆时针方向
+ *
+ * addCircle(float x, float y, float radius, Path.Direction dir)
+ *
+ * addOval(RectF oval, Path.Direction dir)
+ * addOval(float left, float top, float right, float bottom,
+                                Path.Direction dir)
+ *
+ * addRect(RectF rect, Path.Direction dir)
+ * addRect(float left, float top, float right, float bottom,
+                                Path.Direction dir)
+ *
+ * addRoundRect(RectF rect, float rx, float ry, Path.Direction dir)
+ * addRoundRect(RectF rect, float[] radii, Path.Direction dir)
+ * addRoundRect(float left, float top, float right, float bottom,
+                                float[] radii, Path.Direction dir)
+ * addRoundRect(float left, float top, float right, float bottom,
+                            float rx, float ry, Path.Direction dir)
+ */
+private void circleByPath(Canvas canvas) {
+    Path path = new Path();
+    path.addCircle(200,  200,  200, Path.Direction.CW);
+
+    RectF rect = new RectF(100,  0, 300, 400);
+    path.addOval(rect,  Path.Direction.CW);
+
+    path.addRoundRect(new RectF(100, 100, 300, 300), 0, 0,
+                                Path.Direction.CW);
+
+    canvas.drawPath(path,  mPaint);
+}
+</pre>
+                                        </td>
+                                        <td><img src="res/graphics-Path-03.png"
+                                                 class="img-responsive"></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                            <pre class="brush: java; gutter: false;">
+/**
+ * 用于绘制圆滑曲线，即贝塞尔曲线。(x1, y1) 为控制点，(x2, y2) 为结束点
+ * quadTo(float x1, float y1, float x2, float y2)
+ * rQuadTo(float dx1, float dy1, float dx2, float dy2)
+ * 贝塞尔曲线，(x1, y1)，(x2, y2) 都为控制点，(x3, y3) 为结束点
+ * cubicTo(float x1, float y1, float x2, float y2, float x3, float y3)
+ * rCubicTo(float x1, float y1, float x2, float y2, float x3, float y3)
+ */
+private void curve(Canvas canvas) {
+    mPaint.setColor(Color.LTGRAY);
+    canvas.drawLines(new float[]{0,  300,  200, 0,
+                     200, 0, 500, 400, 400, 0, 500, 400}, mPaint);
+
+    Path path = new Path();
+    path.moveTo(0, 300);
+    /** 只有一个控制点，起点和终点的切线过这个点
+     * (0,  300,  200, 0)
+     */
+    path.quadTo(200,0, 500, 400);
+
+    path.moveTo(0, 300);
+    /** 两个个控制点，起点的切线：(0,  300,  200, 0),
+     * 终点的切线(400, 0, 500, 400)
+     */
+    path.cubicTo(200, 0,  400, 0, 500, 400);
+
+    mPaint.setColor(Color.BLUE);
+    canvas.drawPath(path, mPaint);
+}
+</pre>
+                                        </td>
+                                        <td><img src="res/graphics-Path-04.png"
+                                                 class="img-responsive"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                 </div>
             </div>
             <!-- item over -->

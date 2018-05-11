@@ -167,22 +167,25 @@ java.lang.Object
 	android.graphics.drawable.Drawable
 
 public abstract class Drawable {
-	/** 内部类 */
+	/** 主要用于实现对动画的调度和执行，View 类实现了此接口，子类 DrawableWrapper 和 DrawableContainer 也实现了 */
 	public static interface Drawable.Callback {
-		// 自身需要重绘时的处理逻辑
+		// 当 Drawable 重画时触发，此时 Drawable 将被置为不可用
 		public void invalidateDrawable(Drawable who);
-		// 下面两个主要用于动画处理
+		// 可以通过该方法来安排动画的下一帧，可以仅仅简单的调用 postAtTime(Runnable, Object, long) 来实现该方法
 		public void scheduleDrawable(Drawable who, Runnable what, long when);
+        // 可以取消先前通过 scheduleDrawable() 调度的某一帧，可以调用 removeCallbacks(Runnable,Object) 来实现
 		public void unscheduleDrawable(Drawable who, Runnable what);
 	}
 
-    /**  */
+    /** 保存共享的数据和状态，比如：从同一个 xml 加载的 Drawable 使用同一份状态，如果不调用 mutate() 方法，
+     * 那么加载的多个 Drawable 实例的 getConstantState() 方法将返回同一个 ConstantState 实例。
+     */
 	public static abstract class ConstantState {
-		public boolean canApplyTheme();
-		public abstract int getChangingConfigurations();
-		public Drawable newDrawable(Resources res);
-		public abstract Drawable newDrawable();
-		public Drawable newDrawable(Resources res, Resources.Theme theme);
+		public boolean canApplyTheme();     // 是否可以应用主题
+		public abstract int getChangingConfigurations(); // 返回配置更改的位掩码，看子类实现
+		public abstract Drawable newDrawable(); // 返回的新的 Drawable 实例，并且不共享状态
+		public Drawable newDrawable(Resources res); // 默认实现为 newDrawable()；
+		public Drawable newDrawable(Resources res, Resources.Theme theme); // 默认实现为 newDrawable(Resources)；
 	}
 }
 </pre>
