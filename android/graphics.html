@@ -3857,14 +3857,14 @@ public class Path {
                         <li><p><code>void transform(Matrix matrix)</code> -- 矩阵变换路径</p></li>
                         <li><p><code>void transform(Matrix matrix, Path dst)</code> -- 并不变换原来的路径，将变换后的路径写入 dst 中</p></li>
 
-                        <li class="group"><p><code>boolean isRect(RectF rect)</code> -- </p></li>
-                        <li><p><code>boolean isConvex()</code> -- </p></li>
-                        <li><p><code>boolean isEmpty()</code> -- </p></li>
-                        <li><p><code>void computeBounds(RectF bounds, boolean exact)</code> -- </p></li>
-                        <li><p><code>void incReserve(int extraPtCount)</code> -- </p></li>
-                        <li class="group"><p><code>void set(Path src)</code> -- </p></li>
-                        <li><p><code>boolean op(Path path, Path.Op op)</code> -- </p></li>
-                        <li><p><code>boolean op(Path path1, Path path2, Path.Op op)</code> -- </p></li>
+                        <li class="group"><p><code>boolean isRect(RectF rect)</code> -- 当前路径是否为矩形,如果是,将 <code>rect</code> 设置为 path 的边界</p></li>
+                        <li><p><code>boolean isConvex()</code> -- 当前路径是否为凸型</p></li>
+                        <li><p><code>boolean isEmpty()</code> -- 未经操作,不包括任何图形</p></li>
+                        <li><p><code>void computeBounds(RectF bounds, boolean exact)</code> -- 计算路径控制点的边界，并将答案写入 <code>bounds</code>。如果路径包含0个或1个点，则将边界设置为（0，0，0，0）。</p></li>
+                        <li><p><code>void incReserve(int extraPtCount)</code> -- 提示路径准备添加更多的点,这可以允许路径更有效地分配其存储。</p></li>
+                        <li class="group"><p><code>void set(Path src)</code> -- 重置为指定路径</p></li>
+                        <li><p><code>boolean op(Path path, Path.Op op)</code> -- 操作路径,应用到此路径和指定路径的结果,生成的路径将由非重叠轮廓构成。</p></li>
+                        <li><p><code>boolean op(Path path1, Path path2, Path.Op op)</code> -- 操作路径,应用到两个指定路径的结果.生成的路径将由非重叠轮廓构成。</p></li>
                     </ol>
                     <div class="panel panel-default">
                         <div class="panel-heading">
