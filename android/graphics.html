@@ -3786,13 +3786,13 @@ java.lang.Object
     android.graphics.Path
 
 public class Path {
-    /** 比较路径时使用什么方式 */
+    /** 用于对两个 Path 对象做相应的运算组合 */
     public enum Op {
-        DIFFERENCE,         //
-        INTERSECT,          //
-        UNION,              //
-        XOR,                //
-        REVERSE_DIFFERENCE  //
+        DIFFERENCE,         // P1 && !P2
+        INTERSECT,          // P1 && P2
+        UNION,              // P1 || P2
+        XOR,                // (P1 && !P2) || (!P1 && P2)
+        REVERSE_DIFFERENCE  // !P1 && P2
     }
 
     /** 用于添加封闭路径时，确定方向 */
@@ -3801,12 +3801,22 @@ public class Path {
         CCW (1);    // 逆时针方向
     }
 
-    /** 路径填充类型 */
+    /** 路径填充类型，对于简单的封闭图形，下面的类型主要用来确定什么是"内部"？比如一段折线： \/\/，如何确定"内部"
+     * 在图形学中判断一个点是否在多边形内，若多边形不是自相交的，那么可以简单的判断这个点在多边形内部还是外部；
+     *     若多边形是自相交的，那么就需要根据非零环绕数规则和奇-偶规则判断。
+     * 判断多边形是否是自相交的：多边形在平面内除顶点外还有其他公共点
+     * 1.奇-偶规则（Odd-even Rule）：奇数表示在多边形内，偶数表示在多边形外
+     *     从任意位置 p 作一条射线，若与该射线相交的多边形边的数目为奇数，则p是多边形内部点，否则是外部点。
+     * 2.非零环绕数规则：若环绕数为0表示在多边形内，非零表示在多边形外.
+     *     首先使多边形的边变为矢量。将环绕数初始化为零。再从任意位置 p 作一条射线。当从 p 点沿射线方向移动时，
+     *     对在每个方向上穿过射线的边计数，每当多边形的边从右到左穿过射线时，环绕数加1，从左到右时，环绕数减1。
+     *     处理完多边形的所有相关边之后，若环绕数为非零，则 p 为内部点，否则，p 是外部点。
+     */
     public enum FillType {
-        WINDING         (0),    //
-        EVEN_ODD        (1),    //
-        INVERSE_WINDING (2),    //
-        INVERSE_EVEN_ODD(3);    //
+        WINDING         (0),    // 默认，指定“内部”是 非零环绕数规则 计算的。
+        EVEN_ODD        (1),    // 指定“内部” 是 奇-偶规则 计算的
+        INVERSE_WINDING (2),    // 与 WINDING 一样，但是画在路径之外，而不是在内部
+        INVERSE_EVEN_ODD(3);    // 与 EVEN_ODD 一样，但是画在路径之外，而不是在内部
     }
 
     public Path() {}
@@ -3822,8 +3832,8 @@ public class Path {
                         <li><p><code>void rewind()</code> -- 清除掉 path 里的线条和曲线，但是会保留内部的数据结构以便重用</p></li>
                         <li class="group"><p><code>void setFillType(Path.FillType ft)</code> -- 设置填充类型</p></li>
                         <li><p><code>Path.FillType getFillType()</code> -- 获取填充类型</p></li>
-                        <li><p><code>boolean isInverseFillType()</code> -- 是否为可逆填充类型</p></li>
-                        <li><p><code>void toggleInverseFillType()</code> -- 在两种可逆填充类型间切换</p></li>
+                        <li><p><code>boolean isInverseFillType()</code> -- 是否为 <code>INVERSE_WINDING</code> 或 <code>INVERSE_EVEN_ODD</code></p></li>
+                        <li><p><code>void toggleInverseFillType()</code> -- 在 <code>WINDING</code> 和 <code>INVERSE_WINDING</code> 切换 或 <code>EVEN_ODD</code> 和 <code>INVERSE_EVEN_ODD</code>切换</p></li>
                         <li class="group"><p><code>void moveTo(float x, float y)</code> -- 移到到指定点</p></li>
                         <li><p><code>void rMoveTo(float dx, float dy)</code> -- 移到到相对点</p></li>
                         <li><p><code>void setLastPoint(float dx, float dy)</code> -- 设置结束点</p></li>
