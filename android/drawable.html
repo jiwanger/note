@@ -1987,8 +1987,8 @@ public class VectorDrawable extends Drawable {}
     &lt;!-- pathData 格式(对应 Path 类的方法)。 注意：以下所有命令均允许小写字母, 大写表示绝对位置，小写表示相对位置。
         M = moveTo(x, y)
         L = lineTo(x, y)
-        H = (x)，横向线条
-        V = (y)，纵向线条
+        H = (x)，横向线条，指定 x 位置
+        V = (y)，纵向线条，指定 y 位置
         Z = close()，关闭路径
         A = (rx, ry, x-axis-rotation, large-arc-flag, sweep-flag, x, y)，圆弧，这个和原始方法由出入
             rx ry -- 椭圆半径
@@ -2105,7 +2105,7 @@ android:pathData="M4,10 c2,-4 4,4 6,0 s4,4 6,0"
         android:trimPathEnd=""          &lt;!-- 路径结束位置截断路径的比率，取值范围从 0 到 1 -->
         android:trimPathOffset="" />    &lt;!-- 设置路径截取的范围，取值范围从 0 到 1 -->
 
-    &lt;clip-path                       &lt;!-- 剪切路径 -->
+    &lt;clip-path   &lt;!-- 裁剪区域,只对当前的 group 和子 group 有效 -->
         android:name=""
         android:pathData="" />
 
@@ -2127,6 +2127,75 @@ android:pathData="M4,10 c2,-4 4,4 6,0 s4,4 6,0"
     &lt;/group>
 &lt;/vector>
         </pre>
+                    <p><b><code>VectorDrawable</code> 绘制实例:</b></p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><b>1.一个简单的加号</b></p>
+                            <pre class="brush: xml;">
+&lt;vector
+    xmlns:android="..."
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+
+    &lt;path android:pathData="M6,12h12M12,6v12"
+        android:strokeColor="#000000"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"/>
+&lt;/vector>
+
+
+                            </pre>
+                            <p><b>3.圆角方块背景 + 有颜色加号</b></p>
+                            <pre class="brush: xml;">
+&lt;vector
+    xmlns:android="..."
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+
+    &lt;path &lt;!-- 绘制圆角方块背景 -->
+        android:pathData="M2,6A4,4,0,0,1,6,2
+        h12A4,4,0,0,1,22,6v12A4,4,0,0,1,18,22
+        h-12A4,4,0,0,1,2,18Z"
+        android:fillColor="#000000"/>
+
+    &lt;path android:pathData="M8,12h8M12,8v8"
+        android:strokeColor="#FF4081"
+        android:strokeWidth="2"/>
+&lt;/vector>
+                            </pre>
+                        </div>
+                        <div class="col-md-6" style="padding: 5px;">
+                            <p><img src="images/VectorDrawable-icon.png" class="img-responsive"></p>
+                            <p><b>2.圆形背景 + 有颜色加号</b></p>
+                            <pre class="brush: xml;gutter: false;">
+&lt;vector
+    xmlns:android="..."
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+
+    &lt;path &lt;!-- 圆弧方式绘制圆形背景 -->
+        android:pathData="M2,12A10,10,0,1,1,22,12
+                A10,10,0,1,1,2,12Z"
+        android:fillColor="#000000" />
+
+    &lt;path android:pathData="M8,12h8M12,8v8"
+        android:strokeColor="#FF4081"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"/>
+&lt;/vector>
+</pre>
+                            <p><b>4.圆形背景 + 透明加号</b></p>
+                            <p>此图通过 <code>Android Studio</code> 自动生成。</p>
+                            <p>右击你的 <code>Module</code> -> <code>new</code> -> <code>Vector Asset</code>，点击 ICON，可以看到许多矢量图</p>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <!-- item over -->
