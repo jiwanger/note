@@ -2073,6 +2073,131 @@ android:pathData="M4,10 c2,-4 4,4 6,0 s4,4 6,0"
                         <div class="col-md-6"><img src="images/VectorDrawable-pathdata-bein.gif" class="img-responsive center-block"></div>
                         <div class="col-md-6"><img src="images/VectorDrawable-pathdata-surface.png" class="img-responsive center-block"></div>
                     </div>
+                    <p><b>5.二阶贝塞尔曲线实例</b></p>
+                    <p>5.1 绘制直角坐标系作为背景</p>
+                    <pre class="brush: xml;">
+&lt;vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="60dp"
+        android:height="40dp"
+        android:viewportWidth="60"
+        android:viewportHeight="40">
+
+    &lt;path android:pathData="M0,20h57M20,20v-1m10,0v1m10,0v-1m10,0v1"
+          android:strokeWidth="0.5"
+          android:strokeColor="#DD888888" />
+
+    &lt;path android:pathData="M57,18.5l3,1.5l-3,1.5z"
+          android:fillColor="#DD888888" />
+
+    &lt;path android:pathData="M10,40v-37M10,30h1m0,-20h-1"
+          android:strokeWidth="0.5"
+          android:strokeColor="#DD888888" />
+
+    &lt;path android:pathData="M8.5,3l1.5,-3l1.5,3z"
+          android:fillColor="#DD888888" />
+
+
+&lt;/vector>
+                            </pre>
+                    <p>5.2 使用二阶贝塞尔曲线绘制正/余弦曲线</p>
+                    <div class="row">
+                        <div class="col-md-8">
+
+                            <pre class="brush: xml;">
+&lt;!-- 图1，正/余弦曲线的二阶贝赛尔曲线的控制点在最高/低点的上/下方 -->
+&lt;vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="60dp"
+        android:height="40dp"
+        android:viewportWidth="60"
+        android:viewportHeight="40">
+
+    &lt;!-- 以下几种写法一样的效果：
+        android:pathData="M10,20Q20,0,30,20Q40,40,50,20"
+        android:pathData="M10,20Q20,0,30,20T50,20"
+        android:pathData="M10,20q10,-20,20,0t20,0"
+        android:pathData="M10,20q10,-20,20,0q10,20,20,0"
+    -->
+    &lt;path android:pathData="M10,20Q20,0,30,20Q40,40,50,20"
+        android:strokeWidth="0.5"
+        android:strokeColor="@color/colorAccent"/>
+&lt;/vector>
+
+&lt;!-- 图2，利用 clip-path 去点多余的曲线 -->
+&lt;vector ...>
+    &lt;group>
+        &lt;clip-path android:pathData="M10,0h40v40h-40z" />
+        &lt;path android:pathData="M0,20Q10,0,20,20T40,20Q50,0,60,20"
+            android:strokeWidth="0.5"
+            android:strokeColor="@color/colorAccent"/>
+     &lt;/group>
+&lt;/vector>
+
+&lt;!-- 图3 -->
+&lt;vector ...>
+    &lt;path
+        android:pathData="M10,20q10,20,20,0t20,0"
+        android:strokeColor="@color/colorAccent"
+        android:strokeWidth="0.5" />
+&lt;/vector>
+
+&lt;!-- 图4，利用 clip-path 去点多余的曲线 -->
+&lt;vector ...>
+    &lt;group>
+        &lt;clip-path android:pathData="M10,0h40v40h-40z" />
+        &lt;path android:pathData="M0,20q10,20,20,0t20,0t20,0"
+            android:strokeWidth="0.5"
+            android:strokeColor="@color/colorAccent"/>
+    &lt;/group>
+
+&lt;/vector>
+                            </pre>
+                        </div>
+                        <div class="col-md-4"><img src="images/vector-beisaier-ripple-2.png" class="img-responsive center-block"></div>
+                    </div>
+                    p>5.2 使用二阶贝塞尔曲线绘制正/余弦曲线</p>
+                    <div class="row">
+                        <div class="col-md-8">
+
+                            <pre class="brush: xml;">
+&lt;!-- 图 1 -->
+&lt;vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="60dp"
+    android:height="40dp"
+    android:viewportWidth="60"
+    android:viewportHeight="40">
+
+    &lt;path android:pathData="M10,20c0,-15,40,-15,40,0s-40,15,-40,0
+                               M20,20c0,-10,20,-10,20,0"
+        android:strokeWidth="0.5"
+        android:strokeColor="@color/colorAccent" />
+&lt;/vector>
+
+&lt;!-- 图 2 -->
+&lt;vector ...>
+&lt;path android:pathData="M10,20c0,-20,20,-20,20,0s-20,20,-20,0
+                           M15,20c0,-10,10,-10,10,0"
+    android:strokeWidth="0.5"
+    android:strokeColor="@color/colorAccent" />
+&lt;/vector>
+
+&lt;!-- 图 3 -->
+&lt;vector ...>
+&lt;path android:pathData="M10,10c0,-10,30,-10,30,0M23,10
+                           h4v20h-4zM23,30h4l-2,5z"
+    android:fillColor="@color/colorAccent" />
+&lt;/vector>
+
+&lt;!-- 图 4 -->
+&lt;vector ...>
+&lt;path android:pathData="M10,20c0,-10,50,0,1,0"
+    android:strokeWidth="0.5"
+    android:strokeColor="@color/colorAccent" />
+&lt;/vector>
+                            </pre>
+                        </div>
+                        <div class="col-md-4"><img src="images/vector-besaier-3.png" class="img-responsive center-block"></div>
+                    </div>
+
 
 
 
