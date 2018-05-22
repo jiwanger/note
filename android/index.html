@@ -90,6 +90,7 @@
 						<a href="#android-memory" class="list-group-item">内存管理和分析</a>
 						<a href="#android-performance" class="list-group-item">Android
 							应用优化</a>
+						<a href="#android-slient-install" class="list-group-item">App 静默安装</a>
 
 					</div>
 				</div>
@@ -3084,6 +3085,95 @@ fragmentTransaction.add(fragment, tag);
 							,可以减少一半的内存占用.
 						</div>
 					</div>
+					</div>
+					<!-- item over -->
+
+					<!-- item start -->
+					<a class="offset" id="android-slient-install"></a>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h3 class="panel-title">App 静默安装</h3>
+						</div>
+						<div class="panel-body">
+							<p>第三方应用是没有静默安装权限的，这里制作成系统应用，并使用系统签名。使用 <code>PackageManager</code> 的反射方法来安装：</p>
+							<ol>
+								<li>
+									<p>Java 代码很简单，只有几行代码：</p>
+									<pre class="brush: java;">
+/** 通过反射的方式调用: PackageManager.installPackage(Uri, IPackageInstallObserver, int, String);
+ * Uri -- 指向 apk 文件
+ * IPackageInstallObserver -- 安装回调，此类不存在 SDK，需要做一个马甲
+ * int -- 一般安装(1)或者覆盖安装(2)
+ * String -- 安装名称，这个可以随便写
+ * 这个方法报错，因为没有 IPackageInstallObserver 这个类，往下看：
+ */
+public static void installSilentWithReflection(Context context, String filePath) {
+	try {
+		PackageManager packageManager = context.getPackageManager();
+		Method method = packageManager.getClass().getDeclaredMethod("installPackage",
+				new Class[] {Uri.class, IPackageInstallObserver.class, int.class, String.class} );
+		method.setAccessible(true);
+		File apkFile = new File(filePath);
+		Uri apkUri = Uri.fromFile(apkFile);
+
+		method.invoke(packageManager, new Object[] { apkUri, new IPackageInstallObserver.Stub() {
+			@Override
+			public void packageInstalled(String pkgName, int resultCode) throws RemoteException {
+				Log.d("tag", "packageInstalled = " + pkgName + "; resultCode = " + resultCode);
+			}
+		}, Integer.valueOf(2), "com.lesson1234.helper"});
+	} catch (NoSuchMethodException e) {
+		e.printStackTrace();
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+}
+</pre>
+								</li>
+								<li>
+									<p>制作 <code>IPackageInstallObserver</code> 马甲，因为 sdk 中无此类，可以从源码中复制出来，这里我们复制 <code>aidl</code> 文件。</p>
+									<pre class="brush: java;">
+/** 直接从源码文件复制：frameworks/base/core/java/android/content/pm/IPackageInstallObserver.aidl
+ * 到: aidl/android/content/pm/IPackageInstallObserver.aidl
+ * 其实只有一个安装回调的方法：
+ */
+package android.content.pm;
+
+oneway interface IPackageInstallObserver {
+    void packageInstalled(in String packageName, int returnCode);
+}
+</pre>
+								</li>
+								<li>
+									<p>声明安装权限,这个权限只能是系统应用才会被授权，因此还要做成系统应用</p>
+									<pre class="brush: xml;">
+&lt;uses-permission android:name="android.permission.INSTALL_PACKAGES" />
+</pre>
+								</li>
+								<li>
+									<p>申明为系统应用</p>
+									<pre class="brush: xml;">
+&lt;application android:sharedUserId="android.uid.system" ... />
+</pre>
+								</li>
+								<li>
+									<p>进行系统签名，这里直接制作成 <code>keystore</code> 文件，需要 <code>platform.pk8</code> 和 <code>platform.x509.pem</code> 这两个文件</p>
+									<pre class="brush: bash;">
+## 1.生成 keystore 文件
+$ openssl pkcs8 -inform DER -nocrypt -in platform.pk8 -out platform.pem
+## 指定 Key 别名为: androiddebugkey,  Key 密码为: android
+$ openssl pkcs12 -export -in platform.x509.pem -out platform.p12 -inkey platform.pem -password pass:android -name androiddebugkey
+## 指定 keystore 密码为: android，生成的 keystore 文件为: ./platform.keystore
+$ keytool -importkeystore -deststorepass android -destkeystore ./platform.keystore -srckeystore platform.p12 -srcstoretype PKCS12 -srcstorepass android
+
+## 2.使用 keystore 文件进行签名，这里就不说了，和普通应用是一样的
+
+## 3.将签名过的 apk 文件打包到 /system/app 目录下(root 权限),特别注意，可能还需要添加可执行权限。
+									</pre>
+								</li>
+							</ol>
+						</div>
+					</div>
 					<!-- item over -->
 
 					<!-- item start -->
@@ -3096,6 +3186,8 @@ fragmentTransaction.add(fragment, tag);
 					</div>
 					<!-- item over -->
 				</div>
+
+
 			</div>
 		</div>
 

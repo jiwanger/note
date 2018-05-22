@@ -98,7 +98,6 @@
                         <a href="#VectorDrawable" class="list-group-item">VectorDrawable</a>
                         <a href="#AnimatedVectorDrawable" class="list-group-item">AnimatedVectorDrawable</a>
                     </div>
-                    <a href="#Examples" class="list-group-item">Examples</a>
                 </div>
             </div>
         </div>
@@ -2338,55 +2337,72 @@ android.graphics.drawable.Drawable
 android.graphics.drawable.AnimatedVectorDrawable
 
 public class AnimatedVectorDrawable extends Drawable implements Animatable2 {
+    public AnimatedVectorDrawable() {}
+}
 
+public interface Animatable2 extends Animatable {
+    void registerAnimationCallback(@NonNull AnimationCallback callback);
+    boolean unregisterAnimationCallback(@NonNull AnimationCallback callback);
+    void clearAnimationCallbacks();
+
+    public static abstract class AnimationCallback {
+        public void onAnimationStart(Drawable drawable) {};
+        public void onAnimationEnd(Drawable drawable) {};
+    }
+}
+
+public interface Animatable {
+    void start();
+    void stop();
+    boolean isRunning();
 }
 </pre>
                     <p><a href="docs/reference/android/graphics/drawable/AnimatedVectorDrawable.html" target="_blank">AnimatedVectorDrawable</a> -- 使用 <code>ObjectAnimator</code> 和 <code>AnimatorSet</code> 作用于 <code>VectorDrawable</code> 的属性，产生动画效果。</p>
+                    <p>下面的实例为一个加号变成减号：</p>
                     <pre class="brush: xml;">
-&lt;!-- 1.先定义一个 VectorDrawable -->
-&lt;vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:height="64dp"
-    android:width="64dp"
-    android:viewportHeight="600"
-    android:viewportWidth="600" >
-    &lt;group
-        android:name="rotationGroup"
-        android:pivotX="300.0"
-        android:pivotY="300.0"
-        android:rotation="45.0" >
-        &lt;path
-            android:name="v"
-            android:fillColor="#000000"
-            android:pathData="M300,70 l 0,-70 70,70 0,0 -70,70z" />
-     &lt;/group>
+&lt;!-- 1.先 res/drawable/layer.xml 定义一个 VectorDrawable, 这个 VectorDrawable 只是一个加号 -->
+&lt;vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24.0"
+    android:viewportHeight="24.0">
+
+    &lt;path                            &lt;!-- 绘制加号的横线 -->
+        android:pathData="M6,12h12"
+        android:strokeColor="#000000"
+        android:strokeWidth="2" />
+
+    &lt;path                            &lt;!-- 绘制加号的纵线 -->
+        android:name="plus"        &lt;!-- 定义名字，以便后面操作这个 path -->
+        android:pathData="M12,6v12"
+        android:strokeColor="#000000"
+        android:strokeWidth="2" />
 &lt;/vector>
 
-&lt;!-- 2. AnimatedVectorDrawable 作用于先前定义的 VectorDrawable -->
-&lt;animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/vectordrawable" >
-    &lt;target
-        android:name="rotationGroup"
-        android:animation="@anim/rotation" />
-    &lt;target
-        android:name="v"
-        android:animation="@anim/path_morph" />
-&lt;/animated-vector>
-        </pre>
-                </div>
-            </div>
-            <!-- item over -->
+&lt;!-- 2. 在 res/animator/drawable.xml 目录下定义 ObjectAnimator,操作 VectorDrawable 中的属性 -->
+&lt;objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="2000"
+    android:valueType="pathType"    &lt;!-- 类型可为 pathType, 改变 path 值 -->
+    android:propertyName="pathData" &lt;!-- 指定操作的属性 -->
+    android:valueFrom="M12,6v12"
+    android:valueTo="M12,12v0" />    &lt;!-- 纵向线条长度改为 0(变成减号) -->
 
-            <!-- item start -->
-            <a class="offset" id="Examples"></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Examples</h3>
-                </div>
-                <div class="panel-body">
-                    <p><b>Drawable 实例：</b></p>
-                    <ul>
-                        <li></li>
-                    </ul>
+&lt;!-- 3. AnimatedVectorDrawable 作用于先前定义的 VectorDrawable -->
+&lt;animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/layer"> &lt;!-- 必须，指定操作的 VectorDrawable 对象 -->
+    &lt;target
+        android:animation="@animator/drawable"  &lt;!-- 指定 ObjectAnimator 对象 -->
+        android:name="plus" /> &lt;!-- 指定 VectorDrawable 中要指定变换的对象，可能是 group 或者 path -->
+&lt;/animated-vector>
+                    </pre>
+                    <pre class="brush: java;">
+// 4. Java 代码中执行动画
+ImageView imageView = findViewById(R.id.c_09);
+AnimatedVectorDrawable drawable = ((AnimatedVectorDrawable)(imageView.getDrawable()));
+drawable.start();
+        </pre>
                 </div>
             </div>
             <!-- item over -->
