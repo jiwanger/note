@@ -135,7 +135,7 @@
                     <div id="android-os" class="panel-collapse collapse"
                          role="tabpanel">
                         <a href="#android-os-AsyncTask" class="list-group-item">AsyncTask</a>
-                        <a href="#android-os-Handler" class="list-group-item">Handler 机制</a>
+                        <a href="#android-os-Handler" class="list-group-item">Handler 及相关类</a>
                         <a href="#" class="list-group-item">...</a>
                     </div>
                     <a class="list-group-item active dropdown" data-toggle="collapse"
@@ -3628,7 +3628,7 @@ public abstract class AsyncTask&lt;Params, Progress, Result> {
                         <li><p><code>public final AsyncTask&lt;Params, Progress, Result>
                             execute(Params... params)</code> -- 触发执行异步任务</p></li>
                         <li><p><code>protected void onPreExecute()</code> -- 可以执行初始化操作</p></li>
-                        <li><p><code>protected Result doInBackground(Params... params) {</code> --
+                        <li><p><code>protected Result doInBackground(Params... params)</code> --
                             工作线程</p></li>
                         <li><p><code>protected void publishProgress(Progress... values)</code> -- 在
                             doInBackground 中调用，会执行 onProgressUpdate 方法</p></li>
@@ -3654,42 +3654,170 @@ public abstract class AsyncTask&lt;Params, Progress, Result> {
                 </div>
                 <div class="panel-body">
                     <div class="sub-item">
-                        <p><b>Handler</b></p>
-                        <pre class="brush: java;">
 
+                        <pre class="brush: java;">
+java.lang.Object
+    android.os.Handler
+
+public class Handler {
+    public interface Callback {
+        public boolean handleMessage(Message msg);
+    }
+
+    public Handler() {}
+    public Handler(Handler.Callback callback) {}
+    public Handler(Looper looper) {}
+    public Handler(Looper looper, Handler.Callback callback) {}
+}
                         </pre>
+                        <p><a href="docs/reference/android/os/Handler.html" target="_blank">Handler</a> 机制用于异步发送和处理消息，其原理可查看此处: <a href="index.html#android-handler">Handler 机制原理</a></p>
+                        <ol>
+                            <li><p><code>void 	dispatchMessage(Message msg)</code> -- </p></li>
+                            <li><p><code>final void 	dump(Printer pw, String prefix)</code> -- </p></li>
+                            <li><p><code>final Looper 	getLooper()</code> -- </p></li>
+                            <li><p><code>String 	getMessageName(Message message)</code> -- </p></li>
+                            <li><p><code>void 	handleMessage(Message msg)</code> -- </p></li>
+                            <li><p><code>final boolean 	hasMessages(int what)</code> -- </p></li>
+                            <li><p><code>final boolean 	hasMessages(int what, Object object)</code> -- </p></li>
+                            <li class="group"><p><code>final Message 	obtainMessage(int what, Object obj)</code> -- </p></li>
+                            <li><p><code>final Message 	obtainMessage()</code> -- </p></li>
+                            <li><p><code>final Message 	obtainMessage(int what, int arg1, int arg2)</code> -- </p></li>
+                            <li><p><code>final Message 	obtainMessage(int what, int arg1, int arg2, Object obj)</code> -- </p></li>
+                            <li><p><code>final Message 	obtainMessage(int what)</code> -- </p></li>
+                            <li class="group"><p><code>final boolean 	post(Runnable r)</code> -- </p></li>
+                            <li><p><code>final boolean 	postAtFrontOfQueue(Runnable r)</code> -- </p></li>
+                            <li><p><code>final boolean 	postAtTime(Runnable r, long uptimeMillis)</code> -- </p></li>
+                            <li><p><code>final boolean 	postAtTime(Runnable r, Object token, long uptimeMillis)</code> -- </p></li>
+                            <li><p><code>final boolean 	postDelayed(Runnable r, long delayMillis)</code> -- </p></li>
+                            <li class="group"><p><code>final void 	removeCallbacks(Runnable r)</code> -- </p></li>
+                            <li><p><code>final void 	removeCallbacks(Runnable r, Object token)</code> -- </p></li>
+                            <li><p><code>final void 	removeCallbacksAndMessages(Object token)</code> -- </p></li>
+                            <li><p><code>final void 	removeMessages(int what)</code> -- </p></li>
+                            <li><p><code>final void 	removeMessages(int what, Object object)</code> -- </p></li>
+                            <li class="group"><p><code>final boolean 	sendEmptyMessage(int what)</code> -- </p></li>
+                            <li><p><code>final boolean 	sendEmptyMessageAtTime(int what, long uptimeMillis)</code> -- </p></li>
+                            <li><p><code>final boolean 	sendEmptyMessageDelayed(int what, long delayMillis)</code> -- </p></li>
+                            <li><p><code>final boolean 	sendMessage(Message msg)</code> -- </p></li>
+                            <li><p><code>final boolean 	sendMessageAtFrontOfQueue(Message msg)</code> -- </p></li>
+                            <li><p><code>boolean 	sendMessageAtTime(Message msg, long uptimeMillis)</code> -- </p></li>
+                            <li><p><code>final boolean 	sendMessageDelayed(Message msg, long delayMillis)</code> -- </p></li>
+                        </ol>
                     </div>
 
                     <div class="sub-item">
-                        <p><b>Looper</b></p>
+                        <p><b>Looper</b> -- 将 Looper 对象和线程绑定，能够确保线程持续存活并且可以不断的从任务队列中获取任务并进行执行；</p>
                         <pre class="brush: java;">
+java.lang.Object
+    android.os.Looper
 
+public final class Looper {
+
+}
                         </pre>
+                        <ol>
+                            <li><p><code>void 	dump(Printer pw, String prefix)</code> -- </p></li>
+                            <li><p><code>static Looper 	getMainLooper()</code> -- </p></li>
+                            <li><p><code>MessageQueue 	getQueue()</code> -- </p></li>
+                            <li><p><code>Thread 	getThread()</code> -- </p></li>
+                            <li><p><code>boolean 	isCurrentThread()</code> -- </p></li>
+                            <li><p><code>static void 	loop()</code> -- </p></li>
+                            <li><p><code>static Looper 	myLooper()</code> -- </p></li>
+                            <li><p><code>static MessageQueue 	myQueue()</code> -- </p></li>
+                            <li><p><code>static void 	prepare()</code> -- </p></li>
+                            <li><p><code>static void 	prepareMainLooper()</code> -- </p></li>
+                            <li><p><code>void 	quit()</code> -- </p></li>
+                            <li><p><code>void 	quitSafely()</code> -- </p></li>
+                            <li><p><code>void 	setMessageLogging(Printer printer)</code> -- </p></li>
+                        </ol>
                     </div>
 
                     <div class="sub-item">
-                        <p><b>MessageQueue</b></p>
+                        <p><b>MessageQueue</b> -- MessageQueue 有个 LinkedBlockingQueue 队列，此队列的出队方法为阻塞式，没有消息则一直等待。</p>
                         <pre class="brush: java;">
+java.lang.Object
+    android.os.MessageQueue
 
+public final class MessageQueue {
+    public interface MessageQueue.IdleHandler {
+        boolean queueIdle();
+    }
+
+    public interface MessageQueue.OnFileDescriptorEventListener {
+        public static final int EVENT_INPUT = 1 << 0;
+        public static final int EVENT_OUTPUT = 1 << 1;
+        public static final int EVENT_ERROR = 1 << 2;
+
+        int onFileDescriptorEvents(@NonNull FileDescriptor fd, @Events int events);
+    }
+}
                         </pre>
+                        <ol>
+
+                            <li><p><code>void 	addIdleHandler(MessageQueue.IdleHandler handler) </code> -- </p></li>
+                            <li><p><code>void 	addOnFileDescriptorEventListener(FileDescriptor fd, int events, MessageQueue.OnFileDescriptorEventListener listener)</code> -- </p></li>
+                            <li><p><code>boolean 	isIdle() </code> -- </p></li>
+                            <li><p><code>void 	removeIdleHandler(MessageQueue.IdleHandler handler)</code> -- </p></li>
+                            <li><p><code>void 	removeOnFileDescriptorEventListener(FileDescriptor fd)</code> -- </p></li>
+                        </ol>
                     </div>
 
                     <div class="sub-item">
-                        <p><b>ThreadLocal</b></p>
+                        <p><b>ThreadLocal</b> -- ThreadLocal 其实是一个 Map，其 key 为一个线程；</p>
                         <pre class="brush: java;">
+java.lang.Object
+    java.lang.ThreadLocal&lt;T>
 
+public class ThreadLocal {}
                         </pre>
+                        <ol>
+                            <li><p><code>T 	get()</code> -- </p></li>
+                            <li><p><code>void 	remove()</code> -- </p></li>
+                            <li><p><code>void 	set(T value)</code> -- </p></li>
+                        </ol>
                     </div>
 
                     <div class="sub-item">
-                        <p><b>Message</b></p>
+                        <p><b>Message</b> -- 对象包装消息，并绑定到一个 Handler 实例；</p>
                         <pre class="brush: java;">
+java.lang.Object
+    android.os.Message
 
+public final class Message implements Parcelable {
+    public int arg1;
+    public int arg2;
+    public Object obj;
+    public int what;
+    public Messenger replyTo;
+    public int sendingUid;
+}
                         </pre>
+                        <ol>
+                            <li><p><code>void 	copyFrom(Message o)</code> -- </p></li>
+                            <li><p><code>int 	describeContents()</code> -- </p></li>
+                            <li><p><code>Runnable 	getCallback()</code> -- </p></li>
+                            <li><p><code>Bundle 	getData()</code> -- </p></li>
+                            <li><p><code>Handler 	getTarget()</code> -- </p></li>
+                            <li><p><code>long 	getWhen()</code> -- </p></li>
+                            <li><p><code>boolean 	isAsynchronous()</code> -- </p></li>
+                            <li><p><code>static Message 	obtain(Handler h)</code> -- </p></li>
+                            <li><p><code>static Message 	obtain(Handler h, int what)</code> -- </p></li>
+                            <li><p><code>static Message 	obtain(Handler h, Runnable callback)</code> -- </p></li>
+                            <li><p><code>static Message 	obtain(Message orig)</code> -- </p></li>
+                            <li><p><code>static Message 	obtain(Handler h, int what, int arg1, int arg2, Object obj)</code> -- </p></li>
+                            <li><p><code>static Message 	obtain(Handler h, int what, int arg1, int arg2)</code> -- </p></li>
+                            <li><p><code>static Message 	obtain(Handler h, int what, Object obj)</code> -- </p></li>
+                            <li><p><code>static Message 	obtain()</code> -- </p></li>
+                            <li><p><code>Bundle 	peekData()</code> -- </p></li>
+                            <li><p><code>void 	recycle()</code> -- </p></li>
+                            <li><p><code>void 	sendToTarget()</code> -- </p></li>
+                            <li><p><code>void 	setAsynchronous(boolean async)</code> -- </p></li>
+                            <li><p><code>void 	setData(Bundle data)</code> -- </p></li>
+                            <li><p><code>void 	setTarget(Handler target)</code> -- </p></li>
+                        </ol>
                     </div>
 
                     <div class="sub-item">
-                        <p><b>HandlerThread</b></p>
+                        <p><b>HandlerThread</b> -- 把上面组件打包到一起进行协作。</p>
                         <pre class="brush: java;">
 java.lang.Object
     java.lang.Thread
@@ -3702,9 +3830,15 @@ public class HandlerThread extends Thread {
                     </pre>
                         <p><a href="docs/reference/android/os/HandlerThread.html" target="_blank">HandlerThread</a>
                             是 <code>Thread</code> 的子类，将 Looper, Handler, Thread 封装在一起。</p>
+                        <ol>
+                            <li><p><code>Looper 	getLooper()</code> -- </p></li>
+                            <li><p><code>int 	getThreadId()</code> -- </p></li>
+                            <li><p><code>boolean 	quit()</code> -- </p></li>
+                            <li><p><code>boolean 	quitSafely()</code> -- </p></li>
+                            <li><p><code>void 	run()</code> -- </p></li>
+                            <li class="group"><p><code>protected void onLooperPrepared()</code> -- </p></li>
+                        </ol>
                     </div>
-
-
                 </div>
             </div>
             <!-- item over -->
