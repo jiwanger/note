@@ -139,6 +139,20 @@
                         <a href="#" class="list-group-item">...</a>
                     </div>
                     <a class="list-group-item active dropdown" data-toggle="collapse"
+                       data-parent="#accordion" href="#android-media" aria-expanded="true"
+                       style="border-top: 1px solid #DDDDDD;">
+                        <code>android.media</code><span class="caret pull-right"
+                                                             style="margin-top: 5px;"></span>
+                    </a>
+                    <div id="android-media" class="panel-collapse collapse"
+                         role="tabpanel">
+                        <a href="#android-media-MediaPlayer" class="list-group-item">MediaPlayer</a>
+                        <a href="#android-media-SoundPool" class="list-group-item">SoundPool</a>
+                        <a href="#android-media-MediaRecorder" class="list-group-item">MediaRecorder</a>
+                        <a href="#android-media-AudioManager" class="list-group-item">AudioManager</a>
+                        <a href="#" class="list-group-item">...</a>
+                    </div>
+                    <a class="list-group-item active dropdown" data-toggle="collapse"
                        data-parent="#accordion" href="#android-net" aria-expanded="true"
                        style="border-top: 1px solid #DDDDDD;">
                         <code>android.net</code><span class="caret pull-right"
@@ -3906,6 +3920,210 @@ new Thread(new Runnable() {
 }).start();
                         </pre>
                     </div>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="android-media-MediaPlayer"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">MediaPlayer</h3>
+                </div>
+                <div class="panel-body">
+                    <pre class="brush: java;">
+java.lang.Object
+    android.media.MediaPlayer
+
+public class MediaPlayer extends PlayerBase implements SubtitleController.Listener {
+    /** 装载流媒体完毕的时候回调，可在此时调用播放方法，获取时长 */
+    public interface OnPreparedListener {
+        void onPrepared(MediaPlayer mp);
+    }
+
+    /** 从网络加载调用此方法，缓存进度 */
+    public interface OnBufferingUpdateListener {
+        void onBufferingUpdate(MediaPlayer mp, int percent);
+    }
+
+    /** 播放进度改变(seekTo) 完成回调  */
+    public interface OnSeekCompleteListener {
+        void onSeekComplete(MediaPlayer mp);
+    }
+
+    /** 流媒体播放结束时回调 */
+    public interface OnCompletionListener {
+        void onCompletion(MediaPlayer mp);
+    }
+
+    /** 发生错误时回调 */
+    public interface OnErrorListener {
+        boolean onError(MediaPlayer mp, int what, int extra);
+    }
+
+    /**  */
+    public interface OnVideoSizeChangedListener {
+        void onVideoSizeChanged(MediaPlayer mp, int width, int height);
+    }
+
+    /**  */
+    public interface OnInfoListener {
+        boolean onInfo(MediaPlayer mp, int what, int extra);
+    }
+
+    /**  */
+    public interface OnTimedTextListener {
+        void onTimedText(MediaPlayer mp, TimedText text);
+    }
+
+    /**  */
+    public interface OnTimedMetaDataAvailableListener {
+        void onTimedMetaDataAvailable(MediaPlayer mp, TimedMetaData data);
+    }
+
+    /**  */
+    static public class TrackInfo implements Parcelable {
+        public static final int MEDIA_TRACK_TYPE_UNKNOWN = 0;
+        public static final int MEDIA_TRACK_TYPE_VIDEO = 1;
+        public static final int MEDIA_TRACK_TYPE_AUDIO = 2;
+        public static final int MEDIA_TRACK_TYPE_TIMEDTEXT = 3;
+        public static final int MEDIA_TRACK_TYPE_SUBTITLE = 4;
+        public static final int MEDIA_TRACK_TYPE_METADATA = 5;
+
+        public int getTrackType() {
+            return mTrackType;
+        }
+    }
+}
+                    </pre>
+                    <p><a href="docs/reference/android/media/MediaPlayer.html" target="_blank">MediaPlayer</a></p>
+
+                    <p><b>每次缓存多少数据？</b></p>
+                    <p><b>如何连续进行缓存？(每次 seekTo 会调用 onPrepared() )</b></p>
+                    <p><b>如何从 mp3 中获取信息(比如封面照片，歌手...)？</b></p>
+
+                    <p><b>状态图详解</b></p>
+                    <p><img src="images/android-os-MediaPlayer.gif" class="img-responsive center-block" /></p>
+
+                    <ol>
+                        <li><p><code>static MediaPlayer 	create(Context context, Uri uri)</code> -- 使用 Uri 初始化，播放网络，本地存储，<code>assets</code></p></li>
+                        <li><p><code>static MediaPlayer 	create(Context context, int resid)</code> -- 使用 id 初始化，播放 <code>res/raw</code> 下的文件</p></li>
+                        <li><p><code>static MediaPlayer 	create(Context context, int resid, AudioAttributes audioAttributes, int audioSessionId)</code> -- </p></li>
+                        <li><p><code>static MediaPlayer 	create(Context context, Uri uri, SurfaceHolder holder)</code> -- </p></li>
+                        <li><p><code>static MediaPlayer 	create(Context context, Uri uri, SurfaceHolder holder, AudioAttributes audioAttributes, int audioSessionId)</code> -- </p></li>
+
+                        <li class="group"><p><code>void 	setOnPreparedListener(MediaPlayer.OnPreparedListener listener)</code> -- </p></li>
+                        <li><p><code>void 	setOnBufferingUpdateListener(MediaPlayer.OnBufferingUpdateListener listener)</code> -- </p></li>
+                        <li><p><code>void 	setOnSeekCompleteListener(MediaPlayer.OnSeekCompleteListener listener)</code> -- </p></li>
+                        <li><p><code>void 	setOnCompletionListener(MediaPlayer.OnCompletionListener listener)</code> -- </p></li>
+                        <li><p><code>void 	setOnErrorListener(MediaPlayer.OnErrorListener listener)</code> -- </p></li>
+                        <li><p><code>void 	setOnInfoListener(MediaPlayer.OnInfoListener listener)</code> -- </p></li>
+                        <li><p><code>void 	setOnVideoSizeChangedListener(MediaPlayer.OnVideoSizeChangedListener listener)</code> -- </p></li>
+                        <li><p><code>void 	setOnTimedMetaDataAvailableListener(MediaPlayer.OnTimedMetaDataAvailableListener listener)</code> -- </p></li>
+                        <li><p><code>void 	setOnTimedTextListener(MediaPlayer.OnTimedTextListener listener)</code> -- </p></li>
+
+                        <li class="group"><p><code>void 	prepare()</code> -- 同步的方式装载流媒体文件</p></li>
+                        <li><p><code>void 	prepareAsync()</code> -- 异步的方式装载流媒体文件</p></li>
+                        <li><p><code>void 	start()</code> -- 开始播放</p></li>
+                        <li><p><code>int 	getDuration()</code> -- 返回歌曲以毫秒为单位的总时长，在 <code>onPrepared()</code> 后可以获取</p></li>
+                        <li><p><code>int 	getCurrentPosition()</code> -- 返回歌曲以毫秒为单位的当前时间，可以用于获知其进度</p></li>
+                        <li><p><code>void 	seekTo(int msec)</code> -- 设置当前时间，异步方法，完成后可回调 <code>onSeekComplete</code>，可以用于控制进度</p></li>
+                        <li><p><code>boolean 	isLooping()</code> -- 是否循环</p></li>
+                        <li><p><code>void 	setLooping(boolean looping)</code> -- 设置循环</p></li>
+                        <li><p><code>boolean 	isPlaying()</code> -- 是否正在播放</p></li>
+                        <li><p><code>void 	setAudioStreamType(int streamtype)</code> -- 设置音频流类型,一般设置为 <code>AudioManager.STREAM_MUSIC</code>即可</p></li>
+                        <li><p><code>void 	stop()</code> -- 停止播放</p></li>
+                        <li><p><code>void 	pause()</code> -- 暂定播放</p></li>
+                        <li><p><code>void 	release()</code> -- 释放资源</p></li>
+                        <li><p><code>void 	reset()</code> -- 重置，<b>重置后的 MediaPlayer 其回调方法依然有效</b></p></li>
+
+                        <li class="group"><p><code>void 	setDataSource(AssetFileDescriptor afd)</code> -- </p></li>
+                        <li><p><code>void 	setDataSource(FileDescriptor fd)</code> -- 通过文件描述符来设置数据源</p></li>
+                        <li><p><code>void 	setDataSource(FileDescriptor fd, long offset, long length)</code> -- </p></li>
+                        <li><p><code>void 	setDataSource(String path)</code> -- 通过一个路径来设置数据源(本地和网络)</p></li>
+                        <li><p><code>void 	setDataSource(Context context, Uri uri, Map&lt;String, String> headers)</code> -- </p></li>
+                        <li><p><code>void 	setDataSource(MediaDataSource dataSource)</code> -- </p></li>
+                        <li><p><code>void 	setDataSource(Context context, Uri uri)</code> -- </p></li>
+
+                        <li class="group"><p><code>int 	getAudioSessionId()</code> -- 返回音频的 Session ID</p></li>
+                        <li><p><code>void 	setAudioSessionId(int sessionId)</code> -- 设置音频的 Session ID</p></li>
+                        <li><p><code>void 	setVolume(float leftVolume, float rightVolume)</code> -- </p></li>
+
+                        <li class="group"><p><code>void 	addTimedTextSource(FileDescriptor fd, String mimeType)</code> -- </p></li>
+                        <li><p><code>void 	addTimedTextSource(String path, String mimeType)</code> -- </p></li>
+                        <li><p><code>void 	addTimedTextSource(FileDescriptor fd, long offset, long length, String mime)</code> -- </p></li>
+                        <li><p><code>void 	addTimedTextSource(Context context, Uri uri, String mimeType)</code> -- </p></li>
+
+                        <li class="group"><p><code>int 	getVideoHeight()</code> -- </p></li>
+                        <li><p><code>int 	getVideoWidth()</code> -- </p></li>
+                        <li><p><code>void 	setVideoScalingMode(int mode)</code> -- </p></li>
+                        <li><p><code>void 	setDisplay(SurfaceHolder sh)</code> -- </p></li>
+                        <li><p><code>void 	setSurface(Surface surface)</code> -- </p></li>
+                        <li><p><code>void 	setScreenOnWhilePlaying(boolean screenOn)</code> -- </p></li>
+
+                        <li class="group"><p><code>void 	attachAuxEffect(int effectId)</code> -- </p></li>
+                        <li><p><code>void 	setAuxEffectSendLevel(float level)</code> -- </p></li>
+                        <li><p><code>void 	setNextMediaPlayer(MediaPlayer next)</code> -- </p></li>
+
+                        <li><p><code>void 	setWakeMode(Context context, int mode)</code> -- </p></li>
+                        <li><p><code>void 	deselectTrack(int index)</code> -- </p></li>
+                        <li><p><code>void 	setPlaybackParams(PlaybackParams params)</code> -- </p></li>
+                        <li><p><code>PlaybackParams 	getPlaybackParams()</code> -- </p></li>
+                        <li><p><code>int 	getSelectedTrack(int trackType)</code> -- </p></li>
+
+                        <li><p><code>SyncParams 	getSyncParams()</code> -- </p></li>
+                        <li><p><code>void 	setSyncParams(SyncParams params)</code> -- </p></li>
+                        <li><p><code>MediaTimestamp 	getTimestamp()</code> -- </p></li>
+
+                        <li><p><code>TrackInfo[] 	getTrackInfo()</code> -- </p></li>
+                        <li><p><code>void 	selectTrack(int index)</code> -- </p></li>
+                        <li><p><code>void 	setAudioAttributes(AudioAttributes attributes)</code> -- </p></li>
+                    </ol>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="android-media-SoundPool"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">SoundPool</h3>
+                </div>
+                <div class="panel-body">
+<pre class="brush: java;">
+
+                    </pre>
+                    <p><a href="docs/reference/android/media/SoundPool.html" target="_blank">SoundPool</a></p>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="android-media-MediaRecorder"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">MediaRecorder</h3>
+                </div>
+                <div class="panel-body">
+<pre class="brush: java;">
+
+                    </pre>
+                    <p><a href="docs/reference/android/media/MediaRecorder.html" target="_blank">MediaRecorder</a></p>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="android-media-AudioManager"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">AudioManager</h3>
+                </div>
+                <div class="panel-body">
+<pre class="brush: java;">
+
+                    </pre>
+                    <p><a href="docs/reference/android/media/AudioManager.html" target="_blank">AudioManager</a></p>
                 </div>
             </div>
             <!-- item over -->
