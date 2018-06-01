@@ -3931,6 +3931,7 @@ new Thread(new Runnable() {
                     <h3 class="panel-title">MediaPlayer</h3>
                 </div>
                 <div class="panel-body">
+                    <div class="sub-item">
                     <pre class="brush: java;">
 java.lang.Object
     android.media.MediaPlayer
@@ -3958,30 +3959,51 @@ public class MediaPlayer extends PlayerBase implements SubtitleController.Listen
 
     /** 发生错误时回调 */
     public interface OnErrorListener {
+        /** what:
+         *     MEDIA_ERROR_UNKONWN -- 位置错误
+         *     MEDIA_ERROR_SERVER_DIED -- 服务器错误
+         * extra:
+         *     MEDIA_ERROR_IO -- 本地文件或网络相关错误
+         *     MEDIA_ERROR_MALFORMAD -- 比特流不符合相关的编码标准和文件规范
+         *     MEDIA_ERROR_UNSUPPORTED -- 框架不支持该功能
+         *     MEDIA_ERROR_TIME_OUT -- 一些操作超时
+         */
         boolean onError(MediaPlayer mp, int what, int extra);
     }
 
-    /**  */
+    /** 视频大小首次被知晓或者更新的时候回调该方法 */
     public interface OnVideoSizeChangedListener {
         void onVideoSizeChanged(MediaPlayer mp, int width, int height);
     }
 
-    /**  */
+    /** 媒体播放时出现 info / warning 时回调该方法 */
     public interface OnInfoListener {
+        /** what:
+         *     MEDIA_INFO_UNKNOWN -- 未知的信息
+         *     MEDIA_INFO_VEDIO_TRACK_LAGGING -- 视频过于复杂解码太慢
+         *     MEDIA_INFO_VEDIO_RENDERING_START -- 开始渲染第一帧
+         *     MEDIA_INFO_BUFFRING_START -- 暂停播放开始缓冲更多数据
+         *     MEDIA_INFO_BUFFERING_END -- 缓冲了足够的数据重新开始播放
+         *     MEDIA_INFO_BAD_INTERLEAVING -- 错误交叉
+         *     MEDIA_INFO_NOT_SEEKABLE -- 媒体不能够搜索
+         *     MEDIA_INFO_METADATA_UPDATE -- 一组新的元数据用
+         *     MEDIA_INFO_UNSUPPORTED_SUBTITLE -- 不支持字幕
+         *     MEDIA_INFO_SUBTITLE_TIMED_OUT -- 读取字幕使用时间过长
+         */
         boolean onInfo(MediaPlayer mp, int what, int extra);
     }
 
-    /**  */
+    /** 接收到字幕文件时回调 */
     public interface OnTimedTextListener {
         void onTimedText(MediaPlayer mp, TimedText text);
     }
 
-    /**  */
+    /** 字幕文件可达回调 */
     public interface OnTimedMetaDataAvailableListener {
         void onTimedMetaDataAvailable(MediaPlayer mp, TimedMetaData data);
     }
 
-    /**  */
+    /** 音轨信息，音频、视频等统一被 TrackInfo 描述，很多视频流是包含多个音轨 */
     static public class TrackInfo implements Parcelable {
         public static final int MEDIA_TRACK_TYPE_UNKNOWN = 0;
         public static final int MEDIA_TRACK_TYPE_VIDEO = 1;
@@ -3996,31 +4018,27 @@ public class MediaPlayer extends PlayerBase implements SubtitleController.Listen
     }
 }
                     </pre>
-                    <p><a href="docs/reference/android/media/MediaPlayer.html" target="_blank">MediaPlayer</a></p>
-
-                    <p><b>每次缓存多少数据？</b></p>
-                    <p><b>如何连续进行缓存？(每次 seekTo 会调用 onPrepared() )</b></p>
-                    <p><b>如何从 mp3 中获取信息(比如封面照片，歌手...)？</b></p>
+                    <p><a href="docs/reference/android/media/MediaPlayer.html" target="_blank">MediaPlayer</a> 类是 Androd 多媒体框架中的一个重要的组件，通过该类，我们可以获取并播放音视频。</p>
 
                     <p><b>状态图详解</b></p>
                     <p><img src="images/android-os-MediaPlayer.gif" class="img-responsive center-block" /></p>
 
                     <ol>
-                        <li><p><code>static MediaPlayer 	create(Context context, Uri uri)</code> -- 使用 Uri 初始化，播放网络，本地存储，<code>assets</code></p></li>
+                        <li><p><code>static MediaPlayer 	create(Context context, <a href="sdk.html#android-net-Uri">Uri</a> uri)</code> -- 使用 Uri 初始化，播放网络，本地存储，<code>assets</code>, 所有的 <code>create...</code> 都调用了最后一个，并调用了 <code>prepare()</code> 方法</p></li>
                         <li><p><code>static MediaPlayer 	create(Context context, int resid)</code> -- 使用 id 初始化，播放 <code>res/raw</code> 下的文件</p></li>
-                        <li><p><code>static MediaPlayer 	create(Context context, int resid, AudioAttributes audioAttributes, int audioSessionId)</code> -- </p></li>
-                        <li><p><code>static MediaPlayer 	create(Context context, Uri uri, SurfaceHolder holder)</code> -- </p></li>
-                        <li><p><code>static MediaPlayer 	create(Context context, Uri uri, SurfaceHolder holder, AudioAttributes audioAttributes, int audioSessionId)</code> -- </p></li>
+                        <li><p><code>static MediaPlayer 	create(Context context, int resid, AudioAttributes audioAttributes, int audioSessionId)</code> -- 指定音频属性和 ID</p></li>
+                        <li><p><code>static MediaPlayer 	create(Context context, <a href="sdk.html#android-net-Uri">Uri</a> uri, SurfaceHolder holder)</code> -- 播放视频时候使用</p></li>
+                        <li><p><code>static MediaPlayer 	create(Context context, <a href="sdk.html#android-net-Uri">Uri</a> uri, SurfaceHolder holder, AudioAttributes audioAttributes, int audioSessionId)</code> -- 播放视频时候使用</p></li>
 
-                        <li class="group"><p><code>void 	setOnPreparedListener(MediaPlayer.OnPreparedListener listener)</code> -- </p></li>
-                        <li><p><code>void 	setOnBufferingUpdateListener(MediaPlayer.OnBufferingUpdateListener listener)</code> -- </p></li>
-                        <li><p><code>void 	setOnSeekCompleteListener(MediaPlayer.OnSeekCompleteListener listener)</code> -- </p></li>
-                        <li><p><code>void 	setOnCompletionListener(MediaPlayer.OnCompletionListener listener)</code> -- </p></li>
-                        <li><p><code>void 	setOnErrorListener(MediaPlayer.OnErrorListener listener)</code> -- </p></li>
-                        <li><p><code>void 	setOnInfoListener(MediaPlayer.OnInfoListener listener)</code> -- </p></li>
-                        <li><p><code>void 	setOnVideoSizeChangedListener(MediaPlayer.OnVideoSizeChangedListener listener)</code> -- </p></li>
-                        <li><p><code>void 	setOnTimedMetaDataAvailableListener(MediaPlayer.OnTimedMetaDataAvailableListener listener)</code> -- </p></li>
-                        <li><p><code>void 	setOnTimedTextListener(MediaPlayer.OnTimedTextListener listener)</code> -- </p></li>
+                        <li class="group"><p><code>void 	setOnPreparedListener(MediaPlayer.OnPreparedListener listener)</code> -- 数据准备监听</p></li>
+                        <li><p><code>void 	setOnBufferingUpdateListener(MediaPlayer.OnBufferingUpdateListener listener)</code> -- 缓存更新监听</p></li>
+                        <li><p><code>void 	setOnSeekCompleteListener(MediaPlayer.OnSeekCompleteListener listener)</code> -- 时间跳转完成监听</p></li>
+                        <li><p><code>void 	setOnCompletionListener(MediaPlayer.OnCompletionListener listener)</code> -- 播放完成监听</p></li>
+                        <li><p><code>void 	setOnErrorListener(MediaPlayer.OnErrorListener listener)</code> -- 播放错误监听</p></li>
+                        <li><p><code>void 	setOnInfoListener(MediaPlayer.OnInfoListener listener)</code> -- 当 info / warning 信息的时候回调</p></li>
+                        <li><p><code>void 	setOnVideoSizeChangedListener(MediaPlayer.OnVideoSizeChangedListener listener)</code> -- 当 ViewView 大小改变的的时候回调</p></li>
+                        <li><p><code>void 	setOnTimedMetaDataAvailableListener(MediaPlayer.OnTimedMetaDataAvailableListener listener)</code> -- 字幕文件可达回调</p></li>
+                        <li><p><code>void 	setOnTimedTextListener(MediaPlayer.OnTimedTextListener listener)</code> -- 接收到字幕文件时回调</p></li>
 
                         <li class="group"><p><code>void 	prepare()</code> -- 同步的方式装载流媒体文件</p></li>
                         <li><p><code>void 	prepareAsync()</code> -- 异步的方式装载流媒体文件</p></li>
@@ -4037,48 +4055,121 @@ public class MediaPlayer extends PlayerBase implements SubtitleController.Listen
                         <li><p><code>void 	release()</code> -- 释放资源</p></li>
                         <li><p><code>void 	reset()</code> -- 重置，<b>重置后的 MediaPlayer 其回调方法依然有效</b></p></li>
 
-                        <li class="group"><p><code>void 	setDataSource(AssetFileDescriptor afd)</code> -- </p></li>
+                        <li class="group"><p><code>void 	setDataSource(AssetFileDescriptor afd)</code> -- 访问 <code>assets</code> 下资源</p></li>
                         <li><p><code>void 	setDataSource(FileDescriptor fd)</code> -- 通过文件描述符来设置数据源</p></li>
-                        <li><p><code>void 	setDataSource(FileDescriptor fd, long offset, long length)</code> -- </p></li>
+                        <li><p><code>void 	setDataSource(FileDescriptor fd, long offset, long length)</code> -- 同上，但可以指定偏移和长度</p></li>
                         <li><p><code>void 	setDataSource(String path)</code> -- 通过一个路径来设置数据源(本地和网络)</p></li>
-                        <li><p><code>void 	setDataSource(Context context, Uri uri, Map&lt;String, String> headers)</code> -- </p></li>
-                        <li><p><code>void 	setDataSource(MediaDataSource dataSource)</code> -- </p></li>
-                        <li><p><code>void 	setDataSource(Context context, Uri uri)</code> -- </p></li>
+                        <li><p><code>void 	setDataSource(<a href="docs/reference/android/media/MediaDataSource.html">MediaDataSource</a> dataSource)</code> -- 通过 <a href="docs/reference/android/media/MediaDataSource.html">MediaDataSource</a> 设置数据源</p>
+                        <pre class="brush: java;">
+/** 一个抽象类，用于向 MediaPlayer 提供媒体数据，需要自己实现 */
+public abstract class MediaDataSource implements Closeable {
+    public abstract int readAt(long position, byte[] buffer, int offset, int size)
+            throws IOException;
+
+    public abstract long getSize() throws IOException;
+}
+                            </pre>
+                        </li>
+                        <li><p><code>void 	setDataSource(Context context, <a href="sdk.html#android-net-Uri">Uri</a> uri)</code> -- 通过 Uri 设置数据源(本地，网络，<code>res/raw</code>)</p></li>
+                        <li><p><code>void 	setDataSource(Context context, <a href="sdk.html#android-net-Uri">Uri</a> uri, Map&lt;String, String> headers)</code> -- 同上，Map 用于指定请求参数</p></li>
+
+
+
+                        <li class="group"><p><code>void 	addTimedTextSource(FileDescriptor fd, String mimeType)</code> -- 添加字幕文件，mimeType 目前只支持：<code>MEDIA_MIMETYPE_TEXT_SUBRIP</code>，即：<code></code></p></li>
+                        <li><p><code>void 	addTimedTextSource(String path, String mimeType)</code> --  添加字幕文件</p></li>
+                        <li><p><code>void 	addTimedTextSource(FileDescriptor fd, long offset, long length, String mime)</code> --  添加字幕文件</p></li>
+                        <li><p><code>void 	addTimedTextSource(Context context, <a href="sdk.html#android-net-Uri">Uri</a> uri, String mimeType)</code> --  添加字幕文件</p></li>
+
+                        <li class="group"><p><code>int 	getVideoHeight()</code> -- VideoView 高度</p></li>
+                        <li><p><code>int 	getVideoWidth()</code> -- VideoView 宽度</p></li>
+                        <li><p><code>void 	setVideoScalingMode(int mode)</code> -- 缩放模式: <code>VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING</code> 和 <code>VIDEO_SCALING_MODE_SCALE_TO_FIT</code></p></li>
+                        <li><p><code>void 	setDisplay(SurfaceHolder sh)</code> -- 设置 SurfaceHolder</p></li>
+                        <li><p><code>void 	setSurface(Surface surface)</code> -- 设置 Surface</p></li>
+                        <li><p><code>void 	setScreenOnWhilePlaying(boolean screenOn)</code> -- 播放状态是否保持屏幕常量</p></li>
 
                         <li class="group"><p><code>int 	getAudioSessionId()</code> -- 返回音频的 Session ID</p></li>
                         <li><p><code>void 	setAudioSessionId(int sessionId)</code> -- 设置音频的 Session ID</p></li>
-                        <li><p><code>void 	setVolume(float leftVolume, float rightVolume)</code> -- </p></li>
+                        <li><p><code>void 	attachAuxEffect(int effectId)</code> -- 添加混合效果，参见：<a href="docs/reference/android/media/audiofx/AudioEffect.html" target="_blank">AudioEffect 及子类</a></p></li>
+                        <li><p><code>void 	setAuxEffectSendLevel(float level)</code> -- 混合效果等级</p></li>
 
-                        <li class="group"><p><code>void 	addTimedTextSource(FileDescriptor fd, String mimeType)</code> -- </p></li>
-                        <li><p><code>void 	addTimedTextSource(String path, String mimeType)</code> -- </p></li>
-                        <li><p><code>void 	addTimedTextSource(FileDescriptor fd, long offset, long length, String mime)</code> -- </p></li>
-                        <li><p><code>void 	addTimedTextSource(Context context, Uri uri, String mimeType)</code> -- </p></li>
+                        <li class="group"><p><code>void 	setNextMediaPlayer(MediaPlayer next)</code> -- 设置当前流媒体播放完毕,下一个播放的 MediaPlayer</p></li>
+                        <li><p><code>void 	setWakeMode(Context context, int mode)</code> -- 需要权限，参见: <a href="docs/reference/android/os/PowerManager.html" target="_blank">PowerManager</a></p>
+                            <pre class="brush: xml;">&lt;uses-permission android:name="android.permission.WAKE_LOCK" /></pre>
+                        </li>
+                        <li><p><code>void 	setVolume(float leftVolume, float rightVolume)</code> -- 设置音量</p></li>
+                        <li><p><code>void 	setAudioAttributes(<a href="docs/reference/android/media/AudioAttributes.html" target="_blank">AudioAttributes</a> attributes)</code> -- 设置音频属性</p></li>
+                        <li><p><code>MediaTimestamp 	getTimestamp()</code> -- 获取媒体时间</p></li>
 
-                        <li class="group"><p><code>int 	getVideoHeight()</code> -- </p></li>
-                        <li><p><code>int 	getVideoWidth()</code> -- </p></li>
-                        <li><p><code>void 	setVideoScalingMode(int mode)</code> -- </p></li>
-                        <li><p><code>void 	setDisplay(SurfaceHolder sh)</code> -- </p></li>
-                        <li><p><code>void 	setSurface(Surface surface)</code> -- </p></li>
-                        <li><p><code>void 	setScreenOnWhilePlaying(boolean screenOn)</code> -- </p></li>
+                        <li class="group"><p><code>TrackInfo[] 	getTrackInfo()</code> -- 获取所有的音轨信息</p></li>
+                        <li><p><code>void 	selectTrack(int index)</code> -- 选择音轨</p></li>
+                        <li><p><code>void 	deselectTrack(int index)</code> -- 取消选择音轨</p></li>
+                        <li><p><code>int 	getSelectedTrack(int trackType)</code> -- 获取选中的音轨</p></li>
 
-                        <li class="group"><p><code>void 	attachAuxEffect(int effectId)</code> -- </p></li>
-                        <li><p><code>void 	setAuxEffectSendLevel(float level)</code> -- </p></li>
-                        <li><p><code>void 	setNextMediaPlayer(MediaPlayer next)</code> -- </p></li>
-
-                        <li><p><code>void 	setWakeMode(Context context, int mode)</code> -- </p></li>
-                        <li><p><code>void 	deselectTrack(int index)</code> -- </p></li>
-                        <li><p><code>void 	setPlaybackParams(PlaybackParams params)</code> -- </p></li>
-                        <li><p><code>PlaybackParams 	getPlaybackParams()</code> -- </p></li>
-                        <li><p><code>int 	getSelectedTrack(int trackType)</code> -- </p></li>
-
-                        <li><p><code>SyncParams 	getSyncParams()</code> -- </p></li>
-                        <li><p><code>void 	setSyncParams(SyncParams params)</code> -- </p></li>
-                        <li><p><code>MediaTimestamp 	getTimestamp()</code> -- </p></li>
-
-                        <li><p><code>TrackInfo[] 	getTrackInfo()</code> -- </p></li>
-                        <li><p><code>void 	selectTrack(int index)</code> -- </p></li>
-                        <li><p><code>void 	setAudioAttributes(AudioAttributes attributes)</code> -- </p></li>
+                        <li class="group"><p><code>void 	setPlaybackParams(<a href="docs/reference/android/media/PlaybackParams.html" target="_blank">PlaybackParams</a> params)</code> -- 使用回放参数设置回放率</p></li>
+                        <li><p><code><a href="docs/reference/android/media/PlaybackParams.html" target="_blank">PlaybackParams</a> 	getPlaybackParams()</code> -- 获取回放参数</p></li>
+                        <li><p><code><a href="docs/reference/android/media/SyncParams.html" target="_blank">SyncParams</a> 	getSyncParams()</code> -- 获取 A/V 同步模式</p></li>
+                        <li><p><code>void 	setSyncParams(<a href="docs/reference/android/media/SyncParams.html" target="_blank">SyncParams</a> params)</code> -- 设置同步模式</p></li>
                     </ol>
+                </div>
+
+                    <div class="sub-item">
+                        <p><b>使用 <code>MediaPlayer</code> 播放音频文件</b></p>
+                        <ol>
+                            <li><p>播放 <code>res/raw</code> 下文件：</p>
+                                <pre class="brush: java;">
+MediaPlayer mediaPlayer = MediaPlayer.create(context, R.raw.xxx);
+mediaPlayer.start();    // 可以不需要 prepare() 方法
+
+// 也可以使用 Uri 设置源播放
+MediaPlayer mMediaPlayer = new MediaPlayer();
+mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+Uri uri = Uri.parse("android.resource://" + context.getPackageName() + "/"+ raw);
+mMediaPlayer.setDataSource(context, uri);
+mMediaPlayer.prepare();
+
+// prepare 之后在回调方方中调用
+mMediaPlayer.start();
+                                </pre>
+                            </li>
+                            <li><p>播放 <code>assets</code> 下文件：</p>
+                                <pre class="brush: java;">
+MediaPlayer mMediaPlayer = new MediaPlayer();
+mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+
+AssetManager assetMg = context.getApplicationContext().getAssets();
+AssetFileDescriptor fd = assetMg.openFd("assetsPath");
+mMediaPlayer.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
+mMediaPlayer.prepare();
+
+// prepare 之后在回调方方中调用
+mMediaPlayer.start();
+                                </pre>
+                            </li>
+                            <li><p>播放 <code>sdcard</code> 下文件：</p>
+                                <pre class="brush: java;">
+MediaPlayer mMediaPlayer = new MediaPlayer();
+mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+mMediaPlayer.setDataSource("/mnt/sdcard/xxx.mp3");
+mMediaPlayer.prepare();
+
+// prepare 之后在回调方方中调用
+mMediaPlayer.start();
+                                </pre>
+                            </li>
+                            <li><p>播放网络上的文件：</p>
+                                <pre class="brush: java;">
+MediaPlayer mMediaPlayer = new MediaPlayer();
+mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+mediaPlayer.setDataSource(url);
+mediaPlayer.prepareAsync(); // 异步
+
+// prepare 之后在回调方方中调用
+mMediaPlayer.start();
+                                </pre>
+                            </li>
+                        </ol>
+
+                    </div>
                 </div>
             </div>
             <!-- item over -->
