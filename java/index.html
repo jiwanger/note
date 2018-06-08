@@ -968,7 +968,7 @@ public final class FinalDemo {
 				<a class="offset" id="java-reflect"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 id="java-docs" class="panel-title">Java 反射机制</h3>
+						<h3 class="panel-title">Java 反射机制</h3>
 					</div>
 					<div class="panel-body">
 						<p>反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够调用它的任意一个方法和属性；这种动态获取的信息以及动态调用对象的方法的功能称为java语言的反射机制。</p>
@@ -1112,12 +1112,12 @@ public class MyReflect {
 				<a class="offset" id="java-annotation"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 id="java-docs" class="panel-title">Java 注解</h3>
+						<h3 class="panel-title">Java 注解</h3>
 					</div>
 					<div class="panel-body">
-						<p>Java注解是附加在代码中的一些元信息，用于编译和运行时进行解析和使用，起到说明、配置的功能。注解不会影响代码的实际逻辑，仅仅起到辅助性的作用。包含在java.lang.annotation包中。注解的定义类似于接口的定义，使用@interface来定义，定义一个方法即为注解类型定义了一个元素，方法的声明不允许有参数或throw语句，返回值类型被限定为原始数据类型、字符串String、Class、enums、注解类型，或前面这些的数组，方法可以有默认值。注解并不直接影响代码的语义，但是他可以被看做是程序的工具或者类库。它会反过来对正在运行的程序语义有所影响。注解可以从源文件、class文件或者在运行时通过反射机制多种方式被读取。</p>
-						<p>Java元注解 -- 元注解是指注解的注解。包括 @Retention @Target @Document
-							@Inherited四种。</p>
+						<p>Java 注解是附加在代码中的一些元信息，用于编译和运行时进行解析和使用，起到说明、配置的功能。注解不会影响代码的实际逻辑，仅仅起到辅助性的作用。包含在java.lang.annotation包中。注解的定义类似于接口的定义，使用@interface来定义，定义一个方法即为注解类型定义了一个元素，方法的声明不允许有参数或throw语句，返回值类型被限定为原始数据类型、字符串String、Class、enums、注解类型，或前面这些的数组，方法可以有默认值。注解并不直接影响代码的语义，但是他可以被看做是程序的工具或者类库。它会反过来对正在运行的程序语义有所影响。注解可以从源文件、class文件或者在运行时通过反射机制多种方式被读取。</p>
+						<p>Java 元注解 -- 元注解是指注解的注解。包括 @Retention @Target @Document
+							@Inherited 四种。</p>
 						<table class="table table-responsive table-striped table-bordered">
 							<thead>
 								<tr>
@@ -1136,7 +1136,7 @@ public class MyReflect {
 								</tr>
 								<tr>
 									<td>@Document</td>
-									<td>说明该注解将被包含在javadoc中</td>
+									<td>说明该注解将被包含在 javadoc 中</td>
 								</tr>
 								<tr>
 									<td>@Inherited</td>
@@ -1145,10 +1145,12 @@ public class MyReflect {
 							</tbody>
 						</table>
 
+						<p>当注解未指定 Target 值时，则此注解可以用于任何元素之上，多个值使用 {} 包含并用逗号隔开，如下：</p>
+						<pre class="brush: java;">@Target(value={CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE})</pre>
 						<table class="table table-responsive table-striped table-bordered">
 							<thead>
 								<tr>
-									<th>Target类型</th>
+									<th>Target 类型</th>
 									<th>说明</th>
 								</tr>
 							</thead>
@@ -1166,10 +1168,6 @@ public class MyReflect {
 									<td>方法</td>
 								</tr>
 								<tr>
-									<td>ElementType.PARAMETER</td>
-									<td>方法参数</td>
-								</tr>
-								<tr>
 									<td>ElementType.CONSTRUCTOR</td>
 									<td>构造函数</td>
 								</tr>
@@ -1184,6 +1182,14 @@ public class MyReflect {
 								<tr>
 									<td>ElementType.PACKAGE</td>
 									<td>包</td>
+								</tr>
+								<tr>
+									<td>ElementType.PARAMETER</td>
+									<td>方法参数</td>
+								</tr>
+								<tr>
+									<td>ElementType.TYPE_USE</td>
+									<td>类型使用声明</td>
 								</tr>
 							</tbody>
 						</table>
@@ -1324,7 +1330,7 @@ public class FruitInfoUtil {
 				<a class="offset" id="java-thread"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 id="java-docs" class="panel-title">多线程</h3>
+						<h3 class="panel-title">多线程</h3>
 					</div>
 					<div class="panel-body">
 						<div class="sub-item">
@@ -1732,12 +1738,12 @@ try {
 									<div class="panel panel-default">
 										<div class="panel-heading">
 											<a data-toggle="collapse" data-parent="#accordion"
-												href="#java-thread-e5" aria-expanded="true"
+												href="#java-thread-e6" aria-expanded="true"
 												class="code-header">
 												<span class="glyphicon glyphicon-plus"></span> View Code
 											</a>
 										</div>
-										<div id="java-thread-e5" class="panel-collapse collapse"
+										<div id="java-thread-e6" class="panel-collapse collapse"
 											style="" aria-expanded="true">
 											<pre class="brush: java;">
 public class ProducerConsumerInJava {
@@ -1837,7 +1843,7 @@ class Consumer extends Thread {
 				<a class="offset" id="java-thread-pool"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 id="java-docs" class="panel-title">Java 线程池</h3>
+						<h3 class="panel-title">Java 线程池</h3>
 					</div>
 					<div class="panel-body">
 						<div class="sub-item">
@@ -2112,7 +2118,7 @@ singleThreadExecutor.shutdown();
 				<a class="offset" id="java-memory"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 id="java-docs" class="panel-title">内存管理</h3>
+						<h3 class="panel-title">内存管理</h3>
 					</div>
 					<div class="panel-body">
 						<div class="sub-item">
@@ -2434,7 +2440,7 @@ public class HeapOOM {
 				<a class="offset" id="java-jni"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 id="java-docs" class="panel-title">Java 本地编程 -- JNI</h3>
+						<h3 class="panel-title">Java 本地编程 -- JNI</h3>
 					</div>
 					<div class="panel-body">
 						<p><code>System.getProperty("java.library.path");</code></p>
@@ -2446,7 +2452,7 @@ public class HeapOOM {
 				<a class="offset" id="java-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 id="java-docs" class="panel-title">Java</h3>
+						<h3 class="panel-title">Java</h3>
 					</div>
 					<div class="panel-body"></div>
 				</div>
