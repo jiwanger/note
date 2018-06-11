@@ -78,18 +78,36 @@
 							<a href="#java-lang-Package" class="list-group-item">Package</a>
 							<a href="#java-lang-System" class="list-group-item">System</a>
 							<a href="#java-lang-Runtime" class="list-group-item">Runtime / Process</a>
-                            <a href="#java-lang-" class="list-group-item"></a>
+                            <a href="#java-lang-Thread" class="list-group-item">Thread 与 ThreadGroup</a>
+                            <a href="#java-lang-String" class="list-group-item">String 及相关类</a>
+                            <a href="#java-lang-Number" class="list-group-item">Number 及子类</a>
+                            <a href="#java-lang-Exception" class="list-group-item">Exception 和 Error</a>
 						</div>
 
 
 						<a class="list-group-item active drop" data-toggle="collapse"
-						   data-parent="#accordion" href="#java-xxx" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
-							<code>java...</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+						   data-parent="#accordion" href="#java-util" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+							<code>java.util</code><span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-xxx" class="panel-collapse collapse"
+						<div id="java-util" class="panel-collapse collapse"
 							 role="tabpanel">
-							<a href="#java-" class="list-group-item"></a>
+							<a href="#java-util-Date" class="list-group-item">Date, Time, Calendar...</a>
+                            <a href="#java-util-List" class="list-group-item">List, Map, Set, Stack, Queue...</a>
+                            <a href="#java-util-Formatter" class="list-group-item">Formatter</a>
+                            <a href="#java-util-Observable" class="list-group-item">Observable</a>
+                            <a href="#java-util-Timer" class="list-group-item">Timer 和 TimerTask</a>
+                            <a href="#java-util-" class="list-group-item"></a>
+                            <a href="#java-util-" class="list-group-item"></a>
 						</div>
+
+                        <a class="list-group-item active drop" data-toggle="collapse"
+                           data-parent="#accordion" href="#java-xxx" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+                            <code>java...</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+                        </a>
+                        <div id="java-xxx" class="panel-collapse collapse"
+                             role="tabpanel">
+                            <a href="#java-" class="list-group-item"></a>
+                        </div>
 
 						<a href="#java-" class="list-group-item">...</a>
 					</div>
@@ -1738,30 +1756,340 @@ Process process = r.exec(new String[]{"/bin/bash", "-c", "ls >> log.log"});
                             </p>
                             <p>当没有 Process 对象的更多引用时，不是删掉子进程，而是继续异步执行子进程。</p>
                             <p>对于带有 Process 对象的 Java 进程，没有必要异步或并发执行由 Process 对象表示的进程。</p>
+
+							<ol>
+
+								<li><p><code>abstract  void 	destroy()</code> -- 杀掉子进程。</p></li>
+								<li><p><code>abstract  int 	exitValue()</code> -- 返回子进程的出口值。</p></li>
+								<li><p><code>abstract  InputStream 	getErrorStream()</code> -- 获取子进程的错误流。</p></li>
+								<li><p><code>abstract  InputStream 	getInputStream()</code> -- 获取子进程的输入流。</p></li>
+								<li><p><code>abstract  OutputStream 	getOutputStream()</code> -- 获取子进程的输出流。</p></li>
+								<li><p><code>abstract  int 	waitFor()</code> -- 导致当前线程等待，如有必要，一直要等到由该 Process 对象表示的进程已经终止。</p></li>
+							</ol>
                         </div>
 					</div>
 				</div>
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="java-lang-"></a>
+				<a class="offset" id="java-lang-Thread"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">Class</h3>
+						<h3 class="panel-title">Thread 与 ThreadGroup</h3>
 					</div>
 					<div class="panel-body">
 						<div class="sub-item">
-							<h5 class="text-primary"></h5>
-						</div>
+						    <pre class="brush: java;">
+java.lang.Object
+    java.lang.Thread
+
+public class Thread implements Runnable {
+    /** 线程状态 */
+    public enum State {
+        NEW, // 至今尚未启动的线程处于这种状态。
+        RUNNABLE, // 正在 Java 虚拟机中执行的线程处于这种状态。
+        BLOCKED, // 受阻塞并等待某个监视器锁的线程处于这种状态。
+        WAITING, // 无限期地等待另一个线程来执行某一特定操作的线程处于这种状态。
+        TIMED_WAITING, // 等待另一个线程来执行取决于指定等待时间的操作的线程处于这种状态。
+        TERMINATED, // 已退出的线程处于这种状态。
+    }
+
+    /** 未捕获的异常回调接口 */
+    public interface UncaughtExceptionHandler {
+        void uncaughtException(Thread t, Throwable e);
+    }
+
+    public static int MAX_PRIORITY; // 线程可以具有的最高优先级。
+    public static int 	MIN_PRIORITY; // 线程可以具有的最低优先级。
+    public static int 	NORM_PRIORITY; // 分配给线程的默认优先级。
+
+    public Thread() {}
+    public Thread(String name) {}
+    public Thread(Runnable target) {}
+    public Thread(Runnable target, String name) {}
+    public Thread(ThreadGroup group, String name) {}
+    public Thread(ThreadGroup group, Runnable target) {}
+    public Thread(ThreadGroup group, Runnable target, String name) {}
+    public Thread(ThreadGroup group, Runnable target, String name, long stackSize) {}
+}
+
+/** 为非 Thread 子类的类提供了一种激活方式 */
+public interface Runnable {
+    void run();
+}
+                            </pre>
+                            <p><a href="docs/docs-java/api/java/lang/Thread.html" target="_blank">Thread</a> 是程序中的执行线程。Java 虚拟机允许应用程序并发地运行多个执行线程。 </p>
+                            <p>每个线程都有一个标识名，多个线程可以同名。如果线程创建时没有指定标识名，就会为其生成一个新名称。</p>
+                            <p>每个线程都有一个优先级，高优先级线程的执行优先于低优先级线程。每个线程都可以或不可以标记为一个守护程序。当某个线程中运行的代码创建一个新 Thread 对象时，该新线程的初始优先级被设定为创建线程的优先级，并且当且仅当创建线程是守护线程时，新线程才是守护程序。
+                            </p>
+                            <p>当 Java 虚拟机启动时，通常都会有单个非守护线程（它通常会调用某个指定类的 main 方法）。Java 虚拟机会继续执行线程，直到下列任一情况出现时为止：
+                            </p>
+                            <ul>
+                                <li><p>调用了 Runtime 类的 exit 方法，并且安全管理器允许退出操作发生。</p></li>
+                                <li><p>非守护线程的所有线程都已停止运行，无论是通过从对 run 方法的调用中返回，还是通过抛出一个传播到 run 方法之外的异常。</p></li>
+                            </ul>
+
+                            <ol>
+                                <li><p><code>static void 	setDefaultUncaughtExceptionHandler(Thread.UncaughtExceptionHandler eh)</code> -- 设置未捕获到异常而突然终止时调用的默认处理程序</p></li>
+                                <li><p><code>static Thread.UncaughtExceptionHandler 	getDefaultUncaughtExceptionHandler()</code> -- 获取未捕获到异常而突然终止时调用的默认处理程序</p></li>
+
+                                <li class="group"><p><code>static boolean 	interrupted()</code> -- 测试当前线程是否已经中断</p></li>
+                                <li><p><code>static void 	sleep(long millis)</code> -- 当前线程休眠指定毫秒数</p></li>
+                                <li><p><code>static void 	sleep(long millis, int nanos)</code> -- 当前线程休眠指定毫秒数+纳秒数目</p></li>
+                                <li><p><code>static void 	yield()</code> -- 暂停当前正在执行的线程对象，并执行其他线程</p></li>
+
+                                <li class="group"><p><code>static int 	activeCount()</code> -- 当前线程的线程组中活动线程的数目</p></li>
+                                <li><p><code>static int 	enumerate(Thread[] tarray)</code> -- 将当前线程的线程组及其子组中的每一个活动线程复制到指定的数组中</p></li>
+                                <li><p><code>static void 	dumpStack()</code> -- 将当前线程的堆栈跟踪打印至标准错误流</p></li>
+                                <li><p><code>static Map&lt;Thread, StackTraceElement[]> 	getAllStackTraces()</code> -- 返回所有活动线程的堆栈跟踪的一个映射</p></li>
+                                <li><p><code>static Thread 	currentThread()</code> -- 当前线程</p></li>
+                                <li><p><code>static boolean 	holdsLock(Object obj)</code> -- 当且仅当当前线程在指定的对象上保持监视器锁时，才返回 true</p></li>
+
+                                <li class="group"><p><code>void 	setUncaughtExceptionHandler(Thread.UncaughtExceptionHandler eh)</code> -- 设置该线程由于未捕获到异常而突然终止时调用的处理程序</p></li>
+                                <li><p><code>Thread.UncaughtExceptionHandler 	getUncaughtExceptionHandler()</code> -- 获取该线程由于未捕获到异常而突然终止时调用的处理程序</p></li>
+
+                                <li class="group"><p><code>void 	setPriority(int newPriority)</code> -- 更改线程的优先级</p></li>
+                                <li><p><code>int 	getPriority()</code> -- 获取线程优先级</p></li>
+                                <li><p><code>void 	setName(String name)</code> -- 更改线程的名字</p></li>
+                                <li><p><code>String 	getName()</code> -- 获取线程名字</p></li>
+                                <li><p><code>long 	getId()</code> -- 获取线程 ID</p></li>
+                                <li><p><code>void 	setDaemon(boolean on)</code> --  将该线程标记为守护线程或用户线程</p></li>
+                                <li><p><code>boolean 	isDaemon()</code> -- 是否为守护线程</p></li>
+
+                                <li class="group"><p><code>void 	start()</code> --  使该线程开始执行；Java 虚拟机调用该线程的 run 方法</p></li>
+                                <li><p><code>void 	run()</code> -- 如果该线程是使用独立的 Runnable 运行对象构造的，则调用该 Runnable 对象的 run 方法；否则，该方法不执行任何操作并返回</p></li>
+                                <li><p><code>void 	interrupt()</code> -- 中断线程</p></li>
+                                <li><p><code>boolean 	isInterrupted()</code> -- 是否已经中断</p></li>
+                                <li><p><code>boolean 	isAlive()</code> -- 测试线程是否处于活动状态</p></li>
+                                <li><p><code>Thread.State 	getState()</code> -- 返回该线程的状态</p></li>
+                                <li><p><code>void 	checkAccess()</code> -- 判定当前运行的线程是否有权修改该线程</p></li>
+                                <li><p><code>void 	join()</code> -- 等待该线程终止</p></li>
+                                <li><p><code>void 	join(long millis)</code> -- 等待该线程终止的时间最长为 millis 毫秒</p></li>
+                                <li><p><code>void 	join(long millis, int nanos)</code> -- 等待该线程终止的时间最长为 millis 毫秒 + nanos 纳秒</p></li>
+
+                                <li class="group"><p><code>ThreadGroup 	getThreadGroup()</code> -- 返回该线程所属的线程组</p></li>
+                                <li><p><code>StackTraceElement[] 	getStackTrace()</code> -- 返回一个表示该线程堆栈转储的堆栈跟踪元素数组</p></li>
+                                <li><p><code>ClassLoader 	getContextClassLoader()</code> -- 返回该线程的上下文 ClassLoader</p></li>
+                                <li><p><code>void 	setContextClassLoader(ClassLoader cl)</code> -- 设置该线程的上下文 ClassLoader</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class ThreadGroup implements Thread.UncaughtExceptionHandler {
+    public ThreadGroup(String name) {}
+    public ThreadGroup(ThreadGroup parent, String name) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/lang/ThreadGroup.html" target="_blank">ThreadGroup</a> 表示一个线程的集合。此外，线程组也可以包含其他线程组。线程组构成一棵树，在树中，除了初始线程组外，每个线程组都有一个父线程组。 </p>
+                            <p>允许线程访问有关自己的线程组的信息，但是不允许它访问有关其线程组的父线程组或其他任何线程组的信息。 </p>
+                            <ol>
+
+                                <li><p><code>int 	activeCount()</code> -- 返回此线程组中活动线程的估计数。</p></li>
+                                <li><p><code>int 	activeGroupCount()</code> -- 返回此线程组中活动线程组的估计数。</p></li>
+
+                                <li class="group"><p><code>int 	enumerate(Thread[] list)</code> -- 把此线程组及其子组中的所有活动线程复制到指定数组中。</p></li>
+                                <li><p><code>int 	enumerate(Thread[] list, boolean recurse)</code> -- 把此线程组中的所有活动线程复制到指定数组中。</p></li>
+                                <li><p><code>int 	enumerate(ThreadGroup[] list)</code> -- 把对此线程组中的所有活动子组的引用复制到指定数组中。</p></li>
+                                <li><p><code>int 	enumerate(ThreadGroup[] list, boolean recurse)</code> -- 把对此线程组中的所有活动子组的引用复制到指定数组中。</p></li>
+
+                                <li class="group"><p><code>int 	getMaxPriority()</code> -- 返回此线程组的最高优先级。</p></li>
+                                <li><p><code>void 	setMaxPriority(int pri)</code> -- 设置线程组的最高优先级。</p></li>
+                                <li><p><code>String 	getName()</code> -- 返回此线程组的名称。</p></li>
+                                <li><p><code>ThreadGroup 	getParent()</code> -- 返回此线程组的父线程组。</p></li>
+                                <li><p><code>void 	setDaemon(boolean daemon)</code> -- 更改此线程组的后台程序状态。</p></li>
+                                <li><p><code>boolean 	isDaemon()</code> -- 测试此线程组是否为一个后台程序线程组。</p></li>
+                                <li><p><code>void 	interrupt()</code> -- 中断此线程组中的所有线程。</p></li>
+                                <li><p><code>void 	destroy()</code> -- 销毁此线程组及其所有子组。</p></li>
+                                <li><p><code>boolean 	isDestroyed()</code> -- 测试此线程组是否已经被销毁。</p></li>
+                                <li><p><code>void 	checkAccess()</code> -- 确定当前运行的线程是否有权修改此线程组。</p></li>
+
+                                <li class="group"><p><code>void 	list()</code> -- 将有关此线程组的信息打印到标准输出。</p></li>
+                                <li><p><code>boolean 	parentOf(ThreadGroup g)</code> -- 测试此线程组是否为线程组参数或其祖先线程组之一。</p></li>
+                                <li><p><code>String 	toString()</code> -- 返回此线程组的字符串表示形式。</p></li>
+                                <li><p><code>void 	uncaughtException(Thread t, Throwable e)</code> -- 当此线程组中的线程因为一个未捕获的异常而停止，并且线程没有安装特定 Thread.UncaughtExceptionHandler 时，由 Java Virtual Machine 调用此方法。</p></li>
+                            </ol>
+                        </div>
+
 					</div>
 				</div>
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="java-"></a>
+				<a class="offset" id="java-lang-String"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">String 相关类</h3>
+					</div>
+					<div class="panel-body">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+java.lang.Object
+    java.lang.String
+
+public final class String implements Serializable, Comparable&lt;String>, CharSequence {
+    public String() {}
+    public String(String original) {}
+    public String(StringBuffer buffer) {}
+    public String(StringBuilder builder)
+
+    public String(byte[] bytes) {}
+    public String(byte[] bytes, Charset charset) {}
+    public String(byte[] bytes, int offset, int length) {}
+    public String(byte[] bytes, int offset, int length, Charset charset) {}
+    public String(byte[] bytes, int offset, int length, String charsetName) {}
+    public String(byte[] bytes, String charsetName) {}
+
+    public String(char[] value) {}
+    public String(char[] value, int offset, int count) {}
+
+    public String(int[] codePoints, int offset, int count) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/lang/String.html" target="_blank">String</a> 类代表字符串。Java 程序中的所有字符串字面值（如 "abc" ）都作为此类的实例实现。</p>
+                            <p><a href="docs/docs-java/api/java/lang/String.html" target="_blank">String</a> 在创建之后不能更改。字符串缓冲区支持可变的字符串。</p>
+                            <p><a href="docs/docs-java/api/java/lang/String.html" target="_blank">String</a> 类包括的方法可用于检查序列的单个字符、比较字符串、搜索字符串、提取子字符串、创建字符串副本并将所有字符全部转换为大写或小写。大小写映射基于 Character 类指定的 Unicode 标准版。 </p>
+                            <p>Java 语言提供对字符串串联符号（"+"）以及将其他对象转换为字符串的特殊支持。字符串串联是通过 StringBuilder（或 StringBuffer）类及其 append 方法实现的。字符串转换是通过 toString 方法实现的，该方法由 Object 类定义，并可被 Java 中的所有类继承。</p>
+                            <ol>
+
+                                <li class="group"><p><code>static String 	copyValueOf(char[] data)</code> -- 返回指定数组中表示该字符序列的 String。</p></li>
+                                <li><p><code>static String 	copyValueOf(char[] data, int offset, int count)</code> -- 返回指定数组中表示该字符序列的 String。</p></li>
+
+                                <li class="group"><p><code>static String 	format(String format, Object... args)</code> -- 格式化字符串，参见: <a href="#java-util-Formatter">Formatter</a></p></li>
+                                <li><p><code>static String 	format(Locale l, String format, Object... args)</code> -- 用指定的语言环境格式化字符串，参见: <a href="#java-util-Formatter">Formatter</a></p>
+                                    <pre class="brush: java;">
+/** 两个格式化方法都是使用 java.util.Formatter 来进行操作的: */
+public static String format(String format, Object... args) {
+    return new Formatter().format(format, args).toString();
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static String 	valueOf(boolean b)</code> -- 返回 boolean 参数的字符串表示形式。</p></li>
+                                <li><p><code>static String 	valueOf(char c)</code> -- 返回 char 参数的字符串表示形式。</p></li>
+                                <li><p><code>static String 	valueOf(char[] data)</code> -- 返回 char 数组参数的字符串表示形式。</p></li>
+                                <li><p><code>static String 	valueOf(char[] data, int offset, int count)</code> -- 返回 char 数组参数的特定子数组的字符串表示形式。</p></li>
+                                <li><p><code>static String 	valueOf(double d)</code> -- 返回 double 参数的字符串表示形式。</p></li>
+                                <li><p><code>static String 	valueOf(float f)</code> -- 返回 float 参数的字符串表示形式。</p></li>
+                                <li><p><code>static String 	valueOf(int i)</code> -- 返回 int 参数的字符串表示形式。</p></li>
+                                <li><p><code>static String 	valueOf(long l)</code> -- 返回 long 参数的字符串表示形式。</p></li>
+                                <li><p><code>static String 	valueOf(Object obj)</code> -- 返回 Object 参数的字符串表示形式。</p></li>
+
+                                <li class="group"><p><code>static String join(CharSequence delimiter, CharSequence... elements)</code> -- 在 elements 间插入 delimiter，连接成一个 String, JAVA8 添加</p></li>
+                                <li><p><code>static String join(CharSequence delimiter, Iterable&lt;? extends CharSequence> elements)</code> -- 同上，JAVA8 添加</p>
+                                    <pre class="brush: java;">
+String jo = String.join("-", "abc", "def", "hi");
+// jo == "abc-def-hi";
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>int 	length()</code> -- 返回此字符串的长度</p></li>
+                                <li><p><code>boolean 	isEmpty()</code> -- 当且仅当 length() 为 0 时返回 true</p></li>
+                                <li><p><code>int 	indexOf(int ch)</code> -- 返回指定字符在此字符串中第一次出现处的索引</p></li>
+                                <li><p><code>int 	indexOf(int ch, int fromIndex)</code> -- 返回在此字符串中第一次出现指定字符处的索引，从指定的索引开始搜索</p></li>
+                                <li><p><code>int 	indexOf(String str)</code> -- 返回指定子字符串在此字符串中第一次出现处的索引</p></li>
+                                <li><p><code>int 	indexOf(String str, int fromIndex)</code> -- 返回指定子字符串在此字符串中第一次出现处的索引，从指定的索引开始</p></li>
+                                <li><p><code>int 	lastIndexOf(int ch)</code> -- 返回指定字符在此字符串中最后一次出现处的索引</p></li>
+                                <li><p><code>int 	lastIndexOf(int ch, int fromIndex)</code> -- 指定字符在此字符串中最后一次出现处的索引，从指定的索引处开始</p></li>
+                                <li><p><code>int 	lastIndexOf(String str)</code> -- 返回指定子字符串在此字符串中最右边出现处的索引</p></li>
+                                <li><p><code>int 	lastIndexOf(String str, int fromIndex)</code> -- 指定子字符串在此字符串中最后一次出现处的索引，从指定的索引开始</p></li>
+
+                                <li class="group"><p><code>char 	charAt(int index)</code> -- 指定索引处的 char 值</p></li>
+                                <li><p><code>int 	codePointAt(int index)</code> -- 返回指定索引处的字符 Unicode 编码, <a href="https://zh.wikibooks.org/wiki/Unicode" target="_blank">Unicode 编码查询</a></p>
+                                <pre class="brush: java;">
+/** 可从 Unicode 编码查询到以下结果：
+ * "陈".codePointAt(0) -- 结果为 38472, 十六进制为 9648
+ * "茂".codePointAt(0) -- 结果为 33538, 十六进制为 8302
+ */
+</pre>
+                                </li>
+                                <li><p><code>int 	codePointBefore(int index)</code> -- 基本等同于 <code>codePointAt(index - 1)</code></p></li>
+                                <li><p><code>int 	codePointCount(int beginIndex, int endIndex)</code> -- 在求 Unicode 非 BMP(<a href="../tips/charset.html">Unicode</a>) 平面字符数目时候使用</p>
+                                <pre class="brush: java;">
+/** 常用的 UniCode 字符使用一个代码单元就可以表示，但有些辅助字符需要一对代码单元表示
+ * 比如整数集合的数学符号 '𝕫', 不是字母 'z', Unicode 代码点是 U+1D56B, 但它的代理单元是 U+D835 和 U+DD6B
+ * 如果令字符串 str = "\u1D56B", 而是一个代码点 '\u1D56' 和字符 'B', 它的代码点数是 2，代码单元数也是 2;
+ * 但如果令字符 str = "\uD835\uDD6B", str.lenght == 2, str.codePointCount(0, 2) == 1.
+ */
+
+// 字面为：“陈茂𝕫”, 是整数集合的数学符号 '𝕫', 不是字母 'z'
+String s1 = "\u9648\u8302\uD835\uDD6B";
+String s2 = "陈茂𝕫";
+log(s1.equals(s2)); // true
+log(s1, s2); // 陈茂𝕫
+log(s1.codePointCount(0, 4), s2.codePointCount(0, 4)); // 长度为 3
+log(s1.length(), s2.length()); // 长度为 4
+                                </pre>
+                                </li>
+
+                                <li class="group"><p><code>int 	compareTo(String anotherString)</code> --   按字典顺序比较两个字符串</p></li>
+                                <li><p><code>int 	compareToIgnoreCase(String str)</code> -- 按字典顺序比较两个字符串，不考虑大小写</p></li>
+                                <li><p><code>boolean 	contains(CharSequence s)</code> -- 当且仅当此字符串包含指定的 char 值序列时</p></li>
+                                <li><p><code>boolean 	endsWith(String suffix)</code> -- 测试此字符串是否以指定的后缀结束</p></li>
+                                <li><p><code>boolean 	startsWith(String prefix)</code> -- 测试此字符串是否以指定的前缀开始</p></li>
+                                <li><p><code>boolean 	startsWith(String prefix, int toffset)</code> -- 测试此字符串从指定索引开始的子字符串是否以指定前缀开始</p></li>
+                                <li><p><code>boolean 	equals(Object anObject)</code> -- 将此字符串与指定的对象比较</p></li>
+                                <li><p><code>boolean 	equalsIgnoreCase(String anotherString)</code> -- 将此 String 与另一个 String 比较，不考虑大小写</p></li>
+                                <li><p><code>boolean 	matches(String regex)</code> -- 告知此字符串是否匹配给定的正则表达式,参见： <a href="../regex/regexp-java.html">Regex In Java</a></p></li>
+                                <li><p><code>boolean 	regionMatches(boolean ignoreCase, int toffset, String other, int ooffset, int len)</code> -- 测试两个字符串区域是否相等</p></li>
+                                <li><p><code>boolean 	regionMatches(int toffset, String other, int ooffset, int len)</code> -- 测试两个字符串区域是否相等</p></li>
+                                <li><p><code>boolean 	contentEquals(CharSequence cs)</code> -- 将此字符串与指定的 CharSequence 比较</p></li>
+                                <li><p><code>boolean 	contentEquals(StringBuffer sb)</code> -- 将此字符串与指定的 StringBuffer 比较</p></li>
+
+                                <li class="group"><p><code>byte[] 	getBytes()</code> -- </p></li>
+                                <li><p><code>byte[] 	getBytes(Charset charset)</code> -- </p></li>
+                                <li><p><code>byte[] 	getBytes(String charsetName)</code> -- </p></li>
+                                <li><p><code>void 	getChars(int srcBegin, int srcEnd, char[] dst, int dstBegin)</code> -- </p></li>
+
+                                <li class="group"><p><code>String 	replace(char oldChar, char newChar)</code> -- </p></li>
+                                <li><p><code>String 	replace(CharSequence target, CharSequence replacement)</code> -- </p></li>
+                                <li><p><code>String 	replaceAll(String regex, String replacement)</code> -- </p></li>
+                                <li><p><code>String 	replaceFirst(String regex, String replacement)</code> -- </p></li>
+                                <li><p><code>String 	concat(String str)</code> -- </p></li>
+
+                                <li class="group"><p><code>String 	toLowerCase()</code> -- </p></li>
+                                <li><p><code>String 	toLowerCase(Locale locale)</code> -- </p></li>
+                                <li><p><code>String 	toUpperCase()</code> -- </p></li>
+                                <li><p><code>String 	toUpperCase(Locale locale)</code> -- </p></li>
+
+                                <li class="group"><p><code>String[] 	split(String regex)</code> -- </p></li>
+                                <li><p><code>String[] 	split(String regex, int limit)</code> -- </p></li>
+
+                                <li class="group"><p><code>CharSequence 	subSequence(int beginIndex, int endIndex)</code> -- </p></li>
+                                <li><p><code>String 	substring(int beginIndex)</code> -- </p></li>
+                                <li><p><code>String 	substring(int beginIndex, int endIndex)</code> -- </p></li>
+
+                                <li class="group"><p><code>String 	intern()</code> -- 返回字符串对象的规范化表示形式</p></li>
+                                <li><p><code>String 	trim()</code> -- </p></li>
+                                <li><p><code>int 	offsetByCodePoints(int index, int codePointOffset)</code> -- </p></li>
+                                <li><p><code>char[] 	toCharArray()</code> -- </p></li>
+                                <li><p><code>int 	hashCode()</code> -- </p></li>
+                                <li><p><code>String 	toString()</code> -- </p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api/java/lang/StringBuilder.html" target="_blank">StringBuilder</a></p>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api/java/lang/StringBuffer.html" target="_blank">StringBuffer</a></p>
+                        </div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-lang-Number"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Number 及子类</h3>
 					</div>
 					<div class="panel-body">
 						<pre class="brush: java;">
@@ -1772,10 +2100,10 @@ Process process = r.exec(new String[]{"/bin/bash", "-c", "ls >> log.log"});
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="java-"></a>
+				<a class="offset" id="java-lang-Exception"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">Exception 和 Error</h3>
 					</div>
 					<div class="panel-body">
 						<pre class="brush: java;">
@@ -1785,19 +2113,123 @@ Process process = r.exec(new String[]{"/bin/bash", "-c", "ls >> log.log"});
 				</div>
 				<!-- item over -->
 
-				<!-- item start -->
-				<a class="offset" id="java-"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
-					</div>
-					<div class="panel-body">
+                <!-- item start -->
+                <a class="offset" id="java-util-Date"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Date, Time, Calendar...</h3>
+                    </div>
+                    <div class="panel-body">
 						<pre class="brush: java;">
 
 						</pre>
-					</div>
-				</div>
-				<!-- item over -->
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <a class="offset" id="java-util-List"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">List, Map, Set, Stack, Queue...</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+
+						</pre>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <a class="offset" id="java-util-Formatter"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Formatter</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    java.util.Formatter
+
+public final class Formatter implements Closeable, Flushable {
+
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/util/Formatter.html" target="_blank">Formatter</a> 是 <code>printf</code> 风格的格式字符串的解释程序。此类提供了对布局对齐和排列的支持，以及对数值、字符串和日期/时间数据的常规格式和特定于语言环境的输出的支持。</p>
+                        <p>Java 语言的格式化输出在很大程度上受到 C 语言 printf 的启发。虽然一些格式字符串与 C 类似，但已进行了某些定制，以适应 Java 语言，并且利用了其中一些特性。此外，Java 的格式比 C 的格式更严格；例如，如果转换与标志不兼容，则会抛出异常。在 C 中，不适用的标志会被忽略。这样，便于 C 程序员识别这些格式字符串，而又不必与 C 中的那些标志完全兼容。</p>
+
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-util-Observable"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Observable</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+
+						</pre>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-util-Timer"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Timer 和 TimerTask</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+
+						</pre>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-util-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">...</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+
+						</pre>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">...</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+
+						</pre>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">...</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+
+						</pre>
+                    </div>
+                </div>
+                <!-- item over -->
 			</div>
 		</div>
 	</div>
