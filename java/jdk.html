@@ -2255,6 +2255,7 @@ public final class Byte extends Number implements Comparable&lt;Byte> {
     public static byte MAX_VALUE = 127; // 保存 byte 类型可取的最大值，即 2^7 - 1
     public static byte MIN_VALUE = -128; // 保存 byte 类型可取的最小值，即 -2^7
     public static int 	SIZE = 8; // byte 值的二进制位数
+	public static final int BYTES = SIZE / Byte.SIZE; // 字节数
 
     static byte parseByte(String s) {} // 默认 10 进制转换
     /** radix 为指定进制:
@@ -2263,22 +2264,269 @@ public final class Byte extends Number implements Comparable&lt;Byte> {
      */
     static byte parseByte(String s, int radix) {}
 
+	/** decode 接受 10 进制 16 进制， 8 进制数据
+	 * log(Byte.decode("100"), Byte.decode("0x1A"), Byte.decode("#1A"), Byte.decode("010"));
+	 * 输出为: 100, 26, 26, 8
+	 */
     static Byte decode(String nm) {}
+
+	/** 调用 parseByte 方法 */
     static Byte valueOf(byte b) {}
     static Byte valueOf(String s) {}
     static Byte valueOf(String s, int radix) {}
+
+	static int compare(byte x, byte y) {} // reurn x - y;
+	static int toUnsignedInt(byte x) {} // 转为无符号整型
+	static long toUnsignedLong(byte x) {} // 转为无符号长整型
 }
 </pre>
                             </li>
-                            <li><p><a href="docs/docs-java/api/java/lang/Short.html" target="_blank">Short</a></p></li>
-                            <li><p><a href="docs/docs-java/api/java/lang/Integer.html" target="_blank">Integer</a></p></li>
-                            <li><p><a href="docs/docs-java/api/java/lang/Long.html" target="_blank">Long</a></p></li>
-                            <li><p><a href="docs/docs-java/api/java/lang/Float.html" target="_blank">Float</a></p></li>
-                            <li><p><a href="docs/docs-java/api/java/lang/Double.html" target="_blank">Double</a></p></li>
-                            <li><p><a href="docs/docs-java/api/java/math/BigInteger.html" target="_blank">java.math.BigInteger</a></p></li>
-                            <li><p><a href="docs/docs-java/api/java/math/BigDecimal.html" target="_blank">java.math.BigDecimal</a></p></li>
-                            <li><p><a href="docs/docs-java/api/java/util/concurrent/atomic/AtomicInteger.html" target="_blank">java.util.concurrent.atomic.AtomicInteger</a></p></li>
-                            <li><p><a href="docs/docs-java/api/java/util/concurrent/atomic/AtomicLong.html" target="_blank">java.util.concurrent.atomic.AtomicLong</a></p></li>
+                            <li><p><a href="docs/docs-java/api/java/lang/Short.html" target="_blank">Short</a> 类在对象中包装基本类型 short 的值。一个 Short 类型的对象只包含一个 short 类型的字段。 </p>
+								<pre class="brush: java;">
+public final class Short extends Number implements Comparable&lt;Short> {
+    public static final short MAX_VALUE = 32767; // 最大值的常量，最大值为 2^15 - 1
+	public static final short MIN_VALUE = -32768; // 最小值的常量，最小值为 -2^15
+	public static final int SIZE = 16; // short 值的二进制位数
+	public static final int BYTES = SIZE / Byte.SIZE; // 字节数
+
+	// 低字节和高字节二进制互换位置
+	static byte reverseBytes(byte i) {}
+
+	// 以下方法同 Byte 类似
+	static int compare(short x, short y) {}
+	static int toUnsignedInt(short x)
+	static long toUnsignedLong(short x)
+	static Short decode(String nm) {}
+	static short parseShort(String s) {}
+	static short parseShort(String s, int radix) {}
+	static Short valueOf(short s) {}
+	static Short valueOf(String s) {}
+	static Short valueOf(String s, int radix) {}
+}
+</pre>
+							</li>
+                            <li><p><a href="docs/docs-java/api/java/lang/Integer.html" target="_blank">Integer</a> 类在对象中包装了一个基本类型 int 的值。Integer 类型的对象包含一个 int 类型的字段。 </p>
+								<pre class="brush: java;">
+public final class Short extends Number implements Comparable&lt;Short> {
+    public static final int MAX_VALUE = 0x7fffffff; // 最大值的常量，最大值为 2^31 - 1, 即： 2147483647
+	public static final int MIN_VALUE = 0x80000000; // 最小值的常量，最小值为 -2^31，即： -2147483648
+	public static final int SIZE = 32; // int 值的二进制位数
+	public static final int BYTES = SIZE / Byte.SIZE; // 字节数
+
+	static int 	compareUnsigned(int x, int y) {} // 无符号 x - y
+	static int 	divideUnsigned(int x, int y) {} // 无符号 x / y
+	static int remainderUnsigned(int x, int y) {} // 无符号 x % y
+	static int 	max(int a, int b) {} // 返回较大值
+	static int 	min(int a, int b) {} // 返回较小值
+	static int 	sum(int a, int b) {} // 返回 a + b
+
+	static Integer getInteger(String nm) {} // 获取系统属性的 int 值
+	static Integer getInteger(String nm, int val) {} // 获取系统属性的 int 值, 为空则返回 val
+	static Integer getInteger(String nm, Integer val) {} // 获取系统属性的 int 值, 为空则返回 val
+
+	static int bitCount(int i) {} // 二进制形式表示后 '1' 的数量，和数大小无关
+	static int highestOneBit(int i) {} // 二进制形式最高为为 '1' 表示的整数，highestOneBit(0x60) == 64
+	static int lowestOneBit(int i) {} // 二进制形式最低为为 '1' 表示的整数，lowestOneBit(0x60) == 32
+	static int numberOfLeadingZeros(int i) {} // 二进制形式从左往右有多少个连续的 '0'
+	static int numberOfTrailingZeros(int i) {} // 二进制形式从右往左有多少个连续的 '0'
+
+	static int reverse(int i) {} // 同 reverseBytes 区别为此方法二进制从右往左的值，按位不是按字节
+	static int rotateLeft(int i, int b) {} // 二进制左移 b 位，左边会移动到右边，若 b 为 32 倍数，值将不变
+	static int rotateRight(int i, int b) {} // 二进制右移 b 位，右边会移动到左边，若 b 为 32 倍数，值将不变
+	static int signum(int i) {} // 返回 1 为正， -1 为负
+
+	static String toBinaryString(int i) {} // 二进制形式
+	static String toHexString(int i) {} // 八进制形式
+	static String toOctalString(int i) {} // 十六进制形式
+
+	static int parseUnsignedInt(String s) {} // 同 paseInt(String), 无符号整型
+	static int parseUnsignedInt(String s, int radix) {} // 同 paseInt(String, int), 无符号整型
+
+
+	// 其它方法同 Short 类似
+	...
+}
+</pre>
+							</li>
+                            <li><p><a href="docs/docs-java/api/java/lang/Long.html" target="_blank">Long</a> 类在对象中包装了基本类型 long 的值。每个 Long 类型的对象都包含一个 long 类型的字段。 </p>
+								<pre class="brush: java;">
+/** long 类型在数字后加 'L' 表示， 如： 100L */
+public final class Long extends Number implements Comparable&lt;Long> {
+	public static final int MAX_VALUE = 0x7fffffffffffffffL; // 最大值的常量，最大值为 2^63 - 1
+	public static final int MIN_VALUE = 0x8000000000000000L; // 最小值的常量，最小值为 -2^63
+	public static final int SIZE = 64; // int 值的二进制位数
+	public static final int BYTES = SIZE / Byte.SIZE; // 字节数
+
+	/** Long 的方法和 Integer 都是类似的 */
+}
+</pre>
+							</li>
+                            <li><p><a href="docs/docs-java/api/java/lang/Float.html" target="_blank">Float</a> 类在对象中包装一个基本类型 float 的值。Float 类型的对象包含一个 float 类型的字段。 </p>
+								<p><b>一个浮点数有 2 部分组成：底数 和 指数</b></p>
+								<ul>
+									<li><p>底数 -- 使用二进制数来表示此浮点数的实际值，但是最高位始终为 1，所以，最高位省去不存储，在存储中占 23 bit</p></li>
+									<li><p>指数 -- 占用 8 bit 的二进制数，可表示数值范围为 0-255。</p></li>
+								</ul>
+								<p><b>float 类型在内存中的表示：</b></p>
+								<pre class="brush: java;">
+SEEEEEEE EMMMMMMM MMMMMMMM MMMMMMMM
+S: 符号位
+E: 指数位，实际指数加上 127(2^7-1) 后的值后得二进制数据
+M: 底数位，IEEE 794 规定最高位始终为 1，所以，最高位省去不存储
+
+实例： 17.625 在内存中的表示形式
+1.整数部分直接换算程二进制： 10001
+2.小数部分使用乘 2 取整法：
+	2.1 首先给小数部分乘 2，得到的数，如果小数点前为 1，则计 1；为 0，则计 0；
+	2.2 再对剩下的小数部分乘 2，再计出 1 或 0；
+	2.3 重复以上步骤，直至达到需要的精度。
+		0.625 x 2 = 1.25   	--- 计为 1
+		0.25 x 2 = 0.5      --- 计为 0
+        0.5 x 2 = 1.0       --- 计为 1
+		... 如果还有尾数，算到需要的精度为止(最多只有23 bit)
+3.得到的形式为: 10001.101
+4.再将 10001.101 右移，直到小数点前只剩 1 位(IEEE 794 规定)，最终移动了 4 位： 1.0001101 * 2^4
+5.此时，得到了底数和指数：
+	5.1 指数部分要加上 127，即 4 + 127 = 131，二进制表示为： 1000 0011
+	5.2 底数部分为： 1.0001101
+6.符号为正，底数最高位不存储(IEEE 794 规定)，因此表示如下：
+	SEEEEEEE EMMMMMMM MMMMMMMM MMMMMMMM
+	01000001 10001101 00000000 00000000
+</pre>
+								<pre class="brush: java;">
+/** float 类型在数字后加 'f' 表示， 如： 1.0f */
+public final class Float extends Number implements Comparable&lt;Float> {
+	public static final int SIZE = 32; // int 值的二进制位数
+	public static final int BYTES = SIZE / Byte.SIZE; // 字节数
+
+	public static final float NaN = 0.0f / 0.0f; // 保存 float 类型的非数字 (NaN) 值的常量
+	public static final float POSITIVE_INFINITY = 1.0f / 0.0f; // 保存 float 类型的正无穷大值的常量
+	public static final float NEGATIVE_INFINITY = -1.0f / 0.0f; // 保存 float 类型的负无穷大值的常量
+
+	public static final int MAX_EXPONENT = 127; // 有限 float 变量可能具有的最大指数
+	public static final int MIN_EXPONENT = -126; // 标准化 float 变量可能具有的最小指数
+
+	public static final float MAX_VALUE = 0x1.fffffeP+127f; // 最大正有限值，即 (2-2^23) · 2^127
+	public static final float MIN_NORMAL = 0x1.0p-126f; // float 类型最小正标准值，即 2^-126
+	public static final float MIN_VALUE = 0x0.000002P-126f; // float 类型最小正非零值，即 2^-149
+
+	static boolean isNaN(float v) {} // 如果指定的数是一个非数字 (NaN) 值，则返回 true
+	static boolean isInfinite(float v) {} // 如果指定数的数值是无穷大，则返回 true
+
+	/** Float 只支持 10 进制 / 16 的转换，浮点数的 16 进制为 toHexString(String) 的结果 */
+	static float Float.parseFloat(String s) {}
+
+	/** 返回 float 参数的十六进制字符串表示形式，可以通过 parseFloat 转换为浮点数
+	 *  1.如果参数为NaN，那么结果是字符串 "NaN";
+	 *  2.如果符号为负，那么结果的第一个字符是 "-",为正则不显示；
+	 *  3.如果 f 为无穷大，则用字符串 "Infinity" 表示，负无穷大生成结果 "-Infinity";
+	 *  4.如果 f 为 0，则用字符串 "0x0.0p0" 表示，因此，负 0 生成结果 "-0x0.0p0";
+	 *  5.如果是有效浮点数，形式为：0x1.MpE(M 用于表示有效底数，E 用于表示偏移指数) 则需要计算：
+	 *     5.1 前缀不变，为: 0x1.
+	 * 	   5.2 先将浮点书转为二进制表示形式，如： 10.5 二进制为: 0100 0001 0010 1000 0000 0000 0000 0000
+	 * 	   5.3 先计算指数 E:
+	 *         5.3.1 取出二进制指数位(第 2 位开始取 8 位):  100 0001 0 = 130
+     * 		   5.3.2 减去 127, 130 - 127 = 3，即 E = 3(如果浮点数 < 1.0，此值就为负)
+     *     5.4 计算底数 M
+     *         5.4.1 取出二进制底数位(第 10 位开始): 010 1000 0000 0000 0000 0000
+     * 	       5.4.2 去除左右的 '0', 10 1 = 5
+     *     5.5 最终结果为： 0x1.5p3
+	 */
+	static String toHexString(float f) {}
+
+	/** 要明白下面的方法，首先明白一点，float 和 int 的二进制都是 32 位，在二进制范围无区别
+	 * 因此，一个 32 位的二进制，可以用 int 表示，也可以用 float 表示，下面的方法就是相互转化
+	 */
+	static float intBitsToFloat(int bits) {} // 将 int 表示的二进制转化为 float 类型
+	static int floatToIntBits(float value) {} // 将浮点数的二进制转化为 int 值
+	static int floatToRawIntBits(float value) {} // 将浮点数的二进制转化为 int 值，不压缩 NaN 值
+}
+</pre>
+							</li>
+                            <li><p><a href="docs/docs-java/api/java/lang/Double.html" target="_blank">Double</a> 类在对象中包装一个基本类型 double 的值。每个 Double 类型的对象都包含一个 double 类型的字段。 </p>
+								<p><b>一个 Double 有 2 部分组成：底数 和 指数</b></p>
+								<ul>
+									<li><p>底数 -- 使用二进制数来表示此 Double 的实际值，但是最高位始终为 1，所以，最高位省去不存储，在存储中占 52 bit</p></li>
+									<li><p>指数 -- 占用 11 bit 的二进制数，可表示数值范围为 0-1023。</p></li>
+								</ul>
+								<p><b>float 类型在内存中的表示：</b></p>
+								<pre class="brush: java;">
+SEEEEEEE EEEEMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM MMMMMMMM
+S: 符号位
+E: 指数位，实际指数加上 1023(2^10-1) 后的值后得二进制数据
+M: 底数位，IEEE 794 规定最高位始终为 1，所以，最高位省去不存储
+</pre>
+								<pre class="brush: java;">
+/** Double 的方法和 Float 都是类似的
+ * Double 类型使用 64 位存储，因此对应 Long 类型
+ */
+public final class Double extends Number implements Comparable&lt;Double> {
+	public static final int SIZE = 64; // int 值的二进制位数
+	public static final int BYTES = SIZE / Byte.SIZE; // 字节数
+
+	public static final double NaN = 0.0d / 0.0; // 保存 double 类型的非数字 (NaN) 值的常量
+	public static final double POSITIVE_INFINITY = 1.0 / 0.0; // 保存 double 类型的正无穷大值的常量
+	public static final double NEGATIVE_INFINITY = -1.0 / 0.; // 保存 double 类型的负无穷大值的常量
+
+	public static final int MAX_EXPONENT = 1023; // 有限 double 变量可能具有的最大指数
+	public static final int MIN_EXPONENT = -1022; // 标准化 double 变量可能具有的最小指数
+
+	public static final double MAX_VALUE = 0x1.fffffffffffffP+1023;; // 最大正有限值
+	public static final double MIN_NORMAL = 0x1.0p-1022; // double 类型最小正标准值
+	public static final double MIN_VALUE = 0x0.0000000000001P-1022;; // double 类型最小正非零值
+
+	static double longBitsToDouble(long bits) {} // 将 long 表示的二进制转化为 double 类型
+	static long doubleToLongBits(double value) {} // 将 double 的二进制转化为 long 值
+	static long doubleToRawLongBits(double value) {} // 将 double 的二进制转化为 long 值，不压缩 NaN 值
+}
+</pre>
+							</li>
+							<li><p><a href="docs/docs-java/api/java/math/BigInteger.html" target="_blank">java.math.BigInteger</a> 不可变的任意精度的整数。所有操作中，都以二进制补码形式表示 BigInteger（如 Java 的基本整数类型）。BigInteger 提供所有 Java 的基本整数操作符的对应物，并提供 java.lang.Math 的所有相关方法。另外，BigInteger 还提供以下运算：模算术、GCD 计算、质数测试、素数生成、位操作以及一些其他操作。 </p>
+								<pre class="brush: java;">
+public class BigInteger extends Number implements Comparable&lt;BigInteger> {
+	public static final BigInteger ONE = valueOf(1); // BigInteger 的常量 1
+	public static final BigInteger TEN = valueOf(10); // BigInteger 的常量 10
+	public static final BigInteger ZERO = new BigInteger(new int[0], 0); // BigInteger 的常量 0
+
+	/** 将 BigInteger 的十进制字符串表示形式转换为 BigInteger */
+	public BigInteger(String val) {}
+	/** 将指定基数的 BigInteger 的字符串表示形式转换为 BigInteger */
+	public BigInteger(String val, int radix) {}
+	/** 将包含 BigInteger 的二进制补码表示形式的 byte 数组转换为 BigInteger */
+	public BigInteger(byte[] val) {}
+	/** 将 BigInteger 的符号-数量表示形式转换为 BigInteger */
+	public BigInteger(int signum, byte[] magnitude) {}
+	/** 构造一个随机生成的正 BigInteger，它可能是一个具有指定 bitLength 的素数 */
+	public BigInteger(int bitLength, int certainty, Random rnd) {}
+	/** 构造一个随机生成的 BigInteger，它是在 0 到 (2numBits - 1)（包括）范围内均匀分布的值 */
+	public BigInteger(int numBits, Random rnd) {}
+}
+</pre>
+								<ol>
+									<li><p><code></code> -- </p></li>
+								</ol>
+							</li>
+                            <li><p><a href="docs/docs-java/api/java/math/BigDecimal.html" target="_blank">java.math.BigDecimal</a> 不可变的、任意精度的有符号十进制数。由任意精度的整数非标度值 和 32 位的整数标度 (scale) 组成。如果为零或正数，则标度是小数点后的位数。如果为负数，则将该数的非标度值乘以 10 的负 scale 次幂。</p>
+								<p>BigDecimal 类提供以下操作：算术、标度操作、舍入、比较、哈希算法和格式转换。toString() 方法提供 BigDecimal 的规范表示形式。 </p>
+								<pre class="brush: java;">
+public class BigDecimal extends Number implements Comparable&lt;BigDecimal> {
+
+}
+</pre>
+								<ol>
+									<li><p><code></code> -- </p></li>
+								</ol>
+							</li>
+                            <li><p><a href="docs/docs-java/api/java/util/concurrent/atomic/AtomicInteger.html" target="_blank">java.util.concurrent.atomic.AtomicInteger</a></p>
+								<pre class="brush: java;">
+
+</pre>
+							</li>
+                            <li><p><a href="docs/docs-java/api/java/util/concurrent/atomic/AtomicLong.html" target="_blank">java.util.concurrent.atomic.AtomicLong</a></p>
+								<pre class="brush: java;">
+
+</pre>
+							</li>
                         </ul>
 					</div>
 				</div>
