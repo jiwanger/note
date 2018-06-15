@@ -92,11 +92,11 @@
 						</a>
 						<div id="java-util" class="panel-collapse collapse"
 							 role="tabpanel">
-							<a href="#java-util-Date" class="list-group-item">Date, Time, Calendar...</a>
+							<a href="#java-util-Date" class="list-group-item">Date, TimeZone, Calendar</a>
+                            <a href="#java-util-Timer" class="list-group-item">Timer 和 TimerTask</a>
                             <a href="#java-util-List" class="list-group-item">List, Map, Set, Stack, Queue...</a>
                             <a href="#java-util-Formatter" class="list-group-item">Formatter</a>
                             <a href="#java-util-Observable" class="list-group-item">Observable</a>
-                            <a href="#java-util-Timer" class="list-group-item">Timer 和 TimerTask</a>
                             <a href="#java-util-" class="list-group-item"></a>
                             <a href="#java-util-" class="list-group-item"></a>
 						</div>
@@ -2897,8 +2897,105 @@ public class AtomicLong extends Number implements Serializable {
 					</div>
 					<div class="panel-body">
 						<pre class="brush: java;">
+public class Throwable implements Serializable {
+    public Throwable() {}
+    public Throwable(String message) {}
+    public Throwable(String message, Throwable cause) {}
+    public Throwable(Throwable cause) {}
+    protected Throwable(String message, Throwable cause, boolean enableSuppression,
+                            boolean writableStackTrace) {}
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/Throwable.html" target="_blank">Throwable</a> 是 Java 语言中所有错误或异常的超类。只有当对象是此类（或其子类之一）的实例时，才能通过 Java 虚拟机或者 Java throw 语句抛出。类似地，只有此类或其子类之一才可以是 catch 子句中的参数类型。 </p>
+                        <p>两个子类的实例，<a href="docs/docs-java/api/java/lang/Error.html" target="_blank">Error</a> 和 <a href="docs/docs-java/api/java/lang/Exception.html" target="_blank">Exception</a>，通常用于指示发生了异常情况。通常，这些实例是在异常情况的上下文中新近创建的，因此包含了相关的信息（比如堆栈跟踪数据）。 </p>
+                        <ul>
+                            <li><p><a href="docs/docs-java/api/java/lang/Exception.html" target="_blank">Exception</a> -- 类及其子类是 Throwable 的一种形式，它指出了合理的应用程序想要捕获的条件。</p></li>
+                            <li><p><a href="docs/docs-java/api/java/lang/Error.html" target="_blank">Error</a> -- 是 Throwable 的子类，用于指示合理的应用程序不应该试图捕获的严重问题。大多数这样的错误都是异常条件。虽然 ThreadDeath 错误是一个“正规”的条件，但它也是 Error 的子类，因为大多数应用程序都不应该试图捕获它。 </p></li>
+                        </ul>
+                        <p><b>Throwable</b> API:</p>
+                        <ol>
+                            <li><p><code>Throwable 	getCause()</code> -- 返回此 throwable 的 cause；如果 cause 不存在或未知，则返回 null。</p></li>
+                            <li><p><code>String 	getLocalizedMessage()</code> -- 创建此 throwable 的本地化描述。</p></li>
+                            <li><p><code>String 	getMessage()</code> -- 返回此 throwable 的详细消息字符串。</p></li>
+                            <li><p><code>StackTraceElement[] 	getStackTrace()</code> -- 提供编程访问由 printStackTrace() 输出的堆栈跟踪信息。</p></li>
+                            <li><p><code>void 	setStackTrace(StackTraceElement[] stackTrace)</code> -- 设置将由 getStackTrace() 返回，并由 printStackTrace() 和相关方法输出的堆栈跟踪元素。</p></li>
+                            <li><p><code>String 	toString()</code> -- 返回此 throwable 的简短描述。</p></li>
 
-						</pre>
+                            <li class="group"><p><code>void 	printStackTrace()</code> -- 将此 throwable 及其追踪输出至标准错误流。</p></li>
+                            <li><p><code>void 	printStackTrace(PrintStream s)</code> -- 将此 throwable 及其追踪输出到指定的输出流。</p></li>
+                            <li><p><code>void 	printStackTrace(PrintWriter s)</code> -- 将此 throwable 及其追踪输出到指定的 PrintWriter。</p></li>
+
+                            <li class="group"><p><code>void 	addSuppressed(Throwable exception)</code> -- 将指定的异常追加到为传递此异常而被抑制的异常中。</p></li>
+                            <li><p><code>Throwable 	fillInStackTrace()</code> -- 在异常堆栈跟踪中填充。</p></li>
+                            <li><p><code>Throwable 	initCause(Throwable cause)</code> -- 将此 throwable 的 cause 初始化为指定值。</p></li>
+                        </ol>
+
+                        <p><p><a href="docs/docs-java/api/java/lang/Exception.html" target="_blank">Exception</a> 类的常见直接子类和间接子类:</p>
+                            <pre class="brush: java;">
+java.lang.Object
+    java.lang.Throwable
+        java.lang.Exception
+         ├─ CloneNotSupportedException -- 对象未实现 Cloneable 接口
+         ├─ ClassNotFoundException -- 未找到加载的类(使用反射时候发生)
+         ├─ NoSuchMethodException -- 无法找到某一特定方法时，抛出该异常(使用反射时候发生)
+         ├─ NoSuchFieldException -- 不包含指定名称的字段时产生的信号(使用反射时候发生)
+         ├─ InterruptedException -- 当线程在活动之前或活动期间处于正在等待、休眠或占用状态且该线程被中断时，抛出该异常
+         ├─ java.net.URISyntaxException -- 经过检查的指示字符串不能解析为 URI
+         ├─ java.util.concurrent.TimeoutException -- 阻塞操作超时时
+         ├─ java.sql.SQLException -- 数据库访问错误或其他错误信息
+         ├─ java.util.zip.DataFormatException -- 当数据格式发生错误时
+         └─ RuntimeException -- 可能在 Java 虚拟机正常运行期间抛出的异常的超类
+             ├─ IllegalArgumentException -- 异常表明向方法传递了一个不合法或不正确的参数
+             │   ├─ NumberFormatException -- 试图将字符串转换成一种数值类型，但该字符串不能转换为适当格式时
+             │   ├─ PatternSyntaxException -- 表明正则表达式模式中的语法错误
+             │   ├─ IllegalCharsetNameException -- 不是合法 charset 名称的字符串用作 charset 名称时
+             │   ├─ IllegalFormatException -- 格式字符串包含非法语法，或者包含与给定参数不兼容的格式说明符时
+             │   ├─ IllegalThreadStateException -- 指示线程没有处于请求操作所要求的适当状态时抛出的异常
+             │   ├─ UnresolvedAddressException -- 试图对未解析的套接字地址调用网络操作时
+             │   ├─ UnsupportedAddressTypeException -- 试图绑定或连接到一个其类型不受支持的套接字地址时
+             │   └─ UnsupportedCharsetException -- 当不支持请求的 charset 时
+             ├─ ArithmeticException -- 当出现异常的运算条件时(比如除以 0)
+             ├─ ClassCastException -- 当试图将对象强制转换为不是实例的子类时
+             ├─ org.w3c.dom.DOMException -- DOM 操作只在 "exceptional" 情况下引发异常，即不能执行操作时
+             ├─ ArrayStoreException -- 将错误类型的对象存储到一个对象数组时
+             ├─ IllegalStateException -- 在非法或不适当的时间调用方法时产生的信号
+             ├─ IndexOutOfBoundsException -- 指示某排序索引（例如对数组、字符串或向量的排序）超出范围时抛出
+             │   ├─ StringIndexOutOfBoundsException -- 常由 String 方法抛出，指示索引或者为负，或者超出字符串的大小
+             │   └─ ArrayIndexOutOfBoundsException -- 用非法索引访问数组时
+             ├─ NoSuchElementException -- 由 Enumeration 的 nextElement 方法抛出，表明枚举中没有更多的元素
+             ├─ NullPointerException -- 在需要对象的地方使用 null 时
+             └─ ......
+</pre>
+                        <p><p><a href="docs/docs-java/api/java/lang/Error.html" target="_blank">Error</a> 类的常见直接子类和间接子类:</p>
+                        <pre class="brush: java;">
+java.lang.Error
+ ├─ AnnotationFormatError -- 当注释解析器试图从类文件读取注释并确定注释出现异常时
+ ├─ AssertionError -- 抛出该异常指示某个断言失败
+ ├─ ThreadDeath -- 调用 Thread 类中带有零参数的 stop 方法时，受害线程将抛出一个 ThreadDeath 实例
+ ├─ java.io.IOError -- 当发生严重的 I/O 错误时，抛出此错误
+ ├─ VirtualMachineError -- 当 Java 虚拟机崩溃或用尽了它继续操作所需的资源时
+ │   ├─ OutOfMemoryError -- 因为内存溢出或没有可用的内存提供给垃圾回收器时，Java 虚拟机无法分配一个对象
+ │   ├─ StackOverflowError -- 当应用程序递归太深而发生堆栈溢出时
+ │   ├─ UnknownError -- 当 Java 虚拟机中出现一个未知但严重的异常时
+ │   └─ InternalError -- 该异常指示 Java 虚拟机中出现一些意外的内部错误
+ └─ LinkageError -- 指示一个类在一定程度上依赖于另一个类；但是，在编译前一个类之后，后一个类发生了不相容的改变
+     ├─ ClassFormatError -- 当 Java 虚拟机试图读取类文件并确定该文件存在格式错误或无法解释为类文件时
+     │   ├─ GenericSignatureFormatError -- 解释类型、方法或构造方法的一般签名信息的反射方法遇到语法错误的签名属性时
+     │   └─ UnsupportedClassVersionError -- 当 Java 虚拟机试图读取一个类文件，并确定文件的主辅版本号不受支持时
+     ├─ ClassCircularityError -- 当初始化类时检测到类的循环调用的时候
+     ├─ NoClassDefFoundError -- 当 Java 虚拟机或 ClassLoader 实例试图在类的定义中加载，但无法找到该类的定义时
+     ├─ VerifyError -- 当“校验器”检测到一个类文件虽然格式正确，但包含着一些内部不一致性或安全性问题时
+     ├─ UnsatisfiedLinkError -- 当 Java 虚拟机无法找到声明为 native 的方法的适当本地语言定义时
+     ├─ ExceptionInInitializerError -- 静态初始化程序中发生意外异常的信号
+     └─ IncompatibleClassChangeError -- 通常由编译器捕获此类错误
+         ├─ NoSuchMethodError -- 当应用程序试图调用类（静态或实例）的指定方法，而该类已不再具有该方法的定义时
+         ├─ NoSuchFieldError -- 如果应用程序试图访问或修改一个指定的对象字段，而该对象不再包含该字段时
+         ├─ AbstractMethodError -- 当应用程序试图使用 Java 的 new 结构来实例化一个抽象类或一个接口时
+         ├─ IllegalAccessError -- 当应用程序试图访问或修改它不能访问的字段，或调用它不能访问的方法时
+         └─ InstantiationError -- 当应用程序试图调用一个抽象方法时
+
+
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -2907,7 +3004,223 @@ public class AtomicLong extends Number implements Serializable {
                 <a class="offset" id="java-util-Date"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Date, Time, Calendar...</h3>
+                        <h3 class="panel-title">Date, Calendar, TimeZone</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+java.lang.Object
+    java.util.Date
+
+public class Date implements Serializable, Cloneable, Comparable&lt;Date> {
+    public Date() { this(System.currentTimeMillis(); }
+    public Date(long millis) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/util/Date.html" target="_blank">Date</a> 表示特定的瞬间，精确到毫秒。</p>
+                            <p><a href="docs/docs-java/api/java/util/Date.html" target="_blank">Date</a> 类的很多方法已过时，应该使用 Calendar 类实现日期和时间字段之间转换，使用 java.text.DateFormat 类来格式化和解析日期字符串。</p>
+                            <p><a href="docs/docs-java/api/java/util/Date.html" target="_blank">Date</a> 有三个直接子类： <a href="docs/docs-java/api/java/sql/Date.html" target="_blank">java.sql.Date</a>, <a href="docs/docs-java/api/java/sql/Time.html" target="_blank">java.sql.Time</a>, <a href="docs/docs-java/api/java/sql/Timestamp.html" target="_blank">java.sql.Timestamp</a>。</p>
+                            <ol>
+                                <li><p><code>static Date 	from(<a href="docs/docs-java/api/java/time/Instant.html">Instant</a> instant)</code> -- 从 Instant 转化</p></li>
+                                <li><p><code><a href="docs/docs-java/api/java/time/Instant.html">Instant</a> 	toInstant()</code> -- 转化为 Instant</p></li>
+
+                                <li class="group"><p><code>boolean 	after(Date when)</code> -- 测试此日期是否在指定日期之后。</p></li>
+                                <li><p><code>boolean 	before(Date when)</code> -- 测试此日期是否在指定日期之前。</p></li>
+                                <li><p><code>long 	getTime()</code> -- 返回自 1970 年 1 月 1 日 00:00:00 GMT 以来此 Date 对象表示的毫秒数</p></li>
+                                <li><p><code>void 	setTime(long time)</code> -- 设置此 Date 对象，以表示 1970 年 1 月 1 日 00:00:00 GMT 以后 time 毫秒的时间点。</p></li>
+
+                                <li class="group"><p><code>int 	compareTo(Date anotherDate)</code> -- 比较两个日期的顺序。</p></li>
+                                <li><p><code>boolean 	equals(Object obj)</code> -- 比较两个日期的相等性。</p></li>
+                                <li><p><code>Object 	clone()</code> -- 返回此对象的副本。</p></li>
+                                <li><p><code>int 	hashCode()</code> -- 返回此对象的哈希码值</p></li>
+                                <li><p><code>String 	toString()</code> -- 把此 Date 对象转换为以下形式的 String： dow mon dd hh:mm:ss zzz yyyy 其中： dow 是一周中的某一天 (Sun, Mon, Tue, Wed, Thu, Fri, Sat)。</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+java.lang.Object
+    java.util.Calendar
+
+public abstract class Calendar implements Serializable, Cloneable, Comparable&lt;Calendar> {
+    /** Calendar 构造器 */
+    public static class Builder {}
+
+    public final static int FIELD_COUNT = 17;
+    /** get(int) / set(int, int) 方法使用的常量: */
+    public final static int ERA = 0; // 返回 GregorianCalendar.AD(公元后) 或 GregorianCalendar.BC(公元前)
+    public final static int YEAR = 1; // 年
+    public final static int MONTH = 2; // 月, 0 - 11
+    public final static int WEEK_OF_YEAR = 3; // 年的星期数, 1 ~
+    public final static int WEEK_OF_MONTH = 4; // 月中的星期数, 1 ~
+    public final static int DATE = 5; // 月中的某天, 1 ~
+    public final static int DAY_OF_MONTH = 5; // 同 DATE
+    public final static int DAY_OF_YEAR = 6; // 年中的天数, 1 ~
+    public final static int DAY_OF_WEEK = 7; // 星期中的某天, 1 ~
+    // 月中的第几个星期, DAY_OF_MONTH 1 到 7 总是对应于 DAY_OF_WEEK_IN_MONTH 1；依此类推。
+    public final static int DAY_OF_WEEK_IN_MONTH = 8;
+    public final static int AM_PM = 9; // 上午 / 下午
+    public final static int HOUR = 10; // 小时, 12 小时制, 0 ~ 11
+    public final static int HOUR_OF_DAY = 11; // 小时, 24 小时制, 0 ~ 23
+    public final static int MINUTE = 12; // 分钟, 0 ~ 59
+    public final static int SECOND = 13; // 秒数, 0 ~ 59
+    public final static int MILLISECOND = 14; // 毫秒, 0 ~ 999
+    public final static int ZONE_OFFSET = 15; // 以毫秒为单位指示距 GMT 的大致偏移量
+    public final static int DST_OFFSET = 16; // 以毫秒为单位指示夏令时的偏移量
+
+    /** 星期 */
+    public final static int SUNDAY = 1;
+    public final static int MONDAY = 2;
+    public final static int TUESDAY = 3;
+    public final static int WEDNESDAY = 4;
+    public final static int THURSDAY = 5;
+    public final static int FRIDAY = 6;
+    public final static int SATURDAY = 7;
+
+    /** 月份 */
+    public final static int JANUARY = 0;
+    public final static int FEBRUARY = 1;
+    public final static int MARCH = 2;
+    public final static int APRIL = 3;
+    public final static int MAY = 4;
+    public final static int JUNE = 5;
+    public final static int JULY = 6;
+    public final static int AUGUST = 7;
+    public final static int SEPTEMBER = 8;
+    public final static int OCTOBER = 9;
+    public final static int NOVEMBER = 10;
+    public final static int DECEMBER = 11;
+    public final static int UNDECIMBER = 12; // 一年中第十三个月, 阳历没有使用该值，但阴历会使用
+
+    /** 上午 / 下午 */
+    public final static int AM = 0;
+    public final static int PM = 1;
+
+
+    public static final int ALL_STYLES = 0;
+    public static final int SHORT = 1;
+    public static final int LONG = 2;
+
+    public static final int NARROW_FORMAT = 4;
+    public static final int NARROW_STANDALONE = NARROW_FORMAT | STANDALONE_MASK;
+    public static final int SHORT_FORMAT = 1;
+    public static final int LONG_FORMAT = 2;
+    public static final int SHORT_STANDALONE = SHORT | STANDALONE_MASK;
+    public static final int LONG_STANDALONE = LONG | STANDALONE_MASK;
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/util/Calendar.html" target="_blank">Calendar</a> 是一个抽象类，它为特定瞬间与一组诸如 YEAR、MONTH、DAY_OF_MONTH、HOUR 等 日历字段之间的转换提供了一些方法，并为操作日历字段（例如获得下星期的日期）提供了一些方法。</p>
+                            <p>Calendar 对象能够生成为特定语言和日历风格实现日期-时间格式化所需的所有日历字段值，例如，日语-格里高里历，日语-传统日历。Calendar 定义了某些日历字段返回值的范围，以及这些值的含义。</p>
+                            <p><code>Calendar.getInstance()</code> 方法获取的实例其实是其子类 <a href="docs/docs-java/api/java/util/GregorianCalendar.html" target="_blank">GregorianCalendar</a> 的实例，它提供了世界上大多数国家/地区使用的标准日历系统，是一种混合日历，在单一间断性的支持下同时支持儒略历和格里高利历系统，在默认情况下，它对应格里高利日历创立时的格里高利历日期。</p>
+                            <p>在 <code>Calendar.getInstance()</code> 方法中调用了 <a href="docs/docs-java/api/java/util/Calendar.Builder.html" target="_blank">Calendar.Builder</a> 来构建 Calendar, 并传入了 <code>System.currentTimeMillis()</code> 为日历的当前时间，也就是说在构建时，已经确定了时间。</p>
+                            <ol>
+                                <li><p><code>static Calendar 	getInstance()</code> -- 使用默认时区和语言环境获得一个日历。</p></li>
+                                <li><p><code>static Calendar 	getInstance(Locale aLocale)</code> -- 使用默认时区和指定语言环境获得一个日历。</p></li>
+                                <li><p><code>static Calendar 	getInstance(TimeZone zone)</code> -- 使用指定时区和默认语言环境获得一个日历。</p></li>
+                                <li><p><code>static Calendar 	getInstance(TimeZone zone, Locale aLocale)</code> -- 使用指定时区和语言环境获得一个日历</p></li>
+
+                                <li class="group"><p><code>static Locale[] 	getAvailableLocales()</code> --  返回所有语言环境的数组</p></li>
+                                <li><p><code>static Set&lt;String> getAvailableCalendarTypes()</code> -- 返回一个不可修改的集合，包含运行时环境中日历支持的所有类型</p></li>
+
+                                <li class="group"><p><code>int 	get(int field)</code> -- 返回给定日历字段的值，此方法返回 fields[field], fileds 数组长度为: Calendar.FIELD_COUNT ,filed 支持的值看前面常量</p></li>
+                                <li><p><code>void 	set(int field, int value)</code> -- 将给定的日历字段设置为给定值</p></li>
+								<li><p><code>void 	set(int year, int month, int date)</code> -- 设置日历字段</p></li>
+								<li><p><code>void 	set(int year, int month, int date, int hourOfDay, int minute)</code> -- 设置日历字段</p></li>
+								<li><p><code>void 	set(int year, int month, int date, int hourOfDay, int minute, int second)</code> -- 设置日历字段</p>
+                                    <pre class="brush: java;">
+Calendar calendar = Calendar.getInstance();
+calendar.set(2018, Calendar.JUNE, 15, 16, 20, 40); // 2018/6/15 16:20:40
+calendar.set(Calendar.HOUR_OF_DAY, 17); // 2018/6/15 17:20:40
+</pre>
+                                </li>
+
+
+								<li class="group"><p><code>abstract  void 	add(int field, int amount)</code> -- 据日历的规则，为给定的日历字段添加或减去指定的时间量</p></li>
+								<li><p><code>abstract  void 	roll(int field, boolean up)</code> -- 在给定的时间字段上添加或减去单个时间单元，不更改更大的字段</p></li>
+								<li><p><code>void 	roll(int field, int amount)</code> -- 向指定日历字段添加指定（有符号的）时间量，不更改更大的字段</p>
+                                    <pre class="brush: java;">
+Calendar calendar = Calendar.getInstance();
+calendar.set(2018, Calendar.JUNE, 15, 16, 20, 40); // 2018/6/15 16:20:40
+
+calendar.add(Calendar.SECOND, 5); // 2018/6/15 16:20:45
+calendar.add(Calendar.SECOND, -55); // 2018/6/15 16:19:50
+
+/** roll 方法不会更改更大字段，如下：当秒数超出时候，分钟数没变 */
+calendar.roll(Calendar.SECOND, 20); // 2018/6/15 16:20:10
+calendar.roll(Calendar.SECOND, true); // 2018/6/15 16:19:51
+calendar.roll(Calendar.SECOND, false); // 2018/6/15 16:19:50
+
+
+</pre>
+                                </li>
+
+								<li class="group"><p><code>void 	setTimeInMillis(long millis)</code> -- 用给定的 long 值设置此 Calendar 的当前时间值。</p></li>
+								<li><p><code>long 	getTimeInMillis()</code> -- 返回此 Calendar 的时间值，以毫秒为单位</p></li>
+								<li><p><code>Date 	getTime()</code> -- 返回一个表示此 Calendar 时间值</p></li>
+								<li><p><code>void 	setTime(Date date)</code> -- 使用给定的 Date 设置此 Calendar 的时间。</p></li>
+								<li><p><code>void 	setTimeZone(TimeZone value)</code> -- 使用给定的时区值来设置时区。</p></li>
+								<li><p><code>TimeZone 	getTimeZone()</code> -- 获得时区</p></li>
+								<li><p><code>void 	setFirstDayOfWeek(int value)</code> -- 设置一星期的第一天是哪一天；美国(SUNDAY)，法国(MONDAY)</p></li>
+								<li><p><code>int 	getFirstDayOfWeek()</code> -- 获取一星期的第一天，美国(SUNDAY)，法国(MONDAY)</p></li>
+								<li><p><code>int 	getMinimalDaysInFirstWeek()</code> -- 获取一年中第一个星期所需的最少天数</p></li>
+								<li><p><code>void 	setMinimalDaysInFirstWeek(int value)</code> -- 设置一年中第一个星期所需的最少天数，例如，如果定义第一个星期包含一年第一个月的第一天，则使用值 1 调用此方法。</p></li>
+
+								<li class="group"><p><code>String 	getDisplayName(int field, int style, Locale locale)</code> -- 返回给定 style 下的日历 field 值的字符串表示形式</p></li>
+								<li><p><code>Map&lt;String, Integer> 	getDisplayNames(int field, int style, Locale locale)</code> -- 返回给定 style 和 locale 下包含日历 field 所有名称的 Map 及其相应字段值</p>
+                                    <pre class="brush: java;">
+// Month 和 Week 有字符表示形式，指定使用完整写法(Calendar.LONG)或者缩写(Calendar.SHORT)，如: Monday - Mon
+calendar.getDisplayName(filed, Calendar.LONG, Locale.getDefault());
+
+/** 返回 field 字段的指定 style 的 Map，比如字段为: DAY_OF_WEEK，不同的 style 返回如下：
+ * SHORT -- {"Sun":1, "Mon": 2, ...}
+ * LONG -- {"Sunday":1, "Monday": 2, ...}
+ * ALL_STYLES -- 以上两个
+ */
+calendar.getDisplayNames(Calendar.DAY_OF_WEEK, Calendar.ALL_STYLES, Locale.getDefault());
+</pre>
+                                </li>
+
+								<li class="group"><p><code>abstract  int 	getMaximum(int field)</code> -- 返回此 Calendar 实例给定日历字段的最大值</p></li>
+								<li><p><code>abstract  int 	getMinimum(int field)</code> -- 返回此 Calendar 实例给定日历字段的最小值</p></li>
+								<li><p><code>abstract  int 	getGreatestMinimum(int field)</code> -- 返回此 Calendar 实例给定日历字段的最高的最小值</p></li>
+								<li><p><code>abstract  int 	getLeastMaximum(int field)</code> -- 返回此 Calendar 实例给定日历字段的最低的最大值</p></li>
+								<li><p><code>int 	getActualMaximum(int field)</code> -- 给定此 Calendar 的时间值，返回指定日历字段可能拥有的最大值</p></li>
+								<li><p><code>int 	getActualMinimum(int field)</code> -- 给定此 Calendar 的时间值，返回指定日历字段可能拥有的最小值</p></li>
+
+								<li class="group"><p><code>boolean 	isLenient()</code> -- 判断日期/时间的解释是否为宽松的</p></li>
+								<li><p><code>void 	setLenient(boolean lenient)</code> -- 指定日期/时间解释是否是宽松的。</p></li>
+                                <li><p><code>boolean 	isSet(int field)</code> -- 确定给定日历字段是否已经设置了一个值</p></li>
+
+								<li class="group"><p><code>boolean 	after(Object when)</code> -- 判断此 Calendar 表示的时间是否在指定 Object 表示的时间之后，返回判断结果。</p></li>
+								<li><p><code>boolean 	before(Object when)</code> -- 判断此 Calendar 表示的时间是否在指定 Object 表示的时间之前，返回判断结果。</p></li>
+								<li><p><code>void 	clear()</code> -- 将此 Calendar 的所日历字段值和时间值（从历元至现在的毫秒偏移量）设置成未定义。</p></li>
+								<li><p><code>void 	clear(int field)</code> -- 将此 Calendar 的给定日历字段值和时间值（从历元至现在的毫秒偏移量）设置成未定义。</p></li>
+
+								<li class="group"><p><code>int 	compareTo(Calendar anotherCalendar)</code> -- 比较两个 Calendar 对象表示的时间值（从历元至现在的毫秒偏移量）。</p></li>
+								<li><p><code>Object 	clone()</code> -- 创建并返回此对象的一个副本。</p></li>
+								<li><p><code>boolean 	equals(Object obj)</code> -- 将此 Calendar 与指定 Object 比较。</p></li>
+								<li><p><code>String 	toString()</code> -- 返回此日历的字符串表示形式。</p></li>
+								<li><p><code>int 	hashCode()</code> -- 哈希值</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+java.lang.Object
+    java.util.TimeZone
+
+</pre>
+                            <p><a href="" target="_blank"></a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-util-Timer"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Timer 和 TimerTask</h3>
                     </div>
                     <div class="panel-body">
 						<pre class="brush: java;">
@@ -2965,19 +3278,7 @@ public final class Formatter implements Closeable, Flushable {
                 </div>
                 <!-- item over -->
 
-                <!-- item start -->
-                <a class="offset" id="java-util-Timer"></a>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Timer 和 TimerTask</h3>
-                    </div>
-                    <div class="panel-body">
-						<pre class="brush: java;">
 
-						</pre>
-                    </div>
-                </div>
-                <!-- item over -->
 
                 <!-- item start -->
                 <a class="offset" id="java-util-"></a>
