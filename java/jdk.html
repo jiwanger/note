@@ -94,11 +94,11 @@
 							 role="tabpanel">
 							<a href="#java-util-Date" class="list-group-item">Date, TimeZone, Calendar</a>
                             <a href="#java-util-Timer" class="list-group-item">Timer 和 TimerTask</a>
-                            <a href="#java-util-List" class="list-group-item">List, Map, Set, Stack, Queue...</a>
+                            <a href="#java-util-List" class="list-group-item">List, Map, Set, Queue...</a>
                             <a href="#java-util-Formatter" class="list-group-item">Formatter</a>
                             <a href="#java-util-Observable" class="list-group-item">Observable</a>
-                            <a href="#java-util-" class="list-group-item"></a>
-                            <a href="#java-util-" class="list-group-item"></a>
+                            <a href="#java-util-concurrent-Executor" class="list-group-item">Executor 及实现类</a>
+                            <a href="#java-util-concurrent-Future" class="list-group-item">Future 及实现类</a>
 						</div>
 
                         <a class="list-group-item active drop" data-toggle="collapse"
@@ -2804,7 +2804,14 @@ public class BigDecimal extends Number implements Comparable&lt;BigDecimal> {
                                     <li><p><code>BigDecimal[] 	divideAndRemainder(BigDecimal divisor)</code> -- 返回由两个元素组成的 BigDecimal 数组，该数组包含 divideToIntegralValue 的结果，后跟对两个操作数计算所得到的 remainder。</p></li>
                                     <li><p><code>BigDecimal[] 	divideAndRemainder(BigDecimal divisor, MathContext mc)</code> -- 返回由两个元素组成的 BigDecimal 数组，该数组包含 divideToIntegralValue 的结果，后跟根据上下文设置对两个操作数进行舍入计算所得到的 remainder 的结果。</p></li>
                                     <li><p><code>BigDecimal 	divideToIntegralValue(BigDecimal divisor)</code> -- 返回 BigDecimal，其值为向下舍入所得商值 (this / divisor) 的整数部分。</p></li>
-                                    <li><p><code>BigDecimal 	divideToIntegralValue(BigDecimal divisor, MathContext mc)</code> -- 返回 BigDecimal，其值为 (this / divisor) 的整数部分。</p></li>
+                                    <li><p><code>BigDecimal 	divideToIntegralValue(BigDecimal divisor, MathContext mc)</code> -- 返回 BigDecimal，其值为 (this / divisor) 的整数部分。</p>
+										<pre class="brush:java;">
+BigDecimal b1 = BigDecimal.valueOf(Math.PI); // 3.141592653589793
+BigDecimal b2 = BigDecimal.valueOf(1.0);
+b1.divide(b2) == 3.141592653589793;
+b1.divide(b2, 2, BigDecimal.ROUND_HALF_UP) == 3.14; // 指定精度和舍入模式
+</pre>
+									</li>
 
                                     <li class="group"><p><code>int 	intValue()</code> -- 将此 BigDecimal 转换为 int。</p></li>
                                     <li><p><code>int 	intValueExact()</code> -- 将此 BigDecimal 转换为 int，以检查丢失的信息。</p></li>
@@ -3221,10 +3228,32 @@ public abstract class TimeZone implements Serializable, Cloneable {
                                 <li><p><code>static String[] 	getAvailableIDs(int rawOffset)</code> -- 根据给定的时区偏移量（以毫秒为单位）获取可用的 ID。</p></li>
                                 <li><p><code>static TimeZone 	getDefault()</code> -- 获取此主机的默认 TimeZone</p></li>
                                 <li><p><code>static TimeZone 	getTimeZone(String ID)</code> -- 获取给定 ID 的 TimeZone</p></li>
-                                <li><p><code>static TimeZone 	getTimeZone(ZoneId zoneId)</code> -- </p></li>
-                                <li><p><code>static void 	setDefault(TimeZone zone)</code> -- </p></li>
+                                <li><p><code>static TimeZone 	getTimeZone(ZoneId zoneId)</code> -- 获取给定 ZoneId 的 TimeZone</p></li>
+                                <li><p><code>static void 	setDefault(TimeZone zone)</code> -- 设置默认的 TimeZone</p></li>
 
-                                <li class="group"><p><code></code> -- </p></li>
+								<li class="group"><p><code>String 	getID()</code> -- 获取此时区的 ID，如："Asia/Shanghai"</p></li>
+								<li><p><code>void 	setID(String ID)</code> -- 设置时区 ID</p></li>
+
+                                <li class="group"><p><code>String 	getDisplayName()</code> -- 返回适合于展示给默认区域的用户的时区名称</p></li>
+								<li><p><code>String 	getDisplayName(boolean daylight, int style)</code> -- 返回适合于展示给默认区域的用户的时区名称</p></li>
+								<li><p><code>String 	getDisplayName(Locale locale)</code> -- 返回适合于展示给指定区域的用户的时区名称</p></li>
+								<li><p><code>String 	getDisplayName(boolean daylight, int style, Locale locale)</code> -- 返回适合于展示给指定区域的用户的时区名称</p></li>
+
+								<li class="group"><p><code>int 	getOffset(long date)</code> -- 从给定日期的 UTC 返回此时区的偏移量</p></li>
+								<li><p><code>abstract  int 	getOffset(int era, int year, int month, int day, int dayOfWeek, int milliseconds)</code> -- 获取当前日期的时区偏移量</p></li>
+								<li><p><code>abstract  void 	setRawOffset(int offsetMillis)</code> -- 把基准时区偏移量设置到 GMT</p></li>
+								<li><p><code> abstract  int 	getRawOffset()</code> -- 返回添加到 UTC 以获取此时区中的标准时间的时间量</p></li>
+
+								<li class="group"><p><code>abstract  boolean 	useDaylightTime()</code> -- 查询此时区是否使用夏令时</p></li>
+								<li><p><code>abstract  boolean 	inDaylightTime(Date date)</code> -- 查询给定的日期是否在此时区的夏令时中</p>
+									<p><b>夏令时</b> -- 是一种为节约能源而人为规定地方时间的制度，在这一制度实行期间所采用的统一时间称为“夏令时间”。</p>
+									<p>夏令时具体作法是：每年从四月中旬第一个星期日的凌晨2时整（北京时间），将时钟拨快一小时，即将表针由2时拨至3时，夏令时开始；到九月中旬第一个星期日的凌晨2时整（北京夏令时），再将时钟拨回一小时，即将表针由2时拨至1时，夏令时结束。</p>
+								</li>
+
+
+								<li class="group"><p><code>int 	getDSTSavings()</code> -- 返回要添加到本地标准时间以获取本地挂钟时间的时间量</p></li>
+								<li><p><code>boolean 	hasSameRules(TimeZone other)</code> -- 如果此区域和另一个区域具有相同的规则和偏移量</p></li>
+								<li><p><code>Object 	clone()</code> -- 创建此 TimeZone 的一个副本</p></li>
                             </ol>
                         </div>
                     </div>
@@ -3238,9 +3267,51 @@ public abstract class TimeZone implements Serializable, Cloneable {
                         <h3 class="panel-title">Timer 和 TimerTask</h3>
                     </div>
                     <div class="panel-body">
-						<pre class="brush: java;">
+						<div class="sub-item">
+							<pre class="brush: java;">
+java.lang.Object
+	java.util.Timer
 
-						</pre>
+public class Timer {
+	public Timer() {}
+	public Timer(boolean isDaemon) {}
+	public Timer(String name) {}
+	public Timer(String name, boolean isDaemon) {}
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/util/Timer.html" target="_blank">Timer</a> 是一种工具，线程用其安排以后在后台线程中执行的任务。可安排任务执行一次，或者定期重复执行。</p>
+							<p>与每个 Timer 对象相对应的是单个后台线程，用于顺序地执行所有计时器任务。计时器任务应该迅速完成。如果完成某个计时器任务的时间太长，那么它会“独占”计时器的任务执行线程。因此，这就可能延迟后续任务的执行，而这些任务就可能“堆在一起”，并且在上述不友好的任务最终完成时才能够被快速连续地执行。 </p>
+							<p>对 Timer 对象最后的引用完成后，并且 所有未处理的任务都已执行完成后，计时器的任务执行线程会正常终止（并且成为垃圾回收的对象）。但是这可能要很长时间后才发生。默认情况下，任务执行线程并不作为守护线程 来运行，所以它能够阻止应用程序终止。如果调用者想要快速终止计时器的任务执行线程，那么调用者应该调用计时器的 cancel 方法。 </p>
+							<p>如果意外终止了计时器的任务执行线程，例如调用了它的 stop 方法，那么所有以后对该计时器安排任务的尝试都将导致 IllegalStateException，就好像调用了计时器的 cancel 方法一样。 </p>
+							<p>此类是线程安全的：多个线程可以共享单个 Timer 对象而无需进行外部同步。 </p>
+							<ol>
+								<li><p><code>void 	cancel()</code> -- 终止此计时器，丢弃所有当前已安排的任务</p></li>
+								<li><p><code>int 	purge()</code> -- 从此计时器的任务队列中移除所有已取消的任务</p></li>
+								<li class="group"><p><code>void 	schedule(TimerTask task, long delay)</code> -- 安排在指定延迟后执行指定的任务</p></li>
+								<li><p><code>void 	schedule(TimerTask task, long delay, long period)</code> -- 指定的任务从指定的延迟后开始进行重复的固定延迟执行，第一次以 delay 为延迟，后面以 period 为间隔无限重复执行任务</p></li>
+								<li><p><code>void 	schedule(TimerTask task, Date time)</code> -- 安排在指定的时间执行指定的任务</p></li>
+								<li><p><code>void 	schedule(TimerTask task, Date firstTime, long period)</code> -- 安排指定的任务在指定的时间开始进行重复的固定延迟执行</p></li>
+								<li><p><code>void 	scheduleAtFixedRate(TimerTask task, long delay, long period)</code> -- 安排指定的任务在指定的延迟后开始进行重复的固定速率执行，区别在于如果由于任何原因（如垃圾回收或其他后台活动）而延迟了某次执行，则将快速连续地出现两次或更多的执行，从而使后续执行能够“追赶上来”。</p></li>
+								<li><p><code>void 	scheduleAtFixedRate(TimerTask task, Date firstTime, long period)</code> -- 安排指定的任务在指定的时间开始进行重复的固定速率执行</p></li>
+							</ol>
+						</div>
+
+						<div class="sub-item">
+							<pre class="brush: java;">
+java.lang.Object
+	java.util.TimerTask
+
+public abstract class TimerTask implements Runnable {
+ 	protected TimerTask() {}
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/util/TimerTask.html" target="_blank">TimerTask</a> 由 Timer 安排为一次执行或重复执行的任务。</p>
+							<ol>
+								<li><p><code>boolean 	cancel()</code> -- 取消此计时器任务</p></li>
+								<li><p><code>abstract  void 	run()</code> -- 此计时器任务要执行的操作</p></li>
+								<li><p><code>long 	scheduledExecutionTime()</code> -- 返回此任务最近实际 执行的已安排 执行时间</p></li>
+							</ol>
+						</div>
                     </div>
                 </div>
                 <!-- item over -->
@@ -3248,12 +3319,171 @@ public abstract class TimeZone implements Serializable, Cloneable {
                 <a class="offset" id="java-util-List"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">List, Map, Set, Stack, Queue...</h3>
+                        <h3 class="panel-title">List, Map, Set, Queue...</h3>
                     </div>
                     <div class="panel-body">
-						<pre class="brush: java;">
+						<div class="sub-item">
+							<pre class="brush: java; gutter: false;">
+Iterator/**对 Collection 进行迭代的迭代器，Collection 的实现类一般都有内部类实现此接口，并提供了返回 Iterator 的方法 */
+ ├─ ListIterator /** 系列表迭代器，允许程序员按任一方向遍历列表、迭代期间修改列表，并获得迭代器在列表中的当前位置 */
+ └─ javax.xml.stream.XMLEventReader /** 此类是用于解析 XML 事件的顶层接口 */
 
-						</pre>
+/** 容器接口继承结构和父接口(不包括非容器接口，):
+ * java.util.concurrent 包类，在并发编程中很常用的实用工具类，以 * 开头
+ * 有两个父接口的只写在深的父接口下，并加 extends 标明，开头加 = 区分 */
+Iterable /** 实现这个接口允许对象成为 "foreach" 语句的目标 */
+ └─ Collection /** Collection 层次结构中的根接口 */
+     ├─ Queue /** 在处理元素前用于保存元素的 Collection */
+	 │	 ├─	Deque /** 一个线性 Collection，支持在两端插入和移除元素 */
+	 │	 └─ * BlockingQueue /** 支持两个附加操作的 Queue */
+	 │		  └─ *= BlockingDeque extends BlockingQueue, Deque /** 支持两个附加操作的 Queue */
+	 ├─ List /** 有序的 Collection（也称为序列） */
+	 └─ Set /** 一个不包含重复元素的 Collection */
+		 └─	SortedSet /** 进一步提供关于元素的总体排序 的 Set */
+		 	 └─ NavigableSet /** 扩展的 SortedSet，具有了为给定搜索目标报告最接近匹配项的导航方法 */
+
+Map /** 将键映射到值的对象。一个映射不能包含重复的键；每个键最多只能映射到一个值 */
+ ├─ SortedMap /** 进一步提供关于键的总体排序的 Map */
+ │   └─ NavigableMap /** 扩展的 SortedMap，具有了针对给定搜索目标返回最接近匹配项的导航方法 */
+ └─ * ConcurrentMap /** 提供其他原子 putIfAbsent、remove、replace 方法的 Map */
+	  └─ *= ConcurrentNavigableMap extends ConcurrentMap, NavigableMap/**递归方式支持子映射的 ConcurrentMap */
+
+
+/** 容器类继承结构和实现接口(不包括非容器接口):
+ * java.util.concurrent 包类，在并发编程中很常用的实用工具类，以 * 开头 */
+AbstractCollection implements Collection /** 提供 Collection 接口的骨干实现*/
+ ├─	AbstractList implements List /** 提供 List 接口的骨干实现 */
+ │	 ├─	AbstractSequentialList /** 链接列表骨干实现(非数组) */
+ │	 │	 └─	LinkedList implements List, Deque /** List 接口的链接列表实现 */
+ │	 ├─	ArrayList implements List /** 大小可变数组的实现 */
+ │	 └─	Vector implements List /** 实现可增长的对象数组 */
+ │		 └─	Stack /** 后进先出（LIFO）的对象堆栈 */
+ ├─	AbstractMap implements Map /** 提供 Map 接口的骨干实现 */
+ │	 ├─	HashMap implements Map /** 基于哈希表的 Map 接口的实现 */
+ │	 │	 └─	LinkedHashMap implements Map /** Map 接口的哈希表和链接列表实现，具有可预知的迭代顺序 */
+ │	 ├─	WeakHashMap implements Map /** 以弱键 实现的基于哈希表的 Map */
+ │	 ├─	TreeMap implements NavigableMap /** 基于红黑树（Red-Black tree）的 NavigableMap 实现 */
+ │	 ├─	EnumMap /** 与枚举类型键一起使用的专用 Map 实现 */
+ │	 ├─	IdentityHashMap implements Map /** 利用哈希表实现 Map 接口，比较键（和值）时使用引用相等性代替对象相等性 */
+ │	 ├─	* ConcurrentHashMap implements ConcurrentMap /** 支持获取的完全并发和更新的所期望可调整并发的哈希表 */
+ │	 └─	* ConcurrentSkipListMap implements ConcurrentNavigableMap /** 可缩放的并发 ConcurrentNavigableMap 实现 */
+ ├─	AbstractQueue implements Queue /** 提供某些 Queue 操作的骨干实现 */
+ │	 ├─	PriorityQueue /** 一个基于优先级堆的无界优先级队列 */
+ │	 ├─	* ArrayBlockingQueue implements BlockingQueue /** 一个由数组支持的有界阻塞队列 */
+ │	 ├─	* LinkedBlockingQueue implements BlockingQueue /** 一个基于已链接节点的、范围任意的 BlockingBueue */
+ │	 ├─	* LinkedBlockingDeque implements BlockingDeque /** 一个基于已链接节点的、任选范围的阻塞双端队列 */
+ │	 ├─	* PriorityBlockingQueue implements BlockingQueue /** 无界阻塞队列，使用与类 PriorityQueue 相同的顺序规则 */
+ │	 ├─	* SynchronousQueue implements BlockingQueue /** 阻塞队列，其中每个插入操作必须等待另一个线程的对应移除操作 */
+ │	 ├─	* DelayQueue implements BlockingQueue /** Delayed 元素的一个无界阻塞队列，只有在延迟期满时才能从中提取元素 */
+ │	 └─	* ConcurrentLinkedQueue implements Queue /** 一个基于链接节点的无界线程安全队列 */
+ ├─ AbstractSet implements Set /** 提供 Set 接口的骨干实现 */
+ │	 ├─	HashSet implements Set /** 实现 Set 接口，由哈希表（实际上是一个 HashMap 实例）支持 */
+ │	 │	 └─	LinkedHashSet implements Set /** 具有可预知迭代顺序的 Set 接口的哈希表和链接列表实现 */
+ │	 ├─	TreeSet implements NavigableSet /** 基于 TreeMap 的 NavigableSet 实现 */
+ │	 ├─	EnumSet /** 与枚举类型一起使用的专用 Set 实现
+ │	 ├─	* ConcurrentSkipListSet implements NavigableSet /** 可缩放并发 NavigableSet 实现 */
+ │	 └─	* CopyOnWriteArraySet /** 对其所有操作使用内部 CopyOnWriteArrayList 的 Set */
+ ├─	ArrayDeque implements Deque /** Deque 接口的大小可变数组的实现 */
+ ├─	* CopyOnWriteArrayList implements List /** ArrayList 的一个线程安全的变体 */
+ └─	Dictionary /** 任何可将键映射到相应值的类（如 Hashtable）的抽象父类 */
+ 	 └─	Hashtable implements Map /** 实现一个哈希表，该哈希表将键映射到相应的值 */
+</pre>
+						</div>
+
+						<div  class="sub-item">
+							<p><b>从顶向下分析 Java Collections Framework：</b></p>
+							<p><a href="docs/docs-java/api/java/util/Iterator.html" target="_blank">Iterator</a> 对 Collection 进行迭代的迭代器。</p>
+							<pre class="brush: java;">
+public interface Iterator&lt;E> {
+	boolean hasNext(); // 如果仍有元素可以迭代，则返回 true
+ 	E next(); // 返回迭代的下一个元素
+
+ 	default void remove() {} // 从迭代器指向的 Collection 中移除迭代器返回的最后一个元素
+	default void forEachRemaining(Consumer&lt;? super E> action) {}
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/lang/Iterable.html" target="_blank">java.lang.Iterable</a> 实现这个接口允许对象成为 "foreach" 语句的目标。</p>
+							<pre class="brush: java;">
+public interface Iterable&lt;T> {
+	Iterator&lt;T> iterator(); // 返回一个在一组 T 类型的元素上进行迭代的迭代器
+
+	default void forEach(Consumer&lt;? super T> action) {}
+	default Spliterator&lt;T> spliterator() {}
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/util/Map.html" target="_blank">Map</a> 将键映射到值的对象。一个映射不能包含重复的键；每个键最多只能映射到一个值。 </p>
+							<p>Map 接口提供三种collection 视图，允许以键集、值集或键-值映射关系集的形式查看某个映射的内容。映射顺序 定义为迭代器在映射的 collection 视图上返回其元素的顺序。某些映射实现可明确保证其顺序，如 TreeMap 类；另一些映射实现则不保证顺序，如 HashMap 类。</p>
+							<p>注：将可变对象用作映射键时必须格外小心。当对象是映射中某个键时，如果以影响 equals 比较的方式更改了对象的值，则映射的行为将是不确定的。此项禁止的一种特殊情况是不允许某个映射将自身作为一个键包含。虽然允许某个映射将自身作为值包含，但请格外小心：在这样的映射上 equals 和 hashCode 方法的定义将不再是明确的。 </p>
+							<pre class="brush: java;">
+public interface Map&lt;K, V> {
+	interface Entry&lt;K,V> {
+		boolean equals(Object o); // 比较指定对象与此项的相等性
+ 		K getKey(); // 返回与此项对应的键
+ 		V getValue(); // 返回与此项对应的值
+ 		int hashCode(); // 返回此映射项的哈希码值
+ 		V setValue(V value); // 用指定的值替换与此项对应的值
+
+		static &lt;K extends Comparable&lt;? super K>,V> Comparator&lt;Map.Entry&lt;K,V>> comparingByKey() {}
+		static &lt;K,V> Comparator&lt;Map.Entry&lt;K,V>> comparingByKey(Comparator&lt;? super K> cmp) {}
+		static &lt;K,V extends Comparable&lt;? super V>> Comparator&lt;Map.Entry&lt;K,V>> comparingByValue() {}
+		static &lt;K,V> Comparator&lt;Map.Entry&lt;K,V>> comparingByValue(Comparator&lt;? super V> cmp) {}
+	}
+
+	V put(K key, V value); // 将指定的值与此映射中的指定键关联
+	void putAll(Map&lt;? extends K,? extends V> m); // 从指定映射中将所有映射关系复制到此映射中
+	V get(Object key); // 返回指定键所映射的值；如果此映射不包含该键的映射关系，则返回 null
+	boolean isEmpty(); // 如果此映射未包含键-值映射关系，则返回 true
+  	Set&lt;K> keySet(); // 返回此映射中包含的键的 Set 视图
+	Set&lt;Map.Entry&lt;K,V>> entrySet(); //  返回此映射中包含的映射关系的 Set 视图
+	boolean containsKey(Object key); // 如果此映射包含指定键的映射关系，则返回 true
+	boolean containsValue(Object value); // 如果此映射将一个或多个键映射到指定值，则返回 true
+	int size(); // 返回此映射中的键-值映射关系数
+	V remove(Object key); // 如果存在一个键的映射关系，则将其从此映射中移除
+	void clear(); // 从此映射中移除所有映射关系
+	Collection&lt;V> values(); // 返回此映射中包含的值的 Collection 视图
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
+							<pre class="brush: java;">
+
+</pre>
+							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
+							<pre class="brush: java;">
+
+</pre>
+							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
+							<pre class="brush: java;">
+
+</pre>
+							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
+							<pre class="brush: java;">
+
+</pre>
+							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
+							<pre class="brush: java;">
+
+</pre>
+							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
+							<pre class="brush: java;">
+
+</pre>
+							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
+							<pre class="brush: java;">
+
+</pre>
+							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
+							<pre class="brush: java;">
+
+</pre>
+							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
+							<pre class="brush: java;">
+
+</pre>
+							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
+							<pre class="brush: java;">
+
+</pre>
+						</div>
                     </div>
                 </div>
                 <!-- item over -->
@@ -3296,10 +3526,10 @@ public final class Formatter implements Closeable, Flushable {
 
 
                 <!-- item start -->
-                <a class="offset" id="java-util-"></a>
+                <a class="offset" id="java-util-concurrent-Executor"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">...</h3>
+                        <h3 class="panel-title">java.util.concurrent.Executor 及实现类</h3>
                     </div>
                     <div class="panel-body">
 						<pre class="brush: java;">
@@ -3310,10 +3540,10 @@ public final class Formatter implements Closeable, Flushable {
                 <!-- item over -->
 
                 <!-- item start -->
-                <a class="offset" id="java-"></a>
+                <a class="offset" id="java-util-concurrent-Future"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">...</h3>
+                        <h3 class="panel-title">java.util.concurrent.Future 及实现类</h3>
                     </div>
                     <div class="panel-body">
 						<pre class="brush: java;">
