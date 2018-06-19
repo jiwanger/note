@@ -3323,21 +3323,29 @@ public abstract class TimerTask implements Runnable {
                     </div>
                     <div class="panel-body">
 						<div class="sub-item">
+                            <p><b>Java Collections Framework 结构</b></p>
+                            <p>主要包括三大顶级接口：<code>Iterator</code>, <code>Collection</code> 和 <code>Map</code>。基本所有的实现类都继承抽象类 <code>AbstractCollection</code>，数据结构主要分为以下四种: </p>
+                            <ul>
+                                <li><p><b>List</b> -- 有序的 Collection（也称为序列）；</p></li>
+                                <li><p><b>Map</b> -- 将键映射到值的对象；</p></li>
+                                <li><p><b>Queue</b> -- 在处理元素前用于保存元素的 Collection(队列)；</p></li>
+                                <li><p><b>Set</b> -- 不包含重复元素的 Collection。</p></li>
+                            </ul>
+                            <p>还有一些用于操作的工具类：<code>Collection</code>, <code>Arrays</code> ...</p>
 							<pre class="brush: java; gutter: false;">
-Iterator/**对 Collection 进行迭代的迭代器，Collection 的实现类一般都有内部类实现此接口，并提供了返回 Iterator 的方法 */
- ├─ ListIterator /** 系列表迭代器，允许程序员按任一方向遍历列表、迭代期间修改列表，并获得迭代器在列表中的当前位置 */
- └─ javax.xml.stream.XMLEventReader /** 此类是用于解析 XML 事件的顶层接口 */
+Iterator /** 对 Collection 进行迭代的迭代器，Collection 的实现类一般都有内部类实现此接口，并提供了返回 Iterator 的方法 */
+ └─ ListIterator /** 系列表迭代器，允许程序员按任一方向遍历列表、迭代期间修改列表，并获得迭代器在列表中的当前位置 */
 
 /** 容器接口继承结构和父接口(不包括非容器接口，):
  * java.util.concurrent 包类，在并发编程中很常用的实用工具类，以 * 开头
  * 有两个父接口的只写在深的父接口下，并加 extends 标明，开头加 = 区分 */
-Iterable /** 实现这个接口允许对象成为 "foreach" 语句的目标 */
+Iterable /** 实现这个接口允许对象成为 "foreach" 语句的目标，主要是: Iterator&lt;T> iterator() 方法。 */
  └─ Collection /** Collection 层次结构中的根接口 */
+	 ├─ List /** 有序的 Collection（也称为序列） */
      ├─ Queue /** 在处理元素前用于保存元素的 Collection */
 	 │	 ├─	Deque /** 一个线性 Collection，支持在两端插入和移除元素 */
 	 │	 └─ * BlockingQueue /** 支持两个附加操作的 Queue */
 	 │		  └─ *= BlockingDeque extends BlockingQueue, Deque /** 支持两个附加操作的 Queue */
-	 ├─ List /** 有序的 Collection（也称为序列） */
 	 └─ Set /** 一个不包含重复元素的 Collection */
 		 └─	SortedSet /** 进一步提供关于元素的总体排序 的 Set */
 		 	 └─ NavigableSet /** 扩展的 SortedSet，具有了为给定搜索目标报告最接近匹配项的导航方法 */
@@ -3401,6 +3409,24 @@ public interface Iterator&lt;E> {
 	default void forEachRemaining(Consumer&lt;? super E> action) {}
 }
 </pre>
+
+                            <p><a href="docs/docs-java/api/java/util/ListIterator.html" target="_blank">ListIterator</a> 列表迭代器，允许程序员按任一方向遍历列表、迭代期间修改列表，并获得迭代器在列表中的当前位置。</p>
+                            <p>ListIterator 没有当前元素；它的光标位置 始终位于调用 previous() 所返回的元素和调用 next() 所返回的元素之间。</p>
+                            <p>List 接口的 <code>listIterator()</code> 方法会返回此接口实现类的实例。</p>
+                            <ol>
+                                <li><p><code>int 	nextIndex()</code> -- 返回对 next 的后续调用所返回元素的索引</p></li>
+
+                                <li class="group"><p><code>E 	previous()</code> -- 返回列表中的前一个元素</p></li>
+                                <li><p><code>int 	previousIndex()</code> -- 返回对 previous 的后续调用所返回元素的索引</p></li>
+                                <li><p><code>boolean 	hasPrevious()</code> -- 如果以逆向遍历列表，列表迭代器有多个元素，则返回 true</p></li>
+
+                                <li class="group"><p><code>void 	add(E e)</code> -- 将指定的元素插入列表</p></li>
+                                <li><p><code>void 	set(E e)</code> -- 用指定元素替换 next 或 previous 返回的最后一个元素</p></li>
+                            </ol>
+
+                        </div>
+
+                        <div class="sub-item">
 							<p><a href="docs/docs-java/api/java/lang/Iterable.html" target="_blank">java.lang.Iterable</a> 实现这个接口允许对象成为 "foreach" 语句的目标。</p>
 							<pre class="brush: java;">
 public interface Iterable&lt;T> {
@@ -3410,10 +3436,162 @@ public interface Iterable&lt;T> {
 	default Spliterator&lt;T> spliterator() {}
 }
 </pre>
-							<p><a href="docs/docs-java/api/java/util/Map.html" target="_blank">Map</a> 将键映射到值的对象。一个映射不能包含重复的键；每个键最多只能映射到一个值。 </p>
-							<p>Map 接口提供三种 Collection 视图，允许以键集、值集或键-值映射关系集的形式查看某个映射的内容。映射顺序 定义为迭代器在映射的 collection 视图上返回其元素的顺序。某些映射实现可明确保证其顺序，如 TreeMap 类；另一些映射实现则不保证顺序，如 HashMap 类。</p>
-							<p>注：将可变对象用作映射键时必须格外小心。当对象是映射中某个键时，如果以影响 equals 比较的方式更改了对象的值，则映射的行为将是不确定的。此项禁止的一种特殊情况是不允许某个映射将自身作为一个键包含。虽然允许某个映射将自身作为值包含，但请格外小心：在这样的映射上 equals 和 hashCode 方法的定义将不再是明确的。 </p>
-							<pre class="brush: java;">
+
+							<p><a href="docs/docs-java/api/java/util/Collection.html" target="_blank">Collection</a> 表示一组对象，这些对象也称为 Collection 的元素。一些 Collection 允许有重复的元素，而另一些则不允许。一些 Collection 是有序的，而另一些则是无序的。</p>
+                            <ol>
+                                <li><p><code>boolean 	add(E e)</code> -- 确保此 collection 包含指定的元素</p></li>
+                                <li><p><code>boolean 	addAll(Collection&lt;? extends E> c)</code> -- 将指定 collection 中的所有元素都添加到此 collection 中</p></li>
+                                <li><p><code>int 	size()</code> -- 返回此 collection 中的元素数</p></li>
+                                <li><p><code>boolean 	isEmpty()</code> -- 如果此 collection 不包含元素，则返回 true</p></li>
+                                <li><p><code>void 	clear()</code> -- 移除此 collection 中的所有元素</p></li>
+                                <li><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此 collection 的元素上进行迭代的迭代器</p></li>
+
+                                <li class="group"><p><code>boolean 	contains(Object o)</code> -- 如果此 collection 包含指定的元素，则返回 true</p></li>
+                                <li><p><code>boolean 	containsAll(Collection&lt;?> c)</code> -- 如果此 collection 包含指定 collection 中的所有元素，则返回 true</p></li>
+                                <li><p><code>boolean 	remove(Object o)</code> -- 从此 collection 中移除指定元素的单个实例，如果存在的话</p></li>
+                                <li><p><code>boolean 	removeAll(Collection&lt;?> c)</code> -- 移除此 collection 中那些也包含在指定 collection 中的所有元素</p></li>
+
+                                <li class="group"><p><code>boolean 	retainAll(Collection&lt;?> c)</code> -- 仅保留此 collection 中那些也包含在指定 collection 的元素</p></li>
+                                <li><p><code>int 	hashCode()</code> -- 返回此 collection 的哈希码值</p></li>
+                                <li><p><code>boolean 	equals(Object o)</code> -- 比较此 collection 与指定对象是否相等。</p></li>
+                                <li><p><code>Object[] 	toArray()</code> -- 返回包含此 collection 中所有元素的数组</p></li>
+                                <li><p><code>&lt;T>T[] toArray(T[] a)</code> -- 返回包含此 collection 中所有元素的数组；返回数组的运行时类型与指定数组的运行时类型相同</p></li>
+
+                            </ol>
+
+                            <p><a href="docs/docs-java/api/java/util/List.html" target="_blank">List</a> 是有序的序列,可以对列表中每个元素的插入位置进行精确地控制,根据元素的整数索引访问元素，并搜索列表中的元素。</p>
+                            <p>与 set 不同，列表通常允许重复的元素。更确切地讲，列表通常允许满足 <code>e1.equals(e2)</code> 的元素对 e1 和 e2，并且如果列表本身允许 null 元素的话，通常它们允许多个 null 元素。</p>
+                            <ol>
+                                <li><p><code>void 	add(int index, E element</code> -- 在列表的指定位置插入指定元素</p></li>
+                                <li><p><code>boolean 	addAll(int index, Collection&lt;? extends E> c)</code> -- 添加指定 collection 中的所有元素到此列表的结尾</p></li>
+                                <li><p><code>E 	get(int index)</code> -- 返回列表中指定位置的元素</p></li>
+                                <li><p><code>int 	indexOf(Object o)</code> -- 返回此列表中第一次出现的指定元素的索引</p></li>
+                                <li><p><code>int 	lastIndexOf(Object o)</code> -- 返回此列表中最后出现的指定元素的索引</p></li>
+                                <li><p><code>ListIterator&lt;E> 	listIterator()</code> -- 返回此列表元素的列表迭代器（按适当顺序）</p></li>
+                                <li><p><code>ListIterator&lt;E> 	listIterator(int index)</code> -- 返回列表中元素的列表迭代器（按适当顺序），从列表的指定位置开始</p></li>
+                                <li><p><code>E 	remove(int index)</code> -- 移除列表中指定位置的元素</p></li>
+                                <li><p><code>E 	set(int index, E element)</code> -- 用指定元素替换列表中指定位置的元素</p></li>
+                                <li><p><code>List&lt;E> 	subList(int from, int to)</code> -- 返回列表中指定的 from（包括 ）和 to（不包括）之间的部分视图</p></li>
+                            </ol>
+
+							<p><a href="docs/docs-java/api/java/util/Queue.html" target="_blank">Queue</a> 在处理元素前用于保存元素的 collection。除了基本的 Collection 操作外，队列还提供其他的插入、提取和检查操作。</p>
+							<p>队列通常（但并非一定）以 FIFO（先进先出）的方式排序各个元素。不过优先级队列和 LIFO 队列（或堆栈）例外，前者根据提供的比较器或元素的自然顺序对元素进行排序，后者按 LIFO（后进先出）的方式对元素进行排序。无论使用哪种排序方式，队列的头 都是调用 remove() 或 poll() 所移除的元素。在 FIFO 队列中，所有的新元素都插入队列的末尾。其他种类的队列可能使用不同的元素放置规则。每个 Queue 实现必须指定其顺序属性。 </p>
+							<p>Queue 接口并未定义阻塞队列的方法，而这在并发编程中是很常见的。BlockingQueue 接口定义了那些等待元素出现或等待队列中有可用空间的方法，这些方法扩展了此接口。 </p>
+                            <ol>
+                                <li><p><code>boolean 	add(E e)</code> -- 将指定的元素插入此队列（如果立即可行且不会违反容量限制），在成功时返回 true，如果当前没有可用的空间，则抛出 IllegalStateException</p></li>
+                                <li><p><code>boolean 	offer(E e)</code> -- 将指定的元素插入此队列（如果立即可行且不会违反容量限制），当使用有容量限制的队列时，此方法通常要优于 add(E)，后者可能无法插入元素，而只是抛出一个异常</p></li>
+                                <li class="group"><p><code>E 	peek()</code> -- 获取但不移除此队列的头；如果此队列为空，则返回 null</p></li>
+                                <li><p><code>E 	element()</code> -- 获取但不移除此队列的头，与 peek 唯一的不同在于：此队列为空时将抛出一个异常</p></li>
+                                <li><p><code>E 	poll()</code> --  获取并移除此队列的头，如果此队列为空，则返回 null</p></li>
+                                <li><p><code>E 	remove()</code> -- 获取并移除此队列的头，与 poll 唯一的不同在于：此队列为空时将抛出一个异常</p></li>
+                            </ol>
+
+							<p><a href="docs/docs-java/api/java/util/Deque.html" target="_blank">Deque</a> 一个线性 collection，支持在两端插入和移除元素。名称 deque 是“double ended queue（双端队列）”的缩写，通常读为“deck”。大多数 Deque 实现对于它们能够包含的元素数没有固定限制，但此接口既支持有容量限制的双端队列，也支持没有固定大小限制的双端队列。 </p>
+                            <p>此接口定义在双端队列两端访问元素的方法。提供插入、移除和检查元素的方法。每种方法都存在两种形式：一种形式在操作失败时抛出异常，另一种形式返回一个特殊值（null 或 false，具体取决于操作）。插入操作的后一种形式是专为使用有容量限制的 Deque 实现设计的；在大多数实现中，插入操作不能失败。 </p>
+                            <p>注意，在将双端队列用作队列或堆栈时，peek 方法同样正常工作；无论哪种情况下，都从双端队列的开头抽取元素。 </p>
+                            <ol>
+                                <li><p><code>void 	addFirst(E e)</code> -- 将指定元素插入此双端队列的开头</p></li>
+                                <li><p><code>void 	addLast(E e)</code> -- 将指定元素插入此双端队列的末尾</p></li>
+                                <li><p><code>E 	getFirst()</code> -- 获取但不移除此双端队列的第一个元素</p></li>
+                                <li><p><code>E 	getLast()</code> -- 获取但不移除此双端队列的最后一个元素</p></li>
+                                <li><p><code>boolean 	offerFirst(E e)</code> -- 将指定的元素插入此双端队列的开头</p></li>
+                                <li><p><code>boolean 	offerLast(E e)</code> -- 在不违反容量限制的情况下，将指定的元素插入此双端队列的末尾</p></li>
+
+                                <li class="group"><p><code>Iterator&lt;E> 	iterator()</code> -- 返回以恰当顺序在此双端队列的元素上进行迭代的迭代器</p></li>
+                                <li><p><code>Iterator&lt;E> 	descendingIterator()</code> -- 返回以逆向顺序在此双端队列的元素上进行迭代的迭代器</p></li>
+
+                                <li class="group"><p><code>E 	peekFirst()</code> -- 获取但不移除此双端队列的第一个元素</p></li>
+                                <li><p><code>E 	peekLast()</code> -- 获取但不移除此双端队列的最后一个元素</p></li>
+                                <li><p><code>E 	pollFirst()</code> -- 获取并移除此双端队列的第一个元素</p></li>
+                                <li><p><code>E 	pollLast()</code> -- 获取并移除此双端队列的最后一个元素</p></li>
+
+                                <li class="group"><p><code>E 	pop()</code> -- 从此双端队列所表示的堆栈中弹出一个元素</p></li>
+                                <li><p><code>void 	push(E e)</code> -- 将一个元素推入此双端队列所表示的堆栈</p></li>
+
+                                <li class="group"><p><code>boolean 	remove(Object o)</code> -- 从此双端队列中移除第一次出现的指定元素</p></li>
+                                <li><p><code>E 	removeFirst()</code> -- 获取并移除此双端队列第一个元素</p></li>
+                                <li><p><code>E 	removeLast()</code> -- 获取并移除此双端队列的最后一个元素</p></li>
+                                <li><p><code>boolean 	removeFirstOccurrence(Object o)</code> -- 从此双端队列移除第一次出现的指定元素</p></li>
+                                <li><p><code>boolean 	removeLastOccurrence(Object o)</code> -- 从此双端队列移除最后一次出现的指定元素</p></li>
+                            </ol>
+
+							<p><a href="docs/docs-java/api/java/util/concurrent/BlockingQueue.html" target="_blank">BlockingQueue</a> 支持两个附加操作的 Queue，这两个操作是：获取元素时等待队列变为非空，以及存储元素时等待空间变得可用。 </p>
+                            <p>其方法以四种形式出现，对于不能立即满足但可能在将来某一时刻可以满足的操作，这四种形式的处理方式不同：</p>
+                            <ol>
+                                <li><p>第一种是抛出一个异常；</p></li>
+                                <li><p>第二种是返回一个特殊值（null 或 false，具体取决于操作）;</p></li>
+                                <li><p>第三种是在操作可以成功前，无限期地阻塞当前线程；</p></li>
+                                <li><p>第四种是在放弃前只在给定的最大时间限制内阻塞。</p></li>
+                            </ol>
+                            <p>BlockingQueue 实现主要用于生产者-使用者队列，但它另外还支持 Collection 接口。</p>
+                            <p>BlockingQueue 实现是线程安全的。所有排队方法都可以使用内部锁或其他形式的并发控制来自动达到它们的目的。</p>
+                            <ol>
+                                <li><p><code>E 	take()</code> -- 获取并移除此队列的头部，在元素变得可用之前一直等待</p></li>
+                                <li><p><code>void 	put(E e)</code> -- 将指定元素插入此队列中，将等待可用的空间</p></li>
+                                <li><p><code>boolean 	offer(E e, long timeout, TimeUnit unit)</code> -- 将指定元素插入此队列中，在到达指定的等待时间前等待可用的空间</p></li>
+                                <li><p><code>E 	poll(long timeout, TimeUnit unit)</code> -- 获取并移除此队列的头部，在指定的等待时间前等待可用的元素</p></li>
+                                <li class="group"><p><code>int 	drainTo(Collectio&lt;? super E> c)</code> -- 移除此队列中所有可用的元素，并将它们添加到给定 collection 中</p></li>
+                                <li><p><code>int 	drainTo(Collection&lt;? super E> c, int maxElements)</code> -- 最多从此队列中移除给定数量的可用元素，并将这些元素添加到给定 collection 中</p></li>
+                                <li><p><code>int 	remainingCapacity()</code> -- 返回在无阻塞的理想情况下（不存在内存或资源约束）此队列能接受的附加元素数量</p></li>
+                            </ol>
+
+							<p><a href="docs/docs-java/api/java/util/concurrent/BlockingDeque.html" target="_blank">BlockingDeque</a> 支持两个附加操作的 Queue，这两个操作是：获取元素时等待双端队列变为非空；存储元素时等待双端队列中的空间变得可用。 </p>
+                            <p>像所有 BlockingQueue 一样，BlockingDeque 是线程安全的，只是它支持双端操作。</p>
+                            <ol>
+                                <li><p><code>boolean 	offerFirst(E e, long timeout, TimeUnit unit)</code> -- 将指定的元素插入此双端队列的开头，必要时将在指定的等待时间内等待可用空间</p></li>
+                                <li><p><code>boolean 	offerLast(E e, long timeout, TimeUnit unit)</code> -- 将指定的元素插入此双端队列的末尾，必要时将在指定的等待时间内等待可用空间</p></li>
+                                <li><p><code>E pollFirst(long timeout, TimeUnit unit)</code> -- 获取并移除此双端队列的第一个元素，必要时将在指定的等待时间等待可用元素</p></li>
+                                <li><p><code>E 	pollLast(long timeout, TimeUnit unit)</code> -- 获取并移除此双端队列的最后一个元素，必要时将在指定的等待时间内等待可用元素</p></li>
+                                <li><p><code>void 	putFirst(E e)</code> -- 将指定的元素插入此双端队列的开头，必要时将一直等待可用空间</p></li>
+                                <li><p><code>void 	putLast(E e)</code> -- 将指定的元素插入此双端队列的末尾，必要时将一直等待可用空间</p></li>
+                                <li><p><code>E 	takeFirst()</code> -- 获取并移除此双端队列的第一个元素，必要时将一直等待可用元素</p></li>
+                                <li><p><code>E 	takeLast()</code> -- 获取并移除此双端队列的最后一个元素，必要时将一直等待可用元素</p></li>
+                            </ol>
+
+                            <p><a href="docs/docs-java/api/java/util/Set.html" target="_blank">Set</a> 一个不包含重复元素的 collection。更确切地讲，set 不包含满足 e1.equals(e2) 的元素对 e1 和 e2，并且最多包含一个 null 元素。</p>
+                            <p>注：如果将可变对象用作 set 元素，那么必须极其小心。如果对象是 set 中某个元素，以一种影响 equals 比较的方式改变对象的值，那么 set 的行为就是不确定的。此项禁止的一个特殊情况是不允许某个 set 包含其自身作为元素。 </p>
+
+							<p><a href="docs/docs-java/api/java/util/SortedSet.html" target="_blank">SortedSet</a> 进一步提供关于元素的总体排序 的 Set。这些元素使用其自然顺序进行排序，或者根据通常在创建有序 set 时提供的 Comparator 进行排序。该 set 的迭代器将按元素升序遍历 set。提供了一些附加的操作来利用这种排序。</p>
+                            <p>插入有序 set 的所有元素都必须实现 Comparable 接口（或者被指定的比较器所接受）。另外，所有这些元素都必须是可互相比较的：对于有序 set 中的任意两个元素 e1 和 e2，执行 e1.compareTo(e2)（或 comparator.compare(e1, e2)）都不得抛出 ClassCastException。试图违反此限制将导致违反规则的方法或者构造方法调用抛出 ClassCastException。 </p>
+                            <p>所有通用有序 set 实现类都应该提供 4 个“标准”构造方法：</p>
+                                <ul><li><p>1) void（无参数）构造方法，它创建一个空的有序 set，按照元素的自然顺序进行排序；</p></li>
+                                    <li><p>2) 带有一个 Comparator 类型参数的构造方法，它创建一个空的有序 set，根据指定的比较器进行排序；</p></li>
+                                    <li><p>3) 带有一个 Collection 类型参数的构造方法，它创建一个新的有序 set，其元素与参数相同，按照元素的自然顺序进行排序；</p></li>
+                                    <li><p>4) 带有一个 SortedSet 类型参数的构造方法，它创建一个新的有序 set，其元素和排序方法与输入的有序 set 相同。无法保证强制实施此建议，因为接口不能包含构造方法。 </p>
+                                </ul>
+                            <ol>
+                                <li><p><code>E 	first()</code> -- 返回此 set 中当前第一个（最低）元素</p></li>
+                                <li><p><code>E 	last()</code> -- 返回此 set 中当前最后一个（最高）元素</p></li>
+                                <li><p><code>SortedSet&lt;E> 	headSet(E toElement)</code> -- 返回此 set 的部分视图，其元素严格小于 toElement</p></li>
+                                <li><p><code>SortedSet&lt;E> 	tailSet(E fromElement)</code> -- 返回此 set 的部分视图，其元素大于等于 fromElement</p></li>
+                                <li><p><code>SortedSet&lt;E> 	subSet(E fromElement, E toElement)</code> -- 返回此 set 的部分视图，其元素从 fromElement（包括）到 toElement（不包括）</p></li>
+                                <li><p><code>Comparator&lt;? super E></code> -- 返回对此 set 中的元素进行排序的比较器；如果此 set 使用其元素的自然顺序，则返回 null</p></li>
+                            </ol>
+
+							<p><a href="docs/docs-java/api/java/util/NavigableSet.html" target="_blank">NavigableSet</a> 扩展的 SortedSet，具有了为给定搜索目标报告最接近匹配项的导航方法。</p>
+                            <p>方法 lower、floor、ceiling 和 higher 分别返回小于、小于等于、大于等于、大于给定元素的元素，如果不存在这样的元素，则返回 null。可以按升序或降序访问和遍历 NavigableSet。descendingSet 方法返回 set 的一个视图，该视图表示的所有关系方法和方向方法都是逆向的。升序操作和视图的性能很可能比降序操作和视图的性能要好。此外，此接口还定义了 pollFirst 和 pollLast 方法，它们返回并移除最小和最大的元素（如果存在），否则返回 null。subSet、headSet 和 tailSet 方法与名称相似的 SortedSet 方法的不同之处在于：可以接受用于描述是否包括（或不包括）下边界和上边界的附加参数。任何 NavigableSet 的 Submap 必须实现 NavigableSet 接口。</p>
+                            <ol>
+                                <li><p><code>E 	ceiling(E e)</code> -- 返回此 set 中大于等于给定元素的最小元素</p></li>
+                                <li><p><code>E 	floor(E e)</code> -- 返回此 set 中小于等于给定元素的最大元素</p></li>
+                                <li><p><code>E 	higher(E e)</code> -- 返回此 set 中严格大于给定元素的最小元素</p></li>
+                                <li><p><code>E 	lower(E e)</code> -- 返回此 set 中严格小于给定元素的最大元素</p></li>
+                                <li><p><code>E 	pollFirst()</code> -- 获取并移除第一个（最低）元素</p></li>
+                                <li><p><code>E 	pollLast()</code> -- 获取并移除最后一个（最高）元素</p></li>
+
+                                <li class="group"><p><code>Iterator&lt;E> 	descendingIterator()</code> -- 以降序返回在此 set 的元素上进行迭代的迭代器</p></li>
+                                <li><p><code>NavigableSet&lt;E> 	descendingSet()</code> -- 返回此 set 中所包含元素的逆序视图</p></li>
+
+                                <li class="group"><p><code>NavigableSet&lt;E> 	headSet(E toElement, boolean inclusive)</code> -- </p></li>
+                                <li><p><code>NavigableSet&lt;E> 	subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive)</code> -- 返回此 set 的部分视图，其元素范围从 fromElement 到 toElement</p></li>
+                                <li><p><code>NavigableSet&lt;E> 	tailSet(E fromElement, boolean inclusive)</code> -- 返回此 set 的部分视图，其元素大于（或等于，如果 inclusive 为 true）fromElement</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><a href="docs/docs-java/api/java/util/Map.html" target="_blank">Map</a> 将键映射到值的对象。一个映射不能包含重复的键；每个键最多只能映射到一个值。 </p>
+                            <p>Map 接口提供三种 Collection 视图，允许以键集、值集或键-值映射关系集的形式查看某个映射的内容。映射顺序 定义为迭代器在映射的 collection 视图上返回其元素的顺序。某些映射实现可明确保证其顺序，如 TreeMap 类；另一些映射实现则不保证顺序，如 HashMap 类。</p>
+                            <p>注：将可变对象用作映射键时必须格外小心。当对象是映射中某个键时，如果以影响 equals 比较的方式更改了对象的值，则映射的行为将是不确定的。此项禁止的一种特殊情况是不允许某个映射将自身作为一个键包含。虽然允许某个映射将自身作为值包含，但请格外小心：在这样的映射上 equals 和 hashCode 方法的定义将不再是明确的。 </p>
+                            <pre class="brush: java;">
 public interface Map&lt;K, V> {
 	interface Entry&lt;K,V> {
 		boolean equals(Object o); // 比较指定对象与此项的相等性
@@ -3429,89 +3607,101 @@ public interface Map&lt;K, V> {
 	}
 }
 </pre>
-                                <ol>
-                                    <li><p><code>V put(K key, V value)</code> -- 将指定的值与此映射中的指定键关联</p></li>
-                                    <li><p><code>V get(Object key)</code> -- 返回指定键所映射的值；如果此映射不包含该键的映射关系，则返回 null</p></li>
-                                    <li><p><code>boolean isEmpty()</code> -- 如果此映射未包含键-值映射关系，则返回 true</p></li>
-                                    <li><p><code>int size()</code> -- 返回此映射中的键-值映射关系数</p></li>
-                                    <li><p><code>V remove(Object key)</code> -- 如果存在一个键的映射关系，则将其从此映射中移除</p></li>
-                                    <li><p><code>void clear()</code> -- 从此映射中移除所有映射关系</p></li>
+                            <ol>
+                                <li><p><code>V put(K key, V value)</code> -- 将指定的值与此映射中的指定键关联</p></li>
+                                <li><p><code>V get(Object key)</code> -- 返回指定键所映射的值；如果此映射不包含该键的映射关系，则返回 null</p></li>
+                                <li><p><code>boolean isEmpty()</code> -- 如果此映射未包含键-值映射关系，则返回 true</p></li>
+                                <li><p><code>int size()</code> -- 返回此映射中的键-值映射关系数</p></li>
+                                <li><p><code>V remove(Object key)</code> -- 如果存在一个键的映射关系，则将其从此映射中移除</p></li>
+                                <li><p><code>void clear()</code> -- 从此映射中移除所有映射关系</p></li>
 
-                                    <li class="group"><p><code>boolean containsKey(Object key)</code> -- 如果此映射包含指定键的映射关系，则返回 true</p></li>
-                                    <li><p><code>Set&lt;K> keySet()</code> -- 返回此映射中包含的键的 Set 视图</p></li>
-                                    <li><p><code>boolean containsValue(Object value)</code> -- 如果此映射将一个或多个键映射到指定值，则返回 true</p></li>
-                                    <li><p><code>Set&lt;Map.Entry&lt;K,V>> entrySet()</code> --  返回此映射中包含的映射关系的 Set 视图</p></li>
-                                    <li><p><code>void putAll(Map&lt;? extends K,? extends V> m)</code> -- 从指定映射中将所有映射关系复制到此映射中</p></li>
-                                    <li><p><code>Collection&lt;V> values()</code> -- 返回此映射中包含的值的 Collection 视图</p></li>
-                                </ol>
-							<p><a href="docs/docs-java/api/java/util/Collection.html" target="_blank">Collection</a> 表示一组对象，这些对象也称为 Collection 的元素。一些 Collection 允许有重复的元素，而另一些则不允许。一些 Collection 是有序的，而另一些则是无序的。</p>
-                                <ol>
-                                    <li><p><code>boolean 	add(E e)</code> -- 确保此 collection 包含指定的元素</p></li>
-                                    <li><p><code>boolean 	addAll(Collection&lt;? extends E> c)</code> -- 将指定 collection 中的所有元素都添加到此 collection 中</p></li>
-                                    <li><p><code>int 	size()</code> -- 返回此 collection 中的元素数</p></li>
-                                    <li><p><code>boolean 	isEmpty()</code> -- 如果此 collection 不包含元素，则返回 true</p></li>
-                                    <li><p><code>void 	clear()</code> -- 移除此 collection 中的所有元素</p></li>
-                                    <li><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此 collection 的元素上进行迭代的迭代器</p></li>
+                                <li class="group"><p><code>boolean containsKey(Object key)</code> -- 如果此映射包含指定键的映射关系，则返回 true</p></li>
+                                <li><p><code>Set&lt;K> keySet()</code> -- 返回此映射中包含的键的 Set 视图</p></li>
+                                <li><p><code>boolean containsValue(Object value)</code> -- 如果此映射将一个或多个键映射到指定值，则返回 true</p></li>
+                                <li><p><code>Set&lt;Map.Entry&lt;K,V>> entrySet()</code> --  返回此映射中包含的映射关系的 Set 视图</p></li>
+                                <li><p><code>void putAll(Map&lt;? extends K,? extends V> m)</code> -- 从指定映射中将所有映射关系复制到此映射中</p></li>
+                                <li><p><code>Collection&lt;V> values()</code> -- 返回此映射中包含的值的 Collection 视图</p></li>
+                            </ol>
 
-                                    <li class="group"><p><code>boolean 	contains(Object o)</code> -- 如果此 collection 包含指定的元素，则返回 true</p></li>
-                                    <li><p><code>boolean 	containsAll(Collection&lt;?> c)</code> -- 如果此 collection 包含指定 collection 中的所有元素，则返回 true</p></li>
-                                    <li><p><code>boolean 	remove(Object o)</code> -- 从此 collection 中移除指定元素的单个实例，如果存在的话</p></li>
-                                    <li><p><code>boolean 	removeAll(Collection&lt;?> c)</code> -- 移除此 collection 中那些也包含在指定 collection 中的所有元素</p></li>
+							<p><a href="docs/docs-java/api/java/util/SortedMap.html" target="_blank">SortedMap</a> 进一步提供关于键的总体排序 的 Map。该映射是根据其键的自然顺序进行排序的，或者根据通常在创建有序映射时提供的 Comparator 进行排序。对有序映射的 collection 视图（由 entrySet、keySet 和 values 方法返回）进行迭代时，此顺序就会反映出来。要采用此排序方式，还需要提供一些其他操作（此接口是 SortedSet 的对应映射）。</p>
+                            <p>插入有序映射的所有键都必须实现 Comparable 接口（或者被指定的比较器接受）。另外，所有这些键都必须是可互相比较的：对有序映射中的任意两个键 k1 和 k2 执行 k1.compareTo(k2)（或 comparator.compare(k1, k2)）都不得抛出 ClassCastException。试图违反此限制将导致违反规则的方法或者构造方法调用抛出 ClassCastException。 </p>
+                            <ol>
+                                <li><p><code>K 	firstKey()</code> -- 返回此映射中当前第一个（最低）键</p></li>
+                                <li><p><code>K 	lastKey()</code> -- 返回映射中当前最后一个（最高）键</p></li>
 
-                                    <li class="group"><p><code>boolean 	retainAll(Collection&lt;?> c)</code> -- 仅保留此 collection 中那些也包含在指定 collection 的元素</p></li>
-                                    <li><p><code>int 	hashCode()</code> -- 返回此 collection 的哈希码值</p></li>
-                                    <li><p><code>boolean 	equals(Object o)</code> -- 比较此 collection 与指定对象是否相等。</p></li>
-                                    <li><p><code>Object[] 	toArray()</code> -- 返回包含此 collection 中所有元素的数组</p></li>
-                                    <li><p><code><T>T[] toArray(T[] a)</code> -- 返回包含此 collection 中所有元素的数组；返回数组的运行时类型与指定数组的运行时类型相同</p></li>
+                                <li class="group"><p><code>SortedMap&lt;K, V> 	headMap(K toKey)</code> -- 返回此映射的部分视图，其键值严格小于 toKey</p></li>
+                                <li><p><code>SortedMap&lt;K, V> 	subMap(K fromKey, K toKey)</code> -- 返回此映射的部分视图，其键值的范围从 fromKey（包括）到 toKey（不包括）</p></li>
+                                <li><p><code>SortedMap&lt;K, V> 	tailMap(K fromKey)</code> -- 返回此映射的部分视图，其键大于等于 fromKey</p></li>
 
-                                </ol>
-                            <p><a href="docs/docs-java/api/java/util/List.html" target="_blank">List</a> 有序的序列,可以对列表中每个元素的插入位置进行精确地控制,根据元素的整数索引访问元素，并搜索列表中的元素。</p>
-                            <p>与 set 不同，列表通常允许重复的元素。更确切地讲，列表通常允许满足 <code>e1.equals(e2)</code> 的元素对 e1 和 e2，并且如果列表本身允许 null 元素的话，通常它们允许多个 null 元素。</p>
-                                <ol>
-                                    <li><p><code>void 	add(int index, E element</code> -- 在列表的指定位置插入指定元素</p></li>
-                                    <li><p><code>boolean 	addAll(int index, Collection&lt;? extends E> c)</code> -- 添加指定 collection 中的所有元素到此列表的结尾</p></li>
-                                    <li><p><code>E 	get(int index)</code> -- 返回列表中指定位置的元素</p></li>
-                                    <li><p><code>int 	indexOf(Object o)</code> -- 返回此列表中第一次出现的指定元素的索引</p></li>
-                                    <li><p><code>int 	lastIndexOf(Object o)</code> -- 返回此列表中最后出现的指定元素的索引</p></li>
-                                    <li><p><code>ListIterator<E> 	listIterator()</code> -- 返回此列表元素的列表迭代器（按适当顺序）</p></li>
-                                    <li><p><code>ListIterator<E> 	listIterator(int index)</code> -- 返回列表中元素的列表迭代器（按适当顺序），从列表的指定位置开始</p></li>
-                                    <li><p><code>E 	remove(int index)</code> -- 移除列表中指定位置的元素</p></li>
-                                    <li><p><code>E 	set(int index, E element)</code> -- 用指定元素替换列表中指定位置的元素</p></li>
-                                    <li><p><code>List<E> 	subList(int from, int to)</code> -- 返回列表中指定的 from（包括 ）和 to（不包括）之间的部分视图</p></li>
-                                </ol>
-							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
-							<pre class="brush: java;">
+                                <li class="group"><p><code>Comparator&lt;? super K> 	comparator()</code> -- 返回对此映射中的键进行排序的比较器；</p></li>
+                            </ol>
 
-</pre>
-							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
-							<pre class="brush: java;">
+                            <p><a href="docs/docs-java/api/java/util/NavigableMap.html" target="_blank">NavigableMap</a> 扩展的 SortedMap，具有了针对给定搜索目标返回最接近匹配项的导航方法。</p>
+                            <p>方法 lowerEntry、floorEntry、ceilingEntry 和 higherEntry 分别返回与小于、小于等于、大于等于、大于给定键的键关联的 Map.Entry 对象，如果不存在这样的键，则返回 null。类似地，方法 lowerKey、floorKey、ceilingKey 和 higherKey 只返回关联的键。所有这些方法是为查找条目而不是遍历条目而设计的。 </p>
+                            <ol>
+                                <li><p><code>K 	ceilingKey(K key)</code> -- 返回大于等于给定键的最小键</p></li>
+                                <li><p><code>Map.Entry&lt;K,V> 	ceilingEntry(K key)</code> -- 返回一个键-值映射关系，它与大于等于给定键的最小键关联</p></li>
+                                <li><p><code>K 	floorKey(K key</code> -- 返回小于等于给定键的最大键</p></li>
+                                <li><p><code>Map.Entry&lt;K,V> 	floorEntry(K key)</code> -- 返回一个键-值映射关系，它与小于等于给定键的最大键关联</p></li>
+                                <li><p><code>K 	higherKey(K key)</code> -- 返回严格大于给定键的最小键</p></li>
+                                <li><p><code>Map.Entry&lt;K,V> 	higherEntry(K key)</code> -- 返回一个键-值映射关系，它与严格大于给定键的最小键关联</p></li>
+                                <li><p><code>K 	lowerKey(K key)</code> -- 返回严格小于给定键的最大键</p></li>
+                                <li><p><code>Map.Entry&lt;K,V> 	lowerEntry(K key)</code> -- 返回一个键-值映射关系</p></li>
+                                <li><p><code>Map.Entry&lt;K,V> 	firstEntry()</code> -- 返回一个与此映射中的最小键关联的键-值映射关系</p></li>
+                                <li><p><code>Map.Entry&lt;K,V> 	lastEntry()</code> -- 返回与此映射中的最大键关联的键-值映射关系</p></li>
 
-</pre>
-							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
-							<pre class="brush: java;">
+                                <li class="group"><p><code>Map.Entry&lt;K,V> 	pollFirstEntry()</code> -- 移除并返回与此映射中的最小键关联的键-值映射关系</p></li>
+                                <li><p><code>Map.Entry&lt;K,V> 	pollLastEntry()</code> -- 移除并返回与此映射中的最大键关联的键-值映射关系</p></li>
 
-</pre>
-							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
-							<pre class="brush: java;">
+                                <li class="group"><p><code>NavigableSet&lt;K> 	descendingKeySet()</code> -- 返回此映射中所包含键的逆序 NavigableSet 视图</p></li>
+                                <li><p><code>NavigableSet&lt;K> 	navigableKeySet()</code> -- 返回此映射中所包含键的 NavigableSet 视图</p></li>
+                                <li><p><code>NavigableMap&lt;K,V> 	descendingMap()</code> -- 返回此映射中所包含映射关系的逆序视图</p></li>
 
-</pre>
-							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
-							<pre class="brush: java;">
+                                <li class="group"><p><code>NavigableMap&lt;K,V> 	headMap(K toKey, boolean inclusive)</code> -- 返回此映射的部分视图，其键小于（或等于，如果 inclusive 为 true）toKey</p></li>
+                                <li><p><code>NavigableMap&lt;K,V> 	subMap(K fromKey, boolean fromInclusive, K toKey, boolean toInclusive)</code> -- 返回此映射的部分视图，其键的范围从 fromKey 到 toKey</p></li>
+                                <li><p><code>NavigableMap&lt;K,V> 	tailMap(K fromKey, boolean inclusive)</code> -- 返回此映射的部分视图，其键大于（或等于，如果 inclusive 为 true）fromKey</p></li>
+                            </ol>
 
-</pre>
-							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
-							<pre class="brush: java;">
+                            <p><a href="docs/docs-java/api/java/util/concurrent/ConcurrentMap.html" target="_blank">ConcurrentMap</a> 提供其他原子 putIfAbsent、remove、replace 方法的 Map。</p>
+                            <ol>
+                                <li><p><code>V 	putIfAbsent(K key, V value)</code> -- 如果指定键已经不再与某个值相关联，则将它与给定值关联。</p></li>
+                                <li><p><code>boolean 	remove(Object key, Object value)</code> -- 只有目前将键的条目映射到给定值时，才移除该键的条目。</p></li>
+                                <li><p><code>V 	replace(K key, V value)</code> -- 只有目前将键的条目映射到某一值时，才替换该键的条目。</p></li>
+                                <li><p><code>boolean 	replace(K key, V oldValue, V newValue)</code> -- 只有目前将键的条目映射到给定值时，才替换该键的条目。</p></li>
+                            </ol>
 
-</pre>
-							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
-							<pre class="brush: java;">
+                            <p><a href="docs/docs-java/api/java/util/concurrent/ConcurrentNavigableMap.html" target="_blank">ConcurrentNavigableMap</a> 支持 NavigableMap 操作，且以递归方式支持其可导航子映射的 ConcurrentMap。</p>
+                            <ol>
+                                <li><p><code>ConcurrentNavigableMap&lt;K,V> 	headMap(K toKey)</code> -- 返回此映射的部分视图，其键值严格小于 toKey。</p></li>
+                                <li><p><code>ConcurrentNavigableMap&lt;K,V> 	headMap(K toKey, boolean inclusive)</code> -- 返回此映射的部分视图，其键小于（或等于，如果 inclusive 为 true）toKey。</p></li>
+                                <li><p><code>ConcurrentNavigableMap&lt;K,V> 	subMap(K fromKey, boolean fromInclusive, K toKey, boolean toInclusive)</code> -- 返回此映射的部分视图，其键的范围从 fromKey 到 toKey。</p></li>
+                                <li><p><code>ConcurrentNavigableMap&lt;K,V> 	subMap(K fromKey, K toKey)</code> -- 返回此映射的部分视图，其键值的范围从 fromKey（包括）到 toKey（不包括）。</p></li>
+                                <li><p><code>ConcurrentNavigableMap&lt;K,V> 	tailMap(K fromKey)</code> -- 返回此映射的部分视图，其键大于等于 fromKey。</p></li>
+                                <li><p><code>ConcurrentNavigableMap&lt;K,V> 	tailMap(K fromKey, boolean inclusive)</code> -- 返回此映射的部分视图，其键大于（或等于，如果 inclusive 为 true）fromKey。</p></li>
 
-</pre>
-							<p><a href="docs/docs-java/api/java/util/Iterable.html" target="_blank"></a></p>
-							<pre class="brush: java;">
+                                <li class="group"><p><code>NavigableSet&lt;K> 	keySet()</code> -- 返回此映射中所包含键的 NavigableSet 视图。</p></li>
+                                <li><p><code>NavigableSet&lt;K> 	navigableKeySet()</code> -- 返回此映射中所包含键的 NavigableSet 视图。</p></li>
 
-</pre>
+                                <li class="group"><p><code>NavigableSet&lt;K> 	descendingKeySet()</code> -- 返回此映射中所包含键的逆序 NavigableSet 视图。</p></li>
+                                <li><p><code>ConcurrentNavigableMap&lt;K,V> 	descendingMap()</code> -- 返回此映射中所包含映射关系的逆序视图。</p></li>
+                            </ol>
 						</div>
+
+                        <div class="sub-item">
+
+                            <p><a href="docs/docs-java/api/java/util/AbstractCollection.html" target="_blank">AbstractCollection</a> 此类提供 Collection 接口的骨干实现，以最大限度地减少了实现此接口所需的工作。 </p>
+                            <ul>
+                                <li><p>要实现一个不可修改的 collection，编程人员只需扩展此类，并提供 <code>iterator</code> 和 <code>size</code> 方法的实现。</p></li>
+                                <li><p>要实现可修改的 collection，编程人员必须另外重写此类的 <code>add</code> 方法（否则，会抛出 UnsupportedOperationException），iterator 方法返回的迭代器还必须另外实现其 <code>remove</code> 方法。</p></li>
+                                <li><p>按照 Collection 接口规范中的建议，编程人员通常应提供一个 void （无参数）和 Collection 构造方法。</p></li>
+                            </ul>
+                            <ol>
+                                <li><p><code></code> -- </p></li>
+                            </ol>
+
+                        </div>
+
+
                     </div>
                 </div>
                 <!-- item over -->
