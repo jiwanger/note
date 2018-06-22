@@ -94,7 +94,7 @@
 							 role="tabpanel">
 							<a href="#java-util-Date" class="list-group-item">Date, TimeZone, Calendar</a>
                             <a href="#java-util-Timer" class="list-group-item">Timer 和 TimerTask</a>
-                            <a href="#java-util-List" class="list-group-item">List, Map, Set, Queue...</a>
+                            <a href="#java-util-List" class="list-group-item">List, Map, Set, Queue, Collections...</a>
                             <a href="#java-util-Formatter" class="list-group-item">Formatter</a>
                             <a href="#java-util-Observable" class="list-group-item">Observable</a>
                             <a href="#java-util-concurrent-Executor" class="list-group-item">Executor 及实现类</a>
@@ -3319,7 +3319,7 @@ public abstract class TimerTask implements Runnable {
                 <a class="offset" id="java-util-List"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">List, Map, Set, Queue...</h3>
+                        <h3 class="panel-title">List, Map, Set, Queue, Arrays, Collections...</h3>
                     </div>
                     <div class="panel-body">
 						<div class="sub-item">
@@ -3396,6 +3396,336 @@ AbstractCollection implements Collection /** 提供 Collection 接口的骨干�
  	 └─	Hashtable implements Map /** 实现一个哈希表，该哈希表将键映射到相应的值 */
 </pre>
 						</div>
+
+						<div class="sub-item">
+							<p><b><code>Arrays</code>  和 <code>Collections</code> 这两个类提供了许多静态方法操作集合和数组。</b></p>
+                            <p><a href="docs/docs-java/api/java/util/Arrays.html" target="_blank">Arrays</a> 包含用来操作数组（比如排序和搜索）的各种方法。此类还包含一个允许将数组作为列表来查看的静态工厂。</p>
+                            <ol>
+
+
+                                <li><p><code>static int 	binarySearch(byte[] a, byte key)</code> -- 使用二分搜索法来搜索指定的数组，以获得指定的值</p></li>
+                                <li><p><code>static int 	binarySearch(char[] a, char key)</code> -- 同上</p></li>
+                                <li><p><code>static int 	binarySearch(short[] a, short key)</code> -- 同上</p></li>
+                                <li><p><code>static int 	binarySearch(int[] a, int key)</code> -- 同上</p></li>
+                                <li><p><code>static int 	binarySearch(long[] a, long key)</code> -- 同上</p></li>
+                                <li><p><code>static int 	binarySearch(float[] a, float key)</code> -- 同上</p></li>
+                                <li><p><code>static int 	binarySearch(double[] a, double key)</code> -- 同上</p></li>
+                                <li><p><code>static int 	binarySearch(Object[] a, Object key)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> int binarySearch(T[] a, T key, Comparator&lt;? super T> c)</code> -- 指定比较器</p></li>
+
+                                <li class="group"><p><code>static int 	binarySearch(byte[] a, int fromIndex, int toIndex, byte key)</code> -- 二分搜索法搜索指定的范围的值</p></li>
+                                <li><p><code>static int 	binarySearch(char[] a, int fromIndex, int toIndex, char key)</code> -- 同上</p></li>
+                                <li><p><code>static int 	binarySearch(short[] a, int fromIndex, int toIndex, short key)</code> -- 同上</p></li>
+                                <li><p><code>static int 	binarySearch(int[] a, int fromIndex, int toIndex, int key)</code> -- 同上</p></li>
+                                <li><p><code>static int 	binarySearch(long[] a, int fromIndex, int toIndex, long key)</code> -- 同上</p></li>
+                                <li><p><code>static int 	binarySearch(float[] a, int fromIndex, int toIndex, float key)</code> -- 同上</p></li>
+                                <li><p><code>static int 	binarySearch(double[] a, int fromIndex, int toIndex, double key)</code> -- 同上</p></li>
+                                <li><p><code>static int 	binarySearch(Object[] a, int fromIndex, int toIndex, Object key)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> int binarySearch(T[] a, int fromIndex, int toIndex, T key, Comparator&lt;? super T> c)</code> -- 指定比较器</p></li>
+
+                                <li class="group"><p><code>static boolean[] 	copyOf(boolean[] original, int newLength)</code> -- 复制使副本具有指定的长度，截取或用 false 填充</p></li>
+                                <li><p><code>static byte[] 	copyOf(byte[] original, int newLength)</code> -- 复制，截取或用 0 填充</p></li>
+                                <li><p><code>static char[] 	copyOf(char[] original, int newLength)</code> -- 复制，截取或用 空字符 填充</p></li>
+                                <li><p><code>static short[] 	copyOf(short[] original, int newLength)</code> --复制，截取或用 0 填充</p></li>
+                                <li><p><code>static int[] 	copyOf(int[] original, int newLength)</code> -- 复制，截取或用 0 填充</p></li>
+                                <li><p><code>static long[] 	copyOf(long[] original, int newLength)</code> -- 复制，截取或用 0 填充</p></li>
+                                <li><p><code>static float[] 	copyOf(float[] original, int newLength)</code> -- 复制，截取或用 0 填充</p></li>
+                                <li><p><code>static double[] 	copyOf(double[] original, int newLength)</code> -- 复制，截取或用 0 填充</p></li>
+                                <li><p><code>static &lt;T> T[] copyOf(T[] original, int newLength)</code> -- 复制，截取或用 null 填充</p></li>
+                                <li><p><code>static &lt;T,U> T[] copyOf(U[] original, int newLength, Class&lt;? extends T[]> newType)</code> -- 复制，截取或用 null 填充</p></li>
+
+                                <li class="group"><p><code>static boolean[] 	copyOfRange(boolean[] original, int from, int to)</code> -- 将指定数组的指定范围复制到一个新数组</p></li>
+                                <li><p><code>static byte[] 	copyOfRange(byte[] original, int from, int to)</code> -- 同上</p></li>
+                                <li><p><code>static char[] 	copyOfRange(char[] original, int from, int to)</code> -- 同上</p></li>
+                                <li><p><code>static short[] 	copyOfRange(short[] original, int from, int to)</code> -- 同上</p></li>
+                                <li><p><code>static int[] 	copyOfRange(int[] original, int from, int to)</code> -- 同上</p></li>
+                                <li><p><code>static long[] 	copyOfRange(long[] original, int from, int to)</code> -- 同上</p></li>
+                                <li><p><code>static float[] 	copyOfRange(float[] original, int from, int to)</code> -- 同上</p></li>
+                                <li><p><code>static double[] 	copyOfRange(double[] original, int from, int to)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> T[] copyOfRange(T[] original, int from, int to)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T,U> T[] copyOfRange(U[] original, int from, int to, Class&lt;? extends T[]> newType)</code> -- 同上</p></li>
+
+
+                                <li class="group"><p><code>static void 	sort(byte[] a)</code> -- 对 a 数组按数字升序进行排序</p></li>
+                                <li><p><code>static void 	sort(char[] a)</code> -- 同上</p></li>
+                                <li><p><code>static void 	sort(short[] a)</code> -- 同上</p></li>
+                                <li><p><code>static void 	sort(int[] a)</code> -- 同上</p></li>
+                                <li><p><code>static void 	sort(long[] a)</code> -- 同上</p></li>
+                                <li><p><code>static void 	sort(float[] a)</code> -- 同上</p></li>
+                                <li><p><code>static void 	sort(double[] a)</code> -- 同上</p></li>
+                                <li><p><code>static void 	sort(Object[] a)</code> -- 根据元素的自然顺序对指定对象数组按升序进行排序</p></li>
+                                <li><p><code>static &lt;T> void sort(T[] a, Comparator&lt;? super T> c)</code> -- 根据指定比较器产生的顺序对指定对象数组进行排序</p></li>
+
+                                <li class="group"><p><code>static void 	sort(byte[] a, int fromIndex, int toIndex)</code> -- 对 a 数组的指定范围按数字升序进行排序</p></li>
+                                <li><p><code>static void 	sort(char[] a, int fromIndex, int toIndex)</code> -- 同上</p></li>
+                                <li><p><code>static void 	sort(double[] a, int fromIndex, int toIndex)</code> -- 同上</p></li>
+                                <li><p><code>static void 	sort(float[] a, int fromIndex, int toIndex)</code> -- 同上</p></li>
+                                <li><p><code>static void 	sort(int[] a, int fromIndex, int toIndex)</code> -- 同上</p></li>
+                                <li><p><code>static void 	sort(long[] a, int fromIndex, int toIndex)</code> -- 同上</p></li>
+                                <li><p><code>static void 	sort(Object[] a, int fromIndex, int toIndex)</code> -- 同上</p></li>
+                                <li><p><code>static void 	sort(short[] a, int fromIndex, int toIndex)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> void sort(T[] a, int fromIndex, int toIndex, Comparator&lt;? super T> c)</code> -- 指定比较器</p></li>
+
+                                <li class="group"><p><code>static void 	fill(boolean[] a, boolean val)</code> -- 将 val 分配给 a 数组的每个元素</p></li>
+                                <li><p><code>static void 	fill(byte[] a, byte val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(char[] a, char val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(short[] a, short val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(int[] a, int val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(long[] a, long val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(float[] a, float val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(double[] a, double val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(Object[] a, Object val)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>static void 	fill(boolean[] a, int fromIndex, int toIndex, boolean val)</code> -- 用 val 填充 a 数组指定范围中的每个元素</p></li>
+                                <li><p><code>static void 	fill(byte[] a, int fromIndex, int toIndex, byte val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(char[] a, int fromIndex, int toIndex, char val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(short[] a, int fromIndex, int toIndex, short val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(int[] a, int fromIndex, int toIndex, int val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(long[] a, int fromIndex, int toIndex, long val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(float[] a, int fromIndex, int toIndex, float val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(double[] a, int fromIndex, int toIndex, double val)</code> -- 同上</p></li>
+                                <li><p><code>static void 	fill(Object[] a, int fromIndex, int toIndex, Object val)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>static &lt;T> List&lt;T> asList(T... a)</code> -- 返回一个受指定数组支持的固定大小的列表</p></li>
+                                <li><p><code>static boolean 	deepEquals(Object[] a1, Object[] a2)</code> -- 如果两个指定数组彼此是深层相等 的，则返回 true</p></li>
+                                <li><p><code>static int 	deepHashCode(Object[] a)</code> -- 基于指定数组的“深层内容”返回哈希码</p></li>
+                                <li><p><code>static String 	deepToString(Object[] a)</code> -- 返回指定数组“深层内容”的字符串表示形式</p></li>
+
+                                <li class="group"><p><code>static int 	hashCode(boolean[] a)</code> -- 基于指定数组的内容返回哈希码</p></li>
+                                <li><p><code>static int 	hashCode(byte[] a)</code> -- 同上</p></li>
+                                <li><p><code>static int 	hashCode(char[] a)</code> -- 同上</p></li>
+                                <li><p><code>static int 	hashCode(short[] a)</code> -- 同上</p></li>
+                                <li><p><code>static int 	hashCode(int[] a)</code> -- 同上</p></li>
+                                <li><p><code>static int 	hashCode(long[] a)</code> -- 同上</p></li>
+                                <li><p><code>static int 	hashCode(float[] a)</code> -- 同上</p></li>
+                                <li><p><code>static int 	hashCode(double[] a)</code> -- 同上</p></li>
+                                <li><p><code>static int 	hashCode(Object[] a)</code> -- 同上</p>
+                                    <pre class="brush: java;">
+/** 对于长度相等的数组 a[n] 和 b[n], 有 a[i] == b[i], 那么 Arrays.hashCode(a) == Arrays.hashCode(b); */
+                                    </pre>
+                                </li>
+
+                                <li class="group"><p><code>static boolean 	equals(boolean[] a, boolean[] a2)</code> -- 如果两个指定类型数组彼此相等，则返回 true</p></li>
+                                <li><p><code>static boolean 	equals(byte[] a, byte[] a2)</code> -- 同上</p></li>
+                                <li><p><code>static boolean 	equals(char[] a, char[] a2)</code> -- 同上</p></li>
+                                <li><p><code>static boolean 	equals(short[] a, short[] a2)</code> -- 同上</p></li>
+                                <li><p><code>static boolean 	equals(int[] a, int[] a2)</code> -- 同上</p></li>
+                                <li><p><code>static boolean 	equals(long[] a, long[] a2)</code> -- 同上</p></li>
+                                <li><p><code>static boolean 	equals(float[] a, float[] a2)</code> -- 同上</p></li>
+                                <li><p><code>static boolean 	equals(double[] a, double[] a2)</code> -- 同上</p></li>
+                                <li><p><code>static boolean 	equals(Object[] a, Object[] a2)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>static String 	toString(boolean[] a)</code> -- 返回指定数组内容的字符串表示形式，<code>[false, true...]</code></p></li>
+                                <li><p><code>static String 	toString(byte[] a)</code> -- 同上，<code>[1, 2...]</code></p></li>
+                                <li><p><code>static String 	toString(char[] a)</code> -- 同上，<code>[a, b...]</code></p></li>
+                                <li><p><code>static String 	toString(int[] a)</code> -- 同上，<code>[1, 2...]</code></p></li>
+                                <li><p><code>static String 	toString(long[] a)</code> -- 同上，<code>[1, 2...]</code></p></li>
+                                <li><p><code>static String 	toString(short[] a)</code> -- 同上，<code>[1, 2...]</code></p></li>
+                                <li><p><code>static String 	toString(float[] a)</code> -- 同上，<code>[1.0, 2.0...]</code></p></li>
+                                <li><p><code>static String 	toString(double[] a)</code> -- 同上，<code>[1.0, 2.0...]</code></p></li>
+                                <li><p><code>static String 	toString(Object[] a)</code> -- 同上，<code>[a[0].toString(), a[1].toString()...]</code></p></li>
+
+                                <li class="group"><p><code>static void 	parallelSort(byte[] a)</code> -- 并行排序，在多核设备上，当数组容量在 10000 以上的时候，并行排序比较快</p></li>
+                                <li><p><code>static void 	parallelSort(char[] a)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelSort(short[] a)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelSort(int[] a)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelSort(long[] a)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelSort(float[] a)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelSort(double[] a)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static &lt;T extends Comparable&lt;? super T>> void 	parallelSort(T[] a)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static &lt;T> void 	parallelSort(T[] a, Comparator&lt;? super T> cmp)</code> -- 同上，Java 8</p></li>
+
+                                <li class="group"><p><code>static void 	parallelSort(byte[] a, int fromIndex, int toIndex)</code> -- 指定范围并行排序</p></li>
+                                <li><p><code>static void 	parallelSort(char[] a, int fromIndex, int toIndex)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelSort(double[] a, int fromIndex, int toIndex)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelSort(float[] a, int fromIndex, int toIndex)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelSort(int[] a, int fromIndex, int toIndex)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelSort(long[] a, int fromIndex, int toIndex)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelSort(short[] a, int fromIndex, int toIndex)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static &lt;T extends Comparable&lt;? super T>> void 	parallelSort(T[] a, int fromIndex, int toIndex)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static &lt;T> void 	parallelSort(T[] a, int fromIndex, int toIndex, Comparator&lt;? super T> cmp)</code> -- 同上，Java 8</p></li>
+
+                                <li class="group"><p><code>static void 	parallelPrefix(int[] array, IntBinaryOperator op)</code> -- 使用函数并行地对给定数组中的每个元素进行累积</p>
+                                    <pre class="brush: java;">
+int[] a = {1, 2, 3, 4};
+Arrays.parallelPrefix(a, new IntBinaryOperator() {
+   @Override
+   public int applyAsInt(int left, int right) {
+       log(left, right);
+       return left * right;
+   }
+});
+log(Arrays.toString(a)); // 计算后：a = [1, 2, 6, 24]
+</pre>
+                                </li>
+                                <li><p><code>static void 	parallelPrefix(long[] array, LongBinaryOperator op)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelPrefix(double[] array, DoubleBinaryOperator op)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static &lt;T> void 	parallelPrefix(T[] array, BinaryOperator&lt;T> op)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelPrefix(int[] array, int fromIndex, int toIndex, IntBinaryOperator op)</code> -- 指定范围，Java 8</p></li>
+                                <li><p><code>static void 	parallelPrefix(long[] array, int fromIndex, int toIndex, LongBinaryOperator op)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelPrefix(double[] array, int fromIndex, int toIndex, DoubleBinaryOperator op)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static &lt;T> void 	parallelPrefix(T[] array, int fromIndex, int toIndex, BinaryOperator&lt;T> op)</code> -- 同上，Java 8</p></li>
+
+
+                                <li class="group"><p><code>static void 	setAll(int[] array, IntUnaryOperator generator)</code> -- 使用提供的生成器函数计算每个元素</p>
+                                    <pre class="brush: java;">
+int[] a = {1, 2, 3, 4};
+Arrays.setAll(a, new IntUnaryOperator() {
+   @Override
+   public int applyAsInt(int operand) { // operand 为索引
+       return a[operand] * operand;
+   }
+});
+log(Arrays.toString(a)); // 计算后：a = [0, 2, 6, 12]
+</pre>
+                                </li>
+                                <li><p><code>static void 	setAll(long[] array, IntToLongFunction generator)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	setAll(double[] array, IntToDoubleFunction generator)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static &lt;T> void 	setAll(T[] array, IntFunction&lt;? extends T> generator)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelSetAll(int[] array, IntUnaryOperator generator)</code> -- 并行计算</p></li>
+                                <li><p><code>static void 	parallelSetAll(long[] array, IntToLongFunction generator)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static void 	parallelSetAll(double[] array, IntToDoubleFunction generator)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static &lt;T> void 	parallelSetAll(T[] array, IntFunction&lt;? extends T> generator)</code> -- 同上，Java 8</p></li>
+
+                                <li class="group"><p><code>static Spliterator.OfInt 	spliterator(int[] array)</code> -- 创建数组的可分割迭代器，<a href="docs/docs-java/api/java/util/Spliterator.html" target="_blank">Spliterator</a> 是为了并行遍历元素而设计的一个迭代器，相对于顺序遍历迭代器 Iterator，Spliterator 一个是并行遍历的迭代器。</p></li>
+                                <li><p><code>static Spliterator.OfLong 	spliterator(long[] array)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static Spliterator.OfDouble 	spliterator(double[] array)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static &lt;T> Spliterator&lt;T> 	spliterator(T[] array)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static Spliterator.OfInt 	spliterator(int[] array, int startInclusive, int endExclusive)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static Spliterator.OfLong 	spliterator(long[] array, int startInclusive, int endExclusive)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static Spliterator.OfDouble 	spliterator(double[] array, int startInclusive, int endExclusive)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static &lt;T> Spliterator&lt;T> 	spliterator(T[] array, int startInclusive, int endExclusive)</code> -- 同上，Java 8</p></li>
+
+                                <li class="group"><p><code>static IntStream 	stream(int[] array)</code> -- <a href="">IntStream</a> 为支持顺序和并行聚合操作的原始值元素序列，参阅 <a href="docs/docs-java/api/java/util/stream/package-summary.html" target="_blank">java.util.stream</a></p></li>
+                                <li><p><code>static LongStream 	stream(long[] array)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static &lt;T> Stream&lt;T> 	stream(T[] array)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static DoubleStream 	stream(double[] array)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static IntStream 	stream(int[] array, int startInclusive, int endExclusive)</code> -- 指定范围</p></li>
+                                <li><p><code>static LongStream 	stream(long[] array, int startInclusive, int endExclusive)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static DoubleStream 	stream(double[] array, int startInclusive, int endExclusive)</code> -- 同上，Java 8</p></li>
+                                <li><p><code>static &lt;T> Stream&lt;T> 	stream(T[] array, int startInclusive, int endExclusive)</code> -- 同上，Java 8</p></li>
+                            </ol>
+
+
+                            <p><a href="docs/docs-java/api/java/util/Collections.html" target="_blank">Collections</a> 此类完全由在 collection 上进行操作或返回 collection 的静态方法组成。它包含在 collection 上操作的多态算法，即“包装器”，包装器返回由指定 collection 支持的新 collection，以及少数其他内容。</p>
+                            <pre class="brush: java;">
+public class Collections {
+    public static final List EMPTY_LIST = new EmptyList<>();
+    public static final Map EMPTY_MAP = new EmptyMap<>();
+    public static final Set EMPTY_SET = new EmptySet<>();
+}
+</pre>
+                            <ol>
+
+
+
+                                <li class="group"><p><code>static &lt;T> int binarySearch(List&lt;? extends Comparable&lt;? super T>> list, T key)</code> -- 二分搜索法搜索列表返回索引</p></li>
+                                <li><p><code>static &lt;T> int binarySearch(List&lt;? extends T> list, T key, Comparator&lt;? super T> c)</code> -- 二分搜索法搜索返回索引</p></li>
+
+                                <li class="group"><p><code>static &lt;E> List&lt;E> checkedList(List&lt;E> list, Class&lt;E> type)</code> -- 返回一个动态类型安全视图，只能添加固定类型数据</p>
+                                    <pre class="brush: java;">
+List list = new ArrayList<>();
+list.add("nate");
+list.add(2);
+
+List sList = Collections.checkedList(list, String.class); // sList 只能 add(String)
+sList.add("1024");
+list.add(4);
+log(list, sList, list == sList); // list 和 sList 都包括以上 4 项，却不是同一个对象
+// sList.add(2); // 插入非 String, 报 ClassCastException
+</pre>
+                                </li>
+                                <li><p><code>static &lt;E> Collection&lt;E> checkedCollection(Collection&lt;E> c, Class&lt;E> type)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;E> Queue&lt;E> 	checkedQueue(Queue&lt;E> queue, Class&lt;E> type)</code> -- 同上, Java8</p></li>
+                                <li><p><code>static &lt;E> Set&lt;E> checkedSet(Set&lt;E> s, Class&lt;E> type)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;E> SortedSet&lt;E> checkedSortedSet(SortedSet&lt;E> s, Class&lt;E> type)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;E> NavigableSet&lt;E> 	checkedNavigableSet(NavigableSet&lt;E> s, Class&lt;E> type)</code> -- 同上, Java8</p></li>
+                                <li><p><code>static &lt;K,V> Map&lt;K,V> checkedMap(Map&lt;K,V> m, Class&lt;K> keyType, Class&lt;V> valueType)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;K,V> SortedMap&lt;K,V> checkedSortedMap(SortedMap&lt;K,V> m, Class&lt;K> keyType, Class&lt;V> valueType)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;K,V> NavigableMap&lt;K,V> 	checkedNavigableMap(NavigableMap&lt;K,V> m, Class&lt;K> keyType, Class&lt;V> valueType)</code></p></li>
+
+                                <li class="group"><p><code>static  &lt;T> Collection&lt;T> synchronizedCollection(Collection&lt;T> c)</code> -- 返回线程安全支持的 Collection</p></li>
+                                <li><p><code>static &lt;T> List&lt;T> synchronizedList(List&lt;T> list)</code> -- 返回指定线程安全支持的列表，操作加了 <code>synchronized</code></p></li>
+                                <li><p><code>static &lt;K,V> Map&lt;K,V> synchronizedMap(Map&lt;K,V> m)</code> -- 返回指定线程安全支持的映射</p></li>
+                                <li><p><code>static &lt;K,V> SortedMap&lt;K,V> synchronizedSortedMap(SortedMap&lt;K,V> m)</code> -- 返回指定线程安全支持的有序映射</p></li>
+                                <li><p><code>static &lt;K,V> NavigableMap&lt;K,V> 	synchronizedNavigableMap(NavigableMap&lt;K,V> m)</code> -- 线程安全支持的 NavigableMap</p></li>
+                                <li><p><code>static &lt;T> Set&lt;T> synchronizedSet(Set&lt;T> s)</code> -- 返回指定线程安全支持的set</p></li>
+                                <li><p><code>static &lt;T> SortedSet&lt;T> synchronizedSortedSet(SortedSet&lt;T> s)</code> -- 返回指定线程安全支持的有序 set</p></li>
+                                <li><p><code>static &lt;T> NavigableSet&lt;T> 	synchronizedNavigableSet(NavigableSet&lt;T> s)</code> -- 返回指定线程安全支持的 NavigableSet</p></li>
+
+
+                                <li class="group"><p><code>static &lt;T> Collection&lt;T> unmodifiableCollection(Collection&lt;? extends T> c)</code> -- 返回指定 collection 的不可修改视图</p></li>
+                                <li><p><code>static &lt;T> List&lt;T> unmodifiableList(List&lt;? extends T> list)</code> -- 返回指定列表的不可修改视图</p></li>
+                                <li><p><code>static &lt;K,V> Map&lt;K,V> unmodifiableMap(Map&lt;? extends K,? extends V> m)</code> -- 返回指定映射的不可修改视图</p></li>
+                                <li><p><code>static &lt;K,V> SortedMap&lt;K,V> unmodifiableSortedMap(SortedMap&lt;K,? extends V> m)</code> -- 返回指定有序映射的不可修改视图</p></li>
+                                <li><p><code>static &lt;K,V> NavigableMap&lt;K,V> 	unmodifiableNavigableMap(NavigableMap&lt;K,? extends V> m)</code> -- 不可修改视图</p></li>
+                                <li><p><code>static &lt;T> Set&lt;T> unmodifiableSet(Set&lt;? extends T> s)</code> -- 返回指定 set 的不可修改视图</p></li>
+                                <li><p><code>static &lt;T> SortedSet&lt;T> unmodifiableSortedSet(SortedSet&lt;T> s)</code> -- 返回指定有序 set 的不可修改视图</p></li>
+                                <li><p><code>static &lt;T> NavigableSet&lt;T> 	unmodifiableNavigableSet(NavigableSet&lt;T> s)</code> -- NavigableSet 不可修改视图</p></li>
+
+                                <li class="group"><p><code>static &lt;T> List&lt;T> emptyList()</code> -- 返回空的列表</p></li>
+                                <li><p><code>static &lt;K,V> Map&lt;K,V> emptyMap()</code> -- 返回空的映射</p></li>
+                                <li><p><code>static &lt;T> Set&lt;T> emptySet()</code> -- 返回空的 set</p></li>
+                                <li><p><code>static &lt;T> Enumeration&lt;T> 	emptyEnumeration()</code> -- 返回空的 Enumeration, Java8</p></li>
+                                <li><p><code>static &lt;T> Iterator&lt;T> 	emptyIterator()</code> -- 返回空的 Iterator, Java8</p></li>
+                                <li><p><code>static &lt;T> ListIterator&lt;T> 	emptyListIterator()</code> -- 返回空的 ListIterator, Java8</p></li>
+                                <li><p><code>static &lt;E> SortedSet&lt;E> 	emptySortedSet()</code> -- 返回空的 SortedSet, Java8</p></li>
+                                <li><p><code>static &lt;E> NavigableSet&lt;E> 	emptyNavigableSet()</code> -- 返回空的 NavigableSet, Java8</p></li>
+                                <li><p><code>static &lt;K,V> SortedMap&lt;K,V> 	emptySortedMap()</code> -- 返回空的 SortedMap, Java8</p></li>
+                                <li><p><code>static &lt;K,V> NavigableMap&lt;K,V> 	emptyNavigableMap()</code> -- 返回空的 NavigableMap, Java8</p></li>
+                                <li><p><code>static &lt;T> Set&lt;T> singleton(T o)</code> -- 返回只包含一个指定对象的不可变 set</p></li>
+                                <li><p><code>static &lt;T> List&lt;T> singletonList(T o)</code> -- 返回只包含一个指定对象的不可变列表</p></li>
+                                <li><p><code>static &lt;K,V> Map&lt;K,V> singletonMap(K key, V value)</code> -- 返回一个不可变的映射，它只将指定键映射到指定值</p></li>
+
+                                <li class="group"><p><code>static &lt;T> void fill(List&lt;? super T> list, T obj)</code> -- 使用指定元素替换指定列表中的所有元素</p></li>
+                                <li><p><code>static void 	rotate(List&lt;?> list, int distance)</code> -- 根据指定的距离轮换指定列表中的元素</p>
+                                    <pre class="brush: java;">
+list = [1, 2, 3, 4];
+rotate(list, 1) ==> [4, 1, 2, 3]
+rotate(list, 2) ==> [3, 4, 1, 2]
+rotate(list, 3) ==> [2, 3, 4, 1]
+</pre>
+                                </li>
+                                <li><p><code>static void 	shuffle(List&lt;?> list)</code> -- 使用默认随机源对指定列表进行置换(随机打乱顺序)</p></li>
+                                <li><p><code>static void 	shuffle(List&lt;?> list, Random rnd)</code> -- 使用指定的随机源对指定列表进行置换</p></li>
+                                <li><p><code>static void 	swap(List&lt;?> list, int i, int j)</code> -- 在指定列表的指定位置处交换元素</p></li>
+                                <li><p><code>static void 	reverse(List&lt;?> list)</code> -- 反转指定列表中元素的顺序</p></li>
+                                <li><p><code>static &lt;T> List&lt;T> nCopies(int n, T o)</code> -- 返回由指定对象的 n 个副本组成的不可变列表</p></li>
+                                <li><p><code>static &lt;T> boolean replaceAll(List&lt;T> list, T oldVal, T newVal)</code> -- 使用另一个值替换列表中出现的所有某一指定值</p></li>
+                                <li><p><code>static &lt;T> void copy(List&lt;? super T> dest, List&lt;? extends T> src)</code> -- 将所有元素从一个列表复制到另一个列表</p></li>
+                                <li><p><code>static int 	indexOfSubList(List&lt;?> src, List&lt;?> target)</code> -- 返回指定源列表中第一次出现指定目标列表的起始位置</p></li>
+                                <li><p><code>static int 	lastIndexOfSubList(List&lt;?> src, List&lt;?> tar)</code> -- 返回指定源列表中最后一次出现指定目标列表的起始位置</p></li>
+
+                                <li class="group"><p><code>static &lt;T extends Object & Comparable&lt;? super T>> T max(Collection&lt;? extends T> coll)</code> -- 自然顺序最大元素</p></li>
+                                <li><p><code>static &lt;T extends Object & Comparable&lt;? super T>> T min(Collection&lt;? extends T> coll)</code> -- 自然顺序最小元素</p></li>
+                                <li><p><code>static &lt;T> T max(Collection&lt;? extends T> coll, Comparator&lt;? super T> comp)</code> -- 指定比较器的最大元素</p></li>
+                                <li><p><code>static &lt;T> T min(Collection&lt;? extends T> coll, Comparator&lt;? super T> comp)</code> -- 指定比较器的最小元素</p></li>
+
+                                <li class="group"><p><code>static &lt;T extends Comparable&lt;? super T>> void sort(List&lt;T> list)</code> -- 根据元素的自然顺序对指定列表按升序进行排序</p></li>
+                                <li><p><code>static  &lt;T> void sort(List&lt;T> list, Comparator&lt;? super T> c)</code> -- 根据指定比较器产生的顺序对指定列表进行排序</p></li>
+                                <li><p><code>static &lt;T> Comparator&lt;T> reverseOrder()</code> -- 返回一个逆转的比较器</p></li>
+                                <li><p><code>static &lt;T> Comparator&lt;T>  reverseOrder(Comparator&lt;T> cmp)</code> -- 返回一个比较器，它强行逆转指定比较器的顺序</p></li>
+
+
+                                <li class="group"><p><code>static &lt;T> boolean addAll(Collection&lt;? super T> c, T... elements)</code> -- 将所有指定元素添加到指定 collection 中</p></li>
+                                <li><p><code>static boolean 	disjoint(Collection&lt;?> c1, Collection&lt;?> c2)</code> -- 是否有相同元素</p></li>
+                                <li><p><code>static int 	frequency(Collection&lt;?> c, Object o)</code> -- 返回指定 collection 中等于指定对象的元素数</p></li>
+                                <li><p><code>static &lt;T> Queue&lt;T> asLifoQueue(Deque&lt;T> deque)</code> -- 以后进先出 (Lifo) Queue 的形式返回某个 Deque 的视图</p></li>
+                                <li><p><code>static &lt;E> Set&lt;E> newSetFromMap(Map&lt;E,Boolean> map)</code> -- 返回指定映射支持的 set</p></li>
+
+                                <li class="group"><p><code>static &lt;T> Enumeration&lt;T> enumeration(Collection&lt;T> c)</code> -- 返回一个指定 collection 上的枚举</p></li>
+                                <li><p><code>static &lt;T> ArrayList&lt;T> list(Enumeration&lt;T> e)</code> -- 返回一个数组列表，它按返回顺序包含指定枚举返回的元素</p>
+                                    <pre class="brush: java;">
+List list = Arrays.asList(1, 2, 3, 4);
+Enumeration e = Collections.enumeration(list);
+// ArrayList l2 = Collections.list(e); // 可以将 e 转换回 ArrayList
+while(e.hasMoreElements()) { // 遍历元素
+    log(e.nextElement());
+}
+</pre>
+                                </li>
+                            </ol>
+                        </div>
 
 						<div  class="sub-item">
 							<p><b>从顶向下分析 Java Collections Framework：</b></p>
@@ -3690,17 +4020,178 @@ public interface Map&lt;K, V> {
                         <div class="sub-item">
 
                             <p><a href="docs/docs-java/api/java/util/AbstractCollection.html" target="_blank">AbstractCollection</a> 此类提供 Collection 接口的骨干实现，以最大限度地减少了实现此接口所需的工作。 </p>
+							<pre class="brush: java;">
+public abstract class AbstractCollection&lt;E> implements Collection&lt;E> {
+    public abstract Iterator&lt;E> iterator();
+    public abstract int size();
+}
+</pre>
                             <ul>
-                                <li><p>要实现一个不可修改的 collection，编程人员只需扩展此类，并提供 <code>iterator</code> 和 <code>size</code> 方法的实现。</p></li>
-                                <li><p>要实现可修改的 collection，编程人员必须另外重写此类的 <code>add</code> 方法（否则，会抛出 UnsupportedOperationException），iterator 方法返回的迭代器还必须另外实现其 <code>remove</code> 方法。</p></li>
-                                <li><p>按照 Collection 接口规范中的建议，编程人员通常应提供一个 void （无参数）和 Collection 构造方法。</p></li>
+                                <li><p>要实现一个不可修改的 collection，只需扩展此类，并提供 <code>iterator()</code> 和 <code>size()</code> 方法的实现。</p></li>
+                                <li><p>要实现可修改的 collection，必须另外重写此类的 <code>add(E)</code> 方法（否则，会抛出 UnsupportedOperationException），iterator 方法返回的迭代器还必须另外实现其 <code>remove()</code> 方法。</p></li>
+                                <li><p>按照 Collection 接口规范中的建议，通常应提供一个 void （无参数）和 Collection 构造方法。</p></li>
                             </ul>
+
+							<p><a href="docs/docs-java/api/java/util/AbstractList.html" target="_blank">AbstractList</a> 此类提供 List 接口的骨干实现，以最大限度地减少实现“随机访问”数据存储（如数组）支持的该接口所需的工作。对于连续的访问数据（如链表），应优先使用 AbstractSequentialList，而不是此类。  </p>
+                            <pre class="brush: java;">
+/** 实现了 AbstractCollection 的 iterator() 方法，但未实现 size() 方法 */
+public abstract class AbstractList&lt;E> extends AbstractCollection&lt;E> implements List&lt;E> {
+    abstract public E get(int index);
+}
+</pre>
+							<ul>
+								<li><p>要实现不可修改的列表，只需扩展此类，并提供 <code>get(int)</code> 和 <code>size()</code> 方法的实现；</p></li>
+								<li><p>要实现可修改的列表，必须另外重写 <code>set(int, E)</code> 方法（否则将抛出 UnsupportedOperationException）。如果列表为可变大小，则必须另外重写 <code>add(int, E)</code> 和 <code>remove(int)</code> 方法； </p></li>
+								<li><p>按照 Collection 接口规范中的建议，通常应该提供一个 void（无参数）和 collection 构造方法。</p></li>
+							</ul>
+
+                            <p><a href="docs/docs-java/api/java/util/ArrayList.html" target="_blank">ArrayList</a> 是 List 接口的大小可变数组的实现。实现了所有可选列表操作，并允许包括 null 在内的所有元素。除了实现 List 接口外，此类还提供一些方法来操作内部用来存储列表的数组的大小。</p>
+                            <p>每个 ArrayList 实例都有一个容量。该容量是指用来存储列表元素的数组的大小。它总是至少等于列表的大小。随着向 ArrayList 中不断添加元素，其容量也自动增长。并未指定增长策略的细节，因为这不只是添加元素会带来分摊固定时间开销那样简单。</p>
+                            <p>在添加大量元素前，应用程序可以使用 <code>ensureCapacity(int)</code> 操作来增加 ArrayList 实例的容量。这可以减少递增式再分配的数量。</p>
+                            <p>ArrayList 内部有一个 <code>transient Object[] elementData;</code> 数组，针对 ArrayList 的操作都是操作此数组。当数组长度不够时，调用 <code>elementData = Arrays.copyOf(elementData, newCapacity);</code> 方法，创建一个新的数组，并复制原有数组的数据到新的数组。</p>
+                            <pre class="brush: java;">
+public class ArrayList&lt;E> extends AbstractList&lt;E> implements List&lt;E>, RandomAccess,
+                                Cloneable, java.io.Serializable {
+    public ArrayList() {}
+    public ArrayList(Collection&lt;? extends E> c) {}
+    public ArrayList(int initialCapacity) {} // 构造一个具有指定初始容量的空列表
+}
+</pre>
                             <ol>
-                                <li><p><code></code> -- </p></li>
+
+                                <li><p><code>boolean 	add(E e)</code> -- 将指定的元素添加到此列表的尾部</p></li>
+                                <li><p><code>void 	add(int index, E element)</code> -- 将指定的元素插入此列表中的指定位置</p></li>
+                                <li><p><code>boolean 	addAll(Collection&lt;? extends E> c)</code> -- 按 collection 的迭代器顺序，将所有元素添加到此列表的尾部</p></li>
+                                <li><p><code>boolean 	addAll(int index, Collection&lt;? extends E> c)</code> -- 从指定的位置将 collection 中所有元素插入到此列表中</p></li>
+
+                                <li class="group"><p><code>E 	remove(int index)</code> -- 移除此列表中指定位置上的元素</p></li>
+                                <li><p><code>boolean 	remove(Object o)</code> -- 移除此列表中首次出现的指定元素</p></li>
+                                <li><p><code>protected  void 	removeRange(int from, int to)</code> -- 移除索引在 from（包括）和 to（不包括）之间的所有元素</p></li>
+                                <li><p><code>void 	clear()</code> -- 移除此列表中的所有元素。</p></li>
+
+                                <li class="group"><p><code>E 	set(int index, E element)</code> -- 用指定的元素替代此列表中指定位置上的元素</p></li>
+
+                                <li class="group"><p><code>E 	get(int index)</code> -- 返回此列表中指定位置上的元素。</p></li>
+                                <li><p><code>int 	indexOf(Object o)</code> -- 返回此列表中首次出现的指定元素的索引，或如果此列表不包含元素，则返回 -1。</p></li>
+                                <li><p><code>int 	lastIndexOf(Object o)</code> -- 返回此列表中最后一次出现的指定元素的索引，或如果此列表不包含索引，则返回 -1。</p></li>
+                                <li><p><code>boolean 	contains(Object o)</code> --  如果此列表中包含指定的元素，则返回 true。</p></li>
+
+                                <li class="group"><p><code>void 	ensureCapacity(int minCapacity)</code> -- 如有必要，增加此 ArrayList 实例的容量</p></li>
+                                <li><p><code>boolean 	isEmpty()</code> -- 如果此列表中没有元素，则返回 true</p></li>
+                                <li><p><code>int 	size()</code> -- 返回此列表中的元素数</p></li>
+                                <li><p><code>void 	trimToSize()</code> -- 将此 ArrayList 实例的容量调整为列表的当前大小</p></li>
+                                <li><p><code>Object 	clone()</code> -- 返回此 ArrayList 实例的浅表副本</p></li>
+
+                                <li class="group"><p><code>void 	forEach(Consumer&lt;? super E> action)</code> -- 和 <code>for</code> 循环一样</p></li>
+                                <li><p><code>Iterator&lt;E> 	iterator()</code> -- 返回迭代器</p></li>
+                                <li><p><code>ListIterator&lt;E> 	listIterator()</code> -- 返回 ListIterator 迭代器</p></li>
+                                <li><p><code>ListIterator&lt;E> 	listIterator(int index)</code> -- 返回指定索引开始的 ListIterator 迭代器</p></li>
+                                <li><p><code>boolean 	removeAll(Collection&lt;?> c)</code> -- 移除在 c 中的元素</p></li>
+                                <li><p><code>boolean 	removeIf(Predicate&lt;? super E> filter)</code> -- 移除所有符合条件项</p>
+                                    <pre class="brush: java;">
+ArrayList&lt;Integer> a1 = new ArrayList<>();
+Collections.addAll(a1, 1, 2, 3, 4);
+a1.removeIf(filter -> filter % 2 == 0); // 移除了偶数，a1 = [1, 3]
+</pre>
+                                </li>
+                                <li><p><code>void 	replaceAll(UnaryOperator&lt;E> operator)</code> -- 替换所有符合条件项</p>
+                                    <pre class="brush: java;">
+ArrayList&lt;nteger> a1 = new ArrayList<>();
+Collections.addAll(a1, 1, 2, 3, 4);
+a1.replaceAll(operator -> operator % 2 == 0 ? operator * operator : operator); // a1 = [1, 4, 3, 16]
+</pre>
+                                </li>
+                                <li><p><code>boolean 	retainAll(Collection&lt;?> c)</code> -- 仅保留那些也包含在 c 的元素</p></li>
+                                <li><p><code>void 	sort(Comparator&lt;? super E> c)</code> -- 指定比较器排序</p></li>
+                                <li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 返回可分割迭代器，用于并行迭代</p></li>
+                                <li><p><code>List&lt;E> 	subList(int fromIndex, int toIndex)</code> -- 返回在 from（包括）和 to（不包括）子列表</p></li>
+
+                                <li class="group"><p><code>Object[] 	toArray()</code> -- 按适当顺序（从第一个到最后一个元素）返回包含此列表中所有元素的数组</p></li>
+                                <li><p><code>&lt;T> T[] toArray(T[] a)</code> -- 按适当顺序（从第一个到最后一个元素）返回包含此列表中所有元素的数组</p></li>
+
                             </ol>
+
+                            <p><a href="docs/docs-java/api/java/util/AbstractSequentialList.html" target="_blank">AbstractSequentialList</a></p>
+
+
+                            <p><a href="docs/docs-java/api/java/util/LinkedList.html" target="_blank">LinkedList</a></p>
+							<pre class="brush: java;">
+/** 一个简单的链表，只有 add(E), size(), get(Int) 方法 */
+public class MyLink&lt;E> {
+    private Node&lt;E> first;
+    private Node&lt;E> last;
+    private int size;
+
+    public void add(E v) {
+        final Node&lt;E> l = last;
+        final Node&lt;E> newNode = new Node<>(l, v, null);
+        last = newNode;
+        if (l == null)
+            first = newNode;
+        else
+            l.next = newNode;
+        size++;
+    }
+
+    public int size() {
+        return size;
+    }
+
+    private Node&lt;E> node(int index) {
+        if (index < (size >> 1)) { // 从 first 到 last 搜索
+            Node&lt;E> x = first;
+            for (int i = 0; i < index; i++)
+                x = x.next;
+            return x;
+        } else { // 从 last 到 first 搜索
+            Node&lt;E> x = last;
+            for (int i = size - 1; i > index; i--)
+                x = x.pre;
+            return x;
+        }
+    }
+
+    public E get(int index) {
+        if(index < 0 || index >= size) {
+            throw new IndexOutOfBoundsException();
+        }
+        return node(index).value;
+    }
+
+    class Node&lt;E> {
+        Node pre;
+        Node next;
+        E value;
+
+        public Node(Node&lt;E> prev, E element,  Node&lt;E> next) {
+            this.value = element;
+            this.next = next;
+            this.pre = prev;
+        }
+    }
+}
+</pre>
+
+
+                            <p><a href="docs/docs-java/api/java/util/Vector.html" target="_blank">Vector</a></p>
+
+
+                            <p><a href="docs/docs-java/api/java/util/Stack.html" target="_blank">Stack</a></p>
+
 
                         </div>
 
+                        <div class="sub-item">
+                            <p><a href="docs/docs-java/api/java/util/AbstractMap.html" target="_blank">AbstractMap</a></p>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><a href="docs/docs-java/api/java/util/AbstractSet.html" target="_blank">AbstractSet</a></p>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><a href="docs/docs-java/api/java/util/AbstractQueue.html" target="_blank">AbstractQueue</a></p>
+                        </div>
 
                     </div>
                 </div>
