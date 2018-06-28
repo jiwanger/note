@@ -3386,6 +3386,13 @@ AbstractCollection implements Collection /** 提供 Collection 接口的骨干�
  │	 ├─	ArrayList implements List /** 大小可变数组的实现 */
  │	 └─	Vector implements List /** 实现可增长的对象数组，和 ArrayList 相同，但此类是线程安全的 */
  │		 └─	Stack /** 后进先出（LIFO）的对象堆栈 */
+ ├─ AbstractSet implements Set /** 提供 Set 接口的骨干实现 */
+ │	 ├─	HashSet implements Set /** 实现 Set 接口，由哈希表（实际上是一个 HashMap 实例）支持 */
+ │	 │	 └─	LinkedHashSet implements Set /** 具有可预知迭代顺序的 Set 接口的哈希表和链接列表实现 */
+ │	 ├─	TreeSet implements NavigableSet /** 基于 TreeMap 的 NavigableSet 实现 */
+ │	 ├─	EnumSet /** 与枚举类型一起使用的专用 Set 实现 */
+ │	 ├─	* ConcurrentSkipListSet implements NavigableSet /** 可缩放并发 NavigableSet 实现 */
+ │	 └─	* CopyOnWriteArraySet /** 对其所有操作使用内部 CopyOnWriteArrayList 的 Set */
  ├─	AbstractMap implements Map /** 提供 Map 接口的骨干实现 */
  │	 ├─	HashMap implements Map /** 基于哈希表的 Map 接口的实现 */
  │	 │	 └─	LinkedHashMap implements Map /** Map 接口的哈希表和链接列表实现，具有可预知的迭代顺序 */
@@ -3404,13 +3411,6 @@ AbstractCollection implements Collection /** 提供 Collection 接口的骨干�
  │	 ├─	* SynchronousQueue implements BlockingQueue /** 阻塞队列，其中每个插入操作必须等待另一个线程的对应移除操作 */
  │	 ├─	* DelayQueue implements BlockingQueue /** Delayed 元素的一个无界阻塞队列，只有在延迟期满时才能从中提取元素 */
  │	 └─	* ConcurrentLinkedQueue implements Queue /** 一个基于链接节点的无界线程安全队列 */
- ├─ AbstractSet implements Set /** 提供 Set 接口的骨干实现 */
- │	 ├─	HashSet implements Set /** 实现 Set 接口，由哈希表（实际上是一个 HashMap 实例）支持 */
- │	 │	 └─	LinkedHashSet implements Set /** 具有可预知迭代顺序的 Set 接口的哈希表和链接列表实现 */
- │	 ├─	TreeSet implements NavigableSet /** 基于 TreeMap 的 NavigableSet 实现 */
- │	 ├─	EnumSet /** 与枚举类型一起使用的专用 Set 实现 */
- │	 ├─	* ConcurrentSkipListSet implements NavigableSet /** 可缩放并发 NavigableSet 实现 */
- │	 └─	* CopyOnWriteArraySet /** 对其所有操作使用内部 CopyOnWriteArrayList 的 Set */
  ├─	ArrayDeque implements Deque /** Deque 接口的大小可变数组的实现 */
  ├─	* CopyOnWriteArrayList implements List /** ArrayList 的一个线程安全的变体 */
  └─	Dictionary /** 任何可将键映射到相应值的类（如 Hashtable）的抽象父类 */
@@ -4088,7 +4088,7 @@ public class ArrayList&lt;E> extends AbstractList&lt;E> implements List&lt;E>, R
                                 <li class="group"><p><code>E 	remove(int index)</code> -- 移除此列表中指定位置上的元素</p></li>
                                 <li><p><code>boolean 	remove(Object o)</code> -- 移除此列表中首次出现的指定元素</p></li>
                                 <li><p><code>protected  void 	removeRange(int from, int to)</code> -- 移除索引在 from（包括）和 to（不包括）之间的所有元素</p></li>
-                                <li><p><code>void 	clear()</code> -- 移除此列表中的所有元素。</p></li>
+                                <li><p><code>void 	clear()</code> -- 移除此列表中的所有元素</p></li>
 
                                 <li class="group"><p><code>E 	set(int index, E element)</code> -- 用指定的元素替代此列表中指定位置上的元素</p></li>
 
@@ -4241,44 +4241,44 @@ public class MyLink&lt;E> {
                             </div>
                             <ol>
                                 <li><p><code>boolean 	add(E e)</code> -- 将指定元素添加到此列表的结尾</p></li>
+                                <li><p><code>void 	addFirst(E e)</code> -- 将指定元素插入此列表的开头</p></li>
+                                <li><p><code>void 	addLast(E e)</code> -- 将指定元素添加到此列表的结尾</p></li>
                                 <li><p><code>void 	add(int index, E element)</code> -- 在此列表中指定的位置插入指定的元素</p></li>
                                 <li><p><code>boolean 	addAll(Collection&lt;? extends E> c)</code> -- 添加指定 collection 中的所有元素到此列表的结尾</p></li>
                                 <li><p><code>boolean 	addAll(int index, Collection&lt;? extends E> c)</code> -- 将指定 collection 中的所有元素从指定位置开始插入此列表</p></li>
-                                <li><p><code>void 	addFirst(E e)</code> -- 将指定元素插入此列表的开头</p></li>
-                                <li><p><code>void 	addLast(E e)</code> -- 将指定元素添加到此列表的结尾</p></li>
 
-                                <li class="group"><p><code>E 	remove()</code> -- 获取并移除此列表的头</p></li>
-                                <li><p><code>void 	clear()</code> -- 从此列表中移除所有元素</p></li>
-                                <li><p><code>E 	remove(int index)</code> -- 移除此列表中指定位置处的元素</p></li>
-                                <li><p><code>boolean 	remove(Object o)</code> -- 从此列表中移除首次出现的指定元素（如果存在）</p></li>
-                                <li><p><code>E 	removeFirst()</code> -- 移除并返回此列表的第一个元素</p></li>
-                                <li><p><code>E 	removeLast()</code> -- 移除并返回此列表的最后一个元素</p></li>
-                                <li><p><code>boolean 	removeFirstOccurrence(Object o)</code> -- 从此列表中移除第一次出现的指定元素（从头部到尾部遍历列表时）</p></li>
-                                <li><p><code>boolean 	removeLastOccurrence(Object o)</code> -- 从此列表中移除最后一次出现的指定元素（从头部到尾部遍历列表时）</p></li>
+                                <li class="group"><p><code>boolean 	offer(E e)</code> -- 调用 <code>add(E)</code></p></li>
+                                <li><p><code>boolean 	offerFirst(E e)</code> -- 调用 <code>addFirst(E)</code></p></li>
+                                <li><p><code>boolean 	offerLast(E e)</code> -- 调用 <code>addLast(E)</code></p></li>
 
                                 <li class="group"><p><code>E 	get(int index)</code> -- 返回此列表中指定位置处的元素</p></li>
                                 <li><p><code>int 	size()</code> -- 返回此列表的元素数</p></li>
                                 <li><p><code>E 	set(int index, E element)</code> -- 将此列表中指定位置的元素替换为指定的元。</p></li>
-                                <li><p><code>E 	element()</code> -- 获取但不移除此列表的头（第一个元素）</p></li>
-                                <li><p><code>E 	getFirst()</code> -- 返回此列表的第一个元素</p></li>
-                                <li><p><code>E 	getLast()</code> -- 返回此列表的最后一个元素</p></li>
+                                <li><p><code>E 	getFirst()</code> -- 返回此列表的第一个元素，无则抛出异常</p></li>
+                                <li><p><code>E 	getLast()</code> -- 返回此列表的最后一个元素，无则抛出异常</p></li>
+                                <li><p><code>E 	element()</code> -- 调用 <code>getFirst()</code></p></li>
                                 <li><p><code>int 	indexOf(Object o)</code> -- 返回此列表中首次出现的指定元素的索引，如果此列表中不包含该元素，则返回 -1</p></li>
                                 <li><p><code>int 	lastIndexOf(Object o)</code> -- 返回此列表中最后出现的指定元素的索引，如果此列表中不包含该元素，则返回 -1</p></li>
 
-                                <li class="group"><p><code>boolean 	offer(E e)</code> -- 将指定元素添加到此列表的末尾（最后一个元素）</p></li>
-                                <li><p><code>boolean 	offerFirst(E e)</code> -- 在此列表的开头插入指定的元素</p></li>
-                                <li><p><code>boolean 	offerLast(E e)</code> -- 在此列表末尾插入指定的元素</p></li>
-
-                                <li class="group"><p><code>E 	peek()</code> -- 获取但不移除此列表的头（第一个元素）</p></li>
+                                <li class="group"><p><code>E 	peek()</code> -- 获取但不移除此列表的头（第一个元素）；如果此列表为空，则返回 null</p></li>
                                 <li><p><code>E 	peekFirst()</code> -- 获取但不移除此列表的第一个元素；如果此列表为空，则返回 null</p></li>
                                 <li><p><code>E 	peekLast()</code> -- 获取但不移除此列表的最后一个元素；如果此列表为空，则返回 null</p></li>
 
-                                <li class="group"><p><code>E 	poll()</code> -- 获取并移除此列表的头（第一个元素）</p></li>
+                                <li class="group"><p><code>E 	remove(int index)</code> -- 移除此列表中指定位置处的元素</p></li>
+                                <li><p><code>void 	clear()</code> -- 从此列表中移除所有元素</p></li>
+                                <li><p><code>boolean 	remove(Object o)</code> -- 从此列表中移除首次出现的指定元素（如果存在）</p></li>
+                                <li><p><code>E 	removeFirst()</code> -- 移除并返回此列表的第一个元素，无则抛出异常</p></li>
+                                <li><p><code>E 	removeLast()</code> -- 移除并返回此列表的最后一个元素，无则抛出异常</p></li>
+                                <li><p><code>E 	remove()</code> -- 调用 <code>removeFirst()</code></p></li>
+                                <li><p><code>boolean 	removeFirstOccurrence(Object o)</code> -- 从此列表中移除第一次出现的指定元素（从头部到尾部遍历列表时）</p></li>
+                                <li><p><code>boolean 	removeLastOccurrence(Object o)</code> -- 从此列表中移除最后一次出现的指定元素（从头部到尾部遍历列表时）</p></li>
+
+                                <li class="group"><p><code>E 	poll()</code> -- 获取并移除此列表的头；如果此列表为空，则返回 null。</p></li>
                                 <li><p><code>E 	pollFirst()</code> -- 获取并移除此列表的第一个元素；如果此列表为空，则返回 null。</p></li>
                                 <li><p><code>E 	pollLast()</code> -- 获取并移除此列表的最后一个元素；如果此列表为空，则返回 null。</p></li>
 
-                                <li class="group"><p><code>E 	pop()</code> -- 从此列表所表示的堆栈处弹出一个元素</p></li>
-                                <li><p><code>void 	push(E e)</code> -- 将元素推入此列表所表示的堆栈</p></li>
+                                <li class="group"><p><code>E 	pop()</code> -- 调用 <code>removeFirst()</code></p></li>
+                                <li><p><code>void 	push(E e)</code> -- 调用 <code>addFirst(E)</code></p></li>
 
 
                                 <li class="group"><p><code>Object 	clone()</code> -- 返回此 LinkedList 的浅表副本</p></li>
@@ -4308,6 +4308,69 @@ public class Vector&lt;E> extends AbstractList&lt;E> implements List&lt;E>,
     public Vector(int initialCapacity, int capacityIncrement) {} // 使用指定的初始容量和容量增量构造一个空的向量
 }
 </pre>
+							<ol>
+								<li><p><code>boolean 	add(E e)</code> -- 将指定元素添加到此向量的末尾</p></li>
+								<li><p><code>void 	addElement(E obj)</code> -- 同 <code>add(E)</code>, 无返回值</p></li>
+								<li><p><code>void 	add(int index, E element)</code> -- 在此向量的指定位置插入指定的元素</p></li>
+								<li><p><code>void 	insertElementAt(E obj, int index)</code> -- 同 <code>add(E, int)，无返回值</code></p></li>
+								<li><p><code>boolean 	addAll(Collection&lt;? extends E> c)</code> -- 将指定 Collection 中的所有元素添加到此向量的末尾</p></li>
+								<li><p><code>boolean 	addAll(int index, Collection&lt;? extends E> c)</code> -- 在指定位置将指定 Collection 中的所有元素插入到此向量中</p></li>
+
+								<li class="group"><p><code>E 	get(int index)</code> -- 返回向量中指定位置的元素</p></li>
+								<li><p><code>E 	elementAt(int index)</code> -- 同 <code>get(int)</code></p></li>
+								<li><p><code>E 	firstElement()</code> -- 返回此向量的第一个组件（位于索引 0) 处的项）</p></li>
+								<li><p><code>E 	lastElement()</code> -- 返回此向量的最后一个组件</p></li>
+								<li><p><code>List&lt;E> 	subList(int from, int to)</code> -- 返回此 List 的部分视图，元素范围为从 from（包括）到 to（不包括）</p></li>
+
+								<li class="group"><p><code>E 	set(int index, E element)</code> -- 用指定的元素替换此向量中指定位置处的元素，并返回被替换的元素</p></li>
+								<li><p><code>void 	setElementAt(E obj, int index)</code> -- 将此向量指定 index 处的组件设置为指定的对象</p></li>
+
+								<li class="group"><p><code>E 	remove(int index)</code> -- 移除此向量中指定位置的元素，返回被移除的元素</p></li>
+								<li><p><code>void 	removeElementAt(int index)</code> -- 删除指定索引处的组件</p></li>
+								<li><p><code>boolean 	removeElement(Object obj)</code> -- 从此向量中移除变量的第一个（索引最小的）匹配项</p></li>
+								<li><p><code>boolean 	remove(Object o)</code> -- 调用 <code>removeElement(Object)</code></p></li>
+								<li><p><code>protected  void 	removeRange(int from, int to)</code> -- 移除其索引位于 from（包括）与 to（不包括）之间的所有元素</p></li>
+								<li><p><code>boolean 	removeAll(Collection&lt;?> c)</code> -- 从此向量中移除包含在指定 Collection 中的所有元素</p></li>
+								<li><p><code>void 	removeAllElements()</code> -- 从此向量中移除全部组件(将数组元素全部置为 null)，并将其大小设置为零</p></li>
+								<li><p><code>void 	clear()</code> -- 调用 <code>removeAllElements()</code></p></li>
+
+								<li class="group"><p><code>int 	capacity()</code> -- 返回此向量的当前容量</p></li>
+								<li><p><code>int 	size()</code> -- 返回此向量中的组件数</p></li>
+								<li><p><code>void 	setSize(int newSize)</code> -- 设置此向量的大小</p></li>
+								<li><p><code>void 	ensureCapacity(int minCapacity)</code> -- 增加此向量的容量，以确保其至少能够保存最小容量参数指定的组件数</p></li>
+								<li><p><code>void 	trimToSize()</code> -- 对此向量的容量进行微调，使其等于向量的当前大小</p></li>
+								<li><p><code>boolean 	isEmpty()</code> -- 测试此向量是否不包含组件</p></li>
+
+								<li class="group"><p><code>boolean 	contains(Object o)</code> -- 如果此向量包含指定的元素，则返回 true</p></li>
+								<li><p><code>boolean 	containsAll(Collection&lt;?> c)</code> -- 如果此向量包含指定 Collection 中的所有元素，则返回 true</p></li>
+								<li><p><code>int 	indexOf(Object o)</code> -- 返回此向量中第一次出现的指定元素的索引，如果此向量不包含该元素，则返回 -1</p></li>
+								<li><p><code>int 	indexOf(Object o, int index)</code> -- 返回此向量中第一次出现的指定元素的索引，从 index 处正向搜索</p></li>
+								<li><p><code>int 	lastIndexOf(Object o)</code> -- 返回此向量中最后一次出现的指定元素的索引；如果此向量不包含该元素，则返回 -1</p></li>
+								<li><p><code>int 	lastIndexOf(Object o, int index)</code> -- 返回此向量中最后一次出现的指定元素的索引，从 index 处逆向搜索</p></li>
+
+
+								<li class="group"><p><code>boolean 	retainAll(Collection&lt;?> c)</code> -- 在此向量中仅保留包含在指定 Collection 中的元素</p></li
+								<li><p><code>Enumeration&lt;E> 	elements()</code> -- 返回此向量的组件的枚举</p></li>
+
+								<li class="group"><p><code>void 	copyInto(Object[] anArray)</code> -- 将此向量的组件复制到指定的数组中</p></li>
+								<li><p><code>Object[] 	toArray()</code> -- 返回一个数组，包含此向量中以恰当顺序存放的所有元素</p></li>
+								<li><p><code>&lt;T> T[] toArray(T[] a)</code> -- 返回一个数组，包含此向量中以恰当顺序存放的所有元素；返回数组的运行时类型为指定数组的类型</p></li>
+
+								<li class="group"><p><code>Object 	clone()</code> -- 返回向量的一个副本</p></li>
+								<li><p><code>boolean 	equals(Object o)</code> -- 比较指定对象与此向量的相等性</p></li>
+								<li><p><code>String 	toString()</code> -- 返回此向量的字符串表示形式，其中包含每个元素的 String 表示形式</p></li>
+								<li><p><code>int 	hashCode()</code> -- 返回此向量的哈希码值</p></li>
+
+                                <li class="group"><p><code>void 	forEach(Consumer&lt;? super E> action)</code> -- 参照 <code>ArrayList</code></p></li>
+                                <li><p><code>Iterator&lt;E> 	iterator()</code> -- 参照 <code>ArrayList</code></p></li>
+                                <li><p><code>ListIterator&lt;E> 	listIterator()</code> -- 参照 <code>ArrayList</code></p></li>
+                                <li><p><code>ListIterator&lt;E> 	listIterator(int index)</code> -- 参照 <code>ArrayList</code></p></li>
+                                <li><p><code>boolean 	removeIf(Predicate&lt;? super E> filter)</code> -- 参照 <code>ArrayList</code></p></li>
+                                <li><p><code>void 	replaceAll(UnaryOperator&lt;E> operator)</code> -- 参照 <code>ArrayList</code></p></li>
+                                <li><p><code>void 	sort(Comparator&lt;? super E> c)</code> -- 参照 <code>ArrayList</code></p></li>
+                                <li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 参照 <code>ArrayList</code></p></li>
+							</ol>
+
 
 
                             <p><a href="docs/docs-java/api/java/util/Stack.html" target="_blank">Stack</a> 类表示后进先出（LIFO）的对象堆栈，是线程安全的。它通过五个操作对类 Vector 进行了扩展 ，允许将向量视为堆栈。它提供了通常的 push 和 pop 操作，以及取堆栈顶点的 peek 方法、测试堆栈是否为空的 empty 方法、在堆栈中查找项并确定到堆栈顶距离的 search 方法。 </p>
@@ -4317,8 +4380,18 @@ public class Stack&lt;E> extends Vector&lt;E> {
     public Stack() {}
 }
 </pre>
+                            <ol>
+                                <li><p><code>boolean 	empty()</code> -- 同 <code>isEmpty()</code></p></li>
+                                <li><p><code>E 	peek()</code> -- 同 <code>lastElement()</code>，抛出的异常不同</p></li>
+                                <li><p><code>E 	pop()</code> -- 先调用 <code>peek()</code>, 再移除最后一个元素</p></li>
+                                <li><p><code>E 	push(E item)</code> -- 调用 <code>addElement(E)</code>, 返回 item</p></li>
+                                <li><p><code>int 	search(Object o)</code> -- 从 1 开始，从后面往前数, 如: <code>["aa", "bb"], search("aa") == 2</code></p></li>
+                            </ol>
 
+                        </div>
 
+                        <div class="sub-item">
+                            <p><a href="docs/docs-java/api/java/util/AbstractSet.html" target="_blank">AbstractSet</a></p>
                         </div>
 
                         <div class="sub-item">
@@ -4332,9 +4405,10 @@ public class Stack&lt;E> extends Vector&lt;E> {
                             <p><a href="docs/docs-java/api/java/util/HashMap.html" target="_blank">HashMap</a> 基于哈希表的 Map 接口的实现。此实现提供所有可选的映射操作，并允许使用 null 值和 null 键。</p>
                             <p>除了非同步和允许使用 null 之外，HashMap 类与 Hashtable 大致相同。</p>
                             <p>此类不保证映射的顺序，特别是它不保证该顺序恒久不变。</p>
+
                             <pre class="brush: java;">
 public class HashMap&lt;K,V> extends AbstractMap&lt;K,V> implements Map&lt;K,V>, Cloneable, Serializable {
-    transient Node&lt;K,V>[] table;
+    transient Node&lt;K,V>[] table; // 内部存储的还是包装了的数组
 
     static class Node&lt;K,V> implements Map.Entry&lt;K,V> {
         final int hash;
@@ -4349,12 +4423,53 @@ public class HashMap&lt;K,V> extends AbstractMap&lt;K,V> implements Map&lt;K,V>,
             this.next = next;
         }
     }
+
+    public HashMap() {}
+    public HashMap(int initialCapacity) {}
+    public HashMap(int initialCapacity, float loadFactor) {}
+    public HashMap(Map&lt;? extends K,? extends V> m) {}
 }
 </pre>
-                        </div>
+                            <ol>
+                                <li><p><code>V 	put(K key, V value)</code> -- 添加一个键值对，如果 <code>key</code> 已存在，则替换对应的 <code>value</code>, 并返回被替换的 <code>value</code></p></li>
+                                <li><p><code>V 	get(Object key)</code> -- 返回指定键所映射的值</p></li>
+                                <li><p><code>V 	remove(Object key)</code> -- 如果存在指定的键，则移除此键值对</p></li>
+                                <li><p><code>V 	replace(K key, V value)</code> -- 如果存在指定的键，则将值天替换为指定值</p></li>
+                                <li><p><code>boolean 	remove(Object key, Object value)</code> -- 如果存在指定键和值，则移除此键值对</p></li>
+                                <li><p><code>boolean 	replace(K key, V oldValue, V newValue)</code> -- 如果存在指定的键和值，则将值天替换为指定值</p></li>
+                                <li><p><code>V 	getOrDefault(Object key, V defaultValue)</code> -- 如果不存在指定的键，则返回默认值</p></li>
 
-                        <div class="sub-item">
-                            <p><a href="docs/docs-java/api/java/util/AbstractSet.html" target="_blank">AbstractSet</a></p>
+                                <li class="group"><p><code>int 	size()</code> -- 返回此映射中的键-值映射关系数</p></li>
+                                <li><p><code>boolean 	isEmpty()</code> -- 是否为空</p></li>
+                                <li><p><code>void 	clear()</code> -- 青海粗</p></li>
+
+                                <li class="group"><p><code>boolean 	containsKey(Object key)</code> -- 是否包含指定的键</p></li>
+                                <li><p><code>boolean 	containsValue(Object value)</code> -- 是否包含指定的值</p></li>
+                                <li><p><code>Set&lt;Map.Entry&lt;K,V>> 	entrySet()</code> -- 返回 <code>key-value</code> 的 <code>Set</code> 视图</p></li>
+                                <li><p><code>Collection&lt;V> 	values()</code> -- 返回值的 <code>Collection</code> 视图</p></li>
+                                <li><p><code>Set&lt;K> 	keySet()</code> -- 返回 <code>key</code> 的 <code>Set</code> 视图</p></li>
+
+                                <li class="group"><p><code>V 	compute(K key, BiFunction&lt;? super K,? super V,? extends V> remappingFunction)</code> -- </p></li>
+                                <li><p><code>V 	computeIfAbsent(K key, Function&lt;? super K,? extends V> mappingFunction)</code> -- </p></li>
+                                <li><p><code>V 	computeIfPresent(K key, BiFunction&lt;? super K,? super V,? extends V> remappingFunction)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	putAll(Map&lt;? extends K,? extends V> m)</code> --   将指定映射的所有映射关系复制到此映射中</p></li>
+                                <li><p><code>void 	replaceAll(BiFunction&lt;? super K,? super V,? extends V> function)</code> -- </p></li>
+                                <li><p><code>V 	merge(K key, V value, BiFunction&lt;? super V,? super V,? extends V> remappingFunction)</code> -- </p></li>
+                                <li><p><code>Object 	clone()</code> -- 复制</p></li>
+
+                                <li class="group"><p><code>void 	forEach(BiConsumer&lt;? super K,? super V> action)</code> -- 键值迭代器</p>
+                                    <pre class="brush: java;">
+hashMap.forEach(new BiConsumer() {
+    @Override
+    public void accept(Object key, Object value) {
+        log(key, value);
+    }
+});
+</pre>
+                                </li>
+                                <li><p><code>V 	putIfAbsent(K key, V value)</code> -- 如果指定的 <code>key</code> 已经在 map 中，并且其值不为 null，返回原有的 <code>value</code>；否则同 <code>put(K, V)</code>，并返回 null</p></li>
+                            </ol>
                         </div>
 
                         <div class="sub-item">
