@@ -95,7 +95,7 @@
 							 role="tabpanel">
 							<a href="#java-util-Date" class="list-group-item">Date, TimeZone, Calendar</a>
                             <a href="#java-util-Timer" class="list-group-item">Timer 和 TimerTask</a>
-                            <a href="#java-util-List" class="list-group-item">List, Map, Set, Collections...</a>
+                            <a href="#java-util-List" class="list-group-item">List, Map, Set, Queue...</a>
                             <a href="#java-util-Formatter" class="list-group-item">Formatter, Formattable</a>
                             <a href="#java-util-Observable" class="list-group-item">Observer, Observable</a>
                             <a href="#java-util-UUID" class="list-group-item">UUID</a>
@@ -4804,9 +4804,26 @@ public class WeakHashMap&lt;K,V> extends AbstractMap&lt;K,V> implements Map&lt;K
                             <div class="split-item">
                                 <p><a href="docs/docs-java/api/java/util/TreeMap.html" target="_blank">TreeMap</a> 基于红黑树（Red-Black tree）的 NavigableMap 实现。该映射根据其键的自然顺序进行排序，或者根据创建映射时提供的 Comparator 进行排序，具体取决于使用的构造方法。 </p>
                                 <p>注意，如果要正确实现 Map 接口，则有序映射所保持的顺序（无论是否明确提供了比较器）都必须与 equals 一致。</p>
-                                <pre class="brush: java;">
+								<p><b>红黑树是一种近似平衡的二叉查找树，它能够确保任何一个节点的左右子树的高度差不会超过二者中较低那个的一陪。</b></p>
+								<ol>
+									<li><p>每个节点要么是红色，要么是黑色；</p></li>
+									<li><p>根节点必须是黑色；</p></li>
+									<li><p>红色节点不能连续（也即是，红色节点的孩子和父亲都不能是红色）；</p></li>
+									<li><p>从一个节点到该节点的子孙节点的所有路径上包含相同数目的黑节点。</p></li>
+								</ol>
+								<p><b>在树的结构发生改变时（插入或者删除操作），往往会破坏上述条件 3 或条件 4，需要通过调整使得查找树重新满足红黑树的条件。</b></p>
+								<pre class="brush: java;">
 public class TreeMap&lt;K,V> extends AbstractMap&lt;K,V> implements NavigableMap&lt;K,V>,
                                 Cloneable, Serializable {
+	static final class Entry&lt;K,V> implements Map.Entry&lt;K,V> {
+        K key;
+        V value;
+        Entry&lt;K,V> left; // 红黑树的左孩子
+        Entry&lt;K,V> right; // 红黑树的右孩子
+        Entry&lt;K,V> parent; // 红黑树的父节点
+        boolean color = BLACK; // 红黑树的颜色
+	}
+
     public TreeMap() {}
     public TreeMap(Comparator&lt;? super K> comparator) {}
     public TreeMap(Map&lt;? extends K,? extends V> m) {}
@@ -4840,39 +4857,37 @@ log(map); // {aa=xx, bb=yy}, 自动使用 key 的自然顺序排序
 
                                     <li class="group"><p><code>K 	firstKey()</code> -- 返回此映射中当前第一个（最低）键</p></li>
                                     <li><p><code>K 	lastKey()</code> -- 返回此映射中当前最后一个键</p></li>
-                                    <li><p><code>K 	higherKey(K key)</code> -- 返回此映射中指定键的下一个键</p></li>
-                                    <li><p><code>K 	lowerKey(K key)</code> -- 返回此映射中指定键的前一个键</p></li>
-                                    <li><p><code>K 	ceilingKey(K key)</code> -- </p></li>
-                                    <li><p><code>K 	floorKey(K key)</code> -- </p></li>
+                                    <li><p><code>K 	higherKey(K key)</code> -- 返回此映射中大于指定键的键(最接近)</p></li>
+									<li><p><code>K 	ceilingKey(K key)</code> -- 返回此映射中大于或等于指定键的键(最接近)</p></li>
+									<li><p><code>K 	lowerKey(K key)</code> -- 返回此映射中小于指定键的键(最接近)</p></li>
+                                    <li><p><code>K 	floorKey(K key)</code> -- 返回此映射中小于或等于指定键的键(最接近)</p></li>
 
                                     <li class="group"><p><code>Map.Entry&lt;K,V> 	firstEntry()</code> -- 返回一个与此映射中的最小键关联的键-值映射关系</p></li>
                                     <li><p><code>Map.Entry&lt;K,V> 	lastEntry()</code> -- 返回一个与此映射中的最大键关联的键-值映射关系</p></li>
-                                    <li><p><code>Map.Entry&lt;K,V> 	higherEntry(K key)</code> -- 返回此映射中指定键的下一个键-值映射关系</p></li>
-                                    <li><p><code>Map.Entry&lt;K,V> 	lowerEntry(K key)</code> -- 返回此映射中指定键的前一个键-值映射关系</p></li>
-                                    <li><p><code>Map.Entry&lt;K,V> 	ceilingEntry(K key)</code> -- </p></li>
-                                    <li><p><code>Map.Entry&lt;K,V> 	floorEntry(K key)</code> -- </p></li>
+                                    <li><p><code>Map.Entry&lt;K,V> 	higherEntry(K key)</code> -- 返回此映射中大于指定键的键-值映射关系(最接近)</p></li>
+									<li><p><code>Map.Entry&lt;K,V> 	ceilingEntry(K key)</code> -- 返回此映射中大于或等于指定键的键-值映射关系(最接近)</p></li>
+									<li><p><code>Map.Entry&lt;K,V> 	lowerEntry(K key)</code> -- 返回此映射中小于指定键的键-值映射关系(最接近)</p></li>
+                                    <li><p><code>Map.Entry&lt;K,V> 	floorEntry(K key)</code> -- 返回此映射中小于或等于指定键的键-值映射关系(最接近)</p></li>
 
-                                    <li class="group"><p><code>SortedMap&lt;K,V> 	tailMap(K fromKey)</code> -- </p></li>
-                                    <li><p><code>SortedMap&lt;K,V> 	headMap(K toKey)</code> -- </p></li>
-                                    <li><p><code>SortedMap&lt;K,V> 	subMap(K fromKey, K toKey)</code> -- </p></li>
+                                    <li class="group"><p><code>SortedMap&lt;K,V> 	tailMap(K fromKey)</code> -- 返回此映射的部分视图，其键大于等于 fromKey</p></li>
+                                    <li><p><code>SortedMap&lt;K,V> 	headMap(K toKey)</code> -- 返回此映射的部分视图，其键值严格小于 toKey</p></li>
+                                    <li><p><code>SortedMap&lt;K,V> 	subMap(K fromKey, K toKey)</code> -- 返回此映射的部分视图，其键值从 fromKey（包括） 到 toKey（不包括）</p></li>
 
-                                    <li class="group"><p><code>NavigableMap&lt;K,V> 	subMap(K fromKey, boolean fromInclusive, K toKey, boolean toInclusive)</code> -- </p></li>
-                                    <li><p><code>NavigableMap&lt;K,V> 	descendingMap()</code> -- </p></li>
-                                    <li><p><code>NavigableMap&lt;K,V> 	tailMap(K fromKey, boolean inclusive)</code> -- </p></li>
-                                    <li><p><code>NavigableMap&lt;K,V> 	headMap(K toKey, boolean inclusive)</code> -- </p></li>
-
-                                    <li class="group"><p><code>NavigableSet&lt;K> 	descendingKeySet()</code> -- </p></li>
-                                    <li><p><code>NavigableSet&lt;K> 	navigableKeySet()</code> -- </p></li>
-                                    <li><p><code>Set&lt;K> 	keySet()</code> -- </p></li>
-                                    <li><p><code>Set&lt;Map.Entry&lt;K,V>> 	entrySet()</code> -- </p></li>
-
-                                    <li class="group"><p><code>Map.Entry&lt;K,V> 	pollFirstEntry()</code> -- </p></li>
-                                    <li><p><code>Map.Entry&lt;K,V> 	pollLastEntry()</code> -- </p></li>
+									<li class="group"><p><code>NavigableMap&lt;K,V> 	tailMap(K fromKey, boolean inclusive)</code> -- 返回此映射的部分视图，其键大于（或等于，如果 inclusive 为 true）fromKey</p></li>
+									<li><p><code>NavigableMap&lt;K,V> 	headMap(K toKey, boolean inclusive)</code> -- 返回此映射的部分视图，其键小于（或等于，如果 inclusive 为 true）fromKey</p></li>
+									<li><p><code>NavigableMap&lt;K,V> 	subMap(K fromKey, boolean fromInclusive, K toKey, boolean toInclusive)</code> -- 返回此映射的部分视图，其键值从 fromKey（如果 fromInclusive == true，包括） 到 toKey（如果 toInclusive == true，包括）</p></li>
 
 
+									<li class="group"><p><code>Set&lt;K> 	keySet()</code> -- 键的 Set 视图</p></li>
+									<li><p><code>Set&lt;Map.Entry&lt;K,V>> 	entrySet()</code> -- 键-值的 Set 视图</p></li>
+									<li><p><code>NavigableMap&lt;K,V> 	descendingMap()</code> -- 返回逆序视图</p></li>
+									<li><p><code>NavigableSet&lt;K> 	descendingKeySet()</code> -- 逆序键的 Set 视图</p></li>
+									<li><p><code>NavigableSet&lt;K> 	navigableKeySet()</code> -- 键的 NavigableSet 视图</p></li>
+
+                                    <li class="group"><p><code>Map.Entry&lt;K,V> 	pollFirstEntry()</code> -- 移除并返回与此映射中的最小键关联的键-值映射关系</p></li>
+                                    <li><p><code>Map.Entry&lt;K,V> 	pollLastEntry()</code> -- 移除并返回与此映射中的最大键关联的键-值映射关系</p></li>
                                 </ol>
                             </div>
-
 
                             <a id="EnumMap" class="offset"></a>
                             <div class="split-item">
