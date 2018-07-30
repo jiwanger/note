@@ -99,6 +99,13 @@
 					<div class="panel-body">
 						<p>MySql 官方手册： <a href="https://dev.mysql.com/doc/refman/5.7/en/" target="_blank">5.7 版本英文手册</a> &nbsp;&nbsp;&nbsp;&nbsp;<a href="docs/mysql-5.1-zh/index.html" target="_blank">5.1 版本本地副本</a></p>
 						<p>一些好书：　『高性能MySQL』　『MySQL技术内幕』</p>
+						<pre class="brush: bash;">
+# MySQL 在 Linux 下插入数据非常慢
+# 1.登录 MySQL,
+$ mysql -u root -p
+# 2.执行以下命令，并在 /etc/my.cnf 配置才会在重启后生效,但这样就要承担数据库崩溃后，1秒内未存储到数据库数据丢失可能的风险
+$ set global innodb_flush_log_at_trx_commit=0;
+						</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -133,7 +140,7 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>

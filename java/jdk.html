@@ -1621,15 +1621,11 @@ public final class System {
                                 <li><p><code>static StringgetProperty(String key, String def)</code> -- 获得系统属性，如果为空则返回默认值</p></li>
                                 <li><p><code>static String clearProperty(String key)</code> -- 清除属性</p></li>
                                 <li><p><code>static void 	setProperties(Properties props)</code> -- 将系统属性设置为 Properties 参数</p></li>
-                                <li><p><code>static Properties getProperties()</code> -- 获得所有系统属性</p>
+                                <li><p><code>static Properties getProperties()</code> -- 获得所有系统属性，参见: <a href="#Properties">java.util.Properties</a></p>
 									<pre class="brush: java;">
 //  所有的 property
-Properties properties = System.getProperties();
-Iterator it = properties.keySet().iterator();
-while(it.hasNext()) {
-	String key = (String) it.next();
-	System.out.println(key + ":" + properties.get(key));
-}
+Properties prop = System.getProperties();
+prop.stringPropertyNames().forEach(s -> System.out.println(s + ":" + prop.getProperty(s)));
 
 // 指定的 property
 System.out.println(System.getProperty("os.name"));
@@ -1638,6 +1634,73 @@ System.out.println(System.getProperty("os.name2", "default"));
 
 // 自己定义属性
 System.setProperty("property.define", "myProperty");
+
+/** 系统属性: System.getProperties()
+file.separator=/ 								目录分隔符
+path.separator=: 								类路径分隔符
+java.io.tmpdir=/tmp 							临时目录
+line.separator= 								行分隔符(这里直接打印了换行)
+user.dir=/home/nate/Desktop/git/MyApplication   当前运行的路径=
+user.home=/home/nate 							用户主目录
+file.encoding=UTF-8								文件编码
+
+java.class.version=52.0       					class 文件版本
+// 本地库路径
+java.library.path=/home/nate/installed/android-studio/bin::/usr/java/packages/lib/i386:/lib:/usr/lib
+java.class.path=/home/nate/installed/jdk1.8.0_65/jre/lib/charsets.jar:...   Java 库路径
+java.home=/home/nate/installed/jdk1.8.0_65/jre 								Java 主目录
+java.version=1.8.0_65 							Java 版本
+java.specification.version=1.8     				简单版本
+java.ext.dirs=/home/nate/installed/jdk1.8.0_65/jre/lib/ext:/usr/java/packages/lib/ext     	扩展类路径
+sun.boot.class.path=/home/nate/installed/jdk1.8.0_65/jre/lib/resources.jar:...      		启动类路径
+
+java.runtime.version=1.8.0_65-b17  			 			运行时 Java 版本
+java.runtime.name=Java(TM) SE Runtime Environment  		运行时 Java 名称
+
+sun.boot.library.path=/home/nate/installed/jdk1.8.0_65/jre/lib/i386  				Java 启动本地库路径
+
+java.vm.version=25.65-b01
+java.vm.specification.version=1.8
+java.vm.vendor=Oracle Corporation
+java.vm.name=Java HotSpot(TM) Server VM
+java.vm.specification.name=Java Virtual Machine Specification
+java.vm.specification.vendor=Oracle Corporation
+java.vm.info=mixed mode
+
+java.vendor=Oracle Corporation
+java.vendor.url=http://java.oracle.com/
+java.vendor.url.bug=http://bugreport.sun.com/bugreport/
+
+file.encoding.pkg=sun.io
+
+sun.java.launcher=SUN_STANDARD
+sun.os.patch.level=unknown
+
+java.specification.vendor=Oracle Corporation
+java.specification.name=Java Platform API Specification
+java.awt.graphicsenv=sun.awt.X11GraphicsEnvironment
+java.awt.printerjob=sun.print.PSPrinterJob
+java.endorsed.dirs=/home/nate/installed/jdk1.8.0_65/jre/lib/endorsed
+awt.toolkit=sun.awt.X11.XToolkit
+
+os.arch=i386
+os.name=Linux
+os.version=3.13.0-24-generic
+
+user.name=nate
+user.language=en
+user.country=GB
+user.timezone=
+
+sun.jnu.encoding=UTF-8
+sun.arch.data.model=32
+sun.management.compiler=HotSpot Tiered Compilers
+sun.desktop=gnome
+sun.java.command=io.github.jiwanger.App
+sun.cpu.endian=little
+sun.io.unicode.encoding=UnicodeLittle
+sun.cpu.isalist=
+*/
 </pre>
 								</li>
 
@@ -3443,10 +3506,11 @@ public abstract class TimerTask implements Runnable {
                                 <li><p><b>Map 及子接口</b>: <a href="#Map">Map</a>, <a href="#SortedMap">SortedMap</a>, <a href="#NavigableMap">MavigableMap</a>, <a href="#ConcurrentMap">ConcurrentMap</a>, <a href="#ConcurrentNavigableMap">ConcurrentNavigableMap</a></p></li>
                                 <li><p><b>抽象骨干类</b>: <a href="#AbstractCollection">AbstractCollection</a>, <a href="#AbstractList">AbstractList</a>, <a href="#AbstractMap">AbstractMap</a>, <a href="#AbstractSet">AbstractSet</a>, <a href="#AbstractQueue">AbstractQueue</a></p></li>
                                 <li><p><b>List 接口实现类</b>: <a href="#ArrayList">ArrayList</a>, <a href="#AbstractSequentialList">AbstractSequentialList</a>, <a href="#LinkedList">LinkedList</a>, <a href="#Vector">Vector</a>, <a href="#Stack">Stack</a>, <a href="#CopyOnWriteArrayList">CopyOnWriteArrayList</a></p></li>
-                                <li><p><b>Map 接口实现类</b>: <a href="#HashMap">HashMap</a>, <a href="#LinkedHashMap">LinkedHashMap</a>, <a href="#WeakHashMap">WeakHashMap</a>, <a href="#TreeMap">TreeMap</a>, <a href="#EnumMap">EnumMap</a>, <a href="#IdentityHashMap">IdentityHashMap</a>, <a href="#ConcurrentHashMap">ConcurrentHashMap</a>, <a href="#ConcurrentSkipListMap">ConcurrentSkipListMap</a>, <a href="#Dictionary">Dictionary(此类未实现 Map 接口)</a>, <a href="#Hashtable">Hashtable</a></p></li>
+                                <li><p><b>Map 接口实现类</b>: <a href="#HashMap">HashMap</a>, <a href="#LinkedHashMap">LinkedHashMap</a>, <a href="#WeakHashMap">WeakHashMap</a>, <a href="#TreeMap">TreeMap</a>, <a href="#EnumMap">EnumMap</a>, <a href="#IdentityHashMap">IdentityHashMap</a>, <a href="#ConcurrentHashMap">ConcurrentHashMap</a>, <a href="#ConcurrentSkipListMap">ConcurrentSkipListMap</a>, <a href="#Dictionary">Dictionary(此类未实现 Map 接口)</a>, <a href="#Hashtable">Hashtable</a>, <a href="#Properties">Properties</a></p></li>
                                 <li><p><b>Set 接口实现类</b>: <a href="#HashSet">HashSet</a>, <a href="#LinkedHashSet">LinkedHashSet</a>, <a href="#TreeSet">TreeSet</a>, <a href="#EnumSet">EnumSet</a>, <a href="#ConcurrentSkipListSet">ConcurrentSkipListSet</a>, <a href="#CopyOnWriteArraySet">CopyOnWriteArraySet</a></p></li>
                                 <li><p><b>Queue 接口实现类</b>: <a href="#PriorityQueue">PriorityQueue</a>, <a href="#ArrayBlockingQueue">ArrayBlockingQueue</a>, <a href="#LinkedBlockingQueue">LinkedBlockingQueue</a>, <a href="#LinkedBlockingDeque">LinkedBlockingDeque</a>, <a href="#PriorityBlockingQueue">PriorityBlockingQueue</a>, <a href="#SynchronousQueue">SynchronousQueue</a>, <a href="#DelayQueue">DelayQueue</a>, <a href="#ConcurrentLinkedQueue">ConcurrentLinkedQueue</a>, <a href="#ArrayDeque">ArrayDeque</a></p></li>
                             </ul>
+							<p><b>Java Collections Framework</b> 类和接口应用实例: <a href="#java-util-collections-example">应用场景实例</a></p>
 							<pre class="brush: java; gutter: false;">
 Iterator /** 对 Collection 进行迭代的迭代器，Collection 的实现类一般都有内部类实现此接口，并提供了返回 Iterator 的方法 */
  └─ ListIterator /** 系列表迭代器，允许程序员按任一方向遍历列表、迭代期间修改列表，并获得迭代器在列表中的当前位置 */
@@ -3481,7 +3545,7 @@ AbstractCollection implements Collection /** 提供 Collection 接口的骨干�
  │		 └─	Stack /** 后进先出（LIFO）的对象堆栈 */
  ├─	* CopyOnWriteArrayList implements List /** ArrayList 的一个线程安全的变体，修改操作是复制副本修改 */
  ├─	AbstractMap implements Map /** 提供 Map 接口的骨干实现 */
- │	 ├─	HashMap implements Map /** 基于哈希表的 Map 接口的实现 */
+ │	 ├─	HashMap implements Map /** 基于 HashTable 的 Map 接口的实现 */
  │	 │	 └─	LinkedHashMap implements Map /** Map 接口的哈希表和链接列表实现，具有可预知的迭代顺序 */
  │	 ├─	WeakHashMap implements Map /** 以弱键 实现的基于哈希表的 Map */
  │	 ├─	TreeMap implements NavigableMap /** 基于红黑树（Red-Black tree）的 NavigableMap 实现 */
@@ -3491,6 +3555,7 @@ AbstractCollection implements Collection /** 提供 Collection 接口的骨干�
  │	 └─	* ConcurrentSkipListMap implements ConcurrentNavigableMap /** 可缩放的并发 ConcurrentNavigableMap 实现 */
  ├─	Dictionary /** 任何可将键映射到相应值的类（如 Hashtable）的抽象父类 */
  │	 └─	Hashtable implements Map /** 实现一个哈希表，该哈希表将键映射到相应的值 */
+ │	 	└─ Properties /** 表示了一个持久的属性集 */
  ├─ AbstractSet implements Set /** 提供 Set 接口的骨干实现 */
  │	 ├─	HashSet implements Set /** 实现 Set 接口，由哈希表（实际上是一个 HashMap 实例）支持 */
  │	 │	 └─	LinkedHashSet implements Set /** 具有可预知迭代顺序的 Set 接口的哈希表和链接列表实现 */
@@ -4703,7 +4768,7 @@ hashMap.replaceAll((key, value) -> {
 });
 </pre>
 								</li>
-                                <li><p><code>V 	merge(K key, V value, BiFunction&lt;? super V,? super V,? extends V> remappingFunction)</code> -- 替换或添加，可用判断 value 的情况静静操作</p>
+                                <li><p><code>V 	merge(K key, V value, BiFunction&lt;? super V,? super V,? extends V> remappingFunction)</code> -- 替换或添加，可用判断 value 的情况进行操作</p>
                                     <pre class="brush: java;">
 /** 原数据：{aa = xx, bb = yy} -> {aa = zz, bb = yy} */
 String key = "aa";
@@ -4891,54 +4956,401 @@ log(map); // {aa=xx, bb=yy}, 自动使用 key 的自然顺序排序
 
                             <a id="EnumMap" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/EnumMap.html" target="_blank">EnumMap</a></p>
-                            <pre class="brush: java;">
-
+								<p><a href="docs/docs-java/api/java/util/EnumMap.html" target="_blank">EnumMap</a> 与枚举类型键一起使用的专用 Map 实现。枚举映射中所有键都必须来自单个枚举类型，该枚举类型在创建映射时显式或隐式地指定。枚举映射在内部表示为数组。此表示形式非常紧凑且高效。 </p>
+								<p>枚举映射根据其键的自然顺序来维护.</p>
+								<p>不允许使用 null 键。试图插入 null 键将抛出 NullPointerException。但是，试图测试是否出现 null 键或移除 null 键将不会抛出异常。允许使用 null 值。 </p>
+								<pre class="brush: java;">
+public class EnumMap&lt;K extends Enum&lt;K>,V> extends AbstractMap&lt;K,V> implements Serializable, Cloneable {
+	public EnumMap(Class&lt;K> keyType) {}
+	public EnumMap(EnumMap&lt;K,? extends V> m) {}
+	public EnumMap(Map&lt;K,? extends V> m) {}
+}
 </pre>
+								<ol>
+									<li><p><code>V 	put(K key, V value)</code> -- 将指定值与此映射中指定键关联</p></li>
+									<li><p><code>V 	get(Object key)</code> -- 返回指定键所映射的值，如果此映射不包含此键的映射关系，则返回 null</p></li>
+									<li><p><code>V 	remove(Object key)</code> -- 从此映射中移除该键的映射关系（如果存在）</p></li>
+									<li><p><code>void 	putAll(Map&lt;? extends K,? extends V> m)</code> -- 将指定映射中所有映射关系复制到此映射中</p></li>
+
+									<li class="group"><p><code>void 	clear()</code> -- 从此映射中移除所有映射关系</p></li>
+									<li><p><code>int 	size()</code> -- 返回此映射中的键-值映射关系数</p></li>
+
+									<li class="group"><p><code>boolean 	containsKey(Object key)</code> -- 如果此映射包含指定键的映射关系，则返回 true</p></li>
+									<li><p><code>boolean 	containsValue(Object value)</code> -- 如果此映射将一个或多个键映射到指定值，则返回 true</p></li>
+									<li><p><code>Set&lt;K> 	keySet()</code> -- 返回此映射中所包含键的 Set 视图</p></li>
+									<li><p><code>Set&lt;Map.Entry&lt;K,V>> 	entrySet()</code> -- 返回此映射中所包含映射关系的 Set 视图</p></li>
+									<li><p><code>Collection&lt;V> 	values()</code> -- 返回此映射中所包含值的 Collection 视图</p></li>
+
+									<li class="group"><p><code>boolean 	equals(Object o)</code> -- 比较指定对象与此映射的相等性</p></li>
+									<li><p><code>EnumMap&lt;K,V> 	clone()</code> -- 返回此枚举映射的浅表副本</p></li>
+									<li><p><code>int 	hashCode()</code> -- 哈希值</p></li>
+								</ol>
                             </div>
 
                             <a id="IdentityHashMap" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/IdentityHashMap.html" target="_blank">IdentityHashMap</a></p>
-                            <pre class="brush: java;">
-
+								<p><a href="docs/docs-java/api/java/util/IdentityHashMap.html" target="_blank">IdentityHashMap</a> 此类利用哈希表实现 Map 接口，比较键（和值）时使用引用相等性代替对象相等性。</p>
+								<p>换句话说，在 IdentityHashMap 中，当且仅当 (k1==k2) 时，才认为两个键 k1 和 k2 相等（在正常 Map 实现（如 HashMap）中，当且仅当满足下列条件时才认为两个键 k1 和 k2 相等：(k1==null ? k2==null : e1.equals(e2))）。 </p>
+								<p><b>此类不是 通用 Map 实现！此类实现 Map 接口时，它有意违反 Map 的常规协定，该协定在比较对象时强制使用 equals 方法。此类设计仅用于其中需要引用相等性语义的罕见情况。</b></p>
+								<p>此类的典型用法是拓扑保留对象图形转换，如序列化或深层复制。要执行这样的转换，程序必须维护用于跟踪所有已处理对象引用的“节点表”。节点表一定不等于不同对象，即使它们偶然相等也如此。此类的另一种典型用法是维护代理对象。例如，调试设施可能希望为正在调试程序中的每个对象维护代理对象。 </p>
+								<p>此类提供所有的可选映射操作，并且允许 null 值和 null 键。此类对映射的顺序不提供任何保证；特别是不保证顺序随时间的推移保持不变。 </p>
+								<pre class="brush: java;">
+public class IdentityHashMap&lt;K,V> extends AbstractMap&lt;K,V> implements Map&lt;K,V>, Serializable, Cloneable {
+	public IdentityHashMap() {}
+	public IdentityHashMap(int expectedMaxSize) {}
+	public IdentityHashMap(Map&lt;? extends K,? extends V> m) {}
+}
 </pre>
+								<ol>
+									<li><p><code>V 	put(K key, V value)</code> -- 将指定值与此映射中指定键关联</p></li>
+									<li><p><code>V 	get(Object key)</code> -- 返回指定键所映射的值，如果此映射不包含此键的映射关系，则返回 null</p></li>
+									<li><p><code>V 	remove(Object key)</code> -- 从此映射中移除该键的映射关系（如果存在）</p></li>
+									<li><p><code>void 	putAll(Map&lt;? extends K,? extends V> m)</code> -- 将指定映射中所有映射关系复制到此映射中</p></li>
+
+									<li class="group"><p><code>void 	clear()</code> -- 从此映射中移除所有映射关系</p></li>
+									<li><p><code>int 	size()</code> -- 返回此映射中的键-值映射关系数</p></li>
+
+									<li class="group"><p><code>boolean 	containsKey(Object key)</code> -- 如果此映射包含指定键的映射关系，则返回 true</p></li>
+									<li><p><code>boolean 	containsValue(Object value)</code> -- 如果此映射将一个或多个键映射到指定值，则返回 true</p></li>
+									<li><p><code>Set&lt;K> 	keySet()</code> -- 返回此映射中所包含键的 Set 视图</p></li>
+									<li><p><code>Set&lt;Map.Entry&lt;K,V>> 	entrySet()</code> -- 返回此映射中所包含映射关系的 Set 视图</p></li>
+									<li><p><code>Collection&lt;V> 	values()</code> -- 返回此映射中所包含值的 Collection 视图</p></li>
+
+									<li class="group"><p><code>boolean 	equals(Object o)</code> -- 比较指定对象与此映射的相等性</p></li>
+									<li><p><code>EnumMap&lt;K,V> 	clone()</code> -- 返回此枚举映射的浅表副本</p></li>
+									<li><p><code>int 	hashCode()</code> -- 哈希值</p></li>
+								</ol>
                             </div>
 
                             <a id="ConcurrentHashMap" class="offset"></a>
                             <div class="split-item">
-                            <p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/ConcurrentHashMap.html" target="_blank">ConcurrentHashMap</a></p>
-                            <pre class="brush: java;">
+                            	<p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/ConcurrentHashMap.html" target="_blank">ConcurrentHashMap</a> 支持获取的完全并发和更新的所期望可调整并发的哈希表。此类遵守与 Hashtable 相同的功能规范，并且包括对应于 Hashtable 的每个方法的方法版本。不过，尽管所有操作都是线程安全的，但获取操作不 必锁定，并且不 支持以某种防止所有访问的方式锁定整个表。此类可以通过程序完全与 Hashtable 进行互操作，这取决于其线程安全，而与其同步细节无关。 </p>
+								<p>获取操作（包括 get）通常不会受阻塞，因此，可能与更新操作交迭（包括 put 和 remove）。获取会影响最近完成的 更新操作的结果。对于一些聚合操作，比如 putAll 和 clear，并发获取可能只影响某些条目的插入和移除。类似地，在创建迭代器/枚举时或自此之后，Iterators 和 Enumerations 返回在某一时间点上影响哈希表状态的元素。它们不会 抛出 ConcurrentModificationException。不过，迭代器被设计成每次仅由一个线程使用。 </p>
+                            	<pre class="brush: java;">
+public class ConcurrentHashMap&lt;K,V> extends AbstractMap&lt;K,V> implements ConcurrentMap&lt;K,V>,Serializable {
+	public static class KeySetView&lt;K,V> extends CollectionView&lt;K,V,K> implements Set&lt;K>,Serializable {}
 
+	public ConcurrentHashMap() {}
+	public ConcurrentHashMap(int initialCapacity) {}
+	public ConcurrentHashMap(int initialCapacity, float loadFactor) {}
+	public ConcurrentHashMap(int initialCapacity, float loadFactor, int concurrencyLevel) {}
+	public ConcurrentHashMap(Map&lt;? extends K,? extends V> m) {}
+}
 </pre>
+								<ol>
+									<li><p><code>V 	put(K key, V value)</code> -- 将指定值与此映射中指定键关联</p></li>
+									<li><p><code>V 	putIfAbsent(K key, V value)</code> -- 如果指定键已经不再与某个值相关联，则将它与给定值关联</p></li>
+									<li><p><code>V 	get(Object key)</code> -- 返回指定键所映射的值，如果此映射不包含此键的映射关系，则返回 null</p></li>
+									<li><p><code>V 	getOrDefault(Object key, V defaultValue)</code> -- 如果指定键返回值为 null, 则返回 defaultValue</p></li>
+									<li><p><code>V 	remove(Object key)</code> -- 从此映射中移除该键的映射关系（如果存在）</p></li>
+									<li><p><code>boolean 	remove(Object key, Object value)</code> --  只有目前将键的条目映射到给定值时，才移除该键的条目</p></li>
+									<li><p><code>void 	putAll(Map&lt;? extends K,? extends V> m)</code> -- 将指定映射中所有映射关系复制到此映射中</p></li>
+
+									<li class="group"><p><code>void 	clear()</code> -- 从此映射中移除所有映射关系</p></li>
+									<li><p><code>int 	size()</code> -- 返回此映射中的键-值映射关系数</p></li>
+
+									<li class="group"><p><code>boolean 	containsKey(Object key)</code> -- 如果此映射包含指定键的映射关系，则返回 true</p></li>
+									<li><p><code>boolean 	containsValue(Object value)</code> -- 如果此映射将一个或多个键映射到指定值，则返回 true</p></li>
+									<li><p><code>boolean 	contains(Object value)</code> -- 同 containsValue</p></li>
+									<li><p><code>ConcurrentHashMap.KeySetView&lt;K,V> 	keySet()</code> -- 返回 KeySetView 视图</p></li>
+									<li><p><code>ConcurrentHashMap.KeySetView&lt;K,V> 	keySet(V mappedValue)</code> -- 包括一个 mappedValue 的 KeySetView 视图</p></li>
+									<li><p><code>static &lt;K> ConcurrentHashMap.KeySetView&lt;K,Boolean> 	newKeySet()</code> -- 创建一个默认值为 true 的新的 map</p></li>
+									<li><p><code>static &lt;K> ConcurrentHashMap.KeySetView&lt;K,Boolean> 	newKeySet(int initialCapacity)</code> -- 创建一个指定初始容量默认值为 true 的新的 map</p></li>
+									<li><p><code>Set&lt;Map.Entry&lt;K,V>> 	entrySet()</code> -- 返回此映射中所包含映射关系的 Set 视图</p></li>
+									<li><p><code>Collection&lt;V> 	values()</code> -- 返回此映射中所包含值的 Collection 视图</p></li>
+
+									<li class="group"><p><code>boolean 	equals(Object o)</code> -- 比较指定对象与此映射的相等性</p></li>
+									<li><p><code>EnumMap&lt;K,V> 	clone()</code> -- 返回此枚举映射的浅表副本</p></li>
+									<li><p><code>int 	hashCode()</code> -- 哈希值</p></li>
+
+									<li class="group"><p><code>V 	compute(K key, BiFunction&lt;? super K,? super V,? extends V> remappingFunction)</code> -- 参见 <a href="#HashMap">HashMap</a> 同名方法</p></li>
+									<li><p><code>V 	computeIfAbsent(K key, Function&lt;? super K,? extends V> mappingFunction)</code> -- 参见 <a href="#HashMap">HashMap</a> 同名方法</p></li>
+									<li><p><code>V 	computeIfPresent(K key, BiFunction&lt;? super K,? super V,? extends V> remappingFunction)</code> -- 参见 <a href="#HashMap">HashMap</a> 同名方法</p></li>
+
+									<li class="group"><p><code>V 	replace(K key, V value)</code> -- 替换指定 key 的 value</p></li>
+									<li><p><code>boolean 	replace(K key, V oldValue, V newValue)</code> -- 替换指定 key 的 指定 value 为 newValue</p></li>
+									<li><p><code>void 	replaceAll(BiFunction&lt;? super K,? super V,? extends V> function)</code> -- 替换符合条件的 value</p></li>
+
+									<li class="group"><p><code>&lt;U> U 	search(long parallelismThreshold, BiFunction&lt;? super K,? super V,? extends U> searchFunction)</code> -- 并行搜索，直到 searchFunction 返回不为 null</p></li>
+									<li><p><code>&lt;U> U 	searchEntries(long parallelismThreshold, Function&lt;Map.Entry&lt;K,V>,? extends U> searchFunction)</code> --以 Map.Entry 的形式 并行搜索，直到 searchFunction 返回不为 null</p></li>
+									<li><p><code>&lt;U> U 	searchKeys(long parallelismThreshold, Function&lt;? super K,? extends U> searchFunction)</code> -- 并行搜索 key，直到 searchFunction 返回不为 null</p></li>
+									<li><p><code>&lt;U> U 	searchValues(long parallelismThreshold, Function&lt;? super V,? extends U> searchFunction)</code> -- 并行搜索 value，直到 searchFunction 返回不为 null</p></li>
+
+									<li class="group"><p><code>Enumeration&lt;K> 	keys()</code> -- 键的枚举器，可用于迭代</p></li>
+									<li><p><code>Enumeration&lt;V> 	elements()</code> -- 值的枚举器，可用于迭代</p></li>
+									<li><p><code>long 	mappingCount()</code> -- 返回映射数量</p></li>
+									<li><p><code>V 	merge(K key, V value, BiFunction&lt;? super V,? super V,? extends V> remappingFunction)</code> -- 替换或添加，可用判断 value 的情况进行操作</p></li>
+
+									<li class="group"><p><code>void 	forEach(BiConsumer&lt;? super K,? super V> action)</code> -- 迭代键值</p></li>
+									<li><p><code>void 	forEach(long parallelismThreshold, BiConsumer&lt;? super K,? super V> action)</code> -- 并行迭代，并传输一个 Map 中可能的大小，以提高性能</p></li>
+									<li><p><code>&lt;U> void 	forEach(long parallelismThreshold, BiFunction&lt;? super K,? super V,? extends U> transformer, Consumer&lt;? super U> action)</code> -- 并行迭代，将 transformer 的返回值传输到 action 函数</p></li>
+									<li><p><code>void 	forEachEntry(long parallelismThreshold, Consumer&lt;? super Map.Entry&lt;K,V>> action)</code> -- 以 Map.Entry 的形式迭代</p></li>
+									<li><p><code>&lt;U> void 	forEachEntry(long parallelismThreshold, Function&lt;Map.Entry&lt;K,V>,? extends U> transformer, Consumer&lt;? super U> action)</code> -- 以 Map.Entry 的形式并行迭代，将 transformer 的返回值传输到 action 函数</p></li>
+									<li><p><code>void 	forEachKey(long parallelismThreshold, Consumer&lt;? super K> action)</code> -- 并行迭代 key</p></li>
+									<li><p><code>&lt;U> void 	forEachKey(long parallelismThreshold, Function&lt;? super K,? extends U> transformer, Consumer&lt;? super U> action)</code> -- 并行迭代 key，将 transformer 的返回值传输到 action 函数</p></li>
+									<li><p><code>void 	forEachValue(long parallelismThreshold, Consumer&lt;? super V> action)</code> -- 并行迭代 value</p></li>
+									<li><p><code>&lt;U> void 	forEachValue(long parallelismThreshold, Function&lt;? super V,? extends U> transformer, Consumer&lt;? super U> action)</code> -- 并行迭代 value，将 transformer 的返回值传输到 action 函数</p></li>
+
+									<li class="group"><p><code>&lt;U> U 	reduce(long parallelismThreshold, BiFunction&lt;? super K,? super V,? extends U> transformer, BiFunction&lt;? super U,? super U,? extends U> reducer)</code> -- </p></li>
+									<li><p><code>Map.Entry&lt;K,V> 	reduceEntries(long parallelismThreshold, BiFunction&lt;Map.Entry&lt;K,V>,Map.Entry&lt;K,V>,? extends Map.Entry&lt;K,V>> reducer)</code> -- </p></li>
+									<li><p><code>&lt;U> U 	reduceEntries(long parallelismThreshold, Function&lt;Map.Entry&lt;K,V>,? extends U> transformer, BiFunction&lt;? super U,? super U,? extends U> reducer)</code> -- </p></li>
+									<li><p><code>double 	reduceEntriesToDouble(long parallelismThreshold, ToDoubleFunction&lt;Map.Entry&lt;K,V>> transformer, double basis, DoubleBinaryOperator reducer)</code> -- </p></li>
+									<li><p><code>int 	reduceEntriesToInt(long parallelismThreshold, ToIntFunction&lt;Map.Entry&lt;K,V>> transformer, int basis, IntBinaryOperator reducer)</code> -- </p></li>
+									<li><p><code>long 	reduceEntriesToLong(long parallelismThreshold, ToLongFunction&lt;Map.Entry&lt;K,V>> transformer, long basis, LongBinaryOperator reducer)</code> -- </p></li>
+
+									<li class="group"><p><code>K 	reduceKeys(long parallelismThreshold, BiFunction&lt;? super K,? super K,? extends K> reducer)</code> -- </p></li>
+									<li><p><code>&lt;U> U 	reduceKeys(long parallelismThreshold, Function&lt;? super K,? extends U> transformer, BiFunction&lt;? super U,? super U,? extends U> reducer)</code> -- </p></li>
+									<li><p><code>double 	reduceKeysToDouble(long parallelismThreshold, ToDoubleFunction&lt;? super K> transformer, double basis, DoubleBinaryOperator reducer)</code> -- </p></li>
+									<li><p><code>int 	reduceKeysToInt(long parallelismThreshold, ToIntFunction&lt;? super K> transformer, int basis, IntBinaryOperator reducer)</code> -- </p></li>
+									<li><p><code>long 	reduceKeysToLong(long parallelismThreshold, ToLongFunction&lt;? super K> transformer, long basis, LongBinaryOperator reducer)</code> -- </p></li>
+									<li><p><code>double 	reduceToDouble(long parallelismThreshold, ToDoubleBiFunction&lt;? super K,? super V> transformer, double basis, DoubleBinaryOperator reducer)</code> -- </p></li>
+									<li><p><code>int 	reduceToInt(long parallelismThreshold, ToIntBiFunction&lt;? super K,? super V> transformer, int basis, IntBinaryOperator reducer)</code> -- </p></li>
+									<li><p><code>long 	reduceToLong(long parallelismThreshold, ToLongBiFunction&lt;? super K,? super V> transformer, long basis, LongBinaryOperator reducer)</code> -- </p></li>
+
+									<li class="group"><p><code>V 	reduceValues(long parallelismThreshold, BiFunction&lt;? super V,? super V,? extends V> reducer)</code> -- </p></li>
+									<li><p><code>&lt;U> U 	reduceValues(long parallelismThreshold, Function&lt;? super V,? extends U> transformer, BiFunction&lt;? super U,? super U,? extends U> reducer)</code> -- </p></li>
+									<li><p><code>double 	reduceValuesToDouble(long parallelismThreshold, ToDoubleFunction&lt;? super V> transformer, double basis, DoubleBinaryOperator reducer)</code> -- </p></li>
+									<li><p><code>int 	reduceValuesToInt(long parallelismThreshold, ToIntFunction&lt;? super V> transformer, int basis, IntBinaryOperator reducer)</code> -- </p></li>
+									<li><p><code>long 	reduceValuesToLong(long parallelismThreshold, ToLongFunction&lt;? super V> transformer, long basis, LongBinaryOperator reducer)</code> -- </p></li>
+
+
+								</ol>
                             </div>
 
                             <a id="ConcurrentSkipListMap" class="offset"></a>
                             <div class="split-item">
-                            <p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/ConcurrentSkipListMap.html" target="_blank">ConcurrentSkipListMap</a></p>
-                            <pre class="brush: java;">
-
+                            	<p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/ConcurrentSkipListMap.html" target="_blank">ConcurrentSkipListMap</a> 可缩放的并发 ConcurrentNavigableMap 实现。映射可以根据键的自然顺序进行排序，也可以根据创建映射时所提供的 Comparator 进行排序，具体取决于使用的构造方法。 </p>
+								<p>此类实现 SkipLists 的并发变体，为 containsKey、get、put、remove 操作及其变体提供预期平均 log(n) 时间开销。多个线程可以安全地并发执行插入、移除、更新和访问操作。迭代器是弱一致 的，返回的元素将反映迭代器创建时或创建后某一时刻的映射状态。它们不 抛出 ConcurrentModificationException，可以并发处理其他操作。升序键排序视图及其迭代器比降序键排序视图及其迭代器更快。 </p>
+								<p>此类及此类视图中的方法返回的所有 Map.Entry 对，表示他们产生时的映射关系快照。它们不 支持 Entry.setValue 方法。</p>
+								<p>请注意，与在大多数 collection 中不同，这里的 size 方法不是 一个固定时间 (constant-time) 操作。因为这些映射的异步特性，确定元素的当前数目需要遍历元素。此外，批量操作 putAll、equals 和 clear 并不 保证能以原子方式 (atomically) 执行。例如，与 putAll 操作一起并发操作的迭代器只能查看某些附加元素。 </p>
+                            	<pre class="brush: java;">
+public class ConcurrentSkipListMap&lt;K,V> extends AbstractMap&lt;K,V> implements ConcurrentNavigableMap&lt;K,V>,
+								Cloneable, Serializable {
+	public ConcurrentSkipListMap() {}
+	public ConcurrentSkipListMap(Comparator&lt;? super K> comparator) {}
+	public ConcurrentSkipListMap(Map&lt;? extends K,? extends V> m) {}
+	public ConcurrentSkipListMap(SortedMap&lt;K,? extends V> m) {}
+}
 </pre>
+								<ol>
+									<li><p><code>V 	put(K key, V value)</code> -- 将指定值与此映射中的指定键进行关联，<b>此方法会进行排序</b></p></li>
+									<li><p><code>V 	putIfAbsent(K key, V value)</code> -- 如果指定键已经不再与某个值相关联，则将它与给定值关联</p></li>
+									<li><p><code>V 	get(Object key)</code> -- 返回指定键所映射的值</p></li>
+									<li><p><code>V 	getOrDefault(Object key, V defaultValue)</code> -- 如果指定键返回值为 null, 则返回 defaultValue</p></li>
+									<li><p><code>V 	remove(Object key)</code> -- 从此映射中移除该键的映射关系（如果存在）</p></li>
+									<li><p><code>boolean 	remove(Object key, Object value)</code> -- 只有目前将键的条目映射到给定值时，才移除该键的条目</p></li>
+									<li><p><code>void 	clear()</code> -- 从此映射中移除所有映射关系</p></li>
+
+									<li class="group"><p><code>int 	size()</code> -- 返回此映射中的键-值映射关系数</p></li>
+									<li><p><code>boolean 	isEmpty()</code> -- 是否为空</p></li>
+									<li><p><code>V 	replace(K key, V value)</code> -- 替换指定 key 的 value</p></li>
+									<li><p><code>boolean 	replace(K key, V oldValue, V newValue)</code> -- 替换指定 key 的 指定 value 为 newValue</p></li>
+									<li><p><code>void 	replaceAll(BiFunction&lt;? super K,? super V,? extends V> function)</code> -- 替换符合条件的 value</p></li>
+
+									<li class="group"><p><code>void 	forEach(BiConsumer&lt;? super K,? super V> action)</code> -- 迭代</p></li>
+									<li><p><code>V 	merge(K key, V value, BiFunction&lt;? super V,? super V,? extends V> remappingFunction)</code> -- 替换或添加，可用判断 value 的情况进行操作</p></li>
+									<li><p><code>boolean 	containsKey(Object key)</code> -- 是否包含指定键</p></li>
+									<li><p><code>boolean 	containsValue(Object value)</code> -- 是否包含指定值</p></li>
+									<li><p><code>Collection&lt;V> 	values()</code> -- 返回值的 Collection 视图</p></li>
+									<li><p><code>boolean 	equals(Object o)</code> -- 是否相等</p></li>
+									<li><p><code>ConcurrentSkipListMap&lt;K,V> 	clone()</code> -- 复制</p></li>
+									<li><p><code>Comparator&lt;? super K> 	comparator()</code> -- 返回排序器</p></li>
+
+									<li class="group"><p><code>K 	firstKey()</code> -- 返回此映射中当前第一个（最低）键</p></li>
+									<li><p><code>K 	lastKey()</code> -- 返回此映射中当前最后一个键</p></li>
+									<li><p><code>K 	ceilingKey(K key)</code> -- 返回此映射中大于或等于指定键的键(最接近)</p></li>
+									<li><p><code>K 	floorKey(K key)</code> -- 返回此映射中小于或等于指定键的键(最接近)</p></li>
+									<li><p><code>K 	higherKey(K key)</code> -- 返回此映射中大于指定键的键(最接近)</p></li>
+									<li><p><code>K 	lowerKey(K key)</code> -- 返回此映射中小于指定键的键(最接近)</p></li>
+
+									<li class="group"><p><code>Map.Entry&lt;K,V> 	firstEntry()</code> -- 返回一个与此映射中的最小键关联的键-值映射关系</p></li>
+									<li><p><code>Map.Entry&lt;K,V> 	lastEntry()</code> -- 返回一个与此映射中的最大键关联的键-值映射关系</p></li>
+									<li><p><code>Map.Entry&lt;K,V> 	ceilingEntry(K key)</code> -- 返回此映射中大于或等于指定键的键-值映射关系(最接近)</p></li>
+									<li><p><code>Map.Entry&lt;K,V> 	floorEntry(K key)</code> -- 返回此映射中小于或等于指定键的键-值映射关系(最接近)</p></li>
+									<li><p><code>Map.Entry&lt;K,V> 	higherEntry(K key)</code> -- 返回此映射中大于指定键的键-值映射关系(最接近)</p></li>
+									<li><p><code>Map.Entry&lt;K,V> 	lowerEntry(K key)</code> -- 返回此映射中小于指定键的键-值映射关系(最接近)</p></li>
+
+									<li class="group"><p><code>V 	compute(K key, BiFunction&lt;? super K,? super V,? extends V> remappingFunction)</code> -- 参见 <a href="#HashMap">HashMap</a> 同名方法</p></li>
+									<li><p><code>V 	computeIfAbsent(K key, Function&lt;? super K,? extends V> mappingFunction)</code> -- 参见 <a href="#HashMap">HashMap</a> 同名方法</p></li>
+									<li><p><code>V 	computeIfPresent(K key, BiFunction&lt;? super K,? super V,? extends V> remappingFunction)</code> -- 参见 <a href="#HashMap">HashMap</a> 同名方法</p></li>
+
+									<li class="group"><p><code>ConcurrentNavigableMap&lt;K,V> 	headMap(K toKey)</code> -- 返回此映射的部分视图，其键值严格小于 toKey</p></li>
+									<li><p><code>ConcurrentNavigableMap&lt;K,V> 	headMap(K toKey, boolean inclusive)</code> -- 返回此映射的部分视图，其键小于（或等于，如果 inclusive 为 true）fromKey</p></li>
+									<li><p><code>ConcurrentNavigableMap&lt;K,V> 	subMap(K fromKey, K toKey)</code> -- 返回此映射的部分视图，其键值从 fromKey（包括） 到 toKey（不包括）</p></li>
+									<li><p><code>ConcurrentNavigableMap&lt;K,V> 	subMap(K fromKey, boolean fromInclusive, K toKey, boolean toInclusive)</code> -- 返回此映射的部分视图，其键值从 fromKey（如果 fromInclusive == true，包括） 到 toKey（如果 toInclusive == true，包括）</p></li>
+									<li><p><code>ConcurrentNavigableMap&lt;K,V> 	tailMap(K fromKey)</code> -- 返回此映射的部分视图，其键大于等于 fromKey</p></li>
+									<li><p><code>ConcurrentNavigableMap&lt;K,V> 	tailMap(K fromKey, boolean inclusive)</code> -- 返回此映射的部分视图，其键大于（或等于，如果 inclusive 为 true）fromKey</p></li>
+
+									<li class="group"><p><code>NavigableSet&lt;K> 	keySet()</code> -- 键的 Set 视图</p></li>
+									<li><p><code>Set&lt;Map.Entry&lt;K,V>> 	entrySet()</code> -- 键-值的 Set 视图</p></li>
+									<li><p><code>ConcurrentNavigableMap&lt;K,V> 	descendingMap()</code> -- 返回逆序视图</p></li>
+									<li><p><code>NavigableSet&lt;K> 	descendingKeySet()</code> --  逆序键的 NavigableSet 视图</p></li>
+									<li><p><code>NavigableSet&lt;K> 	navigableKeySet()</code> -- 键的 NavigableSet 视图</p></li>
+
+									<li class="group"><p><code>Map.Entry&lt;K,V> 	pollFirstEntry()</code> -- 移除并返回与此映射中的最小键关联的键-值映射关系</p></li>
+									<li><p><code>Map.Entry&lt;K,V> 	pollLastEntry()</code> -- 移除并返回与此映射中的最大键关联的键-值映射关系</p></li>
+								</ol>
                             </div>
                         </div>
 
                         <div class="sub-item">
                             <a id="Dictionary" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/Dictionary.html" target="_blank">Dictionary</a></p>
-                            <pre class="brush: java;">
-
+                            	<p><a href="docs/docs-java/api/java/util/Dictionary.html" target="_blank">Dictionary</a> 类是任何可将键映射到相应值的类（如 Hashtable）的抽象父类。每个键和每个值都是一个对象。在任何一个 Dictionary 对象中，每个键至多与一个值相关联。给定一个 Dictionary 和一个键，就可以查找所关联的元素。任何非 null 对象都可以用作键或值。 </p>
+								<p>常，应该在此类的实现中使用 equals 方法，以决定两个键是否相同。 </p>
+                            	<pre class="brush: java;">
+public abstract class Dictionary&lt;K,V> {}
 </pre>
+								<ol>
+									<li><p><code>abstract V 	put(K key, V value)</code> -- 将指定 key 映射到此 dictionary 中指定 value</p></li>
+									<li><p><code>abstract V 	get(Object key)</code> -- 返回此 dictionary 中该键所映射到的值</p></li>
+									<li><p><code>abstract V 	remove(Object key)</code> -- 从此 dictionary 中移除 key （及其相应的 value）</p></li>
+
+									<li class="group"><p><code>abstract boolean 	isEmpty()</code> -- 测试此 dictionary 是否不存在从键到值的映射</p></li>
+									<li><p><code>abstract int 	size()</code> -- 返回此 dictionary 中条目（不同键）的数量</p></li>
+									<li><p><code>abstract Enumeration&lt;K> 	keys()</code> -- 返回此 dictionary 中的键的枚举</p></li>
+									<li><p><code>abstract Enumeration&lt;V> 	elements()</code> -- 返回此 dictionary 中值的枚举</p></li>
+								</ol>
                             </div>
 
                             <a id="Hashtable" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/Hashtable.html" target="_blank">Hashtable</a></p>
-                            <pre class="brush: java;">
-
+                            	<p><a href="docs/docs-java/api/java/util/Hashtable.html" target="_blank">Hashtable</a> 类实现一个哈希表，该哈希表将键映射到相应的值。任何非 null 对象都可以用作键或值。</p>
+								<p>为了成功地在哈希表中存储和获取对象，用作键的对象必须实现 hashCode 方法和 equals 方法。</p>
+								<p>Hashtable 的实例有两个参数影响其性能：初始容量 和加载因子。容量 是哈希表中桶 的数量，初始容量 就是哈希表创建时的容量。注意，哈希表的状态为 open：在发生“哈希冲突”的情况下，单个桶会存储多个条目，这些条目必须按顺序搜索。加载因子 是对哈希表在其容量自动增加之前可以达到多满的一个尺度。初始容量和加载因子这两个参数只是对该实现的提示。关于何时以及是否调用 rehash 方法的具体细节则依赖于该实现。</p>
+								<p>通常，默认加载因子(.75)在时间和空间成本上寻求一种折衷。加载因子过高虽然减少了空间开销，但同时也增加了查找某个条目的时间（在大多数 Hashtable 操作中，包括 get 和 put 操作，都反映了这一点）。</p>
+								<p>初始容量主要控制空间消耗与执行 rehash 操作所需要的时间损耗之间的平衡。如果初始容量大于 Hashtable 所包含的最大条目数除以加载因子，则永远 不会发生 rehash 操作。但是，将初始容量设置太高可能会浪费空间。</p>
+								<p>如果很多条目要存储在一个 Hashtable 中，那么与根据需要执行自动 rehashing 操作来增大表的容量的做法相比，使用足够大的初始容量创建哈希表或许可以更有效地插入条目。</p>
+                            	<pre class="brush: java;">
+public class Hashtable&lt;K,V> extends Dictionary&lt;K,V> implements Map&lt;K,V>, Cloneable, Serializable {
+	public Hashtable() {} // 用默认的初始容量 (11) 和加载因子 (0.75) 构造一个新的空哈希表
+	public Hashtable(int initialCapacity) {}
+	public Hashtable(int initialCapacity, float loadFactor) {}
+	public Hashtable(Map&lt;? extends K,? extends V> t) {}
+}
 </pre>
+								<ol>
+									<li><p><code>V 	put(K key, V value)</code> -- 将指定值与此映射中的指定键进行关联</p></li>
+									<li><p><code>V 	putIfAbsent(K key, V value)</code> -- 如果指定键已经不再与某个值相关联，则将它与给定值关联</p></li>
+									<li><p><code>void 	putAll(Map&lt;? extends K,? extends V> t)</code> -- 将指定映射中所有映射关系复制到此映射中</p></li>
+									<li><p><code>V 	get(Object key)</code> -- 返回指定键所映射的值</p></li>
+									<li><p><code>V 	getOrDefault(Object key, V defaultValue)</code> -- 如果指定键返回值为 null, 则返回 defaultValue</p></li>
+									<li><p><code>V 	remove(Object key)</code> -- 从哈希表中移除该键及其相应的值</p></li>
+									<li><p><code>boolean 	remove(Object key, Object value)</code> -- 只有目前将键的条目映射到给定值时，才移除该键的条目</p></li>
+
+									<li class="group"><p><code>int 	size()</code> -- 返回此哈希表中的键的数量</p></li>
+									<li><p><code>void 	clear()</code> -- 从此映射中移除所有映射关系</p></li>
+									<li><p><code>boolean 	isEmpty()</code> -- 是否为空</p></li>
+									<li><p><code>boolean 	containsKey(Object key)</code> -- 如果此映射包含指定键的映射关系，则返回 true</p></li>
+									<li><p><code>boolean 	containsValue(Object value)</code> -- 如果此映射将一个或多个键映射到指定值，则返回 true</p></li>
+									<li><p><code>boolean 	contains(Object value)</code> -- 同 containsValue</p></li>
+
+									<li class="group"><p><code>V 	compute(K key, BiFunction&lt;? super K,? super V,? extends V> remappingFunction)</code> -- 参见 <a href="#HashMap">HashMap</a> 同名方法</p></li>
+									<li><p><code>V 	computeIfAbsent(K key, Function&lt;? super K,? extends V> mappingFunction)</code> -- 参见 <a href="#HashMap">HashMap</a> 同名方法</p></li>
+									<li><p><code>V 	computeIfPresent(K key, BiFunction&lt;? super K,? super V,? extends V> remappingFunction)</code> -- 参见 <a href="#HashMap">HashMap</a> 同名方法</p></li>
+
+									<li class="group"><p><code>V 	replace(K key, V value)</code> -- 替换指定 key 的 value</p></li>
+									<li><p><code>boolean 	replace(K key, V oldValue, V newValue)</code> -- 替换指定 key 的 指定 value 为 newValue</p></li>
+									<li><p><code>void 	replaceAll(BiFunction&lt;? super K,? super V,? extends V> function)</code> -- 替换符合条件的 value</p></li>
+
+									<li class="group"><p><code>Enumeration&lt;K> 	keys()</code> -- 键的枚举器，可用于迭代</p></li>
+									<li><p><code>Enumeration&lt;V> 	elements()</code> -- 值的枚举器，可用于迭代</p></li>
+									<li><p><code>Set&lt;K> 	keySet()</code> -- 返回 Key 的 Set 视图</p></li>
+									<li><p><code>Set&lt;Map.Entry&lt;K,V>> 	entrySet()</code> -- 返回 Entry 的 Set 视图</p></li>
+									<li><p><code>Collection&lt;V> 	values()</code> -- 返回此映射中包含的键的 Collection 视图</p></li>
+
+									<li class="group"><p><code>void 	forEach(BiConsumer&lt;? super K,? super V> action)</code> -- 迭代</p></li>
+									<li><p><code>V 	merge(K key, V value, BiFunction&lt;? super V,? super V,? extends V> remappingFunction)</code> -- 替换或添加，可用判断 value 的情况进行操作</p></li>
+
+									<li class="group"><p><code>boolean 	equals(Object o)</code> -- 比较指定对象与此映射的相等性</p></li>
+									<li><p><code>Object 	clone()</code> -- 返回此枚举映射的浅表副本</p></li>
+									<li><p><code>int 	hashCode()</code> -- 哈希值</p></li>
+									<li><p><code>protected void 	rehash()</code> -- 增加此哈希表的容量并在内部对其进行重组，以便更有效地容纳和访问其元素</p></li>
+									<li><p><code>String 	toString()</code> -- 返回此 Hashtable 对象的字符串表示形式</p></li>
+								</ol>
                             </div>
-                        </div>
+
+							<a id="Properties" class="offset"></a>
+							<div class="split-item">
+								<p><a href="docs/docs-java/api/java/util/Properties.html" target="_blank">Properties</a> 表示了一个持久的属性集。Properties 可保存在流中或从流中加载。属性列表中每个键及其对应值都是一个字符串。 </p>
+								<p>一个属性列表可包含另一个属性列表作为它的“默认值”；如果未能在原有的属性列表中搜索到属性键，则搜索第二个属性列表。 </p>
+								<p>因为 Properties 继承于 Hashtable，所以可对 Properties 对象应用 put 和 putAll 方法。但不建议使用这两个方法，因为它们允许调用者插入其键或值不是 String 的项。相反，应该使用 setProperty 方法。如果在“不安全”的 Properties 对象（即包含非 String 的键或值）上调用 store 或 save 方法，则该调用将失败。类似地，如果在“不安全”的 Properties 对象（即包含非 String 的键）上调用 propertyNames 或 list 方法，则该调用将失败。</p>
+								<p>此类是线程安全的：多个线程可以共享单个 Properties 对象而无需进行外部同步。</p>
+								<pre class="brush: java;">
+public class Properties extends Hashtable&lt;Object, Object> {
+	protected Properties defaults; // 一个属性列表，包含属性列表中所有未找到值的键的默认值
+
+	public Properties() {}
+	public Properties(Properties defaults) {}
+}
+</pre>
+								<ol>
+									<li><p><code>Object 	setProperty(String key, String value)</code> -- 调用 Hashtable 的方法 put</p></li>
+									<li><p><code>String 	getProperty(String key)</code> -- 用指定的键在此属性列表中搜索属性</p></li>
+									<li><p><code>String 	getProperty(String key, String defaultValue)</code> -- 用指定的键在此属性列表中搜索属性，没有则返回默认值</p></li>
+
+									<li class="group"><p><code>void 	store(OutputStream out, String comments)</code> -- 以适合使用 <code>load(InputStream)</code> 方法加载到 Properties 表中的格式，将此 Properties 表中的属性列表（键和元素对）写入输出流。</p></li>
+									<li><p><code>void 	store(Writer writer, String comments)</code> -- 以适合使用 <code>load(Reader)</code> 方法的格式，将此 Properties 表中的属性列表（键和元素对）写入输出字符</p>
+										<pre class="brush: java;">
+/** 将 System.getProperties() 属性写入属性文件: */
+Properties prop = System.getProperties();
+try {
+	prop.store(new FileOutputStream("./system.properties"), "System.getProperties() 方法");
+} catch (IOException e) {
+	e.printStackTrace();
+}
+
+// system.properties 内容如下:
+#System.getProperties() 方法
+#Mon Jul 30 17:50:52 CST 2018
+java.runtime.name=Java(TM) SE Runtime Environment
+sun.boot.library.path=/home/nate/installed/jdk1.8.0_65/jre/lib/i386
+java.vm.version=25.65-b01
+......
+</pre>
+									</li>
+									<li><p><code>void 	storeToXML(OutputStream os, String comment)</code> -- 发出一个表示此表中包含的所有属性的 XML 文档</p></li>
+									<li><p><code>void 	storeToXML(OutputStream os, String comment, String encoding)</code> -- 使用指定的编码发出一个表示此表中包含的所有属性的 XML 文档</p>
+										<pre class="brush: java;">
+/** 将 System.getProperties() 属性写入 xml 文件: */
+Properties prop = System.getProperties();
+try {
+	prop.storeToXML(new FileOutputStream("./system.properties.xml"), "System.getProperties() 方法");
+} catch (IOException e) {
+	e.printStackTrace();
+}
+
+// system.properties.xml 内容如下:
+&lt;?xml version="1.0" encoding="UTF-8" standalone="no"?>
+&lt;!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+&lt;properties>
+	&lt;comment>System.getProperties() 方法&lt;/comment>
+	&lt;entry key="java.runtime.name">Java(TM) SE Runtime Environment&lt;/entry>
+	&lt;entry key="sun.boot.library.path">/home/nate/installed/jdk1.8.0_65/jre/lib/i386&lt;/entry>
+	&lt;entry key="java.vm.version">25.65-b01&lt;/entry>
+	......
+&lt;/properties>
+</pre>
+									</li>
+
+									<li class="group"><p><code>void 	load(InputStream inStream)</code> -- 从输入流中读取属性列表（键和元素对）</p></li>
+									<li><p><code>void 	load(Reader reader)</code> -- 按简单的面向行的格式从输入字符流中读取属性列表（键和元素对）</p></li>
+									<li><p><code>void 	loadFromXML(InputStream in)</code> -- 将指定输入流中由 XML 文档所表示的所有属性加载到此属性表中</p></li>
+
+									<li class="group"><p><code>void 	list(PrintStream out)</code> -- 将属性列表输出到指定的输出流</p></li>
+									<li><p><code>void 	list(PrintWriter out)</code> -- 将属性列表输出到指定的输出流</p></li>
+
+									<li class="group"><p><code>Enumeration&lt;?> 	propertyNames()</code> -- 返回此属性列表中所有键的枚举，包括默认属性列表中的不同键，如果同一名称的键尚未从主属性列表中找到</p></li>
+									<li><p><code>Set&lt;String> 	stringPropertyNames()</code> -- 返回此属性列表中的键集</p></li>
+								</ol>
+								<p><b>系统属性键值：</b></p>
+								<pre class="brush: java;">
+Properties prop = System.getProperties();
+prop.stringPropertyNames().forEach(s -> log(s, prop.getProperty(s)));
+// prop.list(System.out);
+</pre>
+							</div>
+						</div>
 
                         <div class="sub-item">
                             <a id="AbstractSet" class="offset"></a>
@@ -5086,6 +5498,13 @@ public class HashSet&lt;E> extends AbstractSet&lt;E> implements Set&lt;E>, Clone
 </pre>
                             </div>
                         </div>
+
+						<div class="sub-item">
+							<a id="java-util-collections-example" class="offset"></a>
+							<div class="split-item">
+								<p><b><b>Java Collections Framework</b> 类和接口应用实例: </b></p>
+							</div>
+						</div>
                     </div>
                 </div>
                 <!-- item over -->
@@ -5101,11 +5520,139 @@ java.lang.Object
     java.util.Formatter
 
 public final class Formatter implements Closeable, Flushable {
+	public enum BigDecimalLayoutForm {
+		SCIENTIFIC,
+        DECIMAL_FLOAT
+    };
 
+	public Formatter() {}
+    public Formatter(Appendable a) {}
+    public Formatter(Appendable a, Locale l) {}
+    public Formatter(File file) {}
+    public Formatter(File file, String csn) {}
+    public Formatter(File file, String csn, Locale l) {}
+    public Formatter(Locale l) {}
+    public Formatter(OutputStream os) {}
+    public Formatter(OutputStream os, String csn) {}
+    public Formatter(OutputStream os, String csn, Locale l) {}
+    public Formatter(PrintStream ps) {}
+    public Formatter(String fileName) {}
+    public Formatter(String fileName, String csn) {}
+    public Formatter(String fileName, String csn, Locale l)
 }
 </pre>
                         <p><a href="docs/docs-java/api/java/util/Formatter.html" target="_blank">Formatter</a> 是 <code>printf</code> 风格的格式字符串的解释程序。此类提供了对布局对齐和排列的支持，以及对数值、字符串和日期/时间数据的常规格式和特定于语言环境的输出的支持。</p>
                         <p>Java 语言的格式化输出在很大程度上受到 C 语言 printf 的启发。虽然一些格式字符串与 C 类似，但已进行了某些定制，以适应 Java 语言，并且利用了其中一些特性。此外，Java 的格式比 C 的格式更严格；例如，如果转换与标志不兼容，则会抛出异常。在 C 中，不适用的标志会被忽略。这样，便于 C 程序员识别这些格式字符串，而又不必与 C 中的那些标志完全兼容。</p>
+
+                        <ol>
+                            <li><p><code>Formatter 	format(String format, Object... args)</code> -- 使用指定格式字符串和参数将一个格式化字符串</p>
+                                <pre class="brush: java;">
+String s = String.format("%s %s %d", "abc", "123", 1024); // 此方法其实调用的是 Formatter 的方法
+
+Formatter formatter = new Formatter().format("%s %s %d", "abc", "123", 1024);
+log(formatter.toString()); // abc 123 1024
+</pre>
+                            </li>
+                            <li><p><code>String 	toString()</code> -- 返回对输出的目标文件调用 toString() 的结果</p></li>
+                            <li><p><code>void 	close()</code> -- 关闭</p></li>
+                            <li><p><code>void 	flush()</code> -- 刷新</p></li>
+                            <li><p><code>Formatter 	format(Locale l, String format, Object... args)</code> -- 使用指定的语言环境、格式字符串和参数</p></li>
+                            <li><p><code>IOException 	ioException()</code> -- 返回由此 formatter 的 Appendable 方法上次抛出的 IOException 异常</p></li>
+                            <li><p><code>Locale 	locale()</code> -- 返回构造此 formatter 时设置的语言环境</p></li>
+                            <li><p><code>Appendable 	out()</code> -- 返回输出的目标文件</p></li>
+                        </ol>
+
+                        <p><b>Formatter 格式说明：</b></p>
+                        <ol>
+                            <li><p>常规类型、字符类型和数值类型的格式说明符的语法如下： </p>
+                                <pre class="brush: bash;">
+%[argument_index$][flags][width][.precision]conversion
+# 可选的 argument_index 是一个十进制整数，用于表明参数在参数列表中的位置。第一个参数由 "1$" 引用，依此类推
+# 可选 flags 是修改输出格式的字符集。有效标志集取决于转换类型(一般用不上)
+# 可选 width 是一个十进制整数，表明要向输出中写入的最少字符数(正数左侧填充空格，负数右侧填充空格)
+# 可选 precision 是一个非负十进制整数，通常用来限制字符数。特定行为取决于转换类型
+# 所需 conversion 是一个表明应该如何格式化参数的字符。给定参数的有效转换集取决于参数的数据类型
+
+format("%s - %d", "nate", 1024); // nate - 1024
+format("%2$s - %1$d", 1024, "nate"); // 先使用第二个为 String 的参数，再使用第一个为 int 的参数: nate - 1024
+format("%6s - %d", "nate", 1024); // 左侧填充了 2 个空格:     nate - 1024
+format("%-6s - %d", "nate", 1024); // 右侧填充了 2 个空格: nate   - 1024
+format("%.2s - %d", "nate", 1024); // 最多限制为 2 个字符: na - 1024
+
+## 参数的数据类型
+# 's', 'S' -- 字符串
+# 'b', 'B' -- boolean 类型, null 或 false 为 false, 其他都为 true
+# 'd' -- 整数
+# 'f' -- 浮点数
+# 'h', 'H' -- 十六进制
+# 'o' -- 八进制
+# 'c', 'C' -- char
+# 'e', 'E' -- 计算机科学记数法表示的十进制数
+# 'g', 'G' -- 根据精度和舍入运算后的值
+# 'x', 'X' -- 结果被格式化为十六进制整数
+# 'a', 'A' -- 结果被格式化为带有效位数和指数的十六进制浮点数
+# 't', 'T' -- 日期和时间转换字符的前缀（参照下面）
+</pre>
+                            </li>
+                            <li><p>用来表示日期和时间类型的格式说明符的语法如下：</p>
+                                <pre class="brush: bash;">
+%[argument_index$][flags][width]conversion
+# 可选的 argument_index、flags 和 width 的定义同上
+# 所需的 conversion 是一个由两字符组成的序列。第一个字符是 't' 或 'T'。第二个字符表明所使用的格式
+
+# 4 个参数分别为年份，月份，一月中的多少天，时间
+format("%1$tY %1$tm %1$td %1$tT", Calendar.getInstance()); // 2018 07 18 16:19:56
+
+## 日期/时间转换(conversion 第二个字符)
+## 1.格式化日期
+# 'B' -- 特定于语言环境的月份全称，例如 "January" 和 "February"。
+# 'b' -- 特定于语言环境的月份简称，例如 "Jan" 和 "Feb"。
+# 'h' -- 与 'b' 相同。
+# 'A' -- 特定于语言环境的星期几全称，例如 "Sunday" 和 "Monday"
+# 'a' -- 特定于语言环境的星期几简称，例如 "Sun" 和 "Mon"
+# 'C' -- 除以 100 的四位数表示的年份，被格式化为必要时带前导零的两位数，即 00 - 99
+# 'Y' -- 年份，被格式化为必要时带前导零的四位数（至少），例如，0092 等于格里高利历的 92 CE。
+# 'y' -- 年份的最后两位数，被格式化为必要时带前导零的两位数，即 00 - 99。
+# 'j' -- 一年中的天数，被格式化为必要时带前导零的三位数，例如，对于格里高利历是 001 - 366。
+# 'm' -- 月份，被格式化为必要时带前导零的两位数，即 01 - 13。
+# 'd' -- 一个月中的天数，被格式化为必要时带前导零两位数，即 01 - 31
+# 'e' -- 一个月中的天数，被格式化为两位数，即 1 - 31
+
+# 2. 格式化时间
+# 'H' -- 24 小时制的小时，被格式化为必要时带前导零的两位数，即 00 - 23。
+# 'I' -- 12 小时制的小时，被格式化为必要时带前导零的两位数，即 01 - 12。
+# 'k' -- 24 小时制的小时，即 0 - 23。
+# 'l' -- 12 小时制的小时，即 1 - 12。
+# 'M' -- 小时中的分钟，被格式化为必要时带前导零的两位数，即 00 - 59。
+# 'S' -- 分钟中的秒，被格式化为必要时带前导零的两位数，即 00 - 60 （"60" 是支持闰秒所需的一个特殊值）。
+# 'L' -- 秒中的毫秒，被格式化为必要时带前导零的三位数，即 000 - 999。
+# 'N' -- 秒中的毫微秒，被格式化为必要时带前导零的九位数，即 000000000 - 999999999。
+# 'p' -- 特定于语言环境的 上午或下午 标记以小写形式表示，例如 "am" 或 "pm"。使用转换前缀 'T' 可以强行转换为大写形式
+# 'z' -- 相对于 GMT 的 RFC 822 格式的数字时区偏移量，例如 -0800。
+# 'Z' -- 表示时区缩写形式的字符串。Formatter 的语言环境将取代参数的语言环境（如果有）。
+# 's' -- 自协调世界时 (UTC) 1970 年 1 月 1 日 00:00:00 至现在所经过的秒数
+# 'Q' -- 自协调世界时 (UTC) 1970 年 1 月 1 日 00:00:00 至现在所经过的毫秒数
+
+# 3. 日期/时间组合
+# 'R' -- 24 小时制的时间，被格式化为 "%tH:%tM"
+# 'T' -- 24 小时制的时间，被格式化为 "%tH:%tM:%tS"。
+# 'r' -- 12 小时制的时间，被格式化为 "%tI:%tM:%tS %Tp"。上午或下午标记 ('%Tp') 的位置可能与语言环境有关。
+# 'D' -- 日期，被格式化为 "%tm/%td/%ty"。
+# 'F' -- ISO 8601 格式的完整日期，被格式化为 "%tY-%tm-%td"。
+# 'c' -- 日期和时间，被格式化为 "%ta %tb %td %tT %tZ %tY"，例如 "Sun Jul 20 16:17:00 EDT 1969"。
+</pre>
+                            </li>
+                            <li><p>与参数不对应的格式说明符的语法如下： </p>
+                                <pre class="brush: bash;">
+%[flags][width]conversion
+# 可选 flags 和 width 的定义同上
+# 所需的 conversion 是一个表明要在输出中所插内容的字符
+
+format("Today is %tA.", Calendar.getInstance()); // Today is Wednesday.
+</pre>
+                            </li>
+                        </ol>
+
 
                     </div>
                 </div>
@@ -5119,8 +5666,60 @@ public final class Formatter implements Closeable, Flushable {
                     </div>
                     <div class="panel-body">
 						<pre class="brush: java;">
+java.lang.Object
+    java.util.Observable
 
-						</pre>
+public class Observable {}
+
+public interface Observer {
+    void update(Observable o, Object arg);
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/util/Observable.html" target="_blank">Observable</a> 表示模型视图范例中的 Observable 对象，或者说“数据”。可将其子类化，表示应用程序想要观察的对象。 </p>
+                        <p>一个 Observable 对象可以有一个或多个观察者。观察者可以是实现了 Observer 接口的任意对象。一个 Observable 实例改变后，调用 Observable 的 notifyObservers 方法的应用程序会通过调用观察者的 update 方法来通知观察者该实例发生了改变。 </p>
+                        <p>未指定发送通知的顺序。Observable 类中所提供的默认实现将按照其注册的重要性顺序来通知 Observers，但是子类可能改变此顺序，从而使用非固定顺序在单独的线程上发送通知，或者也可能保证其子类遵从其所选择的顺序。 </p>
+                        <ol>
+                            <li><p><code>void 	addObserver(Observer o)</code> -- 添加此观察者到 Observable</p></li>
+                            <li><p><code>void 	notifyObservers()</code> -- 如果 hasChanged 方法指示对象已改变（要主动调用 <code>setChanged()</code>），则通知其所有观察者</p></li>
+                            <li><p><code>void 	notifyObservers(Object arg)</code> -- 同上，加一个参数</p></li>
+
+                            <li class="group"><p><code>boolean 	hasChanged()</code> -- 测试对象是否改变</p></li>
+                            <li><p><code>protected void 	clearChanged()</code> -- 指示对象不再改变</p></li>
+                            <li><p><code>protected void 	setChanged()</code> -- 标记此 Observable 对象为已改变的对象</p></li>
+
+                            <li class="group"><p><code>int 	countObservers()</code> -- 返回 Observable 对象的观察者数目</p></li>
+                            <li><p><code>void 	deleteObserver(Observer o)</code> -- 从对象的观察者集合中删除某个观察者</p></li>
+                            <li><p><code>void 	deleteObservers()</code> -- 清除观察者列表，使此对象不再有任何观察者</p></li>
+                        </ol>
+                        <p>使用 Observerable 和 Observer 实现简单的 List 数据添加和删除通知到 Listener:</p>
+                        <pre class="brush: java;">
+public class ListOservable&lt;T> extends Observable {
+    private List&lt;T> datas = new ArrayList<>();
+
+    public void add(T t) {
+        datas.add(t);
+        setChanged();
+        notifyObservers(t);
+    }
+
+    public T get(int index) {
+        return datas.get(index);
+    }
+
+    public void remove(int index) {
+        T t = datas.remove(index);
+        setChanged();
+        notifyObservers(t);
+    }
+}
+
+class Listener implements Observer {
+    @Override
+    public void update(Observable o, Object arg) {
+        log("Listener", arg);
+    }
+}
+                        </pre>
                     </div>
                 </div>
                 <!-- item over -->
@@ -5133,8 +5732,51 @@ public final class Formatter implements Closeable, Flushable {
                     </div>
                     <div class="panel-body">
 						<pre class="brush: java;">
+java.lang.Object
+    java.util.UUID
 
-						</pre>
+public final class UUID implements java.io.Serializable, Comparable&lt;UUID> {
+    public UUID(long mostSigBits, long leastSigBits) {}
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/util/UUID.html" target="_blank">UUID</a> 表示通用唯一标识符 (UUID) 的类。 UUID 表示一个 128 位的值。 </p>
+                        <p>这些通用标识符具有不同的变体。此类的方法用于操作 Leach-Salz 变体，不过构造方法允许创建任何 UUID 变体（将在下面进行描述）。</p>
+                        <p>Leach-Salz 变体 UUID 的布局如下： long 型数据的 最高 / 最低 有效位由以下无符号字段组成： </p>
+                        <pre class="brush: java;">
+// 最高有效位:
+0xFFFFFFFF00000000 time_low
+0x00000000FFFF0000 time_mid
+0x000000000000F000 version
+0x0000000000000FFF time_hi
+
+// 最低有效位:
+0xC000000000000000 variant
+0x3FFF000000000000 clock_seq
+0x0000FFFFFFFFFFFF node
+</pre>
+                        <p>variant 字段包含一个表示 UUID 布局的值。以上描述的位布局仅在 UUID 的 variant 值为 2（表示 Leach-Salz 变体）时才有效。</p>
+                        <p>version 字段保存描述此 UUID 类型的值。有 4 种不同的基本 UUID 类型：基于时间的 UUID、DCE 安全 UUID、基于名称的 UUID 和随机生成的 UUID。 这些类型的 version 值分别为 1、2、3 和 4。 </p>
+                        <ol>
+
+                            <li><p><code>static UUID 	randomUUID()</code> -- 获取类型为 4（伪随机生成的）UUID 的静态工厂</p></li>
+                            <li><p><code>static UUID 	fromString(String name)</code> --  根据 toString() 方法中描述的字符串标准表示形式创建 UUID</p></li>
+                            <li><p><code>static UUID 	nameUUIDFromBytes(byte[] name)</code> -- 根据指定的字节数组获取类型 3（基于名称的）UUID 的静态工厂</p></li>
+
+                            <li class="group"><p><code>int 	variant()</code> -- 与此 UUID 相关联的变体号</p></li>
+                            <li><p><code>int 	version()</code> -- 与此 UUID 相关联的版本号</p></li>
+                            <li><p><code>int 	clockSequence()</code> -- 与此 UUID 相关联的时钟序列值</p></li>
+
+                            <li class="group"><p><code>long 	node()</code> -- 与此 UUID 相关的节点值</p></li>
+                            <li><p><code>long 	timestamp()</code> -- 与此 UUID 相关联的时间戳值</p></li>
+                            <li><p><code>long 	getMostSignificantBits()</code> -- 返回此 UUID 的 128 位值中的最高有效 64 位</p></li>
+                            <li><p><code>long 	getLeastSignificantBits()</code> -- 返回此 UUID 的 128 位值中的最低有效 64 位</p></li>
+
+                            <li class="group"><p><code>int 	hashCode()</code> -- 返回此 UUID 的哈希码</p></li>
+                            <li><p><code>boolean 	equals(Object obj)</code> -- 将此对象与指定对象比较</p></li>
+                            <li><p><code>String 	toString()</code> -- 返回表示此 UUID 的 String 对象</p></li>
+                            <li><p><code>int 	compareTo(UUID val)</code> -- 将此 UUID 与指定的 UUID 比较</p></li>
+
+                        </ol>
                     </div>
                 </div>
                 <!-- item over -->
@@ -5146,9 +5788,289 @@ public final class Formatter implements Closeable, Flushable {
                         <h3 class="panel-title">java.util.concurrent.Executor 及实现类</h3>
                     </div>
                     <div class="panel-body">
+						<div class="sub-item">
 						<pre class="brush: java;">
+java.lang.Object
+	java.util.concurrent.Executor
 
-						</pre>
+public interface Executor {
+    void execute(Runnable command);
+}
+</pre>
+						<p><a href="docs/docs-java/api/java/util/concurrent/Executor.html" target="_blank">Executor</a> 执行已提交的 Runnable 任务的对象。此接口提供一种将任务提交与每个任务将如何运行的机制（包括线程使用的细节、调度等）分离开来的方法。通常使用 Executor 而不是显式地创建线程。</p>
+						<p>不过，Executor 接口并没有严格地要求执行是异步的。在最简单的情况下，执行程序可以在调用者的线程中立即运行已提交的任务： </p>
+						<pre class="brush: java;">
+ class DirectExecutor implements Executor {
+     public void execute(Runnable r) {
+         r.run();
+     }
+ }
+</pre>
+						<p>更常见的是，任务是在某个不是调用者线程的线程中执行的。以下执行程序将为每个任务生成一个新线程。 </p>
+						<pre class="brush: java;">
+ class ThreadPerTaskExecutor implements Executor {
+     public void execute(Runnable r) {
+         new Thread(r).start();
+     }
+ }
+</pre>
+						<p>许多 Executor 实现都对调度任务的方式和时间强加了某种限制。以下执行程序使任务提交与第二个执行程序保持连续，这说明了一个复合执行程序。</p>
+						<pre class="brush: java;">
+class SerialExecutor implements Executor {
+     final Queue&lt;Runnable> tasks = new ArrayDeque&lt;Runnable>();
+     final Executor executor;
+     Runnable active;
+
+     SerialExecutor(Executor executor) {
+         this.executor = executor;
+     }
+
+     public synchronized void execute(final Runnable r) {
+         tasks.offer(new Runnable() {
+             public void run() {
+                 try {
+                     r.run();
+                 } finally {
+                     scheduleNext();
+                 }
+             }
+         });
+         if (active == null) {
+             scheduleNext();
+         }
+     }
+
+     protected synchronized void scheduleNext() {
+         if ((active = tasks.poll()) != null) {
+             executor.execute(active);
+         }
+     }
+}
+</pre>
+						<p>此包中提供的 Executor 实现实现了 ExecutorService，这是一个使用更广泛的接口。ThreadPoolExecutor 类提供一个可扩展的线程池实现。Executors 类为这些 Executor 提供了便捷的工厂方法。 </p>
+						</div>
+
+						<div class="sub-item">
+							<p><b>Execuror 子接口，实现类和相关类</b></p>
+							<ul>
+								<li><p><a href="docs/docs-java/api/java/util/concurrent/ExecutorService.html" target="_blank">ExecutorService</a> 接口是 Executor 子接口，提供了管理终止的方法，以及可为跟踪一个或多个异步任务执行状况而生成 Future 的方法。</p>
+									<p>可以关闭 ExecutorService，这将导致其拒绝新任务。提供两个方法来关闭 ExecutorService。<code>shutdown()</code> 方法在终止前允许执行以前提交的任务，而 <code>shutdownNow()</code> 方法阻止等待任务启动并试图停止当前正在执行的任务。在终止时，执行程序没有任务在执行，也没有任务在等待执行，并且无法提交新任务。应该关闭未使用的 ExecutorService 以允许回收其资源。 </p>
+									<p>通过创建并返回一个可用于取消执行和/或等待完成的 Future，方法 submit 扩展了基本方法 Executor.execute(java.lang.Runnable)。方法 invokeAny 和 invokeAll 是批量执行的最常用形式，它们执行任务 collection，然后等待至少一个，或全部任务完成</p>
+									<pre class="brush: java;">
+public Interface ExecutorService  extends Executor {
+	boolean isShutdown(); // 此执行程序是否已关闭
+	void shutdown(); // 启动一次顺序关闭，执行以前提交的任务，但不接受新任务
+	List&lt;Runnable> shutdownNow(); // 试图停止所有正在执行的任务，暂停处理正在等待的任务，并返回等待执行的任务列表
+
+	Future&lt;?> submit(Runnable task); // 提交一个返回值的任务用于执行，并返回一个表示该任务的 Future
+	&lt;T> Future&lt;T> submit(Runnable task, T result); // 提交一个 Runnable 任务用于执行
+	&lt;T> Future&lt;T> submit(Callable&lt;T> task); // 提交一个 Runnable 任务用于执行
+
+	boolean isTerminated(); // 如果关闭后所有任务都已完成，则返回 true
+	// 请求关闭、发生超时或者当前线程中断，无论哪一个首先发生之后，都将导致阻塞，直到所有任务完成执行
+	boolean awaitTermination(long timeout, TimeUnit unit);
+
+	// 执行给定的任务，当所有任务完成时，返回保持任务状态和结果的 Future 列表
+	&lt;T> List&lt;Future&lt;T>> invokeAll(Collection&lt;? extends Callable&lt;T>> tasks);
+	// 执行给定的任务，当所有任务完成或超时期满时（无论哪个首先发生），返回保持任务状态和结果的 Future 列表
+	&lt;T> List&lt;Future&lt;T>> invokeAll(Collection&lt;? extends Callable&lt;T>> ts, long tout, TimeUnit unit);
+	// 执行给定的任务，如果某个任务已成功完成（也就是未抛出异常），则返回其结果
+	&lt;T> T invokeAny(Collection&lt;? extends Callable&lt;T>> tasks);
+	// 执行给定的任务，如果在给定的超时期满前某个任务已成功完成（也就是未抛出异常），则返回其结果
+	&lt;T> T invokeAny(Collection&lt;? extends Callable&lt;T>> tasks, long timeout, TimeUnit unit);
+}
+</pre>
+								</li>
+								<li><p><a href="docs/docs-java/api/java/util/concurrent/AbstractExecutorService.html" target="_blank">AbstractExecutorService</a> 提供 ExecutorService 执行方法的默认实现。此类使用 newTaskFor 返回的 RunnableFuture 实现 submit、invokeAny 和 invokeAll 方法，默认情况下，RunnableFuture 是此包中提供的 FutureTask 类。</p>
+									<pre class="brush: java;">
+/** 此类实现了接口的 submit(...) 和 invoke... 方法 */
+public abstract class AbstractExecutorService implements ExecutorService {
+	// 为给定可调用任务返回一个 RunnableFuture。
+	protected &lt;T> RunnableFuture&lt;T> newTaskFor(Callable&lt;T> callable) {}
+	// 为给定可运行任务和默认值返回一个 RunnableFuture
+	protected &lt;T> RunnableFuture&lt;T> newTaskFor(Runnable runnable, T value) {}
+}
+</pre>
+								</li>
+								<li><p><a href="docs/docs-java/api/java/util/concurrent/ScheduledExecutorService.html" target="_blank">ScheduledExecutorService</a> 接口也是一个 ExecutorService，可安排在给定的延迟后运行或定期执行的命令。 </p>
+									<p>schedule 方法使用各种延迟创建任务，并返回一个可用于取消或检查执行的任务对象。scheduleAtFixedRate 和 scheduleWithFixedDelay 方法创建并执行某些在取消前一直定期运行的任务。 </p>
+									<p>所有的 schedule 方法都接受相对 延迟和周期作为参数，而不是绝对的时间或日期。</p>
+									<pre class="brush: java;">
+public interface ScheduledExecutorService extends ExecutorService {
+	// 创建并执行在给定延迟后启用的 ScheduledFuture。
+	&lt;V> ScheduledFuture&lt;V> schedule(Callable&lt;V> callable, long delay, TimeUnit unit);
+	// 创建并执行在给定延迟后启用的一次性操作。
+	ScheduledFuture&lt;?> schedule(Runnable command, long delay, TimeUnit unit);
+    /* 创建并执行一个在给定初始延迟后首次启用的定期操作，后续操作具有给定的周期；也就是将在 initDelay 后开始执行，
+	 * 然后在 initialDelay+period 后执行，接着在 initialDelay + 2 * period 后执行，依此类推。*/
+ 	ScheduledFuture&lt;?> scheduleAtFixedRate(Runnable r, long initDelay, long period, TimeUnit unit);
+	// 创建并执行一个在给定初始延迟后首次启用的定期操作，随后，在每一次执行终止和下一次执行开始之间都存在给定的延迟
+ 	ScheduledFuture&lt;?> scheduleWithFixedDelay(Runnable r, long initDelay, long delay, TimeUnit unit);
+}
+</pre>
+								</li>
+								<li><p><a href="" target="_blank">ThreadPoolExecutor</a> 类是一个 ExecutorService，它使用可能的几个池线程之一执行每个提交的任务。</p>
+									<p>因为它的构造函数参数较多，使用容易出错，通常使用 Executors 工厂方法配置(具体使用参照: <a href="index.html#java-thread-pool">线程池</a>)。</p>
+									<p>线程池可以解决两个不同问题：由于减少了每个任务调用的开销，它们通常可以在执行大量异步任务时提供增强的性能，并且还可以提供绑定和管理资源（包括执行任务集时使用的线程）的方法。每个 ThreadPoolExecutor 还维护着一些基本的统计数据，如完成的任务数。 </p>
+									<p>为了便于跨大量上下文使用，此类提供了很多可调整的参数和扩展钩子 (hook)。但是，强烈建议程序员使用较为方便的 Executors 工厂方法 Executors.newCachedThreadPool()（无界线程池，可以进行自动线程回收）、Executors.newFixedThreadPool(int)（固定大小线程池）和 Executors.newSingleThreadExecutor()（单个后台线程），它们均为大多数使用场景预定义了设置。</p>
+									<pre class="brush: java;">
+public class ThreadPoolExecutor extends AbstractExecutorService {
+	/** 以下 4 个内部类都用于被拒绝任务的处理程序，都实现 RejectedExecutionHandler 接口
+	 * AbortPolicy -- 将抛出 RejectedExecutionException。
+ 	 * CallerRunsPolicy -- 直接在 execute 方法的调用线程中运行被拒绝的任务；如果执行程序已关闭，则丢弃该任务。
+	 * DiscardOldestPolicy -- 放弃最旧的未处理请求，然后重试 execute；如果执行程序已关闭，则会丢弃该任务。
+	 * DiscardPolicy -- 默认情况下它将丢弃被拒绝的任务。
+	 */
+	public static class AbortPolicy implements RejectedExecutionHandler {}
+	public static class CallerRunsPolicy implements RejectedExecutionHandler {}
+	public static class DiscardOldestPolicy implements RejectedExecutionHandler {}
+	public static class DiscardPolicy implements RejectedExecutionHandler {}
+
+	public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime,
+							  	TimeUnit unit, BlockingQueue&lt;Runnable> workQueue) {}
+	public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime,
+                              	TimeUnit unit, BlockingQueue&lt;Runnable> workQueue,
+							  	RejectedExecutionHandler handler) {}
+	public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime,
+                              	TimeUnit unit, BlockingQueue&lt;Runnable> workQueue,
+                              	ThreadFactory threadFactory) {}
+	public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime,
+                              	TimeUnit unit, BlockingQueue&lt;Runnable> workQueue,
+                              	ThreadFactory threadFactory, RejectedExecutionHandler handler) {}
+
+	protected void afterExecute(Runnable r, Throwable t); // 基于完成执行给定 Runnable 所调用的方法。
+	protected void beforeExecute(Thread t, Runnable r); // 在执行给定线程中的给定 Runnable 之前调用的方法。
+	protected void terminated(); // 当 Executor 已经终止时调用的方法。
+	protected void finalize(); // 当不再引用此执行程序时，调用 shutdown。
+
+	public boolean isTerminated(); // 如果关闭后所有任务都已完成，则返回 true。
+ 	public boolean isTerminating(); // 如果此执行程序处于在 shutdown 或 shutdownNow 之后正在终止但尚未完全终止的过程中，则返回 true。
+	public boolean awaitTermination(long timeout, TimeUnit unit); // 请求关闭、发生超时或者当前线程中断，无论哪一个首先发生之后，都将导致阻塞，直到所有任务完成执行。
+
+	public boolean isShutdown(); // 如果此执行程序已关闭，则返回 true。
+ 	public void shutdown(); // 按过去执行已提交任务的顺序发起一个有序的关闭，但是不接受新任务。
+ 	public List&lt;Runnable> shutdownNow(); // 尝试停止所有的活动执行任务、暂停等待任务的处理，并返回等待执行的任务列表。
+
+	public void allowCoreThreadTimeOut(boolean value); // 如果在保持活动时间内没有任务到达，新任务到达时正在替换（如果需要），则设置控制核心线程是超时还是终止的策略。
+	public boolean 	allowsCoreThreadTimeOut(); // 如果此池允许核心线程超时和终止，如果在 keepAlive 时间内没有任务到达，新任务到达时正在替换（如果需要），则返回 true。
+
+	public void execute(Runnable command); // 在将来某个时间执行给定任务。
+
+ 	public int getActiveCount(); // 返回主动执行任务的近似线程数。
+ 	public long getCompletedTaskCount(); // 返回已完成执行的近似任务总数。
+	public long getTaskCount(); // 返回曾计划执行的近似任务总数。
+
+ 	public int getCorePoolSize(); // 返回核心线程数。
+	public void setCorePoolSize(int corePoolSize); // 设置核心线程数。
+ 	public int getMaximumPoolSize(); // 返回允许的最大线程数。
+	public void setMaximumPoolSize(int maximumPoolSize); // 设置允许的最大线程数。
+ 	public int getPoolSize(); // 返回池中的当前线程数。
+	public int getLargestPoolSize(); // 返回曾经同时位于池中的最大线程数。
+
+ 	public long getKeepAliveTime(TimeUnit unit); // 返回线程保持活动的时间，该时间就是超过核心池大小的线程可以在终止前保持空闲的时间值。
+ 	public void setKeepAliveTime(long time, TimeUnit unit); // 设置线程在终止前可以保持空闲的时间限制。
+
+
+ 	public RejectedExecutionHandler getRejectedExecutionHandler(); // 返回用于未执行任务的当前处理程序。
+	public void setRejectedExecutionHandler(RejectedExecutionHandler handler); // 设置用于未执行任务的新处理程序。
+ 	public ThreadFactory getThreadFactory(); // 返回用于创建新线程的线程工厂。
+	public void setThreadFactory(ThreadFactory threadFactory); // 设置用于创建新线程的线程工厂。
+
+ 	public int prestartAllCoreThreads(); // 启动所有核心线程，使其处于等待工作的空闲状态。
+ 	public boolean prestartCoreThread(); // 启动核心线程，使其处于等待工作的空闲状态。
+
+	public BlockingQueue&lt;Runnable> getQueue(); // 返回此执行程序使用的任务队列。
+	public void purge(); // 尝试从工作队列移除所有已取消的 Future 任务。
+	public boolean remove(Runnable task); // 从执行程序的内部队列中移除此任务（如果存在），从而如果尚未开始，则其不再运行。
+}
+</pre>
+								</li>
+								<li><p><a href="" target="_blank">Executors</a> 此包中所定义的 Executor、ExecutorService、ScheduledExecutorService、ThreadFactory 和 Callable 类的工厂和实用方法。此类支持以下各种方法：</p>
+									<ul>
+										<li><p>创建并返回设置有常用配置字符串的 ExecutorService 的方法。</p></li>
+										<li><p>创建并返回设置有常用配置字符串的 ScheduledExecutorService 的方法。</p></li>
+										<li><p>创建并返回“包装的”ExecutorService 方法，它通过使特定于实现的方法不可访问来禁用重新配置。</p></li>
+										<li><p>创建并返回 ThreadFactory 的方法，它可将新创建的线程设置为已知的状态。</p></li>
+										<li><p>创建并返回非闭包形式的 Callable 的方法，这样可将其用于需要 Callable 的执行方法中。</p></li>
+									</ul>
+									<pre class="brush: java;">
+public class Executors {
+	static ExecutorService newCachedThreadPool() {}
+	static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {}
+	static ExecutorService newFixedThreadPool(int nThreads) {}
+	static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory) {}
+	static ScheduledExecutorService newScheduledThreadPool(int corePoolSize) {}
+	static ScheduledExecutorService newScheduledThreadPool(int corePoolSize,
+										ThreadFactory threadFactory) {}
+	static ExecutorService newSingleThreadExecutor() {}
+	static ExecutorService newSingleThreadExecutor(ThreadFactory threadFactory) {}
+	static ScheduledExecutorService newSingleThreadScheduledExecutor() {}
+	static ScheduledExecutorService newSingleThreadScheduledExecutor(ThreadFactory threadFactory) {}
+
+	static ThreadFactory defaultThreadFactory() {}
+	static Callable&lt;Object> callable(Runnable task) {}
+	static &lt;T> Callable&lt;T> callable(Runnable task, T result) {}
+	static Callable&lt;Object> callable(PrivilegedAction&lt;?> action) {}
+	static Callable&lt;Object> callable(PrivilegedExceptionAction&lt;?> action) {}
+
+	static &lt;T> Callable&lt;T> privilegedCallable(Callable&lt;T> callable) {}
+	static &lt;T> Callable&lt;T> privilegedCallableUsingCurrentClassLoader(Callable&lt;T> callable) {}
+	static ThreadFactory privilegedThreadFactory() {}
+	static ExecutorService unconfigurableExecutorService(ExecutorService executor) {}
+	static ScheduledExecutorService unconfigurableScheduledExecutorService(
+										ScheduledExecutorService executor) {}
+}
+</pre>
+								</li>
+								<li><p><a href="" target="_blank">ScheduledThreadPoolExecutor</a> 可另行安排在给定的延迟后运行命令，或者定期执行命令。需要多个辅助线程时，或者要求 ThreadPoolExecutor 具有额外的灵活性或功能时，此类要优于 Timer。 </p>
+									<p>一旦启用已延迟的任务就执行它，但是有关何时启用，启用后何时执行则没有任何实时保证。按照提交的先进先出 (FIFO) 顺序来启用那些被安排在同一执行时间的任务。 </p>
+									<p>虽然此类继承自 ThreadPoolExecutor，但是几个继承的调整方法对此类并无作用。特别是，因为它作为一个使用 corePoolSize 线程和一个无界队列的固定大小的池，所以调整 maximumPoolSize 没有什么效果。 </p>
+									<pre class="brush: java;">
+public class ScheduledThreadPoolExecutor extends ThreadPoolExecutor
+										implements ScheduledExecutorService {
+	public ScheduledThreadPoolExecutor(int corePoolSize) {}
+	public ScheduledThreadPoolExecutor(int corePoolSize, RejectedExecutionHandler handler) {}
+	public ScheduledThreadPoolExecutor(int corePoolSize, ThreadFactory threadFactory) {}
+	public ScheduledThreadPoolExecutor(int corePoolSize, ThreadFactory threadFactory,
+											RejectedExecutionHandler handler) {}
+
+	protected &lt;V> RunnableScheduledFuture&lt;V> decorateTask(Callable&lt;V> callable,
+										RunnableScheduledFuture&lt;V> task) {}
+	protected &lt;V> RunnableScheduledFuture&lt;V> decorateTask(Runnable runnable,
+										RunnableScheduledFuture&lt;V> task) {}
+	public void execute(Runnable command) {}
+	public boolean getContinueExistingPeriodicTasksAfterShutdownPolicy() {}
+	public boolean getExecuteExistingDelayedTasksAfterShutdownPolicy() {}
+	public BlockingQueue&lt;Runnable> getQueue() {}
+	public boolean getRemoveOnCancelPolicy() {}
+	public &lt;V> ScheduledFuture&lt;V> schedule(Callable&lt;V> callable, long delay, TimeUnit unit) {}
+	public ScheduledFuture&lt;?> schedule(Runnable command, long delay, TimeUnit unit) {}
+	public ScheduledFuture&lt;?> scheduleAtFixedRate(Runnable command, long initialDelay,
+										long period, TimeUnit unit) {}
+	public ScheduledFuture&lt;?> scheduleWithFixedDelay(Runnable command, long initialDelay,
+										long delay, TimeUnit unit) {}
+	public void setContinueExistingPeriodicTasksAfterShutdownPolicy(boolean value) {}
+	public void setExecuteExistingDelayedTasksAfterShutdownPolicy(boolean value) {}
+	public void setRemoveOnCancelPolicy(boolean value) {}
+	public void shutdown() {}
+	public List&lt;Runnable> shutdownNow() {}
+	public &lt;T> Future&lt;T> submit(Callable&lt;T> task) {}
+	public Future&lt;?> submit(Runnable task) {}
+	public &lt;T> Future&lt;T> submit(Runnable task, T result) {}
+}
+</pre>
+								</li>
+								<li>
+									<p><a href="docs/docs-java/api/java/util/concurrent/RejectedExecutionHandler.html" target="_blank">RejectedExecutionHandler</a> 接口是无法由 ThreadPoolExecutor 执行的任务的处理程序。ThreadPoolExecutor 的 4 个内部类都实现此接口。</p>
+									<pre class="brush: java;">
+public interface RejectedExecutionHandler {
+	// 当 execute 不能接受某个任务时，可以由 ThreadPoolExecutor 调用的方法
+	void rejectedExecution(Runnable r, ThreadPoolExecutor executor);
+}
+</pre>
+								</li>
+							</ul>
+						</div>
                     </div>
                 </div>
                 <!-- item over -->
@@ -5161,8 +6083,70 @@ public final class Formatter implements Closeable, Flushable {
                     </div>
                     <div class="panel-body">
 						<pre class="brush: java;">
+public interface Future&lt;V> {
+	boolean cancel(boolean mayInterruptIfRunning); // 试图取消对此任务的执行
+	boolean isCancelled(); // 如果在任务正常完成前将其取消，则返回 true
+	boolean isDone(); // 如果任务已完成，则返回 true
+	V get(); // 如有必要，等待计算完成，然后获取其结果
+	V get(long timeout, TimeUnit unit); // 如有必要，最多等待为使计算完成所给定的时间之后，获取其结果
+}
+</pre>
+						<p><a href="docs/docs-java/api/java/util/concurrent/Future.html" target="_blank">Future</a> 表示异步计算的结果。它提供了检查计算是否完成的方法，以等待计算的完成，并获取计算的结果。计算完成后只能使用 get 方法来获取结果，如有必要，计算完成前可以阻塞此方法。取消则由 cancel 方法来执行。还提供了其他方法，以确定任务是正常完成还是被取消了。一旦计算完成，就不能再取消计算。如果为了可取消性而使用 Future 但又不提供可用的结果，则可以声明 Future<?> 形式类型、并返回 null 作为底层任务的结果。 </p>
+						<p><b>Future 的子接口及实现类:</b></p>
+						<ul>
+							<li><p><a href="docs/docs-java/api/java/util/concurrent/RunnableFuture.html" target="_blank">RunnableFuture</a> 成功执行 run 方法可以完成 Future 并允许访问其结果。</p>
+								<pre class="brush: java;">
+public interface RunnableFuture&lt;V> extends Runnable, Future&lt;V> {
+	void run(); // 在未被取消的情况下，将此 Future 设置为计算的结果
+}
+</pre>
+							</li>
+							<li><p><a href="docs/docs-java/api/java/util/concurrent/ScheduledFuture.html" target="_blank">ScheduledFuture</a> 一个延迟的、结果可接受的操作，可将其取消。通常已安排的 future 是用 ScheduledExecutorService 安排任务的结果。 </p>
+								<pre class="brush: java;">
+public interface ScheduledFuture&lt;V> extends Delayed, Future&lt;V> {}
 
-						</pre>
+/**  一种混合风格的接口，用来标记那些应该在给定延迟时间之后执行的对象。
+ *  此接口的实现必须定义一个 compareTo 方法，该方法提供与此接口的 getDelay 方法一致的排序。
+ */
+public interface Delayed extends Comparable&lt;Delayed> {
+	long getDelay(TimeUnit unit); // 返回与此对象相关的剩余延迟时间，以给定的时间单位表示
+}
+</pre>
+							</li>
+							<li><p><a href="docs/docs-java/api/java/util/concurrent/RunnableScheduledFuture.html" target="_blank">RunnableScheduledFuture</a> 成功执行 run 方法可以完成 Future 并允许访问其结果。 </p>
+								<pre class="brush: java;">
+public interface RunnableScheduledFuture&lt;V> extends RunnableFuture&lt;V>, ScheduledFuture&lt;V> {
+	boolean isPeriodic(); // 如果这是一个定期任务，则返回 true
+}
+</pre>
+							</li>
+							<li><p><a href="docs/docs-java/api/java/util/concurrent/FutureTask.html" target="_blank">FutureTask</a> 可取消的异步计算。利用开始和取消计算的方法、查询计算是否完成的方法和获取计算结果的方法，此类提供了对 Future 的基本实现。仅在计算完成时才能获取结果；如果计算尚未完成，则阻塞 get 方法。一旦计算完成，就不能再重新开始或取消计算。 </p>
+								<p>可使用 FutureTask 包装 Callable 或 Runnable 对象。因为 FutureTask 实现了 Runnable，所以可将 FutureTask 提交给 Executor 执行。 </p>
+								<p>除了作为一个独立的类外，此类还提供了 protected 功能，这在创建自定义任务类时可能很有用。</p>
+								<pre class="brush: java;">
+public class FutureTask&lt;V> implements RunnableFuture&lt;V> {
+	public FutureTask(Callable&lt;V> callable) {}
+	public FutureTask(Runnable runnable, V result) {}
+
+	protected void done() {} // 当此任务转换到状态 isDone 时，调用受保护的方法
+	// 执行计算而不设置其结果，然后将此 Future 重置为初始状态，如果计算遇到异常或已取消，则该操作失败
+	protected boolean runAndReset() {}
+	protected void set(V v) {} // 除非已经设置了此 Future 或已将其取消，否则将其结果设置为给定的值
+	// 除非已经设置了此 Future 或已将其取消，否则报告一个 ExecutionException，并将给定的 throwable 作为其原因
+	protected void setException(Throwable t) {}
+
+	public boolean cancel(boolean mayInterruptIfRunning) {} // 试图取消对此任务的执行
+	public boolean isCancelled() {} // 如果在任务正常完成前将其取消，则返回 true
+	public boolean isDone() {} // 如果任务已完成，则返回 true
+
+	public void run() {} // 除非已将此 Future 取消，否则将其设置为其计算的结果
+
+	public V get() {} // 如有必要，等待计算完成，然后获取其结果
+	public V get(long timeout, TimeUnit unit) {} // 如有必要，最多等待为所给定的时间之后，获取其结果
+}
+</pre>
+							</li>
+						</ul>
                     </div>
                 </div>
                 <!-- item over -->
@@ -5222,6 +6206,7 @@ public final class Formatter implements Closeable, Flushable {
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
+    <script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
