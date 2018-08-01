@@ -5355,89 +5355,342 @@ prop.stringPropertyNames().forEach(s -> log(s, prop.getProperty(s)));
                         <div class="sub-item">
                             <a id="AbstractSet" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/AbstractSet.html" target="_blank">AbstractSet</a> 类提供 Set 接口的骨干实现，从而最大限度地减少了实现此接口所需的工作。</p>
-                            <p>通过扩展此类来实现一个 set 的过程与通过扩展 AbstractCollection 来实现 Collection 的过程是相同的，除了此类的子类中的所有方法和构造方法都必须服从 Set 接口所强加的额外限制。</p>
-                            <p>注意，此类并没有重写 AbstractCollection 类中的任何实现。它仅仅添加了 equals 和 hashCode 的实现。</p>
-                            <pre class="brush: java;">
+								<p><a href="docs/docs-java/api/java/util/AbstractSet.html" target="_blank">AbstractSet</a> 类提供 Set 接口的骨干实现，从而最大限度地减少了实现此接口所需的工作。</p>
+								<p>通过扩展此类来实现一个 set 的过程与通过扩展 AbstractCollection 来实现 Collection 的过程是相同的，除了此类的子类中的所有方法和构造方法都必须服从 Set 接口所强加的额外限制。</p>
+								<p>注意，此类并没有重写 AbstractCollection 类中的任何实现。它仅仅添加了 equals 和 hashCode 的实现。</p>
+								<pre class="brush: java;">
 public abstract class AbstractSet&lt;E> extends AbstractCollection&lt;E> implements Set&lt;E> {}
 </pre>
                             </div>
 
                             <a id="HashSet" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/HashSet.html" target="_blank">HashSet</a> 此类实现 Set 接口，由哈希表（实际上是一个 HashMap 实例）支持。它不保证 set 的迭代顺序；特别是它不保证该顺序恒久不变。此类允许使用 null 元素。 </p>
-                            <p>此类为基本操作提供了稳定性能，这些基本操作包括 add、remove、contains 和 size，假定哈希函数将这些元素正确地分布在桶中。对此 set 进行迭代所需的时间与 HashSet 实例的大小（元素的数量）和底层 HashMap 实例（桶的数量）的“容量”的和成比例。因此，如果迭代性能很重要，则不要将初始容量设置得太高（或将加载因子设置得太低）。 </p>
-                            <pre class="brush: java;">
+								<p><a href="docs/docs-java/api/java/util/HashSet.html" target="_blank">HashSet</a> 此类实现 Set 接口，由哈希表（实际上是一个 HashMap 实例）支持。它不保证 set 的迭代顺序；特别是它不保证该顺序恒久不变。此类允许使用 null 元素。 </p>
+								<p>此类为基本操作提供了稳定性能，这些基本操作包括 add、remove、contains 和 size，假定哈希函数将这些元素正确地分布在桶中。对此 set 进行迭代所需的时间与 HashSet 实例的大小（元素的数量）和底层 HashMap 实例（桶的数量）的“容量”的和成比例。因此，如果迭代性能很重要，则不要将初始容量设置得太高（或将加载因子设置得太低）。 </p>
+								<pre class="brush: java;">
 public class HashSet&lt;E> extends AbstractSet&lt;E> implements Set&lt;E>, Cloneable, Serializable {
-
+	public HashSet() {} // 其实是构建了一个 HashMap
+	public HashSet(Collection&lt;? extends E> c) {}
+	public HashSet(int initialCapacity) {}
+	public HashSet(int initialCapacity, float loadFactor) {}
 }
 </pre>
+								<ol>
+									<li><p><code>boolean 	add(E e)</code> -- 如果此 set 中尚未包含指定元素，则添加指定元素</p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 如果指定元素存在于此 set 中，则将其移除</p></li>
+									<li><p><code>void 	clear()</code> -- 从此 set 中移除所有元素</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 如果此 set 包含指定元素，则返回 true</p></li>
+									<li><p><code>boolean 	isEmpty()</code> -- 如果此 set 不包含任何元素，则返回 true</p></li>
+									<li><p><code>int 	size()</code> -- 返回此 set 中的元素的数量</p></li>
+									<li><p><code>Iterator&lt;E> 	iterator()</code> -- 返回对此 set 中元素进行迭代的迭代器</p></li>
+									<li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 返回对此 set 中元素进行迭代的拆分迭代器</p></li>
+									<li><p><code>Object 	clone()</code> -- 返回此 HashSet 实例的浅表副本</p></li>
+								</ol>
                             </div>
 
                             <a id="LinkedHashSet" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/LinkedHashSet.html" target="_blank">LinkedHashSet</a></p>
-                            <pre class="brush: java;">
-
+								<p><a href="docs/docs-java/api/java/util/LinkedHashSet.html" target="_blank">LinkedHashSet</a> 具有可预知迭代顺序的 Set 接口的哈希表和链接列表实现。此实现与 HashSet 的不同之外在于，后者维护着一个运行于所有条目的双重链接列表。此链接列表定义了迭代顺序，即按照将元素插入到 set 中的顺序（插入顺序）进行迭代。注意，插入顺序不 受在 set 中重新插入的 元素的影响。</p>
+								<p>此实现可以让客户免遭未指定的、由 HashSet 提供的通常杂乱无章的排序工作，而又不致引起与 TreeSet 关联的成本增加。</p>
+								<p>此类提供所有可选的 Set 操作，并且允许 null 元素。与 HashSet 一样，它可以为基本操作（add、contains 和 remove）提供稳定的性能，假定哈希函数将元素正确地分布到存储段中。由于增加了维护链接列表的开支，其性能很可能会比 HashSet 稍逊一筹，不过，这一点例外：LinkedHashSet 迭代所需时间与 set 的大小 成正比，而与容量无关。HashSet 迭代很可能支出较大，因为它所需迭代时间与其容量 成正比。</p>
+								<p><b>LinkedHashSet 构造的都是 LinkedHashMap, 其它都同父类 HashSet。</b></p>
+								<pre class="brush: java;">
+public class LinkedHashSet&lt;E> extends HashSet&lt;E> implements Set&lt;E>, Cloneable, Serializable {
+	/** LinkedHashSet 构造的都是 LinkedHashMap */
+	public LinkedHashSet() {}
+	public LinkedHashSet(Collection&lt;? extends E> c) {}
+	public LinkedHashSet(int initialCapacity) }|
+	public LinkedHashSet(int initialCapacity, float loadFactor) {}
+}
 </pre>
                             </div>
 
                             <a id="TreeSet" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/TreeSet.html" target="_blank">TreeSet</a></p>
-                            <pre class="brush: java;">
-
+								<p><a href="docs/docs-java/api/java/util/TreeSet.html" target="_blank">TreeSet</a> 基于 TreeMap 的 NavigableSet 实现。使用元素的自然顺序对元素进行排序，或者根据创建 set 时提供的 Comparator 进行排序，具体取决于使用的构造方法。 </p>
+								<p>此实现为基本操作（add、remove 和 contains）提供受保证的 log(n) 时间开销。</p>
+								<p>注意，如果要正确实现 Set 接口，则 set 维护的顺序（无论是否提供了显式比较器）必须与 equals 一致。</p>
+								<pre class="brush: java;">
+public class TreeSet&lt;E> extends AbstractSet&lt;E> implements NavigableSet&lt;E>, Cloneable, Serializable {
+	/** 构造的是一个 TreeMap */
+	public TreeSet() {}
+	public TreeSet(Collection&lt;? extends E> c) {}
+ 	public TreeSet(Comparator&lt;? super E> comparator) {}
+	public TreeSet(SortedSet&lt;E> s) {}
+}
 </pre>
+								<ol>
+									<li><p><code>boolean 	add(E e)</code> -- 其实是 TreeMap 的 <code>put(e, Object)</code></p></li>
+									<li><p><code>boolean 	addAll(Collection&lt;? extends E> c)</code> -- 添加所有元素</p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 将指定的元素从 set 中移除</p></li>
+									<li><p><code>void 	clear()</code> -- 移除此 set 中的所有元素</p></li>
+									<li><p><code>boolean 	isEmpty()</code> -- 是否为空</p></li>
+									<li><p><code>int 	size()</code> -- 返回 set 中的元素数</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 如果此 set 包含指定的元素，则返回 true</p></li>
+									<li><p><code>Comparator&lt;? super E> 	comparator()</code> -- 返回对此 set 中的元素进行排序的比较器</p></li>
+									<li><p><code>Object 	clone()</code> -- 返回 TreeSet 实例的浅表副本</p></li>
+
+									<li class="group"><p><code>E 	first()</code> -- 返回此 set 中当前第一个（最低）元素</p></li>
+									<li><p><code>E 	last()</code> -- 返回此 set 中当前最后一个（最高）元素</p></li>
+									<li><p><code>E 	ceiling(E e)</code> -- 返回此 set 中大于等于给定元素的最小元素</p></li>
+									<li><p><code>E 	floor(E e)</code> -- 返回此 set 中小于等于给定元素的最大元素</p></li>
+									<li><p><code>E 	higher(E e)</code> -- 返回此 set 中严格大于给定元素的最小元素</p></li>
+									<li><p><code>E 	lower(E e)</code> -- 返回此 set 中严格小于给定元素的最大元素</p></li>
+
+									<li class="group"><p><code>E 	pollFirst()</code> -- 获取并移除第一个（最低）元素</p></li>
+									<li><p><code>E 	pollLast()</code> -- 获取并移除最后一个（最高）元素</p></li>
+
+									<li class="group"><p><code>Iterator&lt;E> 	descendingIterator()</code> -- 返回在此 set 元素上按降序进行迭代的迭代</p></li>
+									<li><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此 set 中的元素上按升序进行迭代的迭代器</p></li>
+									<li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 可拆分迭代器</p></li>
+
+									<li class="group"><p><code>SortedSet&lt;E> 	headSet(E toElement)</code> -- 返回此 set 的部分视图，其元素严格小于 toElement</p></li>
+									<li><p><code>NavigableSet&lt;E> 	headSet(E toElement, boolean inclusive)</code> -- 返回此 set 的部分视图，其元素小于（或等于，如果 inclusive 为 true）toElement</p></li>
+									<li><p><code>SortedSet&lt;E> 	subSet(E fromElement, E toElement)</code> -- 返回此 set 的部分视图，其元素从 fromElement（包括）到 toElement（不包括）</p></li>
+									<li><p><code>NavigableSet&lt;E> 	subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive)</code> -- 返回此 set 的部分视图，其元素范围从 fromElement 到 toElement</p></li>
+									<li><p><code>SortedSet&lt;E> 	tailSet(E fromElement)</code> -- 返回此 set 的部分视图，其元素大于等于 fromElement</p></li>
+									<li><p><code>NavigableSet&lt;E> 	tailSet(E fromElement, boolean inclusive)</code> -- 返回此 set 的部分视图，其元素大于（或等于，如果 inclusive 为 true）fromElement</p></li>
+									<li><p><code>NavigableSet&lt;E> 	descendingSet()</code> -- 返回此 set 中所包含元素的逆序视图</p></li>
+
+								</ol>
                             </div>
 
                             <a id="EnumSet" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/EnumSet.html" target="_blank">EnumSet</a></p>
-                            <pre class="brush: java;">
+                            	<p><a href="docs/docs-java/api/java/util/EnumSet.html" target="_blank">EnumSet</a> 与枚举类型一起使用的专用 Set 实现。枚举 set 中所有键都必须来自单个枚举类型，该枚举类型在创建 set 时显式或隐式地指定。枚举 set 在内部表示为位向量。此表示形式非常紧凑且高效。此类的空间和时间性能应该很好，足以用作传统上基于 int 的“位标志”的替换形式，具有高品质、类型安全的优势。如果其参数也是一个枚举 set，则批量操作（如 containsAll 和 retainAll）也应运行得非常快。 </p>
+								<p>不允许使用 null 元素。试图插入 null 元素将抛出 NullPointerException。但是，试图测试是否出现 null 元素或移除 null 元素将不会抛出异常。 </p>
+                            	<pre class="brush: java;">
+public abstract class EnumSet&lt;E extends Enum&lt;E>> extends AbstractSet&lt;E> implements Cloneable,
+										Serializable {
+	final Enum&lt;?>[] universe;
+}
+</pre>
+								<ol>
+									<li><p><code>static &lt;E extends Enum&lt;E>> EnumSet&lt;E> 	allOf(Class&lt;E> elementType)</code> -- 创建一个包含指定元素类型的所有元素枚举 set</p></li>
+									<li><p><code>static &lt;E extends Enum&lt;E>> EnumSet&lt;E> 	complementOf(EnumSet&lt;E> s)</code> -- 创建一个其元素类型与指定枚举 set 相同的枚举 set，最初包含指定 set 中所不 包含的此类型的所有元素</p></li>
+									<li><p><code>static &lt;E extends Enum&lt;E>> EnumSet&lt;E> 	copyOf(Collection&lt;E> c)</code> -- 创建一个从指定 collection 初始化的枚举 set</p></li>
+									<li><p><code>static &lt;E extends Enum&lt;E>> EnumSet&lt;E> 	copyOf(EnumSet&lt;E> s)</code> -- 创建一个其元素类型与指定枚举 set 相同的枚举 set，最初包含相同的元素</p></li>
+									<li><p><code>static &lt;E extends Enum&lt;E>> EnumSet&lt;E> 	noneOf(Class&lt;E> elementType)</code> -- 创建一个具有指定元素类型的空枚举 set</p></li>
 
+									<li class="group"><p><code>static &lt;E extends Enum&lt;E>> EnumSet&lt;E> 	of(E e)</code> -- 创建一个最初包含指定元素的枚举 set</p></li>
+									<li><p><code>static &lt;E extends Enum&lt;E>> EnumSet&lt;E> 	of(E first, E... rest)</code> -- 创建一个最初包含指定元素的枚举 set</p></li>
+									<li><p><code>static &lt;E extends Enum&lt;E>> EnumSet&lt;E> 	of(E e1, E e2)</code> -- 创建一个最初包含指定元素的枚举 set</p></li>
+									<li><p><code>static &lt;E extends Enum&lt;E>> EnumSet&lt;E> 	of(E e1, E e2, E e3)</code> -- 创建一个最初包含指定元素的枚举 set</p></li>
+									<li><p><code>static &lt;E extends Enum&lt;E>> EnumSet&lt;E> 	of(E e1, E e2, E e3, E e4)</code> -- 创建一个最初包含指定元素的枚举 set</p></li>
+									<li><p><code>static &lt;E extends Enum&lt;E>> EnumSet&lt;E> 	of(E e1, E e2, E e3, E e4, E e5)</code> -- 创建一个最初包含指定元素的枚举 set</p></li>
+									<li><p><code>static &lt;E extends Enum&lt;E>> EnumSet&lt;E> 	range(E from, E to)</code> -- 创建一个最初包含由两个指定端点所定义范围内的所有元素的枚举 set</p></li>
+
+									<li class="group"><p><code>EnumSet&lt;E> 	clone()</code> -- 返回 set 的副本</p></li>
+								</ol>
+								<pre class="brush: java;">
+enum Day {
+	MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+}
+
+EnumSet&lt;Day> set = EnumSet.noneOf(Day.class);
+set.add(Day.MONDAY);
+set.add(Day.TUESDAY);
+set.forEach(day -> log(day));
 </pre>
                             </div>
 
                             <a id="CopyOnWriteArraySet" class="offset"></a>
                             <div class="split-item">
-                            <p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/CopyOnWriteArraySet.html" target="_blank">CopyOnWriteArraySet</a></p>
-                            <pre class="brush: java;">
+								<p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/CopyOnWriteArraySet.html" target="_blank">CopyOnWriteArraySet</a> 对其所有操作使用内部 <a href="#CopyOnWriteArrayList">CopyOnWriteArrayList</a> 的 Set。因此，它共享以下相同的基本属性： </p>
+								<ul>
+									<li><p>最适合于具有以下特征的应用程序：set 大小通常保持很小，只读操作远多于可变操作，需要在遍历期间防止线程间的冲突；</p></li>
+									<li><p>是线程安全的；</p></li>
+									<li><p>因为通常需要复制整个基础数组，所以可变操作（add、set 和 remove 等等）的开销很大；</p></li>
+									<li><p>迭代器不支持可变 remove 操作；</p></li>
+									<li><p>使用迭代器进行遍历的速度很快，并且不会与其他线程发生冲突。在构造迭代器时，迭代器依赖于不变的数组快照。</p></li>
+								</ul>
+                            	<pre class="brush: java;">
+public class CopyOnWriteArraySet&lt;E> extends AbstractSet&lt;E> implements Serializable {
+	private final CopyOnWriteArrayList&lt;E> al;
 
+	/** 内部使用的是 CopyOnWriteArrayList */
+	public CopyOnWriteArraySet() {
+		al = new CopyOnWriteArrayList&lt;E>();
+	}
+
+	public CopyOnWriteArraySet(Collection&lt;? extends E> c) {}
+}
 </pre>
+								<ol>
+									<li><p><code>boolean 	add(E e)</code> -- 如果指定元素并不存在于此 set 中，则添加它</p></li>
+									<li><p><code>boolean 	addAll(Collection&lt;? extends E> c)</code> -- 如果此 set 中没有指定 c 中的所有元素，则将它们都添加到此 set 中</p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 如果指定元素存在于此 set 中，则将其移除</p></li>
+									<li><p><code>boolean 	removeAll(Collection&lt;?> c)</code> -- 移除此 set 中包含在指定 collection 中的所有元素</p></li>
+									<li><p><code>boolean 	removeIf(Predicate&lt;? super E> filter)</code> -- 删除符合条件的项目</p></li>
+
+									<li class="group"><p><code>boolean 	isEmpty()</code> -- 如果此 set 不包含任何元素，则返回 true</p></li>
+									<li><p><code>void 	clear()</code> -- 移除此 set 中的所有元素</p></li>
+									<li><p><code>int 	size()</code> -- 返回此 set 中的元素数目</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 如果此 set 包含指定元素，则返回 true</p></li>
+									<li><p><code>boolean 	containsAll(Collection&lt;?> c)</code> -- 如果此 set 包含指定 collection 的所有元素，则返回 true</p></li>
+									<li><p><code>boolean 	retainAll(Collection&lt;?> c)</code> -- 仅保留此 set 中那些包含在指定 collection 中的元素</p></li>
+
+									<li class="group"><p><code>void 	forEach(Consumer&lt;? super E> action)</code> -- 循环</p></li>
+									<li><p><code>Iterator&lt;E> 	iterator()</code> -- 迭代器</p></li>
+									<li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 拆分迭代器</p></li>
+
+									<li class="group"><p><code>Object[] 	toArray()</code> -- 返回一个包含此 set 所有元素的数组</p></li>
+									<li><p><code>&lt;T> T[] 	toArray(T[] a)</code> -- 返回一个包含此 set 所有元素的数组</p></li>
+									<li><p><code>boolean 	equals(Object o)</code> -- 比较指定对象与此 set 的相等性</p></li>
+
+								</ol>
                             </div>
 
                             <a id="ConcurrentSkipListSet" class="offset"></a>
                             <div class="split-item">
-                            <p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/ConcurrentSkipListSet.html" target="_blank">ConcurrentSkipListSet</a></p>
-                            <pre class="brush: java;">
-
+								<p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/ConcurrentSkipListSet.html" target="_blank">ConcurrentSkipListSet</a> 一个基于 <a href="#ConcurrentSkipListMap">ConcurrentSkipListMap</a> 的可缩放并发 NavigableSet 实现。set 的元素可以根据它们的自然顺序进行排序，也可以根据创建 set 时所提供的 Comparator 进行排序，具体取决于使用的构造方法。 </p>
+								<p>此实现为 contains、add、remove 操作及其变体提供预期平均 log(n) 时间开销。多个线程可以安全地并发执行插入、移除和访问操作。迭代器是弱一致 的，返回的元素将反映迭代器创建时或创建后某一时刻的 set 状态。它们不 抛出 ConcurrentModificationException，可以并发处理其他操作。升序排序视图及其迭代器比降序排序视图及其迭代器更快。 </p>
+								<p>注意，与在大多数 collection 中不同，这里的 size 方法不是 一个固定时间 (constant-time) 操作。由于这些 set 的异步特性，确定元素的当前数目需要遍历元素。此外，批量操作 addAll、removeAll、retainAll 和 containsAll 并不 保证能以原子方式 (atomically) 执行。例如，与 addAll 操作一起并发操作的迭代器只能查看某些附加元素。 </p>
+                            	<pre class="brush: java;">
+public class ConcurrentSkipListSet&lt;E> extends AbstractSet&lt;E> implements NavigableSet&lt;E>,
+									Cloneable, Serializable {
+	/** 构造的是 ConcurrentSkipListMap */
+	public ConcurrentSkipListSet() {}
+	public ConcurrentSkipListSet(Collection&lt;? extends E> c) {}
+	public ConcurrentSkipListSet(Comparator&lt;? super E> comparator) {}
+	public ConcurrentSkipListSet(SortedSet&lt;E> s) {}
+}
 </pre>
+								<ol>
+									<li><p><code>boolean 	add(E e)</code> -- 调用的是 <a href="#ConcurrentSkipListMap">ConcurrentSkipListMap</a> 的 <code>putIfAbsent(e, Boolean.TRUE)</code> 方法</p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 将指定的元素从 set 中移除</p></li>
+									<li><p><code>boolean 	removeAll(Collection&lt;?> c)</code> -- 移除此 set 中的在 c 中的元素</p></li>
+									<li><p><code>void 	clear()</code> -- 移除此 set 中的所有元素</p></li>
+									<li><p><code>int 	size()</code> -- 返回 set 中的元素数</p></li>
+									<li><p><code>boolean 	isEmpty()</code> -- 是否为空</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 如果此 set 包含指定的元素，则返回 true</p></li>
+
+									<li class="group"><p><code>E 	first()</code> -- 返回此 set 中当前第一个（最低）元素</p></li>
+									<li><p><code>E 	last()</code> -- 返回此 set 中当前最后一个（最高）元素</p></li>
+									<li><p><code>E 	ceiling(E e)</code> -- 返回此 set 中大于等于给定元素的最小元素</p></li>
+									<li><p><code>E 	floor(E e)</code> -- 返回此 set 中小于等于给定元素的最大元素</p></li>
+									<li><p><code>E 	higher(E e)</code> -- 返回此 set 中严格大于给定元素的最小元素</p></li>
+									<li><p><code>E 	lower(E e)</code> -- 返回此 set 中严格小于给定元素的最大元素</p></li>
+
+									<li class="group"><p><code>E 	pollFirst()</code> -- 获取并移除第一个（最低）元素</p></li>
+									<li><p><code>E 	pollLast()</code> -- 获取并移除最后一个（最高）元素</p></li>
+
+									<li class="group"><p><code>Iterator&lt;E> 	descendingIterator()</code> -- 返回在此 set 元素上按降序进行迭代的迭代</p></li>
+									<li><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此 set 中的元素上按升序进行迭代的迭代器</p></li>
+									<li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 可拆分迭代器</p></li>
+
+									<li class="group"><p><code>NavigableSet&lt;E> 	headSet(E toElement)</code> -- 返回此 set 的部分视图，其元素严格小于 toElement</p></li>
+									<li><p><code>NavigableSet&lt;E> 	headSet(E toElement, boolean inclusive)</code> -- 返回此 set 的部分视图，其元素小于（或等于，如果 inclusive 为 true）toElement</p></li>
+									<li><p><code>NavigableSet&lt;E> 	subSet(E fromElement, E toElement)</code> -- 返回此 set 的部分视图，其元素从 fromElement（包括）到 toElement（不包括）</p></li>
+									<li><p><code>NavigableSet&lt;E> 	subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive)</code> -- 返回此 set 的部分视图，其元素范围从 fromElement 到 toElement</p></li>
+									<li><p><code>NavigableSet&lt;E> 	tailSet(E fromElement)</code> -- 返回此 set 的部分视图，其元素大于等于 fromElement</p></li>
+									<li><p><code>NavigableSet&lt;E> 	tailSet(E fromElement, boolean inclusive)</code> -- 返回此 set 的部分视图，其元素大于（或等于，如果 inclusive 为 true）fromElement</p></li>
+									<li><p><code>NavigableSet&lt;E> 	descendingSet()</code> --  返回此 set 中所包含元素的逆序视图</p></li>
+
+									<li class="group"><p><code>Comparator&lt;? super E> 	comparator()</code> -- 返回对此 set 中的元素进行排序的比较器</p></li>
+									<li><p><code>boolean 	equals(Object o)</code> -- 是否相等</p></li>
+									<li><p><code>ConcurrentSkipListSet&lt;E> 	clone()</code> -- 返回 TreeSet 实例的浅表副本</p></li>
+								</ol>
                             </div>
                         </div>
 
                         <div class="sub-item">
                             <a id="AbstractQueue" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/AbstractQueue.html" target="_blank">AbstractQueue</a></p>
-                            <pre class="brush: java;">
-
+                            	<p><a href="docs/docs-java/api/java/util/AbstractQueue.html" target="_blank">AbstractQueue</a> 类提供某些 Queue 操作的骨干实现。此类中的实现适用于基本实现不 允许包含 null 元素时。add、remove 和 element 方法分别基于 offer、poll 和 peek 方法，但是它们通过抛出异常而不是返回 false 或 null 来指示失败。 </p>
+								<p>扩展此类的 Queue 实现至少必须定义一个不允许插入 null 元素的 Queue.offer(E) 方法，该方法以及 Queue.peek()、Queue.poll()、Collection.size() 和 Collection.iterator() 都支持 Iterator.remove() 方法。通常还要重写其他方法。如果无法满足这些要求，那么可以转而考虑为 AbstractCollection 创建子类。</p>
+                            	<pre class="brush: java;">
+public abstract class AbstractQueue&lt;E> extends AbstractCollection&lt;E> implements Queue&lt;E> {
+	protected AbstractQueue() {}
+}
 </pre>
+								<ul>
+									<li><p><code>boolean 	add(E e)</code> --  将指定的元素插入到此队列中（如果立即可行且不会违反容量限制），在成功时返回 true，如果当前没有可用空间，则抛出 IllegalStateException</p></li>
+									<li><p><code>boolean 	addAll(Collection&lt;? extends E> c)</code> -- 将指定 collection 中的所有元素都添加到此队列中</p></li>
+									<li><p><code>void 	clear()</code> -- 移除此队列中的所有元素</p></li>
+									<li><p><code>E 	element()</code> -- 获取但不移除此队列的头</p></li>
+									<li><p><code>E 	remove()</code> -- 获取并移除此队列的头</p></li>
+								</ul>
                             </div>
 
                             <a id="PriorityQueue" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/PriorityQueue.html" target="_blank">PriorityQueue</a></p>
-                            <pre class="brush: java;">
+                            	<p><a href="docs/docs-java/api/java/util/PriorityQueue.html" target="_blank">PriorityQueue</a> 一个基于优先级堆的无界优先级队列。优先级队列的元素按照其自然顺序进行排序，或者根据构造队列时提供的 Comparator 进行排序，具体取决于所使用的构造方法。优先级队列不允许使用 null 元素。依靠自然顺序的优先级队列还不允许插入不可比较的对象（这样做可能导致 ClassCastException）。 </p>
+								<p>此队列的头 是按指定排序方式确定的最小 元素。如果多个元素都是最小值，则头是其中一个元素——选择方法是任意的。队列获取操作 poll、remove、peek 和 element 访问处于队列头的元素。 </p>
+								<p>优先级队列是无界的，但是有一个内部容量，控制着用于存储队列元素的数组大小。它通常至少等于队列的大小。随着不断向优先级队列添加元素，其容量会自动增加。无需指定容量增加策略的细节。 </p>
+								<p>实现注意事项：此实现为排队和出队方法（offer、poll、remove() 和 add）提供 O(log(n)) 时间；为 remove(Object) 和 contains(Object) 方法提供线性时间；为获取方法（peek、element 和 size）提供固定时间。 </p>
+                            	<pre class="brush: java;">
+public class PriorityQueue&lt;E> extends AbstractQueue&lt;E> implements Serializable {
+	transient Object[] queue; // 数组存储数据
 
+	public PriorityQueue() {}
+	public PriorityQueue(Collection&lt;? extends E> c) {}
+	public PriorityQueue(Comparator&lt;? super E> comparator) {}
+	public PriorityQueue(int initialCapacity) {}
+	public PriorityQueue(int initialCapacity, Comparator&lt;? super E> comparator) {}
+	public PriorityQueue(PriorityQueue&lt;? extends E> c) {}
+	public PriorityQueue(SortedSet&lt;? extends E> c) {}
+}
 </pre>
+								<ol>
+									<li><p><code>boolean 	offer(E e)</code> -- 将指定的元素插入此优先级队列</p></li>
+									<li><p><code>E 	peek()</code> -- 获取但不移除此队列的头</p></li>
+									<li><p><code>E 	poll()</code> -- 获取并移除此队列的头</p></li>
+									<li><p><code>boolean 	add(E e)</code> -- 调用的是 <code>offer(E)</code></p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 从此队列中移除指定元素的单个实例</p></li>
+
+									<li class="group"><p><code>void 	clear()</code> -- 从此优先级队列中移除所有元素</p></li>
+									<li><p><code>int 	size()</code> -- 返回此 collection 中的元素数</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 如果此队列包含指定的元素，则返回 true</p></li>
+
+									<li class="group"><p><code>Comparator&lt;? super E> 	comparator()</code> -- 返回用来对此队列中的元素进行排序的比较器</p></li>
+									<li><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此队列中的元素上进行迭代的迭代器</p></li>
+									<li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 可拆分迭代器</p></li>
+
+									<li class="group"><p><code>Object[] 	toArray()</code> -- 返回一个包含此队列所有元素的数组</p></li>
+									<li><p><code>&lt;T> T[] 	toArray(T[] a)</code> -- 返回一个包含此队列所有元素的数组；返回数组的运行时类型是指定数组的类型</p></li>
+								</ol>
                             </div>
 
                             <a id="ArrayBlockingQueue" class="offset"></a>
                             <div class="split-item">
-                            <p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/ArrayBlockingQueue.html" target="_blank">ArrayBlockingQueue</a></p>
-                            <pre class="brush: java;">
-
+                            	<p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/ArrayBlockingQueue.html" target="_blank">ArrayBlockingQueue</a> 一个由数组支持的有界阻塞队列。此队列按 FIFO（先进先出）原则对元素进行排序。队列的头部 是在队列中存在时间最长的元素。队列的尾部 是在队列中存在时间最短的元素。新元素插入到队列的尾部，队列获取操作则是从队列头部开始获得元素。 </p>
+								<p>这是一个典型的“有界缓存区”，固定大小的数组在其中保持生产者插入的元素和使用者提取的元素。一旦创建了这样的缓存区，就不能再增加其容量。试图向已满队列中放入元素会导致操作受阻塞；试图从空队列中提取元素将导致类似阻塞。 </p>
+								<p>此类支持对等待的生产者线程和使用者线程进行排序的可选公平策略。默认情况下，不保证是这种排序。然而，通过将公平性 (fairness) 设置为 true 而构造的队列允许按照 FIFO 顺序访问线程。公平性通常会降低吞吐量，但也减少了可变性和避免了“不平衡性”。</p>
+                            	<pre class="brush: java;">
+public class ArrayBlockingQueue&lt;E> extends AbstractQueue&lt;E> implements BlockingQueue&lt;E>, Serializable {
+	public ArrayBlockingQueue(int capacity) {}
+	public ArrayBlockingQueue(int capacity, boolean fair) {}
+	public ArrayBlockingQueue(int capacity, boolean fair, Collection&lt;? extends E> c) {}
+}
 </pre>
+								<ol>
+									<li><p><code>boolean 	add(E e)</code> -- 将指定的元素插入到此队列的尾部，如果此队列已满，则抛出 IllegalStateException</p></li>
+									<li><p><code>void 	put(E e)</code> -- 将指定的元素插入此队列的尾部，如果该队列已满，则等待可用的空间</p></li>
+									<li><p><code>boolean 	offer(E e)</code> -- 将指定的元素插入到此队列的尾部，如果此队列已满，则返回 false</p></li>
+									<li><p><code>boolean 	offer(E e, long timeout, TimeUnit unit)</code> -- 将指定的元素插入此队列的尾部，如果该队列已满，则在到达指定的等待时间之前等待可用的空间</p></li>
+									<li><p><code>E 	peek()</code> -- 获取但不移除此队列的头</p></li>
+									<li><p><code>E 	poll()</code> --  获取并移除此队列的头</p></li>
+									<li><p><code>E 	poll(long timeout, TimeUnit unit)</code> -- 获取并移除此队列的头部，在指定的等待时间前等待可用的元素</p></li>
+									<li><p><code>E 	take()</code> -- 获取并移除此队列的头部，在元素变得可用之前一直等待</p></li>
+
+									<li class="group"><p><code>void 	clear()</code> -- 自动移除此队列中的所有元素</p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 从此队列中移除指定元素的单个实例</p></li>
+									<li><p><code>int 	drainTo(Collection&lt;? super E> c)</code> -- 移除此队列中所有可用的元素，并将它们添加到给定 collection 中</p></li>
+									<li><p><code>int 	drainTo(Collection&lt;? super E> c, int maxElements)</code> -- 最多从此队列中移除给定数量的可用元素，并将这些元素添加到给定 collection 中</p></li>
+
+
+									<li class="group"><p><code>int 	size()</code> -- 返回此队列中元素的数量</p></li>
+									<li><p><code>int 	remainingCapacity()</code> -- 返回在无阻塞的理想情况下（不存在内存或资源约束）此队列能接受的其他元素数量</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 如果此队列包含指定的元素，则返回 true</p></li>
+
+									<li class="group"><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此队列中的元素上按适当顺序进行迭代的迭代器</p></li>
+									<li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 可拆分迭代器</p></li>
+
+									<li class="group"><p><code>Object[] 	toArray()</code> -- 返回一个按适当顺序包含此队列中所有元素的数组</p></li>
+									<li><p><code>&lt;T> T[] 	toArray(T[] a)</code> -- 返回按适当顺序包含此队列中所有元素的数组；返回数组的运行时类型是指定数组的运行时类型</p></li>
+									<li><p><code>String 	toString()</code> -- 返回此 collection 的字符串表示形式</p></li>
+								</ol>
                             </div>
 
                             <a id="LinkedBlockingQueue" class="offset"></a>
