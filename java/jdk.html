@@ -5695,60 +5695,329 @@ public class ArrayBlockingQueue&lt;E> extends AbstractQueue&lt;E> implements Blo
 
                             <a id="LinkedBlockingQueue" class="offset"></a>
                             <div class="split-item">
-                            <p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/LinkedBlockingQueue.html" target="_blank">LinkedBlockingQueue</a></p>
-                            <pre class="brush: java;">
-
+                            	<p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/LinkedBlockingQueue.html" target="_blank">LinkedBlockingQueue</a> 一个基于已链接节点的、范围任意的 blocking queue。此队列按 FIFO（先进先出）排序元素。队列的头部 是在队列中时间最长的元素。队列的尾部 是在队列中时间最短的元素。新元素插入到队列的尾部，并且队列获取操作会获得位于队列头部的元素。链接队列的吞吐量通常要高于基于数组的队列，但是在大多数并发应用程序中，其可预知的性能要低。 </p>
+								<p>可选的容量范围构造方法参数作为防止队列过度扩展的一种方法。如果未指定容量，则它等于 Integer.MAX_VALUE。除非插入节点会使队列超出容量，否则每次插入后会动态地创建链接节点。 </p>
+                            	<pre class="brush: java;">
+public class LinkedBlockingQueue&lt;E> extends AbstractQueue&lt;E> implements BlockingQueue&lt;E>, Serializable {
+	public LinkedBlockingQueue() {}
+	public LinkedBlockingQueue(int capacity) {}
+	public LinkedBlockingQueue(Collection&lt;? extends E> c) {}
+}
 </pre>
+								<ol>
+									<li><p><code>boolean 	add(E e)</code> -- 将指定的元素插入到此队列的尾部，如果此队列已满，则抛出 IllegalStateException</p></li>
+									<li><p><code>void 	put(E e)</code> -- 将指定的元素插入此队列的尾部，如果该队列已满，则等待可用的空间</p></li>
+									<li><p><code>boolean 	offer(E e)</code> -- 将指定的元素插入到此队列的尾部，如果此队列已满，则返回 false</p></li>
+									<li><p><code>boolean 	offer(E e, long timeout, TimeUnit unit)</code> -- 将指定的元素插入此队列的尾部，如果该队列已满，则在到达指定的等待时间之前等待可用的空间</p></li>
+									<li><p><code>E 	peek()</code> -- 获取但不移除此队列的头</p></li>
+									<li><p><code>E 	poll()</code> --  获取并移除此队列的头</p></li>
+									<li><p><code>E 	poll(long timeout, TimeUnit unit)</code> -- 获取并移除此队列的头部，在指定的等待时间前等待可用的元素</p></li>
+									<li><p><code>E 	take()</code> -- 获取并移除此队列的头部，在元素变得可用之前一直等待</p></li>
+
+									<li class="group"><p><code>void 	clear()</code> -- 自动移除此队列中的所有元素</p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 从此队列中移除指定元素的单个实例</p></li>
+									<li><p><code>int 	drainTo(Collection&lt;? super E> c)</code> -- 移除此队列中所有可用的元素，并将它们添加到给定 collection 中</p></li>
+									<li><p><code>int 	drainTo(Collection&lt;? super E> c, int maxElements)</code> -- 最多从此队列中移除给定数量的可用元素，并将这些元素添加到给定 collection 中</p></li>
+
+
+									<li class="group"><p><code>int 	size()</code> -- 返回此队列中元素的数量</p></li>
+									<li><p><code>int 	remainingCapacity()</code> -- 返回在无阻塞的理想情况下（不存在内存或资源约束）此队列能接受的其他元素数量</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 如果此队列包含指定的元素，则返回 true</p></li>
+
+									<li class="group"><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此队列中的元素上按适当顺序进行迭代的迭代器</p></li>
+									<li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 可拆分迭代器</p></li>
+
+									<li class="group"><p><code>Object[] 	toArray()</code> -- 返回一个按适当顺序包含此队列中所有元素的数组</p></li>
+									<li><p><code>&lt;T> T[] 	toArray(T[] a)</code> -- 返回按适当顺序包含此队列中所有元素的数组；返回数组的运行时类型是指定数组的运行时类型</p></li>
+									<li><p><code>String 	toString()</code> -- 返回此 collection 的字符串表示形式</p></li>
+								</ol>
                             </div>
 
                             <a id="LinkedBlockingDeque" class="offset"></a>
-                            <div class="split-item">
-                            <p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/LinkedBlockingDeque.html" target="_blank">LinkedBlockingDeque</a></p>
-                            <pre class="brush: java;">
-
+							<div class="split-item">
+								<p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/LinkedBlockingDeque.html" target="_blank">LinkedBlockingDeque</a> 一个基于已链接节点的、任选范围的阻塞双端队列。</p>
+								<p> 可选的容量范围构造方法参数是一种防止过度膨胀的方式。如果未指定容量，那么容量将等于 Integer.MAX_VALUE。只要插入元素不会使双端队列超出容量，每次插入后都将动态地创建链接节点。</p>
+								<pre class="brush: java;">
+public class LinkedBlockingDeque&lt;E> extends AbstractQueue&lt;E> implements BlockingDeque&lt;E>, Serializable {
+	public LinkedBlockingDeque() {}
+	public LinkedBlockingDeque(Collection&lt;? extends E> c) {}
+	public LinkedBlockingDeque(int capacity) {}
+}
 </pre>
+								<ol>
+									<li><p><code>boolean 	offerLast(E e)</code> -- 如果立即可行且不违反容量限制，则将指定的元素插入此双端队列的末尾，并在成功时返回 true；如果当前没有空间可用，则返回 false。</p></li>
+									<li><p><code>boolean 	offerLast(E e, long timeout, TimeUnit unit)</code> --将指定的元素插入此双端队列的末尾，必要时将在指定的等待时间内等待可用空间</p></li>
+									<li><p><code>boolean 	offer(E e)</code> -- 调用 <code>offerLast(E)</code></p></li>
+									<li><p><code>boolean 	offer(E e, long timeout, TimeUnit unit)</code> -- 将指定的元素插入此双端队列的末尾，必要时将在指定的等待时间内等待可用空间</p></li>
+									<li><p><code>boolean 	offerFirst(E e)</code> -- 如果立即可行且不违反容量限制，则将指定的元素插入此双端队列的开头，并在成功时返回 true；如果当前没有空间可用，则返回 false</p></li>
+									<li><p><code>boolean 	offerFirst(E e, long timeout, TimeUnit unit)</code> -- 将指定的元素插入此双端队列表示的队列中（即此双端队列的尾部），必要时将在指定的等待时间内一直等待可用空间</p></li>
+
+									<li class="group"><p><code>E 	getFirst()</code> -- 获取，但不移除此双端队列的第一个元素</p></li>
+									<li><p><code>E 	element()</code> -- 调用 <code>getFirst()</code></p></li>
+									<li><p><code>E 	getLast()</code> -- 获取，但不移除此双端队列的最后一个元素</p></li>
+
+									<li class="group"><p><code>E 	peekFirst()</code> -- 获取，但不移除此双端队列的第一个元素；如果此双端队列为空，则返回 null</p></li>
+									<li><p><code>E 	peek()</code> -- 调用 <code>peekFirst()</code></p></li>
+									<li><p><code>E 	peekLast()</code> -- 获取，但不移除此双端队列的最后一个元素；如果此双端队列为空，则返回 null</p></li>
+
+									<li class="group"><p><code>void 	put(E e)</code> -- 调用 <code>putLast(E)</code></p></li>
+									<li><p><code>void 	putFirst(E e)</code> -- 将指定的元素插入此双端队列的开头，必要时将一直等待可用空间</p></li>
+									<li><p><code>void 	putLast(E e)</code> -- 将指定的元素插入此双端队列的末尾，必要时将一直等待可用空间</p></li>
+
+									<li class="group"><p><code>E 	poll()</code> -- 调用 <code>pollFirst()</code></p></li>
+									<li><p><code>E 	poll(long timeout, TimeUnit unit)</code> -- 获取并移除此双端队列表示的队列的头部（即此双端队列的第一个元素），如有必要将在指定的等待时间内等待可用元素</p></li>
+									<li><p><code>E 	pollFirst()</code> -- 获取并移除此双端队列的第一个元素；如果此双端队列为空，则返回 null</p></li>
+									<li><p><code>E 	pollFirst(long timeout, TimeUnit unit)</code> -- 获取并移除此双端队列的第一个元素，必要时将在指定的等待时间等待可用元素</p></li>
+									<li><p><code>E 	pollLast()</code> -- 获取并移除此双端队列的最后一个元素；如果此双端队列为空，则返回 null</p></li>
+									<li><p><code>E 	pollLast(long timeout, TimeUnit unit)</code> -- 获取并移除此双端队列的最后一个元素，必要时将在指定的等待时间内等待可用元素</p></li>
+
+									<li class="group"><p><code>boolean 	add(E e)</code> -- 调用 <code>addLast(E)</code></p></li>
+									<li><p><code>void 	addFirst(E e)</code> -- 调用 <code>offerFirst(E)</code>, 为 false 则抛出异常</p></li>
+									<li><p><code>void 	addLast(E e)</code> -- 调用 <code>offerLast(E)</code>, 为 false 则抛出异常</p></li>
+
+									<li class="group"><p><code>E 	remove()</code> -- 调用 <code>removeFirst()</code></p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 调用 <code>removeFirstOccurrence(Object)</code></p></li>
+									<li><p><code>E 	removeFirst()</code> -- 调用 <code>pollFirst()</code>, 如果返回值为 null 则抛出 NoSuchElementException 异常</p></li>
+									<li><p><code>boolean 	removeFirstOccurrence(Object o)</code> -- 从此双端队列移除第一次出现的指定元</p></li>
+									<li><p><code>E 	removeLast()</code> -- 调用 <code>pollLast()</code>, 如果返回值为 null 则抛出 NoSuchElementException 异常</p></li>
+									<li><p><code>boolean 	removeLastOccurrence(Object o)</code> -- 从此双端队列移除最后一次出现的指定元素</p></li>
+
+									<li class="group"><p><code>E 	pop()</code> -- 调用 <code>removeFirst(E)</code></p></li>
+									<li><p><code>void 	push(E e)</code> --  调用 <code>addFirst(E)</code></p></li>
+
+									<li class="group"><p><code>E 	take()</code> -- 调用 <code>takeFirst()</code></p></li>
+									<li><p><code>E 	takeFirst()</code> -- 获取并移除此双端队列的第一个元素，必要时将一直等待可用元素</p></li>
+									<li><p><code>E 	takeLast()</code> -- 获取并移除此双端队列的最后一个元素，必要时将一直等待可用元素</p></li>
+
+									<li class="group"><p><code>int 	drainTo(Collection&lt;? super E> c)</code> -- 移除此队列中所有可用的元素，并将它们添加到给定 collection 中</p></li>
+									<li><p><code>int 	drainTo(Collection&lt;? super E> c, int maxElements)</code> -- 最多从此队列中移除给定数量的可用元素，并将这些元素添加到给定 collection 中</p></li>
+
+									<li class="group"><p><code>int 	size()</code> -- 返回此队列中元素的数量</p></li>
+									<li><p><code>void 	clear()</code> -- 自动移除此队列中的所有元素</p></li>
+									<li><p><code>int 	remainingCapacity()</code> -- 返回在无阻塞的理想情况下（不存在内存或资源约束）此队列能接受的其他元素数量</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 如果此队列包含指定的元素，则返回 true</p></li>
+
+									<li class="group"><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此队列中的元素上按适当顺序进行迭代的迭代器</p></li>
+									<li><p><code>Iterator&lt;E> 	descendingIterator()</code> -- 逆序迭代器</p></li>
+									<li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 可拆分迭代器</p></li>
+
+									<li class="group"><p><code>Object[] 	toArray()</code> -- 返回一个按适当顺序包含此队列中所有元素的数组</p></li>
+									<li><p><code>&lt;T> T[] 	toArray(T[] a)</code> -- 返回按适当顺序包含此队列中所有元素的数组；返回数组的运行时类型是指定数组的运行时类型</p></li>
+									<li><p><code>String 	toString()</code> -- 返回此 deque 的字符串表示形式</p></li>
+								</ol>
                             </div>
 
                             <a id="PriorityBlockingQueue" class="offset"></a>
-                            <div class="split-item">
-                            <p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/PriorityBlockingQueue.html" target="_blank">PriorityBlockingQueue</a></p>
-                            <pre class="brush: java;">
-
+							<div class="split-item">
+								<p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/PriorityBlockingQueue.html" target="_blank">PriorityBlockingQueue</a> 一个无界阻塞队列，它使用与类 PriorityQueue 相同的顺序规则，并且提供了阻塞获取操作。虽然此队列逻辑上是无界的，但是资源被耗尽时试图执行 add 操作也将失败（导致 OutOfMemoryError）。此类不允许使用 null 元素。依赖自然顺序的优先级队列也不允许插入不可比较的对象（这样做会导致抛出 ClassCastException）。 </p>
+								<p>此类及其迭代器可以实现 Collection 和 Iterator 接口的所有可选 方法。iterator() 方法中提供的迭代器并不 保证以特定的顺序遍历 PriorityBlockingQueue 的元素。如果需要有序地进行遍历，则应考虑使用 Arrays.sort(pq.toArray())。此外，可以使用方法 drainTo 按优先级顺序移除 全部或部分元素，并将它们放在另一个 collection 中。 </p>
+								<p>在此类上进行的操作不保证具有同等优先级的元素的顺序。如果需要实施某一排序，那么可以定义自定义类或者比较器，比较器可使用修改键断开主优先级值之间的联系。</p>
+								<pre class="brush: java;">
+public class PriorityBlockingQueue&lt;E> extends AbstractQueue&lt;E> implements BlockingQueue&lt;E>,Serializable {
+	public PriorityBlockingQueue() {}
+	public PriorityBlockingQueue(Collection&lt;? extends E> c) {}
+	public PriorityBlockingQueue(int initialCapacity) {}
+	public PriorityBlockingQueue(int initialCapacity, Comparator&lt;? super E> comparator) {}
+}
 </pre>
+								<ol>
+									<li><p><code>boolean 	offer(E e)</code> -- 将指定元素插入此优先级队列</p></li>
+									<li><p><code>boolean 	offer(E e, long timeout, TimeUnit unit)</code> -- 调用 <code>offer(E)</code>, 后面两个参数未使用</p></li>
+									<li><p><code>void 	put(E e)</code> -- 调用 <code>offer(E)</code></p></li>
+									<li><p><code>boolean 	add(E e)</code> -- 调用 <code>offer(E)</code></p></li>
+
+									<li class="group"><p><code>E 	peek()</code> -- 获取但不移除此队列的头；如果此队列为空，则返回 null</p></li>
+									<li><p><code>E 	poll()</code> -- 获取并移除此队列的头，如果此队列为空，则返回 null</p></li>
+									<li><p><code>E 	poll(long timeout, TimeUnit unit)</code> --  获取并移除此队列的头部，在指定的等待时间前等待可用的元素</p></li>
+									<li><p><code>E 	take()</code> -- 获取并移除此队列的头部，在元素变得可用之前一直等待</p></li>
+
+									<li class="group"><p><code>int 	drainTo(Collection&lt;? super E> c)</code> -- 移除此队列中所有可用的元素，并将它们添加到给定 collection 中</p></li>
+									<li><p><code>int 	drainTo(Collection&lt;? super E> c, int maxElements)</code> -- 最多从此队列中移除给定数量的可用元素，并将这些元素添加到给定 collection 中</p></li>
+
+									<li class="group"><p><code>boolean 	remove(Object o)</code> -- 从队列中移除指定元素的单个实例</p></li>
+									<li><p><code>void 	clear()</code> -- 完全移除此队列中的所有元素</p></li>
+									<li><p><code>int 	size()</code> -- 返回此 collection 中的元素数</p></li>
+									<li><p><code>int 	remainingCapacity()</code> -- 总是返回 Integer.MAX_VALUE，因为 PriorityBlockingQueue 没有容量限制</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 如果队列包含指定的元素，则返回 true</p></li>
+									<li><p><code>Comparator&lt;? super E> 	comparator()</code> -- 返回用于对此队列元素进行排序的比较器</p></li>
+
+									<li class="group"><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此队列元素上进行迭代的迭代器</p></li>
+									<li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 拆分迭代器</p></li>
+
+									<li class="group"><p><code>Object[] 	toArray()</code> -- 返回包含此队列所有元素的数组</p></li>
+									<li><p><code>&lt;T> T[] 	toArray(T[] a)</code> -- 返回一个包含此队列所有元素的数组；返回数组的运行时类型是指定数组的类型</p></li>
+									<li><p><code>String 	toString()</code> -- 返回此 collection 的字符串表示形式</p></li>
+								</ol>
                             </div>
 
                             <a id="SynchronousQueue" class="offset"></a>
                             <div class="split-item">
-                            <p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/SynchronousQueue.html" target="_blank">SynchronousQueue</a></p>
-                            <pre class="brush: java;">
-
+								<p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/SynchronousQueue.html" target="_blank">SynchronousQueue</a> 一种阻塞队列，其中每个插入操作必须等待另一个线程的对应移除操作 ，反之亦然。</p>
+								<p>同步队列没有任何内部容量，甚至连一个队列的容量都没有。不能在同步队列上进行 peek，因为仅在试图要移除元素时，该元素才存在；除非另一个线程试图移除某个元素，否则也不能（使用任何方法）插入元素；也不能迭代队列，因为其中没有元素可用于迭代。队列的头 是尝试添加到队列中的首个已排队插入线程的元素；如果没有这样的已排队线程，则没有可用于移除的元素并且 poll() 将会返回 null。对于其他 Collection 方法（例如 contains），SynchronousQueue 作为一个空 collection。此队列不允许 null 元素。 </p>
+								<p>同步队列类似于 CSP 和 Ada 中使用的 rendezvous 信道。它非常适合于传递性设计，在这种设计中，在一个线程中运行的对象要将某些信息、事件或任务传递给在另一个线程中运行的对象，它就必须与该对象同步。 </p>
+								<p>对于正在等待的生产者和使用者线程而言，此类支持可选的公平排序策略。默认情况下不保证这种排序。但是，使用公平设置为 true 所构造的队列可保证线程以 FIFO 的顺序进行访问。 </p>
+								<pre class="brush: java;">
+public class SynchronousQueue&lt;E> extends AbstractQueue&lt;E> implements BlockingQueue&lt;E>, Serializable {
+	public SynchronousQueue() {}
+	public SynchronousQueue(boolean fair) {}
+}
 </pre>
+								<ol>
+									<li><p><code>boolean 	offer(E e)</code> -- 如果另一个线程正在等待以便接收指定元素，则将指定元素插入到此队列</p></li>
+									<li><p><code>boolean 	offer(E e, long timeout, TimeUnit unit)</code> -- 将指定元素插入到此队列，如有必要则等待指定的时间，以便另一个线程接收它</p></li>
+									<li><p><code>E 	take()</code> -- 获取并移除此队列的头，如有必要则等待另一个线程插入它</p></li>
+									<li><p><code>E 	peek()</code> -- 始终返回 null</p></li>
+									<li><p><code>E 	poll()</code> -- 如果另一个线程当前正要使用某个元素，则获取并移除此队列的头</p></li>
+									<li><p><code>E 	poll(long timeout, TimeUnit unit)</code> -- 获取并移除此队列的头，如有必要则等待指定的时间，以便另一个线程插入它</p></li>
+									<li><p><code>void 	put(E e)</code> -- 将指定元素添加到此队列，如有必要则等待另一个线程接收它</p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 始终返回 false</p></li>
+									<li><p><code>boolean 	removeAll(Collection&lt;?> c)</code> -- 始终返回 false</p></li>
+
+									<li class="group"><p><code>void 	clear()</code> -- 不执行任何操作</p></li>
+									<li><p><code>int 	size()</code> -- 始终返回 0</p></li>
+									<li><p><code>boolean 	isEmpty()</code> -- 始终返回 true</p></li>
+									<li><p><code>int 	remainingCapacity()</code> -- 始终返回 0</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 始终返回 false</p></li>
+									<li><p><code>boolean 	containsAll(Collection&lt;?> c)</code> -- 除非给定 collection 为空，否则返回 false</p></li>
+									<li><p><code>boolean 	retainAll(Collection&lt;?> c)</code> -- 始终返回 false</p></li>
+
+									<li class="group"><p><code>int 	drainTo(Collection&lt;? super E> c)</code> -- 移除此队列中所有可用的元素，并将它们添加到给定 collection 中</p></li>
+									<li><p><code>int 	drainTo(Collection&lt;? super E> c, int maxElements)</code> -- 最多从此队列中移除给定数量的可用元素，并将这些元素添加到给定 collection 中</p></li>
+
+
+									<li class="group"><p><code>Iterator&lt;E> 	iterator()</code> -- 返回一个空迭代器，其中 hasNext 始终返回 false</p></li>
+									<li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 拆分迭代器</p></li>
+
+
+									<li class="group"><p><code>Object[] 	toArray()</code> -- 返回一个 0 长度的数组</p></li>
+									<li><p><code>&lt;T> T[] 	toArray(T[] a)</code> -- 将指定数组的第 0 个元素设置为 null（如果该数组有非 0 的长度）并返回它</p></li>
+								</ol>
                             </div>
 
                             <a id="DelayQueue" class="offset"></a>
                             <div class="split-item">
-                            <p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/DelayQueue.html" target="_blank">DelayQueue</a></p>
-                            <pre class="brush: java;">
-
+								<p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/DelayQueue.html" target="_blank">DelayQueue</a> 是 Delayed 元素的一个无界阻塞队列，只有在延迟期满时才能从中提取元素。</p>
+								<p>该队列的头部 是延迟期满后保存时间最长的 Delayed 元素。如果延迟都还没有期满，则队列没有头部，并且 poll 将返回 null。当一个元素的 getDelay(TimeUnit.NANOSECONDS) 方法返回一个小于等于 0 的值时，将发生到期。即使无法使用 take 或 poll 移除未到期的元素，也不会将这些元素作为正常元素对待。例如，size 方法同时返回到期和未到期元素的计数。此队列不允许使用 null 元素。 </p>
+								<pre class="brush: java;">
+public class DelayQueue&lt;E extends Delayed> extends AbstractQueue&lt;E> implements BlockingQueue&lt;E> {
+	public DelayQueue() {}
+	public DelayQueue(Collection&lt;? extends E> c)	{}
+}
 </pre>
+								<ol>
+									<li><p><code>boolean 	offer(E e)</code> -- 将指定元素插入此延迟队列</p></li>
+									<li><p><code>boolean 	offer(E e, long timeout, TimeUnit unit)</code> -- 调用 <code>offer(E)</code>, 后面两个参数未使用</p></li>
+									<li><p><code>boolean 	add(E e)</code> -- 调用 <code>offer(E)</code></p></li>
+									<li><p><code>void 	put(E e)</code> -- 调用 <code>offer(E)</code></p></li>
+
+									<li class="group"><p><code>E 	peek()</code> -- 获取但不移除此队列的头部；如果此队列为空，则返回 null</p></li>
+									<li><p><code>E 	poll()</code> -- 获取并移除此队列的头，如果此队列不包含具有已到期延迟时间的元素，则返回 null</p></li>
+									<li><p><code>E 	poll(long timeout, TimeUnit unit)</code> -- 获取并移除此队列的头部，在可从此队列获得到期延迟的元素，或者到达指定的等待时间之前一直等待</p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 从此队列中移除指定元素的单个实例（如果存在），无论它是否到期</p></li>
+									<li><p><code>E 	take()</code> -- 获取并移除此队列的头部，在可从此队列获得到期延迟的元素之前一直等待</p></li>
+
+									<li class="group"><p><code>int 	size()</code> -- 返回此 collection 中的元素数</p></li>
+									<li><p><code>void 	clear()</code> -- 自动移除此延迟队列的所有元素</p></li>
+									<li><p><code>int 	remainingCapacity()</code> -- 因为 DelayQueue 没有容量限制，所以它总是返回 Integer.MAX_VALUE</p></li>
+									<li><p><code>int 	drainTo(Collection&lt;? super E> c)</code> -- 移除此队列中所有可用的元素，并将它们添加到给定 collection 中</p></li>
+									<li><p><code>int 	drainTo(Collection&lt;? super E> c, int maxElements)</code> -- 最多从此队列中移除给定数量的可用元素，并将这些元素添加到给定 collection 中</p></li>
+									<li><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此队列所有元素（既包括到期的，也包括未到期的）上进行迭代的迭代器</p></li>
+
+									<li class="group"><p><code>Object[] 	toArray()</code> -- 返回包含此队列所有元素的数组</p></li>
+									<li><p><code>&lt;T> T[] 	toArray(T[] a)</code> -- 返回一个包含此队列所有元素的数组；返回数组的运行时类型是指定数组的类型</p></li>
+								</ol>
                             </div>
 
                             <a id="ConcurrentLinkedQueue" class="offset"></a>
                             <div class="split-item">
-                            <p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/ConcurrentLinkedQueue.html" target="_blank">ConcurrentLinkedQueue</a></p>
-                            <pre class="brush: java;">
-
+								<p><code>java.util.concurrent.</code><a href="docs/docs-java/api/java/util/concurrent/ConcurrentLinkedQueue.html" target="_blank">ConcurrentLinkedQueue</a> 一个基于链接节点的无界线程安全队列。此队列按照 FIFO（先进先出）原则对元素进行排序。</p>
+								<p>队列的头部 是队列中时间最长的元素。队列的尾部 是队列中时间最短的元素。新的元素插入到队列的尾部，队列获取操作从队列头部获得元素。当多个线程共享访问一个公共 collection 时，ConcurrentLinkedQueue 是一个恰当的选择。此队列不允许使用 null 元素。 </p>
+								<p>此实现采用了有效的“无等待 (wait-free)”算法。</p>
+								<p>需要小心的是，与大多数 collection 不同，size 方法不是 一个固定时间操作。由于这些队列的异步特性，确定当前元素的数量需要遍历这些元素。</p>
+								<pre class="brush: java;">
+public class ConcurrentLinkedQueue&lt;E> extends AbstractQueue&lt;E> implements Queue&lt;E>, Serializable {
+	public ConcurrentLinkedQueue() {}
+	public ConcurrentLinkedQueue(Collection&lt;? extends E> c) {}
+}
 </pre>
+								<ol>
+									<li><p><code>boolean 	offer(E e)</code> -- 将指定元素插入此队列的尾部</p></li>
+									<li><p><code>boolean 	add(E e)</code> -- 调用 <code>offer(E)</code></p></li>
+									<li><p><code>E 	peek()</code> -- 获取但不移除此队列的头；如果此队列为空，则返回 null</p></li>
+									<li><p><code>E 	poll()</code> -- 获取并移除此队列的头，如果此队列为空，则返回 null</p></li>
+									<li><p><code>boolean 	addAll(Collection&lt;? extends E> c)</code> -- 将 c 中所有元素插入此队列</p></li>
+
+									<li class="group"><p><code>boolean 	remove(Object o)</code> -- 从队列中移除指定元素的单个实例</p></li>
+									<li><p><code>boolean 	isEmpty()</code> -- 如果此队列不包含任何元素，则返回 true</p></li>
+									<li><p><code>int 	size()</code> -- 返回此队列中的元素数量</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 如果此队列包含指定元素，则返回 true</p></li>
+
+									<li class="group"><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此队列元素上以恰当顺序进行迭代的迭代器</p></li>
+									<li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 拆分迭代器</p></li>
+
+									<li class="group"><p><code>Object[] 	toArray()</code> -- 返回以恰当顺序包含此队列所有元素的数组</p></li>
+									<li><p><code>&lt;T> T[] 	toArray(T[] a)</code> -- 返回以恰当顺序包含此队列所有元素的数组；返回数组的运行时类型是指定数组的运行时类型</p></li>
+								</ol>
                             </div>
                         </div>
 
                         <div class="sub-item">
                             <a id="ArrayDeque" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/ArrayDeque.html" target="_blank">ArrayDeque</a></p>
-                            <pre class="brush: java;">
-
+								<p><a href="docs/docs-java/api/java/util/ArrayDeque.html" target="_blank">ArrayDeque</a> 是 Deque 接口的大小可变数组的实现。数组双端队列没有容量限制；它们可根据需要增加以支持使用。</p>
+								<p>它们不是线程安全的；在没有外部同步时，它们不支持多个线程的并发访问。禁止 null 元素。此类很可能在用作堆栈时快于 Stack，在用作队列时快于 LinkedList。 </p>
+								<p>大多数 ArrayDeque 操作以摊销的固定时间运行。异常包括 remove、removeFirstOccurrence、removeLastOccurrence、contains、iterator.remove() 以及批量操作，它们均以线性时间运行。 </p>
+								<pre class="brush: java;">
+public class ArrayDeque&lt;E> extends AbstractCollection&lt;E> implements Deque&lt;E>, Cloneable, Serializable {
+	public ArrayDeque() {}
+	public ArrayDeque(Collection&lt;? extends E> c) {}
+	public ArrayDeque(int numElements) {}
+}
 </pre>
+								<ol>
+									<li><p><code>void 	addLast(E e)</code> -- 将指定元素插入此双端队列的末尾</p></li>
+									<li><p><code>void 	addFirst(E e)</code> -- 将指定元素插入此双端队列的开头</p></li>
+									<li><p><code>boolean 	add(E e)</code> -- 调用 <code>addLast(E)</code>, 始终返回 true</p></li>
+									<li><p><code>boolean 	offer(E e)</code> -- 调用 <code>offerLast(E)</code></p></li>
+									<li><p><code>boolean 	offerFirst(E e)</code> -- 调用 <code>offerFirst(E)</code>, 始终返回 true</p></li>
+									<li><p><code>boolean 	offerLast(E e)</code> -- 调用 <code>addLast(E)</code>, 始终返回 true</p></li>
+
+									<li class="group"><p><code>E 	remove()</code> -- 调用 <code>removeFirst()</code></p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 调用 <code>removeFirstOccurrence(Object)</code></p></li>
+									<li><p><code>E 	removeFirst()</code> -- 调用 <code>pollFirst()</code>, 如果返回值为 null 则抛出 NoSuchElementException 异常</p></li>
+									<li><p><code>E 	removeLast()</code> -- 调用 <code>pollLast()</code>, 如果返回值为 null 则抛出 NoSuchElementException 异常</p></li>
+									<li><p><code>boolean 	removeFirstOccurrence(Object o)</code> -- 移除此双端队列中第一次出现的指定元素（当从头部到尾部遍历双端队列时）</p></li>
+									<li><p><code>boolean 	removeLastOccurrence(Object o)</code> -- 获取并移除此双端队列的最后一个元素</p></li>
+
+									<li class="group"><p><code>E 	pop()</code> -- 调用 <code>removeFirst()</code></p></li>
+									<li><p><code>void 	push(E e)</code> -- 调用 <code>addFirst(E)</code></p></li>
+
+									<li class="group"><p><code>E 	peek()</code> -- 调用 <code>peekFirst()</code></p></li>
+									<li><p><code>E 	peekFirst()</code> -- 获取，但不移除此双端队列的第一个元素；如果此双端队列为空，则返回 null</p></li>
+									<li><p><code>E 	peekLast()</code> -- 获取，但不移除此双端队列的最后一个元素；如果此双端队列为空，则返回 null</p></li>
+
+									<li class="group"><p><code>E 	poll()</code> -- 调用 <code>pollFirst()</code></p></li>
+									<li><p><code>E 	pollFirst()</code> -- 获取并移除此双端队列的第一个元素；如果此双端队列为空，则返回 null</p></li>
+									<li><p><code>E 	pollLast()</code> -- 获取并移除此双端队列的最后一个元素；如果此双端队列为空，则返回 null</p></li>
+
+									<li class="group"><p><code>E 	element()</code> -- 调用 <code>getFirst()</code></p></li>
+									<li><p><code>E 	getFirst()</code> -- 获取，但不移除此双端队列的第一个元素</p></li>
+									<li><p><code>E 	getLast()</code> -- 获取，但不移除此双端队列的最后一个元素</p></li>
+
+
+									<li class="group"><p><code>void 	clear()</code> -- 从此双端队列中移除所有元</p></li>
+									<li><p><code>ArrayDeque&lt;E> 	clone()</code> -- 返回此双端队列的副本</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 如果此双端队列包含指定元素，则返回 true</p></li>
+
+									<li class="group"><p><code>boolean 	isEmpty()</code> -- 如果此双端队列未包含任何元素，则返回 true</p></li>
+									<li><p><code>int 	size()</code> -- 返回此双端队列中的元素数</p></li>
+									<li><p><code>Iterator&lt;E> 	descendingIterator()</code> -- 返回以逆向顺序在此双端队列的元素上进行迭代的迭代器</p></li>
+									<li><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此双端队列的元素上进行迭代的迭代器</p></li>
+									<li><p><code>Spliterator&lt;E> 	spliterator()</code> -- 拆分迭代器</p></li>
+
+									<li class="group"><p><code>Object[] 	toArray()</code> -- 返回一个以恰当顺序包含此双端队列所有元素的数组（从第一个元素到最后一个元素）</p></li>
+									<li><p><code>&lt;T> T[] 	toArray(T[] a)</code> -- 返回一个以恰当顺序包含此双端队列所有元素的数组（从第一个元素到最后一个元素）；返回数组的运行时类型是指定数组的运行时类型</p></li>
+								</ol>
                             </div>
                         </div>
 
