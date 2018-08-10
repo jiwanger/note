@@ -96,6 +96,7 @@
 							<a href="#java-util-Date" class="list-group-item">Date, TimeZone, Calendar</a>
                             <a href="#java-util-Timer" class="list-group-item">Timer 和 TimerTask</a>
                             <a href="#java-util-List" class="list-group-item">List, Map, Set, Queue...</a>
+                            <a href="#java-util-function" class="list-group-item"><code>java.util.function</code> 包</a>
                             <a href="#java-util-Formatter" class="list-group-item">Formatter, Formattable</a>
                             <a href="#java-util-Observable" class="list-group-item">Observer, Observable</a>
                             <a href="#java-util-UUID" class="list-group-item">UUID</a>
@@ -104,13 +105,16 @@
 						</div>
 
                         <a class="list-group-item active drop" data-toggle="collapse"
-                           data-parent="#accordion" href="#java-io" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
-                            <code>java.io</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+                           data-parent="#accordion" href="#java-sql" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+                            <code>java.sql</code><span class="caret pull-right" style="margin-top: 5px;"></span>
                         </a>
-                        <div id="java-io" class="panel-collapse collapse"
+                        <div id="java-sql" class="panel-collapse collapse"
                              role="tabpanel">
-                            <a href="#java-io-File" class="list-group-item">File</a>
-                            <a href="#java-io-" class="list-group-item">...</a>
+                            <a href="#java-sql-DriverManager" class="list-group-item">DriverManager</a>
+							<a href="#java-sql-Connection" class="list-group-item">Connection</a>
+							<a href="#java-sql-PreparedStatement" class="list-group-item">PreparedStatement</a>
+							<a href="#java-sql-ResultSet" class="list-group-item">ResultSet</a>
+                            <a href="#java-sql-" class="list-group-item">...</a>
                         </div>
 
                         <a class="list-group-item active drop" data-toggle="collapse"
@@ -1552,16 +1556,16 @@ public class Package implements AnnotatedElement {}
                                 <li><p><code>static Package 	getPackage(String name)</code> -- 如果 ClassLoader 加载了此包，则返回 Package；否则返回空</p>
                                 <pre class="brush: java;">
 /** 已知一个 App 源码结构如下：
- *  io.github.jiwanger.App.java
- *  io.github.jiwanger.helper.Log.java
- *  io.github.jiwanger.io.MyFile.java
- *  io.github.jiwanger.lang.MyPackage.java
+ *  io.github.java.App.java
+ *  io.github.java.helper.Log.java
+ *  io.github.java.io.MyFile.java
+ *  io.github.java.lang.MyPackage.java
  */
 /** 代码总只使用了 MyPackage, App, Log, 那么以下输出为： */
 Package.getPackage("io.github"); // null
 Package.getPackage("io.github.jiwanger"); // 不为空
-Package.getPackage("io.github.jiwanger.helper"); // null
-Package.getPackage("io.github.jiwanger.lang"); // 不为空
+Package.getPackage("io.github.java.helper"); // null
+Package.getPackage("io.github.java.lang"); // 不为空
                                 </pre>
                                 </li>
                                 <li><p><code>static Package[] 	getPackages()</code> -- ClassLoader 实例当前已知的所有包</p></li>
@@ -1696,7 +1700,7 @@ sun.jnu.encoding=UTF-8
 sun.arch.data.model=32
 sun.management.compiler=HotSpot Tiered Compilers
 sun.desktop=gnome
-sun.java.command=io.github.jiwanger.App
+sun.java.command=io.github.java.App
 sun.cpu.endian=little
 sun.io.unicode.encoding=UnicodeLittle
 sun.cpu.isalist=
@@ -3483,6 +3487,7 @@ public abstract class TimerTask implements Runnable {
                 </div>
                 <!-- item over -->
 
+                <!-- item start -->
                 <a class="offset" id="java-util-List"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -3502,6 +3507,8 @@ public abstract class TimerTask implements Runnable {
                             <p><b>Java Collections Framework</b> 类和接口导航:</p>
                             <ul>
                                 <li><p><b>迭代器接口</b>: <a href="#Iterator">Iterator</a>, <a href="#ListIterator">ListIterator</a></p></li>
+                                <li><p><b>Comparable 接口</b>: <a href="#Comparable">Comparable</a></p></li>
+								<li><p><b>Comparator 接口及实现类</b>: <a href="#Comparator">Comparator</a>, <a href="#Collator">Collator</a>, <a href="#RuleBasedCollator">RuleBasedCollator</a></p></li>
                                 <li><p><b>Iterable 及子接口</b>: <a href="#Iterable">Iterable</a>, <a href="#Collection">Collection</a>, <a href="#List">List</a>, <a href="#Queue">Queue</a>, <a href="#Deque">Deque</a>, <a href="#BlockingQueue">BlockingQueue</a>, <a href="#TransferQueue">TransferQueue</a>, <a href="#BlockingDeque">BlockingDeque</a>, <a href="#Set">Set</a>, <a href="#SortedSet">SortedSet</a>, <a href="#NavigableSet">NavigableSet</a></p></li>
                                 <li><p><b>Map 及子接口</b>: <a href="#Map">Map</a>, <a href="#SortedMap">SortedMap</a>, <a href="#NavigableMap">MavigableMap</a>, <a href="#ConcurrentMap">ConcurrentMap</a>, <a href="#ConcurrentNavigableMap">ConcurrentNavigableMap</a></p></li>
                                 <li><p><b>抽象骨干类</b>: <a href="#AbstractCollection">AbstractCollection</a>, <a href="#AbstractList">AbstractList</a>, <a href="#AbstractMap">AbstractMap</a>, <a href="#AbstractSet">AbstractSet</a>, <a href="#AbstractQueue">AbstractQueue</a></p></li>
@@ -3512,15 +3519,21 @@ public abstract class TimerTask implements Runnable {
                             </ul>
 							<p><b>Java Collections Framework</b> 类和接口应用实例: <a href="#java-util-collections-example">应用场景实例</a></p>
 							<pre class="brush: java; gutter: false;">
-Iterator /** 对 Collection 进行迭代的迭代器，Collection 的实现类一般都有内部类实现此接口，并提供了返回 Iterator 的方法 */
- └─ ListIterator /** 系列表迭代器，允许程序员按任一方向遍历列表、迭代期间修改列表，并获得迭代器在列表中的当前位置 */
+Iterator /** 迭代器，Collections 的实现类都有内部类实现此接口，并提供了返回 Iterator 的方法(实现 Iterable 接口) */
+ └─ ListIterator /** 列表迭代器，允许程序员按任一方向遍历列表、迭代期间修改列表，并获得迭代器在列表中的当前位置 */
+
+java.lang.Comparable /** 此接口强行对实现它的每个类的对象进行整体排序，实现类太多，如: String, Integer... */
+
+Comparator /** 比较器，强行对某个对象 collection 进行整体排序 的比较函数 */
+ └─ java.text.Collator /** 区分语言环境的 String 比较，使用此类可为自然语言文本构建搜索和排序例程 */
+     └─ java.text.RuleBasedCollator /** 是 Collator 的具体子类，它提供了一个简单的、数据驱动的表 collator */
 
 /** 容器接口继承结构和父接口(不包括非容器接口):
  * java.util.concurrent 包类，在并发编程中很常用的实用工具类，以 * 开头
  * 有两个父接口的只写在深的父接口下，并加 extends 标明，开头加 = 区分 */
 java.lang.Iterable /** 实现这个接口允许对象成为 "foreach" 语句的目标，主要是: Iterator&lt;T> iterator() 方法。 */
  └─ Collection /** Collection 层次结构中的根接口 */
-	 ├─ List /** 有序的 Collection（也称为序列） */
+	 ├─ List /** 有序的 Collection（也称为序列）,和 Set 不同，通常允许重复的元素 */
      ├─ Queue /** 在处理元素前用于保存元素的 Collection */
 	 │	 ├─	Deque /** 一个线性 Collection，支持在两端插入和移除元素 */
 	 │	 └─ * BlockingQueue /** 支持两个附加操作的 Queue */
@@ -3683,8 +3696,8 @@ AbstractCollection implements Collection /** 提供 Collection 接口的骨干�
 									<li><p><code>static int 	hashCode(double[] a)</code> -- 同上</p></li>
 									<li><p><code>static int 	hashCode(Object[] a)</code> -- 同上</p>
 										<pre class="brush: java;">
-	/** 对于长度相等的数组 a[n] 和 b[n], 有 a[i] == b[i], 那么 Arrays.hashCode(a) == Arrays.hashCode(b); */
-										</pre>
+/** 对于长度相等的数组 a[n] 和 b[n], 有 a[i] == b[i], 那么 Arrays.hashCode(a) == Arrays.hashCode(b); */
+</pre>
 									</li>
 
 									<li class="group"><p><code>static boolean 	equals(boolean[] a, boolean[] a2)</code> -- 如果两个指定类型数组彼此相等，则返回 true</p></li>
@@ -3923,6 +3936,36 @@ public interface Iterator&lt;E> {
  	default void remove() {} // 从迭代器指向的 Collection 中移除迭代器返回的最后一个元素
 	default void forEachRemaining(Consumer&lt;? super E> action) {}
 }
+
+/** 一般在容器类内部实现 Iterator 接口，每次 forEach 循环都会调用 iterator() 方法，返回一个新的 Iterator 对象 */
+public class MyList&lt;E> implements Iterable&lt;E> {
+    private ArrayList&E> innerList = new ArrayList<>(); // 内部一般有一个数组或者其他数据结构用于保存数据
+
+    @Override
+    public  Iterator&lt;E> iterator() {
+        return new CustomIterator();
+    }
+
+	/** 内部实现 Iterator 接口 */
+    private class CustomIterator implements Iterator&lt;E> {
+        int cursor = 0; // 作为迭代索引使用
+
+        @Override
+        public boolean hasNext() {
+            boolean hasNext = false;
+            if(cursor < innerList.size()) {
+                hasNext = true;
+            }
+            cursor++;
+            return hasNext;
+        }
+
+        @Override
+        public E next() {
+            return innerList.get(cursor - 1);
+        }
+    }
+}
 </pre>
                             </div>
 
@@ -3945,9 +3988,182 @@ public interface Iterator&lt;E> {
                         </div>
 
                         <div class="sub-item">
+                            <a id="Comparable" class="offset"></a>
+                            <div class="split-item">
+                                <p><code>java.lang.</code><a href="docs/docs-java/api/java/util/Comparable.html" target="_blank">Comparable</a> 接口强行对实现它的每个类的对象进行整体排序。这种排序被称为类的自然排序，类的 compareTo 方法被称为它的自然比较方法。</p>
+                                <p><b>实现此接口的对象列表（和数组）可以通过 Collections.sort（和 Arrays.sort）进行自动排序。实现此接口的对象可以用作有序映射中的键或有序集合中的元素，无需指定比较器。</b></p>
+                                <p>对于类 C 的每一个 e1 和 e2 来说，当且仅当 e1.compareTo(e2) == 0 与 e1.equals(e2) 具有相同的 boolean 值时，类 C 的自然排序才叫做与 equals 一致。注意，null 不是任何类的实例，即使 e.equals(null) 返回 false，e.compareTo(null) 也将抛出 NullPointerException。</p>
+                                <pre class="brush: java;">
+public Interface Comparable&lt;T> {
+    int compareTo(T o); // 如果该对象小于、等于或大于指定对象，则分别返回负整数、零或正整数
+}
+</pre>
+                            </div>
+                        </div>
+
+                        <div  class="sub-item">
+                            <a id="Comparator" class="offset"></a>
+                            <div class="split-item">
+                                <p><a href="docs/docs-java/api/java/util/Comparator.html" target="_blank">Comparator</a> 是比较器，提供强行对某个对象 collection 进行整体排序 的比较函数。</p>
+                                <p>可以将 Comparator 传递给 sort 方法（如 Collections.sort 或 Arrays.sort），从而允许在排序顺序上实现精确控制。</p>
+                                <p>还可以使用 Comparator 来控制某些数据结构（如有序 set或有序映射）的顺序，或者为那些没有自然顺序的对象 collection 提供排序。</p>
+                                <p>当且仅当对于一组元素 S 中的每个 e1 和 e2 而言，c.compare(e1, e2)==0 与 e1.equals(e2) 具有相等的布尔值时，Comparator c 强行对 S 进行的排序才叫做与 equals 一致 的排序。</p>
+                                <p>通常来说，让 Comparator 也实现 java.io.Serializable 是一个好主意，因为它们在可序列化的数据结构（像 TreeSet、TreeMap）中可用作排序方法。为了成功地序列化数据结构，Comparator（如果已提供）必须实现 Serializable。</p>
+                                <ol>
+                                    <li><p><code>int 	compare(T o1, T o2)</code> -- 比较用来排序的两个参数</p></li>
+                                    <li><p><code>boolean 	equals(Object obj)</code> -- 指示某个其他对象是否“等于”此 Comparator</p></li>
+
+                                    <li class="group"><p><code>default Comparator&lt;T> 	reversed()</code> -- 当前比较器反转，返回 <code>Collections.reverseOrder(this)</code></p></li>
+
+
+                                    <li class="group"><p><code>static &lt;T extends Comparable&lt;? super T>> Comparator&lt;T> 	naturalOrder()</code> -- 自然排序</p>
+										<pre class="brush: java;">
+public static &lt;T extends Comparable&lt;? super T>> Comparator&lt;T> naturalOrder() {
+	// Comparators 只具有包可访问性
+	return (Comparator&lt;T>) Comparators.NaturalOrderComparator.INSTANCE;
+}
+</pre>
+									</li>
+                                    <li><p><code>static &lt;T extends Comparable&lt;? super T>> Comparator&lt;T> 	reverseOrder()</code> -- 反自然排序</p>
+										<pre class="brush: java;">
+public static &lt;T extends Comparable&lt;? super T>> Comparator&lt;T> reverseOrder() {
+	return Collections.reverseOrder();
+}
+</pre>
+									</li>
+                                    <li><p><code>static &lt;T> Comparator&lt;T> 	nullsFirst(Comparator&lt;? super T> comparator)</code> -- 返回一个NULL友好的比较器，它认为NULL小于非NULL。当两者都为空时，它们被认为是相等的。如果两者均为非空，则使用指定比较器来确定顺序。如果指定的比较器为NULL，则返回的比较器将所有非空值视为相等。</p></li>
+                                    <li><p><code>static &lt;T> Comparator&lt;T> 	nullsLast(Comparator&lt;? super T> comparator)</code> -- 返回一个NULL友好的比较器，它认为NULL大于非NULL。当两者都为空时，它们被认为是相等的。如果两者均为非空，则使用指定比较器来确定顺序。如果指定的比较器为NULL，则返回的比较器将所有非空值视为相等。</p></li>
+
+                                    <li class="group"><p><code>static &lt;T> Comparator&lt;T> 	comparingInt(ToIntFunction&lt;? super T> keyExtractor)</code> -- 返回 int 比较器的比较过程</p>
+										<pre class="brush: java;">
+ArrayList&lt;Integer> list = new ArrayList<>();
+list.add(2);
+list.add(6);
+list.add(4);
+list.add(6);
+
+// 强行认为 4 是最大的
+Comparator&lt;Integer> comparator = Comparator.comparingInt(value -> {
+	if(value == 4) {
+		return Integer.MAX_VALUE;
+	}
+	return value;
+});
+list.sort(comparator); // 2,6,6,4
+</pre>
+									</li>
+                                    <li><p><code>static &lt;T> Comparator&lt;T> 	comparingLong(ToLongFunction&lt;? super T> keyExtractor)</code> --  返回 long 比较器的比较过程</p></li>
+                                    <li><p><code>static &lt;T> Comparator&lt;T> 	comparingDouble(ToDoubleFunction&lt;? super T> ext)</code> --  返回 double 比较器的比较过程</p></li>
+                                    <li><p><code>static &lt;T,U extends Comparable&lt;? super U>> Comparator&lt;T> 	comparing(Function&lt;? super T,? extends U> ext)</code> -- 传入参数 T, 返回 U 类型的比较器</p>
+										<pre class="brush: java;">
+ArrayList&lt;String> list = new ArrayList<>();
+list.add("a");
+list.add("ccc");
+list.add("bb");
+
+Comparator&lt;String> comparator = Comparator.comparing(s -> s.length());
+list.sort(comparator);
+</pre>
+									</li>
+                                    <li><p><code>static &lt;T,U> Comparator&lt;T> 	comparing(Function&lt;? super T,? extends U> ext, Comparator&lt;? super U> ext)</code> -- 参见以下实例</p>
+										<pre class="brush: java;">
+ArrayList&lt;String> list = new ArrayList<>();
+list.add("a");
+list.add("ccc");
+list.add("bb");
+
+
+// 第一个 Fuction 函数传入参数 T, 返回 U 类型的比较器，第二个比较器比较 U
+Comparator&lt;String> comparator = Comparator.comparing(s -> s.length(), (o1, o2) -> o2.compareTo(o1));
+list.sort(comparator); //  ccc, bb, a
+										</pre>
+									</li>
+
+                                    <li class="group"><p><code>default Comparator&lt;T> 	thenComparingInt(ToIntFunction&lt;? super T> keyExtractor)</code> -- 参照 <code>comparingInt(ToIntFunction)</code> 和 <code>thenComparing(Comparator)</code></p></li>
+                                    <li><p><code>default Comparator&lt;T> 	thenComparingLong(ToLongFunction&lt;? super T> keyExtractor)</code> -- 参照 <code>comparingLong(ToLongFunction)</code> 和 <code>thenComparing(Comparator)</code></p></li>
+                                    <li><p><code>default Comparator&lt;T> 	thenComparingDouble(ToDoubleFunction&lt;? super T> keyExtractor)</code> -- 参照 <code>comparingDouble(ToDoubleFunction)</code> 和 <code>thenComparing(Comparator)</code></p></li>
+                                    <li><p><code>default Comparator&lt;T> 	thenComparing(Comparator&lt;? super T> other)</code> -- 参照 <code>comparingInt(ToIntFunction)</code>, 只有在当前对象的 compare 方法返回 0 时才执行 other</p></li>
+									<li><p><code>default &lt;U extends Comparable&lt;? super U>> Comparator&lt;T> 	thenComparing(Function&lt;? super T,? extends U> keyExtractor)</code> -- 参照 <code>comparing(Function)</code> 和 <code>thenComparing(Comparator)</code></p></li>
+									<li><p><code>default &lt;U> Comparator&lt;T> 	thenComparing(Function&lt;? super T,? extends U> keyExtractor, Comparator&lt;? super U> keyComparator)</code> -- 参照 <code>comparing(Function, Comparator)</code> 和 <code>thenComparing(Comparator)</code></p></li>
+
+                                </ol>
+                            </div>
+
+                            <a id="Collator" class="offset"></a>
+                            <div class="split-item">
+                                <p><a href="docs/docs-java/api/java/util/Collator.html" target="_blank">Collator</a> 类执行区分语言环境的 String 比较。使用此类可为自然语言文本构建搜索和排序例程。</p>
+                                <p>Collator 是一个抽象基类。其子类实现具体的整理策略。Java 平台目前提供了 RuleBasedCollator 子类，它适用于很多种语言。还可以创建其他子类，以处理更多的专门需要。 </p>
+                                <p>与其他区分语言环境的类一样，可以使用静态工厂方法 getInstance 来为给定的语言环境获得适当的 Collator 对象。如果需要理解特定整理策略的细节或者需要修改策略，只需查看 Collator 的子类即可。 </p>
+                                <pre class="brush: java;">
+public abstract class Collator implements Comparator&lt;Object>, Cloneable {
+    /** 以下为 Collator 的 strength 值 */
+    public final static int PRIMARY = 0;
+    public final static int SECONDARY = 1;
+    public final static int TERTIARY = 2;
+    public final static int IDENTICAL = 3;
+
+    /** 以下为 Decomposition 模式值 */
+    public final static int NO_DECOMPOSITION = 0;
+    public final static int CANONICAL_DECOMPOSITION = 1;
+    public final static int FULL_DECOMPOSITION = 2;
+
+    protected Collator() {} // 受保护的构造方法
+}
+</pre>
+                                <ol>
+                                    <li><p><code>static Collator 	getInstance()</code> -- 获取当前默认语言环境的 Collator</p></li>
+                                    <li><p><code>static Collator 	getInstance(Locale desiredLocale)</code> -- 获取所需语言环境的 Collator</p></li>
+                                    <li><p><code>static Locale[] 	getAvailableLocales()</code> -- 回一个所有受支持语言环境的数组</p></li>
+
+                                    <li class="group"><p><code>abstract int 	compare(String source, String target)</code> -- 根据此 Collator 的整理规则来比较源字符串和目标字符串</p></li>
+                                    <li><p><code>abstract CollationKey 	getCollationKey(String src)</code> -- 将 src 转换为可以和其他 CollationKey 按位进行比较的位</p></li>
+                                    <li><p><code>abstract int 	hashCode()</code> -- 生成此 Collator 的哈希码</p></li>
+
+                                    <li class="group"><p><code>int 	getDecomposition()</code> -- 获取此 Collator 的 decomposition 模式</p></li>
+                                    <li><p><code>int 	getStrength()</code> -- 返回此 Collator 的 strength 属性</p></li>
+                                    <li><p><code>void 	setDecomposition(int decompositionMode)</code> -- 设置此 Collator 的 decomposition 模式</p></li>
+                                    <li><p><code>void 	setStrength(int newStrength)</code> -- 设置此 Collator 的 strength 属性</p></li>
+
+                                    <li class="group"><p><code>int 	compare(Object o1, Object o2)</code> -- 比较此方法两个参数的顺序</p></li>
+                                    <li><p><code>Object 	clone()</code> -- 重写 Cloneable</p></li>
+                                    <li><p><code>boolean 	equals(Object that)</code> -- 比较两个 Collator 的相等性</p></li>
+                                    <li><p><code>boolean 	equals(String source, String target)</code> -- 根据此 Collator 的整理规则比较两个字符串是否相等的便捷方法</p></li>
+                                </ol>
+                            </div>
+
+                            <a id="RuleBasedCollator" class="offset"></a>
+                            <div class="split-item">
+                                <p><a href="docs/docs-java/api/java/util/RuleBasedCollator.html" target="_blank">RuleBasedCollator</a> 是 Collator 的具体子类，它提供了一个简单的、数据驱动的表 collator。可以通过此类来创建基于表的自定义 Collator。 </p>
+                                <p>RuleBasedCollator 将字符映射到排序键。为了提高效率，对 RuleBasedCollator 做了如下限制（其他子类可以用于更复杂的语言）： </p>
+                                <ul>
+                                    <li><p>如果指定了由 "modif" 控制的特殊整理规则，则它将用于整个 Collator 对象；</p></li>
+                                    <li><p>所有未指定的字符位于整理顺序的末尾</p></li>
+                                </ul>
+                                <pre class="brush: java;">
+public class RuleBasedCollator extends Collator {
+
+    public RuleBasedCollator(String rules) {}
+}
+</pre>
+                                <ol>
+                                    <li><p><code>int 	compare(String source, String target)</code> -- 根据表规则比较存储在两个不同字符串中的字符数据</p></li>
+                                    <li><p><code>CollationKey 	getCollationKey(String source)</code> -- 将字符串转换为能够与 CollationKey.compareTo 进行比较的一系列字符</p></li>
+                                    <li><p><code>int 	hashCode()</code> -- 生成基于表的 collation 对象的哈希码</p></li>
+
+                                    <li class="group"><p><code>String 	getRules()</code> -- 获取 collation 对象的基于表的规则</p></li>
+                                    <li><p><code>CollationElementIterator 	getCollationElementIterator(CharacterIterator source)</code> -- 返回给定 String 的 CollationElementIterator</p></li>
+                                    <li><p><code>CollationElementIterator 	getCollationElementIterator(String source)</code> -- 返回给定 String 的 CollationElementIterator</p></li>
+
+                                    <li class="group"><p><code>Object 	clone()</code> -- 标准重写，无语义变化</p></li>
+                                    <li><p><code>boolean 	equals(Object obj)</code> -- 比较两个 collation 对象的相等性</p></li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="sub-item">
                             <a id="Iterable" class="offset"></a>
                             <div class="split-item">
-								<p><a href="docs/docs-java/api/java/lang/Iterable.html" target="_blank">java.lang.Iterable</a> 实现这个接口允许对象成为 "forEach" 语句的目标。</p>
+								<p><code>java.lang.</code><a href="docs/docs-java/api/java/lang/Iterable.html" target="_blank">Iterable</a> 实现这个接口允许对象成为 "forEach" 语句的目标。</p>
 								<pre class="brush: java;">
 public interface Iterable&lt;T> {
 	Iterator&lt;T> iterator(); // 返回一个在一组 T 类型的元素上进行迭代的迭代器
@@ -4015,51 +4231,84 @@ while(iterator.hasNext()) {
                             <a id="Collection" class="offset"></a>
                             <div class="split-item">
 								<p><a href="docs/docs-java/api/java/util/Collection.html" target="_blank">Collection</a> 表示一组对象，这些对象也称为 Collection 的元素。一些 Collection 允许有重复的元素，而另一些则不允许。一些 Collection 是有序的，而另一些则是无序的。</p>
+                                <p>所有通用的 Collection 实现类（通常通过它的一个子接口间接实现 Collection）应该提供两个“标准”构造方法：一个是 void（无参数）构造方法，用于创建空 collection；另一个是带有 Collection 类型单参数的构造方法，用于创建一个具有与其参数相同元素新的 collection。实际上，后者允许用户复制任何 collection，以生成所需实现类型的一个等效 collection。尽管无法强制执行此约定（因为接口不能包含构造方法），但是 Java 平台库中所有通用的 Collection 实现都遵从它。 </p>
 								<ol>
 									<li><p><code>boolean 	add(E e)</code> -- 确保此 collection 包含指定的元素</p></li>
 									<li><p><code>boolean 	addAll(Collection&lt;? extends E> c)</code> -- 将指定 collection 中的所有元素都添加到此 collection 中</p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 从此 collection 中移除指定元素的单个实例，如果存在的话</p></li>
+									<li><p><code>default boolean 	removeIf(Predicate&lt;? super E> filter)</code> -- </p></li>
+									<li><p><code>boolean 	removeAll(Collection&lt;?> c)</code> -- 移除此 collection 中那些也包含在指定 collection 中的所有元素</p></li>
+
+									<li class="group"><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此 collection 的元素上进行迭代的迭代器</p></li>
+									<li><p><code>default Spliterator&lt;E> 	spliterator()</code> -- 拆分迭代器(多线程迭代)</p></li>
+
+									<li class="group"><p><code>boolean 	contains(Object o)</code> -- 如果此 collection 包含指定的元素，则返回 true</p></li>
+									<li><p><code>boolean 	containsAll(Collection&lt;?> c)</code> -- 如果此 collection 包含指定 c 中的所有元素，则返回 true</p></li>
 									<li><p><code>int 	size()</code> -- 返回此 collection 中的元素数</p></li>
 									<li><p><code>boolean 	isEmpty()</code> -- 如果此 collection 不包含元素，则返回 true</p></li>
 									<li><p><code>void 	clear()</code> -- 移除此 collection 中的所有元素</p></li>
-									<li><p><code>Iterator&lt;E> 	iterator()</code> -- 返回在此 collection 的元素上进行迭代的迭代器</p></li>
+									<li><p><code>boolean 	retainAll(Collection&lt;?> c)</code> -- 仅保留此 collection 中那些也包含在指定 collection 的元素</p></li>
 
-									<li class="group"><p><code>boolean 	contains(Object o)</code> -- 如果此 collection 包含指定的元素，则返回 true</p></li>
-									<li><p><code>boolean 	containsAll(Collection&lt;?> c)</code> -- 如果此 collection 包含指定 collection 中的所有元素，则返回 true</p></li>
-									<li><p><code>boolean 	remove(Object o)</code> -- 从此 collection 中移除指定元素的单个实例，如果存在的话</p></li>
-									<li><p><code>boolean 	removeAll(Collection&lt;?> c)</code> -- 移除此 collection 中那些也包含在指定 collection 中的所有元素</p></li>
-
-									<li class="group"><p><code>boolean 	retainAll(Collection&lt;?> c)</code> -- 仅保留此 collection 中那些也包含在指定 collection 的元素</p></li>
-									<li><p><code>int 	hashCode()</code> -- 返回此 collection 的哈希码值</p></li>
+									<li class="group"><p><code>int 	hashCode()</code> -- 返回此 collection 的哈希码值</p></li>
 									<li><p><code>boolean 	equals(Object o)</code> -- 比较此 collection 与指定对象是否相等。</p></li>
 									<li><p><code>Object[] 	toArray()</code> -- 返回包含此 collection 中所有元素的数组</p></li>
 									<li><p><code>&lt;T>T[] toArray(T[] a)</code> -- 返回包含此 collection 中所有元素的数组；返回数组的运行时类型与指定数组的运行时类型相同</p></li>
+
+									<li class="group"><p><code>default Stream&lt;E> 	stream()</code> -- 返回一个以该集合作为源的序列流</p></li>
+									<li><p><code>default Stream&lt;E> 	parallelStream()</code> -- 返回一个可能的并行流，这个集合作为其源</p></li>
 
 								</ol>
                             </div>
 
                             <a id="List" class="offset"></a>
                             <div class="split-item">
-                            <p><a href="docs/docs-java/api/java/util/List.html" target="_blank">List</a> 是有序的序列,可以对列表中每个元素的插入位置进行精确地控制,根据元素的整数索引访问元素，并搜索列表中的元素。</p>
+                                <p><a href="docs/docs-java/api/java/util/List.html" target="_blank">List</a> 是有序的序列,可以对列表中每个元素的插入位置进行精确地控制,根据元素的整数索引访问元素，并搜索列表中的元素。</p>
 								<p>与 set 不同，列表通常允许重复的元素。更确切地讲，列表通常允许满足 <code>e1.equals(e2)</code> 的元素对 e1 和 e2，并且如果列表本身允许 null 元素的话，通常它们允许多个 null 元素。</p>
+                                <p>List 接口提供了特殊的迭代器，称为 ListIterator，除了允许 Iterator 接口提供的正常操作外，该迭代器还允许元素插入和替换，以及双向访问。还提供了一个方法来获取从列表中指定位置开始的列表迭代器。</p>
 								<ol>
-									<li><p><code>void 	add(int index, E element</code> -- 在列表的指定位置插入指定元素</p></li>
+									<li><p><code>boolean 	add(E e)</code> -- 添加元素到末尾</p></li>
+									<li><p><code>void 	add(int index, E element)</code> -- 在列表的指定位置插入指定元素</p></li>
+									<li><p><code>boolean 	addAll(Collection&lt;? extends E> c)</code> -- 添加指定 collection 中的所有元素元素到末尾</p></li>
 									<li><p><code>boolean 	addAll(int index, Collection&lt;? extends E> c)</code> -- 添加指定 collection 中的所有元素到此列表的结尾</p></li>
-									<li><p><code>E 	get(int index)</code> -- 返回列表中指定位置的元素</p></li>
+									<li><p><code>E 	remove(int index)</code> -- 移除列表中指定位置的元素</p></li>
+									<li><p><code>boolean 	remove(Object o)</code> -- 移除指定元素</p></li>
+									<li><p><code>boolean 	removeAll(Collection&lt;?> c)</code> -- 移除在 c 中的所有元素</p></li>
+
+									<li class="group"><p><code>E 	get(int index)</code> -- 返回列表中指定位置的元素</p></li>
+									<li><p><code>E 	set(int index, E element)</code> -- 用指定元素替换列表中指定位置的元素</p></li>
 									<li><p><code>int 	indexOf(Object o)</code> -- 返回此列表中第一次出现的指定元素的索引</p></li>
 									<li><p><code>int 	lastIndexOf(Object o)</code> -- 返回此列表中最后出现的指定元素的索引</p></li>
+
+									<li class="group"><p><code>Iterator&lt;E> 	iterator()</code> -- 迭代器</p></li>
 									<li><p><code>ListIterator&lt;E> 	listIterator()</code> -- 返回此列表元素的列表迭代器（按适当顺序）</p></li>
 									<li><p><code>ListIterator&lt;E> 	listIterator(int index)</code> -- 返回列表中元素的列表迭代器（按适当顺序），从列表的指定位置开始</p></li>
-									<li><p><code>E 	remove(int index)</code> -- 移除列表中指定位置的元素</p></li>
-									<li><p><code>E 	set(int index, E element)</code> -- 用指定元素替换列表中指定位置的元素</p></li>
+									<li><p><code>default Spliterator&lt;E> 	spliterator()</code> -- 拆分迭代器</p></li>
+
+									<li class="group"><p><code>void 	clear()</code> -- 清除所有元素</p></li>
+									<li><p><code>int 	size()</code> -- 元素数目</p></li>
+									<li><p><code>boolean 	isEmpty()</code> -- 是否为空</p></li>
 									<li><p><code>List&lt;E> 	subList(int from, int to)</code> -- 返回列表中指定的 from（包括 ）和 to（不包括）之间的部分视图</p></li>
+									<li><p><code>boolean 	contains(Object o)</code> -- 是否包含 o 元素</p></li>
+									<li><p><code>boolean 	containsAll(Collection&lt;?> c)</code> -- 是否包含 c 中的所有元素</p></li>
+
+									<li class="group"><p><code>default void 	replaceAll(UnaryOperator&lt;E> operator)</code> -- 替换符合条件的所有元素，UnaryOperator 的 <code>E apply(E)</code> 方法返回值即为替换后的值</p></li>
+									<li><p><code>boolean 	retainAll(Collection&lt;?> c)</code> -- 仅保留此 collection 中那些也包含在指定 c 的元素</p></li>
+									<li><p><code>default void 	sort(Comparator&lt;? super E> c)</code> -- 根据比较器排序</p></li>
+
+									<li class="group"><p><code>boolean 	equals(Object o)</code> -- 是否相等</p></li>
+									<li><p><code>int 	hashCode()</code> -- 哈希值</p></li>
+									<li><p><code>Object[] 	toArray()</code> -- 返回一个包含所有元素的数组</p></li>
+									<li><p><code>&lt;T> T[] 	toArray(T[] a)</code> -- 返回包含此 collection 中所有元素的数组；返回数组的运行时类型与指定数组的运行时类型相同</p></li>
 								</ol>
                             </div>
 
                             <a id="Queue" class="offset"></a>
                             <div class="split-item">
-								<p><a href="docs/docs-java/api/java/util/Queue.html" target="_blank">Queue</a> 在处理元素前用于保存元素的 collection。除了基本的 Collection 操作外，队列还提供其他的插入、提取和检查操作。</p>
+								<p><a href="docs/docs-java/api/java/util/Queue.html" target="_blank">Queue</a> 在处理元素前用于保存元素的 collection。除了基本的 Collection 操作外，队列还提供其他的插入、提取和检查操作。每个方法都存在两种形式：一种抛出异常（操作失败时），另一种返回一个特殊值（null 或 false，具体取决于操作）。插入操作的后一种形式是用于专门为有容量限制的 Queue 实现设计的；在大多数实现中，插入操作不会失败。 </p>
 								<p>队列通常（但并非一定）以 FIFO（先进先出）的方式排序各个元素。不过优先级队列和 LIFO 队列（或堆栈）例外，前者根据提供的比较器或元素的自然顺序对元素进行排序，后者按 LIFO（后进先出）的方式对元素进行排序。无论使用哪种排序方式，队列的头 都是调用 remove() 或 poll() 所移除的元素。在 FIFO 队列中，所有的新元素都插入队列的末尾。其他种类的队列可能使用不同的元素放置规则。每个 Queue 实现必须指定其顺序属性。 </p>
 								<p>Queue 接口并未定义阻塞队列的方法，而这在并发编程中是很常见的。BlockingQueue 接口定义了那些等待元素出现或等待队列中有可用空间的方法，这些方法扩展了此接口。 </p>
+                                <p>Queue 实现通常不允许插入 null 元素，尽管某些实现（如 LinkedList）并不禁止插入 null。即使在允许 null 的实现中，也不应该将 null 插入到 Queue 中，因为 null 也用作 poll 方法的一个特殊返回值，表明队列不包含元素。 </p>
+                                <p>Queue 实现通常未定义 equals 和 hashCode 方法的基于元素的版本，而是从 Object 类继承了基于身份的版本，因为对于具有相同元素但有不同排序属性的队列而言，基于元素的相等性并非总是定义良好的。 </p>
 								<ol>
 									<li><p><code>boolean 	add(E e)</code> -- 将指定的元素插入此队列（如果立即可行且不会违反容量限制），在成功时返回 true，如果当前没有可用的空间，则抛出 IllegalStateException</p></li>
 									<li><p><code>boolean 	offer(E e)</code> -- 将指定的元素插入此队列（如果立即可行且不会违反容量限制），当使用有容量限制的队列时，此方法通常要优于 add(E)，后者可能无法插入元素，而只是抛出一个异常</p></li>
@@ -4159,8 +4408,11 @@ while(iterator.hasNext()) {
                             <div class="split-item">
 								<p><a href="docs/docs-java/api/java/util/Set.html" target="_blank">Set</a> 一个不包含重复元素的 collection。更确切地讲，set 不包含满足 e1.equals(e2) 的元素对 e1 和 e2，并且最多包含一个 null 元素。</p>
 								<p>注：如果将可变对象用作 set 元素，那么必须极其小心。如果对象是 set 中某个元素，以一种影响 equals 比较的方式改变对象的值，那么 set 的行为就是不确定的。此项禁止的一个特殊情况是不允许某个 set 包含其自身作为元素。 </p>
+								<p>Set 的方法都是从 Collection 继承的。</p>
+							</div>
 
-								<a id="SortedSet" class="offset"></a>
+							<a id="SortedSet" class="offset"></a>
+							<div class="split-item">
 								<p><a href="docs/docs-java/api/java/util/SortedSet.html" target="_blank">SortedSet</a> 进一步提供关于元素的总体排序 的 Set。这些元素使用其自然顺序进行排序，或者根据通常在创建有序 set 时提供的 Comparator 进行排序。该 set 的迭代器将按元素升序遍历 set。提供了一些附加的操作来利用这种排序。</p>
 								<p>插入有序 set 的所有元素都必须实现 Comparable 接口（或者被指定的比较器所接受）。另外，所有这些元素都必须是可互相比较的：对于有序 set 中的任意两个元素 e1 和 e2，执行 e1.compareTo(e2)（或 comparator.compare(e1, e2)）都不得抛出 ClassCastException。试图违反此限制将导致违反规则的方法或者构造方法调用抛出 ClassCastException。 </p>
 								<p>所有通用有序 set 实现类都应该提供 4 个“标准”构造方法：</p>
@@ -4225,6 +4477,7 @@ public interface Map&lt;K, V> {
 </pre>
 								<ol>
 									<li><p><code>V put(K key, V value)</code> -- 将指定的值与此映射中的指定键关联</p></li>
+									<li><p><code>void 	putAll(Map&lt;? extends K,? extends V> m)</code> -- 将 m 中的键值添加到此映射</p></li>
 									<li><p><code>V get(Object key)</code> -- 返回指定键所映射的值；如果此映射不包含该键的映射关系，则返回 null</p></li>
 									<li><p><code>boolean isEmpty()</code> -- 如果此映射未包含键-值映射关系，则返回 true</p></li>
 									<li><p><code>int size()</code> -- 返回此映射中的键-值映射关系数</p></li>
@@ -4237,6 +4490,24 @@ public interface Map&lt;K, V> {
 									<li><p><code>Set&lt;Map.Entry&lt;K,V>> entrySet()</code> --  返回此映射中包含的映射关系的 Set 视图</p></li>
 									<li><p><code>void putAll(Map&lt;? extends K,? extends V> m)</code> -- 从指定映射中将所有映射关系复制到此映射中</p></li>
 									<li><p><code>Collection&lt;V> values()</code> -- 返回此映射中包含的值的 Collection 视图</p></li>
+
+									<li class="group"><p><code>boolean 	equals(Object o)</code> -- 比较元素是否相等</p></li>
+									<li><p><code>int 	hashCode()</code> -- 哈希码</p></li>
+
+									<li class="group"><p><code>default V 	compute(K key, BiFunction&lt;? super K,? super V,? extends V> remappingFunction)</code> -- 替换，添加或删除，与 key 和 BiFunction 的返回值有关</p></li>
+									<li><p><code>default V 	computeIfAbsent(K key, Function&lt;? super K,? extends V> mappingFunction)</code> -- 如果 key 不存在于 map 中，并且返回值不为 null, 则相当于 put(key, 返回值)；如果 key 存在于 map 中，并且其值不为 null，不执行回调，返回其值；如果 key 存在于 map 中，并且其值为 null，则执行替换</p></li>
+									<li><p><code>default V 	computeIfPresent(K key, BiFunction&lt;? super K,? super V,? extends V> remappingFunction)</code> -- key 存在于 map 中，并其值不为 null, 才会执行回调，返回值不为 null，则替换；返回值为 null, 则删除</p></li>
+
+									<li class="group"><p><code>default void 	forEach(BiConsumer&lt;? super K,? super V> action)</code> -- 迭代键值</p></li>
+									<li><p><code>default V 	getOrDefault(Object key, V defaultValue)</code> -- 获取指定 key 的值，如果不存在返回默认值</p></li>
+									<li><p><code>default V 	merge(K key, V value, BiFunction&lt;? super V,? super V,? extends V> remappingFunction)</code> -- 替换或添加，可用判断 value 的情况进行操作</p></li>
+
+
+									<li class="group"><p><code>default V 	putIfAbsent(K key, V value)</code> -- 如果指定的 key 已经在 map 中，并且其值不为 null，返回原有的 value；否则同 put(K, V)，并返回 null</p></li>
+									<li><p><code>default boolean 	remove(Object key, Object value)</code> -- 如果存在指定键和值，则移除此键值对</p></li>
+									<li><p><code>default V 	replace(K key, V value)</code> -- 替换指定键的值</p></li>
+									<li><p><code>default boolean 	replace(K key, V oldValue, V newValue)</code> --  如果存在指定的键和值，则将值替换为指定值</p></li>
+									<li><p><code>default void 	replaceAll(BiFunction&lt;? super K,? super V,? extends V> function)</code> -- 使用 BiFunction 替换</p></li>
 								</ol>
                             </div>
 
@@ -6200,6 +6471,326 @@ public class ArrayDeque&lt;E> extends AbstractCollection&lt;E> implements Deque&
                 <!-- item over -->
 
                 <!-- item start -->
+                <a class="offset" id="java-util-function"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><code>java.util.function</code> 包</h3>
+                    </div>
+                    <div class="panel-body">
+						<div class="sub-item">
+                            <p><code>java.util.function</code> 包为 JDK8 添加的，是功能接口，为 lambda 表达式和方法引用提供目标类型。</p>
+                            <p>每个功能接口都有一个抽象的方法，称为功能接口的功能方法，lambda表达式的参数和返回类型匹配或修改。</p>
+                            <p>该软件包中的接口是 JDK 所使用的通用功能接口，也可供用户代码使用。虽然它们没有识别一个完整的函数形状集合，lambda 表达式可以被应用，但是它们提供了足够的覆盖共同需求的功能。</p>
+                            <p>接口列表和简要说明:</p>
+                            <pre class="brush: java;">
+Consumer&lt;T> /** 无返回值，接收一个对象，然后对这个对象执行某些操作 */
+ └─ java.util.stream.Stream.Builder&lt;T>
+BiConsumer&lt;T,U> /** 无返回值，接收两个相关联的对象，然后对这两个对象执行某些操作 */
+Function&lt;T,R> /** 接收一个 T 对象，返回的是 R 对象 */
+ └─ UnaryOperator&lt;T> /** 接收一个 T 对象，返回一个新的或经过加工的 T 对象 */
+BiFunction&lt;T,U,R> /** 接收 T 和 U(一般是相关的，如 Map 的 K, V), 返回 R, 如传入 Map 的 K, V, 返回一个新的 V */
+ └─ BinaryOperator&lt;T> /** 接收两个 T 对象，返回经过比较的 T 对象 */
+Predicate&lt;T> /** 接收一个 T 对象，看其是否符合某些条件(返回 true 或 false) */
+BiPredicate&lt;T,U> /** 接收 T 和 R(一般是相关的，如 Map 的 K, V)，看其是否符合某些条件(返回 true 或 false) */
+Supplier&lt;T> /** 用于获取一个指定类型对象 */
+BooleanSupplier /** 用于获取一个 boolean 对象 */
+
+ObjDoubleConsumer&lt;T> /** 参照 Consumer， 接收一个 Object 和 一个 double */
+ObjIntConsumer&lt;T> /** 参照 Consumer， 接收一个 Object 和 一个 int */
+ObjLongConsumer&lt;T> /** 参照 Consumer， 接收一个 Object 和 一个 long */
+
+ToDoubleFunction&lt;T> /** 参照 Function， 接收 T, 返回 double */
+ToDoubleBiFunction&lt;T,U> /** 参照 BiFunction， 接收 T, U, 返回 double */
+ToLongFunction&lt;T> /** 参照 Function， 接收 T 返回 long */
+ToIntBiFunction&lt;T,U> /** 参照 BiFunction， 接收 T, U, 返回 int */
+ToLongBiFunction&lt;T,U> /** 参照 BiFunction， 接收 T, U, 返回 long */
+
+IntBinaryOperator /** 参照 BinaryOperator， 接收两个 int, 返回经过比较的 int */
+IntConsumer /** 参照 Consumer， 接收一个 int，然后对 int 执行某些操作 */
+ ├─ java.util.stream.IntStream.Builder
+ ├─ java.util.IntSummaryStatistics
+ └─ java.util.LongSummaryStatistics
+IntPredicate /** 参照 Predicate， 接收一个 int，看其是否符合某些条件(返回 true 或 false) */
+IntSupplier /** 参照 Supplier， 用于获取一个 int */
+IntFunction&lt;R> /** 参照 Function， 接收一个 int，返回 R 类型对象 */
+IntToLongFunction /** 参照 Function， 接收一个 int，返回 long */
+IntToDoubleFunction /** 参照 Function， 接收一个 int，返回 double */
+IntUnaryOperator /** 参照 UnaryOperator， 接收一个int，返回一个新的或经过加工的 int */
+
+LongBinaryOperator /** 参照 BinaryOperator， 接收两个 long, 返回经过比较的 long */
+LongConsumer /** 参照 Consumer， 接收一个 long，然后对 long 执行某些操作 */
+ ├─ java.util.stream.LongStream.Builder
+ └─ java.util.LongSummaryStatistics
+LongPredicate /** 参照 Predicate， 接收一个 long，看其是否符合某些条件(返回 true 或 false) */
+LongSupplier /** 参照 Supplier， 用于获取一个 long */
+LongFunction&lt;R> /** 参照 Function， 接收一个 long，返回 R 类型对象 */
+LongToIntFunction /** 参照 Function， 接收一个 long，返回 int */
+LongToDoubleFunction  /** 参照 Function， 接收一个 long，返回 bouble */
+LongUnaryOperator /** 参照 UnaryOperator， 接收一个 long，返回一个新的或经过加工的 long */
+
+DoubleBinaryOperator /** 参照 BinaryOperator， 接收两个 double, 返回经过比较的 double */
+DoubleConsumer /** 参照 Consumer， 接收一个 double，然后对 double 执行某些操作 */
+ ├─ java.util.stream.DoubleStream.Builder
+ └─ java.util.DoubleSummaryStatistics
+DoublePredicate /** 参照 Predicate， 接收一个 double，看其是否符合某些条件(返回 true 或 false) */
+DoubleSupplier /** 参照 Supplier， 用于获取一个 double */
+DoubleFunction&lt;R> /** 参照 Function， 接收一个 double，返回 R 类型对象 */
+DoubleToIntFunction /** 参照 Function， 接收一个 double，返回 int */
+DoubleToLongFunction /** 参照 Function， 接收一个 double，返回 long */
+DoubleUnaryOperator /** 参照 UnaryOperator， 接收一个 double，返回一个新的或经过加工的 double */
+</pre>
+                            <p>标注为 <code>FunctionalInterface</code> 的接口被称为函数式接口，该接口只能有一个自定义方法，但是可以包括从 Object 类继承而来的方法。如果一个接口只有一个方法，则编译器会认为这就是一个函数式接口。是否是一个函数式接口，需要注意的有以下几点：</p>
+                            <ul>
+                                <li>该注解只能标记在”有且仅有一个抽象方法”的接口上；</li>
+                                <li>JDK8 接口中的静态方法和默认方法，都不算是抽象方法；</li>
+                                <li>接口默认继承 java.lang.Object，所以如果接口显示声明覆盖了 Object 中方法，那么也不算抽象方法；</li>
+                                <li>该注解不是必须的，如果一个接口符合”函数式接口”定义，那么加不加该注解都没有影响。加上该注解能够更好地让编译器进行检查。如果编写的不是函数式接口，但是加上了 @FunctionInterface，那么编译器会报错；</li>
+                                <li>在一个接口中定义两个自定义的方法，就会产生 FunctionalInterfaceTest is not a functional interface 错误.</li>
+                            </ul>
+							<p>使用实例：</p>
+							<pre class="brush: java;">
+// 1.Consumer&lt;T> -- 对接收的 T 对象进行某些操作
+private void logString(Consumer&lt;String> action, String str) {
+	action.accept(str);
+}
+
+Consumer&lt;String> str = s -> log(s);
+Consumer&lt;String> strAndLeng = s -> log(s, s.length());
+logString(str, "hello"); // hello
+logString(strAndLeng, "hello"); // hello 5
+
+// 2.BiConsumer&lt;T,U> -- 对接收的 T,U 对象进行某些操作
+BiConsumer&lt;String, Integer> bi = (s, i) -> log(s + " 的长度" + (s.length() == i ? "是 " : "不是 ") + i);
+bi.accept("hello", 4); // hello 的长度不是 4
+
+// 3.Function&lt;T,R> -- 接收 T 对象，返回 R
+Function&lt;Integer, String> f = i -> i > 100 ? i + " 的值大于 100." : i + " 的值不大于 100.";
+log(f.apply(50)); //  50 的值不大于 100.
+
+// 4.UnaryOperator&lt;T -- 继承Function&lt;T,T>， 接收一个 T 对象，返回一个新的或经过加工的 T 对象
+UnaryOperator&lt;String> u = s -> s.concat(" world!");
+og(u.apply("hello")); // hello world!
+
+// 5.BiFunction&lt;T,U,R> -- 接收 T 和 U(一般是相关的，如 Map 的 K, V), 返回 R
+BiFunction&lt;String, Integer, Integer> bf = (k, v) -> {
+	if("year".equals(k)) { return v; }
+	else if("month".equals(k)) { return ++v; }
+	else { return v; }
+};
+log(bf.apply("year", 2018)); // 2018
+log(bf.apply("month", 7)); // 8
+
+// 6.BinaryOprator&ltT> -- 继承自 BiFunction&lt;T,T,T> 传入两个 T 对象，返回经过比较的 T 对象
+BinaryOperator&lt;Integer> bo = BinaryOperator.minBy(Comparator.naturalOrder());
+log(bo.apply(3,  2)); // 2
+bo = BinaryOperator.maxBy(Comparator.naturalOrder());
+log(bo.apply(3,  2)); // 3
+bo = (i, j) -> i + j;
+log(bo.apply(3,  2)); // 5
+
+// 7.Predicate&lt;T> -- 接收一个 T 对象，看其是否符合某些条件(返回 true 或 false)
+Predicate&lt;Integer> p = i -> i > 5;
+log(p.test(2), p.negate().test(2)); // false(2 > 5), true(2 !> 5)
+log(p.test(6), p.negate().test(6)); // true(6 > 5), false(6 !> 5)
+log(p.or(i -> i < 10).test(2)); // true(2 > 5 || 2 < 10)
+
+// 8.BiPredicate&lt;T,U> -- 接收 T 和 R，看其是否符合某些条件(返回 true 或 false)
+BiPredicate&lt;String,Integer> bp = (k, v) -> k.length() == v;
+log(bp.test("hello", 5)); // true
+
+// 9.Supplier&lt;T> -- 用于获取一个指定类型为 T 的对象
+Supplier&lt;Integer> s = () -> (int) (Math.random() * (10 - 0) + 0); // 0-9 随机数
+log(s.get());
+</pre>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><a href="docs/docs-java/api/java/util/function/Consumer.html" target="_blank">Consumer&lt;T></a> 接口用于传入一个对象，然后对这个对象执行某些操作。</p>
+							<p><a href="#Iterable">Iterable</a> 接口的 <code>forEach(Consumer)</code> 方法使用 Consumer 作为参数，迭代元素。</p>
+                            <pre class="brush: java;">
+public interface Consumer&lt;T> {
+    void accept(T t);
+
+    default Consumer&lt;T> andThen(Consumer&lt;? super T> after) {
+        Objects.requireNonNull(after);
+        return (T t) -> { accept(t); after.accept(t); };
+    }
+}
+
+/** 先执行 consumer 对象的 accept 方法，再执行 andThen 中的 lambda 方式表示的 Consumer
+BookConsumer&lt;Book> consumer = new BookConsumer<>();
+Consumer&lt;Book> then = consumer.andThen(book -> log("then", book.id));
+then.accept(new Book(10));
+
+class Book {
+    Book(int id){
+        this.id = id;
+    }
+    int id;
+}
+
+class BookConsumer&lt;T extends Book> implements Consumer&lt;T> {
+
+    @Override
+    public void accept(T t) {
+        log(t.id);
+        t.id++;
+    }
+}
+</pre>
+                        </div>
+
+						<div class="sub-item">
+							<p><a href="docs/docs-java/api/java/util/function/BiConsumer.html" target="_blank">BiConsumer&lt;T, U></a> 接口用于传入两个相关联的对象，然后对这两个对象执行某些操作。</p>
+							<p><a href="#Map">Map</a> 的 <code>forEach(BiConsumer)</code> 方法使用了 BiConsumer 作为参数，迭代键值。</p>
+							<pre class="brush: java;">
+public interface BiConsumer&lt;T, U> {
+	void accept(T t, U u);
+
+	default BiConsumer&lt;T, U> andThen(BiConsumer&lt;? super T, ? super U> after) {
+        Objects.requireNonNull(after);
+
+        return (l, r) -> { accept(l, r); after.accept(l, r); };
+    }
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><a href="docs/docs-java/api/java/util/function/Function.html" target="_blank">Function&lt;T, R></a> 传入一个 T 对象，返回的是 R 对象。</p>
+							<p><a href="#Map">Map</a> 接口的 <code>V computeIfAbsent(K, Function)</code> 方法，使用 Function 来获取值。</p>
+							<pre class="brush: java;">
+public interface Function&lt;T, R> {
+	R apply(T t);
+
+	static &lt;T> Function&lt;T, T> identity() {
+        return t -> t;
+    }
+
+	default &lt;V> Function&lt;V, R> compose(Function&lt;? super V, ? extends T> before) {
+        Objects.requireNonNull(before);
+        return (V v) -> apply(before.apply(v));
+    }
+
+	default &lt;V> Function&lt;T, V> andThen(Function&lt;? super R, ? extends V> after) {
+        Objects.requireNonNull(after);
+        return (T t) -> after.apply(apply(t));
+    }
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><a href="docs/docs-java/api/java/util/function/UnaryOperator.html" target="_blank">UnaryOperator&lt;T></a> 继承 <code>Function&lt;T, T></code>, 重写了 <code>identity()</code> 方法。</p>
+							<p><a href="#List">List</a> 接口的 <code>default void replaceAll(UnaryOperator)</code> 使用 UnaryOperator 来替换符合条件的数据。</p>
+							<pre class="brush: java;">
+public interface UnaryOperator&lt;T> extends Function&lt;T, T> {
+    static &lt;T> UnaryOperator&lt;T> identity() {
+        return t -> t;
+    }
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><a href="docs/docs-java/api/java/util/function/BiFunction.html" target="_blank">BiFunction&lt;T, U, R></a> 传入 T 和 U(一般是相关的，如 Map 的 K, V), 返回 R。</p>
+							<p><a href="#Map">Map</a> 接口的 <code>default V compute(K, BiFunction)</code> 方法，使用 BiFunction 来替换，添加或删除值。</p>
+							<pre class="brush: java;">
+public interface BiFunction&lt;T, U, R> {
+	R apply(T t, U u);
+
+	default &lt;V> BiFunction&lt;T, U, V> andThen(Function&lt;? super R, ? extends V> after) {
+		Objects.requireNonNull(after);
+		return (T t, U u) -> after.apply(apply(t, u));
+	}
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><a href="docs/docs-java/api/java/util/function/BinaryOprator.html" target="_blank">BinaryOprator&lt;T></a> 继承自 BiFunction&lt;T,T,T> 传入两个 T 对象，返回经过比较的 T 对象。</p>
+							<pre class="brush: java;">
+public interface BinaryOperator&lt;T> extends BiFunction&lt;T,T,T> {
+	public static &lt;T> BinaryOperator&lt;T> minBy(Comparator&lt;? super T> comparator) {
+        Objects.requireNonNull(comparator);
+        return (a, b) -> comparator.compare(a, b) <= 0 ? a : b;
+    }
+
+	public static &lt;T> BinaryOperator&lt;T> maxBy(Comparator&lt;? super T> comparator) {
+        Objects.requireNonNull(comparator);
+        return (a, b) -> comparator.compare(a, b) >= 0 ? a : b;
+    }
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><a href="docs/docs-java/api/java/util/function/Predicate.html" target="_blank">Predicate</a> /** 传入一个 T 对象，看其是否符合某些条件(返回 true 或 false) */</p>
+							<p><a href="#Collection">Collection</a> 接口的 <code>default boolean removeIf(Predicate)</code> 使用 Predicate 参数移除符合条件的项(Predicate 的 test(T) 方法返回 true)</p>
+							<pre class="brush: java;">
+public interface Predicate&lt;T> {
+	boolean test(T t);
+
+	// 符合此 Predicate， 并且符合 other
+	default Predicate&lt;T> and(Predicate&lt;? super T> other) {
+        Objects.requireNonNull(other);
+        return (t) -> test(t) && other.test(t);
+    }
+
+	// 返回反向的 Predicate
+	default Predicate&lt;T> negate() {
+        return (t) -> !test(t);
+    }
+
+	// // 符合此 Predicate 或者符合 other
+	default Predicate&lt;T> or(Predicate&lt;? super T> other) {
+        Objects.requireNonNull(other);
+        return (t) -> test(t) || other.test(t);
+    }
+
+	static &lt;T> Predicate&lt;T> isEqual(Object targetRef) {
+        return (null == targetRef) ? Objects::isNull : object -> targetRef.equals(object);
+    }
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><a href="docs/docs-java/api/java/util/function/BiPredicate.html" target="_blank">BiPreoicate&lt;T, U></a> 传入 T 和 R(一般是相关的，如 Map 的 K, V)，看其是否符合某些条件(返回 true 或 false)。</p>
+							<pre class="brush: java;">
+public interface BiPredicate&lt;T, U> {
+	boolean test(T t, U u);
+	/* 参照 Predicate */
+	default BiPredicate&lt;T, U> and(BiPredicate&lt;? super T, ? super U> other) {}
+	default BiPredicate&lt;T, U> negate() {}
+	default BiPredicate&lt;T, U> or(BiPredicate&lt;? super T, ? super U> other) {}
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><a href="docs/docs-java/api/java/util/function/Supplier.html" target="_blank">Supplier</a> 用于获取一个指定类型对象。</p>
+							<pre class="brush: java;">
+public interface Supplier&lt;T> {
+    T get();
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><a href="docs/docs-java/api/java/util/function/BooleanSupplier.html" target="_blank">BooleanSupplier</a> 用于获取一个 boolean 对象。</p>
+							<p></p>
+							<pre class="brush: java;">
+public interface BooleanSupplier {
+    boolean getAsBoolean();
+}
+</pre>
+						</div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
                 <a class="offset" id="java-util-Formatter"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -6844,18 +7435,68 @@ public class FutureTask&lt;V> implements RunnableFuture&lt;V> {
 
 
                 <!-- item start -->
-                <a class="offset" id="java-io-File"></a>
+                <a class="offset" id="java-sql-DriverManager"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">File</h3>
+                        <h3 class="panel-title">DriverManager</h3>
                     </div>
                     <div class="panel-body">
 						<pre class="brush: java;">
+java.lang.Object
+	java.sql.DriverManager
 
-						</pre>
+public class DriverManager {}
+</pre>
+						<p><a href="" target="_blank">DriverManager</a> 是管理一组 JDBC 驱动程序的基本服务。</p>
+						<p><a href="docs/docs-java/api/javax/sql/DataSource.html" target="_blank">DataSource</a> 接口是 JDBC 2.0 API 中的新增内容，它提供了连接到数据源的另一种方法。使用 DataSource 对象是连接到数据源的首选方法。 </p>
+						<p>作为初始化的一部分，DriverManager 类会尝试加载在 "jdbc.drivers" 系统属性中引用的驱动程序类。这允许用户定制由他们的应用程序使用的 JDBC Driver</p>
+						<p>riverManager 类的方法 getConnection 和 getDrivers 已经得到提高以支持 Java Standard Edition Service Provider 机制。 JDBC 4.0 Drivers 必须包括 META-INF/services/java.sql.Driver 文件。此文件包含 java.sql.Driver 的 JDBC 驱动程序实现的名称。</p>
+						<p>应用程序不再需要使用 Class.forName() 显式地加载 JDBC 驱动程序。当前使用 Class.forName() 加载 JDBC 驱动程序的现有程序将在不作修改的情况下继续工作。 </p>
                     </div>
                 </div>
                 <!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-sql-Connection"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Connection</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-sql-PreparedStatement"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">PreparedStatement</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-sql-ResultSet"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">ResultSet</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
 
                 <!-- item start -->
                 <a class="offset" id="java-"></a>
@@ -6866,7 +7507,7 @@ public class FutureTask&lt;V> implements RunnableFuture&lt;V> {
                     <div class="panel-body">
 						<pre class="brush: java;">
 
-						</pre>
+</pre>
                     </div>
                 </div>
                 <!-- item over -->
