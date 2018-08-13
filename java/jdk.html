@@ -7447,11 +7447,54 @@ java.lang.Object
 
 public class DriverManager {}
 </pre>
-						<p><a href="" target="_blank">DriverManager</a> 是管理一组 JDBC 驱动程序的基本服务。</p>
+						<p><a href="docs/docs-java/api/java/sql/DriverManager.html" target="_blank">DriverManager</a> 是管理一组 JDBC 驱动程序的基本服务。</p>
 						<p><a href="docs/docs-java/api/javax/sql/DataSource.html" target="_blank">DataSource</a> 接口是 JDBC 2.0 API 中的新增内容，它提供了连接到数据源的另一种方法。使用 DataSource 对象是连接到数据源的首选方法。 </p>
 						<p>作为初始化的一部分，DriverManager 类会尝试加载在 "jdbc.drivers" 系统属性中引用的驱动程序类。这允许用户定制由他们的应用程序使用的 JDBC Driver</p>
 						<p>riverManager 类的方法 getConnection 和 getDrivers 已经得到提高以支持 Java Standard Edition Service Provider 机制。 JDBC 4.0 Drivers 必须包括 META-INF/services/java.sql.Driver 文件。此文件包含 java.sql.Driver 的 JDBC 驱动程序实现的名称。</p>
 						<p>应用程序不再需要使用 Class.forName() 显式地加载 JDBC 驱动程序。当前使用 Class.forName() 加载 JDBC 驱动程序的现有程序将在不作修改的情况下继续工作。 </p>
+						<ol>
+							<li><p><code>static Connection 	getConnection(String url)</code> -- 试图建立到给定数据库 URL 的连接</p></li>
+							<li><p><code>static Connection 	getConnection(String url, Properties info)</code> -- 同上，数据库用户名和密码在 info 参数中</p></li>
+							<li><p><code>static Connection 	getConnection(String url, String user, String password)</code> -- 同上，指名数据库用户名和密码</p>
+								<pre class="brush: java;">
+String url_01 = "jdbc:mysql:///test?user=root&password=ilesson1401&characterEncoding=utf-8";
+String url_02 = "jdbc:mysql:///test";
+String url_03 = "jdbc:mysql:///test?useUnicode=true&characterEncoding=utf-8";
+String user = "root";
+String password = "ilesson1401";
+
+Properties info = new Properties();
+try {
+	/** db.config.properties 文件内容如下
+	 # 数据库配置
+	 * user=root
+	 * password=ilesson1401
+	 * useUnicode=true
+	 * characterEncoding=utf-8
+	 */
+	info.load(new FileReader("./java-sdk/db.config.properties"));
+} catch (IOException e) {
+	e.printStackTrace();
+}
+Connection connection = DriverManager.getConnection(url_01); // 属性写在 url 中
+Connection connection = DriverManager.getConnection(url_02, info); // 所有属性从 Properties 中读取
+Connection connection = DriverManager.getConnection(url_03, user, password); // 部分属性从 url 中
+</pre>
+							</li>
+
+							<li class="group"><p><code>static void 	registerDriver(Driver driver)</code> -- 向 DriverManager 注册给定驱动程序</p></li>
+							<li><p><code>static void 	registerDriver(Driver driver, DriverAction da)</code> -- 同上，DriverAction 接口只有一个 <code>deregister()</code> 方法</p></li>
+							<li><p><code>static void 	deregisterDriver(Driver driver)</code> -- 从 DriverManager 的列表中删除一个驱动程序</p></li>
+							<li><p><code>static Driver 	getDriver(String url)</code> -- 试图查找能理解给定 URL 的驱动程序</p></li>
+							<li><p><code>static Enumeration&lt;Driver> 	getDrivers()</code> -- 获取带有当前调用者可以访问的所有当前已加载 JDBC 驱动程序的</p></li>
+
+							<li class="group"><p><code>static int 	getLoginTimeout()</code> -- 获取驱动程序试图登录到某一数据库时可以等待的最长时间(默认为 0, 不限时)，秒为单位</p></li>
+							<li><p><code>static void 	setLoginTimeout(int seconds)</code> -- 设置超时时间</p></li>
+
+							<li class="group"><p><code>static PrintWriter 	getLogWriter()</code> -- 获取日志 writer</p></li>
+							<li><p><code>static void 	setLogWriter(PrintWriter out)</code> -- 设置所有驱动程序使用的日志/追踪 PrintWriter 对象</p></li>
+							<li><p><code>static void 	println(String message)</code> --  将一条消息打印到当前 JDBC 日志流中</p></li>
+						</ol>
                     </div>
                 </div>
                 <!-- item over -->
@@ -7463,9 +7506,170 @@ public class DriverManager {}
 						<h3 class="panel-title">Connection</h3>
 					</div>
 					<div class="panel-body">
-						<pre class="brush: java;">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+java.lang.Object
+    java.sql.Connection
 
+public interface Connection extends Wrapper, AutoCloseable {
+    int TRANSACTION_NONE = 0; // 指示事务不受支持的常量
+    int TRANSACTION_READ_COMMITTED = 1; // 指示不可以发生脏读的常量；不可重复读和虚读可以发生
+    int TRANSACTION_READ_UNCOMMITTED = 2; // 指示可以发生脏读、不可重复读和虚读的常量
+    int TRANSACTION_REPEATABLE_READ = 4; // 指示不可以发生脏读和不可重复读的常量；虚读可以发生
+    int TRANSACTION_SERIALIZABLE = 8; // 指示不可以发生脏读、不可重复读和虚读的常量
+}
 </pre>
+                            <p><a href="docs/docs-java/api/java/sql/Connection.html" target="_blank">Connection</a> 是与特定数据库的连接（会话）。在连接上下文中执行 SQL 语句并返回结果。 </p>
+                            <p>Connection 对象的数据库能够提供描述其表、所支持的 SQL 语法、存储过程、此连接功能等等的信息。此信息是使用 getMetaData 方法获得的。</p>
+                            <p><b>注意</b>：在配置 Connection 时，JDBC 应用程序应该使用适当的 Connection 方法，比如 setAutoCommit 或 setTransactionIsolation。在有可用的 JDBC 方法时，应用程序不能直接调用 SQL 命令更改连接的配置。默认情况下，Connection 对象处于自动提交模式下，这意味着它在执行每个语句后都会自动提交更改。如果禁用了自动提交模式，那么要提交更改就必须显式调用 commit 方法；否则无法保存数据库更改。 </p>
+                            <ol>
+                                <li><p><code>void 	abort(Executor executor)</code> -- 终止打开的连接，允许不立即关闭，在 <code>execute(Runable)</code> 方法中自己选择是否执行</p></li>
+                                <li><p><code>void 	clearWarnings()</code> -- 清除为此 Connection 对象报告的所有警告</p></li>
+                                <li><p><code>SQLWarning 	getWarnings()</code> -- 获取此 Connection 对象上的调用报告的第一个警告</p></li>
+                                <li><p><code>boolean 	isClosed()</code> -- 查询此 Connection 对象是否已经被关闭</p></li>
+                                <li><p><code>void 	close()</code> -- 立即释放此 Connection 对象的数据库和 JDBC 资源，而不是等待它们被自动释放</p></li>
+                                <li><p><code>boolean 	isValid(int timeout)</code> -- 如果连接尚未关闭并且仍然有效，则返回 true</p></li>
+
+                                <li><p><code>String 	nativeSQL(String sql)</code> -- 将给定的 SQL 语句转换成系统本机 SQL 语法</p></li>
+                                <li><p><code><a href="#DatabaseMetaData">DatabaseMetaData</a> 	getMetaData()</code> -- 获取一个 DatabaseMetaData 对象，该对象包含关于此 Connection 对象所连接的数据库的元数据</p></li>
+
+                                <li class="group"><p><code>boolean 	isReadOnly()</code> -- 查询此 Connection 对象是否处于只读模式</p></li>
+                                <li><p><code>void 	setReadOnly(boolean readOnly)</code> -- 将此连接设置为只读模式，作为驱动程序启用数据库优化的提示</p></li>
+                                <li><p><code>int 	getNetworkTimeout()</code> -- 检索驱动程序等待数据库请求完成的毫秒数</p></li>
+                                <li><p><code>void 	setNetworkTimeout(Executor executor, int milliseconds)</code> -- 设置最大时期连接或物体从连接创建将等待数据库回答任何一个请求</p></li>
+                                <li><p><code>boolean 	getAutoCommit()</code> -- 获取此 Connection 对象的当前自动提交模式</p></li>
+                                <li><p><code>void 	setAutoCommit(boolean autoCommit)</code> -- 将此连接的自动提交模式设置为给定状态</p></li>
+                                <li><p><code>String 	getCatalog()</code> -- 数据库名称，获取此 Connection 对象的当前目录名称</p></li>
+                                <li><p><code>void 	setCatalog(String catalog)</code> -- 设置给定目录名称，以便选择要在其中进行工作的此 Connection 对象数据库的子空间</p></li>
+                                <li><p><code>String 	getSchema()</code> -- 获取 Schema</p></li>
+                                <li><p><code>void 	setSchema(String schema)</code> -- 设置 Schema</p></li>
+                                <li><p><code>int 	getHoldability()</code> -- 获取使用此 Connection 对象创建的 ResultSet 对象的当前可保存性</p></li>
+                                <li><p><code>void 	setHoldability(int holdability)</code> -- 将使用此 Connection 对象创建的 ResultSet 对象的默认可保存性 (holdability) 更改为给定可保存性</p></li>
+                                <li><p><code>Properties 	getClientInfo()</code> -- 返回一个列表，它包含驱动程序支持的每个客户端信息属性的名称和当前值</p></li>
+                                <li><p><code>void 	setClientInfo(Properties properties)</code> -- 设置连接的客户端信息属性的值</p></li>
+                                <li><p><code>String 	getClientInfo(String name)</code> -- 返回通过名称指定的客户端信息属性的值</p></li>
+                                <li><p><code>void 	setClientInfo(String name, String value)</code> -- 将 name 指定的客户端信息属性的值设置为 value 指定的值</p></li>
+                                <li><p><code>Map&lt;String,Class&lt;?>> 	getTypeMap()</code> -- 获取与此 Connection 对象关联的 Map 对象</p></li>
+                                <li><p><code>void 	setTypeMap(Map&lt;String,Class&lt;?>> map)</code> -- 将给定的 TypeMap 对象安装为此 Connection 对象的类型映射</p></li>
+
+                                <li class="group"><p><code>Array 	createArrayOf(String typeName, Object[] elements)</code> -- 创建 Array 对象的工厂方法</p></li>
+                                <li><p><code>Blob 	createBlob()</code> -- 构造实现 Blob 接口的对象</p></li>
+                                <li><p><code>Clob 	createClob()</code> -- 构造实现 Clob 接口的对象</p></li>
+                                <li><p><code>NClob 	createNClob()</code> -- 构造实现 NClob 接口的对象</p></li>
+                                <li><p><code>SQLXML 	createSQLXML()</code> -- 构造实现 SQLXML 接口的对象</p></li>
+                                <li><p><code>Struct 	createStruct(String typeName, Object[] attributes)</code> -- </p></li>
+
+                                <li class="group"><p><code>Statement 	createStatement()</code> -- 创建一个 Statement 对象来将 SQL 语句发送到数据库</p></li>
+                                <li><p><code>Statement 	createStatement(int resultSetType, int resultSetConcurrency)</code> -- 创建一个 Statement 对象，该对象将生成具有给定类型和并发性的 ResultSet 对象</p></li>
+                                <li><p><code>Statement 	createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability)</code> -- 创建一个 Statement 对象，该对象将生成具有给定类型、并发性和可保存性的 ResultSet 对象</p></li>
+
+                                <li class="group"><p><code>PreparedStatement 	prepareStatement(String sql)</code> -- 创建一个 PreparedStatement 对象来将参数化的 SQL 语句发送到数据库</p></li>
+                                <li><p><code>PreparedStatement 	prepareStatement(String sql, int autoGeneratedKeys)</code> -- 创建一个默认 PreparedStatement 对象，该对象能获取自动生成的键</p></li>
+                                <li><p><code>PreparedStatement 	prepareStatement(String sql, int[] columnIndexes)</code> -- 创建一个能返回由给定数组指定的自动生成键的默认 PreparedStatement 对象</p></li>
+                                <li><p><code>PreparedStatement 	prepareStatement(String sql, int resultSetType, int resultSetConcurrency)</code> -- 创建一个 PreparedStatement 对象，该对象将生成具有给定类型和并发性的 ResultSet 对象</p></li>
+                                <li><p><code>PreparedStatement 	prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)</code> -- 创建一个 PreparedStatement 对象，该对象将生成具有给定类型、并发性和可保存性的 ResultSet 对象</p></li>
+                                <li><p><code>PreparedStatement 	prepareStatement(String sql, String[] columnNames)</code> -- 创建一个能返回由给定数组指定的自动生成键的默认 PreparedStatement 对象</p></li>
+
+                                <li class="group"><p><code>CallableStatement 	prepareCall(String sql)</code> -- 创建一个 CallableStatement 对象来调用数据库存储过程</p></li>
+                                <li><p><code>CallableStatement 	prepareCall(String sql, int resultSetType, int resultSetConcurrency)</code> -- 创建一个 CallableStatement 对象，该对象将生成具有给定类型和并发性的 ResultSet 对象</p></li>
+                                <li><p><code>CallableStatement 	prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)</code> -- 创建一个 CallableStatement 对象，该对象将生成具有给定类型和并发性的 ResultSet 对象</p></li>
+
+                                <li class="group"><p><code>Savepoint 	setSavepoint()</code> -- 在当前事务中创建一个未命名的保存点 (savepoint)，并返回表示它的新 Savepoint 对象</p></li>
+                                <li><p><code>Savepoint 	setSavepoint(String name)</code> -- 在当前事务中创建一个具有给定名称的保存点，返回表示它的新 Savepoint 对象</p></li>
+                                <li><p><code>void 	releaseSavepoint(Savepoint savepoint)</code> -- 从当前事务中移除指定的 Savepoint 和后续 Savepoint 对象</p></li>
+                                <li><p><code>void 	rollback()</code> -- 取消在当前事务中进行的所有更改，并释放此 Connection 对象当前持有的所有数据库锁</p></li>
+                                <li><p><code>void 	rollback(Savepoint savepoint)</code> -- 取消所有设置给定 Savepoint 对象之后进行的更改</p></li>
+                                <li><p><code>void 	commit()</code> -- 使所有上一次提交/回滚后进行的更改成为持久更改，并释放此 Connection 对象当前持有的所有数据库锁</p></li>
+                                <li><p><code>int 	getTransactionIsolation()</code> -- 获取此 Connection 对象的当前事务隔离级别</p></li>
+                                <li><p><code>void 	setTransactionIsolation(int level)</code> -- 试图将此 Connection 对象的事务隔离级别更改为给定的级别</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <a id="DatabaseMetaData" class="offset"></a>
+                            <p><a href="docs/docs-java/api/java/sql/DatabaseMetaData.html" target="_blank">DatabaseMetaData</a> 是关于数据库的整体综合信息。此接口由驱动程序供应商实现。</p>
+                            <pre class="brush: java;">
+public interface DatabaseMetaData extends Wrapper {
+    short attributeNoNulls = 0; // 指示可能不允许使用 NULL 值
+    short attributeNullable = 1; // 指示明确允许使用 NULL 值
+    short attributeNullableUnknown = 2; // 指示不知道是否允许使用 NULL 值
+
+    int bestRowUnknown = 0; // 指示最佳行标识符可能是伪列 (pseudo column)，也可能不是
+    int bestRowNotPseudo = 1; // 指示最佳行标识符“不”是伪列
+    int bestRowPseudo = 2; // 指示最佳行标识符是伪列
+
+    int bestRowTemporary = 0; // 指示最佳行标识符的作用域是临时的，仅在使用该行时可用
+    int bestRowTransaction = 1; // 指示最佳行标识符的作用域是当前事务的剩余部分
+    int bestRowSession = 2; // 指示最佳行标识符的作用域是当前会话的剩余部分
+
+    int columnNoNulls = 0; // 指示列中可能不允许使用 NULL 值
+    int columnNullable = 1; // 指示列中明确允许使用 NULL 值
+    int columnNullableUnknown = 2; // 指示不知道列是否可为 null
+
+    int functionColumnUnknown = 0; // 指示该类型的参数或列未知
+    int functionColumnIn = 1; // 指示参数或列是一个 IN 参数
+    int functionColumnInOut = 2; // 指示参数或列是一个 INOUT 参数
+    int functionColumnOut = 3; // 指示参数或列是一个 OUT 参数
+    int functionReturn = 4; // 指示参数或列是一个返回值
+    int functionColumnResult = 5; // 指示参数或列是结果集中的一列
+
+    int functionNoNulls = 0; // 指示不允许 NULL 值
+    int functionNullable = 1; // 指示允许 NULL 值
+    int functionNullableUnknown = 2; // 指示是否允许 NULL 值是未知的
+
+    int functionResultUnknown = 0; // 指示不知道函数是返回一个结果还是一个表
+    int functionNoTable = 1; // 指示函数不返回一个表
+    int functionReturnsTable = 2; // 指示函数返回一个表
+
+    int importedKeyCascade = 0; // 对于 UPDATE_RULE 列，指示在更新主键时，外键（导入的键）的更改要与之一致
+    int importedKeyRestrict = 1; // 对于 UPDATE_RULE 列，指示如果主键已被另一个表作为外键导入，则可能不更新该主键
+    int importedKeySetNull = 2; // 对于 UPDATE_RULE 和 DELETE_RULE 列，指示在更新或删除主键时，将外键（导入的键）更改为 NULL
+    int importedKeyNoAction = 3; // 对于 UPDATE_RULE 和 DELETE_RULE 列，指示如果主键已导入，则无法更新或删除它
+    int importedKeySetDefault = 4; // 对于 UPDATE_RULE 和 DELETE_RULE 列，指示如果更新或删除了主键，则将外键（导入的键）设置为默认值
+    int importedKeyInitiallyDeferred = 5; // 指示可延迟性
+    int importedKeyInitiallyImmediate = 6; // 指示可延迟性
+    int importedKeyNotDeferrable = 7; // 指示可延迟性
+
+    int procedureColumnUnknown = 0; //  指示列的类型为未知
+    int procedureColumnIn = 1; // 指示列中存储了 IN 参数
+    int procedureColumnInOut = 2; // 指示列中存储了 INOUT 参数
+    int procedureColumnResult = 3; // 指示列中存储了结果
+    int procedureColumnOut = 4; // 指示列中存储了 OUT 参数
+    int procedureColumnReturn = 5; // 指示列中存储了返回值
+
+    int procedureNoNulls = 0; // 指示不允许使用 NULL 值
+    int procedureNullable = 1; // 指示允许使用 NULL 值
+    int procedureNullableUnknown = 2; //  指示不知道是否允许使用 NULL 值
+
+    int procedureResultUnknown = 0; // 指示不知道过程是否返回结果
+    int procedureNoResult = 1; // 指示过程不返回结果
+    int procedureReturnsResult = 2; // 指示过程返回结果
+
+    int sqlStateXOpen = 1; // 用于指示 SQLException.getSQLState 返回的值是否是一个 X/Open（现在称为 Open Group）SQL CLI SQLSTATE 值
+    int sqlStateSQL = 2; // 用于指示 SQLException.getSQLState 方法返回的值是否是一个 SQLSTATE 值
+    int sqlStateSQL99 = sqlStateSQL; // 用于指示 SQLException.getSQLState 方法返回的值是否是一个 SQL99 SQLSTATE 值
+
+    short tableIndexStatistic = 0; // 指示此列包含与表的索引描述一起返回的表统计信息
+    short tableIndexClustered = 1; // 指示此表索引是一个集群索引 (clustered index)
+    short tableIndexHashed = 2; // 指示此表索引是一个散列索引
+    short tableIndexOther = 3; // 指示此表索引不是集群索引、散列索引或表统计信息，它是其他某种东西
+
+    int typeNoNulls = 0; // 指示“不”允许对这种数据类型使用 NULL 值
+    int typeNullable = 1; // 指示允许对这种数据类型使用 NULL 值
+    int typeNullableUnknown = 2; // 指示不知道是否允许对这种数据类型使用 NULL 值
+
+    int typePredNone = 0; // 指示不支持将 WHERE 搜索子句用于这种类型
+    int typePredChar = 1; // 指示该数据类型只能用于使用 LIKE 谓词的 WHERE 搜索子句中
+    int typePredBasic = 2; // 指示该数据类型只能用于不使用 LIKE 谓词的 WHERE 搜索子句中
+    int typeSearchable = 3; // 指示在此类型上可以建立所有 WHERE 搜索子句
+
+    int versionColumnUnknown = 0; // 指示这种版本的列可能是伪列，也可能不是
+    int versionColumnNotPseudo = 1; // 指示这种版本的列“不”是伪列
+    int versionColumnPseudo = 2; // 指示这种版本的列是伪列
+}
+</pre>
+
+                        </div>
 					</div>
 				</div>
 				<!-- item over -->
