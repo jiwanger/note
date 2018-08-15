@@ -113,9 +113,20 @@
                             <a href="#java-sql-DriverManager" class="list-group-item">DriverManager</a>
 							<a href="#java-sql-Connection" class="list-group-item">Connection</a>
                             <a href="#java-sql-DatabaseMetaData" class="list-group-item">DatabaseMetaData</a>
-							<a href="#java-sql-Statement" class="list-group-item">Statement 及子接口</a>
+                            <a href="#java-sql-Types" class="list-group-item">Types 及内置类型</a>
+                            <a href="#java-sql-Statement" class="list-group-item">Statement 及子接口</a>
 							<a href="#java-sql-ResultSet" class="list-group-item">ResultSet 及子接口</a>
                             <a href="#java-sql-" class="list-group-item">...</a>
+                        </div>
+
+                        <a class="list-group-item active drop" data-toggle="collapse"
+                           data-parent="#accordion" href="#java-beans" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+                            <code>java.beans</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+                        </a>
+                        <div id="java-beans" class="panel-collapse collapse"
+                             role="tabpanel">
+                            <a href="#java-beans-Beans" class="list-group-item">Beans</a>
+                            <a href="#java-beans-" class="list-group-item">...</a>
                         </div>
 
                         <a class="list-group-item active drop" data-toggle="collapse"
@@ -7813,8 +7824,6 @@ public interface DatabaseMetaData extends Wrapper {
                             <li><p><code>boolean 	usesLocalFilePerTable()</code> -- 获取此数据库是否为每个表使用一个文件</p></li>
                             <li><p><code>boolean 	usesLocalFiles()</code> --  获取此数据库是否将表存储在本地文件中</p></li>
 
-
-
                             <li class="group"><p><code>int 	getDefaultTransactionIsolation()</code> -- 获取此数据库的默认事务隔离级别</p></li>
                             <li><p><code>ResultSet 	getExportedKeys(String catalog, String schema, String table)</code> -- 获取引用给定表的主键列（表导入的外键）的外键列的描述</p></li>
                             <li><p><code>String 	getExtraNameCharacters()</code> -- 获取可以在不带引号的标识符名称中使用的所有“额外”字符</p></li>
@@ -7873,6 +7882,136 @@ public interface DatabaseMetaData extends Wrapper {
 					</div>
 				</div>
 				<!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-sql-Types"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Types 及内置类型</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+public class Types {
+    public final static int NULL = 0; // SQL NULL
+    public final static int BOOLEAN = 16; // 用 1 代表 TRUE, 0 代表 FALSE
+    public final static int BIT = -7; // 代表一个位值，可为 0 或 1, boolean
+    public final static int TINYINT = -6; // 代表一个 8 位无符号整数，byte
+    public final static int SMALLINT = 5; // 代表一个 16 位的有符号整数，short
+    public final static int INTEGER = 4; // 代表一个 32 位的有符号整数，int
+    public final static int BIGINT = -5; // 代表一个 64 位的有符号整数，long
+    public final static int REAL = 7; // 代表一个有 7 位尾数的“单精度”浮点数，float
+    public final static int DOUBLE = 8; // 代表一个有 15 位尾数的“双精度”浮点数，double
+    public final static int FLOAT = 6; // 建议使用 double
+    public final static int NUMERIC = 2; // 表示固定精度的十进制值，BigDecimal
+    public final static int DECIMAL = 3; // 表示固定精度的十进制值，BigDecimal
+
+    /** CHAR、VARCHAR 和 LONGVARCHAR 可映射为 String 或 char[]，但 String 更适合于一般用法
+     * CHAR -- 固定长度的小字符串,所有主要的数据库都支持长度达 254 个字符的 CHAR
+     * VARCHAR -- 表示长度可变的小字符串,有主要数据库都至少支持长度达 254 个字符
+     * LONGVARCHAR -- 目前并没有一致的 SQL 映射,所有主要数据库都支持某种类型的长度可变的大字符串
+     */
+    public final static int CHAR = 1;
+    public final static int VARCHAR = 12;
+    public final static int LONGVARCHAR = -1;
+
+    /** NCHAR、NVARCHAR 和 LONGNVARCHAR 使用 Unicode 存储 */
+    public static final int NCHAR = -15;
+    public static final int NVARCHAR = -9;
+    public static final int LONGNVARCHAR = -16;
+
+    /** BINARY、VARBINARY 和 LONGVARBINARY 都可用同一 byte 数组来表示
+     * BINARY -- 表示固定长度的小二进制值,通常，BINARY 值被限定在 254 个字节以内
+     * VARBINARY -- 表示长度可变化的小二进制值,通常，BINARY 值被限定在 254 个字节以内
+     * LONGVARBINARY -- 表示长度可变化的大二进制值, 目前还没有一致的 SQL 类型名称
+     */
+    public final static int BINARY = -2;
+    public final static int VARBINARY = -3;
+    public final static int LONGVARBINARY = -4;
+
+    public final static int DATE = 91; // 年、月、日组成的日期，java.sql.Date
+    public final static int TIME = 92; // 小时、分钟和秒组成的时间，java.sql.Time
+    public final static int TIMESTAMP = 93; // DATE 加上 TIME，外加一个纳秒域，java.sql.TimeStamp
+    public static final int TIME_WITH_TIMEZONE = 2013; //
+    public static final int TIMESTAMP_WITH_TIMEZONE = 2014; //
+
+    public final static int OTHER = 1111;
+    public final static int DATALINK = 70;
+    public static final int REF_CURSOR = 2012;
+    public final static int JAVA_OBJECT = 2000;
+    public final static int DISTINCT = 2001;
+    public final static int STRUCT = 2002; // java.sql.Struct
+    public final static int ARRAY = 2003; // java.sql.Array
+    public final static int BLOB = 2004; // 大对象数据类型, java.sql.Blob
+    public final static int CLOB = 2005; // java.sql.Clob
+    public static final int NCLOB = 2011; // java.sql.NClob
+    public final static int REF = 2006; // java.sql.Ref
+    public final static int ROWID = -8; // java.sql.RowId
+    public static final int SQLXML = 2009; // java.sql.SQLXML
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/sql/Types.html" target="_blank">Types</a> 定义用于标识一般 SQL 类型（称为 JDBC 类型）的常量的类。</p>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface Array {}
+</pre>
+                            <p><a href="docs/docs-java/api/java/sql/Array.html" target="_blank">Array</a> SQL 类型 ARRAY 在 Java 编程语言中的映射关系。默认情况下，Array 值是对 SQL ARRAY 值的事务处理期引用。默认情况下，Array 对象是使用 SQL LOCATOR(array) 内部实现的，这意味着 Array 对象包含一个指向 SQL ARRAY 值中数据的逻辑指针，而不是包含 ARRAY 值的数据。</p>
+                            <p></p>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface Blob {}
+</pre>
+                            <p><a href="docs/docs-java/api/java/sql/Blob.html" target="_blank">Blob</a> SQL BLOB 是内置类型，它将二进制大对象 (Binary Large Object) 存储为数据库表某一行中的一个列值。默认情况下，驱动程序使用 SQL locator(BLOB) 实现 Blob，这意味着 Blob 对象包含一个指向 SQL BLOB 数据的逻辑指针而不是数据本身。Blob 对象在它被创建的事务处理期间有效。 </p>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface Clob {}
+</pre>
+                            <p><a href="docs/docs-java/api/java/sql/Clob.html" target="_blank">Clob</a> SQL CLOB 是内置类型，它将字符大对象 (Character Large Object) 存储为数据库表某一行中的一个列值。默认情况下，驱动程序使用 SQL locator(CLOB) 实现 Clob 对象，这意味着 CLOB 对象包含一个指向 SQL CLOB 数据的逻辑指针而不是数据本身。Clob 对象在它被创建的事务处理期间有效。 </p>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface NClob exdents Clob {}
+</pre>
+                            <p><a href="docs/docs-java/api/java/sql/NClob.html" target="_blank">NClob</a> SQL NCLOB 是内置类型，它将使用国家字符集（NATIONAL CHARACTER SET）的字符型大对象（Character Large Object）存储为数据库表某一行中的一个列值。 </p>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface Ref {}
+</pre>
+                            <p><a href="docs/docs-java/api/java/sql/Ref.html" target="_blank">Ref</a> SQL REF 值的映射关系，它是到数据库中的 SQL 结构类型值的引用。</p>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface RowId {}
+</pre>
+                            <p><a href="docs/docs-java/api/java/sql/RowId.html" target="_blank">RowId</a> SQL ROWID 值在 Java 编程语言中的表示形式（映射）。SQL ROWID 是一种内置类型，其值可视为它标识的行在数据库表中的一个地址。该地址是逻辑的还是物理的（在某些方面）取决于它的原始数据源。 </p>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface SQLXML {}
+</pre>
+                            <p><a href="docs/docs-java/api/java/sql/SQLXML.html" target="_blank">SQLXML</a> SQL XML 类型在 JavaTM 编程语言中的映射关系。XML 是内置类型，它将 XML 值存储为数据库表某一行中的一个列值。默认情况下，驱动程序将 SQLXML 对象实现为一个指向 XML 数据而不是数据本身的逻辑指针。SQLXML 对象在创建它的事务处理期间有效。 </p>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface Struct {}
+</pre>
+                            <p><a href="docs/docs-java/api/java/sql/Struct.html" target="_blank">Struct</a> 用于 SQL 结构化类型的 Java 编程语言中的标准映射关系。Struct 对象为它所表示的 SQL 结构化类型的每个属性包含一个值。默认情况下，只要应用程序可以引用 Struct 实例，该实例就有效。 </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
 
 				<!-- item start -->
 				<a class="offset" id="java-sql-Statement"></a>
@@ -8003,7 +8142,7 @@ public interface PreparedStatement extends Statement {}
                                 <li><p><code>void 	setTime(int parameterIndex, Time x, Calendar cal)</code> -- 使用给定的 Calendar 对象将指定参数设置为给定 java.sql.Time 值</p></li>
                                 <li><p><code>void 	setTimestamp(int parameterIndex, Timestamp x)</code> -- 将指定参数设置为给定 java.sql.Timestamp 值</p></li>
                                 <li><p><code>void 	setTimestamp(int parameterIndex, Timestamp x, Calendar cal)</code> -- 使用给定的 Calendar 对象将指定参数设置为给定 java.sql.Timestamp 值</p></li>
-                                <li><p><code>void 	setDate(int parameterIndex, Date x)</code> -- 使用运行应用程序的虚拟机的默认时区将指定参数设置为给定 java.sql.Date 值</p></li>
+                                <li><p><code>void 	setDate(int parameterIndex, Date x)</code> -- 使用运行应用程序的虚拟机的默认时区将指定参数设置为 java.sql.Date 值</p></li>
                                 <li><p><code>void 	setDate(int parameterIndex, Date x, Calendar cal)</code> -- 使用给定的 Calendar 对象将指定参数设置为给定 java.sql.Date 值</p></li>
 
                                 <li class="group"><p><code>void 	setAsciiStream(int parameterIndex, InputStream x)</code> -- 将指定参数设置为给定输入流</p></li>
@@ -8037,7 +8176,7 @@ public interface PreparedStatement extends Statement {}
 
                                 <li class="group"><p><code>void 	setObject(int parameterIndex, Object x)</code> -- 使用给定对象设置指定参数的值</p></li>
                                 <li><p><code>void 	setObject(int parameterIndex, Object x, int targetSqlType)</code> -- 使用给定对象设置指定参数的值</p></li>
-                                <li><p><code>void 	setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength)</code> -- 使用给定对象设置指定参数的值</p></li>
+                                <li><p><code>void 	setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength)</code> -- 使用给定对象设置参数的值</p></li>
                                 <li><p><code>default void 	setObject(int parameterIndex, Object x, SQLType targetSqlType)</code> -- 使用给定对象设置指定参数的值</p></li>
                                 <li><p><code>default void 	setObject(int parameterIndex, Object x, SQLType targetSqlType, int scaleOrLength)</code> -- 使用给定对象设置指定参数的值</p></li>
 
@@ -8063,8 +8202,8 @@ public interface PreparedStatement extends PreparedStatement {}
                             <p>CallableStatement 可以返回一个 ResultSet 对象或多个 ResultSet 对象。多个 ResultSet 对象是使用继承自 Statement 的操作处理的。 </p>
                             <p>为了获得最大的可移植性，某一调用的 ResultSet 对象和更新计数应该在获得输出参数的值之前处理。</p>
                             <ol>
-                                <li><p><code>boolean 	getBoolean(int parameterIndex)</code> -- 以 Java 编程语言中 boolean 值的形式获取指定的 JDBC BIT 或 BOOLEAN 参数的值</p></li>
-                                <li><p><code>boolean 	getBoolean(String parameterName)</code> -- 以 Java 编程语言中 boolean 值的形式获取 JDBC BIT 或 BOOLEAN 参数的值</p></li>
+                                <li><p><code>boolean 	getBoolean(int parameterIndex)</code> -- 以 boolean 值的形式获取指定的 JDBC BIT 或 BOOLEAN 参数的值</p></li>
+                                <li><p><code>boolean 	getBoolean(String parameterName)</code> -- 以 boolean 值的形式获取 JDBC BIT 或 BOOLEAN 参数的值</p></li>
                                 <li><p><code>byte 	getByte(int parameterIndex)</code> -- 以 Java 编程语言中 byte 的形式获取指定的 JDBC TINYINT 参数的值</p></li>
                                 <li><p><code>byte 	getByte(String parameterName)</code> -- 以 Java 编程语言中 byte 值的形式获取 JDBC TINYINT 参数的值</p></li>
                                 <li><p><code>short 	getShort(int parameterIndex)</code> -- 以 Java 编程语言中 short 值的形式获取指定的 JDBC SMALLINT 参数的值</p></li>
@@ -8084,34 +8223,44 @@ public interface PreparedStatement extends PreparedStatement {}
                                 <li><p><code>String 	getNString(int parameterIndex)</code> -- 以 Java 编程语言中 String 的形式获取指定的 NCHAR、NVARCHAR 或 LONGNVARCHAR 参数的值</p></li>
                                 <li><p><code>String 	getNString(String parameterName)</code> -- 以 Java 编程语言中 String 的形式获取指定的 NCHAR、NVARCHAR 或 LONGNVARCHAR 参数的值</p></li>
 
-                                <li class="group"><p><code>byte[] 	getBytes(int parameterIndex)</code> -- 以 Java 编程语言中 byte 数组值的形式获取指定的 JDBC BINARY 或 VARBINARY 参数的值</p></li>
-                                <li><p><code>byte[] 	getBytes(String parameterName)</code> -- 以 Java 编程语言中 byte 数组值的形式获取 JDBC BINARY 或 VARBINARY 参数的值</p></li>
+								<li class="group"><p><code>Time 	getTime(int parameterIndex)</code> -- 以 java.sql.Time 对象的形式获取指定 JDBC TIME 参数的值</p></li>
+								<li><p><code>Time 	getTime(int parameterIndex, Calendar cal)</code> -- 以 java.sql.Time 对象的形式获取指定 JDBC TIME 参数的值，使用给定 Calendar 对象构造时间</p></li>
+								<li><p><code>Time 	getTime(String parameterName)</code> -- 以 java.sql.Time 对象的形式获取 JDBC TIME 参数的值</p></li>
+								<li><p><code>Time 	getTime(String parameterName, Calendar cal)</code> -- 以 java.sql.Time 对象的形式获取 JDBC TIME 参数的值，使用给定 Calendar 对象构造时间</p></li>
 
-                                <li class="group"><p><code>Date 	getDate(int parameterIndex)</code> -- 以 java.sql.Date 对象的形式获取指定 JDBC DATE 参数的值</p></li>
+								<li class="group"><p><code>Timestamp 	getTimestamp(int parameterIndex)</code> -- 以 java.sql.Timestamp 对象的形式获取 JDBC TIMESTAMP 参数的值</p></li>
+								<li><p><code>Timestamp 	getTimestamp(int parameterIndex, Calendar cal)</code> -- 以 java.sql.Timestamp 对象的形式获取指定 JDBC TIMESTAMP 参数的值，使用给定 Calendar 对象构造 Timestamp 对象</p></li>
+								<li><p><code>Timestamp 	getTimestamp(String parameterName)</code> -- 以 java.sql.Timestamp 对象的形式获取 JDBC TIMESTAMP 参数的值</p></li>
+								<li><p><code>Timestamp 	getTimestamp(String parameterName, Calendar cal)</code> -- 以 java.sql.Timestamp 对象的形式获取 JDBC TIMESTAMP 参数的值，使用给定 Calendar 对象构造 Timestamp 对象</p></li>
+
+								<li class="group"><p><code>Date 	getDate(int parameterIndex)</code> -- 以 java.sql.Date 对象的形式获取指定 JDBC DATE 参数的值</p></li>
                                 <li><p><code>Date 	getDate(int parameterIndex, Calendar cal)</code> -- 以 java.sql.Date 对象的形式获取指定 JDBC DATE 参数的值，使用给定 Calendar 对象构造日期</p></li>
                                 <li><p><code>Date 	getDate(String parameterName)</code> -- 以 java.sql.Date 对象的形式获取 JDBC DATE 参数的值</p></li>
                                 <li><p><code>Date 	getDate(String parameterName, Calendar cal)</code> -- 以 java.sql.Date 对象的形式获取 JDBC DATE 参数的值，使用给定 Calendar 对象构造日期</p></li>
 
-                                <li class="group"><p><code>Array 	getArray(int parameterIndex)</code> -- 以 Java 编程语言中 java.sql.Array 对象的形式获取指定的 JDBC ARRAY 参数的值</p></li>
+								<li class="group"><p><code>byte[] 	getBytes(int parameterIndex)</code> -- 以 Java 编程语言中 byte 数组值的形式获取指定的 JDBC BINARY 或 VARBINARY 参数的值</p></li>
+								<li><p><code>byte[] 	getBytes(String parameterName)</code> -- 以 Java 编程语言中 byte 数组值的形式获取 JDBC BINARY 或 VARBINARY 参数的值</p></li>
+                                <li><p><code>Array 	getArray(int parameterIndex)</code> -- 以 Java 编程语言中 java.sql.Array 对象的形式获取指定的 JDBC ARRAY 参数的值</p></li>
                                 <li><p><code>Array 	getArray(String parameterName)</code> -- 以 Java 编程语言中 java.sql.ARRAY 对象的形式获取 JDBC ARRAY 参数的值</p></li>
+
+								<li class="group"><p><code>URL 	getURL(int parameterIndex)</code> -- 以 java.net.URL 对象的形式获取指定 JDBC DATALINK 参数的值</p></li>
+								<li><p><code>URL 	getURL(String parameterName)</code> -- 以 java.net.URL 对象的形式获取 JDBC DATALINK 参数的值</p></li>
+
+								<li class="group"><p><code>Clob 	getClob(int parameterIndex)</code> -- 以 Java 编程语言中 java.sql.Clob 对象的形式获取指定的 JDBC CLOB 参数的值</p></li>
+								<li><p><code>Clob 	getClob(String parameterName)</code> -- 以 Java 编程语言中 java.sql.Clob 对象的形式获取 JDBC CLOB 参数的值</p></li>
+								<li><p><code>NClob 	getNClob(int parameterIndex)</code> -- 以 java.sql.NClob 对象的形式获取指定的 JDBC NCLOB 参数的值</p></li>
+								<li><p><code>NClob 	getNClob(String parameterName)</code> -- 以 java.sql.NClob 对象的形式获取 JDBC NCLOB 参数的值</p></li>
                                 <li><p><code>Blob 	getBlob(int parameterIndex)</code> -- 以 Java 编程语言中 java.sql.Blob 对象的形式获取指定的 JDBC CLOB 参数的值</p></li>
                                 <li><p><code>Blob 	getBlob(String parameterName)</code> -- 以 Java 编程语言中 java.sql.Blob 对象的形式获取 JDBC BLOB 参数的值</p></li>
-
 
                                 <li class="group"><p><code>Reader 	getCharacterStream(int parameterIndex)</code> -- 以 Java 编程语言中 java.io.Reader 对象的形式获取指定参数的值</p></li>
                                 <li><p><code>Reader 	getCharacterStream(String parameterName)</code> -- 以 Java 编程语言中 java.io.Reader 对象的形式获取指定参数的值</p></li>
                                 <li><p><code>Reader 	getNCharacterStream(int parameterIndex)</code> -- 以 Java 编程语言中 java.io.Reader 对象的形式获取指定参数的值</p></li>
                                 <li><p><code>Reader 	getNCharacterStream(String parameterName)</code> -- 以 Java 编程语言中 java.io.Reader 对象的形式获取指定参数的值</p></li>
 
-                                <li class="group"><p><code>Clob 	getClob(int parameterIndex)</code> -- 以 Java 编程语言中 java.sql.Clob 对象的形式获取指定的 JDBC CLOB 参数的值</p></li>
-                                <li><p><code>Clob 	getClob(String parameterName)</code> -- 以 Java 编程语言中 java.sql.Clob 对象的形式获取 JDBC CLOB 参数的值</p></li>
-                                <li><p><code>NClob 	getNClob(int parameterIndex)</code> -- 以 Java 编程语言中 java.sql.NClob 对象的形式获取指定的 JDBC NCLOB 参数的值</p></li>
-                                <li><p><code>NClob 	getNClob(String parameterName)</code> -- 以 Java 编程语言中 java.sql.NClob 对象的形式获取 JDBC NCLOB 参数的值</p></li>
-
-
                                 <li class="group"><p><code>Object 	getObject(int parameterIndex)</code> -- 以 Java 编程语言中 Object 的形式获取指定参数的值</p></li>
-                                <li><p><code>&lt;T> T 	getObject(int parameterIndex, Class&lt;T> type)</code> -- </p></li>
-                                <li><p><code>Object 	getObject(int parameterIndex, Map&lt;String,Class&lt;?>> map)</code> -- 返回一个表示 OUT 参数 parameterIndex 值的对象，并将 map 用于该参数值的自定义映射关</p></li>
+                                <li><p><code>&lt;T> T 	getObject(int parameterIndex, Class&lt;T> type)</code> -- 指明类型</p></li>
+                                <li><p><code>Object 	getObject(int parameterIndex, Map&lt;String,Class&lt;?>> map)</code> -- 返回一个表示 OUT 参数 parameterIndex 值的对象，并将 map 用于该参数值的自定义映射关系</p></li>
                                 <li><p><code>Object 	getObject(String parameterName)</code> -- 以 Java 编程语言中 Object 的形式获取参数的值</p></li>
                                 <li><p><code>&lt;T> T 	getObject(String parameterName, Class&lt;T> type)</code> -- 指明类型</p></li>
                                 <li><p><code>Object 	getObject(String parameterName, Map&lt;String,Class&lt;?>> map)</code> -- 返回一个表示 OUT 参数 parameterName 值的对象，并将 map 用于该参数值的自定义映射关系</p></li>
@@ -8122,21 +8271,9 @@ public interface PreparedStatement extends PreparedStatement {}
                                 <li class="group"><p><code>RowId 	getRowId(int parameterIndex)</code> -- 以 java.sql.RowId 对象的形式获取指定 JDBC ROWID 参数的值</p></li>
                                 <li><p><code>RowId 	getRowId(String parameterName)</code> -- 以 java.sql.RowId 对象的形式获取指定 JDBC ROWID 参数的值</p></li>
 
-                                <li class="group"><p><code>SQLXML 	getSQLXML(int parameterIndex)</code> -- 以 Java 编程语言中 java.sql.SQLXML 对象的形式获取指定的 SQL XML 参数的值</p></li>
-                                <li><p><code>SQLXML 	getSQLXML(String parameterName)</code> -- 以 Java 编程语言中 java.sql.SQLXML 对象的形式获取指定的 SQL XML 参数的值</p></li>
+                                <li class="group"><p><code>SQLXML 	getSQLXML(int parameterIndex)</code> -- 以 java.sql.SQLXML 对象的形式获取指定的 SQL XML 参数的值</p></li>
+                                <li><p><code>SQLXML 	getSQLXML(String parameterName)</code> -- 以 java.sql.SQLXML 对象的形式获取指定的 SQL XML 参数的值</p></li>
 
-
-                                <li class="group"><p><code>Time 	getTime(int parameterIndex)</code> -- 以 java.sql.Time 对象的形式获取指定 JDBC TIME 参数的值</p></li>
-                                <li><p><code>Time 	getTime(int parameterIndex, Calendar cal)</code> -- 以 java.sql.Time 对象的形式获取指定 JDBC TIME 参数的值，使用给定 Calendar 对象构造时间</p></li>
-                                <li><p><code>Time 	getTime(String parameterName)</code> -- 以 java.sql.Time 对象的形式获取 JDBC TIME 参数的值</p></li>
-                                <li><p><code>Time 	getTime(String parameterName, Calendar cal)</code> -- 以 java.sql.Time 对象的形式获取 JDBC TIME 参数的值，使用给定 Calendar 对象构造时间</p></li>
-                                <li><p><code>Timestamp 	getTimestamp(int parameterIndex)</code> -- 以 java.sql.Timestamp 对象的形式获取指定 JDBC TIMESTAMP 参数的值</p></li>
-                                <li><p><code>Timestamp 	getTimestamp(int parameterIndex, Calendar cal)</code> -- 以 java.sql.Timestamp 对象的形式获取指定 JDBC TIMESTAMP 参数的值，使用给定 Calendar 对象构造 Timestamp 对象</p></li>
-                                <li><p><code>Timestamp 	getTimestamp(String parameterName)</code> -- 以 java.sql.Timestamp 对象的形式获取 JDBC TIMESTAMP 参数的值</p></li>
-                                <li><p><code>Timestamp 	getTimestamp(String parameterName, Calendar cal)</code> -- 以 java.sql.Timestamp 对象的形式获取 JDBC TIMESTAMP 参数的值，使用给定 Calendar 对象构造 Timestamp 对象</p></li>
-
-                                <li class="group"><p><code>URL 	getURL(int parameterIndex)</code> -- 以 java.net.URL 对象的形式获取指定 JDBC DATALINK 参数的值</p></li>
-                                <li><p><code>URL 	getURL(String parameterName)</code> -- 以 java.net.URL 对象的形式获取 JDBC DATALINK 参数的值</p></li>
 
                                 <li class="group"><p><code>void 	setBoolean(String parameterName, boolean x)</code> -- 将指定参数设置为给定 Java boolean 值</p></li>
                                 <li><p><code>void 	setByte(String parameterName, byte x)</code> -- 将指定参数设置为给定 Java byte 值</p></li>
@@ -8153,7 +8290,7 @@ public interface PreparedStatement extends PreparedStatement {}
                                 <li><p><code>void 	setTime(String parameterName, Time x, Calendar cal)</code> -- 使用给定的 Calendar 对象将指定参数设置为给定 java.sql.Time 值</p></li>
                                 <li><p><code>void 	setTimestamp(String parameterName, Timestamp x)</code> -- 将指定参数设置为给定 java.sql.Timestamp 值</p></li>
                                 <li><p><code>void 	setTimestamp(String parameterName, Timestamp x, Calendar cal)</code> -- 使用给定的 Calendar 对象将指定参数设置为给定 java.sql.Timestamp 值</p></li>
-                                <li><p><code>void 	setDate(String parameterName, Date x)</code> -- 使用运行应用程序的虚拟机默认时区将指定参数设置为给定 java.sql.Date 值</p></li>
+                                <li><p><code>void 	setDate(String parameterName, Date x)</code> -- 使用运行应用程序的虚拟机默认时区将参数设置为给定 java.sql.Date 值</p></li>
                                 <li><p><code>void 	setDate(String parameterName, Date x, Calendar cal)</code> -- 使用给定的 Calendar 对象将指定参数设置为给定 java.sql.Date 值</p></li>
 
                                 <li class="group"><p><code>void 	setBytes(String parameterName, byte[] x)</code> -- 将指定参数设置为给定 Java byte 数组</p></li>
@@ -8224,10 +8361,39 @@ public interface PreparedStatement extends PreparedStatement {}
 					</div>
 					<div class="panel-body">
                         <div class="sub-item">
-						    <pre class="brush: java;">
-...
-    java.sql.ResultSet
+                            <p><b>ResultSet 接口及相关类实例</b></p>
+                            <div class="split-item">
+<a href="#Predicate">Predicate</a> -- FilteredRowSet 的过滤器<br>
+<a href="#Joinable">Joinable</a> -- 实现此接口的 ResultSet 可加入 JoinRowSet<br>
 
+<a href="#ResultSet">java.sql.ResultSet</a> -- 默认的结果集只能前向遍历,并且不能更新<br>
+<s10 />└─ <a href="#RowSet">RowSet</a> -- 支持适合于 JavaBeans 组件模型的 JDBC API<br>
+<s40 />├─ <a href="#JdbcRowSet">JdbcRowSet</a> -- 让 ResultSet 对象可滚动和可更新<br>
+<s40 />├─ <a href="#CachedRowSet">CachedRowSet</a> -- 内存缓存，提供了不用一直保持连接数据源而操作数据的能力<br>
+<s40 />├ <s20 />└─ <a href="#WebRowSet">WebRowSet</a> -- 输出到 XML 和使用有效的 XML 作为输入<br>
+<s40 />├ <s50 />├─ <a href="#FilteredRowSet">FilteredRowSet</a> -- 对其内容进行某种程度的过滤<br>
+<s40 />├ <s50 />└─ <a href="#JoinRowSet">JoinRowSet</a> -- 联合多个相关结果集<br>
+<s40 />└─ <a href="#SyncResolver">SyncResolver</a> -- 定义一个框架，当发生同步冲突时，它允许应用程序使用手工决策树来确定应该执行的操作
+                            </div>
+
+                            <div class="split-item">
+                                <p>直接使用 ResultSet:</p>
+                                <pre class="brush: java;">
+
+</pre>
+                            </div>
+
+                            <div class="split-item">
+                                <p>使用 RowSet:</p>
+                                <pre class="brush: java;">
+
+</pre>
+                            </div>
+                        </div>
+
+                        <div class="sub-item">
+                            <a id="ResultSet" class="offset"></a>
+                            <pre class="brush: java;">
 public interface ResultSet extends Wrapper, AutoCloseable {
     int FETCH_FORWARD = 1000; // 该常量指示将按正向（即从第一个到最后一个）处理结果集中的行
     int FETCH_REVERSE = 1001; // 该常量指示将按逆向（即从最后一个到第一个）处理结果集中的行处理
@@ -8305,223 +8471,547 @@ ResultSet rs = stmt.executeQuery("SELECT * FROM table_x;");
                                 <li><p><code>ResultSetMetaData 	getMetaData()</code> -- 获取此 ResultSet 对象的列的编号、类型和属性</p></li>
                                 <li><p><code>Statement 	getStatement()</code> -- 获取生成此 ResultSet 对象的 Statement 对象</p></li>
 
-                                <li class="group"><p><code>boolean 	getBoolean(int columnIndex)</code> -- </p></li>
-                                <li><p><code>boolean 	getBoolean(String columnLabel)</code> -- </p></li>
-                                <li><p><code>byte 	getByte(int columnIndex)</code> -- </p></li>
-                                <li><p><code>byte 	getByte(String columnLabel)</code> -- </p></li>
-                                <li><p><code>short 	getShort(int columnIndex)</code> -- </p></li>
-                                <li><p><code>short 	getShort(String columnLabel)</code> -- </p></li>
-                                <li><p><code>int 	getInt(int columnIndex)</code> -- </p></li>
-                                <li><p><code>int 	getInt(String columnLabel)</code> -- </p></li>
-                                <li><p><code>long 	getLong(int columnIndex)</code> -- </p></li>
-                                <li><p><code>long 	getLong(String columnLabel)</code> -- </p></li>
-                                <li><p><code>float 	getFloat(int columnIndex)</code> -- </p></li>
-                                <li><p><code>float 	getFloat(String columnLabel)</code> -- </p></li>
-                                <li><p><code>double 	getDouble(int columnIndex)</code> -- </p></li>
-                                <li><p><code>double 	getDouble(String columnLabel)</code> -- </p></li>
-                                <li><p><code>BigDecimal 	getBigDecimal(int columnIndex)</code> -- </p></li>
-                                <li><p><code>BigDecimal 	getBigDecimal(String columnLabel)</code> -- </p></li>
-                                <li><p><code>String 	getString(int columnIndex)</code> -- </p></li>
-                                <li><p><code>String 	getString(String columnLabel)</code> -- </p></li>
-                                <li><p><code>String 	getNString(int columnIndex)</code> -- </p></li>
-                                <li><p><code>String 	getNString(String columnLabel)</code> -- </p></li>
+                                <li class="group"><p><code>boolean 	getBoolean(int columnIndex)</code> -- 以 boolean 值的形式获取指定的 JDBC BIT 或 BOOLEAN 参数的值</p></li>
+                                <li><p><code>boolean 	getBoolean(String columnLabel)</code> -- 以 boolean 值的形式获取 JDBC BIT 或 BOOLEAN 参数的值</p></li>
+                                <li><p><code>byte 	getByte(int columnIndex)</code> -- 以 byte 的形式获取指定的 JDBC TINYINT 参数的值</p></li>
+                                <li><p><code>byte 	getByte(String columnLabel)</code> -- 以 byte 的形式获取指定的 JDBC TINYINT 参数的值</p></li>
+                                <li><p><code>short 	getShort(int columnIndex)</code> -- 以 short 值的形式获取指定的 JDBC SMALLINT 参数的值</p></li>
+                                <li><p><code>short 	getShort(String columnLabel)</code> -- 以 short 值的形式获取指定的 JDBC SMALLINT 参数的值</p></li>
+                                <li><p><code>int 	getInt(int columnIndex)</code> -- 以 int 值的形式获取指定的 JDBC INTEGER 参数的值</p></li>
+                                <li><p><code>int 	getInt(String columnLabel)</code> -- 以 int 值的形式获取指定的 JDBC INTEGER 参数的值</p></li>
+                                <li><p><code>long 	getLong(int columnIndex)</code> -- 以 long 值的形式获取指定的 JDBC BIGINT 参数的值</p></li>
+                                <li><p><code>long 	getLong(String columnLabel)</code> -- 以 long 值的形式获取指定的 JDBC BIGINT 参数的值</p></li>
+                                <li><p><code>float 	getFloat(int columnIndex)</code> -- 以 float 值的形式获取指定的 JDBC FLOAT 参数的值</p></li>
+                                <li><p><code>float 	getFloat(String columnLabel)</code> -- 以 float 值的形式获取指定的 JDBC FLOAT 参数的值</p></li>
+                                <li><p><code>double 	getDouble(int columnIndex)</code> -- 以 double 值的形式获取指定的 JDBC DOUBLE 参数的值</p></li>
+                                <li><p><code>double 	getDouble(String columnLabel)</code> -- 以 double 值的形式获取指定的 JDBC DOUBLE 参数的值</p></li>
+                                <li><p><code>BigDecimal 	getBigDecimal(int columnIndex)</code> -- 以 java.math.BigDecimal 对象的形式获取指定 JDBC NUMERIC 参数的值，小数点右边的位数与该参数值所包含的位数相同</p></li>
+                                <li><p><code>BigDecimal 	getBigDecimal(String columnLabel)</code> -- 以 java.math.BigDecimal 对象的形式获取 JDBC NUMERIC 参数的值，小数点右边的位数与该参数值所包含的位数相同</p></li>
+                                <li><p><code>String 	getString(int columnIndex)</code> -- 以 Java 编程语言中 String 的形式获取指定的 JDBC CHAR、VARCHAR 或 LONGVARCHAR 参数的</p></li>
+                                <li><p><code>String 	getString(String columnLabel)</code> -- 以 Java 编程语言中 String 的形式获取指定的 JDBC CHAR、VARCHAR 或 LONGVARCHAR 参数的</p></li>
+                                <li><p><code>String 	getNString(int columnIndex)</code> -- 以 Java 编程语言中 String 的形式获取指定的 NCHAR、NVARCHAR 或 LONGNVARCHAR 参数的值</p></li>
+                                <li><p><code>String 	getNString(String columnLabel)</code> -- 以 Java 编程语言中 String 的形式获取指定的 NCHAR、NVARCHAR 或 LONGNVARCHAR 参数的值</p></li>
 
-                                <li class="group"><p><code>Date 	getDate(int columnIndex)</code> -- </p></li>
-                                <li><p><code>Date 	getDate(int columnIndex, Calendar cal)</code> -- </p></li>
-                                <li><p><code>Date 	getDate(String columnLabel)</code> -- </p></li>
-                                <li><p><code>Date 	getDate(String columnLabel, Calendar cal)</code> -- </p></li>
+                                <li class="group"><p><code>Date 	getDate(int columnIndex)</code> -- 以 java.sql.Date 对象的形式获取指定 JDBC DATE 参数的值</p></li>
+                                <li><p><code>Date 	getDate(int columnIndex, Calendar cal)</code> -- 以 java.sql.Date 对象的形式获取指定 JDBC DATE 参数的值，使用给定 Calendar 对象构造日期</p></li>
+                                <li><p><code>Date 	getDate(String columnLabel)</code> -- 以 java.sql.Date 对象的形式获取 JDBC DATE 参数的值</p></li>
+                                <li><p><code>Date 	getDate(String columnLabel, Calendar cal)</code> -- 以 java.sql.Date 对象的形式获取 JDBC DATE 参数的值，使用给定 Calendar 对象构造日期</p></li>
 
-                                <li class="group"><p><code>Time 	getTime(int columnIndex)</code> -- </p></li>
-                                <li><p><code>Time 	getTime(int columnIndex, Calendar cal)</code> -- </p></li>
-                                <li><p><code>Time 	getTime(String columnLabel)</code> -- </p></li>
-                                <li><p><code>Time 	getTime(String columnLabel, Calendar cal)</code> -- </p></li>
+                                <li class="group"><p><code>Time 	getTime(int columnIndex)</code> -- 以 java.sql.Time 对象的形式获取指定 JDBC TIME 参数的值</p></li>
+                                <li><p><code>Time 	getTime(int columnIndex, Calendar cal)</code> -- 以 java.sql.Time 对象的形式获取指定 JDBC TIME 参数的值，使用给定 Calendar 对象构造时间</p></li>
+                                <li><p><code>Time 	getTime(String columnLabel)</code> -- 以 java.sql.Time 对象的形式获取 JDBC TIME 参数的值</p></li>
+                                <li><p><code>Time 	getTime(String columnLabel, Calendar cal)</code> -- 以 java.sql.Time 对象的形式获取 JDBC TIME 参数的值，使用给定 Calendar 对象构造时间</p></li>
 
-                                <li class="group"><p><code>Timestamp 	getTimestamp(int columnIndex)</code> -- </p></li>
-                                <li><p><code>Timestamp 	getTimestamp(int columnIndex, Calendar cal)</code> -- </p></li>
-                                <li><p><code>Timestamp 	getTimestamp(String columnLabel)</code> -- </p></li>
-                                <li><p><code>Timestamp 	getTimestamp(String columnLabel, Calendar cal)</code> -- </p></li>
+                                <li class="group"><p><code>Timestamp 	getTimestamp(int columnIndex)</code> -- 以 java.sql.Timestamp 对象的形式获取指定 JDBC TIMESTAMP 参数的值</p></li>
+                                <li><p><code>Timestamp 	getTimestamp(int columnIndex, Calendar cal)</code> -- 以 java.sql.Timestamp 对象的形式获取指定 JDBC TIMESTAMP 参数的值，使用给定 Calendar 对象构造 Timestamp 对象</p></li>
+                                <li><p><code>Timestamp 	getTimestamp(String columnLabel)</code> -- 以 java.sql.Timestamp 对象的形式获取 JDBC TIMESTAMP 参数的值</p></li>
+                                <li><p><code>Timestamp 	getTimestamp(String columnLabel, Calendar cal)</code> -- 以 java.sql.Timestamp 对象的形式获取 JDBC TIMESTAMP 参数的值，使用给定 Calendar 对象构造 Timestamp 对象</p></li>
 
-                                <li class="group"><p><code>byte[] 	getBytes(int columnIndex)</code> -- </p></li>
-                                <li><p><code>byte[] 	getBytes(String columnLabel)</code> -- </p></li>
-                                <li><p><code>URL 	getURL(int columnIndex)</code> -- </p></li>
-                                <li><p><code>URL 	getURL(String columnLabel)</code> -- </p></li>
-                                <li><p><code>Array 	getArray(int columnIndex)</code> -- </p></li>
-                                <li><p><code>Array 	getArray(String columnLabel)</code> -- </p></li>
+                                <li class="group"><p><code>byte[] 	getBytes(int columnIndex)</code> -- 以 byte 数组值的形式获取指定的 JDBC BINARY 或 VARBINARY 参数的值</p></li>
+                                <li><p><code>byte[] 	getBytes(String columnLabel)</code> -- 以 byte 数组值的形式获取 JDBC BINARY 或 VARBINARY 参数的值</p></li>
+                                <li><p><code>URL 	getURL(int columnIndex)</code> -- 以 java.net.URL 对象的形式获取指定 JDBC DATALINK 参数的值</p></li>
+                                <li><p><code>URL 	getURL(String columnLabel)</code> -- 以 java.net.URL 对象的形式获取 JDBC DATALINK 参数的值</p></li>
+                                <li><p><code>Array 	getArray(int columnIndex)</code> -- 以 Java 编程语言中 java.sql.Array 对象的形式获取指定的 JDBC ARRAY 参数的值</p></li>
+                                <li><p><code>Array 	getArray(String columnLabel)</code> -- 以 Java 编程语言中 java.sql.ARRAY 对象的形式获取 JDBC ARRAY 参数的值</p></li>
 
-                                <li class="group"><p><code>Blob 	getBlob(int columnIndex)</code> -- </p></li>
-                                <li><p><code>Blob 	getBlob(String columnLabel)</code> -- </p></li>
-                                <li><p><code>Clob 	getClob(int columnIndex)</code> -- </p></li>
-                                <li><p><code>Clob 	getClob(String columnLabel)</code> -- </p></li>
-                                <li><p><code>NClob 	getNClob(int columnIndex)</code> -- </p></li>
-                                <li><p><code>NClob 	getNClob(String columnLabel)</code> -- </p></li>
+                                <li class="group"><p><code>Blob 	getBlob(int columnIndex)</code> -- 以 Java 编程语言中 java.sql.Blob 对象的形式获取指定的 JDBC CLOB 参数的值</p></li>
+                                <li><p><code>Blob 	getBlob(String columnLabel)</code> -- 以 Java 编程语言中 java.sql.Blob 对象的形式获取 JDBC BLOB 参数的值</p></li>
+                                <li><p><code>Clob 	getClob(int columnIndex)</code> -- 以 Java 编程语言中 java.sql.Clob 对象的形式获取指定的 JDBC CLOB 参数的值</p></li>
+                                <li><p><code>Clob 	getClob(String columnLabel)</code> -- 以 Java 编程语言中 java.sql.Clob 对象的形式获取 JDBC CLOB 参数的值</p></li>
+                                <li><p><code>NClob 	getNClob(int columnIndex)</code> -- 以 Java 编程语言中 java.sql.NClob 对象的形式获取指定的 JDBC NCLOB 参数的值</p></li>
+                                <li><p><code>NClob 	getNClob(String columnLabel)</code> -- 以 Java 编程语言中 java.sql.NClob 对象的形式获取 JDBC NCLOB 参数的值</p></li>
 
-                                <li class="group"><p><code>Object 	getObject(int columnIndex)</code> -- </p></li>
-                                <li><p><code>&lt;T> T 	getObject(int columnIndex, Class&lt;T> type)</code> -- </p></li>
-                                <li><p><code>Object 	getObject(int columnIndex, Map&lt;String,Class&lt;?>> map)</code> -- </p></li>
-                                <li><p><code>Object 	getObject(String columnLabel)</code> -- </p></li>
-                                <li><p><code>&lt;T> T 	getObject(String columnLabel, Class&lt;T> type)</code> -- </p></li>
-                                <li><p><code>Object 	getObject(String columnLabel, Map&lt;String,Class&lt;?>> map)</code> -- </p></li>
+                                <li class="group"><p><code>Object 	getObject(int columnIndex)</code> -- 以 Java 编程语言中 Object 的形式获取指定参数的值</p></li>
+                                <li><p><code>&lt;T> T 	getObject(int columnIndex, Class&lt;T> type)</code> -- 指明类型</p></li>
+                                <li><p><code>Object 	getObject(int columnIndex, Map&lt;String,Class&lt;?>> map)</code> -- 返回一个表示 OUT 参数 parameterIndex 值的对象，并将 map 用于该参数值的自定义映射关系</p></li>
+                                <li><p><code>Object 	getObject(String columnLabel)</code> -- 以 Java 编程语言中 Object 的形式获取参数的值</p></li>
+                                <li><p><code>&lt;T> T 	getObject(String columnLabel, Class&lt;T> type)</code> -- 指明类型</p></li>
+                                <li><p><code>Object 	getObject(String columnLabel, Map&lt;String,Class&lt;?>> map)</code> -- 返回一个表示 OUT 参数 parameterName 值的对象，并将 map 用于该参数值的自定义映射关系</p></li>
 
-                                <li class="group"><p><code>Ref 	getRef(int columnIndex)</code> -- </p></li>
-                                <li><p><code>Ref 	getRef(String columnLabel)</code> -- </p></li>
-                                <li><p><code>void 	updateRef(int columnIndex, Ref x)</code> -- </p></li>
-                                <li><p><code>void 	updateRef(String columnLabel, Ref x)</code> -- </p></li>
+                                <li class="group"><p><code>Ref 	getRef(int columnIndex)</code> -- 以 Java 编程语言中 java.sql.Ref 对象的形式获取指定的 JDBC REF 参数的值</p></li>
+                                <li><p><code>Ref 	getRef(String columnLabel)</code> -- 以 Java 编程语言中 Ref 对象的形式获取 JDBC REF参数的值</p></li>
 
-                                <li class="group"><p><code>RowId 	getRowId(int columnIndex)</code> -- </p></li>
-                                <li><p><code>RowId 	getRowId(String columnLabel)</code> -- </p></li>
-                                <li><p><code>void 	updateRowId(int columnIndex, RowId x)</code> -- </p></li>
-                                <li><p><code>void 	updateRowId(String columnLabel, RowId x)</code> -- </p></li>
+                                <li class="group"><p><code>RowId 	getRowId(int columnIndex)</code> -- 以 java.sql.RowId 对象的形式获取指定 JDBC ROWID 参数的值</p></li>
+                                <li><p><code>RowId 	getRowId(String columnLabel)</code> -- 以 java.sql.RowId 对象的形式获取指定 JDBC ROWID 参数的值</p></li>
 
-                                <li class="group"><p><code>SQLXML 	getSQLXML(int columnIndex)</code> -- </p></li>
-                                <li><p><code>SQLXML 	getSQLXML(String columnLabel)</code> -- </p></li>
-                                <li><p><code>void 	updateSQLXML(int columnIndex, SQLXML xmlObject)</code> -- </p></li>
-                                <li><p><code>void 	updateSQLXML(String columnLabel, SQLXML xmlObject)</code> -- </p></li>
+                                <li class="group"><p><code>SQLXML 	getSQLXML(int columnIndex)</code> -- 以 Java 编程语言中 java.sql.SQLXML 对象的形式获取指定的 SQL XML 参数的值</p></li>
+                                <li><p><code>SQLXML 	getSQLXML(String columnLabel)</code> -- 以 java.sql.SQLXML 对象的形式获取指定的 SQL XML 参数的值</p></li>
 
-                                <li class="group"><p><code>InputStream 	getAsciiStream(int columnIndex)</code> -- </p></li>
-                                <li><p><code>InputStream 	getAsciiStream(String columnLabel)</code> -- </p></li>
-                                <li><p><code>InputStream 	getBinaryStream(int columnIndex)</code> -- </p></li>
-                                <li><p><code>InputStream 	getBinaryStream(String columnLabel)</code> -- </p></li>
-                                <li><p><code>Reader 	getCharacterStream(int columnIndex)</code> -- </p></li>
-                                <li><p><code>Reader 	getCharacterStream(String columnLabel)</code> -- </p></li>
-                                <li><p><code>Reader 	getNCharacterStream(int columnIndex)</code> -- </p></li>
-                                <li><p><code>Reader 	getNCharacterStream(String columnLabel)</code> -- </p></li>
+                                <li class="group"><p><code>InputStream 	getAsciiStream(int columnIndex)</code> -- 以 ASCII 字符流的形式获取此 ResultSet 对象的当前行中指定列的值</p></li>
+                                <li><p><code>InputStream 	getAsciiStream(String columnLabel)</code> -- 以 ASCII 字符流的形式获取此 ResultSet 对象的当前行中指定列的值</p></li>
+                                <li><p><code>InputStream 	getBinaryStream(int columnIndex)</code> -- 以未解释字节的流的形式获取此 ResultSet 对象的当前行中指定列的值</p></li>
+                                <li><p><code>InputStream 	getBinaryStream(String columnLabel)</code> -- 以未解释的 byte 流的形式获取此 ResultSet 对象的当前行中指定列的值</p></li>
+                                <li><p><code>Reader 	getCharacterStream(int columnIndex)</code> -- 以 Java 编程语言中 java.io.Reader 对象的形式获取指定参数的值</p></li>
+                                <li><p><code>Reader 	getCharacterStream(String columnLabel)</code> -- 以 Java 编程语言中 java.io.Reader 对象的形式获取指定参数的值</p></li>
+                                <li><p><code>Reader 	getNCharacterStream(int columnIndex)</code> -- 以 Java 编程语言中 java.io.Reader 对象的形式获取指定参数的值</p></li>
+                                <li><p><code>Reader 	getNCharacterStream(String columnLabel)</code> -- 以 Java 编程语言中 java.io.Reader 对象的形式获取指定参数的值</p></li>
 
+                                <li class="group"><p><code>void 	updateBoolean(int columnIndex, boolean x)</code> -- 用 boolean 值更新指定列</p></li>
+                                <li><p><code>void 	updateBoolean(String columnLabel, boolean x)</code> -- 用 boolean 值更新指定列</p></li>
+                                <li><p><code>void 	updateByte(int columnIndex, byte x)</code> -- 用 byte 值更新指定列</p></li>
+                                <li><p><code>void 	updateByte(String columnLabel, byte x)</code> -- 用 byte 值更新指定列</p></li>
+                                <li><p><code>void 	updateShort(int columnIndex, short x)</code> -- 用 short 值更新指定列</p></li>
+                                <li><p><code>void 	updateShort(String columnLabel, short x)</code> -- 用 short 值更新指定列</p></li>
+                                <li><p><code>void 	updateInt(int columnIndex, int x)</code> -- 用 int 值更新指定列</p></li>
+                                <li><p><code>void 	updateInt(String columnLabel, int x)</code> -- 用 int 值更新指定列</p></li>
+                                <li><p><code>void 	updateLong(int columnIndex, long x)</code> -- 用 long 值更新指定列</p></li>
+                                <li><p><code>void 	updateLong(String columnLabel, long x)</code> -- 用 long 值更新指定列</p></li>
+                                <li><p><code>void 	updateFloat(int columnIndex, float x)</code> -- 用 float 值更新指定列</p></li>
+                                <li><p><code>void 	updateFloat(String columnLabel, float x)</code> -- 用 float 值更新指定列</p></li>
+                                <li><p><code>void 	updateDouble(int columnIndex, double x)</code> -- 用 double 值更新指定列</p></li>
+                                <li><p><code>void 	updateDouble(String columnLabel, double x)</code> -- 用 double 值更新指定列</p></li>
+                                <li><p><code>void 	updateBigDecimal(int columnIndex, BigDecimal x)</code> -- 用 java.math.BigDecimal 值更新指定列</p></li>
+                                <li><p><code>void 	updateBigDecimal(String columnLabel, BigDecimal x)</code> -- 用 java.math.BigDecimal 值更新指定列</p></li>
+                                <li><p><code>void 	updateString(int columnIndex, String x)</code> -- 用 String 值更新指定的列</p></li>
+                                <li><p><code>void 	updateString(String columnLabel, String x)</code> -- 用 String 值更新指定的列</p></li>
+                                <li><p><code>void 	updateNString(int columnIndex, String nString)</code> -- 用 String 值更新指定的列</p></li>
+                                <li><p><code>void 	updateNString(String columnLabel, String nString)</code> -- 用 String 值更新指定的列</p></li>
+                                <li><p><code>void 	updateNull(int columnIndex)</code> -- 用 null 值更新指定列</p></li>
+                                <li><p><code>void 	updateNull(String columnLabel)</code> -- 用 null 值更新指定列</p></li>
 
-                                <li class="group"><p><code>void 	updateBoolean(int columnIndex, boolean x)</code> -- </p></li>
-                                <li><p><code>void 	updateBoolean(String columnLabel, boolean x)</code> -- </p></li>
-                                <li><p><code>void 	updateByte(int columnIndex, byte x)</code> -- </p></li>
-                                <li><p><code>void 	updateByte(String columnLabel, byte x)</code> -- </p></li>
-                                <li><p><code>void 	updateShort(int columnIndex, short x)</code> -- </p></li>
-                                <li><p><code>void 	updateShort(String columnLabel, short x)</code> -- </p></li>
-                                <li><p><code>void 	updateInt(int columnIndex, int x)</code> -- </p></li>
-                                <li><p><code>void 	updateInt(String columnLabel, int x)</code> -- </p></li>
-                                <li><p><code>void 	updateLong(int columnIndex, long x)</code> -- </p></li>
-                                <li><p><code>void 	updateLong(String columnLabel, long x)</code> -- </p></li>
-                                <li><p><code>void 	updateFloat(int columnIndex, float x)</code> -- </p></li>
-                                <li><p><code>void 	updateFloat(String columnLabel, float x)</code> -- </p></li>
-                                <li><p><code>void 	updateDouble(int columnIndex, double x)</code> -- </p></li>
-                                <li><p><code>void 	updateDouble(String columnLabel, double x)</code> -- </p></li>
-                                <li><p><code>void 	updateBigDecimal(int columnIndex, BigDecimal x)</code> -- </p></li>
-                                <li><p><code>void 	updateBigDecimal(String columnLabel, BigDecimal x)</code> -- </p></li>
-                                <li><p><code>void 	updateString(int columnIndex, String x)</code> -- </p></li>
-                                <li><p><code>void 	updateString(String columnLabel, String x)</code> -- </p></li>
-                                <li><p><code>void 	updateNString(int columnIndex, String nString)</code> -- </p></li>
-                                <li><p><code>void 	updateNString(String columnLabel, String nString)</code> -- </p></li>
-                                <li><p><code>void 	updateNull(int columnIndex)</code> -- </p></li>
-                                <li><p><code>void 	updateNull(String columnLabel)</code> -- </p></li>
+                                <li class="group"><p><code>void 	updateBytes(int columnIndex, byte[] x)</code> -- 用 byte 数组值更新指定列</p></li>
+                                <li><p><code>void 	updateBytes(String columnLabel, byte[] x)</code> -- 用字节数组值更新指定列</p></li>
+                                <li><p><code>void 	updateArray(int columnIndex, Array x)</code> -- 用 java.sql.Array 值更新指定列</p></li>
+                                <li><p><code>void 	updateArray(String columnLabel, Array x)</code> -- 用 java.sql.Array 值更新指定列</p></li>
 
-                                <li class="group"><p><code>void 	updateBytes(int columnIndex, byte[] x)</code> -- </p></li>
-                                <li><p><code>void 	updateBytes(String columnLabel, byte[] x)</code> -- </p></li>
-                                <li><p><code>void 	updateArray(int columnIndex, Array x)</code> -- </p></li>
-                                <li><p><code>void 	updateArray(String columnLabel, Array x)</code> -- </p></li>
+                                <li class="group"><p><code>void 	updateDate(int columnIndex, Date x)</code> -- 用 java.sql.Date 值更新指定列</p></li>
+                                <li><p><code>void 	updateDate(String columnLabel, Date x)</code> -- 用 java.sql.Date 值更新指定列</p></li>
+                                <li><p><code>void 	updateTime(int columnIndex, Time x)</code> -- 用 java.sql.Time 值更新指定列</p></li>
+                                <li><p><code>void 	updateTime(String columnLabel, Time x)</code> -- 用 java.sql.Time 值更新指定列</p></li>
+                                <li><p><code>void 	updateTimestamp(int columnIndex, Timestamp x)</code> -- 用 java.sql.Timestamp 值更新指定列</p></li>
+                                <li><p><code>void 	updateTimestamp(String columnLabel, Timestamp x)</code> -- 用 java.sql.Timestamp 值更新指定列</p></li>
 
-                                <li class="group"><p><code>void 	updateDate(int columnIndex, Date x)</code> -- </p></li>
-                                <li><p><code>void 	updateDate(String columnLabel, Date x)</code> -- </p></li>
-                                <li><p><code>void 	updateTime(int columnIndex, Time x)</code> -- </p></li>
-                                <li><p><code>void 	updateTime(String columnLabel, Time x)</code> -- </p></li>
-                                <li><p><code>void 	updateTimestamp(int columnIndex, Timestamp x)</code> -- </p></li>
-                                <li><p><code>void 	updateTimestamp(String columnLabel, Timestamp x)</code> -- </p></li>
+                                <li class="group"><p><code>void 	updateBlob(int columnIndex, Blob x)</code> -- 用 java.sql.Blob 值更新指定列</p></li>
+                                <li><p><code>void 	updateBlob(int columnIndex, InputStream inputStream)</code> -- 使用给定输入流值更新指定列</p></li>
+                                <li><p><code>void 	updateBlob(int columnIndex, InputStream inputStream, long length)</code> -- 使用给定输入流更新指定的列，该流将具有指定的字节数</p></li>
+                                <li><p><code>void 	updateBlob(String columnLabel, Blob x)</code> -- 用 java.sql.Blob 值更新指定列</p></li>
+                                <li><p><code>void 	updateBlob(String columnLabel, InputStream inputStream)</code> -- 使用给定输入流值更新指定列</p></li>
+                                <li><p><code>void 	updateBlob(String columnLabel, InputStream inputStream, long length)</code> -- 使用给定输入流更新指定列，该流将具有指定的字节数</p></li>
 
-                                <li class="group"><p><code>void 	updateBlob(int columnIndex, Blob x)</code> -- </p></li>
-                                <li><p><code>void 	updateBlob(int columnIndex, InputStream inputStream)</code> -- </p></li>
-                                <li><p><code>void 	updateBlob(int columnIndex, InputStream inputStream, long length)</code> -- </p></li>
-                                <li><p><code>void 	updateBlob(String columnLabel, Blob x)</code> -- </p></li>
-                                <li><p><code>void 	updateBlob(String columnLabel, InputStream inputStream)</code> -- </p></li>
-                                <li><p><code>void 	updateBlob(String columnLabel, InputStream inputStream, long length)</code> -- </p></li>
+                                <li class="group"><p><code>void 	updateClob(int columnIndex, Clob x)</code> -- 用 java.sql.Clob 值更新指定列</p></li>
+                                <li><p><code>void 	updateClob(int columnIndex, Reader reader)</code> -- 使用给定的 Reader 对象更新指定列</p></li>
+                                <li><p><code>void 	updateClob(int columnIndex, Reader reader, long length)</code> -- 使用给定的 Reader 对象更新指定列，该对象是给定的字符长度数目</p></li>
+                                <li><p><code>void 	updateClob(String columnLabel, Clob x)</code> -- 用 java.sql.Clob 值更新指定列</p></li>
+                                <li><p><code>void 	updateClob(String columnLabel, Reader reader)</code> -- 使用给定的 Reader 对象更新指定列</p></li>
+                                <li><p><code>void 	updateClob(String columnLabel, Reader reader, long length)</code> -- 使用给定的 Reader 对象更新指定列，该对象是给定的字符长度数目</p></li>
 
-                                <li class="group"><p><code>void 	updateClob(int columnIndex, Clob x)</code> -- </p></li>
-                                <li><p><code>void 	updateClob(int columnIndex, Reader reader)</code> -- </p></li>
-                                <li><p><code>void 	updateClob(int columnIndex, Reader reader, long length)</code> -- </p></li>
-                                <li><p><code>void 	updateClob(String columnLabel, Clob x)</code> -- </p></li>
-                                <li><p><code>void 	updateClob(String columnLabel, Reader reader)</code> -- </p></li>
-                                <li><p><code>void 	updateClob(String columnLabel, Reader reader, long length)</code> -- </p></li>
+                                <li class="group"><p><code>void 	updateNClob(int columnIndex, NClob nClob)</code> -- 用 java.sql.NClob 值更新指定的列</p></li>
+                                <li><p><code>void 	updateNClob(int columnIndex, Reader reader)</code> -- 使用给定的 Reader 对象更新指定列</p></li>
+                                <li><p><code>void 	updateNClob(int columnIndex, Reader reader, long length)</code> -- 使用给定的 Reader 对象更新指定的列，该对象是给定的字符长度数目</p></li>
+                                <li><p><code>void 	updateNClob(String columnLabel, NClob nClob)</code> -- 用 java.sql.NClob 值更新指定的列</p></li>
+                                <li><p><code>void 	updateNClob(String columnLabel, Reader reader)</code> -- 使用给定的 Reader 对象更新指定列</p></li>
+                                <li><p><code>void 	updateNClob(String columnLabel, Reader reader, long length)</code> -- 使用给定的 Reader 对象更新指定的列，该对象是给定的字符长度数目</p></li>
 
-                                <li class="group"><p><code>void 	updateNClob(int columnIndex, NClob nClob)</code> -- </p></li>
-                                <li><p><code>void 	updateNClob(int columnIndex, Reader reader)</code> -- </p></li>
-                                <li><p><code>void 	updateNClob(int columnIndex, Reader reader, long length)</code> -- </p></li>
-                                <li><p><code>void 	updateNClob(String columnLabel, NClob nClob)</code> -- </p></li>
-                                <li><p><code>void 	updateNClob(String columnLabel, Reader reader)</code> -- </p></li>
-                                <li><p><code>void 	updateNClob(String columnLabel, Reader reader, long length)</code> -- </p></li>
+                                <li class="group"><p><code>void 	updateRef(int columnIndex, Ref x)</code> -- 用 java.sql.Ref 值更新指定列</p></li>
+                                <li><p><code>void 	updateRef(String columnLabel, Ref x)</code> -- 用 java.sql.Ref 值更新指定列</p></li>
 
-                                <li class="group"><p><code>void 	updateObject(int columnIndex, Object x)</code> -- </p></li>
-                                <li><p><code>void 	updateObject(int columnIndex, Object x, int scaleOrLength)</code> -- </p></li>
-                                <li><p><code>default void 	updateObject(int columnIndex, Object x, SQLType targetSqlType)</code> -- </p></li>
-                                <li><p><code>default void 	updateObject(int columnIndex, Object x, SQLType targetSqlType, int scaleOrLength)</code> -- </p></li>
-                                <li><p><code>void 	updateObject(String columnLabel, Object x)</code> -- </p></li>
-                                <li><p><code>void 	updateObject(String columnLabel, Object x, int scaleOrLength)</code> -- </p></li>
-                                <li><p><code>default void 	updateObject(String columnLabel, Object x, SQLType targetSqlType)</code> -- </p></li>
-                                <li><p><code>default void 	updateObject(String columnLabel, Object x, SQLType targetSqlType, int scaleOrLength)</code> -- </p></li>
+                                <li class="group"><p><code>void 	updateRowId(int columnIndex, RowId x)</code> -- 用 RowId 值更新指定列</p></li>
+                                <li><p><code>void 	updateRowId(String columnLabel, RowId x)</code> -- 用 RowId 值更新指定列</p></li>
 
-                                <li class="group"><p><code>void 	updateCharacterStream(int columnIndex, Reader x)</code> -- </p></li>
-                                <li><p><code>void 	updateCharacterStream(int columnIndex, Reader x, int length)</code> -- </p></li>
-                                <li><p><code>void 	updateCharacterStream(int columnIndex, Reader x, long length)</code> -- </p></li>
-                                <li><p><code>void 	updateCharacterStream(String columnLabel, Reader reader)</code> -- </p></li>
-                                <li><p><code>void 	updateCharacterStream(String columnLabel, Reader reader, int length)</code> -- </p></li>
-                                <li><p><code>void 	updateCharacterStream(String columnLabel, Reader reader, long length)</code> -- </p></li>
+                                <li class="group"><p><code>void 	updateSQLXML(int columnIndex, SQLXML xmlObject)</code> --  用 java.sql.SQLXML 值更新指定列</p></li>
+                                <li><p><code>void 	updateSQLXML(String columnLabel, SQLXML xmlObject)</code> --  用 java.sql.SQLXML 值更新指定列</p></li>
 
-                                <li class="group"><p><code>void 	updateNCharacterStream(int columnIndex, Reader x)</code> -- </p></li>
-                                <li><p><code>void 	updateNCharacterStream(int columnIndex, Reader x, long length)</code> -- </p></li>
-                                <li><p><code>void 	updateNCharacterStream(String columnLabel, Reader reader)</code> -- </p></li>
-                                <li><p><code>void 	updateNCharacterStream(String columnLabel, Reader reader, long length)</code> -- </p></li>
+                                <li class="group"><p><code>void 	updateObject(int columnIndex, Object x)</code> -- 用 Object 值更新指定列</p></li>
+                                <li><p><code>void 	updateObject(int columnIndex, Object x, int scaleOrLength)</code> -- 用 Object 值更新指定列</p></li>
+                                <li><p><code>default void 	updateObject(int columnIndex, Object x, SQLType targetSqlType)</code> -- 用 Object 值更新指定列</p></li>
+                                <li><p><code>default void 	updateObject(int columnIndex, Object x, SQLType targetSqlType, int scaleOrLength)</code> -- 用 Object 值更新指定列</p></li>
+                                <li><p><code>void 	updateObject(String columnLabel, Object x)</code> -- 用 Object 值更新指定列</p></li>
+                                <li><p><code>void 	updateObject(String columnLabel, Object x, int scaleOrLength)</code> -- 用 Object 值更新指定列</p></li>
+                                <li><p><code>default void 	updateObject(String columnLabel, Object x, SQLType targetSqlType)</code> -- 用 Object 值更新指定列</p></li>
+                                <li><p><code>default void 	updateObject(String columnLabel, Object x, SQLType targetSqlType, int scaleOrLength)</code> -- 用 Object 值更新指定列</p></li>
 
-                                <li class="group"><p><code>void 	updateAsciiStream(int columnIndex, InputStream x)</code> -- </p></li>
-                                <li><p><code>void 	updateAsciiStream(int columnIndex, InputStream x, int length)</code> -- </p></li>
-                                <li><p><code>void 	updateAsciiStream(int columnIndex, InputStream x, long length)</code> -- </p></li>
-                                <li><p><code>void 	updateAsciiStream(String columnLabel, InputStream x)</code> -- </p></li>
-                                <li><p><code>void 	updateAsciiStream(String columnLabel, InputStream x, int length)</code> -- </p></li>
-                                <li><p><code>void 	updateAsciiStream(String columnLabel, InputStream x, long length)</code> -- </p></li>
+                                <li class="group"><p><code>void 	updateCharacterStream(int columnIndex, Reader x)</code> -- 用字符流值更新指定的列</p></li>
+                                <li><p><code>void 	updateCharacterStream(int columnIndex, Reader x, int length)</code> -- 用字符流值更新指定列，该列将具有指定字节数</p></li>
+                                <li><p><code>void 	updateCharacterStream(int columnIndex, Reader x, long length)</code> -- 用字符流值更新指定的列，该值将具有指定的字节数</p></li>
+                                <li><p><code>void 	updateCharacterStream(String columnLabel, Reader reader)</code> -- 用字符流值更新指定列</p></li>
+                                <li><p><code>void 	updateCharacterStream(String columnLabel, Reader reader, int length)</code> -- 用字符流值更新指定列，该列具有指定的字节数</p></li>
+                                <li><p><code>void 	updateCharacterStream(String columnLabel, Reader reader, long length)</code> -- 用字符流值更新指定的列，该值将具有指定的字节数</p></li>
 
-                                <li class="group"><p><code>void 	updateBinaryStream(int columnIndex, InputStream x)</code> -- </p></li>
-                                <li><p><code>void 	updateBinaryStream(int columnIndex, InputStream x, int length)</code> -- </p></li>
-                                <li><p><code>void 	updateBinaryStream(int columnIndex, InputStream x, long length)</code> -- </p></li>
-                                <li><p><code>void 	updateBinaryStream(String columnLabel, InputStream x)</code> -- </p></li>
-                                <li><p><code>void 	updateBinaryStream(String columnLabel, InputStream x, int length)</code> -- </p></li>
-                                <li><p><code>void 	updateBinaryStream(String columnLabel, InputStream x, long length)</code> -- </p></li>
+                                <li class="group"><p><code>void 	updateNCharacterStream(int columnIndex, Reader x)</code> -- 用字符流值更新指定的列</p></li>
+                                <li><p><code>void 	updateNCharacterStream(int columnIndex, Reader x, long length)</code> -- 用字符流值更新指定的列，该值将具有指定的字节数</p></li>
+                                <li><p><code>void 	updateNCharacterStream(String columnLabel, Reader reader)</code> -- 用字符流值更新指定的列</p></li>
+                                <li><p><code>void 	updateNCharacterStream(String columnLabel, Reader reader, long length)</code> -- 用字符流值更新指定的列，该值将具有指定的字节数</p></li>
 
+                                <li class="group"><p><code>void 	updateAsciiStream(int columnIndex, InputStream x)</code> -- 用 ascii 流值更新指定的列</p></li>
+                                <li><p><code>void 	updateAsciiStream(int columnIndex, InputStream x, int length)</code> -- 用 ascii 流值更新指定列，该列将具有指定字节数</p></li>
+                                <li><p><code>void 	updateAsciiStream(int columnIndex, InputStream x, long length)</code> -- 用 ascii 流值更新指定的列，该值将具有指定的字节数</p></li>
+                                <li><p><code>void 	updateAsciiStream(String columnLabel, InputStream x)</code> -- 用 ascii 流值更新指定列</p></li>
+                                <li><p><code>void 	updateAsciiStream(String columnLabel, InputStream x, int length)</code> -- 用 ascii 流值更新指定列，该列具有指定的字节数</p></li>
+                                <li><p><code>void 	updateAsciiStream(String columnLabel, InputStream x, long length)</code> -- 用 ascii 流值更新指定的列，该值将具有指定的字节数</p></li>
 
+                                <li class="group"><p><code>void 	updateBinaryStream(int columnIndex, InputStream x)</code> -- 用二进制流值更新指定的列</p></li>
+                                <li><p><code>void 	updateBinaryStream(int columnIndex, InputStream x, int length)</code> -- 用二进制流值更新指定列，该列将具有指定字节数</p></li>
+                                <li><p><code>void 	updateBinaryStream(int columnIndex, InputStream x, long length)</code> -- 用二进制流值更新指定的列，该值将具有指定的字节数</p></li>
+                                <li><p><code>void 	updateBinaryStream(String columnLabel, InputStream x)</code> -- 用二进制流值更新指定列</p></li>
+                                <li><p><code>void 	updateBinaryStream(String columnLabel, InputStream x, int length)</code> -- 用二进制流值更新指定列，该列具有指定的字节数</p></li>
+                                <li><p><code>void 	updateBinaryStream(String columnLabel, InputStream x, long length)</code> -- 用二进制流值更新指定的列，该值将具有指定的字节数</p></li>
                             </ol>
                         </div>
 
+                        <a id="RowSet" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public interface RowSet extends ResultSet {}
 </pre>
+                            <p><a href="docs/docs-java/api/javax/sql/RowSet.html" target="_blank"><code>javax.sql.</code>RowSet</a> 接口添加了对 JavaBeans<sup>TM</sup> 组件模型的 JDBC API 支持。rowset 可用作可视化 Bean 开发环境中的 JavaBeans 组件，它可以在设计时创建和配置并在运行时执行。 </p>
+                            <p>RowSet 接口提供一组 JavaBeans 属性，这些属性允许配置一个 RowSet 实例来连接 JDBC 数据源并从中读取某些数据。一组设置方法（setInt、setBytes、setString 等等）提供将输入参数传递到 rowset 命令属性的方式。在一般情况下，此命令是 rowset 从关系数据库获取其数据时所使用的 SQL 查询。 </p>
+                            <p>RowSet 接口支持 JavaBeans 事件，允许应用程序中的其他组件在 rowset 发生事件时（如值的更改）得到通知。 </p>
+                            <p>RowSet 接口是唯一的，因为需要使用其他 JDBC API 来实现它。换句话说，RowSet 实现是在 JDBC 驱动程序“顶部”执行的软件层。任何人都可以提供 RowSet 接口的实现，包括希望将 RowSet 实现作为其 JDBC 产品的一部分提供的 JDBC 驱动程序供应商。 </p>
+                            <p>RowSet 对象可以建立一个与数据源的连接并在其整个生命周期中维持该连接，在此情况下，该对象被称为连接的 rowset。rowset 还可以建立一个与数据源的连接，从其获取数据，然后关闭它。这种 rowset 被称为非连接 rowset。非连接 rowset 可以在断开时更改其数据，然后将这些更改发送回原始数据源，不过它必须重新建立连接才能完成此操作。 </p>
+                            <p>非连接 rowset 可以具有与之关联的 reader（RowSetReader 对象）和 writer（RowSetWriter 对象）。可以多种方式实现 reader 来使用数据填充 rowset，包括从非关系型数据源获取数据。也可以多种方式实现 writer 来将对 rowset 的数据所做的更改传回底层数据源。 </p>
+                            <p>Rowset 易于使用。RowSet 接口扩展了标准 java.sql.ResultSet 接口。RowSetMetaData 接口扩展了 java.sql.ResultSetMetaData 接口。</p>
+                            <ol>
+                                <li class="group"><p><code>void 	addRowSetListener(RowSetListener listener)</code> -- 注册给定侦听器，以便此 RowSet 对象上发生事件时将得到通知</p></li>
+                                <li><p><code>void 	removeRowSetListener(RowSetListener listener)</code> -- 移除指定的侦听器</p></li>
+
+                                <li class="group"><p><code>void 	clearParameters()</code> -- 清除为此 RowSet 对象命令设置的参数</p></li>
+                                <li><p><code>void 	execute()</code> -- 使用数据填充此 RowSet 对象</p></li>
+                                <li><p><code>void 	setConcurrency(int concurrency)</code> -- 将此 RowSet 对象的并发性设置为给定的并发级别，参数为：<code>CONCUR_READ_ONLY</code> or <code>CONCUR_UPDATABLE</code></p></li>
+                                <li><p><code>void 	setType(int type)</code> -- 将此 RowSet 对象的类型设置为给定的类型。此方法用于更改 rowset 的类型，默认情况下该类型为只读且不可滚动，参数为：<code>TYPE_FORWARD_ONLY</code>, <code>TYPE_SCROLL_INSENSITIVE</code> or <code>TYPE_SCROLL_SENSITIVE</code></p></li>
+
+                                <li class="group"><p><code>String 	getUrl()</code> -- 如果 RowSet 对象使用 DriverManager 而非 DataSource 对象建立连接，则获取创建连接时的 url 属性</p></li>
+                                <li><p><code>void 	setUrl(String url)</code> -- 设置 url</p></li>
+                                <li><p><code>String 	getUsername()</code> -- 获取用于创建此 RowSet 对象的数据库连接的用户名</p></li>
+                                <li><p><code>void 	setUsername(String name)</code> -- 设置 userName</p></li>
+                                <li><p><code>String 	getPassword()</code> -- 获取用于创建数据库连接的密码</p></li>
+                                <li><p><code>void 	setPassword(String password)</code> -- 设置 password</p></li>
+                                <li><p><code>boolean 	isReadOnly()</code> -- 获取此 RowSet 对象是否是只读的</p></li>
+                                <li><p><code>void 	setReadOnly(boolean value)</code> -- 设置是否是只读</p></li>
+                                <li><p><code>String 	getCommand()</code> -- 获取此 RowSet 对象的命令属性</p></li>
+                                <li><p><code>void 	setCommand(String cmd)</code> -- 设置此 RowSet 对象的命令属性</p></li>
+                                <li><p><code>String 	getDataSourceName()</code> -- 获取标识此 RowSet 对象的数据源的逻辑名称</p></li>
+                                <li><p><code>void 	setDataSourceName(String name)</code> -- 设置数据源的逻辑名称</p></li>
+                                <li><p><code>int 	getQueryTimeout()</code> -- 获取驱动程序等待语句执行的最大秒数</p></li>
+                                <li><p><code>void 	setQueryTimeout(int seconds)</code> --  设置驱动程序等待语句执行的最大秒数</p></li>
+                                <li><p><code>int 	getMaxRows()</code> -- 获取此 RowSet 对象可以包含的最大行数</p></li>
+                                <li><p><code>void 	setMaxRows(int max)</code> -- 设置此 RowSet 对象可以包含的最大行数</p></li>
+                                <li><p><code>int 	getMaxFieldSize()</code> -- 获取可以对某些列值返回的最大字节数</p></li>
+                                <li><p><code>void 	setMaxFieldSize(int max)</code> -- 设置可以对某些列值返回的最大字节数</p></li>
+                                <li><p><code>boolean 	getEscapeProcessing()</code> -- 获取是否为此 RowSet 对象启用转义处理</p></li>
+                                <li><p><code>void 	setEscapeProcessing(boolean enable)</code> -- 设置是否为此 RowSet 对象启用转义处理</p></li>
+                                <li><p><code>int 	getTransactionIsolation()</code> -- 获取为此 RowSet 对象设置的事务隔离级别</p></li>
+                                <li><p><code>void 	setTransactionIsolation(int level)</code> -- 设置为此 RowSet 对象设置的事务隔离级别，参数为 <a href="#java-sql-Connection">Connection</a> 对象的：<code>TRANSACTION_READ_UNCOMMITTED</code>、<code>TRANSACTION_READ_COMMITTED</code>、<code>TRANSACTION_REPEATABLE_READ</code> or <code>TRANSACTION_SERIALIZABLE</code></p></li>
+                                <li><p><code>Map&lt;String,Class&lt;?>> 	getTypeMap()</code> -- 获取 RowSet 对象关联的 Map 对象，它指定 SQL 用户定义类型的自定义映射关系</p></li>
+                                <li><p><code>void 	setTypeMap(Map&lt;String,Class&lt;?>> map)</code> -- 设置 RowSet 对象关联的 Map 对象</p></li>
+
+                                <li class="group"><p><code>void 	setBoolean(int parameterIndex, boolean x)</code> -- 将指定参数设置为给定的 boolean 值</p></li>
+                                <li><p><code>void 	setBoolean(String parameterName, boolean x)</code> -- 将指定参数设置为给定的 boolean 值</p></li>
+                                <li><p><code>void 	setByte(int parameterIndex, byte x)</code> -- 将指定参数设置为给定的 byte 值</p></li>
+                                <li><p><code>void 	setByte(String parameterName, byte x)</code> -- 将指定参数设置为给定的 byte 值</p></li>
+                                <li><p><code>void 	setShort(int parameterIndex, short x)</code> -- 将指定参数设置为给定的 short 值</p></li>
+                                <li><p><code>void 	setShort(String parameterName, short x)</code> -- 将指定参数设置为给定的 short 值</p></li>
+                                <li><p><code>void 	setInt(int parameterIndex, int x)</code> -- 将指定参数设置为给定的 int 值</p></li>
+                                <li><p><code>void 	setInt(String parameterName, int x)</code> -- 将指定参数设置为给定的 int 值</p></li>
+                                <li><p><code>void 	setLong(int parameterIndex, long x)</code> -- 将指定参数设置为给定的 long 值</p></li>
+                                <li><p><code>void 	setLong(String parameterName, long x)</code> -- 将指定参数设置为给定的 long 值</p></li>
+                                <li><p><code>void 	setFloat(int parameterIndex, float x)</code> -- 将指定参数设置为给定的 float 值</p></li>
+                                <li><p><code>void 	setFloat(String parameterName, float x)</code> -- 将指定参数设置为给定的 float 值</p></li>
+                                <li><p><code>void 	setDouble(int parameterIndex, double x)</code> -- 将指定参数设置为给定的 double 值</p></li>
+                                <li><p><code>void 	setDouble(String parameterName, double x)</code> -- 将指定参数设置为给定的 double 值</p></li>
+                                <li><p><code>void 	setBigDecimal(int parameterIndex, BigDecimal x)</code> -- 将指定参数设置为给定的 java.math.BigDecimal 值</p></li>
+                                <li><p><code>void 	setBigDecimal(String parameterName, BigDecimal x)</code> -- 将指定参数设置为给定的 java.math.BigDecimal 值</p></li>
+                                <li><p><code>void 	setString(int parameterIndex, String x)</code> -- 将指定参数设置为给定的 String 值</p></li>
+                                <li><p><code>void 	setString(String parameterName, String x)</code> -- 将指定参数设置为给定的 String 值</p></li>
+                                <li><p><code>void 	setNString(int parameterIndex, String value)</code> -- 将指定参数设置为给定的 String 值</p></li>
+                                <li><p><code>void 	setNString(String parameterName, String value)</code> -- 将指定参数设置为给定的 String 值</p></li>
+
+                                <li class="group"><p><code>void 	setNull(int parameterIndex, int sqlType)</code> -- 设置为指定类型的 NULL, 参见: <a href="#java-sql-Types">Types</a></p></li>
+                                <li><p><code>void 	setNull(int paramIndex, int sqlType, String typeName)</code> -- 设置为指定类型的 NULL, 参见: <a href="#java-sql-Types">Types</a></p></li>
+                                <li><p><code>void 	setNull(String parameterName, int sqlType)</code> -- 设置为指定类型的 NULL, 参见: <a href="#java-sql-Types">Types</a></p></li>
+                                <li><p><code>void 	setNull(String parameterName, int sqlType, String typeName)</code> -- 设置为指定类型的 NULL, 参见: <a href="#java-sql-Types">Types</a></p></li>
+
+                                <li class="group"><p><code>void 	setTime(int parameterIndex, Time x)</code> -- 将指定参数设置为给定的 Time 值</p></li>
+                                <li><p><code>void 	setTime(int parameterIndex, Time x, Calendar cal)</code> -- 将指定参数设置为给定的 Time 值</p></li>
+                                <li><p><code>void 	setTime(String parameterName, Time x)</code> -- 将指定参数设置为给定的 Time 值</p></li>
+                                <li><p><code>void 	setTime(String parameterName, Time x, Calendar cal)</code> -- 将指定参数设置为给定的 Time 值</p></li>
+
+                                <li class="group"><p><code>void 	setTimestamp(int parameterIndex, Timestamp x)</code> -- 将指定参数设置为给定的 Timestamp 值</p></li>
+                                <li><p><code>void 	setTimestamp(int parameterIndex, Timestamp x, Calendar cal)</code> -- 将指定参数设置为给定的 Timestamp 值</p></li>
+                                <li><p><code>void 	setTimestamp(String parameterName, Timestamp x)</code> -- 将指定参数设置为给定的 Timestamp 值</p></li>
+                                <li><p><code>void 	setTimestamp(String parameterName, Timestamp x, Calendar cal)</code> -- 将指定参数设置为给定的 Timestamp 值</p></li>
+
+                                <li class="group"><p><code>void 	setDate(int parameterIndex, Date x)</code> -- 将指定参数设置为给定的 Date 值</p></li>
+                                <li><p><code>void 	setDate(int parameterIndex, Date x, Calendar cal)</code> -- 将指定参数设置为给定的 Date 值</p></li>
+                                <li><p><code>void 	setDate(String parameterName, Date x)</code> -- 将指定参数设置为给定的 Date 值</p></li>
+                                <li><p><code>void 	setDate(String parameterName, Date x, Calendar cal)</code> -- 将指定参数设置为给定的 Date 值</p></li>
+
+                                <li class="group"><p><code>void 	setBytes(int parameterIndex, byte[] x)</code> -- 将指定参数设置为给定的 byte[] 值</p></li>
+                                <li><p><code>void 	setBytes(String parameterName, byte[] x)</code> -- 将指定参数设置为给定的 byte[] 值</p></li>
+                                <li><p><code>void 	setArray(int i, Array x)</code> -- 使用给定 Array 值设置此 RowSet 对象命令中的指定参数</p></li>
+                                <li><p><code>void 	setURL(int parameterIndex, URL x)</code> -- 将指定参数设置为给定的 URL 值</p></li>
+                                <li><p><code>void 	setRef(int i, Ref x)</code> -- 将指定参数设置为给定的 Ref 值</p></li>
+
+                                <li class="group"><p><code>void 	setObject(int parameterIndex, Object x)</code> -- 使用给定对象设置指定参数的值</p></li>
+                                <li><p><code>void 	setObject(int parameterIndex, Object x, int targetSqlType)</code> -- 使用给定对象设置指定参数的值</p></li>
+                                <li><p><code>void 	setObject(int parameterIndex, Object x, int targetSqlType, int scaleOrLength)</code> -- 使用给定对象设置指定参数的值</p></li>
+                                <li><p><code>void 	setObject(String parameterName, Object x)</code> -- 使用给定对象设置指定参数的值</p></li>
+                                <li><p><code>void 	setObject(String parameterName, Object x, int targetSqlType)</code> -- 使用给定对象设置指定参数的值</p></li>
+                                <li><p><code>void 	setObject(String parameterName, Object x, int targetSqlType, int scale)</code> -- 使用给定对象设置指定参数的值</p></li>
+
+                                <li class="group"><p><code>void 	setRowId(int parameterIndex, RowId x)</code> -- 将指定参数设置为给定的 RowId 值</p></li>
+                                <li><p><code>void 	setRowId(String parameterName, RowId x)</code> -- 将指定参数设置为给定的 RowId 值</p></li>
+
+                                <li class="group"><p><code>void 	setSQLXML(int parameterIndex, SQLXML xmlObject)</code> -- 将指定参数设置为给定的 SQLXML 值</p></li>
+                                <li><p><code>void 	setSQLXML(String parameterName, SQLXML xmlObject)</code> -- 将指定参数设置为给定的 SQLXML 值</p></li>
+
+                                <li class="group"><p><code>void 	setBlob(int i, Blob x)</code> -- 使用给定 Blob 值设置此 RowSet 对象命令中的指定参数</p></li>
+                                <li><p><code>void 	setBlob(int parameterIndex, InputStream inputStream)</code> -- 使用给定 Blob 值设置此 RowSet 对象命令中的指定参数</p></li>
+                                <li><p><code>void 	setBlob(int parameterIndex, InputStream inputStream, long length)</code> -- 将指定参数设置为给定的 Blob 值</p></li>
+                                <li><p><code>void 	setBlob(String parameterName, Blob x)</code> -- 将指定参数设置为给定的 Blob 值</p></li>
+                                <li><p><code>void 	setBlob(String parameterName, InputStream inputStream)</code> -- 将指定参数设置为给定的 Blob 值</p></li>
+                                <li><p><code>void 	setBlob(String parameterName, InputStream inputStream, long length)</code> -- 将指定参数设置为给定的 Blob 值</p></li>
+
+                                <li class="group"><p><code>void 	setClob(int i, Clob x)</code> -- 使用给定 Clob 值设置此 RowSet 对象命令中的指定参数</p></li>
+                                <li><p><code>void 	setClob(int parameterIndex, Reader reader)</code> -- 将指定参数设置为给定的 Clob 值</p></li>
+                                <li><p><code>void 	setClob(int parameterIndex, Reader reader, long length)</code> -- 将指定参数设置为给定的 Clob 值</p></li>
+                                <li><p><code>void 	setClob(String parameterName, Clob x)</code> -- 将指定参数设置为给定的 Clob 值</p></li>
+                                <li><p><code>void 	setClob(String parameterName, Reader reader)</code> -- 将指定参数设置为给定的 Clob 值</p></li>
+                                <li><p><code>void 	setClob(String parameterName, Reader reader, long length)</code> -- 将指定参数设置为给定的 Clob 值</p></li>
+
+                                <li class="group"><p><code>void 	setNClob(int parameterIndex, NClob value)</code> -- 将指定参数设置为给定的 NClob 值</p></li>
+                                <li><p><code>void 	setNClob(int parameterIndex, Reader reader)</code> -- 将指定参数设置为给定的 NClob 值</p></li>
+                                <li><p><code>void 	setNClob(int parameterIndex, Reader reader, long length)</code> -- 将指定参数设置为给定的 NClob 值</p></li>
+                                <li><p><code>void 	setNClob(String parameterName, NClob value)</code> -- 将指定参数设置为给定的 NClob 值</p></li>
+                                <li><p><code>void 	setNClob(String parameterName, Reader reader)</code> -- 将指定参数设置为给定的 NClob 值</p></li>
+                                <li><p><code>void 	setNClob(String parameterName, Reader reader, long length)</code> -- 将指定参数设置为给定的 NClob 值</p></li>
+
+                                <li class="group"><p><code>void 	setAsciiStream(int parameterIndex, InputStream x)</code> -- 将此 RowSet 对象命令中的指定参数设置为给定输入流</p></li>
+                                <li><p><code>void 	setAsciiStream(int parameterIndex, InputStream x, int length)</code> -- 将此 RowSet 对象命令中的指定参数设置为给定输入流，并指定长度</p></li>
+                                <li><p><code>void 	setAsciiStream(String parameterName, InputStream x)</code> -- 将指定参数设置为给定输入流</p></li>
+                                <li><p><code>void 	setAsciiStream(String parameterName, InputStream x, int length)</code> -- 将指定参数设置为给定输入流，并指定长度</p></li>
+
+                                <li class="group"><p><code>void 	setBinaryStream(int parameterIndex, InputStream x)</code> -- 将指定参数设置为给定输入流</p></li>
+                                <li><p><code>void 	setBinaryStream(int parameterIndex, InputStream x, int length)</code> -- 将指定参数设置为给定输入流</p></li>
+                                <li><p><code>void 	setBinaryStream(String parameterName, InputStream x)</code> -- 将指定参数设置为给定输入流</p></li>
+                                <li><p><code>void 	setBinaryStream(String parameterName, InputStream x, int length)</code> -- 将指定参数设置为给定输入流</p></li>
+
+                                <li class="group"><p><code>void 	setCharacterStream(int parameterIndex, Reader reader)</code> -- 将指定参数设置为给定 Reader 对象</p></li>
+                                <li><p><code>void 	setCharacterStream(int parameterIndex, Reader reader, int length)</code> -- 将指定参数设置为给定 Reader 对象</p></li>
+                                <li><p><code>void 	setCharacterStream(String parameterName, Reader reader)</code> -- 将指定参数设置为给定 Reader 对象</p></li>
+                                <li><p><code>void 	setCharacterStream(String parameterName, Reader reader, int length)</code> -- 将指定参数设置为给定 Reader 对象</p></li>
+
+                                <li class="group"><p><code>void 	setNCharacterStream(int parameterIndex, Reader value)</code> -- 将指定参数设置为给定 Reader 对象</p></li>
+                                <li><p><code>void 	setNCharacterStream(int parameterIndex, Reader value, long length)</code> -- 将指定参数设置为给定 Reader 对象</p></li>
+                                <li><p><code>void 	setNCharacterStream(String parameterName, Reader value)</code> -- 将指定参数设置为给定 Reader 对象</p></li>
+                                <li><p><code>void 	setNCharacterStream(String parameterName, Reader value, long length)</code> -- 将指定参数设置为给定 Reader 对象</p></li>
+                            </ol>
                         </div>
 
+                        <a id="JdbcRowSet" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public interface JdbcRowSet extends RowSet, Joinable {}
 </pre>
+                            <p><a href="docs/docs-java/api/javax/sql/rowset/JdbcRowSet.html" target="_blank"><code>javax.sql.rowset.</code>JdbcRowSet</a> 所有标准 JdbcRowSet 实现都必须实现的标准接口</p>
+                            <p>ResultSet 对象的包装器使得将该结果集用作 JavaBeansTM 组件成为可能。因此，JdbcRowSet 对象可以是某个 Beans，是可用于组成应用程序的工具。因为 JdbcRowSet 是一个连接的 rowset，也就是说，它使用启用 JDBC 技术的驱动程序来维持它与数据库的连接，所以它也能有效地使驱动程序成为 JavaBeans 组件。 </p>
+                            <p>因为它始终连接到其数据库，所以 JdbcRowSet 的实例可以简单地采用在其上进行调用的方法，并依次对其 ResultSet 对象调用这些方法。</p>
+                            <p>JdbcRowSet 对象的另一个优点是可使用它让 ResultSet 对象可滚动和可更新。默认情况下，所有 RowSet 对象都是可滚动的和可更新的。如果使用的驱动程序和数据库不支持结果集的滚动和/或更新，则应用程序可以组装一个带 ResultSet 对象数据的 JdbcRowSet 对象，然后在该 JdbcRowSet 对象上操作，就好像它是 ResultSet 对象一样。 </p>
+                            <ol>
+                                <li><p><code>void 	commit()</code> -- 包装 Connection 提交方法，以允许灵活的自动提交或非自动提交事务控制支持</p></li>
+                                <li><p><code>boolean 	getAutoCommit()</code> -- 包装 Connection 的 getAutoCommit 方法，以允许应用程序确定 JdbcRowSet 的事务行为</p></li>
+                                <li><p><code>void 	setAutoCommit(boolean autoCommit)</code> -- 包装 Connection 的 getAutoCommit 方法，以允许应用程序设置 JdbcRowSet 的事务行为</p></li>
+                                <li><p><code>void 	rollback()</code> -- 取消在当前事务中进行的所有更改，并释放此 Connection 对象当前保存的所有数据库锁定</p></li>
+                                <li><p><code>void 	rollback(Savepoint s)</code> -- 取消在当前事务中进行的所有更改，一直到最后设置的保存点，并释放此 Connection 对象当前保存的所有数据库锁定</p></li>
+                                <li><p><code>boolean 	getShowDeleted()</code> -- 获取一个 boolean 值，该值指示标记为删除的行是否会出现在当前行集合中</p></li>
+                                <li><p><code>void 	setShowDeleted(boolean b)</code> -- 将属性 showDeleted 设置为给定的 boolean 值</p></li>
+                                <li><p><code>RowSetWarning 	getRowSetWarnings()</code> -- 获取此 JdbcRowSet 对象上的调用报告的第一个警告</p></li>
+                            </ol>
                         </div>
 
+                        <a id="CachedRowSet" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public interface CachedRowSet extends RowSet, Joinable {}
 </pre>
+                            <p><a href="docs/docs-java/api/javax/sql/rowset/CachedRowSet.html" target="_blank"><code>javax.sql.rowset.</code>CachedRowSet</a> 对象是一个数据行的容器，可在内存中缓存其各行，这使得进行操作时无需总是连接到数据源。</p>
+                            <p>此外，它还是一个 JavaBeans<sup>TM</sup> 组件，是可滚动、可更新、可序列化的。</p>
+                            <p>CachedRowSet 对象通常包含结果集中的行，但它也可以包含任何具有表格式的文件（如电子表格）中的行。参考实现只支持从 ResultSet 对象中获取数据，但是开发人员可以扩展 SyncProvider 实现，以提供对其他表格数据源的访问。 </p>
+                            <p>应用程序可以修改 CachedRowSet 对象中的数据，这些修改随后可以被传播回数据源。 </p>
+                            <p>CachedRowSet 对象是一个非连接 rowset，这意味着它只会短暂地连接其数据源。连接数据源发生在读取数据以用各行填充自身，以及将更改传播回其底层数据源时。其余时间 CachedRowSet 对象是非连接的，包括修改它的数据时。非连接使 RowSet 对象更为简洁，因此更容易传递给另一个组件。</p>
+                            <ol>
+                                <li><p><code>void 	commit()</code> -- 包装 Connection 提交方法，以允许灵活的自动提交或非自动提交事务控制支持</p></li>
+                                <li><p><code>void 	rollback()</code> -- 取消在当前事务中进行的所有更改，并释放此 Connection 对象当前保存的所有数据库锁定</p></li>
+                                <li><p><code>void 	rollback(Savepoint s)</code> -- 取消在当前事务中进行的所有更改，一直到最后设置的保存点，并释放此 Connection 对象当前保存的所有数据库锁定</p></li>
+                                <li><p><code>boolean 	getShowDeleted()</code> -- 获取一个 boolean 值，该值指示标记为删除的行是否会出现在当前行集合中</p></li>
+                                <li><p><code>void 	setShowDeleted(boolean b)</code> -- 将属性 showDeleted 设置为给定的 boolean 值，它确定标记为删除的行是否会出现在当前行集合中</p></li>
+                                <li><p><code>RowSetWarning 	getRowSetWarnings()</code> -- 获取此 RowSet 对象上的调用报告的第一个警告</p></li>
+                                <li><p><code>void 	setMetaData(RowSetMetaData md)</code> -- 使用给定的 RowSetMetaData 对象设置此 CachedRowSet 对象的元数据</p></li>
+                                <li><p><code>int 	size()</code> -- 返回此 CachedRowSet 对象中的行数</p></li>
+
+                                <li class="group"><p><code>void 	acceptChanges()</code> -- 将对此 CachedRowSet 对象所做的行更新、插入以及删除更改传播到底层数据源</p></li>
+                                <li><p><code>void 	acceptChanges(Connection con)</code> -- 将所有行更新、插入以及删除更改传播到支持此 CachedRowSet 对象的数据源，使用指定的 Connection 对象建立到数据源的连接</p></li>
+                                <li><p><code>void 	execute(Connection conn)</code> -- 用数据填充此 CachedRowSet 对象，使用给定的连接来生成从中读取数据的结果集</p></li>
+                                <li><p><code>void 	populate(ResultSet data)</code> -- 使用取自给定 ResultSet 对象的数据填充此 CachedRowSet 对象</p></li>
+                                <li><p><code>void 	populate(ResultSet rs, int startRow)</code> -- 使用取自给定 ResultSet 对象的数据填充此 CachedRowSet 对象</p></li>
+
+                                <li class="group"><p><code>boolean 	columnUpdated(int idx)</code> -- 指示此 CachedRowSet 对象当前行中的指定列是否已更新</p></li>
+                                <li><p><code>boolean 	columnUpdated(String columnName)</code> -- 指示此 CachedRowSet 对象当前行中的指定列是否已更新</p></li>
+
+                                <li class="group"><p><code>CachedRowSet 	createCopy()</code> -- 创建一个 RowSet 对象，它是此 CachedRowSet 对象中数据的深层副本</p></li>
+                                <li><p><code>CachedRowSet 	createCopyNoConstraints()</code> -- 创建一个 CachedRowSet 对象，它是此 CachedRowSet 对象数据的深层副本，但是独立于此 CachedRowSet 对象</p></li>
+                                <li><p><code>CachedRowSet 	createCopySchema()</code> -- 创建一个 CachedRowSet 对象，它是此 CachedRowSet 对象的空副本</p></li>
+                                <li><p><code>RowSet 	createShared()</code> -- 返回一个新的 RowSet 对象，支持该对象的数据与此 CachedRowSet 对象的相同</p></li>
+
+                                <li class="group"><p><code>String 	getTableName()</code> -- 返回创建此 CachedRowSet 对象时所用对象（表）的标识符</p></li>
+                                <li><p><code>void 	setTableName(String tabName)</code> -- 将派生此 CachedRowSet 对象的表的标识符设置为给定的表名</p></li>
+                                <li><p><code>ResultSet 	getOriginalRow()</code> -- 返回一个只包含此 CachedRowSet 对象当前行原始值的 ResultSet 对象</p></li>
+                                <li><p><code>void 	setOriginalRow()</code> -- 将此 CachedRowSet 对象中的当前行设置为原始行</p></li>
+                                <li><p><code>ResultSet 	getOriginal()</code> -- 返回一个包含此 CachedRowSet 对象原始值的 ResultSet 对象</p></li>
+                                <li><p><code>void 	restoreOriginal()</code> -- 将此 CachedRowSet 对象还原成其原始值，即执行上一组更改前的值</p></li>
+                                <li><p><code>int[] 	getKeyColumns()</code> -- 返回一个包含一个或多个列号的数组，这些列号指示了形成某个键的列，该键唯一地标识了此 CachedRowSet 对象中的某个行</p></li>
+                                <li><p><code>void 	setKeyColumns(int[] keys)</code> -- 使用给定的列号数组设置此 CachedRowSet 对象的 keyCols 字段，它形成了唯一标识此 CachedRowSet 对象中某个行的键</p></li>
+                                <li><p><code>SyncProvider 	getSyncProvider()</code> -- 获取此 CachedRowSet 对象的 SyncProvider 实现</p></li>
+                                <li><p><code>void 	setSyncProvider(String provider)</code> -- 将此 CachedRowSet 对象的 SyncProvider 对象设置为指定的提供者</p></li>
+
+                                <li class="group"><p><code>void 	undoDelete()</code> -- 取消删除当前行并通知侦听器已更改了某个行</p></li>
+                                <li><p><code>void 	undoInsert()</code> -- 如果已经插入了当前行，则立即将它从此 CachedRowSet 对象移除，同样通知侦听器已更改了某个行</p></li>
+                                <li><p><code>void 	undoUpdate()</code> -- 如果已经修改了行，则立即逆转上一次更新操作</p></li>
+                                <li><p><code>void 	release()</code> -- 释放此 CachedRowSet 对象的当前内容并将 rowSetChanged 事件发送到所有已注册侦听器</p></li>
+                                <li><p><code>void 	rowSetPopulated(RowSetEvent event, int numRows)</code> -- 通知已注册侦听器给定 RowSetEvent 对象中的某个 RowSet 对象已经填充了多个附加行</p></li>
+
+                                <li class="group"><p><code>int 	getPageSize()</code> -- 返回 CachedRowSet 对象的页大小</p></li>
+                                <li><p><code>void 	setPageSize(int size)</code> -- 设置 CachedRowSet 对象的页大小</p></li>
+                                <li><p><code>boolean 	nextPage()</code> -- 逐个增加 CachedRowSet 的当前页</p></li>
+                                <li><p><code>boolean 	previousPage()</code> -- 逐个减少 CachedRowSet 的当前页</p></li>
+
+                                <li class="group"><p><code>Collection&lt;?> 	toCollection()</code> -- 将此 CachedRowSet 对象转换成一个 Collection 对象，它包含此 CachedRowSet 对象的所有数据</p></li>
+                                <li><p><code>Collection&lt;?> 	toCollection(int column)</code> -- 将此 CachedRowSet 对象中的指定列转换成一个 Collection 对象</p></li>
+                                <li><p><code>Collection&lt;?> 	toCollection(String column)</code> -- 将此 CachedRowSet 对象中的指定列转换成一个 Collection 对象</p></li>
+                            </ol>
                         </div>
 
+                        <a id="WebRowSet" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public interface WebRowSet extends CachedRowSet {
+    String PUBLIC_XML_SCHEMA = "--//Oracle Corporation//XSD Schema//EN";
+    String SCHEMA_SYSTEM_ID = "http://java.sun.com/xml/ns/jdbc/webrowset.xsd";
+}
 </pre>
+                            <p><a href="docs/docs-java/api/javax/sql/rowset/WebRowSet.html" target="_blank"><code>javax.sql.rowset.</code>WebRowSet</a> 用于将结果集输出到 XML 和使用有效的 XML 作为结果集的输入。</p>
+                            <p>准的 WebRowSet XML 模式定义位于以下 URI 中：<a href="http://java.sun.com/xml/ns/jdbc/webrowset.xsd" target="_blank">webrowset.xsd</a></p>
+                            <p>它描述使用 XML 描述 RowSet 对象时所需的标准 XML 文档格式，所有 WebRowSet 接口的标准实现必须使用该文档格式以确保互操作性。此外，WebRowSet 模式使用特定的 SQL/XML 模式注释，从而确保较高的跨平台互操作性。</p>
+                            <ol>
+                                <li><p><code>void 	readXml(InputStream iStream)</code> -- 读取基于流的 XML 输入，以填充此 WebRowSet 对象</p></li>
+                                <li><p><code>void 	readXml(Reader reader)</code> -- 从给定的 Reader 对象以其 XML 格式读取 WebRowSet 对象</p></li>
+                                <li><p><code>void 	writeXml(OutputStream oStream)</code> -- 以 XML 格式将此 WebRowSet 对象的数据、属性和元数据写入给定的 OutputStream 对象</p></li>
+                                <li><p><code>void 	writeXml(ResultSet rs, OutputStream oStream)</code> -- 使用给定 ResultSet 对象的内容填充此 WebRowSet 对象，并以 XML 格式将其数据、属性和元数据写入给定的 OutputStream 对象</p></li>
+                                <li><p><code>void 	writeXml(ResultSet rs, Writer writer)</code> -- 使用给定 ResultSet 对象的内容填充此 WebRowSet 对象，并以 XML 格式将其数据、属性和元数据写入给定的 Writer 对象</p></li>
+                                <li><p><code>void 	writeXml(Writer writer)</code> -- 以 XML 格式将此 WebRowSet 对象的数据、属性和元数据写入给定的 Writer 对象</p></li>
+                            </ol>
                         </div>
 
+                        <a id="FilteredRowSet" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
+public interface FilteredRowSet extends WebRowSet {
+    Predicate getFilter(); // 获取此 FilteredRowSet 对象的活动过滤器
+    void setFilter(Predicate p); // 将给定的 Predicate 对象应用到此 FilteredRowSet 对象
+}
 
+public interface Predicate {
+    /** 向 FilteredRowSet 实例插入新行时，FilteredRowSet 对象将在内部使用此方法
+     * 如果行值位于过滤器中，则返回 true；否则返回 false
+     */
+    boolean evaluate(Object value, int column);
+    boolean evaluate(Object value, String columnName);
+
+    /** 控制 RowSet 对象的指针从一行移动到下一行。此外，如果此内部方法将指针移动到一个已删除的行上，则其将继续移动指针，
+     * 直到找到一个有效行为止，如果在过滤器中存在更多行，则返回 true；否则返回 false
+     */
+    boolean evaluate(RowSet rs);
+}
 </pre>
+                            <p><a href="docs/docs-java/api/javax/sql/rowset/FilteredRowSet.html" target="_blank"><code>javax.sql.rowset.</code>FilteredRowSet</a> CachedRowSet 类提供了一组受保护的光标操纵方法，FilteredRowSet 实现可重写这些方法将来提供过滤支持。 </p>
+                            <p>有时 RowSet 对象需要对其内容进行某种程度的过滤。一种可能的解决方案是为所有标准的 RowSet 实现提供一种查询语言；但是这对诸如非连接 RowSet 对象之类的轻量级组件而言是一种不切实际的方法。FilteredRowSet 接口寻求在不提供重量级查询语言和这种查询语言所需处理的情况下解决这一需求问题。 </p>
+                            <p>在移除过滤器或应用新的过滤器之前，不能修改那些位于 FilteredRowSet 对象上设置的过滤器范围外的各行。 </p>
+                            <p><a><a href="docs/docs-java/api/javax/sql/rowset/Predicate.html" target="_blank"><code>javax.sql.rowset.</code>Predicate</a> 是为所有 FilteredRowSet 对象提供框架以描述其过滤器的标准接口。</p>
+                            <p>Predicate 接口是一个标准接口，应用程序可以实现它来定义希望应用于 FilteredRowSet 对象的过滤器。FilteredRowSet 对象使用此接口的实现并实施在 evaluate 方法的实现中定义的各种约束。FilteredRowSet 对象以双向方式实施过滤器约束：它只输出过滤器的约束中存在的行；反之，也只插入、修改或更新过滤器的约束中存在的行。 </p>
+                            <p>如果使用父接口中继承的 createShared 方法共享了 FilteredRowSet 实现，则应所有 FilteredRowSet 实例副本应共享 Predicate 并不做任何修改。 </p>
                         </div>
 
+                        <a id="Joinable" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public interface Joinable {}
 </pre>
+                            <p><a href="docs/docs-java/api/javax/sql/rowset/Joinable.html" target="_blank"><code>javax.sql.rowset.</code>Joinable</a> 接口提供了用于获取和设置匹配列的各种方法，匹配列是形成通过将 RowSet 对象添加到 JoinRowSet 对象所形成的 SQL JOIN 的基础。</p>
+                            <p>任何标准 RowSet 实现都可以实现 Joinable 接口，以便能够被添加到 JoinRowSet 对象中。实现此接口使 RowSet 对象能够使用各种 Joinable 方法，这些方法可设置、检索和获取有关匹配列的信息。应用程序可以将尚未实现 Joinable 接口的 RowSet 对象添加到 JoinRowSet 对象中，但是这样做必须使用一个同时带有 RowSet 对象和匹配列（或者 RowSet 对象数组和匹配列数组）的 JoinRowSet.addRowSet 方法。</p>
+                            <p>当应用程序向 JoinRowSet 对象添加两个或更多 RowSet 对象时，数组中索引的顺序特别重要。每个数组索引都直接映射到以前添加的 RowSet 对象的相应索引。如果出现重叠或间隙，则匹配列数据将被保留在添加了附加 Joinable RowSet 并需要关联匹配列数据的事件中。因此，应用程序可以以任意顺序设置多个匹配列，但是此顺序对 SQL JOIN 的结果有直接的影响。 </p>
+                            <ol>
+                                <li><p><code>int[] 	getMatchColumnIndexes()</code> -- 获取使用方法 setMatchColumn(int[] columnIdxes) 为此 RowSet 对象设置的匹配列的索引</p></li>
+                                <li><p><code>String[] 	getMatchColumnNames()</code> -- 获取使用方法 setMatchColumn(String [] columnNames) 为此 RowSet 对象设置的匹配列的名称</p></li>
+                                <li><p><code>void 	setMatchColumn(int columnIdx)</code> -- 将指定的列设置为此 RowSet 对象的匹配列</p></li>
+                                <li><p><code>void 	setMatchColumn(int[] columnIdxes)</code> -- 将指定的列设置为此 RowSet 对象的匹配列</p></li>
+                                <li><p><code>void 	setMatchColumn(String columnName)</code> -- 将指定的列设置为此 RowSet 对象的匹配列</p></li>
+                                <li><p><code>void 	setMatchColumn(String[] columnNames)</code> -- 将指定的列设置为此 RowSet 对象的匹配列</p></li>
+                                <li><p><code>void 	unsetMatchColumn(int columnIdx)</code> -- 取消将指定的列设置为此 RowSet 对象的匹配列</p></li>
+                                <li><p><code>void 	unsetMatchColumn(int[] columnIdxes)</code> -- 取消将指定的列设置为此 RowSet 对象的匹配列</p></li>
+                                <li><p><code>void 	unsetMatchColumn(String columnName)</code> -- 取消将指定的列设置为此 RowSet 对象的匹配列</p></li>
+                                <li><p><code>void 	unsetMatchColumn(String[] columnName)</code> -- 取消将指定的列设置为此 RowSet 对象的匹配列</p></li>
+                            </ol>
                         </div>
 
+                        <a id="JoinRowSet" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public interface JoinRowSet extends WebRowSet {
+    int CROSS_JOIN = 0; // ANSI 风格的 JOIN，提供两个表的交叉乘积
+    int INNER_JOIN = 1; // 提供两个表之间的内联合 (inner join)
+    int LEFT_OUTER_JOIN = 2; // 提供两个表之间的左外联合 (left outer join)
+    int RIGHT_OUTER_JOIN = 3; // 提供两个表之间的右外联合 (right outer join)
+    int FULL_JOIN = 4; // 提供一个完全 JOIN
+}
 </pre>
+                            <p><a href="docs/docs-java/api/javax/sql/rowset/JoinRowSet.html" target="_blank"><code>javax.sql.rowset.</code>JoinRowSet</a> 接口提供了一种机制，用于将取自不同 RowSet 对象的相关数据组合到一个 JoinRowSet 对象中，该对象表示一个 SQL JOIN。换句话说，JoinRowSet 对象可作为一个数据容器，这些数据取自那些形成 SQL JOIN 关系的 RowSet 对象。 </p>
+                            <p>Joinable 接口提供了一些用于设置、获取和取消设置匹配列的方法，匹配列建立 SQL JOIN 关系的基础。通过将匹配列提供给恰当形式的 JointRowSet 方法 addRowSet 也可设置匹配列。 </p>
+                            <p>无连接的 RowSet 对象（CachedRowSet 对象和扩展 CachedRowSet 接口的实现）没有一种能在 RowSet 之间建立 SQL JOIN且无需重新连接数据源（该操作开销很大）的标准方式。JoinRowSet 接口是专门为解决这一需求而设计的。 </p>
+                            <p>任何 RowSet 对象都可添加到 JoinRowSet 对象，以成为 SQL JOIN 关系的一部分。这意味着已连接和无连接的 RowSet 对象都可成为 JOIN 的一部分。鼓励在连接环境中运行的 RowSet 对象（JdbcRowSet 对象）使用它们已连接的数据库直接在表之间建立 SQL JOIN 关系。但必要时也可以将 JdbcRowSet 对象添加到 JoinRowSet 对象中。 </p>
+                            <p>可将任意数目的 RowSet 对象添加到 JoinRowSet 的实例中，前提是只要这些对象可以在 SQL JOIN 中关联起来。根据定义，SQL JOIN 语句用于将两个或多个基于某个公共属性的关系数据库表中所包含的数据组合在一起。Joinable 接口提供了用于建立公共属性的方法，可通过设置匹配列 来建立。匹配列通常与主键相符，但是不要求匹配列与主键相同。通过建立然后强制执行匹配列，JoinRowSet 对象可在 RowSet 对象之间建立 JOIN 关系，无需可用关系型数据库的协助。 </p>
+                            <p>注意，如果未设置类型，则 JOIN 将自动为 INNER_JOIN。JoinRowSet 接口中各字段的注释说明了这些 JOIN 类型，它们都是标准的 SQL JOIN 类型。</p>
+                            <ol>
+                                <li><p><code>void 	addRowSet(Joinable rowset)</code> -- 将给定的 RowSet 对象添加到此 JoinRowSet 对象</p></li>
+                                <li><p><code>void 	addRowSet(RowSet[] rowset, int[] columnIdx)</code> -- 将给定 RowSet 对象数组中包含的一个或多个 RowSet 对象添加到此 JoinRowSet 对象，并且将每个 RowSet 对象的匹配列设置为给定列索引数组中的匹配列</p></li>
+                                <li><p><code>void 	addRowSet(RowSet[] rowset, String[] columnName)</code> -- 将给定 RowSet 对象数组中包含的一个或多个 RowSet 对象添加到此 JoinRowSet 对象，并且将每个 RowSet 对象的匹配列设置为给定列名数组中的匹配列</p></li>
+                                <li><p><code>void 	addRowSet(RowSet rowset, int columnIdx)</code> -- 将给定的 RowSet 对象添加到此 JoinRowSet 对象，并将指定的列设置为 RowSet 对象的匹配列</p></li>
+                                <li><p><code>void 	addRowSet(RowSet rowset, String columnName)</code> -- 将 rowset 添加到此 JoinRowSet 对象，并将指定的列设置为匹配列</p></li>
+
+                                <li class="group"><p><code>int 	getJoinType()</code> -- 返回一个 int 值，它描述控制此 JoinRowSet 实例的已设置 SQL JOIN 类型</p></li>
+                                <li><p><code>void 	setJoinType(int joinType)</code> -- 允许应用程序调整在 JoinRowSet 对象实例包含的表上强制应用的 JOIN 类型</p></li>
+                                <li><p><code>String[] 	getRowSetNames()</code> -- 返回一个 String 数组，包含添加到此 JoinRowSet 对象的 RowSet 对象的名称</p></li>
+                                <li><p><code>Collection&lt;?> 	getRowSets()</code> -- 返回一个 Collection 对象，包含已经添加到此 JoinRowSet 对象的 RowSet 对象</p></li>
+                                <li><p><code>String 	getWhereClause()</code> -- 返回在 JoinRowSet 对象中使用的 WHERE 子句的类似 SQL 的描述</p></li>
+                                <li><p><code>CachedRowSet 	toCachedRowSet()</code> -- 创建一个包含此 JoinRowSet 对象中数据的新 CachedRowSet 对象，可以使用 CachedRowSet 对象的 SyncProvider 对象将此 JoinRowSet 对象保存到数据源</p></li>
+
+                                <li class="group"><p><code>boolean 	supportsCrossJoin()</code> -- 指示 JoinRowSet 实现是否支持 CROSS_JOIN</p></li>
+                                <li><p><code>boolean 	supportsFullJoin()</code> -- 指示 JoinRowSet 实现是否支持 FULL_JOIN</p></li>
+                                <li><p><code>boolean 	supportsInnerJoin()</code> -- 指示 JoinRowSet 实现是否支持 INNER_JOIN</p></li>
+                                <li><p><code>boolean 	supportsLeftOuterJoin()</code> -- 指示 JoinRowSet 实现是否支持 LEFT_OUTER_JOIN</p></li>
+                                <li><p><code>boolean 	supportsRightOuterJoin()</code> -- 指示 JoinRowSet 实现是否支持 RIGHT_OUTER_JOIN</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="SyncResolver" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface SyncResolver extends RowSet {
+    int UPDATE_ROW_CONFLICT = 0; // 指示在 RowSet 对象试图更新数据源中的行时发生冲突
+    int DELETE_ROW_CONFLICT = 1; // 指示在 RowSet 对象试图删除数据源中的行时发生冲突
+    int INSERT_ROW_CONFLICT = 2; // 指示在 RowSet 对象试图将行插入数据源中时发生冲突
+    int NO_ROW_CONFLICT = 3; // 指示在 RowSet 对象试图更新、删除或插入数据源中的行时不发生任何冲突
+}
+</pre>
+                            <p><a href="docs/docs-java/api/javax/sql/rowset/spi/SyncResolver.html" target="_blank"><code>javax.sql.rowset.spi.</code>SyncResolver</a> 定义一个框架，当发生同步冲突时，它允许应用程序使用手工决策树来确定应该执行的操作。虽然应用程序手工解决同步冲突并不是委托过程，但此框架还是提供了一些发生冲突时委托应用程序的方法。 </p>
+                            <p>注意，冲突是指 RowSet 对象的原始行值与数据源中的值不匹配的情况，它指示自最后一次同步以来数据源行已被修改。还要注意，RowSet 对象的原始值就是最后一次同步之前的值，不必是其初始值。 </p>
+                            <ol>
+                                <li><p><code>Object 	getConflictValue(int index)</code> -- 获取此 SyncResolver 对象的当前行中指定列的值，它是数据源中导致冲突的值</p></li>
+                                <li><p><code>Object 	getConflictValue(String columnName)</code> -- 获取此 SyncResolver 对象的当前行中指定列的值，它是数据源中导致冲突的值</p></li>
+                                <li><p><code>int 	getStatus()</code> -- 获取此 SyncResolver 的当前行的冲突状态，它指示在发生冲突时 RowSet 对象正尝试的操作</p></li>
+                                <li><p><code>boolean 	nextConflict()</code> -- 将指针从其当前位置移动到下一个包含冲突值的行</p></li>
+                                <li><p><code>boolean 	previousConflict()</code> -- 将指针从其当前位置移动到此 SyncResolver 对象中上一个冲突行</p></li>
+                                <li><p><code>void 	setResolvedValue(int index, Object obj)</code> -- 将 obj 设置为将同步的 RowSet 对象当前行中第 index 列的值</p></li>
+                                <li><p><code>void 	setResolvedValue(String columnName, Object obj)</code> -- 将 obj 设置为将同步的 RowSet 对象当前行中列 columnName 的值</p></li>
+                            </ol>
                         </div>
 					</div>
 				</div>
