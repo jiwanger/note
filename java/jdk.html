@@ -120,13 +120,26 @@
                         </div>
 
                         <a class="list-group-item active drop" data-toggle="collapse"
+                           data-parent="#accordion" href="#javax-sql" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+                            <code>javax.sql</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+                        </a>
+                        <div id="javax-sql" class="panel-collapse collapse"
+                             role="tabpanel">
+                            <a href="#javax-sql-DataSource" class="list-group-item">DataSource</a>
+                            <a href="#javax-sql-" class="list-group-item">...</a>
+                        </div>
+
+                        <a class="list-group-item active drop" data-toggle="collapse"
                            data-parent="#accordion" href="#java-beans" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
                             <code>java.beans</code><span class="caret pull-right" style="margin-top: 5px;"></span>
                         </a>
                         <div id="java-beans" class="panel-collapse collapse"
                              role="tabpanel">
                             <a href="#java-beans-Beans" class="list-group-item">Beans</a>
-                            <a href="#java-beans-" class="list-group-item">...</a>
+                            <a href="#java-beans-Encoder" class="list-group-item">Encoder 及相关类</a>
+                            <a href="#java-beans-FeatureDescriptor" class="list-group-item">FeatureDescriptor 及子类</a>
+
+                            <a href="#java-beans-" class="list-group-item"></a>
                         </div>
 
                         <a class="list-group-item active drop" data-toggle="collapse"
@@ -7723,7 +7736,7 @@ public interface DatabaseMetaData extends Wrapper {
                             <li><p><code>String 	getDatabaseProductVersion()</code> -- 获取此数据库产品的版本号</p></li>
 
                             <li class="group"><p><code>int 	getDriverMajorVersion()</code> -- 获取此 JDBC 驱动程序的主版本号</p></li>
-                            <li><p><code>int 	getDriverMinorVersion()</code> -- 获取此 JDBC 驱动程序的次版本号</p></li
+                            <li><p><code>int 	getDriverMinorVersion()</code> -- 获取此 JDBC 驱动程序的次版本号</p></li>
                             <li><p><code>String 	getDriverName()</code> -- 获取此 JDBC 驱动程序的名称</p></li>
                             <li><p><code>String 	getDriverVersion()</code> -- 获取此 JDBC 驱动程序的 String 形式的版本号</p></li>
 
@@ -8361,32 +8374,66 @@ public interface PreparedStatement extends PreparedStatement {}
 					</div>
 					<div class="panel-body">
                         <div class="sub-item">
-                            <p><b>ResultSet 接口及相关类实例</b></p>
                             <div class="split-item">
-<a href="#Predicate">Predicate</a> -- FilteredRowSet 的过滤器<br>
-<a href="#Joinable">Joinable</a> -- 实现此接口的 ResultSet 可加入 JoinRowSet<br>
-
-<a href="#ResultSet">java.sql.ResultSet</a> -- 默认的结果集只能前向遍历,并且不能更新<br>
-<s10 />└─ <a href="#RowSet">RowSet</a> -- 支持适合于 JavaBeans 组件模型的 JDBC API<br>
-<s40 />├─ <a href="#JdbcRowSet">JdbcRowSet</a> -- 让 ResultSet 对象可滚动和可更新<br>
-<s40 />├─ <a href="#CachedRowSet">CachedRowSet</a> -- 内存缓存，提供了不用一直保持连接数据源而操作数据的能力<br>
-<s40 />├ <s20 />└─ <a href="#WebRowSet">WebRowSet</a> -- 输出到 XML 和使用有效的 XML 作为输入<br>
-<s40 />├ <s50 />├─ <a href="#FilteredRowSet">FilteredRowSet</a> -- 对其内容进行某种程度的过滤<br>
-<s40 />├ <s50 />└─ <a href="#JoinRowSet">JoinRowSet</a> -- 联合多个相关结果集<br>
-<s40 />└─ <a href="#SyncResolver">SyncResolver</a> -- 定义一个框架，当发生同步冲突时，它允许应用程序使用手工决策树来确定应该执行的操作
+								<p><b>ResultSet 接口及相关类实例</b></p>
+								<p><a href="#ResultSet">java.sql.ResultSet</a> -- 默认的结果集只能前向遍历,并且不能更新</p>
+								<p><s10 />└─ <a href="#RowSet">RowSet</a> -- 支持适合于 JavaBeans 组件模型的 JDBC API</p>
+								<p><s40 />├─ <a href="#JdbcRowSet">JdbcRowSet</a> -- 让 ResultSet 对象可滚动和可更新</p>
+								<p><s40 />├─ <a href="#CachedRowSet">CachedRowSet</a> -- 内存缓存，提供了不用一直保持连接数据源而操作数据的能力</p>
+								<p><s40 />├ <s20 />└─ <a href="#WebRowSet">WebRowSet</a> -- 输出到 XML 和使用有效的 XML 作为输入</p>
+								<p><s40 />├ <s50 />├─ <a href="#FilteredRowSet">FilteredRowSet</a> -- 对其内容进行某种程度的过滤</p>
+								<p><s40 />├ <s50 />└─ <a href="#JoinRowSet">JoinRowSet</a> -- 联合多个相关结果集</p>
+								<p><s40 />└─ <a href="#SyncResolver">SyncResolver</a> -- 定义一个框架，当发生同步冲突时，它允许应用程序使用手工决策树来确定应该执行的操作</p>
+								<p><a href="#Predicate">Predicate</a> -- FilteredRowSet 的过滤器</p>
+								<p><a href="#Joinable">Joinable</a> -- 实现此接口的 ResultSet 可加入 JoinRowSet</p>
                             </div>
 
                             <div class="split-item">
                                 <p>直接使用 ResultSet:</p>
                                 <pre class="brush: java;">
-
+// Statement 必须为可更新的，ResultSet 才能调用 update 相关方法
+Statement statement = conn.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+ResultSet rs = statement.executeQuery("select * from bonecp limit 10;");
+while(rs.next()) {
+    int id = rs.getInt(1);
+    if(id == 5) {
+        rs.updateString(2, "nate");
+        rs.updateString(3, "http://d.lesson1234.com");
+        rs.updateRow();
+    }
+    log(id, rs.getString(2), rs.getString(3));
+}
 </pre>
                             </div>
 
                             <div class="split-item">
-                                <p>使用 RowSet:</p>
+                                <p>使用 RowSet 及子类:</p>
                                 <pre class="brush: java;">
+// 推荐使用先使用 RowSetProvider 构建 RowSetFactory， 再构建相应的 RowSet，实现类来自 com.sun.rowset 包
+RowSetFactory factory = RowSetProvider.newFactory(); // 实现类: com.sun.rowset.RowSetFactoryImpl
+JdbcRowSet jdbcRowSet = factory.createJdbcRowSet(); // 实现类: com.sun.rowset.JdbcRowSetImpl
+CachedRowSet cachedRowSet = factory.createCachedRowSet(); // 实现类: com.sun.rowset.CachedRowSetImpl
+WebRowSet webRowSet = factory.createWebRowSet(); // 实现类: com.sun.rowset.WebRowSetImpl
+JoinRowSet joinRowSet = factory.createJoinRowSet(); // 实现类: com.sun.rowset.JoinRowSetImpl
+FilteredRowSet filteredRowSet = factory.createFilteredRowSet(); // 实现类: com.sun.rowset.FilteredRowSetImpl
 
+// javax.sql.rowset.spi.SyncResolver 类工厂未提供构建方法
+SyncResolver syncResolver = new SyncResolverImpl();
+
+// 使用实例 JdbcRowSet：
+compile 'mysql:mysql-connector-java:8.0.11' // 1.要导入驱动包
+
+RowSetFactory factory = RowSetProvider.newFactory(); // 2. 构建 RowSetFactory
+JdbcRowSet jrs = factory.createJdbcRowSet(); // 3.构建 JdbcRowSet
+jrs.setUrl(url); // 数据库连接 url
+jrs.setUsername(user); // 数据库用户名
+jrs.setPassword(password); // 数据库密码
+jrs.setCommand("select * from bonecp limit 10;"); // sql 查询语句
+jrs.execute(); // 执行 sql
+
+while(jrs.next()) {
+    log(jrs.getInt(1), jrs.getString(2), jrs.getString(3));
+}
 </pre>
                             </div>
                         </div>
@@ -8925,7 +8972,7 @@ public interface Predicate {
                             <p><a href="docs/docs-java/api/javax/sql/rowset/FilteredRowSet.html" target="_blank"><code>javax.sql.rowset.</code>FilteredRowSet</a> CachedRowSet 类提供了一组受保护的光标操纵方法，FilteredRowSet 实现可重写这些方法将来提供过滤支持。 </p>
                             <p>有时 RowSet 对象需要对其内容进行某种程度的过滤。一种可能的解决方案是为所有标准的 RowSet 实现提供一种查询语言；但是这对诸如非连接 RowSet 对象之类的轻量级组件而言是一种不切实际的方法。FilteredRowSet 接口寻求在不提供重量级查询语言和这种查询语言所需处理的情况下解决这一需求问题。 </p>
                             <p>在移除过滤器或应用新的过滤器之前，不能修改那些位于 FilteredRowSet 对象上设置的过滤器范围外的各行。 </p>
-                            <p><a><a href="docs/docs-java/api/javax/sql/rowset/Predicate.html" target="_blank"><code>javax.sql.rowset.</code>Predicate</a> 是为所有 FilteredRowSet 对象提供框架以描述其过滤器的标准接口。</p>
+                            <p><a href="docs/docs-java/api/javax/sql/rowset/Predicate.html" target="_blank"><code>javax.sql.rowset.</code>Predicate</a> 是为所有 FilteredRowSet 对象提供框架以描述其过滤器的标准接口。</p>
                             <p>Predicate 接口是一个标准接口，应用程序可以实现它来定义希望应用于 FilteredRowSet 对象的过滤器。FilteredRowSet 对象使用此接口的实现并实施在 evaluate 方法的实现中定义的各种约束。FilteredRowSet 对象以双向方式实施过滤器约束：它只输出过滤器的约束中存在的行；反之，也只插入、修改或更新过滤器的约束中存在的行。 </p>
                             <p>如果使用父接口中继承的 createShared 方法共享了 FilteredRowSet 实现，则应所有 FilteredRowSet 实例副本应共享 Predicate 并不做任何修改。 </p>
                         </div>
@@ -9018,7 +9065,22 @@ public interface SyncResolver extends RowSet {
 				<!-- item over -->
 
                 <!-- item start -->
-                <a class="offset" id="java-"></a>
+                <a class="offset" id="javax-sql-DataSource"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">DataSource</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+                        <p><a href="docs/docs-java/api/" target="_blank"></a></p>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javax-sql-"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title">...</h3>
@@ -9027,6 +9089,337 @@ public interface SyncResolver extends RowSet {
 						<pre class="brush: java;">
 
 </pre>
+                        <p><a href="docs/docs-java/api/" target="_blank"></a></p>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-beans-Beans"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Beans</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <p><b>java.beans 包概述</b></p>
+                            <p><code>java.beans</code> 包包含与开发 beans 有关的类，即基于 JavaBeans<sup>TM</sup> 架构的组件。</p>
+                            <p>少数类可由 bean 使用，也能以应用程序的形式运行。</p>
+                            <p>结构良好的对象就叫做 JavaBeans，简称Beans。定义Beans的类称为 JavaBeans 组件或 Bean 组件，或者简称为组件。这些类通过下列条件组织为 JavaBeans 组件模型：</p>
+                            <ol>
+                                <li><p>Bean 必须是 public 类；</p></li>
+                                <li><p>尽管 Bean 可能有其他构造方法，但是必须有一个公用的无参构造方法；</p></li>
+                                <li><p>Bean 必须实现接口 java.io.Serializeable,并确保其持续性；</p></li>
+                                <li><p>Bean 的属性通常带有构造恰当的共用访问器方法（get 方法）和修改器方法（set 方法），可以使开发工具能够看到并使用 Bean 属性；</p></li>
+                                <li><p>Bean 事件可能带有构造恰当的，共用的注册方法和注销方法，使用这些方法可以添加或删除监听器。如果 Bean 是事件源，它必须提供注册监听器的注册方法。</p></li>
+                            </ol>
+                            <p>Bean 必须满足前三个条件，因此，这三个条件称为 JavanBeans 组件的最低要求。是否满足后两个条件依赖于具体实现，可能编写的Bean没有 get/set 方法或者没有事件注册/注销方法。</p>
+                            <p>为了最大限度地减少 bean 使用的资源，只在要编辑 bean 时加载 bean 编辑器使用的类。当 bean 以应用程序的形式运行时，不需要这些类，所以不用加载它们。</p>
+                            <p>除非显式声明，否则 null 值或空 String 对于此包中的方法是无效参数。如果使用这些参数，可能将引发异常。 </p>
+                            <p>从 v1.4 开始，java.beans 包提供了对长期持久性 的支持，即以其属性值的文本表示形式读取或写入 bean。这些属性值被视为 bean，它们被递归地读取或写入，以捕获其公共可用状态。此方法适用于长期存储，因为它只依赖于公共 API 而不是很可能发生更改的私有实现。 </p>
+                            <p><b>注意</b>： 持久性方案无法自动实例化自定义内部类，比如用于事件处理程序。通过使用 EventHandler 类而不是自定义事件处理程序的内部类，可以避免此问题。 </p>
+                            <p>如果需要（或选择）为 bean 提供持久委托，则可以通过使用 DefaultPersistenceDelegate 实例或通过创建自己的 PersistenceDelegate 子类来实现。如果 bean 需要持久委托的唯一原因是因为用户想调用 bean 使用属性值作为参数的构造方法，则可以使用单参数的 DefaultPersistenceDelegate 构造方法创建 bean 的持久委托。否则，用户需要实现自己的持久委托，对此，可能需要以下类：</p>
+                            <ul>
+                                <li><p><a href="#java-beans-PersistenceDelegate">PersistenceDelegate</a> -- 是一个抽象类，所有持久委托都是从它遗传的。子类应该使用它所知的 bean 类型信息来提供创建 bean 和恢复其状态所需的任何 Statement 和 Expression。</p></li>
+                                <li><p><a href="#java-beans-Statement">Statement</a> -- 表示某一对象上的单个方法的调用。包括该方法的参数集合。</p></li>
+                                <li><p><a href="#java-beans-Expression">Expression</a> -- 用于返回一个值的那些方法的 Statement 的子类。</p></li>
+                            </ul>
+                            <p>一旦创建了一个持久委托，就可以使用 XMLEncoder 的 setPersistenceDelegate 方法注册它。</p>
+                        </div>
+						<pre class="brush: java;">
+public class Beans {}
+</pre>
+                        <p><a href="docs/docs-java/api/java/beans/Beans.html" target="_blank">Beans</a> 类提供一些通用的 bean 控制方法。 </p>
+                        <ol>
+                            <li><p><code>static Object 	instantiate(ClassLoader cls, String beanName)</code> -- 实例化 JavaBean</p></li>
+                            <li><p><code>static Object 	instantiate(ClassLoader cls, String beanName, BeanContext beanContext)</code> -- 实例化 JavaBean</p></li>
+                            <li><p><code>static Object 	instantiate(ClassLoader cls, String beanName, BeanContext beanContext, AppletInitializer initializer)</code> -- 实例化 bean</p></li>
+
+                            <li class="group"><p><code>static Object 	getInstanceOf(Object bean, Class&lt;?> targetType)</code> -- 从 bean 中获得表示源对象的指定类型视图的对象</p></li>
+                            <li><p><code>static boolean 	isInstanceOf(Object bean, Class&lt;?> targetType)</code> -- 检查是否可以将 bean 视为给定目标类型</p></li>
+
+                            <li class="group"><p><code>static boolean 	isDesignTime()</code> -- 测试是否正处于设计模式</p></li>
+                            <li><p><code>static void 	setDesignTime(boolean isDesignTime)</code> -- 用于指示是否正运行在应用程序生成器环境中</p></li>
+
+                            <li class="group"><p><code>static boolean 	isGuiAvailable()</code> -- 确定 bean 是否可以假定某个 GUI 是可用的</p></li>
+                            <li><p><code>static void 	setGuiAvailable(boolean isGuiAvailable)</code> -- 用于指示是否正运行在可进行 GUI 交互的环境中</p></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-beans-Encoder"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Encoder 及相关类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+java.lang.Object
+    java.beans.Encoder
+
+public class Encoder {}
+</pre>
+                            <p><a href="docs/docs-java/api/java/beans/Encoder.html" target="_blank">Encoder</a> 是这样的类，它可用于创建根据其公共 API 对 JavaBeans 集合状态进行编码的文件或流。Encoder 结合其持久委托，负责将对象图形拆分成一系列可用于创建它的 Statements 和 Expression。子类通常使用某种可读形式（比如 Java 源代码或 XML）提供这些表达式的语法。 </p>
+                            <ol>
+                                <li><p><code>Object 	get(Object oldInstance)</code> -- 在由此流创建的环境中返回 oldInstance 的一个实验值</p></li>
+                                <li><p><code>Object 	remove(Object oldInstance)</code> -- 移除此实例的条目，返回旧条目</p></li>
+
+                                <li class="group"><p><code>protected  void 	writeObject(Object o)</code> -- 将指定对象写入输出流中</p></li>
+                                <li><p><code>void 	writeStatement(Statement oldStm)</code> -- 将语句 oldStm 写入流中</p></li>
+                                <li><p><code>void 	writeExpression(Expression oldExp)</code> -- 该实现首先查看使用此值的表达式是否已经被写入</p></li>
+
+                                <li class="group"><p><code>ExceptionListener 	getExceptionListener()</code> -- 获得此流的异常处理程序</p></li>
+                                <li><p><code>void 	setExceptionListener(ExceptionListener exceptionListener)</code> -- 将此流的异常处理程序设置为 exceptionListener</p></li>
+
+                                <li class="group"><p><code>PersistenceDelegate 	getPersistenceDelegate(Class&lt;?> type)</code> -- 返回给定类型的持久委托</p></li>
+                                <li><p><code>void 	setPersistenceDelegate(Class&lt;?> type, PersistenceDelegate persistenceDelegate)</code> -- 将与此 type 相关联的持久委托设置为 persistenceDelegate</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    java.beans.Encoder
+        java.beans.XMLEncoder
+
+public class XMLEncoder extends Encoder implements AutoCloseable {
+    public XMLEncoder(OutputStream out) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/beans/XMLEncoder.html" target="_blank">XMLEncoder</a> 是 ObjectOutputStream 的互补替换，可用于生成 JavaBean 的文本表示形式，所使用方式与用 ObjectOutputStream 创建 Serializable 对象的二进制表示形式的方式相同。</p>
+                            <p>尽管两者的 API 类似，但 XMLEncoder 类仅设计用于将 JavaBean 的图形归档为其公共属性的文本表示形式。与 Java 源文件类似，以这种方式写入的文档在所涉及类的实现中可自然免除更改。在进程间通信和通用序列化中继续推荐使用 ObjectOutputStream。 </p>
+                            <p>XMLEncoder 类提供 JavaBean 的默认指示，其中它们被表示为符合 1.0 版的 XML 规范和 Unicode/ISO 10646 字符集 UTF-8 字符编码的 XML 文档。由 XMLEncoder 类生成的 XML 文档如下： </p>
+                            <ul>
+                                <li><p>轻便且版本灵活：它们不依赖于任何类的私有实现，因此，与 Java 源文件类似，可以在某些不同版本的类之间或不同的供应商的 VM 之间交换它们。</p></li>
+                                <li><p>结构紧凑：XMLEncoder 类在内部使用删减冗余 (redundancy elimination) 算法，因此 Bean 属性的默认值不会被写入流中。</p></li>
+                                <li><p>容错性：文件中的非结构性错误（由于文件的破坏或在归档文件中对类进行的 API 更改导致）仍然保持本地化，因此 reader 可以报告错误，并继续加载不受错误影响的那部分文档。</p></li>
+                            </ul>
+                            <ol>
+                                <li><p><code>void 	close()</code> -- 此方法调用 flush，写入结束后文，然后关闭与此流有关的输出流</p></li>
+                                <li><p><code>void 	flush()</code> -- 如果还没有写出导言，那么此方法将写出与 XML 编码有关的导言，并随后写出从最后一次调用 flush 以来写入流中的所有值</p></li>
+                                <li><p><code>Object 	getOwner()</code> -- 获得此编码器的所有者</p></li>
+                                <li><p><code>void 	setOwner(Object owner)</code> -- 将此编码器的所有者设置为 owner</p></li>
+                                <li><p><code>void 	writeExpression(Expression oldExp)</code> -- 记录 Expression，以便 Encoder 在刷新流的缓存时产生实际输出</p></li>
+                                <li><p><code>void 	writeObject(Object o)</code> -- 将指定对象的 XML 表示形式写入输出中</p></li>
+                                <li><p><code>void 	writeStatement(Statement oldStm)</code> -- 记录 Statement，以便 Encoder 在刷新流的缓存时产生实际输出</p></li>
+                            </ol>
+                            <p>将对象生成 XML 文件：</p>
+                            <pre class="brush: java;">
+List&lt;Book> books = new ArrayList<>();
+books.add(new Book(1001, "Think In Java", 30.00f));
+books.add(new Book(1001, "Linux Kernel", 60.00f));
+try {
+    OutputStream out = new FileOutputStream("./books.xml");
+    XMLEncoder xmlEncoder = new XMLEncoder(out);
+    xmlEncoder.writeObject(books);
+    xmlEncoder.close();
+} catch (FileNotFoundException e) {
+    e.printStackTrace();
+}
+</pre>
+                            <p>生成的 XML 文件如下：</p>
+                            <pre class="brush: xml;">
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.8.0_65" class="java.beans.XMLDecoder">
+ <object class="java.util.ArrayList">
+  <void method="add">
+   <object class="io.github.my.bean.Book">
+    <void property="id">
+     <int>1001</int>
+    </void>
+    <void property="name">
+     <string>Think In Java</string>
+    </void>
+    <void property="price">
+     <float>30.0</float>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="io.github.my.bean.Book">
+    <void property="id">
+     <int>1001</int>
+    </void>
+    <void property="name">
+     <string>Linux Kernel</string>
+    </void>
+    <void property="price">
+     <float>60.0</float>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>
+</pre>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    java.beans.XMLDecoder
+
+public class XMLDecoder implements AutoCloseable {
+    public XMLDecoder(InputSource is) {}
+    public XMLDecoder(InputStream in) {}
+    public XMLDecoder(InputStream in, Object owner) {}
+    public XMLDecoder(InputStream in, Object owner, ExceptionListener exceptionListener) {}
+    public XMLDecoder(InputStream in, Object owner, ExceptionListener exceptionListener, ClassLoader cl) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/beans/XMLDecoder.html" target="_blank">XMLDecoder</a> 类用于读取使用 XMLEncoder 创建的 XML 文档，用途类似于 ObjectInputStream。</p>
+                            <ol>
+                                <li><p><code>static DefaultHandler 	createHandler(Object owner, ExceptionListener el, ClassLoader cl)</code> -- 为 SAX 解析器创建一个新的处理程序</p></li>
+
+                                <li class="group"><p><code>Object 	readObject()</code> -- 从基础输入流中读取下一个对象</p></li>
+                                <li><p><code>void 	close()</code> -- 关闭与此流相关联的输入流</p></li>
+                                <li><p><code>Object 	getOwner()</code> -- 获取此解码器的所有者</p></li>
+                                <li><p><code>void 	setOwner(Object owner)</code> -- 设置将此解码器的所有者</p></li>
+
+                                <li class="group"><p><code>void 	setExceptionListener(ExceptionListener exceptionListener)</code> -- 设置异常处理程序</p></li>
+                                <li><p><code>ExceptionListener 	getExceptionListener()</code> -- 获得此流的异常处理程序</p></li>
+                            </ol>
+                            <p>从 XML 加载对象:(前面 XMLEncoder 生成的 xml 文件)</p>
+                            <pre class="brush: java;">
+try {
+    InputStream in = new FileInputStream("./books.xml");
+    XMLDecoder xmlDecoder = new XMLDecoder(in);
+    List&lt;Book> bookList = (List&lt;Book>) xmlDecoder.readObject();
+    bookList.forEach(book -> {
+        log(book);
+    });
+} catch (FileNotFoundException e) {
+    e.printStackTrace();
+}
+</pre>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-beans-FeatureDescriptor"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">FeatureDescriptor 及子类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+java.lang.Object
+    java.beans.FeatureDescriptor
+
+public class FeatureDescriptor {}
+</pre>
+                            <p><a href="docs/docs-java/api/java/beans/FeatureDescriptor.html" target="_blank">FeatureDescriptor</a> 类是 PropertyDescriptor、EventSetDescriptor 和 MethodDescriptor 等的公共基类。</p>
+                            <p>它支持一些可以设置和检索任意的内省描述符的公共信息。 </p>
+                            <p>此外，它还提供了一种扩展机制，从而任意属性/值对都可以与设计特性相关联。 </p>
+                            <ol>
+                                <li><p><code>void 	setName(String name)</code> -- 设置此特性的编程名称</p></li>
+                                <li><p><code>String 	getName()</code> -- 获得此特性的编程名称</p></li>
+                                <li><p><code>void 	setDisplayName(String displayName)</code> -- 获得此特性的本地化显示名称</p></li>
+                                <li><p><code>String 	getDisplayName()</code> -- 设置此特性的本地化显示名称</p></li>
+                                <li><p><code>void 	setShortDescription(String text)</code> -- 可以将简短描述性字符串与某一特性相关联</p></li>
+                                <li><p><code>String 	getShortDescription()</code> -- 获得此特性的简短描述</p></li>
+
+                                <li class="group"><p><code>Object 	getValue(String attributeName)</code> -- 利用此特性检索指定属性</p></li>
+                                <li><p><code>void 	setValue(String attributeName, Object value)</code> -- 将某一指定属性与此特性相关联</p></li>
+                                <li><p><code>Enumeration&lt;String> 	attributeNames()</code> -- 获得与语言环境无关的此特性名称的枚举</p></li>
+
+                                <li class="group"><p><code>boolean 	isExpert()</code> -- "expert" 标志用于区分那些打算供高级用户使用的特性与那些打算供普通用户使用的特性</p></li>
+                                <li><p><code>void 	setExpert(boolean expert)</code> -- 设置 expert 标志</p></li>
+                                <li><p><code>boolean 	isHidden()</code> -- "hidden" 标志用于标识只打算供工具使用、不应对人类开放的特性</p></li>
+                                <li><p><code>void 	setHidden(boolean hidden)</code> -- 设置 hidden 标志</p></li>
+                                <li><p><code>boolean 	isPreferred()</code> -- "preferred" 标志用于标识呈现给用户的特别重要的特性</p></li>
+                                <li><p><code>void 	setPreferred(boolean preferred)</code> -- 设置 preferred 标志</p></li>
+
+                                <li class="group"><p><code>void toString()</code> -- 所有属性</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+java.lang.Object
+    java.beans.FeatureDescriptor
+        java.beans.BeanDescriptor
+
+public class BeanDescriptor extends FeatureDescriptor {
+    public BeanDescriptor(Class&lt;?> beanClass) {}
+    public BeanDescriptor(Class&lt;?> beanClass, Class&lt;?> customizerClass) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/beans/BeanDescriptor.html" target="_blank">BeanDescriptor</a> 提供有关 "bean" 的全局信息，其中包括其 Java 类、其 displayName 等等</p>
+                            <p>这是由 BeanInfo 对象返回的描述符种类之一，该对象还返回属性、方法和事件的描述符。</p>
+                            <ol>
+                                <li><p><code>Class&lt;?> 	getBeanClass()</code> -- 获得 bean 的 Class 对象</p></li>
+                                <li><p><code>Class&lt;?> 	getCustomizerClass()</code> -- 获得 bean 的 customizer 的 Class 对象</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+java.lang.Object
+    java.beans.FeatureDescriptor
+        java.beans.EventSetDescriptor
+
+public class EventSetDescriptor extends FeatureDescriptor {
+    public EventSetDescriptor(Class&lt;?> sourceClass, String eventSetName, Class&lt;?> listenerType,
+        String listenerMethodName) {}
+    public EventSetDescriptor(Class&lt;?> sourceClass, String eventSetName, Class&lt;?> listenerType,
+        String[] listenerMethodNames, String addListenerMethodName, String removeListenerMethodName) {}
+    public EventSetDescriptor(Class&lt;?> sourceClass, String eventSetName, Class&lt;?> listenerType,
+        String[] listenerMethodNames, String addListenerMethodName, String removeListenerMethodName,
+        String getListenerMethodName) {}
+    public EventSetDescriptor(String eventSetName, Class&lt;?> listenerType, Method[] listenerMethods,
+        Method addListenerMethod, Method removeListenerMethod) {}
+    public EventSetDescriptor(String eventSetName, Class&lt;?> listenerType, Method[] listenerMethods,
+        Method addListenerMethod, Method removeListenerMethod, Method getListenerMethod) {}
+    public EventSetDescriptor(String eventSetName, Class&lt;?> listenerType, MethodDescriptor[]
+        listenerMethodDescriptors, Method addListenerMethod, Method removeListenerMethod) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/beans/EventSetDescriptor.html" target="_blank">EventSetDescriptor</a> 描述给定 Java bean 激发的一组事件的 EventSetDescriptor。 </p>
+                            <p>给定的事件组都是作为方法调用在单个事件侦听器接口上传递的，事件侦听器对象可以通过调用事件源提供的注册方法进行注册。</p>
+
+                        </div>
+
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api/" target="_blank"></a></p>
+                        </div>
+
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api/" target="_blank"></a></p>
+                        </div>
+
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api/" target="_blank"></a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id=""></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">...</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+                        <p><a href="docs/docs-java/api/" target="_blank"></a></p>
                     </div>
                 </div>
                 <!-- item over -->
