@@ -86,6 +86,34 @@
                             <a href="#java-lang-ref-Reference" class="list-group-item">ref.Reference 及子类</a>
 						</div>
 
+                        <a class="list-group-item active drop" data-toggle="collapse"
+                           data-parent="#accordion" href="#java-lang-annotation" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+                            <code>java.lang.annotation</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+                        </a>
+                        <div id="java-lang-annotation" class="panel-collapse collapse"
+                             role="tabpanel">
+                            <a href="#java-lang-annotation-Annotation" class="list-group-item">Annotation 及元注解</a>
+                            <a href="#java-lang-annotation-" class="list-group-item">...</a>
+                        </div>
+
+                        <a class="list-group-item active drop" data-toggle="collapse"
+                           data-parent="#accordion" href="#java-lang-reflect" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+                            <code>java.lang.reflect</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+                        </a>
+                        <div id="java-lang-reflect" class="panel-collapse collapse"
+                             role="tabpanel">
+                            <a href="#java-lang-reflect-base" class="list-group-item">反射类的基础接口</a>
+                            <a href="#java-lang-reflect-AccessibleObject" class="list-group-item">AccessibleObject</a>
+                            <a href="#java-lang-reflect-Executable" class="list-group-item">Executable</a>
+                            <a href="#java-lang-reflect-Constructor" class="list-group-item">Constructor</a>
+                            <a href="#java-lang-reflect-Field" class="list-group-item">Field</a>
+                            <a href="#java-lang-reflect-Method" class="list-group-item">Method</a>
+                            <a href="#java-lang-reflect-Modifier" class="list-group-item">Modifier</a>
+                            <a href="#java-lang-reflect-Parameter" class="list-group-item">Parameter</a>
+                            <a href="#java-lang-reflect-Array" class="list-group-item">Array</a>
+                            <a href="#java-lang-reflect-Proxy" class="list-group-item">Proxy</a>
+                            <a href="#java-lang-reflect-ReflectPermission" class="list-group-item">ReflectPermission</a>
+                        </div>
 
 						<a class="list-group-item active drop" data-toggle="collapse"
 						   data-parent="#accordion" href="#java-util" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
@@ -928,24 +956,7 @@ public class ClassDemo {
                                     <p><code>Type 	getGenericSuperclass()</code> -- 直接继承类的类型，只有 Object 返回空，参见相关类</p>
                                 </li>
                                 <li class="group">
-                                    <p><code>native int getModifiers()</code> -- 获得整数表示的修饰符，由 <a href="docs/docs-java/api/java/lang/reflect/Modifier.html" target="_blank">Modifier</a> 定义</p>
-                                    <pre class="brush: java;">
-/** Modifier 类定义以下常量，并且定义了相关 is 方法。
- * 因为修饰符有多个叠加，返回值需要计算：比如 public static 为 9
- */
-public static final int PUBLIC           = 0x00000001;
-public static final int PRIVATE          = 0x00000002;
-public static final int PROTECTED        = 0x00000004;
-public static final int STATIC           = 0x00000008;
-public static final int FINAL            = 0x00000010;
-public static final int SYNCHRONIZED     = 0x00000020;
-public static final int VOLATILE         = 0x00000040;
-public static final int TRANSIENT        = 0x00000080;
-public static final int NATIVE           = 0x00000100;
-public static final int INTERFACE        = 0x00000200;
-public static final int ABSTRACT         = 0x00000400;
-public static final int STRICT           = 0x00000800;
-                                    </pre>
+                                    <p><code>native int getModifiers()</code> -- 获得整数表示的修饰符，由 <a href="#java-lang-reflect-Modifier" target="_blank">Modifier</a> 定义</p>
                                 </li>
                                 <li>
                                     <p><code>String getName()</code> -- 获取类或接口的名字，包括包名</p>
@@ -970,45 +981,45 @@ public class Test&lt;T, M> {}
                                 </li>
 
                                 <li class="group">
-                                    <p><code>Constructor&lt;?>[] getConstructors()</code> -- 获得所有的构造函数</p>
+                                    <p><code><a href="#java-lang-reflect-Constructor">Constructor&lt;?></a>[] getConstructors()</code> -- 获得所有的构造函数</p>
                                 </li>
                                 <li>
-                                    <p><code>Constructor&lt;T> getConstructor(Class&lt;?>... parameterTypes)</code> -- 获得指定参数类型的构造函数</p>
+                                    <p><code><a href="#java-lang-reflect-Constructor">Constructor&lt;?></a> getConstructor(Class&lt;?>... parameterTypes)</code> -- 获得指定参数类型的构造函数</p>
                                 </li>
                                 <li>
-                                    <p><code>Constructor&lt;?>[] 	getDeclaredConstructors()</code> -- 自己的构造方法</p>
+                                    <p><code><a href="#java-lang-reflect-Constructor">Constructor&lt;?></a>[] 	getDeclaredConstructors()</code> -- 自己的构造方法</p>
                                 </li>
                                 <li>
-                                    <p><code>Constructor&lt;T> 	getDeclaredConstructor(Class&lt;?>... parameterTypes)</code> -- 指定参数类型的自己的构造方法</p>
+                                    <p><code><a href="#java-lang-reflect-Constructor">Constructor&lt;?></a> 	getDeclaredConstructor(Class&lt;?>... parameterTypes)</code> -- 指定参数类型的自己的构造方法</p>
                                 </li>
 
                                 <li class="group">
-                                    <p><code>Field[] getFields()</code> -- 获得字段数组(public 修饰的，包括继承的)</p>
+                                    <p><code><a href="#java-lang-reflect-Field">Field</a>[] getFields()</code> -- 获得字段数组(public 修饰的，包括继承的)</p>
                                 </li>
                                 <li>
-                                    <p><code>Field 	getField(String name)</code> -- 获取指定名字字段(public 修饰的，包括继承的)</p>
+                                    <p><code><a href="#java-lang-reflect-Field">Field</a> 	getField(String name)</code> -- 获取指定名字字段(public 修饰的，包括继承的)</p>
                                 </li>
                                 <li>
-                                    <p><code>Field[] 	getDeclaredFields()</code> -- 自己的所有字段列表，不包括父类</p>
+                                    <p><code><a href="#java-lang-reflect-Field">Field</a>[] 	getDeclaredFields()</code> -- 自己的所有字段列表，不包括父类</p>
                                 </li>
                                 <li>
-                                    <p><code>Field 	getDeclaredField(String name)</code> -- 指定名字的自己的字段</p>
+                                    <p><code><a href="#java-lang-reflect-Field">Field</a> 	getDeclaredField(String name)</code> -- 指定名字的自己的字段</p>
                                 </li>
                                 <li>
                                     <p><code>T[] getEnumConstants()</code> -- 获取枚举常量数组</p>
                                 </li>
 
                                 <li class="group">
-                                    <p><code>Method[] 	getDeclaredMethods()</code> -- 自己的所有方法列表，不包括父类</p>
+                                    <p><code><a href="#java-lang-reflect-Method">Method</a>[] 	getDeclaredMethods()</code> -- 自己的所有方法列表，不包括父类</p>
                                 </li>
                                 <li>
-                                    <p><code>Method 	getDeclaredMethod(String name, Class&lt;?>... parameterTypes)</code> -- 指定名字和参数类型的自己的方法</p>
+                                    <p><code><a href="#java-lang-reflect-Method">Method</a> 	getDeclaredMethod(String name, Class&lt;?>... parameterTypes)</code> -- 指定名字和参数类型的自己的方法</p>
                                 </li>
                                 <li>
-                                    <p><code>Method[] getMethods()</code> -- 获得 public 方法(包括继承的)</p>
+                                    <p><code><a href="#java-lang-reflect-Method">Method</a>[] getMethods()</code> -- 获得 public 方法(包括继承的)</p>
                                 </li>
                                 <li>
-                                    <p><code>Method 	getMethod(String name, Class&lt;?>... parameterTypes)</code> -- 指定名字和参数类型的 public 方法(包括继承的)</p>
+                                    <p><code><a href="#java-lang-reflect-Method">Method</a> 	getMethod(String name, Class&lt;?>... parameterTypes)</code> -- 指定名字和参数类型的 public 方法(包括继承的)</p>
                                 </li>
 
                                 <li class="group">
@@ -1024,10 +1035,10 @@ public class Test&lt;T, M> {}
                                     <p><code>Class&lt;?> 	getEnclosingClass()</code> -- 返回其包裹类(上一级的类)</p>
                                 </li>
                                 <li>
-                                    <p><code>Constructor&lt;?> 	getEnclosingConstructor()</code> -- 如果局部类定义在构造方法中，返回局部类所在的构造方法</p>
+                                    <p><code><a href="#java-lang-reflect-Constructor">Constructor&lt;?></a> 	getEnclosingConstructor()</code> -- 如果局部类定义在构造方法中，返回局部类所在的构造方法</p>
                                 </li>
                                 <li>
-                                    <p><code>Method 	getEnclosingMethod()</code> -- 如果局部类定义在普通方法中，返回局部类所在的方法</p>
+                                    <p><code><a href="#java-lang-reflect-Method">Method</a> 	getEnclosingMethod()</code> -- 如果局部类定义在普通方法中，返回局部类所在的方法</p>
                                 </li>
 
                                 <li class="group">
@@ -3199,6 +3210,738 @@ public class PhantomReference&lt;T> extends Reference&lt;T> {
     public PhantomReference(T referent, ReferenceQueue&lt;? super T> q) {}
 }
 </pre>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-annotation-Annotation"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Annotation 及元注解</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+public interface Annotation {}
+</pre>
+                            <p><a href="docs/docs-java/api/java/lang/annotation/Annotation.html" target="_blank">Annotation</a> 为 Java 编程语言注释设施提供库支持。 </p>
+                            <p>注解的定义类似于接口的定义，使用 <code>@interface</code> 来定义，自动继承自 <code>Annotation</code> 接口。</p>
+                            <p><b>注意</b>，手动扩展该公共接口的接口不定义 annotation 类型。还要注意此接口本身不定义 annotation 类型。 </p>
+                            <ol>
+                                <li><p><code>Class&lt;? extends Annotation> 	annotationType()</code> -- 返回此 annotation 的注释类型</p></li>
+                                <li><p><code>boolean 	equals(Object obj)</code> -- 如果指定的对象表示在逻辑上等效于此接口的注释，则返回 true。换句话说，如果指定对象是一个与此实例相同的 annotation 类型的实例，即其所有成员都与此实例中所对应的成员相等，则返回 true</p></li>
+                                <li><p><code>int 	hashCode()</code> -- 返回此 annotation 的哈希码</p></li>
+                                <li><p><code>String 	toString()</code> -- 返回此 annotation 的字符串表示形式</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <div class="split-item">
+                                <p><b>Java 元注解</b> -- 是指用于定义注解类型的注解。包括 @Retention @Target @Document @Inherited @Repeatable(1.8 添加) 几种。</p>
+                                <table class="table table-responsive table-striped table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>注解</th>
+                                        <th>说明</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>@Target</td>
+                                        <td>定义注解的作用目标</td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Retention</td>
+                                        <td>定义注解的保留策略。RetentionPolicy.SOURCE:注解仅存在于源码中，在class字节码文件中不包含；RetentionPolicy.CLASS:默认的保留策略，注解会在class字节码文件中存在，但运行时无法获得;RetentionPolicy.RUNTIME:注解会在class字节码文件中存在，在运行时可以通过反射获取到。</td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Document</td>
+                                        <td>说明该注解将被包含在 Javadoc 中</td>
+                                    </tr>
+                                    <tr>
+                                        <td>@Inherited</td>
+                                        <td>说明子类可以继承父类中的该注解</td>
+                                    </tr>
+                                    <tr>
+                                        <td>@RepeatAble</td>
+                                        <td>表明标记的注解可以多次应用于相同的声明或类型使用</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <p>当注解未指定 Target 值时，则此注解可以用于任何元素之上，多个值使用 {} 包含并用逗号隔开，如下：</p>
+                                <pre class="brush: java;">@Target(value={CONSTRUCTOR, FIELD, METHOD})</pre>
+                                <table class="table table-responsive table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Target 类型</th>
+                                    <th>说明</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>ElementType.TYPE</td>
+                                    <td>接口、类、枚举、注解</td>
+                                </tr>
+                                <tr>
+                                    <td>ElementType.FIELD</td>
+                                    <td>字段、枚举的常量</td>
+                                </tr>
+                                <tr>
+                                    <td>ElementType.METHOD</td>
+                                    <td>方法</td>
+                                </tr>
+                                <tr>
+                                    <td>ElementType.CONSTRUCTOR</td>
+                                    <td>构造函数</td>
+                                </tr>
+                                <tr>
+                                    <td>ElementType.LOCAL_VARIABLE</td>
+                                    <td>局部变量</td>
+                                </tr>
+                                <tr>
+                                    <td>ElementType.ANNOTATION_TYPE</td>
+                                    <td>注解</td>
+                                </tr>
+                                <tr>
+                                    <td>ElementType.PACKAGE</td>
+                                    <td>包</td>
+                                </tr>
+                                <tr>
+                                    <td>ElementType.PARAMETER</td>
+                                    <td>方法参数</td>
+                                </tr>
+                                <tr>
+                                    <td>ElementType.TYPE_USE</td>
+                                    <td>类型使用声明</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            </div>
+
+                            <div class="split-item">
+								<pre class="brush: java;">
+@Documented // 说明该注解将被包含在 javadoc 中
+@Retention(RetentionPolicy.RUNTIME) // 定义注解的保留策略为运行时
+@Target(ElementType.ANNOTATION_TYPE) // 表明为元注解
+public @interface Target {
+	ElementType[] value(); // 值为 ElementType
+}
+
+public enum ElementType {
+    TYPE, /** 定义接口、类、枚举、注解的时候使用 */
+    FIELD, /** 字段、枚举的常量上使用 */
+    METHOD, /** 方法上使用 */
+    PARAMETER, /** 参数上使用 */
+    CONSTRUCTOR, /** 构造方法上使用 */
+    LOCAL_VARIABLE, /** 局部变量上使用 */
+    ANNOTATION_TYPE, /** 注解类型类型上使用 */
+    PACKAGE, /** 包声明时使用 */
+    TYPE_PARAMETER, /**  */
+    TYPE_USE /**  */
+}
+</pre>
+                                <p><a href="docs/docs-java/api/java/lang/annotation/Target.html" target="_blank">@Target</a> 用于定义注解的作用目标。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-annotation-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">...</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/annotation/.html" target="_blank"></a></p>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-reflect-base"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">反射类的基础接口和类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+public interface Member {
+    int PUBLIC = 0; // 标识类或接口的所有公共成员（包括继承成员）的集合
+    int DECLARED = 1; // 标识类或接口的所有已声明成员的集合
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/lang/reflect/Member.html" target="_blank">Member</a> 是一种接口，反映有关单个成员（字段或方法）或构造方法的标识信息。</p>
+                            <p>实现类：<a href="#java-lang-reflect-Executable">Executable</a>, <a href="#java-lang-reflect-Constructor">Constructor</a>, <a href="#java-lang-reflect-Field">Field</a>, <a href="#java-lang-reflect-Method">Method</a></p>
+                            <ol>
+                                <li><p><code>Class&lt;?> 	getDeclaringClass()</code> -- 返回表示声明由此 Member 表示的成员或构造方法的类或接口的 Class 对象</p></li>
+                                <li><p><code>int 	getModifiers()</code> -- 作为整数返回由此 Member 所表示的成员或构造方法的 Java 语言修饰符</p></li>
+                                <li><p><code>String 	getName()</code> -- 返回此 Member 表示的底层成员或构造方法的简单名称</p></li>
+                                <li><p><code>boolean 	isSynthetic()</code> -- 如果此成员是编译器引入的，则返回 true；否则，返回 false</p></li>
+                            </ol>
+                            <pre class="brush: java;">
+public final void member() {
+    try {
+        Member member = MyReflect.class.getMethod("member"); // MyReflect 的 member 方法
+        int mofifiers = member.getModifiers();
+        log(Modifier.toString(mofifiers)); // 修饰符，转换为 String 查看: public final
+        log(member.getName());  // 成员名，这里是方法: member
+        log(member.getDeclaringClass().getName()); // 此成员的类或接口的 Class: io.github.java.lang.reflect.MyReflect
+        log(member.isSynthetic()); // 成员是否是编译器引入: false
+    } catch (NoSuchMethodException e) {
+        e.printStackTrace();
+    }
+}
+</pre>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface AnnotatedElement {}
+</pre>
+                            <p><a href="docs/docs-java/api/java/lang/reflect/AnnotatedElement.html" target="_blank">AnnotatedElement</a> 是注解元素，表示目前正在此 VM 中运行的程序的一个已注释元素。该接口允许反射性地读取注释。由此接口中的方法返回的所有注释都是不可变并且可序列化的。调用者可以修改已赋值数组枚举成员的访问器返回的数组；这不会对其他调用者返回的数组产生任何影响。 </p>
+                            <p>如果此接口中的方法返回的注释（直接或间接地）包含一个已赋值的 Class 成员，该成员引用了一个在此 VM 中不可访问的类，则试图通过在返回的注释上调用相关的类返回的方法来读取该类，将导致一个 TypeNotPresentException。 </p>
+                            <p>类似地，如果注释中的枚举常量不再以枚举类型存在，那么试图读取一个已赋值的枚举成员将导致一个 EnumConstantNotPresentException。 </p>
+                            <ol>
+                                <li><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p></li>
+                                <li><p><code>default boolean 	isAnnotationPresent(Class&lt;? extends Annotation> annotationClass)</code> -- 如果指定类型的注释存在于此元素上，则返回 true，否则返回 false</p></li>
+                                <li><p><code>Annotation[] 	getAnnotations()</code> -- 返回此元素上存在的所有注释</p></li>
+                                <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注释</p></li>
+
+                                <li class="group"><p><code>default &lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 返回与此元素关联的注释</p></li>
+                                <li><p><code>default &lt;T extends Annotation> T 	getDeclaredAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在直接在此元素上的指定类型的注释，则返回指定类型的元素的注释，否则返回 NULL</p></li>
+                                <li><p><code>default &lt;T extends Annotation> T[] 	getDeclaredAnnotationsByType(Class&lt;T> annotationClass)</code> -- 如果这种注释直接呈现或间接呈现，则返回该元素的指定类型的注释</p></li>
+                            </ol>
+                            <p>实现类：<a href="#java-lang-reflect-AccessibleObject">AccessibleObject</a>, <a href="#java-lang-reflect-Executable">Executable</a>, <a href="#java-lang-reflect-Constructor">Constructor</a>, <a href="#java-lang-reflect-Field">Field</a>, <a href="#java-lang-reflect-Method">Method</a>, <a href="#java-lang-reflect-Parameter">Parameter</a>, <a href="#java-lang-Package">Package</a>, <a href="#java-lang-Class">Class&lt;T></a></p>
+                            <p>子接口：<a href="docs/docs-java/api/java/lang/reflect/GenericDeclaration.html">GenericDeclaration</a>, <a href="docs/docs-java/api/java/lang/reflect/TypeVariable.html">TypeVariable&lt;D></a>, <a href="docs/docs-java/api/java/lang/reflect/AnnotatedType.html">AnnotatedType</a>, <a href="docs/docs-java/api/java/lang/reflect/AnnotatedArrayType.html">AnnotatedArrayType</a>, <a href="docs/docs-java/api/java/lang/reflect/AnnotatedParameterizedType.html">AnnotatedParameterizedType</a>, <a href="docs/docs-java/api/java/lang/reflect/AnnotatedTypeVariable.html">AnnotatedTypeVariable</a>, <a href="docs/docs-java/api/java/lang/reflect/AnnotatedWildcardType.html">AnnotatedWildcardType</a></p>
+                            <pre class="brush: java;">
+public interface GenericDeclaration extends AnnotatedElement {
+    TypeVariable&lt;?>[] getTypeParameters();
+}
+
+public interface TypeVariable&lt;D extends GenericDeclaration> extends Type, AnnotatedElement {
+    AnnotatedType[] getAnnotatedBounds();
+    Type[] getBounds();
+    D getGenericDeclaration();
+    String getName();
+}
+
+public interface AnnotatedType extends AnnotatedElement {
+    Type getType();
+}
+
+public interface AnnotatedArrayType extends AnnotatedType {
+    AnnotatedType getAnnotatedGenericComponentType();
+}
+
+public interface AnnotatedTypeVariable extends AnnotatedType {
+    AnnotatedType[] getAnnotatedBounds();
+}
+
+public interface AnnotatedParameterizedType extends AnnotatedType {
+    AnnotatedType[] getAnnotatedActualTypeArguments();
+}
+
+public interface AnnotatedWildcardType extends AnnotatedType {
+    AnnotatedType[] getAnnotatedLowerBounds();
+    AnnotatedType[] getAnnotatedUpperBounds();
+}
+</pre>
+                        </div>
+
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+public interface Type {
+    default String getTypeName();
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/lang/reflect/Type.html" target="_blank">Type</a> 是 Java 编程语言中所有类型的公共高级接口。它们包括原始类型、参数化类型、数组类型、类型变量和基本类型。</p>
+                            <p>子接口: <a href="docs/docs-java/api/java/lang/reflect/GenericArrayType.html">GenericArrayType</a>, <a href="docs/docs-java/api/java/lang/reflect/ParameterizedType.html">ParameterizedType</a>, <a href="docs/docs-java/api/java/lang/reflect/WildcardType.html">WildcardType</a>, 还有前面的 <code>TypeVariable&lt;D></code></p>
+                            <p>实现类: <a href="#java-lang-Class">Class&lt;T></a></p>
+                            <pre class="brush: java;">
+public interface GenericArrayType extends Type {
+    Type getGenericComponentType();
+}
+
+public interface ParameterizedType extends Type {
+    Type[] getActualTypeArguments();
+    Type getOwnerType();
+    Type getRawType();
+}
+
+public interface WildcardType extends Type {
+    Type[] getLowerBounds();
+    Type[] getUpperBounds();
+}
+                            </pre>
+                        </div>
+
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+public interface InvocationHandler {
+    Object invoke(Object proxy, Method method, Object[] args);
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/lang/reflect/InvocationHandler.html" target="_blank">InvocationHandler</a> 是代理实例的调用处理程序 实现的接口。 </p>
+                            <p>每个代理实例都具有一个关联的调用处理程序。对代理实例调用方法时，将对方法调用进行编码并将其指派到它的调用处理程序的 invoke 方法。</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-reflect-AccessibleObject"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">AccessibleObject</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    java.lang.reflect.AccessibleObject
+
+public class AccessibleObject implements AnnotatedElement {
+    protected AccessibleObject() {}
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/reflect/AccessibleObject.html" target="_blank">AccessibleObject</a> 是 Executable, Constructor, Field 和 Method 对象的基类。</p>
+                        <p>提供了将反射的对象标记为在使用时取消默认 Java 语言访问控制检查的能力。对于公共成员、默认（打包）访问成员、受保护成员和私有成员，在分别使用 Field、Method 或 Constructor 对象来设置或获取字段、调用方法，或者创建和初始化类的新实例的时候，会执行访问检查。 </p>
+                        <p>在反射对象中设置 accessible 标志允许具有足够特权的复杂应用程序（比如 Java Object Serialization 或其他持久性机制）以某种通常禁止使用的方式来操作对象。 </p>
+                        <ol>
+                            <li><p><code>static void 	setAccessible(AccessibleObject[] array, boolean flag)</code> -- 使用单一安全性检查（为了提高效率）为一组对象设置 accessible 标志的便捷方法</p></li>
+
+                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p></li>
+                            <li><p><code>&lt;T extends Annotation> T 	getDeclaredAnnotation(Class&lt;T> annotationClass)</code> -- </p></li>
+                            <li><p><code>Annotation[] 	getAnnotations()</code> -- 返回此元素上存在的所有注释</p></li>
+                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注释</p></li>
+
+                            <li class="group"><p><code>&lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- </p></li>
+
+                            <li class="group"><p><code>&lt;T extends Annotation> T[] 	getDeclaredAnnotationsByType(Class&lt;T> annotationClass)</code> -- </p></li>
+                            <li><p><code>boolean 	isAnnotationPresent(Class&lt;? extends Annotation> annotationClass)</code> -- 如果指定类型的注释存在于此元素上，则返回 true，否则返回 false</p></li>
+
+                            <li class="group"><p><code>boolean 	isAccessible()</code> -- 获取此对象的 accessible 标志的值</p></li>
+                            <li><p><code>void 	setAccessible(boolean flag)</code> -- 将此对象的 accessible 标志设置为指示的布尔值</p></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-reflect-Executable"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Executable</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    java.lang.reflect.AccessibleObject
+        java.lang.reflect.Executable
+
+public abstract class Executable extends AccessibleObject implements Member, GenericDeclaration {}
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/reflect/Executable.html" target="_blank">Executable</a> 是 Constructor 和 Method 的父类。</p>
+                        <ol>
+                            <li><p><code>abstract int 	getModifiers()</code> -- 以整数形式返回此方法对象所表示构造方法的 Java 语言修饰符</p></li>
+                            <li><p><code>abstract String 	getName()</code> -- 字符串形式返回此方法的名称</p></li>
+                            <li><p><code>abstract String 	toGenericString()</code> -- 返回描述此方法的字符串，其中包括类型参数</p></li>
+
+                            <li class="group"><p><code>AnnotatedType[] 	getAnnotatedExceptionTypes()</code> -- 异常注解类型</p></li>
+                            <li><p><code>AnnotatedType[] 	getAnnotatedParameterTypes()</code> -- 参数注解类型</p></li>
+                            <li><p><code>abstract AnnotatedType 	getAnnotatedReturnType()</code> -- 返回值注解类型</p></li>
+                            <li><p><code>AnnotatedType 	getAnnotatedReceiverType()</code> -- 方法/构造函数的接收器类型</p></li>
+
+                            <li class="group"><p><code>abstract Class&lt;?> 	getDeclaringClass()</code> -- 如果是成员类，则返回其包裹类</p></li>
+                            <li><p><code>abstract Class&lt;?>[] 	getExceptionTypes()</code> -- 异常类的类型</p></li>
+                            <li><p><code>abstract Class&lt;?>[] 	getParameterTypes()</code> -- 参数类的类型</p></li>
+
+                            <li class="group"><p><code>Type[] 	getGenericExceptionTypes()</code> -- </p></li>
+                            <li><p><code>Type[] 	getGenericParameterTypes()</code> -- </p></li>
+                            <li><p><code>abstract TypeVariable&lt;?>[] 	getTypeParameters()</code> -- </p></li>
+
+                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 指定类型的注解</p></li>
+                            <li><p><code>&lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 指定类型的注解</p></li>
+                            <li><p><code>abstract Annotation[][] 	getParameterAnnotations()</code> -- 此方法的参数的注解列表</p></li>
+                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 直接存在此方法上的注解列表</p></li>
+
+                            <li class="group"><p><code>int 	getParameterCount()</code> -- 参数数量</p></li>
+                            <li><p><code>Parameter[] 	getParameters()</code> -- 获取参数列表</p></li>
+                            <li><p><code>boolean 	isSynthetic()</code> -- 此方法是否有复合参数</p></li>
+                            <li><p><code>boolean 	isVarArgs()</code> -- 此方法是否有可变参数</p></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-reflect-Constructor"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Constructor</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    java.lang.reflect.AccessibleObject
+        java.lang.reflect.Executable
+            java.lang.reflect.Constructor&lt;T>
+
+public final class Constructor&lt;T> extends Executable {}
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/reflect/Constructor.html" target="_blank">Constructor</a> 提供关于类的单个构造方法的信息以及对它的访问权限。 </p>
+                        <p>Constructor 允许在将实参与带有底层构造方法的形参的 newInstance() 匹配时进行扩展转换，但是如果发生收缩转换，则抛出 IllegalArgumentException。 </p>
+                        <ol>
+                            <li><p><code>T 	newInstance(Object... initargs)</code> -- 使用此 Constructor 对象表示的构造方法来创建该构造方法的声明类的新实例，并用指定的初始化参数初始化该实例</p></li>
+                            <li><p><code>int 	getModifiers()</code> -- 以整数形式返回此 Constructor 对象所表示构造方法的 Java 语言修饰符</p></li>
+                            <li><p><code>int 	getParameterCount()</code> -- 此构造方法的参数数目</p></li>
+                            <li><p><code>boolean 	isVarArgs()</code> -- 如果声明此构造方法可以带可变数量的参数，则返回 true；否则返回 false</p></li>
+                            <li><p><code>boolean 	isSynthetic()</code> -- 如果此构造方法是一个复合构造方法，则返回 true；否则返回 false</p></li>
+                            <li><p><code>String 	getName()</code> -- 以字符串形式返回此构造方法的名称</p></li>
+
+                            <li class="group"><p><code>AnnotatedType 	getAnnotatedReceiverType()</code> -- 返回一个注释类型对象，该对象表示使用类型来指定由该可执行对象表示的方法/构造函数的接收器类型</p></li>
+                            <li><p><code>AnnotatedType 	getAnnotatedReturnType()</code> -- 返回一个注释类型对象，该对象表示使用类型来指定由该可执行文件表示的方法/构造函数的返回类型</p></li>
+
+                            <li class="group"><p><code>Type[] 	getGenericExceptionTypes()</code> -- 返回一组 Type 对象，这些对象表示声明要由此 Constructor 对象抛出的异常</p></li>
+                            <li><p><code>Type[] 	getGenericParameterTypes()</code> -- 按照声明顺序返回一组 Type 对象，这些对象表示此 Constructor 对象所表示的方法的形参类型</p></li>
+                            <li><p><code>TypeVariable&lt;Constructor&lt;T>>[] 	getTypeParameters()</code> -- 按照声明顺序返回一组 TypeVariable 对象，这些对象表示通过此 GenericDeclaration 对象所表示的一般声明来声明的类型变量</p></li>
+
+                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p></li>
+                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注释</p></li>
+                            <li><p><code>Annotation[][] 	getParameterAnnotations()</code> -- 按照声明顺序返回一组数组，这些数组表示通过此 Constructor 对象表示的方法的形参上的注释</p></li>
+
+                            <li class="group"><p><code>Class&lt;T> 	getDeclaringClass()</code> -- 返回 Class 对象，该对象表示声明由此 Constructor 对象表示的构造方法的类</p></li>
+                            <li><p><code>Class&lt;?>[] 	getExceptionTypes()</code> -- 返回一组表示声明要抛出的异常类型的 Class 对象，这些异常是由此 Constructor 对象表示的底层构造方法抛出的</p></li>
+                            <li><p><code>Class&lt;?>[] 	getParameterTypes()</code> -- 按照声明顺序返回一组 Class 对象，这些对象表示此 Constructor 对象所表示构造方法的形参类型</p></li>
+
+                            <li class="group"><p><code>int 	hashCode()</code> -- 返回此 Constructor 的哈希码</p></li>
+                            <li><p><code>boolean 	equals(Object obj)</code> -- 将此 Constructor 对象与指定的对象进行比较</p></li>
+                            <li><p><code>String 	toGenericString()</code> -- 返回描述此 Constructor 的字符串，其中包括类型参数</p></li>
+                            <li><p><code>String 	toString()</code> -- 返回描述此 Constructor 的字符串</p></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-reflect-Field"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Field</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    java.lang.reflect.AccessibleObject
+        java.lang.reflect.Field
+
+public final class Field extends AccessibleObject implements Member {}
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/reflect/Field.html" target="_blank">Field</a> 提供有关类或接口的单个字段的信息，以及对它的动态访问权限。反射的字段可能是一个类（静态）字段或实例字段。 </p>
+                        <p>Array 允许在执行 get 或 set 访问操作期间进行扩展转换，但如果将发生收缩转换，则抛出一个 IllegalArgumentException。</p>
+                        <ol>
+                            <li><p><code>int 	getModifiers()</code> -- 以整数形式返回由此 Field 对象表示的字段的 Java 语言修饰符</p></li>
+                            <li><p><code>String 	getName()</code> -- 返回此 Field 对象表示的字段的名称</p></li>
+                            <li><p><code>boolean 	isEnumConstant()</code> -- 如果此字段表示枚举类型的元素，则返回 true；否则返回 false</p></li>
+                            <li><p><code>boolean 	isSynthetic()</code> -- 如果此字段是复合字段，则返回 true；否则返回 false</p></li>
+                            <li><p><code>Class&lt;?> 	getType()</code> -- 返回一个 Class 对象，它标识了此 Field 对象所表示字段的声明类型</p></li>
+
+                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p></li>
+                            <li><p><code>&lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 存在于此元素上指定类型的所有注释</p></li>
+                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注释</p></li>
+
+                            <li class="group"><p><code>Class&lt;?> 	getDeclaringClass()</code> -- 返回表示类或接口的 Class 对象，该类或接口声明由此 Field 对象表示的字段</p></li>
+                            <li><p><code>AnnotatedType 	getAnnotatedType()</code> -- 返回一个注释类型对象，该对象表示使用类型来指定由该字段表示的字段的声明类型</p></li>
+                            <li><p><code>Type 	getGenericType()</code> -- 返回一个描述此 Field（包括其一般类型）的字符串</p></li>
+
+                            <li class="group"><p><code>Object 	get(Object obj)</code> -- 返回指定对象上此 Field 表示的字段的值</p></li>
+                            <li><p><code>boolean 	getBoolean(Object obj)</code> -- 获取一个静态或实例 boolean 字段的值</p></li>
+                            <li><p><code>byte 	getByte(Object obj)</code> --  获取一个静态或实例 byte 字段的值</p></li>
+                            <li><p><code>char 	getChar(Object obj)</code> --  获取一个静态或实例 char 字段的值</p></li>
+                            <li><p><code>short 	getShort(Object obj)</code> --  获取一个静态或实例 short 字段的值</p></li>
+                            <li><p><code>int 	getInt(Object obj)</code> --  获取一个静态或实例 int 字段的值</p></li>
+                            <li><p><code>long 	getLong(Object obj)</code> --  获取一个静态或实例 long 字段的值</p></li>
+                            <li><p><code>float 	getFloat(Object obj)</code> --  获取一个静态或实例 float 字段的值</p></li>
+                            <li><p><code>double 	getDouble(Object obj)</code> --  获取一个静态或实例 double 字段的值</p></li>
+
+                            <li class="group"><p><code>void 	set(Object obj, Object value)</code> -- 将字段的值设置为指定对象上的一个 Object 值</p></li>
+                            <li><p><code>void 	setBoolean(Object obj, boolean z)</code> -- 将字段的值设置为指定对象上的一个 boolean 值</p></li>
+                            <li><p><code>void 	setByte(Object obj, byte b)</code> -- 将字段的值设置为指定对象上的一个 byte 值</p></li>
+                            <li><p><code>void 	setChar(Object obj, char c)</code> -- 将字段的值设置为指定对象上的一个 char 值</p></li>
+                            <li><p><code>void 	setShort(Object obj, short s)</code> -- 将字段的值设置为指定对象上的一个 short 值</p></li>
+                            <li><p><code>void 	setInt(Object obj, int i)</code> -- 将字段的值设置为指定对象上的一个 int 值</p></li>
+                            <li><p><code>void 	setLong(Object obj, long l)</code> -- 将字段的值设置为指定对象上的一个 long 值</p></li>
+                            <li><p><code>void 	setFloat(Object obj, float f)</code> -- 将字段的值设置为指定对象上的一个 float 值</p></li>
+                            <li><p><code>void 	setDouble(Object obj, double d)</code> -- 将字段的值设置为指定对象上的一个 double 值</p></li>
+
+                            <li class="group"><p><code>int 	hashCode()</code> -- 返回此 Field 的哈希码</p></li>
+                            <li><p><code>boolean 	equals(Object obj)</code> -- 将此 Field 对象与指定的对象进行比较</p></li>
+                            <li><p><code>String 	toGenericString()</code> -- 返回描述此 Field 的字符串，其中包括类型参数</p></li>
+                            <li><p><code>String 	toString()</code> -- 返回描述此 Field 的字符串</p></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-reflect-Method"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Method</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    java.lang.reflect.AccessibleObject
+        java.lang.reflect.Executable
+            java.lang.reflect.Method
+
+public final class Method extends Executable {}
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/reflect/Method.html" target="_blank">Method</a> 提供关于类或接口上单独某个方法（以及如何访问该方法）的信息。所反映的方法可能是类方法或实例方法（包括抽象方法）。</p>
+                        <p>Method 允许在匹配要调用的实参与底层方法的形参时进行扩展转换；但如果要进行收缩转换，则会抛出 IllegalArgumentException。</p>
+                        <ol>
+                            <li><p><code>int 	getModifiers()</code> -- 以整数形式返回此 Method 对象所表示方法的 Java 语言修饰符</p></li>
+                            <li><p><code>String 	getName()</code> -- 以 String 形式返回此 Method 对象表示的方法名称</p></li>
+                            <li><p><code>Class&lt;?> 	getReturnType()</code> -- 返回一个 Class 对象，该对象描述了此 Method 对象所表示的方法的正式返回类型</p></li>
+                            <li><p><code>int 	getParameterCount()</code> -- 如果此字段表示枚举类型的元素，则返回 true；否则返回 false</p></li>
+                            <li><p><code>Object 	invoke(Object obj, Object... args)</code> -- 对带有指定参数的指定对象调用由此 Method 对象表示的底层方法</p></li>
+
+                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p></li>
+                            <li><p><code>Annotation[][] 	getParameterAnnotations()</code> -- 返回表示按照声明顺序对此 Method 对象所表示方法的形参进行注释的那个数组的数组</p></li>
+                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注释</p></li>
+                            <li><p><code>Object 	getDefaultValue()</code> -- 返回由此 Method 实例表示的注释成员的默认值</p></li>
+
+                            <li class="group"><p><code>AnnotatedType 	getAnnotatedReturnType()</code> -- 返回一个注释类型对象，该对象表示使用类型来指定由该可执行文件表示的方法/构造函数的返回类型</p></li>
+                            <li><p><code>Class&lt;?>[] 	getParameterTypes()</code> -- 按照声明顺序返回 Class 对象的数组，这些对象描述了此 Method 对象所表示的方法的形参类型</p></li>
+                            <li><p><code>Class&lt;?>[] 	getExceptionTypes()</code> -- 返回 Class 对象的数组，这些对象描述了声明将此 Method 对象表示的底层方法抛出的异常类型</p></li>
+                            <li><p><code>Class&lt;?> 	getDeclaringClass()</code> -- 返回表示声明由此 Method 对象表示的方法的类或接口的 Class 对象</p></li>
+
+                            <li class="group"><p><code>Type[] 	getGenericExceptionTypes()</code> -- 返回 Type 对象数组，这些对象描述了声明由此 Method 对象抛出的异常</p></li>
+                            <li><p><code>Type[] 	getGenericParameterTypes()</code> -- 按照声明顺序返回 Type 对象的数组，这些对象描述了此 Method 对象所表示的方法的形参类型的</p></li>
+                            <li><p><code>Type 	getGenericReturnType()</code> -- 返回表示由此 Method 对象所表示方法的正式返回类型的 Type 对象</p></li>
+                            <li><p><code>TypeVariable&lt;Method>[] 	getTypeParameters()</code> -- 返回 TypeVariable 对象的数组，这些对象描述了由 GenericDeclaration 对象表示的一般声明按声明顺序来声明的类型变量</p></li>
+
+                            <li class="group"><p><code>boolean 	isBridge()</code> -- 如果此方法是 bridge 方法，则返回 true；否则，返回 false</p></li>
+                            <li><p><code>boolean 	isDefault()</code> -- 是否为默认方法(用接口类型声明的具有方法体的非静态方法)</p></li>
+                            <li><p><code>boolean 	isSynthetic()</code> -- 如果此方法为复合方法，则返回 true；否则，返回 false</p></li>
+                            <li><p><code>boolean 	isVarArgs()</code> -- 如果将此方法声明为带有可变数量的参数，则返回 true；否则，返回 false</p></li>
+
+                            <li class="group"><p><code>int 	hashCode()</code> -- 返回此 Method 的哈希码</p></li>
+                            <li><p><code>boolean 	equals(Object obj)</code> -- 将此 Method 对象与指定的对象进行比较</p></li>
+                            <li><p><code>String 	toGenericString()</code> -- 返回描述此 Method 的字符串，其中包括类型参数</p></li>
+                            <li><p><code>String 	toString()</code> -- 返回描述此 Method 的字符串</p></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-reflect-Modifier"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Modifier</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    java.lang.reflect.Modifier
+
+public class Modifier {
+    public static final int PUBLIC           = 0x00000001; // 表示 public 修饰符的 int 值
+    public static final int PRIVATE          = 0x00000002; // 表示 private 修饰符的 int 值
+    public static final int PROTECTED        = 0x00000004; // 表示 protected 修饰符的 int 值
+    public static final int STATIC           = 0x00000008; // 表示 static 修饰符的 int 值
+    public static final int FINAL            = 0x00000010; // 表示 final 修饰符的 int 值
+    public static final int SYNCHRONIZED     = 0x00000020; // 表示 synchronized 修饰符的 int 值
+    public static final int VOLATILE         = 0x00000040; // 表示 volatile 修饰符的 int 值
+    public static final int TRANSIENT        = 0x00000080; // 表示 transient 修饰符的 int 的值
+    public static final int NATIVE           = 0x00000100; // 表示 native 修饰符的 int 的值
+    public static final int INTERFACE        = 0x00000200; // 表示 interface 修饰符的 int 的值
+    public static final int ABSTRACT         = 0x00000400; // 表示 abstract 修饰符的 int 的值
+    public static final int STRICT           = 0x00000800; // 表示 strictfp 修饰符的 int 的值
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/reflect/Modifier.html" target="_blank">Modifier</a> 类提供了 static 方法和常量，对类和成员访问修饰符进行解码。</p>
+                        <p>修饰符集被表示为整数，用不同的位位置 (bit position) 表示不同的修饰符。</p>
+                        <ol>
+                            <li><p><code>static int 	classModifiers()</code> -- 可用于 类 的修饰符按位或的结果</p></li>
+                            <li><p><code>static int 	interfaceModifiers()</code> -- 可用于 接口 的修饰符按位或的结果</p></li>
+                            <li><p><code>static int 	constructorModifiers()</code> -- 可用于 构造方法 的修饰符按位或的结果</p></li>
+                            <li><p><code>static int 	fieldModifiers()</code> -- 可用于 字段 的修饰符按位或的结果</p></li>
+                            <li><p><code>static int 	methodModifiers()</code> -- 可用于 方法 的修饰符按位或的结果</p></li>
+                            <li><p><code>static int 	parameterModifiers()</code> -- 可用于 参数 的修饰符按位或的结果</p></li>
+
+                            <li class="group"><p><code>static String 	toString(int mod)</code> -- 返回 mod 修饰符的 String 形式</p></li>
+
+                            <li class="group"><p><code>static boolean 	isAbstract(int mod)</code> -- 如果整数参数包括 abstract 修饰符，则返回 true，否则返回 false</p></li>
+                            <li><p><code>static boolean 	isFinal(int mod)</code> -- 如果整数参数包括 final 修饰符，则返回 true，否则返回 false</p></li>
+                            <li><p><code>static boolean 	isInterface(int mod)</code> -- 如果整数参数包括 interface 修饰符，则返回 true，否则返回 false</p></li>
+                            <li><p><code>static boolean 	isNative(int mod)</code> -- 如果整数参数包括 native 修饰符，则返回 true，否则返回 false</p></li>
+                            <li><p><code>static boolean 	isPrivate(int mod)</code> -- 如果整数参数包括 private 修饰符，则返回 true，否则返回 false</p></li>
+                            <li><p><code>static boolean 	isProtected(int mod)</code> -- 如果整数参数包括 protected 修饰符，则返回 true，否则返回 false</p></li>
+                            <li><p><code>static boolean 	isPublic(int mod)</code> -- 如果整数参数包括 public 修饰符，则返回 true，否则返回 false</p></li>
+                            <li><p><code>static boolean 	isStatic(int mod)</code> -- 如果整数参数包括 static 修饰符，则返回 true，否则返回 false</p></li>
+                            <li><p><code>static boolean 	isStrict(int mod)</code> -- 如果整数参数包括 strictfp 修饰符，则返回 true，否则返回 false</p></li>
+                            <li><p><code>static boolean 	isSynchronized(int mod)</code> -- 如果整数参数包括 synchronized 修饰符，则返回 true，否则返回 false</p></li>
+                            <li><p><code>static boolean 	isTransient(int mod)</code> -- 如果整数参数包括 transient 修饰符，则返回 true，否则返回 false</p></li>
+                            <li><p><code>static boolean 	isVolatile(int mod)</code> -- 如果整数参数包括 volatile 修饰符，则返回 true，否则返回 false</p></li>
+
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-reflect-Parameter"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Parameter</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    java.lang.reflect.Parameter
+
+public final class Parameter implements AnnotatedElement {}
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/reflect/Parameter.html" target="_blank">Parameter</a> 提供有关方法参数的信息。参数提供有关方法参数的信息，包括其名称和修饰符。它还提供了获取参数属性的另一种方法。</p>
+                        <ol>
+                            <li><p><code>int 	getModifiers()</code> -- 以整数形式返回此 Parameter 对象所表示构造方法的 Java 语言修饰符</p></li>
+                            <li><p><code>String 	getName()</code> -- 以字符串形式返回此 Parameter 的名称</p></li>
+                            <li><p><code>Class&lt;?> 	getType()</code> --  返回一个 Class 对象，它标识了此 Parameter 对象所表示字段的声明类型</p></li>
+
+                            <li class="group"><p><code>boolean 	isImplicit()</code> -- 如果在源代码中隐式声明此参数，则返回 true</p></li>
+                            <li><p><code>boolean 	isNamePresent()</code> -- 如果参数具有类文件名，则返回 true</p></li>
+                            <li><p><code>boolean 	isSynthetic()</code> --  如果此 Parameter 是复合参数，则返回 true</p></li>
+                            <li><p><code>boolean 	isVarArgs()</code> -- 如果是可变参数则返回 true</p></li>
+
+                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p></li>
+                            <li><p><code>&lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 存在于此元素上指定类型的所有注释</p></li>
+                            <li><p><code>&lt;T extends Annotation> T 	getDeclaredAnnotation(Class&lt;T> annotationClass)</code> -- 直接存在于此元素上指定类型的所有注释</p></li>
+                            <li><p><code>Annotation[] 	getAnnotations()</code> -- 返回此元素上存在的所有注释</p></li>
+                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注释</p></li>
+                            <li><p><code>&lt;T extends Annotation> T[] 	getDeclaredAnnotationsByType(Class&lt;T> annotationClass)</code> -- </p></li>
+
+                            <li class="group"><p><code>AnnotatedType 	getAnnotatedType()</code> -- 返回一个注释类型对象，该对象表示使用类型来指定由该字段表示的字段的声明类型</p></li>
+                            <li><p><code>Executable 	getDeclaringExecutable()</code> -- </p></li>
+                            <li><p><code>Type 	getParameterizedType()</code> -- </p></li>
+
+                            <li class="group"><p><code>int 	hashCode()</code> -- 返回此 Parameter 的哈希码</p></li>
+                            <li><p><code>boolean 	equals(Object obj)</code> -- 将此 Parameter 对象与指定的对象进行比较</p></li>
+                            <li><p><code>String 	toString()</code> -- 返回描述此 Parameter 的字符串</p></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-reflect-Array"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Array</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    java.lang.reflect.Array
+
+public final class Array {}
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/reflect/Array.html" target="_blank">Array</a> 类提供了动态创建和访问 Java 数组的方法。</p>
+                        <p>Array 允许在执行 get 或 set 操作期间进行扩展转换，但如果发生收缩转换，则抛出 IllegalArgumentException。</p>
+                        <ol>
+                            <li><p><code>static Object 	newInstance(Class&lt;?> componentType, int length)</code> -- 创建一个具有指定的组件类型和长度的新数组</p></li>
+                            <li><p><code>static Object 	newInstance(Class&lt;?> componentType, int... dimensions)</code> -- 创建一个具有指定的组件类型和维度的新数组</p>
+                                <pre class="brush: java;">
+int[] arr = (int[]) Array.newInstance(int.class, 2); // 一维数组，{0, 0}
+
+/** 有几个参数，则为几维数组，参数值为每一维度的长度 */
+// 二维数组,{{0, 0, 0}, {0, 0, 0}}
+int[][] arr = (int[][]) Array.newInstance(int.class, 2, 3);
+// 三维数组，{{{0}, {0}}, {{0}, {0}},  {{0}, {0}}};
+int[][][] arr = (int[][][]) Array.newInstance(int.class, 3, 2, 1);
+</pre>
+                            </li>
+
+                            <li class="group"><p><code>static int 	getLength(Object array)</code> -- 以 int 形式返回指定数组对象的长度</p></li>
+
+                            <li class="group"><p><code>static Object 	get(Object array, int index)</code> -- 返回指定数组对象中索引组件的值</p></li>
+                            <li><p><code>static boolean 	getBoolean(Object array, int index)</code> -- 以 boolean 形式返回指定数组对象中索引组件的值</p></li>
+                            <li><p><code>static byte 	getByte(Object array, int index)</code> -- 以 byte 形式返回指定数组对象中索引组件的值</p></li>
+                            <li><p><code>static char 	getChar(Object array, int index)</code> -- 以 char 形式返回指定数组对象中索引组件的值</p></li>
+                            <li><p><code>static short 	getShort(Object array, int index)</code> -- 以 short 形式返回指定数组对象中索引组件的值</p></li>
+                            <li><p><code>static int 	getInt(Object array, int index)</code> -- 以 int 形式返回指定数组对象中索引组件的值</p></li>
+                            <li><p><code>static long 	getLong(Object array, int index)</code> -- 以 long 形式返回指定数组对象中索引组件的值</p></li>
+                            <li><p><code>static float 	getFloat(Object array, int index)</code> -- 以 float 形式返回指定数组对象中索引组件的值</p></li>
+                            <li><p><code>static double 	getDouble(Object array, int index)</code> -- 以 double 形式返回指定数组对象中索引组件的值</p></li>
+
+                            <li class="group"><p><code>static void 	set(Object array, int index, Object value)</code> -- 将指定数组对象中索引组件的值设置为指定的新值</p></li>
+                            <li><p><code>static void 	setBoolean(Object array, int index, boolean z)</code> -- 将指定数组对象中索引组件的值设置为 boolean 值</p></li>
+                            <li><p><code>static void 	setByte(Object array, int index, byte b)</code> -- 将指定数组对象中索引组件的值设置为 byte 值</p></li>
+                            <li><p><code>static void 	setChar(Object array, int index, char c)</code> -- 将指定数组对象中索引组件的值设置为 chaar 值</p></li>
+                            <li><p><code>static void 	setShort(Object array, int index, short s)</code> -- 将指定数组对象中索引组件的值设置为 short 值</p></li>
+                            <li><p><code>static void 	setInt(Object array, int index, int i)</code> -- 将指定数组对象中索引组件的值设置为 int 值</p></li>
+                            <li><p><code>static void 	setLong(Object array, int index, long l)</code> -- 将指定数组对象中索引组件的值设置为 long 值</p></li>
+                            <li><p><code>static void 	setFloat(Object array, int index, float f)</code> -- 将指定数组对象中索引组件的值设置为 float 值</p></li>
+                            <li><p><code>static void 	setDouble(Object array, int index, double d)</code> -- 将指定数组对象中索引组件的值设置为 double 值</p></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-reflect-Proxy"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Proxy</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    java.lang.reflect.Proxy
+
+public class Proxy implements Serializable {
+    protected InvocationHandler h;
+    protected Proxy(InvocationHandler h) {}
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/reflect/Proxy.html" target="_blank">Proxy</a> 提供用于创建动态代理类和实例的静态方法，它还是由这些方法创建的所有动态代理类的超类。 </p>
+                        <ol>
+                            <li><p><code>static InvocationHandler 	getInvocationHandler(Object proxy)</code> -- </p></li>
+                            <li><p><code>static Class&lt;?> 	getProxyClass(ClassLoader loader, Class&lt;?>... interfaces)</code> -- </p></li>
+                            <li><p><code>static boolean 	isProxyClass(Class&lt;?> cl)</code> -- </p></li>
+                            <li><p><code>static Object 	newProxyInstance(ClassLoader loader, Class&lt;?>[] interfaces, InvocationHandler h)</code> -- </p></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-reflect-ReflectPermission"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">ReflectPermission</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    java.security.Permission
+        java.security.BasicPermission
+            java.lang.reflect.ReflectPermission
+
+public final class ReflectPermission extends BasicPermission {
+    public ReflectPermission(String name) {}
+    public ReflectPermission(String name, String actions) {}
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/reflect/ReflectPermission.html" target="_blank">ReflectPermission</a> 反射操作的 Permission 类。ReflectPermission 是一种指定权限，没有动作。当前定义的唯一名称是 suppressAccessChecks，它允许取消由反射对象在其使用点上执行的标准 Java 语言访问检查 - 对于 public、default（包）访问、protected、private 成员。 </p>
                     </div>
                 </div>
                 <!-- item over -->
@@ -9382,28 +10125,116 @@ public class EventSetDescriptor extends FeatureDescriptor {
 </pre>
                             <p><a href="docs/docs-java/api/java/beans/EventSetDescriptor.html" target="_blank">EventSetDescriptor</a> 描述给定 Java bean 激发的一组事件的 EventSetDescriptor。 </p>
                             <p>给定的事件组都是作为方法调用在单个事件侦听器接口上传递的，事件侦听器对象可以通过调用事件源提供的注册方法进行注册。</p>
+							<ol>
+                                <li><p><code>Method 	getAddListenerMethod()</code> -- 获得用来添加事件侦听器的方法</p></li>
+                                <li><p><code>Method 	getRemoveListenerMethod()</code> -- 获得用来移除事件侦听器的方法</p></li>
+                                <li><p><code>Method 	getGetListenerMethod()</code> -- 获得用来访问已注册事件侦听器的方法</p></li>
 
+                                <li class="group"><p><code>Method[] 	getListenerMethods()</code> -- 获得目标侦听器接口的方法</p></li>
+                                <li><p><code>MethodDescriptor[] 	getListenerMethodDescriptors()</code> -- 获得目标侦听器接口的 MethodDescriptor</p></li>
+                                <li><p><code>Class&lt;?> 	getListenerType()</code> -- 获得目标接口的 Class 对象</p></li>
+
+                                <li class="group"><p><code>boolean 	isInDefaultEventSet()</code> -- 报告事件集是否在“默认”集合中</p></li>
+                                <li><p><code>void 	setInDefaultEventSet(boolean inDefaultEventSet)</code> -- 将事件集标记为“默认”集合（或非默认集合）</p></li>
+                                <li><p><code>boolean 	isUnicast()</code> -- 通常事件源是多播的</p></li>
+                                <li><p><code>void 	setUnicast(boolean unicast)</code> -- 将事件集标记为单播（或非单播）</p></li>
+							</ol>
                         </div>
 
                         <div class="sub-item">
 						    <pre class="brush: java;">
+java.lang.Object
+    java.beans.FeatureDescriptor
+        java.beans.MethodDescriptor
 
+public class MethodDescriptor extends FeatureDescriptor {
+    public MethodDescriptor(Method method) {}
+    public MethodDescriptor(Method method, ParameterDescriptor[] parameterDescriptors) {}
+}
 </pre>
-                            <p><a href="docs/docs-java/api/" target="_blank"></a></p>
+                            <p><a href="docs/docs-java/api/java/beans/MethodDescriptor.html" target="_blank">MethodDescriptor</a> 描述了一种特殊方法，即 Java Bean 支持从其他组件对其进行外部访问。</p>
+                            <ol>
+                                <li><p><code>Method 	getMethod()</code> -- 获得此 MethodDescriptor 封装的方法</p></li>
+                                <li><p><code>ParameterDescriptor[] 	getParameterDescriptors()</code> -- 获得此 MethodDescriptor 每个方法参数的 ParameterDescriptor</p></li>
+                            </ol>
                         </div>
 
                         <div class="sub-item">
 						    <pre class="brush: java;">
+java.lang.Object
+    java.beans.FeatureDescriptor
+        java.beans.ParameterDescriptor
 
+public class ParameterDescriptor extends FeatureDescriptor {}
 </pre>
-                            <p><a href="docs/docs-java/api/" target="_blank"></a></p>
+                            <p><a href="docs/docs-java/api/java/beans/ParameterDescriptor.html" target="_blank">ParameterDescriptor</a> 类允许 bean 实现者提供除 java.lang.reflect.Method 类提供的低级别信息之外的关于其每个参数的额外信息。 </p>
+                            <p>当前所有状态都来自 FeatureDescriptor 基类。</p>
                         </div>
 
                         <div class="sub-item">
 						    <pre class="brush: java;">
+java.lang.Object
+    java.beans.FeatureDescriptor
+        java.beans.PropertyDescriptor
 
+public class PropertyDescriptor extends FeatureDescriptor {
+    public PropertyDescriptor(String propertyName, Class&lt;?> beanClass) {}
+    public PropertyDescriptor(String propertyName, Class&lt;?> beanClass, String readMethodName,
+                              String writeMethodName) {}
+    public PropertyDescriptor(String propertyName, Method readMethod, Method writeMethod) {}
+}
 </pre>
-                            <p><a href="docs/docs-java/api/" target="_blank"></a></p>
+                            <p><a href="docs/docs-java/api/java/beans/PropertyDescriptor.html" target="_blank">PropertyDescriptor</a> 描述 Java Bean 通过一对存储器方法导出的一个属性。 </p>
+                            <ol>
+                                <li><p><code>PropertyEditor 	createPropertyEditor(Object bean)</code> -- 使用当前属性编辑器类构造一个属性编辑器实例</p></li>
+                                <li><p><code>Class&lt;?> 	getPropertyEditorClass()</code> -- 获得已为此属性注册的任何显式 PropertyEditor Class</p></li>
+                                <li><p><code>void 	setPropertyEditorClass(Class&lt;?> propertyEditorClass)</code> -- 通常此 class  是使用 PropertyEditorManager 找到的</p></li>
+
+                                <li class="group"><p><code>Class&lt;?> 	getPropertyType()</code> -- 获得属性的 Class 对象</p></li>
+
+                                <li class="group"><p><code>boolean 	isBound()</code> -- 更新 "bound" 属性将导致更改该属性时激发 "PropertyChange" 事件</p></li>
+                                <li><p><code>void 	setBound(boolean bound)</code> -- 更新 "bound" 属性将导致更改该属性时激发 "PropertyChange" 事件</p></li>
+                                <li><p><code>boolean 	isConstrained()</code> -- 试图更新 "Constrained" 属性将导致更改该属性时激发 "VetoableChange" 事件</p></li>
+                                <li><p><code>void 	setConstrained(boolean constrained)</code> -- 更新 "Constrained" 属性将导致更改该属性时激发 "VetoableChange" 事件</p></li>
+
+                                <li class="group"><p><code>Method 	getReadMethod()</code> -- 获得应该用于读取属性值的方法</p></li>
+                                <li><p><code>void 	setReadMethod(Method readMethod)</code> -- 设置应该用于读取属性值的方法</p></li>
+                                <li><p><code>void 	setWriteMethod(Method writeMethod)</code> -- 设置应该用于写入属性值的方法</p></li>
+                                <li><p><code>Method 	getWriteMethod()</code> -- 获得应该用于写入属性值的方法</p></li>
+
+                                <li class="group"><p><code>int 	hashCode()</code> -- 返回对象的哈希码</p></li>
+                                <li><p><code>boolean 	equals(Object obj)</code> -- 将此 PropertyDescriptor 与指定对象进行比较</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+java.lang.Object
+    java.beans.FeatureDescriptor
+        java.beans.PropertyDescriptor
+            java.beans.IndexedPropertyDescriptor
+
+public class IndexedPropertyDescriptor extends PropertyDescriptor {
+    public IndexedPropertyDescriptor(String propertyName, Class&lt;?> beanClass) {}
+    public IndexedPropertyDescriptor(String propertyName, Class&lt;?> beanClass, String readMethodName,
+        String writeMethodName, String indexedReadMethodName, String indexedWriteMethodName) {}
+    public IndexedPropertyDescriptor(String propertyName, Method readMethod, Method writeMethod,
+        Method indexedReadMethod, Method indexedWriteMethod) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/beans/IndexedPropertyDescriptor.html" target="_blank">IndexedPropertyDescriptor</a> 描述了类似数组行为的属性，且有一种访问数组特定元素的索引读和/或索引写方法。 </p>
+                            <p>索引 (indexed) 属性还可以提供简单的非索引读和写方法。如果存在这些方法，它们可读取和写入索引读方法所返回类型的读写数组。</p>
+                            <ol>
+                                <li><p><code>Class&lt;?> 	getIndexedPropertyType()</code> -- 获得索引属性类型的 Class 对象</p></li>
+
+                                <li class="group"><p><code>Method 	getIndexedReadMethod()</code> -- 获得应该用于读取索引属性值的方法</p></li>
+                                <li><p><code>void 	setIndexedReadMethod(Method readMethod)</code> -- 设置应该用于读取索引属性值的方法</p></li>
+                                <li><p><code>Method 	getIndexedWriteMethod()</code> -- 获得应该用于写入索引属性值的方法</p></li>
+                                <li><p><code>void 	setIndexedWriteMethod(Method writeMethod)</code> -- 设置应该用于写入索引属性值的方法</p></li>
+
+                                <li class="group"><p><code>boolean 	equals(Object obj)</code> -- 将此 PropertyDescriptor 与指定对象比较</p></li>
+                                <li><p><code>int 	hashCode()</code> -- 返回对象的哈希码值</p></li>
+                            </ol>
                         </div>
                     </div>
                 </div>
