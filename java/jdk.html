@@ -93,7 +93,7 @@
                         <div id="java-lang-annotation" class="panel-collapse collapse"
                              role="tabpanel">
                             <a href="#java-lang-annotation-Annotation" class="list-group-item">Annotation 及元注解</a>
-                            <a href="#java-lang-annotation-" class="list-group-item">...</a>
+                            <a href="#java-lang-annotation-MyAnnotation" class="list-group-item">自定义注解使用实例</a>
                         </div>
 
                         <a class="list-group-item active drop" data-toggle="collapse"
@@ -3249,11 +3249,11 @@ public interface Annotation {}
                                     <tbody>
                                     <tr>
                                         <td>@Target</td>
-                                        <td>定义注解的作用目标</td>
+                                        <td>定义注解的作用目标，其值为 ElementType 类型数组</td>
                                     </tr>
                                     <tr>
                                         <td>@Retention</td>
-                                        <td>定义注解的保留策略。RetentionPolicy.SOURCE:注解仅存在于源码中，在class字节码文件中不包含；RetentionPolicy.CLASS:默认的保留策略，注解会在class字节码文件中存在，但运行时无法获得;RetentionPolicy.RUNTIME:注解会在class字节码文件中存在，在运行时可以通过反射获取到。</td>
+                                        <td>定义注解的保留策略，其值为 RetentionPolicy 类型</td>
                                     </tr>
                                     <tr>
                                         <td>@Document</td>
@@ -3332,33 +3332,356 @@ public enum ElementType {
     TYPE, /** 定义接口、类、枚举、注解的时候使用 */
     FIELD, /** 字段、枚举的常量上使用 */
     METHOD, /** 方法上使用 */
-    PARAMETER, /** 参数上使用 */
     CONSTRUCTOR, /** 构造方法上使用 */
     LOCAL_VARIABLE, /** 局部变量上使用 */
-    ANNOTATION_TYPE, /** 注解类型类型上使用 */
+    ANNOTATION_TYPE, /** 注解类型类型上使用,表明为元注解 */
     PACKAGE, /** 包声明时使用 */
-    TYPE_PARAMETER, /**  */
-    TYPE_USE /**  */
+    PARAMETER, /** 形式参数声明 */
+    TYPE_PARAMETER, /** 类型参数声明 */
+    TYPE_USE /** 类型的使用 */
 }
 </pre>
                                 <p><a href="docs/docs-java/api/java/lang/annotation/Target.html" target="_blank">@Target</a> 用于定义注解的作用目标。</p>
+								<p><a href="docs/docs-java/api/java/lang/annotation/ElementType.html" target="_blank">ElementType</a> 是 Target 的参数值，为枚举常量。</p>
+								<p><a href="docs/docs-java/api/java/lang/annotation/Documented.html" target="_blank">@Documented</a> 表明无论何时使用指定的注释，都应该使用Javadoc工具对这些元素进行文档化。</p>
+								<p><a href="docs/docs-java/api/java/lang/annotation/Inherited.html" target="_blank">@Inherited</a> 说明子类可以继承父类中的该注解。</p>
+								<p><a href="docs/docs-java/api/java/lang/annotation/Retention.html" target="_blank">@Retention</a> 定义注解的保留策略。</p>
+                                <p><a href="docs/docs-java/api/java/lang/annotation/RetentionPolicy.html" target="_blank">RetentionPolicy</a> 是 Retention 的参数值，，为枚举常量。</p>
+                                <p><a href="docs/docs-java/api/java/lang/annotation/Repeatable.html" target="_blank">@Repeatable</a> 是 Java 1.8 添加的，表明标记的注解可以多次应用于相同的声明或类型使用。</p>
+                                <pre class="brush: java;">
+public enum RetentionPolicy {
+	SOURCE, // 注解仅存在于源码中，在class字节码文件中不包含
+	CLASS, // 默认的保留策略，注解会在 class 字节码文件中存在，但运行时无法获得
+	RUNTIME // 注解会在class字节码文件中存在，在运行时可以通过反射获取到
+}
+</pre>
                             </div>
+                        </div>
+
+                        <div class="split-item">
+                            <p><b>Java 常用的内置注解类型(都是 java.lang 包下)：</b></p>
+                            <ul>
+                                <li><p><a href="docs/docs-java/api/java/lang/annotation/Override.html" target="_blank">@Override</a> -- 指示一个方法声明要覆盖一个父类型中的方法声明。</p>
+                                    <pre class="brush: java;">
+@Target(ElementType.METHOD)
+@Retention(RetentionPolicy.SOURCE)
+public @interface Override {}
+
+/** 实例 */
+interface IParent { void a(); }
+class Parent { void b() {} }
+
+class Child extends Parent implements IParent {
+    @Override
+    public void a() {}
+
+    @Override
+    void b() {}
+}
+</pre>
+                                </li>
+                                <li><p><a href="docs/docs-java/api/java/lang/annotation/Deprecated.html" target="_blank">@Deprecated</a> -- 指示元素(方法或字段)是程序员使用的不鼓励使用，通常是因为危险，或者因为存在更好的选择。</p>
+                                    <pre class="brush: java;">
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(value={CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE})
+public @interface Deprecated {}
+
+/** 实例 */
+public class NumberUtil {
+    @Deprecated // 不应该再使用此方法，应该使用 toInt(String val, int def) 更好
+    public static int toInt(String val) {
+        try { return Integer.parseInt(val); }
+        catch (NumberFormatException e) { return -1; }
+    }
+
+    public static int toInt(String val, int def) {
+        try { return Integer.parseInt(val); }
+        catch (NumberFormatException e) { return def; }
+    }
+}
+</pre>
+                                </li>
+
+                                <li><p><a href="docs/docs-java/api/java/lang/annotation/SafeVarargs.html" target="_blank">@SafeVarargs</a> -- 该注释应用于方法或构造函数时，断言代码不会对其可变参数执行潜在的不安全操作。</p>
+                                    <pre class="brush: java;">
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.CONSTRUCTOR, ElementType.METHOD})
+public @interface SafeVarargs {}
+
+/** 实例 */
+public class VarargsWaring {
+    @SafeVarargs // 用于 final / static 的方法，参数为可变参数，并且一般都是泛型
+    public static&lt;T> T useVarargs(T... args){
+        return args.length > 0 ? args[0] : null;
+    }
+}
+</pre>
+                                </li>
+                                <li><p><a href="docs/docs-java/api/java/lang/annotation/FunctionalInterface.html" target="_blank">@FunctionalInterface</a> -- 表明接口只有一个未实现的方法（对于 Lambda 表达式很重要，参见 <a href="#java-util-function">java.util.function</a> 包）。</p>
+                                    <pre class="brush: java;">
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface FunctionalInterface {}
+
+/** 实例 */
+@FunctionalInterface // 接口只能有一个未实现的方法
+public interface ITest {
+    void a();
+
+    default void b() {}
+}
+</pre>
+                                </li>
+                                <li><p><a href="docs/docs-java/api/java/lang/annotation/SuppressWarnings.html" target="_blank">@SuppressWarnings</a> -- 用于抑制编译器的警告。</p>
+                                    <p>注意，在给定元素中取消显示的警告集是所有包含元素中取消显示的警告的超集。</p>
+                                    <p>根据风格不同，程序员应该始终在最里层的嵌套元素上使用此注释，在那里使用才有效。如果要在特定的方法中取消显示某个警告，则应该注释该方法而不是注释它的类。 </p>
+                                    <pre class="brush: java;">
+@Target({TYPE, FIELD, METHOD, PARAMETER, CONSTRUCTOR, LOCAL_VARIABLE})
+@Retention(RetentionPolicy.SOURCE)
+public @interface SuppressWarnings {
+    String[] value();
+}
+</pre>
+                                    <p>常见的抑制的选项参见下表，多种类型的警告如下：</p>
+                                    <pre class="brush: java;">@SuppressWarnings({"unchecked", "rawtypes"})</pre>
+                                    <table class="table table-responsive table-striped table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>选项</th>
+                                            <th>说明</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody><tr>
+                                            <td align="left">all</td>
+                                            <td align="left">禁止所有警告</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">deprecation</td>
+                                            <td align="left">使用了不推荐的 API</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">unchecked</td>
+                                            <td align="left">未经检查的转换，比如泛型未指定类型</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">unused</td>
+                                            <td align="left">未使用代码，比如某个方法从未调用，或者使用反射调用的</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">serial</td>
+                                            <td align="left">当在可序列化的类中没有发现 serialVersionUID 字段的警告</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">boxing</td>
+                                            <td align="left">禁止与装箱/拆箱操作相关的警告</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">cast</td>
+                                            <td align="left">强制转换以抑制与强制转换操作相关的警告</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">dep-ann</td>
+                                            <td align="left">用于抑制相对于已弃用注释的警告</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">fallthrough</td>
+                                            <td align="left">在 switch 语句块中，除了最后一个 case 之外的其它 case 中没有包含 break 语句</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">finally</td>
+                                            <td align="left">当发现 finally 子句无法正常结束的情况时给出警告，比如 finally 块中为死循环</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">hiding</td>
+                                            <td align="left">隐藏以抑制相对于隐藏变量的本地警告</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">incomplete-switch</td>
+                                            <td align="left">忽略没有完整的 switch 语句</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">javadoc</td>
+                                            <td align="left">禁止与 javadoc 警告相关的警告</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">nls</td>
+                                            <td align="left">使用nls来抑制相对于非nls字符串的警告。</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">null</td>
+                                            <td align="left">空值来抑制相对于空值分析的警告</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">rawtypes</td>
+                                            <td align="left">拒绝与使用原始类型相关的警告</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">resource</td>
+                                            <td align="left">用于抑制与使用类型为Closeable的资源相关的警告的资源</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">restriction</td>
+                                            <td align="left">限制禁止与使用不鼓励或禁止引用相关的警告</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td align="left">static-access</td>
+                                            <td align="left">静态访问，抑制相对于不正确的静态访问的警告</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">static-method</td>
+                                            <td align="left">静态方法，用于抑制相对于可以声明为静态的方法的警告</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">super</td>
+                                            <td align="left">超级-来抑制相对于在没有超级调用的情况下重写方法的警告</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">synthetic-access</td>
+                                            <td align="left">用于抑制相对于内部类的未优化访问的警告的合成访问</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">sync-override</td>
+                                            <td align="left">在覆盖同步方法时，由于缺少同步而取消警告</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td align="left">unqualified-field-access</td>
+                                            <td align="left">不限定字段访问来抑制与字段访问不限定相关的警告</td>
+                                        </tr>
+
+                                        </tbody>
+                                    </table>
+                                </li>
+                            </ul>
+
+
                         </div>
                     </div>
                 </div>
                 <!-- item over -->
 
                 <!-- item start -->
-                <a class="offset" id="java-lang-annotation-"></a>
+                <a class="offset" id="java-lang-annotation-MyAnnotation"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">...</h3>
+                        <h3 class="panel-title">自定义注解使用实例</h3>
                     </div>
                     <div class="panel-body">
-						<pre class="brush: java;">
+                        <p><b>自定义注解使用实例：</b></p>
+                        <ol type="I">
+                            <li><p>定义实体类和三个注解类:</p>
+                                <pre class="brush: java;">
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface FruitName { // 表示水果名字
+    String value();
+}
 
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface FruitColor { // 表示水果颜色
+    Color color();
+
+    enum Color { // 内部枚举
+        RED("Red"), BLUE("Blue"), GREEN("Green"), YELLOW("Yellow");
+
+        private String colorName;
+        private Color(String colorName) { this.colorName = colorName; }
+        public String getColorName() { return colorName; }
+    }
+}
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.FIELD)
+public @interface FruitAttributes { // // 表示只是为了演示多个属性时如何使用，相当于前面两个类
+    FruitColor.Color color();
+    String name();
+}
+
+public class Fruit { // 实体类
+    private String name;
+    private FruitColor.Color color;
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public FruitColor.Color getColor() { return color; }
+    public void setColor(FruitColor.Color color) { this.color = color; }
+}
 </pre>
-                        <p><a href="docs/docs-java/api/java/lang/annotation/.html" target="_blank"></a></p>
+                            </li>
+                            <li><p>自定义注解处理器处理注解:</p>
+                                <pre class="brush: java;">
+public class FruitAnnotationHandler {
+    /** 因为要设置注解所在类的字段值，此处要拿到注解所在类的 class 和实例对象，所以使用了一个 Object 类型的参数 */
+    public static void handler(Object instance) {
+        Field[] fields = instance.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            Class clazz = field.getType();
+            if (clazz.getName().equals(Fruit.class.getName())) {
+                field.setAccessible(true); // 允许访问 private 字段
+                Fruit fruit = null;
+                try {
+                    try {
+                        fruit = (Fruit) clazz.newInstance();
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                if (field.isAnnotationPresent(FruitName.class)) {
+                    FruitName fruitName = field.getAnnotation(FruitName.class);
+                    fruit.setName(fruitName.value());
+                }
+                if (field.isAnnotationPresent(FruitColor.class)) {
+                    FruitColor fruitColor = field.getAnnotation(FruitColor.class);
+                    fruit.setColor(fruitColor.color());
+                }
+                if (field.isAnnotationPresent(FruitAttributes.class)) {
+                    FruitAttributes fruitAttributes = field.getAnnotation(FruitAttributes.class);
+                    fruit.setName(fruitAttributes.name());
+                    fruit.setColor(fruitAttributes.color());
+                }
+                try {
+                    field.set(instance, fruit); // 将指定对象的字段赋为指定值
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+</pre>
+                            </li>
+                            <li><p>使用自定义的注解类(要先调用注解处理器处理注解):</p>
+                                <pre class="brush: java;">
+public class MyAnnotation {
+    @FruitName("Apple") // 如果注解方法为 value(), 那么不用指定方法名
+    @FruitColor(color = FruitColor.Color.RED) // 如果注解方法名不是 value()， 那么要此赋值
+    public Fruit redApple; // 此处为 public
+
+    @FruitName("Banana")
+    @FruitColor(color = FruitColor.Color.YELLOW)
+    private Fruit yellowBanana; // 如果为 private, 那么在注解处理器要有 field.setAccessible(true);
+
+    @FruitAttributes(name = "Apple", color = FruitColor.Color.GREEN) // 多个注解值一起使用，需要指定方法名
+    private Fruit greenApple
+
+    public static void main(String[] args) {
+        FruitAnnotationHandler.handler(this); // 调用注解处理器处理注解，实例化注解字段
+        log(redApple.getName(), redApple.getColor());
+        log(greenApple.getName(), greenApple.getColor(), greenApple.getColor().getColorName());
+        log(yellowBanana.getName(), yellowBanana.getColor());
+    }
+}
+</pre>
+                            </li>
+                        </ol>
                     </div>
                 </div>
                 <!-- item over -->
@@ -3372,6 +3695,12 @@ public enum ElementType {
                     <div class="panel-body">
                         <div class="sub-item">
 						    <pre class="brush: java;">
+Member
+ ├─ Executable
+ ├─ Constructor
+ ├─ Field
+ └─ Method
+
 public interface Member {
     int PUBLIC = 0; // 标识类或接口的所有公共成员（包括继承成员）的集合
     int DECLARED = 1; // 标识类或接口的所有已声明成员的集合
@@ -3392,7 +3721,7 @@ public final void member() {
         int mofifiers = member.getModifiers();
         log(Modifier.toString(mofifiers)); // 修饰符，转换为 String 查看: public final
         log(member.getName());  // 成员名，这里是方法: member
-        log(member.getDeclaringClass().getName()); // 此成员的类或接口的 Class: io.github.java.lang.reflect.MyReflect
+        log(member.getDeclaringClass().getName()); // Class: io.github.java.lang.reflect.MyReflect
         log(member.isSynthetic()); // 成员是否是编译器引入: false
     } catch (NoSuchMethodException e) {
         e.printStackTrace();
@@ -3405,24 +3734,64 @@ public final void member() {
                             <pre class="brush: java;">
 public interface AnnotatedElement {}
 </pre>
-                            <p><a href="docs/docs-java/api/java/lang/reflect/AnnotatedElement.html" target="_blank">AnnotatedElement</a> 是注解元素，表示目前正在此 VM 中运行的程序的一个已注释元素。该接口允许反射性地读取注释。由此接口中的方法返回的所有注释都是不可变并且可序列化的。调用者可以修改已赋值数组枚举成员的访问器返回的数组；这不会对其他调用者返回的数组产生任何影响。 </p>
+                            <p><a href="docs/docs-java/api/java/lang/reflect/AnnotatedElement.html" target="_blank">AnnotatedElement</a> 是注解元素(类，字段，方法等等)，表示目前正在此 VM 中运行的程序的一个已注释元素。该接口允许反射性地读取注释。由此接口中的方法返回的所有注释都是不可变并且可序列化的。调用者可以修改已赋值数组枚举成员的访问器返回的数组；这不会对其他调用者返回的数组产生任何影响。 </p>
                             <p>如果此接口中的方法返回的注释（直接或间接地）包含一个已赋值的 Class 成员，该成员引用了一个在此 VM 中不可访问的类，则试图通过在返回的注释上调用相关的类返回的方法来读取该类，将导致一个 TypeNotPresentException。 </p>
                             <p>类似地，如果注释中的枚举常量不再以枚举类型存在，那么试图读取一个已赋值的枚举成员将导致一个 EnumConstantNotPresentException。 </p>
                             <ol>
-                                <li><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p></li>
-                                <li><p><code>default boolean 	isAnnotationPresent(Class&lt;? extends Annotation> annotationClass)</code> -- 如果指定类型的注释存在于此元素上，则返回 true，否则返回 false</p></li>
-                                <li><p><code>Annotation[] 	getAnnotations()</code> -- 返回此元素上存在的所有注释</p></li>
-                                <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注释</p></li>
+                                <li><p><code>Annotation[] 	getAnnotations()</code> -- 返回此元素上存在的所有注解</p>
+                                    <pre class="brush: java;">
+@FruitName("Apple")
+@FruitColor(color = FruitColor.Color.RED)
+public Fruit redApple;
 
-                                <li class="group"><p><code>default &lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 返回与此元素关联的注释</p></li>
-                                <li><p><code>default &lt;T extends Annotation> T 	getDeclaredAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在直接在此元素上的指定类型的注释，则返回指定类型的元素的注释，否则返回 NULL</p></li>
-                                <li><p><code>default &lt;T extends Annotation> T[] 	getDeclaredAnnotationsByType(Class&lt;T> annotationClass)</code> -- 如果这种注释直接呈现或间接呈现，则返回该元素的指定类型的注释</p></li>
+AnnotatedElement element = MyAnnotation.class.getField("redApple"); // 获取指定字段
+// 注解数组：[io.github.java.annotation.FruitName, io.github.java.annotation.FruitColor]
+for (Annotation annotation : element.getAnnotations()) {
+    log(annotation.annotationType().getName());
+}
+</pre>
+                                </li>
+                                <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注解（忽略继承的注释）</p></li>
+
+                                <li class="group"><p><code>default boolean 	isAnnotationPresent(Class&lt;? extends Annotation> annotationClass)</code> -- 如果指定类型的注释存在于此元素上，则返回 true，否则返回 false</p></li>
+                                <li><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p>
+                                    <pre class="brush: java;">
+@FruitName("Apple")
+@FruitColor(color = FruitColor.Color.RED)
+public Fruit redApple;
+
+AnnotatedElement filed = MyAnnotation.class.getField("redApple"); // 获取指定字段
+if(filed.isAnnotationPresent(FruitName.class)) { // 字段上是否存在指定类型注解
+    FruitName fruitName = filed.getAnnotation(FruitName.class);  // 获取此注解
+    log(fruitName.value()); // 可以调用注解的方法，拿到注解值: Apple
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>default &lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 因为 Java 1.8 添加了 <code>@Repeatable</code> 注解，所以同种类型的注解可能多次存在于同一个元素，此方法返回的是数组。同 <code>getAnnotation(Class&lt;T>)</code></p></li>
+                                <li><p><code>default &lt;T extends Annotation> T[] 	getDeclaredAnnotationsByType(Class&lt;T> annotationClass)</code> -- 返回直接存在于此元素上的指定类型的注解，检测是否是可重复注释类型，参照： <code>getDeclaredAnnotations()</code> 和 <code>getAnnotation(Class&lt;T>)</code></p></li>
+                                <li><p><code>default &lt;T extends Annotation> T 	getDeclaredAnnotation(Class&lt;T> annotationClass)</code> -- 返回直接存在于此元素上的指定类型的注解，不检测是否是可重复注释类型</p></li>
                             </ol>
                             <p>实现类：<a href="#java-lang-reflect-AccessibleObject">AccessibleObject</a>, <a href="#java-lang-reflect-Executable">Executable</a>, <a href="#java-lang-reflect-Constructor">Constructor</a>, <a href="#java-lang-reflect-Field">Field</a>, <a href="#java-lang-reflect-Method">Method</a>, <a href="#java-lang-reflect-Parameter">Parameter</a>, <a href="#java-lang-Package">Package</a>, <a href="#java-lang-Class">Class&lt;T></a></p>
                             <p>子接口：<a href="docs/docs-java/api/java/lang/reflect/GenericDeclaration.html">GenericDeclaration</a>, <a href="docs/docs-java/api/java/lang/reflect/TypeVariable.html">TypeVariable&lt;D></a>, <a href="docs/docs-java/api/java/lang/reflect/AnnotatedType.html">AnnotatedType</a>, <a href="docs/docs-java/api/java/lang/reflect/AnnotatedArrayType.html">AnnotatedArrayType</a>, <a href="docs/docs-java/api/java/lang/reflect/AnnotatedParameterizedType.html">AnnotatedParameterizedType</a>, <a href="docs/docs-java/api/java/lang/reflect/AnnotatedTypeVariable.html">AnnotatedTypeVariable</a>, <a href="docs/docs-java/api/java/lang/reflect/AnnotatedWildcardType.html">AnnotatedWildcardType</a></p>
                             <pre class="brush: java;">
+AnnotatedElement
+ ├─ AccessibleObject
+ │   ├─ Executable implements Member, GenericDeclaration
+ │   │    ├─ Constructor&lt;T>
+ │   │    └─ Method
+ │   └─ Field implements Member
+ ├─ Parameter implements AnnotatedElement
+ ├─ GenericDeclaration
+ ├─ TypeVariable&lt;D>
+ └─ AnnotatedType
+     ├─ AnnotatedArrayType
+     ├─ AnnotatedTypeVariable
+     ├─ AnnotatedParameterizedType
+     └─ AnnotatedWildcardType
+
 public interface GenericDeclaration extends AnnotatedElement {
-    TypeVariable&lt;?>[] getTypeParameters();
+    TypeVariable&lt;?>[] getTypeParameters(); // 返回声明顺序的 TypeVariable 对象的数组
 }
 
 public interface TypeVariable&lt;D extends GenericDeclaration> extends Type, AnnotatedElement {
