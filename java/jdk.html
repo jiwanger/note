@@ -93,7 +93,8 @@
                         <div id="java-lang-annotation" class="panel-collapse collapse"
                              role="tabpanel">
                             <a href="#java-lang-annotation-Annotation" class="list-group-item">Annotation 及元注解</a>
-                            <a href="#java-lang-annotation-MyAnnotation" class="list-group-item">自定义注解使用实例</a>
+                            <a href="#java-lang-annotation-MyAnnotation" class="list-group-item">自定义运行时注解使用实例</a>
+                            <a href="#java-lang-annotation-Compile-Annotation" class="list-group-item">编译时注解和源码注解</a>
                         </div>
 
                         <a class="list-group-item active drop" data-toggle="collapse"
@@ -111,7 +112,7 @@
                             <a href="#java-lang-reflect-Modifier" class="list-group-item">Modifier</a>
                             <a href="#java-lang-reflect-Parameter" class="list-group-item">Parameter</a>
                             <a href="#java-lang-reflect-Array" class="list-group-item">Array</a>
-                            <a href="#java-lang-reflect-Proxy" class="list-group-item">Proxy</a>
+                            <a href="#java-lang-reflect-Proxy" class="list-group-item">InvocationHandler 和 Proxy</a>
                             <a href="#java-lang-reflect-ReflectPermission" class="list-group-item">ReflectPermission</a>
                         </div>
 
@@ -3350,9 +3351,9 @@ public enum ElementType {
                                 <p><a href="docs/docs-java/api/java/lang/annotation/Repeatable.html" target="_blank">@Repeatable</a> 是 Java 1.8 添加的，表明标记的注解可以多次应用于相同的声明或类型使用。</p>
                                 <pre class="brush: java;">
 public enum RetentionPolicy {
-	SOURCE, // 注解仅存在于源码中，在class字节码文件中不包含
+	RUNTIME // 注解会在 class 字节码文件中存在，在运行时可以通过反射获取到(应用较多)
 	CLASS, // 默认的保留策略，注解会在 class 字节码文件中存在，但运行时无法获得
-	RUNTIME // 注解会在class字节码文件中存在，在运行时可以通过反射获取到
+	SOURCE, // 注解仅存在于源码中，在 class 字节码文件中不包含
 }
 </pre>
                             </div>
@@ -3565,6 +3566,27 @@ public @interface SuppressWarnings {
                 <!-- item over -->
 
                 <!-- item start -->
+                <a class="offset" id="java-lang-annotation-Compile-Annotation"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">编译时注解和源码注解</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <p>编译时注解(RetentionPolicy.CLASS)都要和注解处理器(Annotation Processor) 扯上关系，因为这里是真正体现编译时注解价值的地方。</p>
+                            <p>需要注意的一点是，运行时注解(RetentionPolicy.RUNTIME)和源码注解(RetentionPolicy.SOURCE)也可以在注解处理器进行处理，不同的注解有各自的生命周期，根据你实际使用来确定。</p>
+                            <p>注解处理器是 javac 的一个工具，它用来在编译时扫描和处理注解（Annotation）。你可以自定义注解，并注册到相应的注解处理器，由注解处理器来处理你的注解。</p>
+                            <p>一个注解的注解处理器，以 Java 代码（或者编译过的字节码）作为输入，生成文件（通常是 <code>.java</code> 文件）作为输出。这些生成的 Java 代码是在生成的 .java 文件中，所以你不能修改已经存在的 Java 类，例如向已有的类中添加方法。这些生成的 Java 文件，会同其他普通的手动编写的Java源代码一样被 javac 编译。</p>
+                            <pre class="brush: java;">
+
+</pre>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
                 <a class="offset" id="java-lang-annotation-MyAnnotation"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -3573,7 +3595,7 @@ public @interface SuppressWarnings {
                     <div class="panel-body">
                         <p><b>自定义注解使用实例：</b></p>
                         <ol type="I">
-                            <li><p>定义实体类和三个注解类:</p>
+                            <li><p>定义实体类和三个注解类(都是运行时注解):</p>
                                 <pre class="brush: java;">
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
@@ -3584,7 +3606,7 @@ public @interface FruitName { // 表示水果名字
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface FruitColor { // 表示水果颜色
-    Color color();
+    Color color() default Color.RED;
 
     enum Color { // 内部枚举
         RED("Red"), BLUE("Blue"), GREEN("Green"), YELLOW("Yellow");
@@ -3614,7 +3636,7 @@ public class Fruit { // 实体类
 }
 </pre>
                             </li>
-                            <li><p>自定义注解处理器处理注解:</p>
+                            <li><p>自定义注解处理器处理注解(这里处理的都是运行时注解):</p>
                                 <pre class="brush: java;">
 public class FruitAnnotationHandler {
     /** 因为要设置注解所在类的字段值，此处要拿到注解所在类的 class 和实例对象，所以使用了一个 Object 类型的参数 */
@@ -3662,7 +3684,8 @@ public class FruitAnnotationHandler {
                                 <pre class="brush: java;">
 public class MyAnnotation {
     @FruitName("Apple") // 如果注解方法为 value(), 那么不用指定方法名
-    @FruitColor(color = FruitColor.Color.RED) // 如果注解方法名不是 value()， 那么要此赋值
+    // 如果注解方法名不是 value()， 那么要如下赋值；可以只写: @FruitColor, 因为定义注解时有默认值为： Color.RED
+    @FruitColor(color = FruitColor.Color.RED)
     public Fruit redApple; // 此处为 public
 
     @FruitName("Banana")
@@ -3730,6 +3753,7 @@ public final void member() {
 </pre>
                         </div>
 
+                        <a class="offset" id="AnnotedElement"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public interface AnnotatedElement {}
@@ -3790,19 +3814,48 @@ AnnotatedElement
      ├─ AnnotatedParameterizedType
      └─ AnnotatedWildcardType
 
+/** 所有可以声明/定义类型变量实体的公共父接口 */
 public interface GenericDeclaration extends AnnotatedElement {
-    TypeVariable&lt;?>[] getTypeParameters(); // 返回声明顺序的 TypeVariable 对象的数组
+    TypeVariable&lt;?>[] getTypeParameters(); // 参见实现类 Executable
 }
 
+/** 声明/定义类型变量的实体 */
 public interface TypeVariable&lt;D extends GenericDeclaration> extends Type, AnnotatedElement {
-    AnnotatedType[] getAnnotatedBounds();
+    /** 先定义两个方法：
+     * 1.public &lt;T extends Integer> void x() {}
+     * 2.public &lt;T extends Integer,U extends String> void x() {}
+     */
+
+    /** getBounds() -- 返回表示此类型变量上边界的 Type 对象的数组
+     * 方法 1 返回: [java.lang.Integer]
+     * 方法 2 返回: [java.lang.Integer, java.lang.String]
+     */
     Type[] getBounds();
-    D getGenericDeclaration();
-    String getName();
+    AnnotatedType[] getAnnotatedBounds(); // 类似 getBounds()
+    D getGenericDeclaration(); // 返回 GenericDeclaration 对象
+    String getName(); // 返回此类型变量的名称， 方法 1 返回: T, 方法 2 返回: T, U
+
+/**********************************************************************************/
+    /** 泛型的上下边界:
+     * aList -- 泛型上边界，只能存数 B 及 B 的子类
+     * bList -- 泛型下边界，只能存数 B 及 B 的父类(包括接口)
+     */
+    void show(List&lt;? extends B> aList, List&lt;? super B> bList) {
+        for (B b : aList) { b.b(); }
+        for (Object o : bList) { log(o.getClass().getName()); }
+    }
+
+    class A { void a() { log("a"); } }
+    class B extends A { void b() { log("b"); } }
+    class C extends B { void c() { log("c"); } }
+/**********************************************************************************/
 }
 
+
+
+/** 表示在当前 VM 中运行的程序中可能存在的注释类型 */
 public interface AnnotatedType extends AnnotatedElement {
-    Type getType();
+    Type getType(); // 返回注解类型的类型
 }
 
 public interface AnnotatedArrayType extends AnnotatedType {
@@ -3827,38 +3880,31 @@ public interface AnnotatedWildcardType extends AnnotatedType {
                         <div class="sub-item">
 						    <pre class="brush: java;">
 public interface Type {
-    default String getTypeName();
+    default String getTypeName(); // 返回类型名
 }
 </pre>
                             <p><a href="docs/docs-java/api/java/lang/reflect/Type.html" target="_blank">Type</a> 是 Java 编程语言中所有类型的公共高级接口。它们包括原始类型、参数化类型、数组类型、类型变量和基本类型。</p>
                             <p>子接口: <a href="docs/docs-java/api/java/lang/reflect/GenericArrayType.html">GenericArrayType</a>, <a href="docs/docs-java/api/java/lang/reflect/ParameterizedType.html">ParameterizedType</a>, <a href="docs/docs-java/api/java/lang/reflect/WildcardType.html">WildcardType</a>, 还有前面的 <code>TypeVariable&lt;D></code></p>
                             <p>实现类: <a href="#java-lang-Class">Class&lt;T></a></p>
                             <pre class="brush: java;">
+/** 数组类型，其组件类型为参数化类型或类型变量 */
 public interface GenericArrayType extends Type {
     Type getGenericComponentType();
 }
 
+/** 参数化类型，如 Collection&lt;String> */
 public interface ParameterizedType extends Type {
-    Type[] getActualTypeArguments();
-    Type getOwnerType();
-    Type getRawType();
+    Type[] getActualTypeArguments(); // 返回表示此类型实际类型参数的 Type 对象的数组
+    Type getOwnerType(); // 返回 Type 对象，表示此类型是其成员之一的类型
+    Type getRawType(); // 返回 Type 对象，表示声明此类型的类或接口
 }
 
+/** 通配符类型表达式，如 ?、? extends Number 或 ? super Integer */
 public interface WildcardType extends Type {
-    Type[] getLowerBounds();
-    Type[] getUpperBounds();
+    Type[] getLowerBounds(); // 返回表示此类型变量下边界的 Type 对象的数组
+    Type[] getUpperBounds(); // 返回表示此类型变量上边界的 Type 对象的数组
 }
                             </pre>
-                        </div>
-
-                        <div class="sub-item">
-						    <pre class="brush: java;">
-public interface InvocationHandler {
-    Object invoke(Object proxy, Method method, Object[] args);
-}
-</pre>
-                            <p><a href="docs/docs-java/api/java/lang/reflect/InvocationHandler.html" target="_blank">InvocationHandler</a> 是代理实例的调用处理程序 实现的接口。 </p>
-                            <p>每个代理实例都具有一个关联的调用处理程序。对代理实例调用方法时，将对方法调用进行编码并将其指派到它的调用处理程序的 invoke 方法。</p>
                         </div>
                     </div>
                 </div>
@@ -3884,19 +3930,19 @@ public class AccessibleObject implements AnnotatedElement {
                         <p>在反射对象中设置 accessible 标志允许具有足够特权的复杂应用程序（比如 Java Object Serialization 或其他持久性机制）以某种通常禁止使用的方式来操作对象。 </p>
                         <ol>
                             <li><p><code>static void 	setAccessible(AccessibleObject[] array, boolean flag)</code> -- 使用单一安全性检查（为了提高效率）为一组对象设置 accessible 标志的便捷方法</p></li>
+                            <li class="group"><p><code>boolean 	isAccessible()</code> -- 获取此对象(字段，方法，类)的可访问性</p></li>
+                            <li><p><code>void 	setAccessible(boolean flag)</code> -- 强行修改此对象可访问性</p></li>
 
-                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p></li>
-                            <li><p><code>&lt;T extends Annotation> T 	getDeclaredAnnotation(Class&lt;T> annotationClass)</code> -- </p></li>
-                            <li><p><code>Annotation[] 	getAnnotations()</code> -- 返回此元素上存在的所有注释</p></li>
-                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注释</p></li>
+                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 返回此元素上的指定类型的注解</p></li>
+                            <li><p><code>&lt;T extends Annotation> T 	getDeclaredAnnotation(Class&lt;T> annotationClass)</code> -- 直接存在于此元素上的指定类型的注解</p></li>
+                            <li><p><code>Annotation[] 	getAnnotations()</code> -- 返回此元素上存在的所有注解</p></li>
+                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注解（忽略继承的注释）</p></li>
 
-                            <li class="group"><p><code>&lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- </p></li>
+                            <li class="group"><p><code>&lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>&lt;T extends Annotation> T[] 	getDeclaredAnnotationsByType(Class&lt;T> annotationClass)</code> --  参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>boolean 	isAnnotationPresent(Class&lt;? extends Annotation> annotationClass)</code> --  参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
 
-                            <li class="group"><p><code>&lt;T extends Annotation> T[] 	getDeclaredAnnotationsByType(Class&lt;T> annotationClass)</code> -- </p></li>
-                            <li><p><code>boolean 	isAnnotationPresent(Class&lt;? extends Annotation> annotationClass)</code> -- 如果指定类型的注释存在于此元素上，则返回 true，否则返回 false</p></li>
 
-                            <li class="group"><p><code>boolean 	isAccessible()</code> -- 获取此对象的 accessible 标志的值</p></li>
-                            <li><p><code>void 	setAccessible(boolean flag)</code> -- 将此对象的 accessible 标志设置为指示的布尔值</p></li>
                         </ol>
                     </div>
                 </div>
@@ -3918,32 +3964,60 @@ public abstract class Executable extends AccessibleObject implements Member, Gen
 </pre>
                         <p><a href="docs/docs-java/api/java/lang/reflect/Executable.html" target="_blank">Executable</a> 是 Constructor 和 Method 的父类。</p>
                         <ol>
+                            <li><p><code>abstract Class&lt;?> 	getDeclaringClass()</code> -- 如果是成员类，则返回其包裹类</p></li>
                             <li><p><code>abstract int 	getModifiers()</code> -- 以整数形式返回此方法对象所表示构造方法的 Java 语言修饰符</p></li>
                             <li><p><code>abstract String 	getName()</code> -- 字符串形式返回此方法的名称</p></li>
-                            <li><p><code>abstract String 	toGenericString()</code> -- 返回描述此方法的字符串，其中包括类型参数</p></li>
-
-                            <li class="group"><p><code>AnnotatedType[] 	getAnnotatedExceptionTypes()</code> -- 异常注解类型</p></li>
-                            <li><p><code>AnnotatedType[] 	getAnnotatedParameterTypes()</code> -- 参数注解类型</p></li>
-                            <li><p><code>abstract AnnotatedType 	getAnnotatedReturnType()</code> -- 返回值注解类型</p></li>
-                            <li><p><code>AnnotatedType 	getAnnotatedReceiverType()</code> -- 方法/构造函数的接收器类型</p></li>
-
-                            <li class="group"><p><code>abstract Class&lt;?> 	getDeclaringClass()</code> -- 如果是成员类，则返回其包裹类</p></li>
-                            <li><p><code>abstract Class&lt;?>[] 	getExceptionTypes()</code> -- 异常类的类型</p></li>
-                            <li><p><code>abstract Class&lt;?>[] 	getParameterTypes()</code> -- 参数类的类型</p></li>
-
-                            <li class="group"><p><code>Type[] 	getGenericExceptionTypes()</code> -- </p></li>
-                            <li><p><code>Type[] 	getGenericParameterTypes()</code> -- </p></li>
-                            <li><p><code>abstract TypeVariable&lt;?>[] 	getTypeParameters()</code> -- </p></li>
-
-                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 指定类型的注解</p></li>
-                            <li><p><code>&lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 指定类型的注解</p></li>
-                            <li><p><code>abstract Annotation[][] 	getParameterAnnotations()</code> -- 此方法的参数的注解列表</p></li>
-                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 直接存在此方法上的注解列表</p></li>
+                            <li><p><code>boolean 	isSynthetic()</code> -- 此方法是否是合成方法（编译器引入）</p></li>
 
                             <li class="group"><p><code>int 	getParameterCount()</code> -- 参数数量</p></li>
                             <li><p><code>Parameter[] 	getParameters()</code> -- 获取参数列表</p></li>
-                            <li><p><code>boolean 	isSynthetic()</code> -- 此方法是否有复合参数</p></li>
                             <li><p><code>boolean 	isVarArgs()</code> -- 此方法是否有可变参数</p></li>
+                            <li><p><code>abstract String 	toGenericString()</code> -- 返回描述此方法的字符串，其中包括类型参数</p></li>
+
+                            <li class="group"><p><code>abstract Class&lt;?>[] 	getExceptionTypes()</code> -- 抛出的异常类型类列表</p></li>
+                            <li><p><code>Type[] 	getGenericExceptionTypes()</code> -- 返回值不同，其它同 <code>getExceptionTypes()</code></p></li>
+                            <li><p><code>Type[] 	getGenericParameterTypes()</code> -- 返回值不同，其它同 <code>getParameterTypes()</code></p></li>
+                            <li><p><code>abstract Class&lt;?>[] 	getParameterTypes()</code> -- 参数类的类型类列表</p>
+                                <pre class="brush: java;">
+public void reflect(String s) throws NoSuchMethodException {
+    Executable executable = MyAnnotation.class.getMethod("reflect", String.class);
+    for (Class&lt;?> aClass : executable.getExceptionTypes()) {
+        log(aClass.getName()); // java.lang.NoSuchMethodException
+    }
+    for (Class&lt;?> aClass : executable.getParameterTypes()) {
+        log(aClass.getName()); // java.lang.String
+    }
+}
+</pre>
+                            </li>
+
+                            <li class="group"><p><code>AnnotatedType[] 	getAnnotatedExceptionTypes()</code> -- 方法或构造方法抛出的异常类型</p></li>
+                            <li><p><code>AnnotatedType[] 	getAnnotatedParameterTypes()</code> -- 方法或构造方法的参数类型</p></li>
+                            <li><p><code>abstract AnnotatedType 	getAnnotatedReturnType()</code> -- 方法或构造方法返回值类型</p></li>
+                            <li><p><code>AnnotatedType 	getAnnotatedReceiverType()</code> -- 方法/构造函数的接收器类型(static 方法返回 NULL) </p></li>
+
+                            <li class="group"><p><code>abstract TypeVariable&lt;?>[] 	getTypeParameters()</code> -- 获取泛型类型限定符的类型列表</p>
+                                <pre class="brush: java;">
+/** 此处的类型限定符： &lt;M extends Integer> 只是为了展示 getTypeParameters 的方法 */
+public &lt;M extends Integer> void reflect(String s, M... e) throws NoSuchMethodException {
+    for (TypeVariable&lt;Class&lt;ArrayList>> classTypeVariable : ArrayList.class.getTypeParameters()) {
+        log(classTypeVariable.getName()); // E
+    }
+    for (TypeVariable&lt;Class&lt;HashMap>> classTypeVariable : HashMap.class.getTypeParameters()) {
+        log(classTypeVariable.getName()); // K, V
+    }
+    Executable executable = MyAnnotation.class.getMethod("reflect", String.class, Integer[].class);
+    for (TypeVariable&lt;?> variable : executable.getTypeParameters()) {
+        log(variable.getName()); // M
+    }
+}
+</pre>
+                            </li>
+
+                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>&lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>abstract Annotation[][] 	getParameterAnnotations()</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
                         </ol>
                     </div>
                 </div>
@@ -3981,8 +4055,8 @@ public final class Constructor&lt;T> extends Executable {}
                             <li><p><code>Type[] 	getGenericParameterTypes()</code> -- 按照声明顺序返回一组 Type 对象，这些对象表示此 Constructor 对象所表示的方法的形参类型</p></li>
                             <li><p><code>TypeVariable&lt;Constructor&lt;T>>[] 	getTypeParameters()</code> -- 按照声明顺序返回一组 TypeVariable 对象，这些对象表示通过此 GenericDeclaration 对象所表示的一般声明来声明的类型变量</p></li>
 
-                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p></li>
-                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注释</p></li>
+                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
                             <li><p><code>Annotation[][] 	getParameterAnnotations()</code> -- 按照声明顺序返回一组数组，这些数组表示通过此 Constructor 对象表示的方法的形参上的注释</p></li>
 
                             <li class="group"><p><code>Class&lt;T> 	getDeclaringClass()</code> -- 返回 Class 对象，该对象表示声明由此 Constructor 对象表示的构造方法的类</p></li>
@@ -4021,9 +4095,9 @@ public final class Field extends AccessibleObject implements Member {}
                             <li><p><code>boolean 	isSynthetic()</code> -- 如果此字段是复合字段，则返回 true；否则返回 false</p></li>
                             <li><p><code>Class&lt;?> 	getType()</code> -- 返回一个 Class 对象，它标识了此 Field 对象所表示字段的声明类型</p></li>
 
-                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p></li>
-                            <li><p><code>&lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 存在于此元素上指定类型的所有注释</p></li>
-                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注释</p></li>
+                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>&lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
 
                             <li class="group"><p><code>Class&lt;?> 	getDeclaringClass()</code> -- 返回表示类或接口的 Class 对象，该类或接口声明由此 Field 对象表示的字段</p></li>
                             <li><p><code>AnnotatedType 	getAnnotatedType()</code> -- 返回一个注释类型对象，该对象表示使用类型来指定由该字段表示的字段的声明类型</p></li>
@@ -4081,11 +4155,12 @@ public final class Method extends Executable {}
                             <li><p><code>Class&lt;?> 	getReturnType()</code> -- 返回一个 Class 对象，该对象描述了此 Method 对象所表示的方法的正式返回类型</p></li>
                             <li><p><code>int 	getParameterCount()</code> -- 如果此字段表示枚举类型的元素，则返回 true；否则返回 false</p></li>
                             <li><p><code>Object 	invoke(Object obj, Object... args)</code> -- 对带有指定参数的指定对象调用由此 Method 对象表示的底层方法</p></li>
-
-                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p></li>
-                            <li><p><code>Annotation[][] 	getParameterAnnotations()</code> -- 返回表示按照声明顺序对此 Method 对象所表示方法的形参进行注释的那个数组的数组</p></li>
-                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注释</p></li>
                             <li><p><code>Object 	getDefaultValue()</code> -- 返回由此 Method 实例表示的注释成员的默认值</p></li>
+
+                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>Annotation[][] 	getParameterAnnotations()</code> -- 返回表示按照声明顺序对此 Method 对象所表示方法的形参进行注释的那个数组的数组</p></li>
+                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> --参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+
 
                             <li class="group"><p><code>AnnotatedType 	getAnnotatedReturnType()</code> -- 返回一个注释类型对象，该对象表示使用类型来指定由该可执行文件表示的方法/构造函数的返回类型</p></li>
                             <li><p><code>Class&lt;?>[] 	getParameterTypes()</code> -- 按照声明顺序返回 Class 对象的数组，这些对象描述了此 Method 对象所表示的方法的形参类型</p></li>
@@ -4184,6 +4259,8 @@ public final class Parameter implements AnnotatedElement {}
                         <ol>
                             <li><p><code>int 	getModifiers()</code> -- 以整数形式返回此 Parameter 对象所表示构造方法的 Java 语言修饰符</p></li>
                             <li><p><code>String 	getName()</code> -- 以字符串形式返回此 Parameter 的名称</p></li>
+							<li><p><code>Executable 	getDeclaringExecutable()</code> -- 此参数的方法/构造方法</p></li>
+							<li><p><code>Type 	getParameterizedType()</code> -- 参数的类型</p></li>
                             <li><p><code>Class&lt;?> 	getType()</code> --  返回一个 Class 对象，它标识了此 Parameter 对象所表示字段的声明类型</p></li>
 
                             <li class="group"><p><code>boolean 	isImplicit()</code> -- 如果在源代码中隐式声明此参数，则返回 true</p></li>
@@ -4191,16 +4268,15 @@ public final class Parameter implements AnnotatedElement {}
                             <li><p><code>boolean 	isSynthetic()</code> --  如果此 Parameter 是复合参数，则返回 true</p></li>
                             <li><p><code>boolean 	isVarArgs()</code> -- 如果是可变参数则返回 true</p></li>
 
-                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 如果存在该元素的指定类型的注释，则返回这些注释，否则返回 null</p></li>
-                            <li><p><code>&lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 存在于此元素上指定类型的所有注释</p></li>
-                            <li><p><code>&lt;T extends Annotation> T 	getDeclaredAnnotation(Class&lt;T> annotationClass)</code> -- 直接存在于此元素上指定类型的所有注释</p></li>
-                            <li><p><code>Annotation[] 	getAnnotations()</code> -- 返回此元素上存在的所有注释</p></li>
-                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 返回直接存在于此元素上的所有注释</p></li>
-                            <li><p><code>&lt;T extends Annotation> T[] 	getDeclaredAnnotationsByType(Class&lt;T> annotationClass)</code> -- </p></li>
+                            <li class="group"><p><code>&lt;T extends Annotation> T 	getAnnotation(Class&lt;T> annotationClass)</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>&lt;T extends Annotation> T[] 	getAnnotationsByType(Class&lt;T> annotationClass)</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>&lt;T extends Annotation> T 	getDeclaredAnnotation(Class&lt;T> annotationClass)</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>Annotation[] 	getAnnotations()</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>Annotation[] 	getDeclaredAnnotations()</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
+                            <li><p><code>&lt;T extends Annotation> T[] 	getDeclaredAnnotationsByType(Class&lt;T> annotationClass)</code> -- 参见: <a href="#AnnotedElement">AnnotedElement</a></p></li>
 
                             <li class="group"><p><code>AnnotatedType 	getAnnotatedType()</code> -- 返回一个注释类型对象，该对象表示使用类型来指定由该字段表示的字段的声明类型</p></li>
-                            <li><p><code>Executable 	getDeclaringExecutable()</code> -- </p></li>
-                            <li><p><code>Type 	getParameterizedType()</code> -- </p></li>
+
 
                             <li class="group"><p><code>int 	hashCode()</code> -- 返回此 Parameter 的哈希码</p></li>
                             <li><p><code>boolean 	equals(Object obj)</code> -- 将此 Parameter 对象与指定的对象进行比较</p></li>
@@ -4269,10 +4345,21 @@ int[][][] arr = (int[][][]) Array.newInstance(int.class, 3, 2, 1);
                 <a class="offset" id="java-lang-reflect-Proxy"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Proxy</h3>
+                        <h3 class="panel-title">InvocationHandler 和 Proxy</h3>
                     </div>
                     <div class="panel-body">
-						<pre class="brush: java;">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+public interface InvocationHandler {
+    Object invoke(Object proxy, Method method, Object[] args); // 在代理实例上处理方法调用并返回结果
+}
+</pre>
+                                <p><a href="docs/docs-java/api/java/lang/reflect/InvocationHandler.html" target="_blank">InvocationHandler</a> 是代理实例的调用处理程序 实现的接口。 </p>
+                                <p>每个代理实例都具有一个关联的调用处理程序。对代理实例调用方法时，将对方法调用进行编码并将其指派到它的调用处理程序的 invoke 方法。</p>
+                        </div>
+
+                        <div class="sub-item">
+						    <pre class="brush: java;">
 java.lang.Object
     java.lang.reflect.Proxy
 
@@ -4281,13 +4368,20 @@ public class Proxy implements Serializable {
     protected Proxy(InvocationHandler h) {}
 }
 </pre>
-                        <p><a href="docs/docs-java/api/java/lang/reflect/Proxy.html" target="_blank">Proxy</a> 提供用于创建动态代理类和实例的静态方法，它还是由这些方法创建的所有动态代理类的超类。 </p>
-                        <ol>
-                            <li><p><code>static InvocationHandler 	getInvocationHandler(Object proxy)</code> -- </p></li>
-                            <li><p><code>static Class&lt;?> 	getProxyClass(ClassLoader loader, Class&lt;?>... interfaces)</code> -- </p></li>
-                            <li><p><code>static boolean 	isProxyClass(Class&lt;?> cl)</code> -- </p></li>
-                            <li><p><code>static Object 	newProxyInstance(ClassLoader loader, Class&lt;?>[] interfaces, InvocationHandler h)</code> -- </p></li>
-                        </ol>
+                            <p><a href="docs/docs-java/api/java/lang/reflect/Proxy.html" target="_blank">Proxy</a> 提供用于创建动态代理类和实例的静态方法，它还是由这些方法创建的所有动态代理类的超类。 </p>
+                            <ol>
+                                <li><p><code>static boolean 	isProxyClass(Class&lt;?> cl)</code> -- 指定的 cl 是否是一个代理类(代理类要符合一些条件)</p></li>
+                                <li><p><code>static InvocationHandler 	getInvocationHandler(Object proxy)</code> -- </p></li>
+                                <li><p><code>static Class&lt;?> 	getProxyClass(ClassLoader loader, Class&lt;?>... interfaces)</code> -- </p></li>
+                                <li><p><code>static Object 	newProxyInstance(ClassLoader loader, Class&lt;?>[] interfaces, InvocationHandler h)</code> -- </p></li>
+                            </ol>
+                            <p>代理类要符合以下条件：</p>
+                            <ul>
+                                <li><p></p></li>
+                                <li><p></p></li>
+                            </ul>
+
+                        </div>
                     </div>
                 </div>
                 <!-- item over -->
