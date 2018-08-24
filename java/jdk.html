@@ -149,16 +149,6 @@
                         </div>
 
                         <a class="list-group-item active drop" data-toggle="collapse"
-                           data-parent="#accordion" href="#javax-sql" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
-                            <code>javax.sql</code><span class="caret pull-right" style="margin-top: 5px;"></span>
-                        </a>
-                        <div id="javax-sql" class="panel-collapse collapse"
-                             role="tabpanel">
-                            <a href="#javax-sql-DataSource" class="list-group-item">DataSource</a>
-                            <a href="#javax-sql-" class="list-group-item">...</a>
-                        </div>
-
-                        <a class="list-group-item active drop" data-toggle="collapse"
                            data-parent="#accordion" href="#java-beans" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
                             <code>java.beans</code><span class="caret pull-right" style="margin-top: 5px;"></span>
                         </a>
@@ -4370,16 +4360,68 @@ public class Proxy implements Serializable {
 </pre>
                             <p><a href="docs/docs-java/api/java/lang/reflect/Proxy.html" target="_blank">Proxy</a> 提供用于创建动态代理类和实例的静态方法，它还是由这些方法创建的所有动态代理类的超类。 </p>
                             <ol>
+                                <li><p><code>static Object 	newProxyInstance(ClassLoader loader, Class&lt;?>[] interfaces, InvocationHandler h)</code> -- 通过代理构建一个新的实例</p></li>
                                 <li><p><code>static boolean 	isProxyClass(Class&lt;?> cl)</code> -- 指定的 cl 是否是一个代理类(代理类要符合一些条件)</p></li>
-                                <li><p><code>static InvocationHandler 	getInvocationHandler(Object proxy)</code> -- </p></li>
-                                <li><p><code>static Class&lt;?> 	getProxyClass(ClassLoader loader, Class&lt;?>... interfaces)</code> -- </p></li>
-                                <li><p><code>static Object 	newProxyInstance(ClassLoader loader, Class&lt;?>[] interfaces, InvocationHandler h)</code> -- </p></li>
+                                <li><p><code>static InvocationHandler 	getInvocationHandler(Object proxy)</code> -- 获取代理实例的 InvocationHandler(proxy 必须是一个代理实例，由 newProxyInstance 创建)</p></li>
+                                <li><p><code>static Class&lt;?> 	getProxyClass(ClassLoader loader, Class&lt;?>... interfaces)</code> -- 返回代理类的 java.lang.Class 对象</p></li>
                             </ol>
-                            <p>代理类要符合以下条件：</p>
-                            <ul>
-                                <li><p></p></li>
-                                <li><p></p></li>
-                            </ul>
+							<p>先看一个实例：(要求在不更改 KeyEventHandler 类和 performKeyEvent(KeyEventListener)) 方法的情况下，更改 onKeyEvent 逻辑</p>
+                            <p><b>对 KeyEventListener 接口的调用，会交由 KeyEventHandlerProxy.KeyEventInvocationHandler 的 invoke 方法处理，并在不改变 onKeyEvent 的源代码下，新增了动态的逻辑（before onKeyEvent/after onKeyEvent)，这正式 Spring AOP 所做的。</b></p>
+							<pre class="brush: java;">
+interface KeyEventListener {
+    void onKeyEvent();
+}
+
+final class KeyEventHandler implements KeyEventListener { // 不允许此类有子类
+
+    @Override
+    public void onKeyEvent() {
+        Log.d("onKeyEvent");
+    }
+}
+
+public void performKeyEvent(KeyEventListener listener) {
+	log("performKeyEvent before");
+	listener.onKeyEvent();
+	log("performKeyEvent after");
+}
+
+public void execute() {
+    KeyEventListener listener = new KeyEventHandler();
+    // performKeyEvent(listener); // 原来的逻辑
+
+    KeyEventHandlerProxy proxy = new KeyEventHandlerProxy(listener);
+    KeyEventListener proxyListener = proxy.create();
+    performKeyEvent(proxyListener); // 修改后的逻辑，在 KeyEventInvocationHandler 的 invoke 方法中添加了逻辑
+}
+
+class KeyEventHandlerProxy {
+    private KeyEventListener mKeyEventListener;
+
+    public KeyEventHandlerProxy(KeyEventListener mKeyEventListener) {
+        this.mKeyEventListener = mKeyEventListener;
+    }
+
+    public KeyEventListener create() {
+        final ClassLoader classLoader = KeyEventListener.class.getClassLoader();
+        final Class&lt;?>[] interfaces = new Class[]{ KeyEventListener.class };
+        final KeyEventInvocationHandler handler = new KeyEventInvocationHandler();
+
+        return (KeyEventListener) Proxy.newProxyInstance(classLoader, interfaces, handler);
+    }
+
+    class KeyEventInvocationHandler implements InvocationHandler {
+
+        @Override
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+            Log.d("before onKeyDown");
+            Object result = method.invoke(mKeyEventListener);
+            Log.d("after onKeyDown");
+            return result;
+        }
+    }
+}
+</pre>
 
                         </div>
                     </div>
@@ -8680,6 +8722,16 @@ public class DriverManager {}
 </pre>
 						<p><a href="docs/docs-java/api/java/sql/DriverManager.html" target="_blank">DriverManager</a> 是管理一组 JDBC 驱动程序的基本服务。</p>
 						<p><a href="docs/docs-java/api/javax/sql/DataSource.html" target="_blank">DataSource</a> 接口是 JDBC 2.0 API 中的新增内容，它提供了连接到数据源的另一种方法。使用 DataSource 对象是连接到数据源的首选方法。 </p>
+                        <pre class="brush: java;">
+DataSource dataSource = new MysqlDataSource(); // MysqlDataSource 由 Mysql 的驱动提供的
+try {
+    Connection connection = dataSource.getConnection(user, password);
+    connection.setCatalog("test"); // 设置数据库名
+    ...
+} catch (SQLException e) {
+    e.printStackTrace();
+}
+</pre>
 						<p>作为初始化的一部分，DriverManager 类会尝试加载在 "jdbc.drivers" 系统属性中引用的驱动程序类。这允许用户定制由他们的应用程序使用的 JDBC Driver</p>
 						<p>riverManager 类的方法 getConnection 和 getDrivers 已经得到提高以支持 Java Standard Edition Service Provider 机制。 JDBC 4.0 Drivers 必须包括 META-INF/services/java.sql.Driver 文件。此文件包含 java.sql.Driver 的 JDBC 驱动程序实现的名称。</p>
 						<p>应用程序不再需要使用 Class.forName() 显式地加载 JDBC 驱动程序。当前使用 Class.forName() 加载 JDBC 驱动程序的现有程序将在不作修改的情况下继续工作。 </p>
@@ -10271,36 +10323,6 @@ public interface SyncResolver extends RowSet {
 				<!-- item over -->
 
                 <!-- item start -->
-                <a class="offset" id="javax-sql-DataSource"></a>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">DataSource</h3>
-                    </div>
-                    <div class="panel-body">
-						<pre class="brush: java;">
-
-</pre>
-                        <p><a href="docs/docs-java/api/" target="_blank"></a></p>
-                    </div>
-                </div>
-                <!-- item over -->
-
-                <!-- item start -->
-                <a class="offset" id="javax-sql-"></a>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">...</h3>
-                    </div>
-                    <div class="panel-body">
-						<pre class="brush: java;">
-
-</pre>
-                        <p><a href="docs/docs-java/api/" target="_blank"></a></p>
-                    </div>
-                </div>
-                <!-- item over -->
-
-                <!-- item start -->
                 <a class="offset" id="java-beans-Beans"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -10700,6 +10722,203 @@ public class IndexedPropertyDescriptor extends PropertyDescriptor {
                             </ol>
                         </div>
                     </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-text-Format"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Format 及其子类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+Format
+ ├─ DateFormat
+ │   └─ SimpleDateFormat
+ ├─ NumberFormat
+ │   ├─ DecimalFormat
+ │   └─ ChoiceFormat
+ └─ MessageFormat
+
+java.lang.Object
+    java.text.Format
+
+public abstract class Format implements Serializable, Cloneable {
+    public static class Field extends AttributedCharacterIterator.Attribute {
+        protected Field(String name) {}
+    }
+
+    protected Format() {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/text/Format.html" target="_blank">Format</a>  是一个用于格式化语言环境敏感的信息（如日期、消息和数字）的抽象基类。 </p>
+                            <p>Format 定义了编程接口，用于将语言环境敏感的对象格式化为 String（使用 format 方法）和将 String 重新解析为对象（使用 parseObject 方法）。</p>
+                            <p>通常，一个 format 的 parseObject 方法必须能解析任何由其 format 方法格式化的字符串。不过，也可能存在不能解析的异常情况。例如，format 方法可能创建中间无分隔符的两个相邻整数，在这种情况下，parseObject 无法判断哪个数字属于哪个数。 </p>
+                            <ol>
+                                <li><p><code>String 	format(Object obj)</code> -- 格式化一个对象以生成一个字符串</p></li>
+                                <li><p><code>abstract  StringBuffer 	format(Object obj, StringBuffer toAppendTo, FieldPosition pos)</code> -- 格式化一个对象，并将得到的文本添加到给定的字符缓冲区</p></li>
+                                <li><p><code>AttributedCharacterIterator 	formatToCharacterIterator(Object obj)</code> -- 格式化一个对象，生成一个 AttributedCharacterIterator</p></li>
+
+                                <li class="group"><p><code>Object 	parseObject(String source)</code> -- 从给定字符串的开始处解析文本以生成一个对象</p></li>
+                                <li><p><code>abstract  Object 	parseObject(String source, ParsePosition pos)</code> -- 解析字符串文本，生成一个对象</p></li>
+
+                                <li class="group"><p><code>Object 	clone()</code> -- 创建并返回此对象的一个副本</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <div class="split-item">
+						        <pre class="brush: java;">
+public abstract class DateFormat extends Format {
+    public static class Field extends Format.Field {}
+
+    /** 格式化样式，包括日期和时间的样式都能使用 */
+    public static final int FULL = 0;   // Friday, 24 August 2018 17:17:40 o'clock CST
+    public static final int LONG = 1;   // 24 August 2018 17:18:21 CST
+    public static final int MEDIUM = 2; // 24-Aug-2018 17:19:19
+    public static final int SHORT = 3;  // 24/08/18 17:18
+    public static final int DEFAULT = MEDIUM;
+
+    public final static int ERA_FIELD = 0;
+    public final static int YEAR_FIELD = 1;
+    public final static int MONTH_FIELD = 2;
+    public final static int DATE_FIELD = 3;
+    public final static int HOUR_OF_DAY1_FIELD = 4;
+    public final static int HOUR_OF_DAY0_FIELD = 5;
+    public final static int MINUTE_FIELD = 6;
+    public final static int SECOND_FIELD = 7;
+    public final static int MILLISECOND_FIELD = 8;
+    public final static int DAY_OF_WEEK_FIELD = 9;
+    public final static int DAY_OF_YEAR_FIELD = 10;
+    public final static int DAY_OF_WEEK_IN_MONTH_FIELD = 11;
+    public final static int WEEK_OF_YEAR_FIELD = 12;
+    public final static int WEEK_OF_MONTH_FIELD = 13;
+    public final static int AM_PM_FIELD = 14;
+    public final static int HOUR1_FIELD = 15;
+    public final static int HOUR0_FIELD = 16;
+    public final static int TIMEZONE_FIELD = 17;
+}
+</pre>
+                                <p><a href="docs/docs-java/api/java/text/DateFormat.html" target="_blank">DateFormat</a> 是日期/时间格式化子类的抽象类，它以与语言无关的方式格式化并解析日期或时间。</p>
+                                <p>DateFormat 提供了很多类方法，以获得基于默认或给定语言环境和多种格式化风格的默认日期/时间 Formatter。格式化风格包括 FULL、LONG、MEDIUM 和 SHORT。</p>
+                                <p>DateFormat 可帮助进行格式化并解析任何语言环境的日期。对于月、星期，甚至日历格式（阴历和阳历），其代码可完全与语言环境的约定无关。</p>
+                                <ol>
+                                    <li><p><code>static DateFormat 	getInstance()</code> -- 调用的是 <code>getDateTimeInstance(SHORT, SHORT)</code> 方法</p></li>
+
+                                    <li class="group"><p><code>static DateFormat 	getDateInstance()</code> -- 同 <code>getDateInstance(DEFAULT)</code></p></li>
+                                    <li><p><code>static DateFormat 	getDateInstance(int style)</code> -- 获取指定格式的日期格式器，参见格式化样式常量</p></li>
+                                    <li><p><code>static DateFormat 	getDateInstance(int style, Locale aLocale)</code> -- 获取指定语言环境的指定格式的日期格式器</p>
+                                        <pre class="brush: java;">
+log(DateFormat.getDateInstance().format(new Date()));                 // 24-Aug-2018
+log(DateFormat.getDateInstance(DateFormat.SHORT).format(new Date())); // 24/08/18
+</pre>
+                                    </li>
+
+                                    <li class="group"><p><code>static DateFormat 	getTimeInstance()</code> -- 同 <code>getTimeInstance(DEFAULT)</code></p></li>
+                                    <li><p><code>static DateFormat 	getTimeInstance(int style)</code> -- 获取指定格式的时间格式器，参见格式化样式常量</p></li>
+                                    <li><p><code>static DateFormat 	getTimeInstance(int style, Locale aLocale)</code> -- 获取指定语言环境的指定格式的时间格式器</p>
+                                        <pre class="brush: java;">
+log(DateFormat.getTimeInstance().format(new Date()));                 // 17:44:45
+log(DateFormat.getTimeInstance(DateFormat.SHORT).format(new Date())); // 17:44
+</pre>
+                                    </li>
+
+                                    <li class="group"><p><code>static DateFormat 	getDateTimeInstance()</code> -- 合并 <code>getDateInstance(DEFAULT)</code> 和 <code>getTimeInstance(DEFAULT)</code></p></li>
+                                    <li><p><code>static DateFormat 	getDateTimeInstance(int dateStyle, int timeStyle)</code> -- 获取指定格式的时间和时间格式器</p></li>
+                                    <li><p><code>static DateFormat 	getDateTimeInstance(int dateStyle, int timeStyle, Locale aLocale)</code> -- 指定语言环境</p>
+                                        <pre class="brush: java;">
+// 24-Aug-2018 17:44
+log(DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(new Date()));
+</pre>
+                                    </li>
+
+                                    <li class="group"><p><code>static Locale[] 	getAvailableLocales()</code> -- 返回所有语言环境的数组</p></li>
+
+                                    <li class="group"><p><code>String 	format(Date date)</code> -- 用当前的时间/时间格式器将 date 格式为字符串</p></li>
+                                    <li><p><code>abstract StringBuffer 	format(Date date, StringBuffer toAppendTo, FieldPosition fieldPosition)</code> -- 参见子类实现</p></li>
+                                    <li><p><code>StringBuffer 	format(Object obj, StringBuffer toAppendTo, FieldPosition fieldPosition)</code> -- 相当于重写 format</p></li>
+
+                                    <li class="group"><p><code>Date 	parse(String source)</code> -- 从给定字符串的开始解析文本以生成一个日期，参见子类 SimpleDateFormat</p></li>
+                                    <li><p><code>abstract Date 	parse(String source, ParsePosition pos)</code> -- 参见子类 SimpleDateFormat 实现</p></li>
+                                    <li><p><code>Object 	parseObject(String source, ParsePosition pos)</code> -- 相当于重写 parse</p></li>
+
+                                    <li class="group"><p><code>NumberFormat 	getNumberFormat()</code> -- 获取数字格式器</p></li>
+                                    <li><p><code>void 	setNumberFormat(NumberFormat newNumberFormat)</code> -- 允许用户设置数字格式器</p></li>
+                                    <li><p><code>TimeZone 	getTimeZone()</code> -- 获取时区，参见: <a href="#java-util-Date">TimeZone</a></p></li>
+                                    <li><p><code>void 	setTimeZone(TimeZone zone)</code> -- 为此 DateFormat 对象的日历设置时区</p></li>
+                                    <li><p><code>boolean 	isLenient()</code> -- 判断日期/时间解析是否为不严格的</p></li>
+                                    <li><p><code>void 	setLenient(boolean lenient)</code> -- 指定日期/时间解析是否不严格</p></li>
+                                    <li><p><code>Calendar 	getCalendar()</code> -- 获取使用的日历</p></li>
+                                    <li><p><code>void 	setCalendar(Calendar newCalendar)</code> -- 设置此日期格式所使用的日历</p></li>
+                                </ol>
+                            </div>
+                            <div class="split-item">
+						        <pre class="brush: java;">
+public class SimpleDateFormat extends DateFormat {
+    /** 这些构造方法最然是公共的，但是推荐使用 DateFormat 的 getTimeInstance(...) 方法构建 */
+    public SimpleDateFormat() {}
+    public SimpleDateFormat(String pattern) {}
+    public SimpleDateFormat(String pattern, DateFormatSymbols formatSymbols) {}
+    public SimpleDateFormat(String pattern, Locale locale) {}
+}
+</pre>
+                                <p><a href="docs/docs-java/api/java/text/SimpleDateFormat.html" target="_blank">SimpleDateFormat</a> 是一个以与语言环境有关的方式来格式化和解析日期的具体类。它允许进行格式化（日期 -> 文本）、解析（文本 -> 日期）和规范化。 </p>
+                                <p>SimpleDateFormat 使得可以选择任何用户定义的日期-时间格式的模式。但是，仍然建议通过 DateFormat 中的 getTimeInstance、getDateInstance 或 getDateTimeInstance 来创建日期-时间格式器。每一个这样的类方法都能够返回一个以默认格式模式初始化的日期/时间格式器。可以根据需要使用 applyPattern 方法来修改格式模式。</p>
+                                <ol>
+
+                                    <li><p><code>StringBuffer 	format(Date date, StringBuffer toAppendTo, FieldPosition pos)</code> -- 将给定的 Date 格式化为日期/时间字符串，并将结果添加到给定的 StringBuffer</p></li>
+                                    <li><p><code>AttributedCharacterIterator 	formatToCharacterIterator(Object obj)</code> -- 格式化生成 AttributedCharacterIterator 的对象</p></li>
+                                    <li><p><code>Date 	parse(String text, ParsePosition pos)</code> -- 解析字符串的文本，生成 Date</p></li>
+
+                                    <li class="group"><p><code>void 	applyLocalizedPattern(String pattern)</code> -- 将给定的本地化模式字符串应用于此日期格式</p></li>
+                                    <li><p><code>void 	applyPattern(String pattern)</code> -- 将给定模式字符串应用于此日期格式</p></li>
+                                    <li><p><code>String 	toLocalizedPattern()</code> -- 返回描述此日期格式的本地化模式字符串</p></li>
+                                    <li><p><code>String 	toPattern()</code> -- 返回描述此日期格式的模式字符串</p></li>
+
+                                    <li class="group"><p><code>Date 	get2DigitYearStart()</code> -- 返回在 100 年周期内被解释的两位数字年份的开始日期</p></li>
+                                    <li><p><code>void 	set2DigitYearStart(Date startDate)</code> -- 设置 100 年周期的两位数年份，该年份将被解释为从用户指定的日期开始</p></li>
+                                    <li><p><code>DateFormatSymbols 	getDateFormatSymbols()</code> -- 获取此日期格式的日期和时间格式符号的一个副本</p></li>
+                                    <li><p><code>void 	setDateFormatSymbols(DateFormatSymbols newFormatSymbols)</code> -- 设置此日期格式的日期和时间格式符号</p></li>
+
+                                    <li class="group"><p><code>Object 	clone()</code> -- 创建此 SimpleDateFormat 的一个副本</p></li>
+                                    <li><p><code>boolean 	equals(Object obj)</code> -- 比较给定对象与此 SimpleDateFormat 的相等性</p></li>
+                                    <li><p><code>int 	hashCode()</code> -- 返回此 SimpleDateFormat 对象的哈希码值</p></li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="sub-item">
+                            <div class="split-item">
+						        <pre class="brush: java;">
+
+</pre>
+                                <p><a href="docs/docs-java/api/java/text/NumberFormat.html" target="_blank">NumberFormat</a>  </p>
+                            </div>
+                            <div class="split-item">
+						        <pre class="brush: java;">
+
+</pre>
+                                <p><a href="docs/docs-java/api/java/text/DecimalFormat.html" target="_blank">DecimalFormat</a>  </p>
+                            </div>
+                            <div class="split-item">
+						        <pre class="brush: java;">
+
+</pre>
+                                <p><a href="docs/docs-java/api/java/text/ChoiceFormat.html" target="_blank">ChoiceFormat</a>  </p>
+                            </div>
+                        </div>
+
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api/java/text/MessageFormat.html" target="_blank">MessageFormat</a>  </p>
+                        </div>
+                    </div>
+
+
                 </div>
                 <!-- item over -->
 
