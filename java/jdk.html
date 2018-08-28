@@ -80,7 +80,7 @@
 							<a href="#java-lang-Runtime" class="list-group-item">Runtime / Process</a>
                             <a href="#java-lang-Thread" class="list-group-item">Thread 与 ThreadGroup</a>
                             <a href="#java-lang-String" class="list-group-item">String 及相关类</a>
-                            <a href="#java-lang-Math" class="list-group-item">Math</a>
+                            <a href="#java-lang-Math" class="list-group-item">Math 及 RoundingMode</a>
                             <a href="#java-lang-Number" class="list-group-item">Number 及子类</a>
                             <a href="#java-lang-Exception" class="list-group-item">Exception 和 Error</a>
                             <a href="#java-lang-ref-Reference" class="list-group-item">ref.Reference 及子类</a>
@@ -168,7 +168,8 @@
                         <div id="java-text" class="panel-collapse collapse"
                              role="tabpanel">
                             <a href="#java-text-Format" class="list-group-item">Format 及子类</a>
-                            <a href="#java-text-" class="list-group-item">...</a>
+                            <a href="#java-text-CharacterIterator" class="list-group-item">CharacterIterator 及实现类</a>
+							<a href="#java-text-" class="list-group-item">...</a>
                         </div>
 
                         <a class="list-group-item active drop" data-toggle="collapse"
@@ -2340,10 +2341,11 @@ public StringBuffer append(boolean b) {
                 <a class="offset" id="java-lang-Math"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Math</h3>
+                        <h3 class="panel-title">Math 及 RoundingMode</h3>
                     </div>
                     <div class="panel-body">
-						<pre class="brush: java;">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
 public final class Math {
     // 比任何其他值都更接近 e（即自然对数的底数）的 double 值, e 的值为 n 接近无穷大时： e = Math.pow(1 + 1 / n, n)
     public static final double E = 2.7182818284590452354;
@@ -2351,60 +2353,60 @@ public final class Math {
     public static final double PI = 3.14159265358979323846;
 }
 </pre>
-                        <p><a href="docs/docs-java/api/java/lang/Math.html" target="_blank">Math</a> 类包含用于执行基本数学运算的方法，如初等指数、对数、平方根和三角函数。</p>
-                        <p>默认情况下，很多 Math 方法仅调用 StrictMath 中的等价方法来完成它们的实现，而这些函数方法在 StrictMath 里面的形式是调用本地的非 Java 代码的接口。建议代码生成器使用特定于平台的本机库或者微处理器指令（可用时）来提供 Math 方法更高性能的实现。这种更高性能的实现仍然必须遵守 Math 的规范。 </p>
-                        <ol>
-                            <li><p><code>static double 	max(double a, double b)</code> -- 返回两个 double 值中较大的一个。</p></li>
-                            <li><p><code>static float 	max(float a, float b)</code> -- 返回两个 float 值中较大的一个。</p></li>
-                            <li><p><code>static int 	max(int a, int b)</code> -- 返回两个 int 值中较大的一个。</p></li>
-                            <li><p><code>static long 	max(long a, long b)</code> -- 返回两个 long 值中较大的一个。</p></li>
-                            <li><p><code>static double 	min(double a, double b)</code> -- 返回两个 double 值中较小的一个。</p></li>
-                            <li><p><code>static float 	min(float a, float b)</code> -- 返回两个 float 值中较小的一个。</p></li>
-                            <li><p><code>static int 	min(int a, int b)</code> -- 返回两个 int 值中较小的一个。</p></li>
-                            <li><p><code>static long 	min(long a, long b)</code> -- 返回两个 long 值中较小的一个。</p></li>
+                            <p><a href="docs/docs-java/api/java/lang/Math.html" target="_blank">Math</a> 类包含用于执行基本数学运算的方法，如初等指数、对数、平方根和三角函数。</p>
+                            <p>默认情况下，很多 Math 方法仅调用 StrictMath 中的等价方法来完成它们的实现，而这些函数方法在 StrictMath 里面的形式是调用本地的非 Java 代码的接口。建议代码生成器使用特定于平台的本机库或者微处理器指令（可用时）来提供 Math 方法更高性能的实现。这种更高性能的实现仍然必须遵守 Math 的规范。 </p>
+                            <ol>
+                                <li><p><code>static double 	max(double a, double b)</code> -- 返回两个 double 值中较大的一个。</p></li>
+                                <li><p><code>static float 	max(float a, float b)</code> -- 返回两个 float 值中较大的一个。</p></li>
+                                <li><p><code>static int 	max(int a, int b)</code> -- 返回两个 int 值中较大的一个。</p></li>
+                                <li><p><code>static long 	max(long a, long b)</code> -- 返回两个 long 值中较大的一个。</p></li>
+                                <li><p><code>static double 	min(double a, double b)</code> -- 返回两个 double 值中较小的一个。</p></li>
+                                <li><p><code>static float 	min(float a, float b)</code> -- 返回两个 float 值中较小的一个。</p></li>
+                                <li><p><code>static int 	min(int a, int b)</code> -- 返回两个 int 值中较小的一个。</p></li>
+                                <li><p><code>static long 	min(long a, long b)</code> -- 返回两个 long 值中较小的一个。</p></li>
 
-                            <li class="group"><p><code>static double 	abs(double a)</code> -- 返回 double 值的绝对值。</p></li>
-                            <li><p><code>static float 	abs(float a)</code> -- 返回 float 值的绝对值。</p></li>
-                            <li><p><code>static int 	abs(int a)</code> -- 返回 int 值的绝对值。</p></li>
-                            <li><p><code>static long 	abs(long a)</code> -- 返回 long 值的绝对值。</p></li>
+                                <li class="group"><p><code>static double 	abs(double a)</code> -- 返回 double 值的绝对值。</p></li>
+                                <li><p><code>static float 	abs(float a)</code> -- 返回 float 值的绝对值。</p></li>
+                                <li><p><code>static int 	abs(int a)</code> -- 返回 int 值的绝对值。</p></li>
+                                <li><p><code>static long 	abs(long a)</code> -- 返回 long 值的绝对值。</p></li>
 
-                            <li class="group"><p><code>static double 	signum(double d)</code> -- 返回参数的符号函数；如果参数为 0，则返回 0；如果参数大于 0，则返回 1.0；如果参数小于 0，则返回 -1.0。</p></li>
-                            <li><p><code>static float 	signum(float f)</code> -- 返回参数的符号函数；如果参数为 0，则返回 0；如果参数大于 0，则返回 1.0；如果参数小于 0，则返回 -1.0。</p></li>
+                                <li class="group"><p><code>static double 	signum(double d)</code> -- 返回参数的符号函数；如果参数为 0，则返回 0；如果参数大于 0，则返回 1.0；如果参数小于 0，则返回 -1.0。</p></li>
+                                <li><p><code>static float 	signum(float f)</code> -- 返回参数的符号函数；如果参数为 0，则返回 0；如果参数大于 0，则返回 1.0；如果参数小于 0，则返回 -1.0。</p></li>
 
-                            <li class="group"><p><code>static double 	floor(double a)</code> -- 返回最大的（最接近正无穷大）double 值，该值小于等于参数，并等于某个整数。</p></li>
-                            <li><p><code>static double 	ceil(double a)</code> -- 返回最小的（最接近负无穷大）double 值，该值大于等于参数，并等于某个整数。</p></li>
-                            <li><p><code>static double 	rint(double a)</code> -- 返回最接近参数并等于某一整数的 double 值。</p></li>
-                            <li><p><code>static long 	round(double a)</code> -- 返回最接近参数的 long。</p></li>
-                            <li><p><code>static int 	round(float a)</code> -- 返回最接近参数的 int。</p>
-                                <pre class="brush: java;">
+                                <li class="group"><p><code>static double 	floor(double a)</code> -- 返回最大的（最接近正无穷大）double 值，该值小于等于参数，并等于某个整数。</p></li>
+                                <li><p><code>static double 	ceil(double a)</code> -- 返回最小的（最接近负无穷大）double 值，该值大于等于参数，并等于某个整数。</p></li>
+                                <li><p><code>static double 	rint(double a)</code> -- 返回最接近参数并等于某一整数的 double 值。</p></li>
+                                <li><p><code>static long 	round(double a)</code> -- 返回最接近参数的 long。</p></li>
+                                <li><p><code>static int 	round(float a)</code> -- 返回最接近参数的 int。</p>
+                                    <pre class="brush: java;">
 /** floor -- 总是往负无穷大方向舍取，如: floor(3.9) = 3.0, floor(-3.1) = -4.0
  * ceil -- 和 floor 相反，总是往正无穷大方向舍取，如: ceil(3.9) = 4.0, ceil(-3.1) = -3.0
  * rint -- 四舍五入，如：rint(3.1) = 3.0, rint(3.5) = 4.0, rint(-3.1) = 3.0, rint(-3.5) = -4.0
  * round -- 舍入同 rint 函数，返回 int 或 long，如： round(3.1) = 3, round(-3.1) = 3
  */
 </pre>
-                            </li>
+                                </li>
 
-                            <li class="group"><p><code>static double 	pow(double a, double b)</code> -- 返回第一个参数的第二个参数次幂的值。</p></li>
-                            <li><p><code>static double 	sqrt(double a)</code> -- 返回正确舍入的 double 值的正平方根。</p></li>
-                            <li><p><code>static double 	cbrt(double a)</code> -- 返回 double 值的立方根。</p></li>
-                            <li><p><code>static double 	hypot(double x, double y)</code> -- 返回 sqrt(x2 +y2)，没有中间溢出或下溢。</p></li>
+                                <li class="group"><p><code>static double 	pow(double a, double b)</code> -- 返回第一个参数的第二个参数次幂的值。</p></li>
+                                <li><p><code>static double 	sqrt(double a)</code> -- 返回正确舍入的 double 值的正平方根。</p></li>
+                                <li><p><code>static double 	cbrt(double a)</code> -- 返回 double 值的立方根。</p></li>
+                                <li><p><code>static double 	hypot(double x, double y)</code> -- 返回 sqrt(x2 +y2)，没有中间溢出或下溢。</p></li>
 
-                            <li class="group"><p><code>static double 	toDegrees(double angrad)</code> -- 将用弧度表示的角转换为近似相等的用角度表示的角。</p></li>
-                            <li><p><code>static double 	toRadians(double angdeg)</code> -- 将用角度表示的角转换为近似相等的用弧度表示的角。</p>
-                                <pre class="brush: java;">
+                                <li class="group"><p><code>static double 	toDegrees(double angrad)</code> -- 将用弧度表示的角转换为近似相等的用角度表示的角。</p></li>
+                                <li><p><code>static double 	toRadians(double angdeg)</code> -- 将用角度表示的角转换为近似相等的用弧度表示的角。</p>
+                                    <pre class="brush: java;">
 Math.toDegrees(Math.PI * 30 / 180) ~= 30;
 Math.toDegrees(Math.PI * 45 / 180) ~= 45;
 
 Math.toRadians(30) ~= Math.PI * 30 / 180;
 Math.toRadians(45) ~= Math.PI * 45 / 180;
 </pre>
-                            </li>
+                                </li>
 
-                            <li><p><code>static double 	sin(double a)</code> -- 返回角的三角正弦。</p></li>
-                            <li><p><code>static double 	cos(double a)</code> -- 返回角的三角余弦。</p></li>
-                            <li><p><code>static double 	tan(double a)</code> -- 返回角的三角正切。</p>
-                                <pre class="brush: java;">
+                                <li><p><code>static double 	sin(double a)</code> -- 返回角的三角正弦。</p></li>
+                                <li><p><code>static double 	cos(double a)</code> -- 返回角的三角余弦。</p></li>
+                                <li><p><code>static double 	tan(double a)</code> -- 返回角的三角正切。</p>
+                                    <pre class="brush: java;">
 sin(30°) == Math.sin(Math.PI * 30 / 180) ~= 1 / 2
 sin(45°) == Math.sin(Math.PI * 45 / 180) ~= 1 / sqrt(2)
 cos(60°) == Math.cos(Math.PI * 60 / 180) ~= 1 / 2
@@ -2412,37 +2414,37 @@ cos(45°) == Math.cos(Math.PI * 45 / 180) ~= 1 / sqrt(2)
 tan(30°) == Math.tan(Math.PI * 30 / 180) ~= 1 / sqrt(3)
 tan(45°) == Math.tan(Math.PI * 45 / 180) ~= 1
 </pre>
-                            </li>
+                                </li>
 
-                            <li><p><code>static double 	asin(double a)</code> -- 返回一个值的反正弦；返回的角度范围在 -pi/2 到 pi/2 之间。</p></li>
-                            <li><p><code>static double 	acos(double a)</code> -- 返回一个值的反余弦；返回的角度范围在 0.0 到 pi 之间。</p></li>
-                            <li><p><code>static double 	atan2(double y, double x)</code> -- 同 atan(double), 参数为 y 边长 和 x 边长</p></li>
-                            <li><p><code>static double 	atan(double a)</code> -- 返回一个值的反正切；返回的角度范围在 -pi/2 到 pi/2 之间。</p>
-                                <pre class="brush: java;">
+                                <li><p><code>static double 	asin(double a)</code> -- 返回一个值的反正弦；返回的角度范围在 -pi/2 到 pi/2 之间。</p></li>
+                                <li><p><code>static double 	acos(double a)</code> -- 返回一个值的反余弦；返回的角度范围在 0.0 到 pi 之间。</p></li>
+                                <li><p><code>static double 	atan2(double y, double x)</code> -- 同 atan(double), 参数为 y 边长 和 x 边长</p></li>
+                                <li><p><code>static double 	atan(double a)</code> -- 返回一个值的反正切；返回的角度范围在 -pi/2 到 pi/2 之间。</p>
+                                    <pre class="brush: java;">
 asin(30°) ~= Math.PI * 30 / 180, sin(30°) == Math.sin(Math.PI * 30 / 180)
 acos(60°) ~= Math.PI * 60 / 180, cos(60°) == Math.cos(Math.PI * 60 / 180)
 atan(30°) ~= atan2(1, Math.sqrt(3)) ~= Math.PI * 30 / 180, tan(30°) == Math.tan(Math.PI * 30 / 180)
 </pre>
-                            </li>
+                                </li>
 
-                            <li><p><code>static double 	sinh(double x)</code> -- 返回 x 值的双曲线正弦，x 的双曲正弦被定义为 <code>(e<sup>x</sup> - e<sup>-x</sup>) / 2</code>, e 为自然对数</p></li>
-                            <li><p><code>static double 	cosh(double x)</code> -- 返回 x 值的双曲线余弦，x 的双曲余弦被定义为 <code>(e<sup>x</sup> + e<sup>-x</sup>) / 2</code>, e 为自然对数</p></li>
-                            <li><p><code>static double 	tanh(double x)</code> -- 返回 x 值的双曲线正切，x 的双曲正切被定义为 <code>(e<sup>x</sup> - e<sup>-x</sup>) / (e<sup>x</sup> + e<sup>-x</sup>)</code>, e 为自然对数</p>
-                                <pre class="brush: java;">
+                                <li><p><code>static double 	sinh(double x)</code> -- 返回 x 值的双曲线正弦，x 的双曲正弦被定义为 <code>(e<sup>x</sup> - e<sup>-x</sup>) / 2</code>, e 为自然对数</p></li>
+                                <li><p><code>static double 	cosh(double x)</code> -- 返回 x 值的双曲线余弦，x 的双曲余弦被定义为 <code>(e<sup>x</sup> + e<sup>-x</sup>) / 2</code>, e 为自然对数</p></li>
+                                <li><p><code>static double 	tanh(double x)</code> -- 返回 x 值的双曲线正切，x 的双曲正切被定义为 <code>(e<sup>x</sup> - e<sup>-x</sup>) / (e<sup>x</sup> + e<sup>-x</sup>)</code>, e 为自然对数</p>
+                                    <pre class="brush: java;">
 sinh(x) == (Math.pow(Math.E, x) - Math.pow(Math.E, -x)) / 2
 cosh(x) == (Math.pow(Math.E, x) + Math.pow(Math.E, -x)) / 2
 tanh(x) == (Math.pow(Math.E, x) - Math.pow(Math.E, -x)) / (Math.pow(Math.E, x) + Math.pow(Math.E, -x))
 </pre>
-                            </li>
+                                </li>
 
 
-                            <li class="group"><p><code>static double 	exp(double x)</code> -- 返回 e^x</p></li>
-                            <li><p><code>static double 	expm1(double x)</code> -- 返回 e^x - 1</p></li>
-                            <li><p><code>static double 	log(double a)</code> -- 返回 a 值的自然对数（底数是 e）。</p></li>
-                            <li><p><code>static double 	log10(double a)</code> -- 返回 a 值的底数为 10 的对数。</p></li>
-                            <li><p><code>static double 	log1p(double x)</code> -- 返回参数与 1 之和的自然对数。</p></li>
-                            <li><p><code>static int 	getExponent(double d)</code> -- 返回 d 表示形式中使用的无偏差指数(d 是 2 的 x 次方，不管符号，余数和小数)</p></li>
-                            <li><p><code>static int 	getExponent(float f)</code> -- 返回 f 表示形式中使用的无偏差指数(d 是 2 的 x 次方，不管符号，余数和小数)</p>
+                                <li class="group"><p><code>static double 	exp(double x)</code> -- 返回 e^x</p></li>
+                                <li><p><code>static double 	expm1(double x)</code> -- 返回 e^x - 1</p></li>
+                                <li><p><code>static double 	log(double a)</code> -- 返回 a 值的自然对数（底数是 e）。</p></li>
+                                <li><p><code>static double 	log10(double a)</code> -- 返回 a 值的底数为 10 的对数。</p></li>
+                                <li><p><code>static double 	log1p(double x)</code> -- 返回参数与 1 之和的自然对数。</p></li>
+                                <li><p><code>static int 	getExponent(double d)</code> -- 返回 d 表示形式中使用的无偏差指数(d 是 2 的 x 次方，不管符号，余数和小数)</p></li>
+                                <li><p><code>static int 	getExponent(float f)</code> -- 返回 f 表示形式中使用的无偏差指数(d 是 2 的 x 次方，不管符号，余数和小数)</p>
                                 <pre class="brush: java;">
 Math.getExponent(8) == 3
 Math.getExponent(-8) == 3
@@ -2451,14 +2453,14 @@ Math.getExponent(9) == 3
 double m = Math.pow(Math.E, 3);
 Math.log(m) == Math.log1p(m - 1) == 3.0
 </pre>
-                            </li>
+                                </li>
 
-                            <li class="group"><p><code>static double 	nextUp(double d)</code> -- 返回 d 和正无穷大之间与 d 相邻的浮点值。</p></li>
-                            <li><p><code>static float 	nextUp(float f)</code> -- 返回 f 和正无穷大之间与 f 相邻的浮点值。</p></li>
-                            <li><p><code>static double 	nextDown(double d)</code> -- 返回 d 和负无穷大之间与 d 相邻的浮点值。</p></li>
-                            <li><p><code>static float 	nextDown(float f)</code> -- 返回 f 和负无穷大之间与 f 相邻的浮点值。</p></li>
-                            <li><p><code>static double 	nextAfter(double start, double direction)</code> -- 返回 start 和 direction 间与第一个参数相邻的浮点数。</p></li>
-                            <li><p><code>static float 	nextAfter(float start, double direction)</code> -- 返回 start 和 direction 间与第一个参数相邻的浮点数。</p>
+                                <li class="group"><p><code>static double 	nextUp(double d)</code> -- 返回 d 和正无穷大之间与 d 相邻的浮点值。</p></li>
+                                <li><p><code>static float 	nextUp(float f)</code> -- 返回 f 和正无穷大之间与 f 相邻的浮点值。</p></li>
+                                <li><p><code>static double 	nextDown(double d)</code> -- 返回 d 和负无穷大之间与 d 相邻的浮点值。</p></li>
+                                <li><p><code>static float 	nextDown(float f)</code> -- 返回 f 和负无穷大之间与 f 相邻的浮点值。</p></li>
+                                <li><p><code>static double 	nextAfter(double start, double direction)</code> -- 返回 start 和 direction 间与第一个参数相邻的浮点数。</p></li>
+                                <li><p><code>static float 	nextAfter(float start, double direction)</code> -- 返回 start 和 direction 间与第一个参数相邻的浮点数。</p>
                                 <pre class="brush: java;">
 float f = 3.14f;
 double d = 3.14;
@@ -2472,25 +2474,48 @@ Math.nextDown(d) == 3.1399999999999997; // 比 d 稍小但是接近 d 的 double
  */
 nextAfter(double start, double direction);
 </pre>
-                            </li>
+                                </li>
 
+                                <li class="group"><p><code>static double 	random()</code> -- 返回随机正的 double 值，该值大于等于 0.0 且小于 1.0。</p></li>
+                                <li><p><code>static double 	IEEEremainder(double f1, double f2)</code> -- 按照 IEEE 754 标准的规定，对两个参数进行余数运算，返回为 <code>f1 - f2 * Math.rint(f1 / f2)</code></p></li>
+                                <li><p><code>static double 	copySign(double magnitude, double sign)</code> -- 返回带有第二个浮点参数符号的第一个浮点参数。</p></li>
+                                <li><p><code>static float 	copySign(float magnitude, float sign)</code> -- 返回带有第二个浮点参数符号的第一个浮点参数。</p></li>
 
-                            <li class="group"><p><code>static double 	random()</code> -- 返回随机正的 double 值，该值大于等于 0.0 且小于 1.0。</p></li>
-                            <li><p><code>static double 	IEEEremainder(double f1, double f2)</code> -- 按照 IEEE 754 标准的规定，对两个参数进行余数运算，返回为 <code>f1 - f2 * Math.rint(f1 / f2)</code></p></li>
-                            <li><p><code>static double 	copySign(double magnitude, double sign)</code> -- 返回带有第二个浮点参数符号的第一个浮点参数。</p></li>
-                            <li><p><code>static float 	copySign(float magnitude, float sign)</code> -- 返回带有第二个浮点参数符号的第一个浮点参数。</p></li>
+                                <li><p><code>static double 	scalb(double d, int scaleFactor)</code> -- 返回 <code>d × 2^scaleFactor</code>，其舍入方式如同将一个正确舍入的浮点值乘以 double 值集合中的一个值。</p></li>
+                                <li><p><code>static float 	scalb(float f, int scaleFactor)</code> -- 返回 <code>f × 2^scaleFactor</code>，其舍入方式如同将一个正确舍入的浮点值乘以 float 值集合中的一个值。</p></li>
 
-                            <li><p><code>static double 	scalb(double d, int scaleFactor)</code> -- 返回 <code>d × 2^scaleFactor</code>，其舍入方式如同将一个正确舍入的浮点值乘以 double 值集合中的一个值。</p></li>
-                            <li><p><code>static float 	scalb(float f, int scaleFactor)</code> -- 返回 <code>f × 2^scaleFactor</code>，其舍入方式如同将一个正确舍入的浮点值乘以 float 值集合中的一个值。</p></li>
-
-                            <li><p><code>static double 	ulp(double d)</code> -- 返回一个数字和距其最近的数字之间的距离</p></li>
-                            <li><p><code>static float 	ulp(float f)</code> -- 返回一个数字和距其最近的数字之间的距离</p>
-                                <pre class="brush: java;">
+                                <li><p><code>static double 	ulp(double d)</code> -- 返回一个数字和距其最近的数字之间的距离</p></li>
+                                <li><p><code>static float 	ulp(float f)</code> -- 返回一个数字和距其最近的数字之间的距离</p>
+                                    <pre class="brush: java;">
 在计算机中，float(32 位) 和 double(64 位) 都是固定长度的，一个数字和另外一个数字间，所有的数字是有限的。
 比如： 1.0001f 和 1.00012f 间，假设计算机能表示的数字为 10232332(乱写的)，那么，ulp = 1.0 / 10232332.
-                                </pre>
-                            </li>
-                        </ol>
+                                    </pre>
+                                </li>
+                            </ol>
+                        </div>
+
+                        <a id="java-math-RoundingMode" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    java.lang.Enum&lt;RoundingMode>
+        java.math.RoundingMode
+
+public enum RoundingMode {
+    /** 参见 Number 的子类 BigDecimal 的常量 */
+    UP(BigDecimal.ROUND_UP),
+    DOWN(BigDecimal.ROUND_DOWN),
+    CEILING(BigDecimal.ROUND_CEILING),
+    FLOOR(BigDecimal.ROUND_FLOOR),
+    HALF_UP(BigDecimal.ROUND_HALF_UP),
+    HALF_DOWN(BigDecimal.ROUND_HALF_DOWN),
+    HALF_EVEN(BigDecimal.ROUND_HALF_EVEN),
+    UNNECESSARY(BigDecimal.ROUND_UNNECESSARY);
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/math/RoundingMode.html" target="_blank">RoundingMode</a> 为可能丢弃精度的数值操作指定一种舍入行为。</p>
+                            <p>每种舍入模式都指示如何计算返回舍入结果位数的最低有效位。如果返回的位数比表示精确数值结果所需的位数少，则舍弃的位数称为舍弃部分，而不管这些位数对数值的作用如何。换句话说，假设是一个数值，舍弃部分的绝对值可能大于 1。 </p>
+                        </div>
                     </div>
                 </div>
                 <!-- item over -->
@@ -10857,10 +10882,12 @@ log(DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(
                             <div class="split-item">
 						        <pre class="brush: java;">
 public class SimpleDateFormat extends DateFormat {
-    /** 这些构造方法最然是公共的，但是推荐使用 DateFormat 的 getTimeInstance(...) 方法构建 */
+    /** 前三个构造方法最然是公共的，但是推荐使用 DateFormat 的 getTimeInstance(...) 方法构建 */
     public SimpleDateFormat() {}
     public SimpleDateFormat(String pattern) {}
     public SimpleDateFormat(String pattern, DateFormatSymbols formatSymbols) {}
+
+	/** 此方法唯一适合 SimpleDateFormat 的构造 */
     public SimpleDateFormat(String pattern, Locale locale) {}
 }
 </pre>
@@ -10886,35 +10913,301 @@ public class SimpleDateFormat extends DateFormat {
                                     <li><p><code>boolean 	equals(Object obj)</code> -- 比较给定对象与此 SimpleDateFormat 的相等性</p></li>
                                     <li><p><code>int 	hashCode()</code> -- 返回此 SimpleDateFormat 对象的哈希码值</p></li>
                                 </ol>
+								<p>日期和时间的模式:</p>
+								<pre class="brush: java;">
+/**
+ * y 	年 	Year 	1996; 96
+ * M 	年中的月份 	Month 	July; Jul; 07
+ * d 	月份中的天数 	Number 	10
+ * H 	一天中的小时数（0-23） 	Number 	0
+ * h 	am/pm 中的小时数（1-12） 	Number 	12
+ * m 	小时中的分钟数 	Number 	30
+ * s 	分钟中的秒数 	 	55
+ * S 	毫秒数 	Number 	978
+ * a 	Am/pm 标记 	Text 	PM
+ * E 	星期中的天数 	Text 	Tuesday; Tue
+ * G 	Era 标志符 	Text 	AD
+ * w 	年中的周数 	Number 	27
+ * W 	月份中的周数 	Number 	2
+ * D 	年中的天数 	Number 	189
+ * F 	月份中的星期 	Number 	2
+ * k 	一天中的小时数（1-24） 	Number 	24
+ * K 	am/pm 中的小时数（0-11） 	Number 	0
+ * z 	时区 	General time zone 	Pacific Standard Time; PST; GMT-08:00
+ * Z 	时区 	RFC 822 time zone 	-0800
+ */
+SimpleDateFormat format = new SimpleDateFormat("dd/MM/YYYY E hh:mm:ss", Locale.CHINA);
+log(format.format(new Date())); // 27/08/2018 星期一 09:01:19
+format.applyPattern("YYYY 年 MM 月 dd 日 E hh 时 mm 分 ss 秒");
+log(format.format(new Date())); // 2018 年 08 月 27 日 星期一 09 时 01 分 19 秒
+</pre>
                             </div>
                         </div>
 
                         <div class="sub-item">
                             <div class="split-item">
 						        <pre class="brush: java;">
+public abstract class NumberFormat extends Format {
+    public static class Field extends Format.Field {}
 
+    protected NumberFormat() {}
+
+    /** 用于构造 FieldPosition 对象的字段常量 */
+    public static final int INTEGER_FIELD = 0;  // 表示必须返回格式化数值整数部分的位置
+    public static final int FRACTION_FIELD = 1; // 表示必须返回格式化数值小数部分的位置
+}
 </pre>
-                                <p><a href="docs/docs-java/api/java/text/NumberFormat.html" target="_blank">NumberFormat</a>  </p>
+                                <p><a href="docs/docs-java/api/java/text/NumberFormat.html" target="_blank">NumberFormat</a> 是所有数值格式的抽象基类。此类提供格式化和解析数值的接口。NumberFormat 还提供了一些方法来确定哪些语言环境具有数值格式，以及它们的名称是什么。 </p>
+                                <p>NumberFormat 可用于格式化和解析任何语言环境的数值。使代码能够完全独立于小数点、千位分隔符甚至所用特定小数位数的语言环境约定，并与数值格式是否为偶小数无关。 </p>
+                                <ol>
+                                    <li><p><code>static NumberFormat 	getInstance()</code> -- 返回当前默认语言环境的通用数值格式</p></li>
+                                    <li><p><code>static NumberFormat 	getNumberInstance()</code> -- 同上</p></li>
+                                    <li><p><code>static NumberFormat 	getInstance(Locale inLocale)</code> -- 返回指定语言环境的通用数值格式</p></li>
+                                    <li><p><code>static NumberFormat 	getNumberInstance(Locale inLocale)</code> -- 同上</p>
+                                        <pre class="brush: java;">
+/** 去除左右无效位(0),float 和 double 默认保留三位小数(第三位为四舍五入)，
+ 可通过 setMaximumFractionDigits(int) 更改浮点数有效位数 */
+NumberFormat format = NumberFormat.getInstance();
+log(format.format(100), format.format(0100.23456789f)); // 100, 100.235
+format = NumberFormat.getNumberInstance();
+log(format.format(100), format.format(0100.234567890)); // 100, 100.235
+</pre>
+                                    </li>
+
+                                    <li class="group"><p><code>static NumberFormat 	getIntegerInstance()</code> -- 返回当前默认语言环境的整数格式(小数位直接丢弃)</p></li>
+                                    <li><p><code>static NumberFormat 	getIntegerInstance(Locale inLocale)</code> -- 返回指定语言环境的整数格式</p></li>
+                                    <li><p><code>static NumberFormat 	getPercentInstance()</code> -- 返回当前默认语言环境的百分比格式</p></li>
+                                    <li><p><code>static NumberFormat 	getPercentInstance(Locale inLocale)</code> -- 返回指定语言环境的百分比格式</p>
+                                        <pre class="brush: java;">log(NumberFormat.getPercentInstance().format(88.8)); // 8,880%</pre>
+                                    </li>
+                                    <li><p><code>static NumberFormat 	getCurrencyInstance()</code> -- 返回当前默认语言环境的货币格式(格式化时加货币符号)</p></li>
+                                    <li><p><code>static NumberFormat 	getCurrencyInstance(Locale inLocale)</code> -- 返回指定语言环境的货币格式</p>
+                                        <pre class="brush: java;">log(NumberFormat.getCurrencyInstance(Locale.CHINA).format(100)); // ￥100.00</pre>
+                                    </li>
+
+                                    <li class="group"><p><code>static Locale[] 	getAvailableLocales()</code> -- 返回所有语言环境的数组</p></li>
+
+                                    <li class="group"><p><code>String 	format(long number)</code> -- 使用当前的数字格式器格式化 long 类型</p></li>
+                                    <li><p><code>String 	format(double number)</code> -- 使用当前的数字格式器格式化 double 类型</p></li>
+                                    <li><p><code>abstract StringBuffer 	format(long number, StringBuffer toAppendTo, FieldPosition pos)</code> -- 相当于重写</p></li>
+                                    <li><p><code>abstract StringBuffer 	format(double number, StringBuffer toAppendTo, FieldPosition pos)</code> -- 相当于重写</p></li>
+                                    <li><p><code>StringBuffer 	format(Object number, StringBuffer toAppendTo, FieldPosition pos)</code> -- 如何格式化 Object 类型</p></li>
+
+                                    <li class="group"><p><code>Number 	parse(String source)</code> -- 解析给定字符串开头的文本，生成一个数值</p></li>
+                                    <li><p><code>abstract Number 	parse(String source, ParsePosition parsePosition)</code> -- 参见子类实现</p></li>
+                                    <li><p><code>Object 	parseObject(String source, ParsePosition pos)</code> -- 解析字符串中的文本，以生成一个 Number</p></li>
+
+                                    <li class="group"><p><code>int 	getMaximumFractionDigits()</code> -- 获取数的小数部分所允许的最大位数</p></li>
+                                    <li><p><code>void 	setMaximumFractionDigits(int newValue)</code> -- 设置数的小数部分所允许的最大位数(四舍五入)</p></li>
+                                    <li><p><code>int 	getMinimumFractionDigits()</code> -- 获取数的小数部分所允许的最小位数</p></li>
+                                    <li><p><code>void 	setMinimumFractionDigits(int newValue)</code> -- 设置数的小数部分所允许的最小位数(右侧填充 0)</p></li>
+                                    <li><p><code>int 	getMaximumIntegerDigits()</code> -- 获取数的整数部分所允许的最大位数</p></li>
+                                    <li><p><code>void 	setMaximumIntegerDigits(int newValue)</code> -- 设置数的整数部分所允许的最大位数(丢弃高位)</p></li>
+                                    <li><p><code>int 	getMinimumIntegerDigits()</code> -- 获取数的整数部分所允许的最小位数</p></li>
+                                    <li><p><code>void 	setMinimumIntegerDigits(int newValue)</code> -- 设置数的整数部分所允许的最小位数(左侧填充 0)</p></li>
+
+                                    <li class="group"><p><code>Currency 	getCurrency()</code> -- 获取格式化货币值时此数值格式使用的货币单位</p></li>
+                                    <li><p><code>void 	setCurrency(Currency currency)</code> -- 设置格式化货币值时此数值格式使用的货币</p></li>
+                                    <li><p><code>boolean 	isGroupingUsed()</code> -- 格式中是否使用了分组</p></li>
+                                    <li><p><code>void 	setGroupingUsed(boolean newValue)</code> -- 设置此格式中是否使用分组</p></li>
+                                    <li><p><code>boolean 	isParseIntegerOnly()</code> -- 格式是否只将数作为整数解析</p></li>
+                                    <li><p><code>void 	setParseIntegerOnly(boolean value)</code> -- 设置数是否应该仅作为整数进行解析</p></li>
+                                    <li><p><code>RoundingMode 	getRoundingMode()</code> -- 获取舍入模式，参见: <a href="#java-math-RoundingMode">RoundingMode 和 BigDecimal</a></p></li>
+                                    <li><p><code>void 	setRoundingMode(RoundingMode roundingMode)</code> -- 设置舍入模式</p></li>
+                                </ol>
                             </div>
+
                             <div class="split-item">
 						        <pre class="brush: java;">
+public class DecimalFormat extends NumberFormat {
+    public DecimalFormat() {} // 默认的模式为: #,##0.###
+    public DecimalFormat(String pattern) {}
+    public DecimalFormat(String pattern, DecimalFormatSymbols symbols) {}
+}
 
+/** 模式实例和解析: #,##0.###;(-#,##0.###)
+ * #,##0.### -- 默认的模式，分组为 3 位，小数后保留 3 位，如果整数个位没有值，则用 0 填充
+ *  eg: format(1234) = 1,234, format(1234.5678) = 1,234.568, format(0.2) = 0.2
+ * #,###0.00#### -- 分组 4 位，小数后保留 6 位，如果整数个位和小数前两位没有值，则用 0 填充
+ *  eg: format(1234) = 1234.00, format(1234.5678) = 1234.5678, format(0.2) = 0.20
+ * #,##0.###% -- % 号在前或者在后，都要将值乘以 100,然后在按上面的格式格式化
+ *  eg: format(0.5678) = 56.78%
+ * #,##0.###‰ -- ‰(\u2030) 号在前或者在后，都要将值乘以 1000,然后在按上面的格式格式化
+ *  eg: format(0.5678) = 567.8‰
+ * ¤#,##0.### -- ¤(\u00A4) 货币记号，由货币符号替换，如果两个同时出现，则用国际货币符号替换
+ *  eg: format(0.5678) = £0.568
+ * '#,#'#0.### -- ' 号为特殊字符，其包裹的内容原样输出
+ *  eg: format("'#,#'#0.###") = #,#0.568
+ * #.######E0 -- 科学计数法，E0 写在后缀，有效位同前面实例
+ *  eg: format("#.######E0") = 1.234568E3
+ */
 </pre>
-                                <p><a href="docs/docs-java/api/java/text/DecimalFormat.html" target="_blank">DecimalFormat</a>  </p>
+                                <p><a href="docs/docs-java/api/java/text/DecimalFormat.html" target="_blank">DecimalFormat</a> 是 NumberFormat 的一个具体子类，用于格式化十进制数字。该类设计有各种功能，使其能够解析和格式化任意语言环境中的数，包括对西方语言、阿拉伯语和印度语数字的支持。它还支持不同类型的数，包括整数 (123)、定点数 (123.4)、科学记数法表示的数 (1.23E4)、百分数 (12%) 和金额 ($123)。所有这些内容都可以本地化。</p>
+                                <ol>
+                                    <li class="group"><p><code>void 	applyLocalizedPattern(String pattern)</code> -- 应用一个本地化的模式</p></li>
+                                    <li><p><code>String 	toPattern()</code> -- 合成一个表示此 Format 对象当前状态的模式字符串</p></li>
+                                    <li><p><code>String 	toLocalizedPattern()</code> -- 合成一个表示此 Format 对象当前状态的、已本地化的模式字符串</p></li>
+                                    <li><p><code>void 	applyPattern(String pattern)</code> -- 应用模式</p></li>
+
+                                    <li class="group"><p><code>StringBuffer 	format(double number, StringBuffer result, FieldPosition fieldPosition)</code> -- 格式化一个 double 值，以生成一个字符串</p></li>
+                                    <li><p><code>StringBuffer 	format(long number, StringBuffer result, FieldPosition fieldPosition)</code> -- 格式化一个 long 值，以生成一个字符串</p></li>
+                                    <li><p><code>StringBuffer 	format(Object number, StringBuffer toAppendTo, FieldPosition pos)</code> -- 格式化一个数，并将所得文本追加到给定的字符串缓冲区</p></li>
+                                    <li><p><code>AttributedCharacterIterator 	formatToCharacterIterator(Object obj)</code> -- 格式化 obj 生成 AttributedCharacterIterator</p></li>
+
+                                    <li class="group"><p><code>Number 	parse(String text, ParsePosition pos)</code> -- 解析字符串中的文本，以生成一个 Number</p></li>
+
+                                    <li class="group"><p><code>RoundingMode 	getRoundingMode()</code> -- 获取舍入模式</p></li>
+                                    <li><p><code>void 	setRoundingMode(RoundingMode roundingMode)</code> -- 设置舍入模式</p></li>
+                                    <li><p><code>Currency 	getCurrency()</code> -- 获取格式化货币值时此数值格式使用的货币单位</p></li>
+                                    <li><p><code>void 	setCurrency(Currency currency)</code> -- 设置格式化货币值时此数值格式使用的货币</p></li>
+
+                                    <li class="group"><p><code>int 	getMultiplier()</code> -- 获取百分数、千分数和类似格式中使用的乘数(应用模式可能会改变此值)</p></li>
+                                    <li><p><code>void 	setMultiplier(int newValue)</code> -- 设置百分数、千分数和类似格式中使用的乘数</p></li>
+                                    <li><p><code>int 	getGroupingSize()</code> -- 返回分组大小(应用模式可能会改变此值)</p></li>
+                                    <li><p><code>void 	setGroupingSize(int newValue)</code> -- 设置分组大小(默认为 3)</p></li>
+                                    <li><p><code>void 	setGroupingUsed(boolean newValue)</code> -- 格式中是否使用分组(应用模式可能会改变此值)</p>
+                                        <pre class="brush: java;">
+DecimalFormat format = new DecimalFormat(); //  默认模式: #,##0.###
+log(format.isGroupingUsed(), format.getGroupingSize(), format.getMultiplier()); // true, 3, 1
+format.applyPattern("#0.###%");
+log(format.isGroupingUsed(), format.getGroupingSize(), format.getMultiplier()); // false, 0, 100
+</pre>
+                                    </li>
+
+                                    <li class="group"><p><code>boolean 	isDecimalSeparatorAlwaysShown()</code> -- 是否允许获取整数中小数分隔符的行为</p></li>
+                                    <li><p><code>void 	setDecimalSeparatorAlwaysShown(boolean newValue)</code> -- 设置是否允许设置整数中小数分隔符的行为</p></li>
+                                    <li><p><code>DecimalFormatSymbols 	getDecimalFormatSymbols()</code> -- 获取设置小数格式符号</p></li>
+                                    <li><p><code>void 	setDecimalFormatSymbols(DecimalFormatSymbols newSymbols)</code> -- 设置小数格式符号，通常程序员或用户不改变此符号</p></li>
+                                    <li><p><code>boolean 	isParseBigDecimal()</code> -- 是否解析的为 BigDecimal</p></li>
+                                    <li><p><code>void 	setParseBigDecimal(boolean newValue)</code> -- 设置 <code>parse(String, ParsePosition)</code> 方法是否返回 BigDecimal</p></li>
+
+                                    <li class="group"><p><code>int 	getMaximumFractionDigits()</code> -- 获取数的小数部分所允许的最大位数</p></li>
+                                    <li><p><code>void 	setMaximumFractionDigits(int newValue)</code> -- 设置数的小数部分所允许的最大位数(四舍五入)</p></li>
+                                    <li><p><code>int 	getMinimumFractionDigits()</code> -- 获取数的小数部分所允许的最小位数</p></li>
+                                    <li><p><code>void 	setMinimumFractionDigits(int newValue)</code> -- 设置数的小数部分所允许的最小位数(右侧填充 0)</p></li>
+                                    <li><p><code>int 	getMaximumIntegerDigits()</code> -- 获取数的整数部分所允许的最大位数</p></li>
+                                    <li><p><code>void 	setMaximumIntegerDigits(int newValue)</code> -- 设置数的整数部分所允许的最大位数(丢弃高位)</p></li>
+                                    <li><p><code>int 	getMinimumIntegerDigits()</code> -- 获取数的整数部分所允许的最小位数</p></li>
+                                    <li><p><code>void 	setMinimumIntegerDigits(int newValue)</code> -- 设置数的整数部分所允许的最小位数(左侧填充 0)</p></li>
+
+                                    <li class="group"><p><code>String 	getNegativePrefix()</code> -- 获取负数前缀(默认"-")</p></li>
+                                    <li><p><code>void 	setNegativePrefix(String newValue)</code> -- 设置负数前缀</p></li>
+                                    <li><p><code>String 	getNegativeSuffix()</code> -- 获取负数后缀(默认无)</p></li>
+                                    <li><p><code>void 	setNegativeSuffix(String newValue)</code> -- 设置负数后缀</p></li>
+                                    <li><p><code>String 	getPositivePrefix()</code> -- 获取正数前缀(默认无)</p></li>
+                                    <li><p><code>void 	setPositivePrefix(String newValue)</code> -- 设置正数前缀</p></li>
+                                    <li><p><code>String 	getPositiveSuffix()</code> -- 获取正数后缀(默认无)</p></li>
+                                    <li><p><code>void 	setPositiveSuffix(String newValue)</code> -- 设置正数后缀</p></li>
+
+                                </ol>
                             </div>
+
                             <div class="split-item">
 						        <pre class="brush: java;">
-
+public class ChoiceFormat extends NumberFormat {
+    public ChoiceFormat(double[] limits, String[] formats) {}
+    public ChoiceFormat(String newPattern) {}
+}
 </pre>
-                                <p><a href="docs/docs-java/api/java/text/ChoiceFormat.html" target="_blank">ChoiceFormat</a>  </p>
+                                <p><a href="docs/docs-java/api/java/text/ChoiceFormat.html" target="_blank">ChoiceFormat</a> 允许将格式应用到某个范围的数。它通常用于在 MessageFormat 中处理复数。</p>
+                                <p><b>注意</b>：ChoiceFormat 不同于其他 Format 类，因为 ChoiceFormat 对象是通过构造方法创建的（而不是通过 getInstance 样式工厂方法）。工厂方法不是必需的，因为 ChoiceFormat 不要求针对给定语言环境进行任何复杂的设置。事实上，ChoiceFormat 并不实现任何特定于语言环境的行为。 </p>
+                                <p>关于 ChoiceFormat 的使用直接看实例：</p>
+                                <pre class="brush: java;">
+double[] limits = {1, 2, 3, 4, 5, 6, 7};
+String[] dayOfWeekNames = {"星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期天"};
+
+ChoiceFormat format = new ChoiceFormat(limits, dayOfWeekNames); // 数组长度必须相等
+// 星期一, 星期一, 星期一
+log(format.format(0.5), format.format(1), format.format(1.5));
+// 星期二, 星期天, 星期天
+log(format.format(2), format.format(7), format.format(8));
+</pre>
+                                <ol>
+                                    <li><p><code>static double 	nextDouble(double d)</code> -- 下一个计算机可表示的 double</p></li>
+                                    <li><p><code>static double 	previousDouble(double d)</code> -- 上一个计算机可表示的 double</p></li>
+                                    <li><p><code>static double 	nextDouble(double d, boolean positive)</code> -- positive 为 true / false, 分别表示上面的两个方法</p></li>
+
+                                    <li class="group"><p><code>void 	setChoices(double[] limits, String[] formats)</code> -- 设置要在格式化中使用的 choice</p></li>
+                                    <li><p><code>Object[] 	getFormats()</code> -- 获取 formats</p></li>
+                                    <li><p><code>double[] 	getLimits()</code> -- 获取 limits</p></li>
+
+                                    <li class="group"><p><code>void 	applyPattern(String newPattern)</code> -- 应用模式</p></li>
+                                    <li><p><code>String 	toPattern()</code> -- 获取模式的 String 表示</p></li>
+
+                                    <li class="group"><p><code>StringBuffer 	format(double number, StringBuffer toAppendTo, FieldPosition status)</code> -- 带已格式化 double 的模式</p></li>
+                                    <li><p><code>StringBuffer 	format(long number, StringBuffer toAppendTo, FieldPosition status)</code> -- 返回带已格式化 long 的模式</p></li>
+
+                                    <li class="group"><p><code>Number 	parse(String text, ParsePosition status)</code> -- format 逆向操作</p></li>
+                                </ol>
                             </div>
                         </div>
 
                         <div class="sub-item">
 						    <pre class="brush: java;">
+public class MessageFormat extends Format {
+    public static class Field extends Format.Field {}
 
+    public MessageFormat(String pattern) {}
+    public MessageFormat(String pattern, Locale locale) {}
+}
 </pre>
-                            <p><a href="docs/docs-java/api/java/text/MessageFormat.html" target="_blank">MessageFormat</a>  </p>
+                            <p><a href="docs/docs-java/api/java/text/MessageFormat.html" target="_blank">MessageFormat</a> 提供了以与语言无关方式生成连接消息的方式。使用此方法构造向终端用户显示的消息。</p>
+                            <p>MessageFormat 获取一组对象，格式化这些对象，然后将格式化后的字符串插入到模式中的适当位置。 </p>
+                            <p>注：MessageFormat 不同于其他 Format 类，因为 MessageFormat 对象是用其构造方法之一创建的（而不是使用 getInstance 样式的工厂方法创建的）。工厂方法不是必需的，因为 MessageFormat 本身不实现特定于语言环境的行为。特定于语言环境的行为是由所提供的模式和用于已插入参数的子格式来定义的。 </p>
+                            <ol>
+                                <li><p><code>static String 	format(String pattern, Object... arguments)</code> -- 创建具有给定模式的 MessageFormat，并用它来格式化给定的参数</p>
+                                    <pre class="brush: java;">
+/** 模式可以为以下类型:
+ * { ArgumentIndex } -- 只索引值，那么值就是指定 arguments[ArgumentIndex]
+ *  eg: format("今天是星期{0}", "一", "二") == 今天是星期一
+ * { ArgumentIndex, FormatType } -- 格式化类型类: number, date, time 或 choice
+ *  eg: log(MessageFormat.format("日期：{0, date}", new Date()));
+ * { ArgumentIndex , FormatType , FormatStyle } -- 不同的 FormatType 可以使用的 FormatStyle 如下表：
+ *	eg: log(MessageFormat.format("日期：{0, date, yyyy 年 MM 月 dd 日}", new Date()));
+ * SubformatPattern 为模式字符串，比如 date 类型可以为: "YYYY/MM/dd HH:mm:ss"
+ *  FormatType |  FormatStyle     | 	使用的格式(默认调用下面的方法来格式化)
+ *    number   |   (none) 	      | NumberFormat.getInstance(getLocale())
+ *    		   |   integer 	      | NumberFormat.getIntegerInstance(getLocale())
+ *    		   |  currency 	      | NumberFormat.getCurrencyInstance(getLocale())
+ *    		   |   percent 	      | NumberFormat.getPercentInstance(getLocale())
+ *    		   | SubformatPattern |	new DecimalFormat(String, DecimalFormatSymbols)
+ *    date 	   |   (none)     	  | DateFormat.getDateInstance(DateFormat.DEFAULT, getLocale())
+ *    		   |    short 	      | DateFormat.getDateInstance(DateFormat.SHORT, getLocale())
+ *    		   |    medium 	      | DateFormat.getDateInstance(DateFormat.DEFAULT, getLocale())
+ *    		   |    long 	      | DateFormat.getDateInstance(DateFormat.LONG, getLocale())
+ *    		   |    full 	      | DateFormat.getDateInstance(DateFormat.FULL, getLocale())
+ *    		   | SubformatPattern |	new SimpleDateFormat(subformatPattern, getLocale())
+ *    time 	   |   (none) 	      | DateFormat.getTimeInstance(DateFormat.DEFAULT, getLocale())
+ *    		   |    short 	      | DateFormat.getTimeInstance(DateFormat.SHORT, getLocale())
+ *    		   |    medium 	      | DateFormat.getTimeInstance(DateFormat.DEFAULT, getLocale())
+ *    		   |    long 	      | DateFormat.getTimeInstance(DateFormat.LONG, getLocale())
+ *    		   |    full 	      | DateFormat.getTimeInstance(DateFormat.FULL, getLocale())
+ *    		   | SubformatPattern |	new SimpleDateFormat(subformatPattern, getLocale())
+ *    choice   | SubformatPattern | new ChoiceFormat(subformatPattern)
+ */
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>void 	applyPattern(String pattern)</code> -- 设置此消息格式所使用的模式</p></li>
+                                <li><p><code>String 	toPattern()</code> -- 返回表示消息格式当前状态的模式</p></li>
+                                <li><p><code>Locale 	getLocale()</code> -- 获取创建或比较子格式时所使用的语言环境</p></li>
+                                <li><p><code>void 	setLocale(Locale locale)</code> -- 设置创建或比较子格式时要使用的语言环境</p></li>
+
+                                <li class="group"><p><code>StringBuffer 	format(Object[] arguments, StringBuffer result, FieldPosition pos)</code> -- 格式化一个对象数组，并将 MessageFormat 的模式添加到所提供的 StringBuffer，用格式化后的对象替换格式元素</p></li>
+                                <li><p><code>StringBuffer 	format(Object arguments, StringBuffer result, FieldPosition pos)</code> -- 格式化一个对象，并将 MessageFormat 的模式添加到所提供的 StringBuffer，用格式化后的对象替换格式元素</p></li>
+                                <li><p><code>AttributedCharacterIterator 	formatToCharacterIterator(Object arguments)</code> --  格式化生成 AttributedCharacterIterator</p></li>
+
+                                <li class="group"><p><code>Format[] 	getFormats()</code> -- 获取用于以前所设置的模式字符串中格式元素的格式</p></li>
+                                <li><p><code>void 	setFormats(Format[] newFormats)</code> -- 设置用于以前所设置的模式字符串中格式元素的格式</p></li>
+                                <li><p><code>Format[] 	getFormatsByArgumentIndex()</code> -- 获取传递给 format 方法或从 parse 方法返回的值的格式</p></li>
+                                <li><p><code>void 	setFormatsByArgumentIndex(Format[] newFormats)</code> -- 设置传递给 format 方法或从 parse 方法返回的值使用的格式</p></li>
+                                <li><p><code>void 	setFormat(int formatElementIndex, Format newFormat)</code> -- 使用在以前设置的模式字符串中给定的格式元素索引来设置格式元素使用的格式</p></li>
+                                <li><p><code>void 	setFormatByArgumentIndex(int argumentIndex, Format newFormat)</code> -- 设置用于以前所设置的模式字符串中格式元素的格式，其中以前的模式字符串是用给定的参数索引设置的</p></li>
+
+                                <li class="group"><p><code>Object[] 	parse(String source)</code> -- 从给定字符串的开始位置解析文本，以生成一个对象数组</p></li>
+                                <li><p><code>Object[] 	parse(String source, ParsePosition pos)</code> -- 自定义解析为一个对象数组</p></li>
+                                <li><p><code>Object 	parseObject(String source, ParsePosition pos)</code> -- 自定义解析为一个对象</p></li>
+                            </ol>
                         </div>
                     </div>
 
@@ -10923,19 +11216,130 @@ public class SimpleDateFormat extends DateFormat {
                 <!-- item over -->
 
                 <!-- item start -->
-                <a class="offset" id=""></a>
+                <a class="offset" id="java-text-CharacterIterator"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">...</h3>
+                        <h3 class="panel-title">CharacterIterator 及实现类</h3>
                     </div>
                     <div class="panel-body">
-						<pre class="brush: java;">
-
+						<div class="sub-item">
+							<pre class="brush: java;">
+public interface CharacterIterator extends Cloneable {
+    public static final char DONE = '\uFFFF';
+}
 </pre>
-                        <p><a href="docs/docs-java/api/" target="_blank"></a></p>
+                        	<p><a href="docs/docs-java/api/java/text/CharacterIterator.html" target="_blank">CharacterIterator</a> 接口定义了对文本进行双向迭代的协议。</p>
+                            <p>迭代器对有界字符序列进行迭代。这些字符使用从 getBeginIndex() 返回的值开始，一直到 getEndIndex()-1 返回的值结束之间的值进行索引。 </p>
+                            <p>迭代器维护当前的字符索引，索引值的有效范围是从 getBeginIndex() 到 getEndIndex()；出于历史原因，包括了值 getEndIndex() 以允许处理零长度的文本范围。可以通过调用 getIndex() 获取当前索引，还可以通过调用 setIndex()、first() 和 last() 直接设置当前索引。 </p>
+                            <ol>
+                                <li><p><code>char 	first()</code> -- 将位置设置为 getBeginIndex()，并返回该位置的字符</p></li>
+                                <li><p><code>char 	last()</code> -- 将位置设置为 getEndIndex()-1（如果文本为空，则为 getEndIndex()），并返回该位置的字符</p></li>
+                                <li><p><code>char 	previous()</code> -- 将迭代器的索引减一，并返回新索引处的字符</p></li>
+                                <li><p><code>char 	next()</code> -- 将迭代器的索引加一，并返回新索引处的字符</p></li>
+                                <li><p><code>char 	current()</code> -- 获取当前位置（由 getIndex() 返回）的字符</p>
+                                    <pre class="brush: java;">
+CharacterIterator iterator = new StringCharacterIterator("abcdefg你好0123456789");
+while (iterator.current() != CharacterIterator.DONE) {
+    log(iterator.current());
+    iterator.next();
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>int 	getBeginIndex()</code> -- 返回文本的起始索引</p></li>
+                                <li><p><code>int 	getEndIndex()</code> -- 返回文本的结束索引</p></li>
+                                <li><p><code>int 	getIndex()</code> -- 返回当前索引</p></li>
+                                <li><p><code>char 	setIndex(int position)</code> -- 将位置设置为文本中的指定位置，并返回该字符</p></li>
+
+                                <li class="group"><p><code>Object 	clone()</code> -- 创建此迭代器的一个副本</p></li>
+                            </ol>
+                        </div>
+
+						<div class="sub-item">
+							<pre class="brush: java;">
+public interface AttributedCharacterIterator extends CharacterIterator {
+    /** 内部有一个 Map&lt;String, Attribute> */
+    public static class Attribute implements Serializable {}
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/text/AttributedCharacterIterator.html" target="_blank">AttributedCharacterIterator</a> 允许对文本和相关属性信息的迭代。</p>
+                            <p>属性是一个由键来标识的键/值对。在一个给定字符上的两个属性不能有相同的键。</p>
+                            <p>一个属性的值是不可变的，或者不能由客户端或存储来改变。其始终按引用而不是复制来传递。</p>
+                            <p>对于以下情况，关于属性的运行是一个最大的文本范围：</p>
+                            <ul>
+                                <li><p>在整个范围中属性没有定义或为 null。</p></li>
+                                <li><p>定义了属性值并且在整个范围中具有同样的非 null 值。</p></li>
+                            </ul>
+                            <p>对于每个成员属性都满足此条件的关于属性集合的运行 是一个最大的文本范围。</p>
+                            <p><a href="#java-text-Format">Format</a> 接口有一个 <code>formatToCharacterIterator(Object obj)</code> 方法返回此对象的实例，另外， <a href="#java-text-Format">Format</a> 的内部类 <code>Field</code> 继承自 <code>AttributedCharacterIterator.Attribute</code>。</p>
+                            <ol>
+                                <li><p><code>Set&lt;AttributedCharacterIterator.Attribute> 	getAllAttributeKeys()</code> -- 返回定义于迭代器文本范围上的所有属性的键</p></li>
+                                <li><p><code>Object 	getAttribute(AttributedCharacterIterator.Attribute attribute)</code> -- 返回当前字符的命名属性的值</p></li>
+                                <li><p><code>Map&lt;AttributedCharacterIterator.Attribute,Object> 	getAttributes()</code> -- 返回具有定义于当前字符上的多个属性的映射</p></li>
+
+                                <li class="group"><p><code>int 	getRunLimit()</code> -- 返回关于包含当前字符的所有属性的运行之后的第一个字符的索引</p></li>
+                                <li><p><code>int 	getRunLimit(AttributedCharacterIterator.Attribute attribute)</code> -- 返回关于包含当前字符的给定属性的运行之后的第一个字符的索引</p></li>
+                                <li><p><code>int 	getRunLimit(Set&lt;? extends AttributedCharacterIterator.Attribute> attributes)</code> -- 返回关于包含当前字符的给定多个属性的运行之后的第一个字符的索引</p></li>
+
+                                <li class="group"><p><code>int 	getRunStart()</code> -- 返回关于包含当前字符的所有属性的运行的第一个字符的索引</p></li>
+                                <li><p><code>int 	getRunStart(AttributedCharacterIterator.Attribute attribute)</code> -- 返回关于包含当前字符的给定属性的运行的第一个字符的索引</p></li>
+                                <li><p><code>int 	getRunStart(Set&lt;? extends AttributedCharacterIterator.Attribute> attributes)</code> -- 返回关于包含当前字符的给定多个属性的运行的第一个字符的索引</p></li>
+                            </ol>
+                        </div>
+
+						<div class="sub-item">
+							<pre class="brush: java;">
+public final class StringCharacterIterator implements CharacterIterator {
+    public StringCharacterIterator(String text) {}
+    public StringCharacterIterator(String text, int pos) {}
+    public StringCharacterIterator(String text, int begin, int end, int pos) {}
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/text/StringCharacterIterator.html" target="_blank">StringCharacterIterator</a> 为 String 实现 CharacterIterater 协议。StringCharacterIterator 类对整个 String 进行迭代。</p>
+                            <ol>
+                                <li><p><code>char 	first()</code> -- 将位置设置为 getBeginIndex()，并返回该位置的字符</p></li>
+                                <li><p><code>char 	last()</code> -- 将位置设置为 getEndIndex()-1（如果文本为空，则为 getEndIndex()），并返回该位置的字符</p></li>
+                                <li><p><code>char 	previous()</code> -- 将迭代器的索引减一，并返回新索引处的字符</p></li>
+                                <li><p><code>char 	next()</code> -- 将迭代器的索引加一，并返回新索引处的字符</p></li>
+                                <li><p><code>char 	current()</code> -- 获取当前位置（由 getIndex() 返回）的字符</p>
+                                    <pre class="brush: java;">
+StringCharacterIterator iterator = new StringCharacterIterator("abcdefg0123456789");
+while (iterator.current() != CharacterIterator.DONE) {
+    log(iterator.current());
+    iterator.next();
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>int 	getBeginIndex()</code> -- 返回文本的起始索引</p></li>
+                                <li><p><code>int 	getEndIndex()</code> -- 返回文本的结束索引</p></li>
+                                <li><p><code>int 	getIndex()</code> -- 返回当前索引</p></li>
+                                <li><p><code>char 	setIndex(int position)</code> -- 将位置设置为文本中的指定位置，并返回该字符</p></li>
+
+                                <li class="group"><p><code>Object 	clone()</code> -- 创建此迭代器的一个副本</p></li>
+                                <li><p><code>int 	hashCode()</code> -- 计算此迭代器的哈希码</p></li>
+                                <li><p><code>boolean 	equals(Object obj)</code> -- 比较两个 StringCharacterIterator 对象的相等性</p></li>
+                            </ol>
+						</div>
+
                     </div>
                 </div>
                 <!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-text-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+
+</pre>
+						<p><a href="docs/docs-java/api/" target="_blank"></a></p>
+					</div>
+				</div>
+				<!-- item over -->
 			</div>
 		</div>
 	</div>

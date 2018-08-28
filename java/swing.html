@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="keywords" content="key1, key2" />
+<meta name="description" content=””>
+<meta name="author" content="nate">
+<meta name="author" content="nate &lt;jiwanger@126.com&gt;">
+<link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
+<link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<title>NATE--笔记--SWING</title>
+<!-- Bootstrap -->
+<link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
+	rel="stylesheet">
+<!-- 
+<link href="../support/bootstrap/css/bootstrap.css" rel="stylesheet">
+-->
+<link type="text/css" rel="stylesheet"
+	href="../support/syntaxhighlighter/styles/shCoreDefault.css" />
+<link href="../commons/css/common.css" rel="stylesheet">
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+
+<body>
+	<!-- nav start -->
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle"
+					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="../index.html">
+					<img src="../commons/images/icon.png">
+				</a>
+			</div>
+
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul id="my-nav" class="nav navbar-nav">
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- nav end -->
+
+
+	<div class="container">
+		<div class="row">
+			<!-- left-menu start -->
+			<div class="col-md-3">
+				<div class="panel panel-default"
+					style="position: fixed; top: 70px; width: 260px;  overflow: auto; float: left;">
+					<div class="panel-heading">
+						<h3 class="panel-title">AWT & SWING</h3>
+					</div>
+					<div class="list-group">
+						<a href="#javax-swing-intro" class="list-group-item">AWT & SWING</a>
+						<a class="list-group-item active dropdown" data-toggle="collapse"
+							data-parent="#accordion" href="#java-awt" aria-expanded="true"  style="border-top: 1px solid #DDDDDD;">
+							<code>java.awt</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="java-awt" class="panel-collapse collapse"
+							role="tabpanel">
+							<a href="#java-awt-Frame" class="list-group-item">Frame 及父类</a>
+							<a href="#" class="list-group-item">...</a>
+							<a href="#" class="list-group-item">...</a>
+						</div>
+
+                        <a class="list-group-item active dropup" data-toggle="collapse"
+                           data-parent="#accordion" href="#javax-swing" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+                            <code>javax.swing</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+                        </a>
+                        <div id="javax-swing" class="panel-collapse collapse in"
+                             role="tabpanel">
+                            <a href="#javax-swing-JFrame" class="list-group-item">JFrame 及父类</a>
+                            <a href="#" class="list-group-item">...</a>
+                            <a href="#" class="list-group-item">...</a>
+                        </div>
+						<a href="#java-class-loader" class="list-group-item">...</a>
+					</div>
+				</div>
+			</div>
+			<!-- left-menu over -->
+		</div>
+	</div>
+
+
+	<div class="container" style="margin-top: 70px;">
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-9" style="float: left;">
+				<!-- item start -->
+				<a class="offset" id="javax-swing-intro"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">AWT & SWING</h3>
+					</div>
+					<div class="panel-body">
+                        <p><b>AWT</b> 是 Abstract Window ToolKit (抽象窗口工具包)的缩写，这个工具包提供了一套与本地图形界面进行交互的接口。AWT 中的图形函数与操作系统所提供的图形函数之间有着一一对应的关系，我们把它称为peers。 也就是说，当我们利用 AWT 来构件图形用户界面的时候，我们实际上是在利用操作系统所提供的图形库。由于不同操作系统的图形库所提供的功能是不一样的，在一个平台上存在的功能在另外一个平台上则可能不存在。为了实现 Java 语言所宣称的"一次编译，到处运行"的概念，AWT 不得不通过牺牲功能来实现其平台无关性，也就是说，AWT 所提供的图形功能是各种通用型操作系统所提供的图形功能的交集。由于 AWT 是依靠本地方法来实现其功能的，我们通常把 AWT 控件称为重量级控件。 </p>
+                        <p><b>Swing</b> 是在 AWT 的基础上构建的一套新的图形界面系统，它提供了 AWT 所能够提供的所有功能，并且用纯粹的 Java 代码对 AWT 的功能进行了大幅度的扩充。例如说并不是所有的操作系统都提供了对树形控件的支持， Swing 利用了 AWT 中所提供的基本作图方法对树形控件进行模拟。由于 Swing 控件是用 100% 的 Java 代码来实现的，因此在一个平台上设计的树形控件可以在其他平台上使用。由于在 Swing 中没有使用本地方法来实现图形功能，我们通常把 Swing 控件称为轻量级控件。 </p>
+                        <p><b>AWT</b> 是抽象窗口组件工具包，是 Java 最早的用于编写图形节目应用程序的开发包。</p>
+                        <p><b>Swing</b> 是为了解决 AWT 存在的问题而新开发的包，它以 AWT 为基础的。</p>
+                        <p><b>AWT</b> 和 <b>Swing</b> 之间的基本区别：AWT 是基于本地方法的 C/C++ 程序，其运行速度比较快；Swing 是基于 AWT 的 Java 程序，其运行速度比较慢。对于一个嵌入式应用来说，目标平台的硬件资源往往非常有限，而应用程序的运行速度又是项目中至关重要的因素。在这种矛盾的情况下，简单而高效的 AWT 当然成了嵌入式 Java 的第一选择。而在普通的基于 PC 或者是工作站的标准 Java 应用中，硬件资源对应用程序所造成的限制往往不是项目中的关键因素，所以在标准版的 Java 中则提倡使用 Swing， 也就是通过牺牲速度来实现应用程序的功能。 </p>
+					</div>
+				</div>
+				<!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-awt-Frame"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Frame  及父类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    java.awt.Component
+        java.awt.Container
+            java.awt.Window
+                java.awt.Frame
+
+public class Frame extends Window implements MenuContainer {
+    /** 实现对 Frame 类的可访问性支持 */
+    protected class AccessibleAWTFrame extends AccessibleAWTWindow {}
+
+    /** 只是窗口的状态 */
+    public static final int NORMAL = 0;          // 窗体处于 "normal" 状态
+    public static final int ICONIFIED = 1;       // 此状态位指示将窗体图标化
+    public static final int MAXIMIZED_BOTH = 6;  // 此状态位掩码指示将窗体完全最大化
+    public static final int MAXIMIZED_HORIZ = 2; // 此状态位指示在水平方向将窗体最大化
+    public static final int MAXIMIZED_VERT = 4;  // 此状态位指示在垂直方向将窗体最大化
+
+    /** 构造的 Frame 实例最初是不可见的 */
+    public Frame() {}
+    public Frame(String title) {}
+    public Frame(GraphicsConfiguration gc) {}
+    public Frame(String title, GraphicsConfiguration gc) {}
+}
+
+/** 所有菜单相关容器的超类 */
+public interface MenuContainer {
+    Font getFont();
+    void remove(MenuComponent comp);
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/Frame.html" target="_blank">Frame</a> 是带有标题和边框的顶层窗口。</p>
+                            <p>窗体的大小包括为边框指定的所有区域。边框区域的尺寸可以使用 getInsets 方法获得，但是，由于这些尺寸与平台相关，因此在通过调用 pack 或 show 将窗体设置为可显示之前，将无法获得有效的 insets 值。由于窗体的总大小包括了边框区，因此边框实际上遮掩了窗体的部分区域，并将可用于在矩形中呈现和/或显示子部件的区域限制在一个矩形内，该矩形左上角的位置为 (insets.left, insets.top)，宽度为 width - (insets.left + insets.right)，长度为 height - (insets.top + insets.bottom)。 </p>
+                            <p>窗体的默认布局为 BorderLayout。 </p>
+                            <p>使用 setUndecorated，窗体可以关闭本机装饰（即 Frame 和 Titlebar）。但只有在窗体不是 displayable 时才能这样做。</p>
+                            <p>在多屏幕环境中，通过使用 Frame(GraphicsConfiguration) 或 Frame(String title, GraphicsConfiguration) 构造 Frame，可以在不同的屏幕设备上创建 Frame。GraphicsConfiguration 对象是目标屏幕设备的 GraphicsConfiguration 对象之一。</p>
+                            <p>在虚拟设备多屏幕环境中（其中桌面区域可以跨越多物理屏幕设备），所有配置的边界都是相对于虚拟坐标系的。虚拟坐标系的原点位于主物理屏幕的左上角。</p>
+                            <ol>
+                                <li><p><code>static Frame[] 	getFrames()</code> -- 返回一个此应用程序创建的所有 Frame 所组成的数组</p></li>
+
+                                <li class="group"><p><code>MenuBar 	getMenuBar()</code> -- 获取此窗体的菜单栏</p></li>
+                                <li><p><code>void 	setMenuBar(MenuBar mb)</code> -- 将此窗体的菜单栏设置为指定的菜单栏</p></li>
+                                <li><p><code>void 	remove(MenuComponent m)</code> -- 从此窗体移除指定的菜单栏</p></li>
+
+                                <li class="group"><p><code>int 	getExtendedState()</code> -- 获取此窗体的状态</p></li>
+                                <li><p><code>void 	setExtendedState(int state)</code> -- 设置此窗体的状态</p></li>
+                                <li><p><code>Image 	getIconImage()</code> -- 返回要作为此窗体图标显示的图像</p></li>
+                                <li><p><code>void 	setIconImage(Image image)</code> -- 设置要作为此窗口图标显示的图像</p></li>
+                                <li><p><code>Rectangle 	getMaximizedBounds()</code> -- 获取此窗体的最大化边界</p></li>
+                                <li><p><code>void 	setMaximizedBounds(Rectangle bounds)</code> -- 设置此窗体的最大化边界</p></li>
+                                <li><p><code>String 	getTitle()</code> -- 获得窗体的标题</p></li>
+                                <li><p><code>void 	setTitle(String title)</code> -- 将此窗体的标题设置为指定的字符串</p></li>
+                                <li><p><code>boolean 	isResizable()</code> -- 指示此窗体是否可由用户调整大小</p></li>
+                                <li><p><code>void 	setResizable(boolean resizable)</code> -- 设置此窗体是否可由用户调整大小</p></li>
+                                <li><p><code>boolean 	isUndecorated()</code> -- 指示此窗体是否未装饰</p></li>
+                                <li><p><code>void 	setUndecorated(boolean undecorated)</code> -- 禁用或启用此窗体的装饰</p></li>
+                                <li><p><code>void 	addNotify()</code> -- 通过将此窗体连接到本机屏幕资源，使其成为可显示的</p></li>
+                                <li><p><code>void 	removeNotify()</code> -- 通过移除与本机屏幕资源的连接，将此窗体设置为不可显示的</p></li>
+
+                                <li class="group"><p><code>protected String 	paramString()</code> -- 返回表示此 Frame 状态的字符串</p></li>
+
+                                <li class="group"><p><code>void 	setBackground(Color bgColor)</code> -- 设置此窗体的背景颜色</p></li>
+                                <li><p><code>void 	setOpacity(float opacity)</code> -- 设置透明度(依赖于平台)</p></li>
+                                <li><p><code>void 	setShape(Shape shape)</code> -- 设置窗口的形状</p></li>
+                                <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此窗体有关的 AccessibleContext</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Window extends Container implements Accessible {
+    /** Window 类型 */
+    public enum Type {
+        NORMAL,  // 正常窗口
+        UTILITY, // 弹出窗口，如下拉菜单，对话框
+        POPUP    // 实用程序窗口，通常是一个小窗口，如工具栏或调色板
+    }
+
+    /** 实现对 Window 类的可访问性支持 */
+    protected class AccessibleAWTWindow extends AccessibleAWTContainer {}
+
+    public Window(Frame owner) {}
+    public Window(Window owner) {}
+    public Window(Window owner, GraphicsConfiguration gc) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/Window.html" target="_blank">Window</a> 对象是一个没有边界和菜单栏的顶层窗口。窗口的默认布局是 BorderLayout。</p>
+                            <p>构造窗口时，它必须拥有窗体、对话框或其他作为其所有者定义的窗口。</p>
+                            <p>注：顶层窗口（包括 Window、Frame 和 Dialog）的位置和大小受桌面窗口管理系统的控制。对 setLocation、setSize 和 setBounds 的调用是转发到窗口管理系统的请求（不是指令）。将尽所有努力响应这样的请求。但是，在某些情况下，窗口管理系统可以忽略这样的请求，或修改请求的几何结构，以放置和调整 Window 的大小，使之更好地与桌面设置匹配。 </p>
+                            <p>应用程序可以随意设置不可见 Window 的大小和位置，但是当 Window 可见时，窗口管理系统可以随后更改它的大小和/或位置。将生成一个或多个 ComponentEvent 来表示新的几何结构。 </p>
+                            <ol>
+                                <li><p><code>static Window[] 	getOwnerlessWindows()</code> -- 返回此应用程序创建的所有没有所有者的 Window 组成的数组</p></li>
+                                <li><p><code>static Window[] 	getWindows()</code> -- 返回此应用程序创建的所有 Window 数组</p></li>
+
+                                <li class="group"><p><code>void 	addPropertyChangeListener(PropertyChangeListener listener)</code> -- 将 PropertyChangeListener 添加到侦听器列表</p></li>
+                                <li><p><code>void 	addPropertyChangeListener(String propertyName, PropertyChangeListener listener)</code> -- 将某个特定属性的侦听器列表</p>
+                                    <pre class="brush: java;">
+/** 包括此窗体的以下属性:
+ * this Window's font ("font")
+ * this Window's background color ("background")
+ * this Window's foreground color ("foreground")
+ * this Window's focusability ("focusable")
+ * this Window's focus traversal keys enabled state ("focusTraversalKeysEnabled")
+ * this Window's Set of FORWARD_TRAVERSAL_KEYS ("forwardFocusTraversalKeys")
+ * this Window's Set of BACKWARD_TRAVERSAL_KEYS ("backwardFocusTraversalKeys")
+ *  this Window's Set of UP_CYCLE_TRAVERSAL_KEYS ("upCycleFocusTraversalKeys")
+ * this Window's Set of DOWN_CYCLE_TRAVERSAL_KEYS ("downCycleFocusTraversalKeys")
+ * this Window's focus traversal policy ("focusTraversalPolicy")
+ * this Window's focusable Window state ("focusableWindowState")
+ * this Window's always-on-top state("alwaysOnTop")
+ */
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>void 	addWindowFocusListener(WindowFocusListener l)</code> -- 添加指定的窗口焦点侦听器</p></li>
+                                <li><p><code>void 	addWindowStateListener(WindowStateListener l)</code> -- 添加指定的窗口状态侦听器(最大化，最小化等)</p></li>
+                                <li><p><code>void 	addWindowListener(WindowListener l)</code> -- 添加指定的窗口侦听器(包括以上两项，参见：<a href="docs/docs-java/api/java/awt/event/WindowAdapter.html" target="_blank">WindowAdapter</a>)</p></li>
+
+                                <li><p><code>void 	createBufferStrategy(int numBuffers)</code> -- 为此组件上的多缓冲创建一个新策略</p></li>
+                                <li><p><code>BufferStrategy 	getBufferStrategy()</code> -- 返回此组件使用的 BufferStrategy</p></li>
+                                <li><p><code>void 	createBufferStrategy(int numBuffers, BufferCapabilities caps)</code> -- 根据所需缓冲区能力为此组件上的多缓冲创建新策略</p></li>
+
+                                <li><p><code>void 	dispose()</code> -- 释放由此 Window、其子组件及其拥有的所有子组件所使用的所有本机屏幕资源</p></li>
+
+                                <li><p><code>Color 	getBackground()</code> -- 获取此窗体的背景色</p></li>
+                                <li><p><code>float 	getOpacity()</code> -- 获取透明度值(依赖平台)</p></li>
+                                <li><p><code>Shape 	getShape()</code> -- 返回此窗体的图平</p></li>
+                                <li><p><code>Window.Type 	getType()</code> -- 获取窗体类型</p></li>
+
+                                <li><p><code>boolean 	getFocusableWindowState()</code> -- 返回如果此窗口满足 isFocusableWindow 中列出的其他要求，其是否可以成为焦点窗口</p></li>
+                                <li><p><code>Container 	getFocusCycleRootAncestor()</code> -- 始终返回 null，因为窗口没有祖先；它们表示组件层次结构的顶层</p></li>
+                                <li><p><code>Component 	getFocusOwner()</code> -- 如果此窗口为焦点窗口，则返回是焦点窗口的子组件</p></li>
+                                <li><p><code>Set&lt;AWTKeyStroke> 	getFocusTraversalKeys(int id)</code> -- 获取此窗口的焦点遍历键</p></li>
+                                <li><p><code>List&lt;Image> 	getIconImages()</code> -- 返回要作为此窗口的图标显示的图像序列</p></li>
+                                <li><p><code>InputContext 	getInputContext()</code> --  获取此窗口的输入上下文</p></li>
+                                <li><p><code>&lt;T extends EventListener> T[] 	getListeners(Class&lt;T> listenerType)</code> -- 返回当前在此 Window 上注册的所有对象所组成的数组</p></li>
+                                <li><p><code>Locale 	getLocale()</code> -- 如果设置了区域，则获取与此窗口关联的 Locale 对象</p></li>
+                                <li><p><code>Dialog.ModalExclusionType 	getModalExclusionType()</code> -- 返回此窗口的模式排斥类型</p></li>
+                                <li><p><code>Component 	getMostRecentFocusOwner()</code> -- 返回此窗口的子组件，该子组件在此窗口为焦点窗口时将接收焦点</p></li>
+                                <li><p><code>Window[] 	getOwnedWindows()</code> -- 返回包含此窗口当前拥有的所有窗口的数组</p></li>
+                                <li><p><code>Window 	getOwner()</code> -- 返回此窗口的所有者</p></li>
+
+                                <li><p><code>Toolkit 	getToolkit()</code> -- 返回此窗体的工具包</p></li>
+
+                                <li><p><code>String 	getWarningString()</code> -- 获取此窗口中显示的警告字符串</p></li>
+                                <li><p><code>WindowFocusListener[] 	getWindowFocusListeners()</code> -- 返回在此窗口注册的所有窗口焦点侦听器所组成的数组</p></li>
+                                <li><p><code>WindowListener[] 	getWindowListeners()</code> -- 返回在此窗口注册的所有窗口侦听器所组成的数组</p></li>
+                                <li><p><code>WindowStateListener[] 	getWindowStateListeners()</code> -- 返回在此窗口注册的所有窗口状态侦听器所组成的数组</p></li>
+                                <li><p><code>boolean 	isActive()</code> -- 返回此窗口是否为活动窗口</p></li>
+                                <li><p><code>boolean 	isAlwaysOnTop()</code> -- 返回此窗口是否为 always-on-top 窗口</p></li>
+
+                                <li><p><code>boolean 	isAlwaysOnTopSupported()</code> -- </p></li>
+                                <li><p><code>boolean 	isAutoRequestFocus()</code> -- </p></li>
+                                <li><p><code>boolean 	isFocusableWindow()</code> -- </p></li>
+                                <li><p><code>boolean 	isFocusCycleRoot()</code> -- </p></li>
+                                <li><p><code>boolean 	isFocused()</code> -- </p></li>
+                                <li><p><code>boolean 	isLocationByPlatform()</code> -- </p></li>
+                                <li><p><code>boolean 	isOpaque()</code> -- </p></li>
+                                <li><p><code>boolean 	isShowing()</code> -- </p></li>
+                                <li><p><code>boolean 	isValidateRoot()</code> -- </p></li>
+                                <li><p><code>void 	pack()</code> -- </p></li>
+                                <li><p><code>void 	paint(Graphics g)</code> -- </p></li>
+                                <li><p><code>protected void 	processEvent(AWTEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processWindowEvent(WindowEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processWindowFocusEvent(WindowEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processWindowStateEvent(WindowEvent e)</code> -- </p></li>
+                                <li><p><code>void 	removeNotify()</code> -- </p></li>
+                                <li><p><code>void 	removeWindowFocusListener(WindowFocusListener l)</code> -- </p></li>
+                                <li><p><code>void 	removeWindowListener(WindowListener l)</code> -- </p></li>
+                                <li><p><code>void 	removeWindowStateListener(WindowStateListener l)</code> -- </p></li>
+                                <li><p><code>void 	setAlwaysOnTop(boolean alwaysOnTop)</code> -- </p></li>
+                                <li><p><code>void 	setAutoRequestFocus(boolean autoRequestFocus)</code> -- </p></li>
+                                <li><p><code>void 	setBackground(Color bgColor)</code> -- </p></li>
+                                <li><p><code>void 	setBounds(int x, int y, int width, int height)</code> -- </p></li>
+                                <li><p><code>void 	setBounds(Rectangle r)</code> -- </p></li>
+                                <li><p><code>void 	setCursor(Cursor cursor)</code> -- </p></li>
+                                <li><p><code>void 	setFocusableWindowState(boolean focusableWindowState)</code> -- </p></li>
+                                <li><p><code>void 	setFocusCycleRoot(boolean focusCycleRoot)</code> -- </p></li>
+                                <li><p><code>void 	setIconImage(Image image)</code> -- </p></li>
+                                <li><p><code>void 	setIconImages(List&lt;? extends Image> icons)</code> -- </p></li>
+                                <li><p><code>void 	setLocation(int x, int y)</code> -- </p></li>
+                                <li><p><code>void 	setLocation(Point p)</code> -- </p></li>
+                                <li><p><code>void 	setLocationByPlatform(boolean locationByPlatform)</code> -- </p></li>
+                                <li><p><code>void 	setLocationRelativeTo(Component c)</code> -- </p></li>
+                                <li><p><code>void 	setMinimumSize(Dimension minimumSize)</code> -- </p></li>
+                                <li><p><code>void 	setModalExclusionType(Dialog.ModalExclusionType exclusionType)</code> -- </p></li>
+                                <li><p><code>void 	setOpacity(float opacity)</code> -- </p></li>
+                                <li><p><code>void 	setShape(Shape shape)</code> -- </p></li>
+                                <li><p><code>void 	setSize(Dimension d)</code> -- </p></li>
+                                <li><p><code>void 	setSize(int width, int height)</code> -- </p></li>
+                                <li><p><code>void 	setType(Window.Type type)</code> -- </p></li>
+                                <li><p><code>void 	setVisible(boolean b)</code> -- </p></li>
+                                <li><p><code>void 	toBack()</code> -- </p></li>
+                                <li><p><code>void 	toFront()</code> -- </p></li>
+
+                                <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此窗口关联的 AccessibleContext</p></li>
+                                <li><p><code>void 	addNotify()</code> -- 通过创建到本机屏幕资源的连接，使此窗口变得可显示</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Container extends Component {
+    protected class AccessibleAWTContainer extends AccessibleAWTComponent {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/Container.html" target="_blank">Container</a> 是一般的 Abstract Window Toolkit(AWT) 容器对象是一个可包含其他 AWT 组件的组件。 </p>
+                            <ol>
+                                <li><p><code>Component 	add(Component comp)</code> -- </p></li>
+                                <li><p><code>Component 	add(Component comp, int index)</code> -- </p></li>
+                                <li><p><code>void 	add(Component comp, Object constraints)</code> -- </p></li>
+                                <li><p><code>void 	add(Component comp, Object constraints, int index)</code> -- </p></li>
+                                <li><p><code>Component 	add(String name, Component comp)</code> -- </p></li>
+                                <li><p><code>void 	addContainerListener(ContainerListener l)</code> -- </p></li>
+                                <li><p><code>protected void 	addImpl(Component comp, Object constraints, int index)</code> -- </p></li>
+                                <li><p><code>void 	addNotify()</code> -- </p></li>
+                                <li><p><code>void 	addPropertyChangeListener(PropertyChangeListener listener)</code> -- </p></li>
+                                <li><p><code>void 	addPropertyChangeListener(String propertyName, PropertyChangeListener listener)</code> -- </p></li>
+                                <li><p><code>void 	applyComponentOrientation(ComponentOrientation o)</code> -- </p></li>
+                                <li><p><code>boolean 	areFocusTraversalKeysSet(int id)</code> -- </p></li>
+                                <li><p><code>void 	doLayout()</code> -- </p></li>
+                                <li><p><code>Component 	findComponentAt(int x, int y)</code> -- </p></li>
+                                <li><p><code>Component 	findComponentAt(Point p)</code> -- </p></li>
+                                <li><p><code>float 	getAlignmentX()</code> -- </p></li>
+                                <li><p><code>float 	getAlignmentY()</code> -- </p></li>
+                                <li><p><code>Component 	getComponent(int n)</code> -- </p></li>
+                                <li><p><code>Component 	getComponentAt(int x, int y)</code> -- </p></li>
+                                <li><p><code>Component 	getComponentAt(Point p)</code> -- </p></li>
+                                <li><p><code>int 	getComponentCount()</code> -- </p></li>
+                                <li><p><code>Component[] 	getComponents()</code> -- </p></li>
+                                <li><p><code>int 	getComponentZOrder(Component comp)</code> -- </p></li>
+                                <li><p><code>ContainerListener[] 	getContainerListeners()</code> -- </p></li>
+                                <li><p><code>Set&lt;AWTKeyStroke> 	getFocusTraversalKeys(int id)</code> -- </p></li>
+                                <li><p><code>FocusTraversalPolicy 	getFocusTraversalPolicy()</code> -- </p></li>
+                                <li><p><code>Insets 	getInsets()</code> -- </p></li>
+                                <li><p><code>LayoutManager 	getLayout()</code> -- </p></li>
+                                <li><p><code>&lt;T extends EventListener> T[] 	getListeners(Class&lt;T> listenerType)</code> -- </p></li>
+                                <li><p><code>Dimension 	getMaximumSize()</code> -- </p></li>
+                                <li><p><code>Dimension 	getMinimumSize()</code> -- </p></li>
+                                <li><p><code>Point 	getMousePosition(boolean allowChildren)</code> -- </p></li>
+                                <li><p><code>Dimension 	getPreferredSize()</code> -- </p></li>
+                                <li><p><code>void 	invalidate()</code> -- </p></li>
+                                <li><p><code>boolean 	isAncestorOf(Component c)</code> -- </p></li>
+                                <li><p><code>boolean 	isFocusCycleRoot()</code> -- </p></li>
+                                <li><p><code>boolean 	isFocusCycleRoot(Container container)</code> -- </p></li>
+                                <li><p><code>boolean 	isFocusTraversalPolicyProvider()</code> -- </p></li>
+                                <li><p><code>boolean 	isFocusTraversalPolicySet()</code> -- </p></li>
+                                <li><p><code>boolean 	isValidateRoot()</code> -- </p></li>
+                                <li><p><code>void 	list(PrintStream out, int indent)</code> -- </p></li>
+                                <li><p><code>void 	list(PrintWriter out, int indent)</code> -- </p></li>
+                                <li><p><code>void 	paint(Graphics g)</code> -- </p></li>
+                                <li><p><code>void 	paintComponents(Graphics g)</code> -- </p></li>
+                                <li><p><code>protected String 	paramString()</code> -- </p></li>
+                                <li><p><code>void 	print(Graphics g)</code> -- </p></li>
+                                <li><p><code>void 	printComponents(Graphics g)</code> -- </p></li>
+                                <li><p><code>protected void 	processContainerEvent(ContainerEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processEvent(AWTEvent e)</code> -- </p></li>
+                                <li><p><code>void 	remove(Component comp)</code> -- </p></li>
+                                <li><p><code>void 	remove(int index)</code> -- </p></li>
+                                <li><p><code>void 	removeAll()</code> -- </p></li>
+                                <li><p><code>void 	removeContainerListener(ContainerListener l)</code> -- </p></li>
+                                <li><p><code>void 	removeNotify()</code> -- </p></li>
+                                <li><p><code>void 	setComponentZOrder(Component comp, int index)</code> -- </p></li>
+                                <li><p><code>void 	setFocusCycleRoot(boolean focusCycleRoot)</code> -- </p></li>
+                                <li><p><code>void 	setFocusTraversalKeys(int id, Set&lt;? extends AWTKeyStroke> keystrokes)</code> -- </p></li>
+                                <li><p><code>void 	setFocusTraversalPolicy(FocusTraversalPolicy policy)</code> -- </p></li>
+                                <li><p><code>void 	setFocusTraversalPolicyProvider(boolean provider)</code> -- </p></li>
+                                <li><p><code>void 	setFont(Font f)</code> -- </p></li>
+                                <li><p><code>void 	setLayout(LayoutManager mgr)</code> -- </p></li>
+                                <li><p><code>void 	transferFocusDownCycle()</code> -- </p></li>
+                                <li><p><code>void 	update(Graphics g)</code> -- </p></li>
+                                <li><p><code>void 	validate()</code> -- </p></li>
+                                <li><p><code>protected void 	validateTree()</code> -- </p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public abstract class Component extends Object implements ImageObserver, MenuContainer, Serializable {
+    public static final float TOP_ALIGNMENT = 0.0f;
+    public static final float CENTER_ALIGNMENT = 0.5f;
+    public static final float BOTTOM_ALIGNMENT = 1.0f;
+    public static final float LEFT_ALIGNMENT = 0.0f;
+    public static final float RIGHT_ALIGNMENT = 1.0f;
+
+    protected Component() {}
+    protected AccessibleContext accessibleContext = null;
+
+    public enum BaselineResizeBehavior {
+        CONSTANT_ASCENT,
+        CONSTANT_DESCENT,
+        CENTER_OFFSET,
+        OTHER
+    }
+
+    protected class BltBufferStrategy extends BufferStrategy {}
+    protected class FlipBufferStrategy extends BufferStrategy {}
+    protected abstract class AccessibleAWTComponent extends AccessibleContext implements Serializable,
+                                AccessibleComponent {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/Component.html" target="_blank">Component</a> 是一个具有图形表示能力的对象，可在屏幕上显示，并可与用户进行交互。</p>
+                            <ol>
+                                <li><p><code>void 	add(PopupMenu popup)</code> -- </p></li>
+                                <li><p><code>void 	addComponentListener(ComponentListener l)</code> -- </p></li>
+                                <li><p><code>void 	addFocusListener(FocusListener l)</code> -- </p></li>
+                                <li><p><code>void 	addHierarchyBoundsListener(HierarchyBoundsListener l)</code> -- </p></li>
+                                <li><p><code>void 	addHierarchyListener(HierarchyListener l)</code> -- </p></li>
+                                <li><p><code>void 	addInputMethodListener(InputMethodListener l)</code> -- </p></li>
+                                <li><p><code>void 	addKeyListener(KeyListener l)</code> -- </p></li>
+                                <li><p><code>void 	addMouseListener(MouseListener l)</code> -- </p></li>
+                                <li><p><code>void 	addMouseMotionListener(MouseMotionListener l)</code> -- </p></li>
+                                <li><p><code>void 	addMouseWheelListener(MouseWheelListener l)</code> -- </p></li>
+                                <li><p><code>void 	addNotify()</code> -- </p></li>
+                                <li><p><code>void 	addPropertyChangeListener(PropertyChangeListener listener)</code> -- </p></li>
+                                <li><p><code>void 	addPropertyChangeListener(String propertyName, PropertyChangeListener listener)</code> -- </p></li>
+                                <li><p><code>void 	applyComponentOrientation(ComponentOrientation orientation)</code> -- </p></li>
+                                <li><p><code>boolean 	areFocusTraversalKeysSet(int id)</code> -- </p></li>
+                                <li><p><code>int 	checkImage(Image image, ImageObserver observer)</code> -- </p></li>
+                                <li><p><code>int 	checkImage(Image image, int width, int height, ImageObserver observer)</code> -- </p></li>
+                                <li><p><code>protected AWTEvent 	coalesceEvents(AWTEvent existingEvent, AWTEvent newEvent)</code> -- </p></li>
+                                <li><p><code>boolean 	contains(int x, int y)</code> -- </p></li>
+                                <li><p><code>boolean 	contains(Point p)</code> -- </p></li>
+                                <li><p><code>Image 	createImage(ImageProducer producer)</code> -- </p></li>
+                                <li><p><code>Image 	createImage(int width, int height)</code> -- </p></li>
+                                <li><p><code>VolatileImage 	createVolatileImage(int width, int height)</code> -- </p></li>
+                                <li><p><code>VolatileImage 	createVolatileImage(int width, int height, ImageCapabilities caps)</code> -- </p></li>
+                                <li><p><code>protected void 	disableEvents(long eventsToDisable)</code> -- </p></li>
+                                <li><p><code>void 	dispatchEvent(AWTEvent e)</code> -- </p></li>
+                                <li><p><code>void 	doLayout()</code> -- </p></li>
+                                <li><p><code>protected void 	enableEvents(long eventsToEnable)</code> -- </p></li>
+                                <li><p><code>void 	enableInputMethods(boolean enable)</code> -- </p></li>
+                                <li><p><code>protected void 	firePropertyChange(String propertyName, boolean oldValue, boolean newValue)</code> -- </p></li>
+                                <li><p><code>void 	firePropertyChange(String propertyName, byte oldValue, byte newValue)</code> -- </p></li>
+                                <li><p><code>void 	firePropertyChange(String propertyName, char oldValue, char newValue)</code> -- </p></li>
+                                <li><p><code>void 	firePropertyChange(String propertyName, double oldValue, double newValue)</code> -- </p></li>
+                                <li><p><code>void 	firePropertyChange(String propertyName, float oldValue, float newValue)</code> -- </p></li>
+                                <li><p><code>protected void 	firePropertyChange(String propertyName, int oldValue, int newValue)</code> -- </p></li>
+                                <li><p><code>void 	firePropertyChange(String propertyName, long oldValue, long newValue)</code> -- </p></li>
+                                <li><p><code>protected void 	firePropertyChange(String propertyName, Object oldValue, Object newValue)</code> -- </p></li>
+                                <li><p><code>void 	firePropertyChange(String propertyName, short oldValue, short newValue)</code> -- </p></li>
+                                <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- </p></li>
+                                <li><p><code>float 	getAlignmentX()</code> -- </p></li>
+                                <li><p><code>float 	getAlignmentY()</code> -- </p></li>
+                                <li><p><code>Color 	getBackground()</code> -- </p></li>
+                                <li><p><code>int 	getBaseline(int width, int height)</code> -- </p></li>
+                                <li><p><code>Component.BaselineResizeBehavior 	getBaselineResizeBehavior()</code> -- </p></li>
+                                <li><p><code>Rectangle 	getBounds()</code> -- </p></li>
+                                <li><p><code>Rectangle 	getBounds(Rectangle rv)</code> -- </p></li>
+                                <li><p><code>ColorModel 	getColorModel()</code> -- </p></li>
+                                <li><p><code>Component 	getComponentAt(int x, int y)</code> -- </p></li>
+                                <li><p><code>Component 	getComponentAt(Point p)</code> -- </p></li>
+                                <li><p><code>ComponentListener[] 	getComponentListeners()</code> -- </p></li>
+                                <li><p><code>ComponentOrientation 	getComponentOrientation()</code> -- </p></li>
+                                <li><p><code>Cursor 	getCursor()</code> -- </p></li>
+                                <li><p><code>DropTarget 	getDropTarget()</code> -- </p></li>
+                                <li><p><code>Container 	getFocusCycleRootAncestor()</code> -- </p></li>
+                                <li><p><code>FocusListener[] 	getFocusListeners()</code> -- </p></li>
+                                <li><p><code>Set&lt;AWTKeyStroke> 	getFocusTraversalKeys(int id)</code> -- </p></li>
+                                <li><p><code>boolean 	getFocusTraversalKeysEnabled()</code> -- </p></li>
+                                <li><p><code>Font 	getFont()</code> -- </p></li>
+                                <li><p><code>FontMetrics 	getFontMetrics(Font font)</code> -- </p></li>
+                                <li><p><code>Color 	getForeground()</code> -- </p></li>
+                                <li><p><code>Graphics 	getGraphics()</code> -- </p></li>
+                                <li><p><code>GraphicsConfiguration 	getGraphicsConfiguration()</code> -- </p></li>
+                                <li><p><code>int 	getHeight()</code> -- </p></li>
+                                <li><p><code>HierarchyBoundsListener[] 	getHierarchyBoundsListeners()</code> -- </p></li>
+                                <li><p><code>HierarchyListener[] 	getHierarchyListeners()</code> -- </p></li>
+                                <li><p><code>boolean 	getIgnoreRepaint()</code> -- </p></li>
+                                <li><p><code>InputContext 	getInputContext()</code> -- </p></li>
+                                <li><p><code>InputMethodListener[] 	getInputMethodListeners()</code> -- </p></li>
+                                <li><p><code>InputMethodRequests 	getInputMethodRequests()</code> -- </p></li>
+                                <li><p><code>KeyListener[] 	getKeyListeners()</code> -- </p></li>
+                                <li><p><code>&lt;T extends EventListener>T[] 	getListeners(Class&lt;T> listenerType)</code> -- </p></li>
+                                <li><p><code>Locale 	getLocale()</code> -- </p></li>
+                                <li><p><code>Point 	getLocation()</code> -- </p></li>
+                                <li><p><code>Point 	getLocation(Point rv)</code> -- </p></li>
+                                <li><p><code>Point 	getLocationOnScreen()</code> -- </p></li>
+                                <li><p><code>Dimension 	getMaximumSize()</code> -- </p></li>
+                                <li><p><code>Dimension 	getMinimumSize()</code> -- </p></li>
+                                <li><p><code>MouseListener[] 	getMouseListeners()</code> -- </p></li>
+                                <li><p><code>MouseMotionListener[] 	getMouseMotionListeners()</code> -- </p></li>
+                                <li><p><code>Point 	getMousePosition()</code> -- </p></li>
+                                <li><p><code>MouseWheelListener[] 	getMouseWheelListeners()</code> -- </p></li>
+                                <li><p><code>String 	getName()</code> -- </p></li>
+                                <li><p><code>Container 	getParent()</code> -- </p></li>
+                                <li><p><code>Dimension 	getPreferredSize()</code> -- </p></li>
+                                <li><p><code>PropertyChangeListener[] 	getPropertyChangeListeners()</code> -- </p></li>
+                                <li><p><code>PropertyChangeListener[] 	getPropertyChangeListeners(String propertyName)</code> -- </p></li>
+                                <li><p><code>Dimension 	getSize()</code> -- </p></li>
+                                <li><p><code>Dimension 	getSize(Dimension rv)</code> -- </p></li>
+                                <li><p><code>Toolkit 	getToolkit()</code> -- </p></li>
+                                <li><p><code>Object 	getTreeLock()</code> -- </p></li>
+                                <li><p><code>int 	getWidth()</code> -- </p></li>
+                                <li><p><code>int 	getX()</code> -- </p></li>
+                                <li><p><code>int 	getY()</code> -- </p></li>
+                                <li><p><code>boolean 	hasFocus()</code> -- </p></li>
+                                <li><p><code>boolean 	imageUpdate(Image img, int infoflags, int x, int y, int w, int h)</code> -- </p></li>
+                                <li><p><code>void 	invalidate()</code> -- </p></li>
+                                <li><p><code>boolean 	isBackgroundSet()</code> -- </p></li>
+                                <li><p><code>boolean 	isCursorSet()</code> -- </p></li>
+                                <li><p><code>boolean 	isDisplayable()</code> -- </p></li>
+                                <li><p><code>boolean 	isDoubleBuffered()</code> -- </p></li>
+                                <li><p><code>boolean 	isEnabled()</code> -- </p></li>
+                                <li><p><code>boolean 	isFocusable()</code> -- </p></li>
+                                <li><p><code>boolean 	isFocusCycleRoot(Container container)</code> -- </p></li>
+                                <li><p><code>boolean 	isFocusOwner()</code> -- </p></li>
+                                <li><p><code>boolean 	isFontSet()</code> -- </p></li>
+                                <li><p><code>boolean 	isForegroundSet()</code> -- </p></li>
+                                <li><p><code>boolean 	isLightweight()</code> -- </p></li>
+                                <li><p><code>boolean 	isMaximumSizeSet()</code> -- </p></li>
+                                <li><p><code>boolean 	isMinimumSizeSet()</code> -- </p></li>
+                                <li><p><code>boolean 	isOpaque()</code> -- </p></li>
+                                <li><p><code>boolean 	isPreferredSizeSet()</code> -- </p></li>
+                                <li><p><code>boolean 	isShowing()</code> -- </p></li>
+                                <li><p><code>boolean 	isValid()</code> -- </p></li>
+                                <li><p><code>boolean 	isVisible()</code> -- </p></li>
+                                <li><p><code>void 	list()</code> -- </p></li>
+                                <li><p><code>void 	list(PrintStream out)</code> -- </p></li>
+                                <li><p><code>void 	list(PrintStream out, int indent)</code> -- </p></li>
+                                <li><p><code>void 	list(PrintWriter out)</code> -- </p></li>
+                                <li><p><code>void 	list(PrintWriter out, int indent)</code> -- </p></li>
+                                <li><p><code>void 	paint(Graphics g)</code> -- </p></li>
+                                <li><p><code>void 	paintAll(Graphics g)</code> -- </p></li>
+                                <li><p><code>protected String 	paramString()</code> -- </p></li>
+                                <li><p><code>boolean 	prepareImage(Image image, ImageObserver observer)</code> -- </p></li>
+                                <li><p><code>boolean 	prepareImage(Image image, int width, int height, ImageObserver observer)</code> -- </p></li>
+                                <li><p><code>void 	print(Graphics g)</code> -- </p></li>
+                                <li><p><code>void 	printAll(Graphics g)</code> -- </p></li>
+                                <li><p><code>protected void 	processComponentEvent(ComponentEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processEvent(AWTEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processFocusEvent(FocusEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processHierarchyBoundsEvent(HierarchyEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processHierarchyEvent(HierarchyEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processInputMethodEvent(InputMethodEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processKeyEvent(KeyEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processMouseEvent(MouseEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processMouseMotionEvent(MouseEvent e)</code> -- </p></li>
+                                <li><p><code>protected void 	processMouseWheelEvent(MouseWheelEvent e)</code> -- </p></li>
+                                <li><p><code>void 	remove(MenuComponent popup)</code> -- </p></li>
+                                <li><p><code>void 	removeComponentListener(ComponentListener l)</code> -- </p></li>
+                                <li><p><code>void 	removeFocusListener(FocusListener l)</code> -- </p></li>
+                                <li><p><code>void 	removeHierarchyBoundsListener(HierarchyBoundsListener l)</code> -- </p></li>
+                                <li><p><code>void 	removeHierarchyListener(HierarchyListener l)</code> -- </p></li>
+                                <li><p><code>void 	removeInputMethodListener(InputMethodListener l)</code> -- </p></li>
+                                <li><p><code>void 	removeKeyListener(KeyListener l)</code> -- </p></li>
+                                <li><p><code>void 	removeMouseListener(MouseListener l)</code> -- </p></li>
+                                <li><p><code>void 	removeMouseMotionListener(MouseMotionListener l)</code> -- </p></li>
+                                <li><p><code>void 	removeMouseWheelListener(MouseWheelListener l)</code> -- </p></li>
+                                <li><p><code>void 	removeNotify()</code> -- </p></li>
+                                <li><p><code>void 	removePropertyChangeListener(PropertyChangeListener listener)</code> -- </p></li>
+                                <li><p><code>void 	removePropertyChangeListener(String propertyName, PropertyChangeListener listener)</code> -- </p></li>
+                                <li><p><code>void 	repaint()</code> -- </p></li>
+                                <li><p><code>void 	repaint(int x, int y, int width, int height)</code> -- </p></li>
+                                <li><p><code>void 	repaint(long tm)</code> -- </p></li>
+                                <li><p><code>void 	repaint(long tm, int x, int y, int width, int height)</code> -- </p></li>
+                                <li><p><code>void 	requestFocus()</code> -- </p></li>
+                                <li><p><code>protected boolean 	requestFocus(boolean temporary)</code> -- </p></li>
+                                <li><p><code>boolean 	requestFocusInWindow()</code> -- </p></li>
+                                <li><p><code>protected boolean 	requestFocusInWindow(boolean temporary)</code> -- </p></li>
+                                <li><p><code>void 	revalidate()</code> -- </p></li>
+                                <li><p><code>void 	setBackground(Color c)</code> -- </p></li>
+                                <li><p><code>void 	setBounds(int x, int y, int width, int height)</code> -- </p></li>
+                                <li><p><code>void 	setBounds(Rectangle r)</code> -- </p></li>
+                                <li><p><code>void 	setComponentOrientation(ComponentOrientation o)</code> -- </p></li>
+                                <li><p><code>void 	setCursor(Cursor cursor)</code> -- </p></li>
+                                <li><p><code>void 	setDropTarget(DropTarget dt)</code> -- </p></li>
+                                <li><p><code>void 	setEnabled(boolean b)</code> -- </p></li>
+                                <li><p><code>void 	setFocusable(boolean focusable)</code> -- </p></li>
+                                <li><p><code>void 	setFocusTraversalKeys(int id, Set&lt;? extends AWTKeyStroke> keystrokes)</code> -- </p></li>
+                                <li><p><code>void 	setFocusTraversalKeysEnabled(boolean focusTraversalKeysEnabled)</code> -- </p></li>
+                                <li><p><code>void 	setFont(Font f)</code> -- </p></li>
+                                <li><p><code>void 	setForeground(Color c)</code> -- </p></li>
+                                <li><p><code>void 	setIgnoreRepaint(boolean ignoreRepaint)</code> -- </p></li>
+                                <li><p><code>void 	setLocale(Locale l)</code> -- </p></li>
+                                <li><p><code>void 	setLocation(int x, int y)</code> -- </p></li>
+                                <li><p><code>void 	setLocation(Point p)</code> -- </p></li>
+                                <li><p><code>void 	setMaximumSize(Dimension maximumSize)</code> -- </p></li>
+                                <li><p><code>void 	setMinimumSize(Dimension minimumSize)</code> -- </p></li>
+                                <li><p><code>void 	setName(String name)</code> -- </p></li>
+                                <li><p><code>void 	setPreferredSize(Dimension preferredSize)</code> -- </p></li>
+                                <li><p><code>void 	setSize(Dimension d)</code> -- </p></li>
+                                <li><p><code>void 	setSize(int width, int height)</code> -- </p></li>
+                                <li><p><code>void 	setVisible(boolean b)</code> -- </p></li>
+                                <li><p><code>String 	toString()</code> -- </p></li>
+                                <li><p><code>void 	transferFocus()</code> -- </p></li>
+                                <li><p><code>void 	transferFocusBackward()</code> -- </p></li>
+                                <li><p><code>void 	transferFocusUpCycle()</code> -- </p></li>
+                                <li><p><code>void 	update(Graphics g)</code> -- </p></li>
+                                <li><p><code>void 	validate()</code> -- </p></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-awt-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">...</h3>
+                    </div>
+                    <div class="panel-body">
+
+                    </div>
+                </div>
+                <!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="javax-swing-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+
+					</div>
+				</div>
+				<!-- item over -->
+			</div>
+		</div>
+	</div>
+
+	<div class="btn-group-vertical bottom-button">
+		<a href="#" type="button"
+		   class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
+			<span class="caret"></span>
+		</a>
+		<a href="#" type="button"
+		   class="btn btn-default dropdown-toggle btn-primary"
+		   data-toggle="dropup"> TOP </a>
+		<a target="_blank" href="./docs/docs-java/api-zh/index.html"
+		   type="button" class="btn btn-default dropdown-toggle btn-primary"
+		   data-toggle="dropup"> DOCS-6 </a>
+		<a target="_blank" href="./docs/docs-java/api/index.html"
+		   type="button" class="btn btn-default dropdown-toggle btn-primary"
+		   data-toggle="dropup"> DOCS-8 </a>
+	</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="../support/jquery/jquery-3.1.1.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
+    <script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
+	<script src="res/menu.js"></script>
+	<script src="../commons/js/common.js"></script>
+</body>
+</html>
