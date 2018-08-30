@@ -78,6 +78,7 @@
 							<a href="#java-awt-LayoutManager" class="list-group-item">LayoutManager 及实现类</a>
 							<a href="#java-awt-MenuComponent" class="list-group-item">MenuComponent 及子类</a>
                             <a href="#java-awt-Container" class="list-group-item">Container 的子类</a>
+                            <a href="#java-awt-Component" class="list-group-item">Component 的子类</a>
                             <a href="#java-awt-" class="list-group-item">...</a>
 						</div>
 
@@ -717,11 +718,11 @@ public interface LayoutManager2 extends LayoutManager {
                             <p>LayoutManager 的常见实现类(没有列出许多内部类)：</p>
                             <ul>
                                 <li><p><a href="#BorderLayout">BorderLayout</a> -- 是边框布局。分为五个区域：NORTH、SOUTH、EAST、WEST、CENTER。NORTH 和 SOUTH 组件可以在水平方向上拉伸；而 EAST 和 WEST 组件可以在垂直方向上拉伸；CENTER 组件可同时在水平和垂直方向上拉伸，从而填充所有剩余空间。</p></li>
-                                <li><p><a href="#FlowLayout">FlowLayout</a> -- 是流式布局，这非常类似于段落中的文本行。从左到右或从右到左一次排列组件，到达边界从下一行开始排列。</p></li>
+                                <li><p><a href="#FlowLayout">FlowLayout</a> -- 是流式布局，类似于段落中的文本行。从左到右或从右到左一次排列组件，到达边界从下一行开始排列。</p></li>
+                                <li><p><a href="#GridLayout">GridLayout</a> -- 矩形网格形式对容器的组件进行布置。容器被分成大小相等的矩形，一个矩形中放置一个组件。</p></li>
+                                <li><p><a href="#GridBagLayout">GridBagLayout</a> -- 是一个灵活的布局管理器(类似于单元格可以合并)，它不要求组件的大小相同便可以将组件垂直、水平或沿它们的基线对齐。每个 GridBagLayout 对象维持一个动态的矩形单元网格，每个组件占用一个或多个这样的单元，该单元被称为显示区域。 </p></li>
                                 <li><p><a href="#BoxLayout">BoxLayout</a> -- </p></li>
                                 <li><p><a href="#CardLayout">CardLayout</a> -- </p></li>
-                                <li><p><a href="#GridLayout">GridLayout</a> -- </p></li>
-                                <li><p><a href="#GridBagLayout">GridBagLayout</a> -- </p></li>
                                 <li><p><a href="#GroupLayout">GroupLayout</a> -- </p></li>
                                 <li><p><a href="#DefaultMenuLayout">DefaultMenuLayout</a> -- </p></li>
                                 <li><p><a href="#MetalScrollBarUI">MetalScrollBarUI</a> -- </p></li>
@@ -767,9 +768,33 @@ public class BorderLayout implements LayoutManager2, Serializable {
                             <p>为了与以前的版本兼容，BorderLayout 还包括相对定位常量 BEFORE_FIRST_LINE、AFTER_LAST_LINE、BEFORE_LINE_BEGINS 和 AFTER_LINE_ENDS。这些常量分别等同于 PAGE_START、PAGE_END、LINE_START 和 LINE_END。为了与其他组件使用的相对定位常量一致，应优先使用后一组常量。</p>
                             <p>将绝对定位常量与相对定位常量混合会产生无法预料的结果。如果两种类型的常量都使用，则优先采用相对常量。例如，如果同时使用 NORTH 和 PAGE_START 常量在方向性为 LEFT_TO_RIGHT 的容器中添加组件，则只体现 PAGE_START 布局。 </p>
                             <p><b>根据其首选大小和容器大小的约束 (constraints) 对组件进行布局。NORTH 和 SOUTH 组件可以在水平方向上拉伸；而 EAST 和 WEST 组件可以在垂直方向上拉伸；CENTER 组件可同时在水平和垂直方向上拉伸，从而填充所有剩余空间。</b> </p>
+                            <ol>
+                                <li><p><code>void 	addLayoutComponent(Component comp, Object constraints)</code> -- 使用指定的约束对象将指定组件添加到布局中</p></li>
+                                <li><p><code>void 	removeLayoutComponent(Component comp)</code> -- 从此边框布局中移除指定组件</p></li>
+                                <li><p><code>Object 	getConstraints(Component comp)</code> -- 获取指定组件的约束</p></li>
+                                <li><p><code>Component 	getLayoutComponent(Container target, Object constraints)</code> -- 基于目标 Container 的组件方向，返回给定约束位置对应的组件</p></li>
+                                <li><p><code>Component 	getLayoutComponent(Object constraints)</code> -- 获取使用给定约束添加的组件</p></li>
+
+                                <li class="group"><p><code>int 	getHgap()</code> -- 返回组件之间的水平间距</p></li>
+                                <li><p><code>int 	getVgap()</code> -- 返回组件之间的垂直间距</p></li>
+                                <li><p><code>void 	setHgap(int hgap)</code> -- 设置组件之间的水平间距</p></li>
+                                <li><p><code>void 	setVgap(int vgap)</code> -- 设置组件之间的垂直间距</p></li>
+
+                                <li class="group"><p><code>float 	getLayoutAlignmentX(Container parent)</code> -- 返回沿 x 轴的对齐方式</p></li>
+                                <li><p><code>float 	getLayoutAlignmentY(Container parent)</code> -- 返回沿 y 轴的对齐方式</p></li>
+
+                                <li class="group"><p><code>void 	invalidateLayout(Container target)</code> -- 使布局无效，指示如果布局管理器缓存了信息，则应该将其丢弃</p></li>
+                                <li><p><code>void 	layoutContainer(Container target)</code> -- 使用此边框布局对容器参数进行布局</p></li>
+
+                                <li class="group"><p><code>Dimension 	maximumLayoutSize(Container target)</code> -- 在给出指定目标容器中的组件的前提下，返回此布局的最大尺寸</p></li>
+                                <li><p><code>Dimension 	preferredLayoutSize(Container target)</code> -- 基于容器中的组件，使用此布局管理器确定 target 容器的首选大小</p></li>
+                                <li><p><code>Dimension 	minimumLayoutSize(Container target)</code> -- 使用此布局管理器确定 target 容器的最小大小</p></li>
+
+                                <li class="group"><p><code>String 	toString()</code> -- 返回此边框布局的状态的字符串表示形式</p></li>
+                            </ol>
                         </div>
 
-                        <a id="" class="offset"></a>
+                        <a id="FlowLayout" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class FlowLayout implements LayoutManager, Serializable {
@@ -787,6 +812,123 @@ public class FlowLayout implements LayoutManager, Serializable {
 }
 </pre>
                             <p><a href="docs/docs-java/api/java/awt/FlowLayout.html" target="_blank">FlowLayout</a> 是流式布局，这非常类似于段落中的文本行。从左到右或从右到左一次排列组件，到达边界从下一行开始排列。</p>
+                            <p>流布局把每个组件都假定为它的自然（首选）大小。 </p>
+                            <ol>
+                                <li><p><code>int 	getAlignment()</code> -- 获取此布局的对齐方式</p></li>
+                                <li><p><code>void 	setAlignment(int align)</code> -- 设置此布局的对齐方式</p></li>
+                                <li><p><code>int 	getHgap()</code> -- 获取组件之间以及组件与 Container 的边之间的水平间隙</p></li>
+                                <li><p><code>void 	setHgap(int hgap)</code> -- 设置组件之间以及组件与 Container 的边之间的水平间隙</p></li>
+                                <li><p><code>int 	getVgap()</code> -- 获取组件之间以及组件与 Container 的边之间的垂直间隙</p></li>
+                                <li><p><code>void 	setVgap(int vgap)</code> -- 设置组件之间以及组件与 Container 的边之间的垂直间隙</p></li>
+
+                                <li class="group"><p><code>boolean 	getAlignOnBaseline()</code> -- 如果组件将沿其基线垂直对齐，则返回 true</p></li>
+                                <li><p><code>void 	setAlignOnBaseline(boolean alignOnBaseline)</code> -- 设置组件是否应该沿着其基线垂直对齐</p></li>
+
+                                <li class="group"><p><code>void 	addLayoutComponent(String name, Component comp)</code> -- 将指定的组件添加到布局中</p></li>
+                                <li><p><code>void 	removeLayoutComponent(Component comp)</code> -- 从布局中移除指定的组件</p></li>
+                                <li><p><code>void 	layoutContainer(Container target)</code> -- 布置该容器</p></li>
+
+                                <li class="group"><p><code>Dimension 	minimumLayoutSize(Container target)</code> -- 布置指定容器的子组件的最小维数</p></li>
+                                <li><p><code>Dimension 	preferredLayoutSize(Container target)</code> -- 布置指定容器的子组件的首选维数</p></li>
+
+                                <li class="group"><p><code>String 	toString()</code> -- 返回此 FlowLayout 对象及其值的字符串表示形式</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="GridLayout" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class GridLayout implements LayoutManager, Serializable {
+    public GridLayout() {} // 单行无间距
+    public GridLayout(int rows, int cols) {}
+    public GridLayout(int rows, int cols, int hgap, int vgap) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/GridLayout.html" target="_blank">GridLayout</a> 以矩形网格形式对容器的组件进行布置。容器被分成大小相等的矩形，一个矩形中放置一个组件。</p>
+                            <p><b>通过构造方法或 setRows 和 setColumns 方法将行数和列数都设置为非零值时，指定的列数将被忽略。列数通过指定的行数和布局中的组件总数来确定。因此，例如，如果指定了三行和两列，在布局中添加了九个组件，则它们将显示为三行三列。仅当将行数设置为零时，指定列数才对布局有效。</b></p>
+                            <ol>
+                                <li><p><code>int 	getColumns()</code> -- 获取此布局中的列数</p></li>
+                                <li><p><code>void 	setColumns(int cols)</code> -- 将此布局中的列数设置为指定值</p></li>
+                                <li><p><code>int 	getRows()</code> -- 获取此布局中的行数</p></li>
+                                <li><p><code>void 	setRows(int rows)</code> -- 将此布局中的行数设置为指定值</p></li>
+
+                                <li class="group"><p><code>int 	getHgap()</code> -- 获取组件之间的水平间距</p></li>
+                                <li><p><code>void 	setHgap(int hgap)</code> -- 将组件之间的水平间距设置为指定值</p></li>
+                                <li><p><code>int 	getVgap()</code> -- 获取组件之间的垂直间距</p></li>
+                                <li><p><code>void 	setVgap(int vgap)</code> -- 将组件之间的垂直间距设置为指定值</p></li>
+
+                                <li class="group"><p><code>void 	addLayoutComponent(String name, Component comp)</code> -- 将具有指定名称的指定组件添加到布局</p></li>
+                                <li><p><code>void 	removeLayoutComponent(Component comp)</code> -- 从布局移除指定组件</p></li>
+
+                                <li class="group"><p><code>void 	layoutContainer(Container parent)</code> -- 使用此布局布置指定容器</p></li>
+                                <li><p><code>Dimension 	minimumLayoutSize(Container parent)</code> -- 使用此网络布局确定最小大小的容器参数</p></li>
+                                <li><p><code>Dimension 	preferredLayoutSize(Container parent)</code> -- 使用此网格布局确定容器参数的首选大小</p></li>
+
+                                <li class="group"><p><code>String 	toString()</code> -- 返回此网格布局的值的字符串表示形式</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="GridBagLayout" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class GridBagLayout implements LayoutManager2, Serializable {
+    public int columnWidths[];      // 保存对列最小宽度的重写
+    public double columnWeights[];  // 保存对列权重的重写
+    public int rowHeights[];        // 保存对行最小高度的重写
+    public double rowWeights[];     // 保存对行权重的重写
+
+    protected static final int MAXGRIDSIZE = 512;
+    protected static final int MINSIZE = 1;
+    protected static final int PREFERREDSIZE = 2;
+
+    protected Hashtable&lt;Component,GridBagConstraints> comptable;
+    protected GridBagConstraints defaultConstraints;
+    protected GridBagLayoutInfo layoutInfo;
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/GridBagLayout.html" target="_blank">GridBagLayout</a> 是一个灵活的布局管理器(类似于单元格可以合并)，它不要求组件的大小相同便可以将组件垂直、水平或沿它们的基线对齐。每个 GridBagLayout 对象维持一个动态的矩形单元网格，每个组件占用一个或多个这样的单元，该单元被称为显示区域。</p>
+                            <p>每个由 GridBagLayout 管理的组件都与 GridBagConstraints 的实例相关联。Constraints 对象指定组件的显示区域在网格中的具体放置位置，以及组件在其显示区域中的放置方式。除了 Constraints 对象之外，GridBagLayout 还考虑每个组件的最小大小和首选大小，以确定组件的大小。 </p>
+                            <p>网格的总体方向取决于容器的 ComponentOrientation 属性。对于水平的从左到右的方向，网格坐标 (0,0) 位于容器的左上角，其中 X 向右递增，Y 向下递增。对于水平的从右到左的方向，网格坐标 (0,0) 位于容器的右上角，其中 X 向左递增，Y 向下递增。 </p>
+                            <ol>
+                                <li><p><code>void 	addLayoutComponent(Component comp, Object constraints)</code> -- </p>
+                                    <pre class="brush: java;">
+public class GridBagConstraints implements Cloneable, Serializable {}
+</pre>
+                                </li>
+                                <li><p><code>void 	addLayoutComponent(String name, Component comp)</code> -- </p></li>
+                                <li><p><code>protected void 	adjustForGravity(GridBagConstraints constraints, Rectangle r)</code> -- </p></li>
+                                <li><p><code>protected void 	AdjustForGravity(GridBagConstraints constraints, Rectangle r)</code> -- </p></li>
+                                <li><p><code>protected void 	arrangeGrid(Container parent)</code> -- </p></li>
+                                <li><p><code>protected void 	ArrangeGrid(Container parent)</code> -- </p></li>
+                                <li><p><code>GridBagConstraints 	getConstraints(Component comp)</code> -- </p></li>
+                                <li><p><code>float 	getLayoutAlignmentX(Container parent)</code> -- </p></li>
+                                <li><p><code>float 	getLayoutAlignmentY(Container parent)</code> -- </p></li>
+                                <li><p><code>int[][] 	getLayoutDimensions()</code> -- </p></li>
+                                <li><p><code>protected GridBagLayoutInfo 	getLayoutInfo(Container parent, int sizeflag)</code> -- </p></li>
+                                <li><p><code>protected GridBagLayoutInfo 	GetLayoutInfo(Container parent, int sizeflag)</code> -- </p></li>
+                                <li><p><code>Point 	getLayoutOrigin()</code> -- </p></li>
+                                <li><p><code>double[][] 	getLayoutWeights()</code> -- </p></li>
+                                <li><p><code>protected Dimension 	getMinSize(Container parent, GridBagLayoutInfo info)</code> -- </p></li>
+                                <li><p><code>protected Dimension 	GetMinSize(Container parent, GridBagLayoutInfo info)</code> -- </p></li>
+                                <li><p><code>void 	invalidateLayout(Container target)</code> -- </p></li>
+                                <li><p><code>void 	layoutContainer(Container parent)</code> -- </p></li>
+                                <li><p><code>Point 	location(int x, int y)</code> -- </p></li>
+                                <li><p><code>protected GridBagConstraints 	lookupConstraints(Component comp)</code> -- </p></li>
+                                <li><p><code>Dimension 	maximumLayoutSize(Container target)</code> -- </p></li>
+                                <li><p><code>Dimension 	minimumLayoutSize(Container parent)</code> -- </p></li>
+                                <li><p><code>Dimension 	preferredLayoutSize(Container parent)</code> -- </p></li>
+                                <li><p><code>void 	removeLayoutComponent(Component comp)</code> -- </p></li>
+                                <li><p><code>void 	setConstraints(Component comp, GridBagConstraints constraints)</code> -- </p></li>
+                                <li><p><code>String 	toString()</code> -- </p></li>
+                            </ol>
+                        </div>
+
+                        <a id="" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/.html" target="_blank"></a></p>
                         </div>
                     </div>
                 </div>
@@ -1027,9 +1169,12 @@ public class Panel extends Container implements Accessible {
                             </ol>
                         </div>
 
+
+
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class ScrollPane extends Container implements Accessible {
+    /** 可访问性支持 */
     protected class AccessibleAWTScrollPane extends AccessibleAWTContainer {}
 
     /** 滚动条显示模式 */
@@ -1070,6 +1215,495 @@ public class ScrollPane extends Container implements Accessible {
                                 <li><p><code>String 	paramString()</code> -- 返回表示此 ScrollPane 的状态的字符串</p></li>
                                 <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此 ScrollPane 相关的 AccessibleContext</p></li>
                             </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Applet extends Panel {
+    /** 可访问性支持 */
+    protected class AccessibleApplet extends AccessibleAWTPanel {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/Applet.html" target="_blank">Applet</a> 是一种不能单独运行但可嵌入在其他应用程序中的小程序。 </p>
+                            <p>Applet 类必须是任何嵌入 Web 页或可用 Java Applet Viewer 查看的 applet 的超类。Applet 类提供了 applet 及其运行环境之间的标准接口。</p>
+                            <ol>
+                                <li><p><code>static AudioClip 	newAudioClip(URL url)</code> -- 从给定 URL 处获取音频剪辑</p></li>
+
+                                <li class="group"><p><code>void 	play(URL url)</code> -- 播放指定绝对 URL 处的音频剪辑</p></li>
+                                <li><p><code>void 	play(URL url, String name)</code> -- 播放音频剪辑，给定了 URL 及与之相对的说明符</p></li>
+                                <li><p><code>AudioClip 	getAudioClip(URL url)</code> -- 返回 URL 参数指定的 AudioClip 对象</p></li>
+                                <li><p><code>AudioClip 	getAudioClip(URL url, String name)</code> -- 返回 URL 和 name 参数指定的 AudioClip 对象</p></li>
+
+                                <li class="group"><p><code>Image 	getImage(URL url)</code> -- 返回能被绘制到屏幕上的 Image 对象</p></li>
+                                <li><p><code>Image 	getImage(URL url, String name)</code> -- 返回能被绘制到屏幕上的 Image 对象</p></li>
+
+                                <li class="group"><p><code>AppletContext 	getAppletContext()</code> -- 确定此 applet 的上下文，上下文允许 applet 查询和影响它所运行的环境</p></li>
+                                <li><p><code>String 	getAppletInfo()</code> -- 返回有关此 applet 的信息</p></li>
+                                <li><p><code>URL 	getCodeBase()</code> -- 获得基 URL</p></li>
+                                <li><p><code>URL 	getDocumentBase()</code> -- 获取嵌入此 applet 的文档的 URL</p></li>
+                                <li><p><code>String 	getParameter(String name)</code> -- 返回 HTML 标记中指定参数的值</p></li>
+                                <li><p><code>String[][] 	getParameterInfo()</code> -- 返回此 applet 理解的关于参数的信息</p></li>
+
+                                <li class="group"><p><code>Locale 	getLocale()</code> -- 获取 applet 的语言环境</p></li>
+                                <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此 Applet 关联的 AccessibleContext</p></li>
+                                <li><p><code>boolean 	isActive()</code> -- 确定 applet 是否处于活动状态</p></li>
+                                <li><p><code>boolean 	isValidateRoot()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	resize(Dimension d)</code> -- 请求调整此 applet 的大小</p></li>
+                                <li><p><code>void 	resize(int width, int height)</code> -- 请求调整此 applet 的大小</p></li>
+
+                                <li class="group"><p><code>void 	setStub(AppletStub stub)</code> -- 设置此 applet 的 stub</p></li>
+                                <li><p><code>void 	showStatus(String msg)</code> -- 请求将参数字符串显示在“状态窗口”中</p></li>
+
+                                <li class="group"><p><code>void 	init()</code> -- 由浏览器或 applet viewer 调用，通知此 applet 它已经被加载到系统中</p></li>
+                                <li><p><code>void 	start()</code> -- 由浏览器或 applet viewer 调用，通知此 applet 它应该开始执行</p></li>
+                                <li><p><code>void 	stop()</code> -- 由浏览器或 applet viewer 调用，通知此 applet 它应该终止执行</p></li>
+                                <li><p><code>void 	destroy()</code> --  由浏览器或 applet viewer 调用，通知此 applet 它正在被回收，它应该销毁分配给它的任何资源</p></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-awt-Component"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Component 及子类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Label extends Component implements Accessible {
+    /** 可访问性支持 */
+    protected class AccessibleAWTLabel extends AccessibleAWTComponent {}
+
+    public static final int LEFT        = 0; // 左对齐
+    public static final int CENTER      = 1; // 居中
+    public static final int RIGHT       = 2; // 右对齐
+
+    public Label() () // 无标题，左对齐
+    public Label(String text) {}
+    public Label(String text, int alignment) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/Label.html" target="_blank">Label</a> 对象是一个可在容器中放置文本的组件。一个标签只显示一行只读文本。文本可由应用程序更改，但是用户不能直接对其进行编辑。</p>
+                            <ol>
+                                <li><p><code>int 	getAlignment()</code> -- 获取此标签的当前对齐方式</p></li>
+                                <li><p><code>void 	setAlignment(int alignment)</code> -- 设置此标签的当前对齐方式</p></li>
+                                <li><p><code>String 	getText()</code> -- 获取此标签的文本</p></li>
+                                <li><p><code>void 	setText(String text)</code> -- 设置此标签的文本</p></li>
+
+                                <li class="group"><p><code>void 	addNotify()</code> -- 创建此标签的同位体</p></li>
+                                <li><p><code>protected String 	paramString()</code> -- 返回一个表示此 Label 状态的字符串</p></li>
+                                <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此标签相关的 AccessibleContext</p></li>
+
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Button extends Component implements Accessible {
+    /** 可访问性支持 */
+    protected class AccessibleAWTButton extends AccessibleAWTComponent implements AccessibleAction,
+                                AccessibleValue {}
+
+    public Button() {}
+    public Button(String label) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/Button.html" target="_blank">Button</a> 当按下该按钮时，应用程序能执行某项动作。</p>
+                            <p>用鼠标单击按钮这一动作与 ActionEvent 的一个实例相关，在按下鼠标和释放按钮的时候都会用到该类。如果应用程序希望知道何时按钮作为一个单独动作被按下但未释放，它可以特殊化 processMouseEvent，或者通过调用 addMouseListener 将自身注册为鼠标事件的侦听器。这两种方法都是由所有组件的抽象超类 Component 定义的。 </p>
+                            <p>当按下按钮并释放时，AWT 通过调用按钮的 processEvent，将 ActionEvent 的一个实例发送给按钮。按钮的 processEvent 方法接收按钮的所有事件；同时，它通过调用自身的 processActionEvent 方法传递一个动作事件。后一种方法将动作事件传递给为关注此按钮生成的动作事件而注册的任何动作侦听器。 </p>
+                            <p>如果应用程序想要执行基于按下并释放按钮的某个动作，则它应该实现 ActionListener 并注册新的侦听器，以便通过调用按钮的 addActionListener 方法来接收发自此按钮的事件。应用程序可以按消息传递协议使用按钮的动作命令。 </p>
+                            <ol>
+                                <li><p><code>void 	addActionListener(ActionListener l)</code> -- 添加指定的动作侦听器</p></li>
+                                <li><p><code>void 	removeActionListener(ActionListener l)</code> -- 移除指定的动作侦听器</p></li>
+                                <li><p><code>ActionListener[] 	getActionListeners()</code> -- 返回在此按钮上注册的所有动作侦听器的一个数组</p></li>
+
+                                <li class="group"><p><code>&lt;T extends EventListener> T[] 	getListeners(Class&lt;T> listenerType)</code> -- 返回当前在此 Button 上注册为 FooListener 的所有对象的数组</p></li>
+                                <li><p><code>protected void 	processActionEvent(ActionEvent e)</code> -- 处理发生在此按钮上的动作事件，方法是将这些事件指派给所有已注册的 ActionListener 对象</p></li>
+                                <li><p><code>protected void 	processEvent(AWTEvent e)</code> -- 处理此按钮上的事件</p></li>
+
+                                <li class="group"><p><code>String 	getLabel()</code> -- 获取此按钮的标签</p></li>
+                                <li><p><code>void 	setLabel(String label)</code> -- 将按钮的标签设置为指定的字符串</p></li>
+                                <li><p><code>String 	getActionCommand()</code> -- 返回此按钮激发的动作事件的命令名称</p></li>
+                                <li><p><code>void 	setActionCommand(String command)</code> -- 设置此按钮激发的动作事件的命令名称</p></li>
+
+                                <li class="group"><p><code>void 	addNotify()</code> -- 创建按钮的同位体</p></li>
+                                <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此 Button 相关的 AccessibleContext</p></li>
+                                <li><p><code>protected String 	paramString()</code> -- 返回此 Button 状态的字符串表示形式</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <div class="split-item">
+                                <pre class="brush: java;">
+public class TextComponent extends Component implements Accessible {
+    /** 可访问性支持 */
+    protected class AccessibleAWTTextComponent extends AccessibleAWTComponent implements AccessibleText,
+                                    TextListener {}
+
+    protected TextListener textListener;
+}
+</pre>
+                                <p><a href="docs/docs-java/api/java/awt/TextComponent.html" target="_blank">TextComponent</a> 是所有允许编辑文本的组件的超类。</p>
+                                <p>文本组件具体化文本字符串。TextComponent 类定义了一组判断此文本是否可编辑的方法。如果组件是可编辑的，则该类还定义了另一组支持文件插入符的方法。 </p>
+                                <p>此外，该类定义了用于维护文本当前选择 的方法。文本选择是组件文本的子字符串，是编辑操作的目标。它也被称为选定文本。</p>
+                                <ol>
+                                    <li><p><code>String 	getText()</code> -- 返回此文本组件表示的文本</p></li>
+                                    <li><p><code>void 	setText(String t)</code> -- 将此文本组件显示的文本设置为指定文本</p></li>
+                                    <li><p><code>boolean 	isEditable()</code> -- 指示此文本组件是否可编辑</p></li>
+                                    <li><p><code>void 	setEditable(boolean b)</code> -- 设置判断此文本组件是否可编辑的标志</p></li>
+
+                                    <li class="group"><p><code>String 	getSelectedText()</code> -- 返回此文本组件所表示文本的选定文本</p></li>
+                                    <li><p><code>int 	getSelectionStart()</code> -- 获取此文本组件中选定文本的开始位置</p></li>
+                                    <li><p><code>int 	getSelectionEnd()</code> -- 获取此文本组件中选定文本的结束位置</p></li>
+                                    <li><p><code>int 	getCaretPosition()</code> -- 返回文本插入符的位置</p></li>
+                                    <li><p><code>void 	setCaretPosition(int position)</code> -- 设置文本插入符的位置</p></li>
+                                    <li><p><code>void 	select(int selectionStart, int selectionEnd)</code> -- 选择指定开始位置和结束位置之间的文本</p></li>
+                                    <li><p><code>void 	setSelectionStart(int selectionStart)</code> -- 将此文本组件的选定开始位置设置为指定位置</p></li>
+                                    <li><p><code>void 	setSelectionEnd(int selectionEnd)</code> -- 将此文本组件的选定结束位置设置为指定位置</p></li>
+                                    <li><p><code>void 	selectAll()</code> -- 选择此文本组件中的所有文本</p></li>
+
+                                    <li class="group"><p><code>Color 	getBackground()</code> -- 获得此文本组件的背景色</p></li>
+                                    <li><p><code>void 	setBackground(Color c)</code> -- 设置此文本组件的背景色</p></li>
+                                    <li><p><code>void 	enableInputMethods(boolean enable)</code> -- 启用或禁用此文本组件的输入法支持</p></li>
+                                    <li><p><code>InputMethodRequests 	getInputMethodRequests()</code> -- 获取输入方法请求处理程序</p></li>
+
+                                    <li class="group"><p><code>void 	addTextListener(TextListener l)</code> -- 添加指定的文本事件侦听器</p></li>
+                                    <li><p><code>void 	removeTextListener(TextListener l)</code> -- 移除指定的文本事件侦听器</p></li>
+                                    <li><p><code>TextListener[] 	getTextListeners()</code> -- 返回在此文本组件上所有已注册文本侦听器的数组</p></li>
+
+                                    <li class="group"><p><code>&lt;T extends EventListener> T[] 	getListeners(Class&lt;T> listenerType)</code> -- 返回当前已在此 TextComponent 上注册为 FooListener 的所有对象的数组</p></li>
+                                    <li><p><code>protected void 	processEvent(AWTEvent e)</code> -- 处理此文本组件上发生的事件</p></li>
+                                    <li><p><code>protected void 	processTextEvent(TextEvent e)</code> -- 处理发生在此文本组件上的文本事件</p></li>
+
+                                    <li class="group"><p><code>void 	addNotify()</code> -- 通过将此 Component 连接到一个本机屏幕资源，使其成为可显示的</p></li>
+                                    <li><p><code>void 	removeNotify()</code> -- 移除 TextComponent 的同位体</p></li>
+                                    <li><p><code>protected String 	paramString()</code> -- 返回表示此 TextComponent 状态的字符串</p></li>
+                                    <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此 TextComponent 关联的 AccessibleContext</p></li>
+                                </ol>
+                            </div>
+
+                            <div class="split-item">
+                                <pre class="brush: java;">
+public class TextField extends TextComponent {
+    /** 可访问性支持 */
+    protected class AccessibleAWTTextField extends AccessibleAWTTextComponent {}
+
+    public TextField() {} // 创建 0 列的文本框
+    public TextField(int columns) {}
+    public TextField(String text) {}
+    public TextField(String text, int columns) {}
+}
+</pre>
+                                <p><a href="docs/docs-java/api/java/awt/TextField.html" target="_blank">TextField</a> 是允许编辑单行文本的文本组件。</p>
+                                <p>每次用户在文本字段中键入一个键时，就有一个或更多键事件被发送到该文本字段。</p>
+                                <ol>
+                                    <li><p><code>void 	addActionListener(ActionListener l)</code> -- 添加指定的操作侦听器</p></li>
+                                    <li><p><code>void 	removeActionListener(ActionListener l)</code> -- 移除指定的操作侦听器</p></li>
+                                    <li><p><code>ActionListener[] 	getActionListeners()</code> -- 返回此文本字段上已注册的所有操作侦听器的数组</p></li>
+
+                                    <li class="group"><p><code>&lt;T extends EventListener> T[] 	getListeners(Class&lt;T> listenerType)</code> -- 返回当前已在此 TextField 上注册为 FooListener 的所有对象的数组</p></li>
+                                    <li><p><code>protected void 	processActionEvent(ActionEvent e)</code> -- 处理发生在此文本字段上的操作事件</p></li>
+                                    <li><p><code>protected void 	processEvent(AWTEvent e)</code> -- 处理此文本字段上的事件</p></li>
+
+                                    <li class="group"><p><code>void 	setText(String t)</code> -- 将此文本组件显示的文本设置为指定文本</p></li>
+                                    <li><p><code>Dimension 	getMinimumSize()</code> --  获取此文本字段的最小尺寸</p></li>
+                                    <li><p><code>Dimension 	getMinimumSize(int columns)</code> -- 获取具有指定列数的文本字段的最小尺寸</p></li>
+                                    <li><p><code>Dimension 	getPreferredSize()</code> -- 获取此文本字段的首选大小</p></li>
+                                    <li><p><code>Dimension 	getPreferredSize(int columns)</code> -- 获取具有指定列数的文本字段的首选大小</p></li>
+
+                                    <li class="group"><p><code>int 	getColumns()</code> -- 获取此文本字段中的列数</p></li>
+                                    <li><p><code>void 	setColumns(int columns)</code> -- 设置此文本字段中的列数</p></li>
+                                    <li><p><code>char 	getEchoChar()</code> -- 获取用于回显的字符</p></li>
+                                    <li><p><code>boolean 	echoCharIsSet()</code> -- 指示此文本字段是否有一个回显字符集</p></li>
+                                    <li><p><code>void 	setEchoChar(char c)</code> -- 设置此文本字段的回显字符</p></li>
+
+                                    <li class="group"><p><code>void 	addNotify()</code> -- 创建 TextField 的同位体</p></li>
+                                    <li><p><code>protected String 	paramString()</code> -- 返回表示此 TextField 状态的字符串</p></li>
+                                    <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此 TextField 关联的 AccessibleContext</p></li>
+                                </ol>
+                            </div>
+
+                            <div class="split-item">
+                                <pre class="brush: java;">
+public class TextArea extends TextComponent {
+    /** 可访问性支持 */
+    protected class AccessibleAWTTextArea extends AccessibleAWTTextComponent {}
+
+    /** 滚动条样式 */
+    public static final int SCROLLBARS_BOTH = 0;            // 显示垂直和水平滚动条
+    public static final int SCROLLBARS_VERTICAL_ONLY = 1;   // 显示垂直滚动条
+    public static final int SCROLLBARS_HORIZONTAL_ONLY = 2; // 显示水平滚动条
+    public static final int SCROLLBARS_NONE = 3;            // 不显示任何滚动条
+
+    public TextArea() {} // 默认滚动条样式为 SCROLLBARS_BOTH
+    public TextArea(int rows, int columns) {}
+    public TextArea(String text) {}
+    public TextArea(String text, int rows, int columns) {}
+    public TextArea(String text, int rows, int columns, int scrollbars) {}
+}
+</pre>
+                                <p><a href="docs/docs-java/api/java/awt/TextArea.html" target="_blank">TextArea</a> 是显示文本的多行区域。可以将它设置为允许编辑或只读。 </p>
+                                <ol>
+                                    <li><p><code>int 	getRows()</code> -- 返回此文本区的行数</p></li>
+                                    <li><p><code>void 	setRows(int rows)</code> -- 设置此文本区的行数</p></li>
+                                    <li><p><code>int 	getColumns()</code> -- 返回此文本区中的列数</p></li>
+                                    <li><p><code>void 	setColumns(int columns)</code> -- 设置此文本区的列数</p></li>
+
+                                    <li class="group"><p><code>Dimension 	getMinimumSize()</code> -- 确定此文本区的最小大小</p></li>
+                                    <li><p><code>Dimension 	getMinimumSize(int rows, int columns)</code> -- 确定具有指定行数和列数的文本区的最小大小</p></li>
+                                    <li><p><code>Dimension 	getPreferredSize()</code> -- 确定此文本区的首选大小</p></li>
+                                    <li><p><code>Dimension 	getPreferredSize(int rows, int columns)</code> -- 确定具有指定行数和列数的文本区的首选大小</p></li>
+
+                                    <li class="group"><p><code>void 	insert(String str, int pos)</code> -- 在此文本区的指定位置插入指定文本</p></li>
+                                    <li><p><code>void 	replaceRange(String str, int start, int end)</code> -- 用指定替换文本替换指定开始位置与结束位置之间的文本</p></li>
+
+                                    <li class="group"><p><code>void 	append(String str)</code> -- 将给定文本追加到文本区的当前文本</p></li>
+                                    <li><p><code>int 	getScrollbarVisibility()</code> -- 返回指示文本区使用何种滚动条的枚举值</p></li>
+
+                                    <li class="group"><p><code>void 	addNotify()</code> -- 创建 TextArea 的同位体</p></li>
+                                    <li><p><code>protected String 	paramString()</code> -- 返回表示此 TextArea 状态的字符串</p></li>
+                                    <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 返回与此 TextArea 相关的 AccessibleContext</p></li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Scrollbar extends Component implements Adjustable, Accessible {
+    /** 可访问性支持 */
+    protected class AccessibleAWTScrollBar extends AccessibleAWTComponent implements AccessibleValue {}
+
+    /** 方向 */
+    public static final int HORIZONTAL = 0;
+    public static final int VERTICAL   = 1;
+
+    public Scrollbar() {} // 纵向，初始值为 0, 可见量(滑块长度)为 10, 最小值为 0, 最大值为 100
+    public Scrollbar(int orientation) {}
+    public Scrollbar(int orientation, int value, int visible, int minimum, int maximum) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/Scrollbar.html" target="_blank">Scrollbar</a> 描述了一个滚动条，这是大家都很熟悉的用户界面对象。滚动条提供了一个允许用户在一定范围的值中进行选择的便捷方式。</p>
+                            <p>注：我们建议只对值的选择使用 Scrollbar(比如调节音量，类似 Android 中的 SeekBar)。如果想在容器中实现一个可滚动的组件，那么建议您使用 ScrollPane。如果使用 Scrollbar 来实现这一目的，那么可能会遇到绘制、键处理、大小调整和定位问题。 </p>
+                            <ol>
+                                <li><p><code>int 	getOrientation()</code> -- 返回此滚动条的方向</p></li>
+                                <li><p><code>void 	setOrientation(int orientation)</code> -- 设置此滚动条的方向</p></li>
+                                <li><p><code>int 	getValue()</code> -- 获取此滚动条的当前值</p></li>
+                                <li><p><code>void 	setValue(int newValue)</code> -- 将此滚动条的值设置为指定值</p></li>
+                                <li><p><code>int 	getVisibleAmount()</code> -- 获取此滚动条的可见量</p></li>
+                                <li><p><code>void 	setVisibleAmount(int newAmount)</code> -- 设置此滚动条的可见量</p></li>
+                                <li><p><code>int 	getMinimum()</code> -- 获取此滚动条的最小值</p></li>
+                                <li><p><code>void 	setMinimum(int newMinimum)</code> -- 设置此滚动条的最小值</p></li>
+                                <li><p><code>int 	getMaximum()</code> -- 获取此滚动条的最大值</p></li>
+                                <li><p><code>void 	setMaximum(int newMaximum)</code> -- 设置此滚动条的最大值</p></li>
+                                <li><p><code>void 	setValues(int value, int visible, int minimum, int maximum)</code> -- 设置此滚动条的四个属性值(参见构造方法)</p></li>
+
+                                <li class="group"><p><code>int 	getBlockIncrement()</code> -- 获取此滚动条的块增量(点击三角形滑块移动数量)</p></li>
+                                <li><p><code>void 	setBlockIncrement(int v)</code> -- 设置此滚动条的块增量</p></li>
+                                <li><p><code>int 	getUnitIncrement()</code> -- 获取此滚动条的单位增量(比如其值可以只为偶数)</p></li>
+                                <li><p><code>void 	setUnitIncrement(int v)</code> -- 设置此滚动条的单位增量</p></li>
+
+                                <li class="group"><p><code>boolean 	getValueIsAdjusting()</code> -- 如果该值作为用户执行动作的结果正处于更改过程中，则返回 true</p></li>
+                                <li><p><code>void 	setValueIsAdjusting(boolean b)</code> -- 设置 valueIsAdjusting 属性</p></li>
+
+                                <li class="group"><p><code>void 	addAdjustmentListener(AdjustmentListener l)</code> -- 添加指定的调整侦听器</p></li>
+                                <li><p><code>void 	removeAdjustmentListener(AdjustmentListener l)</code> -- 移除指定的调整侦听器</p></li>
+                                <li><p><code>AdjustmentListener[] 	getAdjustmentListeners()</code> -- 返回在此滚动条上所有已注册调整侦听器组成的数组</p></li>
+                                <li><p><code>&lt;T extends EventListener> T[] 	getListeners(Class&lt;T> listenerType)</code> -- 返回目前已在此 Scrollbar 上注册为 FooListener 的所有对象组成的数组</p></li>
+
+                                <li class="group"><p><code>protected void 	processAdjustmentEvent(AdjustmentEvent e)</code> -- 处理此滚动条上发生的调整事件</p></li>
+                                <li><p><code>protected void 	processEvent(AWTEvent e)</code> -- 处理在滚动条上发生的事件</p></li>
+
+                                <li class="group"><p><code>void 	addNotify()</code> -- 创建 Scrollbar 的同位体</p></li>
+                                <li><p><code>protected String 	paramString()</code> -- 返回表示此 Scrollbar 当前状态的字符串表示形式</p></li>
+                                <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此 Scrollbar 相关的 AccessibleContext</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Checkbox extends Component implements ItemSelectable, Accessible {
+    protected class AccessibleAWTCheckbox extends AccessibleAWTComponent implements ItemListener,
+                                AccessibleAction, AccessibleValue {}
+    public Checkbox() {}
+    public Checkbox(String label) {}
+    public Checkbox(String label, boolean state) {}
+    public Checkbox(String label, boolean state, CheckboxGroup group) {} // 加入一个 Group 变成单选框
+    public Checkbox(String label, CheckboxGroup group, boolean state) {} // 同上
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/Checkbox.html" target="_blank">Checkbox</a> 是复选框。一个可处于“开”(true) 或“关”(false) 状态的图形组件。单击复选框可将其状态从“开”更改为“关”，或从“关”更改为“开”。 </p>
+                            <p>作为选择，可使用 CheckboxGroup 类将一些复选框组成一组，作为单个对象来控制。在一个复选框组中，在任何给定时间，最多只能有一个按钮处于“开”状态。单击并打开一个复选框会强迫同组中其他原来处于打开状态的复选框变为“关”状态。 </p>
+                            <ol>
+                                <li><p><code>void 	addItemListener(ItemListener l)</code> -- 添加指定的项侦听器</p></li>
+                                <li><p><code>void 	removeItemListener(ItemListener l)</code> -- 移除此项侦听器</p></li>
+                                <li><p><code>ItemListener[] 	getItemListeners()</code> -- 返回已在此复选框上注册的所有项侦听器所组成的数组</p></li>
+                                <li><p><code>&lt;T extends EventListener> T[] 	getListeners(Class&lt;T> listenerType)</code> -- 返回目前已在此 Checkbox 上注册为 FooListener 的所有对象组成的数组</p></li>
+                                <li><p><code>protected void 	processEvent(AWTEvent e)</code> -- 处理关于此复选框的事件</p></li>
+                                <li><p><code>protected void 	processItemEvent(ItemEvent e)</code> -- 处理发生在此复选框上的项事件</p></li>
+
+                                <li class="group"><p><code>boolean 	getState()</code> -- 确定此复选框是状态</p></li>
+                                <li><p><code>void 	setState(boolean state)</code> -- 将此复选框的状态设置为指定状态</p></li>
+                                <li><p><code>CheckboxGroup 	getCheckboxGroup()</code> -- 确定此复选框的组</p></li>
+                                <li><p><code>void 	setCheckboxGroup(CheckboxGroup g)</code> -- 将此复选框的组设置为指定复选框组</p></li>
+                                <li><p><code>String 	getLabel()</code> -- 获取此复选框的标签</p></li>
+                                <li><p><code>void 	setLabel(String label)</code> -- 将此复选框的标签设置为字符串参数</p></li>
+
+                                <li class="group"><p><code>Object[] 	getSelectedObjects()</code> -- 返回包含复选框标签的数组 (length 1)，如果没有选定复选框，则返回 null</p></li>
+
+                                <li class="group"><p><code>void 	addNotify()</code> -- 创建 Checkbox 的同位体</p></li>
+                                <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此 Checkbox 相关的 AccessibleContext</p></li>
+                                <li><p><code>protected String 	paramString()</code> -- 返回表示此 Checkbox 的状态的字符串</p></li>
+
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Choice extends Component implements ItemSelectable, Accessible {
+    protected class AccessibleAWTChoice extends AccessibleAWTComponent implements AccessibleAction {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/Choice.html" target="_blank">Choice</a> 表示一个弹出式选择菜单。类似于 Android 中的 Spinner。 </p>
+                            <p>一些本机平台不支持任意调整 Choice 组件的大小，setSize()/getSize() 的行为受到这类限制的约束。</p>
+                            <ol>
+                                <li><p><code>void 	addItem(String item)</code> -- 将一个项添加到此 Choice 菜单中</p></li>
+                                <li><p><code>void 	add(String item)</code> -- 同上</p></li>
+                                <li><p><code>void 	insert(String item, int index)</code> -- 将菜单项插入此选择的指定位置上</p></li>
+                                <li><p><code>void 	remove(int position)</code> -- 从选择菜单的指定位置上移除一个项</p></li>
+                                <li><p><code>void 	remove(String item)</code> -- 移除 Choice 菜单中第一个出现的 item</p></li>
+                                <li><p><code>void 	removeAll()</code> -- 从选择菜单中移除所有的项</p></li>
+
+                                <li class="group"><p><code>void 	select(int pos)</code> -- 将此 Choice 菜单中的选定项设置为指定位置上的项</p></li>
+                                <li><p><code>void 	select(String str)</code> -- 将此 Choice 菜单中的选定项设置为其名称等于指定字符串的项</p></li>
+                                <li><p><code>int 	getSelectedIndex()</code> -- 返回当前选定项的索引</p></li>
+                                <li><p><code>String 	getSelectedItem()</code> -- 获取当前选择的字符串表示形式</p></li>
+                                <li><p><code>String 	getItem(int index)</code> -- 获取此 Choice 菜单中指定索引上的字符串</p></li>
+
+                                <li class="group"><p><code>int 	getItemCount()</code> -- 返回此 Choice 菜单中项的数量</p></li>
+                                <li><p><code>Object[] 	getSelectedObjects()</code> -- 返回包含当前选定项的数组（长度为 1）</p></li>
+
+                                <li class="group"><p><code>void 	addItemListener(ItemListener l)</code> -- 添加指定的项侦听器</p></li>
+                                <li><p><code>void 	removeItemListener(ItemListener l)</code> -- 移除指定的项侦听器</p></li>
+                                <li><p><code>ItemListener[] 	getItemListeners()</code> -- 返回已在此选择上注册的所有项侦听器组成的数组</p></li>
+                                <li><p><code>&lt;T extends EventListener> T[] 	getListeners(Class&lt;T> listenerType)</code> -- 返回目前已在此 Choice 上注册为 FooListener 的所有对象组成的数组</p></li>
+
+                                <li class="group"><p><code>protected void 	processEvent(AWTEvent e)</code> -- 处理关于此选择的事件</p></li>
+                                <li><p><code>protected void 	processItemEvent(ItemEvent e)</code> -- 处理发生在此 Choice 菜单上的项事件</p></li>
+
+                                <li class="group"><p><code>void 	addNotify()</code> -- 创建 Choice 的同位体</p></li>
+                                <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此 Choice 相关的 AccessibleContext</p></li>
+                                <li><p><code>protected String 	paramString()</code> -- 返回表示此 Choice 菜单的状态的字符串</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class List extends Component implements ItemSelectable, Accessible {
+    protected class AccessibleAWTList extends AccessibleAWTComponent implements AccessibleSelection,
+                                ItemListener, ActionListener {}
+
+    public List() {} // 0 行，不允许多选
+    public List(int rows) {}
+    public List(int rows, boolean multipleMode) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/List.html" target="_blank">List</a> 组件为用户提供了一个可滚动的文本项列表。可设置此 list，使其允许用户进行单项或多项选择。</p>
+                            <p>如果 List 允许进行多项选择，则单击已选中的项时，将取消选中该项。</p>
+                            <ol>
+                                <li><p><code>void 	add(String item)</code> -- 向滚动列表的末尾添加指定的项</p></li>
+                                <li><p><code>void 	add(String item, int index)</code> -- 向滚动列表中索引指示的位置添加指定的项</p></li>
+                                <li><p><code>void 	replaceItem(String newValue, int index)</code> -- 使用新字符串替换滚动列表中指定索引处的项</p></li>
+                                <li><p><code>void 	remove(int position)</code> -- 从此滚动列表中移除指定位置处的项</p></li>
+                                <li><p><code>void 	remove(String item)</code> -- 从列表中移除项的第一次出现</p></li>
+                                <li><p><code>void 	removeAll()</code> -- 从此列表中移除所有项</p></li>
+
+                                <li class="group"><p><code>void 	select(int index)</code> -- 选择滚动列表中指定索引处的项</p></li>
+                                <li><p><code>void 	deselect(int index)</code> -- 取消选择指定索引处的项</p></li>
+                                <li><p><code>String 	getSelectedItem()</code> -- 获取此滚动列表中选中的项</p></li>
+                                <li><p><code>String[] 	getSelectedItems()</code> -- 获取此滚动列表中选中的项</p></li>
+                                <li><p><code>int 	getSelectedIndex()</code> -- 获取列表中选中项的索引</p></li>
+                                <li><p><code>int[] 	getSelectedIndexes()</code> -- 获取列表中选中的索引</p></li>
+                                <li><p><code>Object[] 	getSelectedObjects()</code> -- 获取对象数组中此滚动列表的选中项</p></li>
+                                <li><p><code>boolean 	isIndexSelected(int index)</code> -- 确定是否已选中此滚动列表中的指定项</p></li>
+
+                                <li class="group"><p><code>boolean 	isMultipleMode()</code> -- 确定此列表是否允许进行多项选择</p></li>
+                                <li><p><code>void 	setMultipleMode(boolean b)</code> -- 设置是否允许进行多项选择</p></li>
+
+                                <li class="group"><p><code>int 	getItemCount()</code> -- 获取列表中的项数</p></li>
+                                <li><p><code>String 	getItem(int index)</code> -- 获取与指定索引关联的项</p></li>
+                                <li><p><code>String[] 	getItems()</code> -- 获取列表中的项</p></li>
+                                <li><p><code>void 	makeVisible(int index)</code> -- 使指定索引处的项可视</p></li>
+                                <li><p><code>int 	getVisibleIndex()</code> -- 获取上次由 makeVisible 方法使其可视的项的索引</p></li>
+                                <li><p><code>int 	getRows()</code> -- 获取此列表中的可视行数</p></li>
+
+                                <li class="group"><p><code>void 	addActionListener(ActionListener l)</code> -- 添加指定的动作侦听器以从此列表接收动作事件</p></li>
+                                <li><p><code>void 	removeActionListener(ActionListener l)</code> -- 移除指定的动作侦听器</p></li>
+                                <li><p><code>ActionListener[] 	getActionListeners()</code> -- 返回已在此列表上注册的所有动作侦听器的数组</p></li>
+                                <li><p><code>void 	addItemListener(ItemListener l)</code> -- 添加指定的项侦听器以接收此列表的项事件</p></li>
+                                <li><p><code>void 	removeItemListener(ItemListener l)</code> -- 移除指定的项侦听器</p></li>
+                                <li><p><code>ItemListener[] 	getItemListeners()</code> -- 返回已在此列表上注册的所有项侦听器的数组</p></li>
+                                <li><p><code>&lt;T extends EventListener> T[] 	getListeners(Class&lt;T> listenerType)</code> -- 返回目前已在此 List 上注册为 FooListener 的所有对象的数组</p></li>
+
+                                <li class="group"><p><code>protected void 	processActionEvent(ActionEvent e)</code> -- 处理发生在此列表上的动作事件</p></li>
+                                <li><p><code>protected void 	processEvent(AWTEvent e)</code> -- 处理此滚动列表的进程事件</p></li>
+                                <li><p><code>protected void 	processItemEvent(ItemEvent e)</code> -- 处理发生在此列表上的项事件</p></li>
+
+                                <li class="group"><p><code>Dimension 	getMinimumSize()</code> -- 确定此滚动列表的最小大小</p></li>
+                                <li><p><code>Dimension 	getMinimumSize(int rows)</code> -- 获取具有指定行数的列表的最少维数</p></li>
+                                <li><p><code>Dimension 	getPreferredSize()</code> -- 获取此滚动列表的首选大小</p></li>
+                                <li><p><code>Dimension 	getPreferredSize(int rows)</code> -- 获取具有指定行数的列表的首选维数</p></li>
+
+                                <li class="group"><p><code>void 	addNotify()</code> -- 创建列表的同位体</p></li>
+                                <li><p><code>void 	removeNotify()</code> -- 移除此列表的同位体</p></li>
+                                <li><p><code>protected String 	paramString()</code> -- 返回表示此滚动列表状态的参数字符串</p></li>
+                                <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此 List 关联的 AccessibleContext</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Canvas extends Component implements Accessible {
+    protected class AccessibleAWTCanvas extends AccessibleAWTComponent {}
+
+    public Canvas() {}
+    public Canvas(GraphicsConfiguration config) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/Canvas.html" target="_blank">Canvas</a> 组件表示屏幕上一个空白矩形区域，应用程序可以在该区域内绘图，或者可以从该区域捕获用户的输入事件。 </p>
+                            <p>应用程序必须为 Canvas 类创建子类，以获得有用的功能（如创建自定义组件）。必须重写 paint 方法，以便在 canvas 上执行自定义图形。</p>
+                            <ol>
+                                <li><p><code>void 	paint(Graphics g)</code> -- 绘制此 canvas</p></li>
+                                <li><p><code>void 	update(Graphics g)</code> -- 更新此 canvas</p></li>
+
+                                <li class="group"><p><code>void 	createBufferStrategy(int numBuffers)</code> -- 创建一个新的策略，用于对此组件的多缓冲</p></li>
+                                <li><p><code>void 	createBufferStrategy(int numBuffers, BufferCapabilities caps)</code> -- 创建一个新的策略，使用所需的缓冲区能力对此组件进行多缓冲</p></li>
+                                <li><p><code>BufferStrategy 	getBufferStrategy()</code> -- 返回由此组件使用的多缓冲策略</p></li>
+
+                                <li class="group"><p><code>void 	addNotify()</code> -- 创建 canvas 的同位体</p></li>
+                                <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获取与此 Canvas 相关的 AccessibleContext</p></li>
+                            </ol>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-awt-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">...</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api/java/awt/.html" target="_blank"></a></p>
                         </div>
                     </div>
                 </div>
