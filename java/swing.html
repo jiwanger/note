@@ -64,10 +64,10 @@
 				<div class="panel panel-default"
 					style="position: fixed; top: 70px; width: 260px;  overflow: auto; float: left;">
 					<div class="panel-heading">
-						<h3 class="panel-title">AWT & SWING</h3>
+						<h3 class="panel-title">Swing & JavaFX</h3>
 					</div>
 					<div class="list-group">
-						<a href="#javax-swing-intro" class="list-group-item">AWT & SWING</a>
+						<a href="#javax-swing-intro" class="list-group-item">Awt & Swing & SWT & JavaFX</a>
 						<a class="list-group-item active dropdown" data-toggle="collapse"
 							data-parent="#accordion" href="#java-awt" aria-expanded="true"  style="border-top: 1px solid #DDDDDD;">
 							<code>java.awt</code><span class="caret pull-right" style="margin-top: 5px;"></span>
@@ -88,12 +88,26 @@
                         </a>
                         <div id="javax-swing" class="panel-collapse collapse in"
                              role="tabpanel">
-                            <a href="#javax-swing-JFrame" class="list-group-item">JFrame</a>
+                            <a href="#javax-swing-JFrame" class="list-group-item">JFrame, JWindow, JDialog</a>
                             <a href="#javax-swing-LayoutManager" class="list-group-item">LayoutManager 及实现类(SWING)</a>
-                            <a href="#javax-swing-MenuComponent" class="list-group-item">MenuComponent 子类(SWING)</a>
-                            <a href="#javax-swing-Container" class="list-group-item">Container 子类(SWING)</a>
-                            <a href="#javax-swing-Component" class="list-group-item">Component 子类(SWING)</a>
+                            <a href="#javax-swing-JComponent" class="list-group-item">JComponent 及子类</a>
                             <a href="#" class="list-group-item">...</a>
+                        </div>
+                        <a class="list-group-item active dropdown" data-toggle="collapse" data-parent="#accordion" href="#swt-framework" aria-expanded="true"
+                            style="border-top: 1px solid #DDDDDD;">
+                            <b>SWT</b><span class="caret pull-right" style="margin-top: 5px;"></span>
+                        </a>
+                        <div id="swt-framework" class="panel-collapse collapse" role="tabpanel">
+                            <a href="#swt-base" class="list-group-item">SWT 基础</a>
+                            <a href="#swt-" class="list-group-item">...</a>
+                        </div>
+                        <a class="list-group-item active dropup" data-toggle="collapse" data-parent="#accordion" href="#javafx-framework" aria-expanded="true"
+                           style="border-top: 1px solid #DDDDDD;">
+                            <b>Java-FX</b><span class="caret pull-right" style="margin-top: 5px;"></span>
+                        </a>
+                        <div id="javafx-framework" class="panel-collapse collapse in" role="tabpanel">
+                            <a href="#javafx-base" class="list-group-item">Java-FX 基础</a>
+                            <a href="#swt-" class="list-group-item">...</a>
                         </div>
 						<a href="#java-class-loader" class="list-group-item">...</a>
 					</div>
@@ -112,15 +126,532 @@
 				<a class="offset" id="javax-swing-intro"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">AWT & SWING</h3>
+						<h3 class="panel-title">Awt & Swing & SWT & JavaFX</h3>
 					</div>
 					<div class="panel-body">
+                        <div class="sub-item">
                         <p><b>AWT</b> 是 Abstract Window ToolKit (抽象窗口工具包)的缩写，这个工具包提供了一套与本地图形界面进行交互的接口。AWT 中的图形函数与操作系统所提供的图形函数之间有着一一对应的关系，我们把它称为peers。 也就是说，当我们利用 AWT 来构件图形用户界面的时候，我们实际上是在利用操作系统所提供的图形库。由于不同操作系统的图形库所提供的功能是不一样的，在一个平台上存在的功能在另外一个平台上则可能不存在。为了实现 Java 语言所宣称的"一次编译，到处运行"的概念，AWT 不得不通过牺牲功能来实现其平台无关性，也就是说，AWT 所提供的图形功能是各种通用型操作系统所提供的图形功能的交集。由于 AWT 是依靠本地方法来实现其功能的，我们通常把 AWT 控件称为重量级控件。 </p>
-                        <p><b>Swing</b> 是在 AWT 的基础上构建的一套新的图形界面系统，它提供了 AWT 所能够提供的所有功能，并且用纯粹的 Java 代码对 AWT 的功能进行了大幅度的扩充。例如说并不是所有的操作系统都提供了对树形控件的支持， Swing 利用了 AWT 中所提供的基本作图方法对树形控件进行模拟。由于 Swing 控件是用 100% 的 Java 代码来实现的，因此在一个平台上设计的树形控件可以在其他平台上使用。由于在 Swing 中没有使用本地方法来实现图形功能，我们通常把 Swing 控件称为轻量级控件。 </p>
                         <p><b>AWT</b> 是抽象窗口组件工具包，是 Java 最早的用于编写图形节目应用程序的开发包。</p>
-                        <p><b>Swing</b> 是为了解决 AWT 存在的问题而新开发的包，它以 AWT 为基础的。</p>
                         <p><b>AWT</b> 和 <b>Swing</b> 之间的基本区别：AWT 是基于本地方法的 C/C++ 程序，其运行速度比较快；Swing 是基于 AWT 的 Java 程序，其运行速度比较慢。对于一个嵌入式应用来说，目标平台的硬件资源往往非常有限，而应用程序的运行速度又是项目中至关重要的因素。在这种矛盾的情况下，简单而高效的 AWT 当然成了嵌入式 Java 的第一选择。而在普通的基于 PC 或者是工作站的标准 Java 应用中，硬件资源对应用程序所造成的限制往往不是项目中的关键因素，所以在标准版的 Java 中则提倡使用 Swing， 也就是通过牺牲速度来实现应用程序的功能。 </p>
-					</div>
+                        </div>
+                        <div class="sub-item">
+                            <p><b>Swing</b> 是在 AWT 的基础上构建的一套新的图形界面系统，它提供了 AWT 所能够提供的所有功能，并且用纯粹的 Java 代码对 AWT 的功能进行了大幅度的扩充。例如说并不是所有的操作系统都提供了对树形控件的支持， Swing 利用了 AWT 中所提供的基本作图方法对树形控件进行模拟。由于 Swing 控件是用 100% 的 Java 代码来实现的，因此在一个平台上设计的树形控件可以在其他平台上使用。由于在 Swing 中没有使用本地方法来实现图形功能，我们通常把 Swing 控件称为轻量级控件。 </p>
+                            <p><b>Swing</b> 是为了解决 AWT 存在的问题而新开发的包，它以 AWT 为基础的。</p>
+                        </div>
+                        <div class="sub-item">
+                            <p><b>SWT</b> 是 Standard Widget Toolkit (标准部件工具包)的缩写，是 IBM 创建一个为 Java 设计提供了高效的部件工具包。与 AWT/Swing 有相似的用处，著名的开源 eclipse 就是用 SWT 开发的。</p>
+                            <p><b>SWT</b> 的构建者从 AWT 和 Swing 实现中学习了很多经验，他们试图构建一个集二者优点于一体而没有二者的缺点的系统。</p>
+                            <p><b>在大部分情况中，决定都是在 Swing 与结合了 JFace 的 SWT 之间进行的</b>。通常来说，每个工具包都非常完整且功能强大，足以构建功能完善的 GUI，但是 Swing 通常要比单独使用 SWT（不使用 JFace 时）更好。Swing 具有内嵌于 Java 技术的优点，是完全可移植的，无可争议地是一种更好的架构。Swing 也具有高级图形应用程序所需要的优点。SWT 具有可以作为本地应用程序实现的优点，这可以提高性能，并利用基于 SWT 的 GUI 来实现本地兼容性。 </p>
+                            <p>如果只为一种平台来开发系统，那么 SWT 就具有主机兼容性方面的优点，包括与主机特性的集成，例如在 Windows 上对 ActiveX 控件的使用。</p>
+                        </div>
+                        <div class="sub-item">
+                            <p><b>JavaFx</b> 是 Java 中的最新的界面库，Oracle 开发的。有两种编写模式，一种是纯代码编写，一种是 CODE+FXML。</p>
+                            <p><b>JavaFX</b> 是 Java 的下一代图形用户界面工具包。JavaFX 是一组图形和媒体 API，我们可以用它们来创建和部署富客户端应用程序。</p>
+                            <p><b>JavaFX</b> 允许开发人员快速构建丰富的跨平台应用程序。JavaFX 通过硬件加速图形支持现代 GPU。</p>
+                            <p><b>JavaFX</b> 允许开发人员在单个编程接口中组合图形，动画和 UI 控件。</p>
+                            <p><b>JavaFX</b> 技术有着良好的前景，包括可以直接调用 Java API 的能力。因为 JavaFX Script 是静态类型，它同样具有结构化代码、重用性和封装性，如包、类、继承和单独编译和发布单元，这些特性使得使用 JavaFX 技术创建和管理大型程序变为可能。</p>
+                        </div>
+                        <div class="sub-item">
+                            <p><b>SWT 、AWT 、SWING 和 JAVAFX 优劣势比较:</b></p>
+                            <table class="table table-bordered table-responsive">
+                                <thead>
+                                <tr>
+                                    <th>&nbsp;</th>
+                                    <th>Awt</th>
+                                    <th>Swing</th>
+                                    <th>SWT</th>
+                                    <th>JavaFx</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td >优势</td>
+                                    <td >1. 运行速度快</td>
+                                    <td >1. 多平台</td>
+                                    <td >1. 介于Awt和Swing之间</td>
+                                    <td >1. 支持控件多</td>
+                                </tr>
+
+                                <tr>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                    <td >2. 稳定</td>
+                                    <td >&nbsp;</td>
+                                    <td >2. 默认控件漂亮</td>
+                                </tr>
+
+                                <tr>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                    <td >3. 编写接口简洁</td>
+                                </tr>
+
+                                <tr>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                    <td >4. 开发效率高</td>
+                                </tr>
+                                </tbody>
+                                <tbody>
+                                <tr>
+                                    <td >劣势</td>
+                                    <td >1. 夸平台效果不好</td>
+                                    <td >1. 运行效率低</td>
+                                    <td >1. 介于Awt和Swing之间</td>
+                                    <td >1. 运行效率一般</td>
+                                </tr>
+
+                                <tr>
+                                    <td >&nbsp;</td>
+                                    <td >2. 开发效率低</td>
+                                    <td >2. 开发效率不高</td>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                </tr>
+
+                                <tr>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                    <td >3. 接口繁琐</td>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                </tr>
+
+                                <tr>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                    <td >4. 默认主题界面不美观</td>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                </tr>
+
+                                <tr>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                    <td >5. 精通耗时长</td>
+                                    <td >&nbsp;</td>
+                                    <td >&nbsp;</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <p><b>SWT 、AWT 和 SWING 特性的比较:</b></p>
+                            <table class="table table-bordered table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th>功能/角色/外表</th>
+                                        <th>AWT</th>
+                                        <th>Swing</th>
+                                        <th>SWT（风格）</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>显示静态文本</td>
+                                        <td>Label</td>
+                                        <td>JLabel</td>
+                                        <td>Label, CLabel</td>
+                                    </tr>
+                                    <tr>
+                                        <td>显示多行静态文本</td>
+                                        <td>Multiple Labels</td>
+                                        <td>具有 HTML 内容的 Multiple JLabels 或 JLabel</td>
+                                        <td>具有新行的 Multiple Labels 或 Label</td>
+                                    </tr>
+                                    <tr>
+                                        <td>显示多行格式化静态文本</td>
+                                        <td>具有不同字体的 Multiple Labels</td>
+                                        <td>具有 HTML 内容的 JLabel</td>
+                                        <td>具有不同字体的 Multiple Labels</td>
+                                    </tr>
+                                    <tr>
+                                        <td>单行文本输入</td>
+                                        <td>TextField</td>
+                                        <td>JTextField</td>
+                                        <td>Text(SWT.SINGLE)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>多行文本输入</td>
+                                        <td>TextArea</td>
+                                        <td>JTextArea</td>
+                                        <td>Text(SWT.MULTI)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>显示图像</td>
+                                        <td>N/A</td>
+                                        <td>JLabel</td>
+                                        <td>Label</td>
+                                    </tr>
+                                    <tr>
+                                        <td>显示文本和图像</td>
+                                        <td>N/A</td>
+                                        <td>JLabel</td>
+                                        <td>CLabel</td>
+                                    </tr>
+                                    <tr>
+                                        <td>提示弹出帮助</td>
+                                        <td>N/A</td>
+                                        <td>组件的 setToolTip，JToolTip 子类</td>
+                                        <td>控件的 setToolTip</td>
+                                    </tr>
+                                    <tr>
+                                        <td>风格化的文本输入</td>
+                                        <td>N/A</td>
+                                        <td>JEditorPane</td>
+                                        <td>StyledText</td>
+                                    </tr>
+                                    <tr>
+                                        <td>从条目列表中进行选择</td>
+                                        <td>List</td>
+                                        <td>JList</td>
+                                        <td>List</td>
+                                    </tr>
+                                    <tr>
+                                        <td>简单按下具有文本的按钮</td>
+                                        <td>Button</td>
+                                        <td>JButton</td>
+                                        <td>Button(SWT.PUSH)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>简单按下具有文本或图像的按钮</td>
+                                        <td>N/A</td>
+                                        <td>JButton</td>
+                                        <td>Button(SWT.PUSH)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>绘图区域；可能用于定制控件</td>
+                                        <td>Canvas</td>
+                                        <td>JPanel</td>
+                                        <td>Canvas</td>
+                                    </tr>
+                                    <tr>
+                                        <td>选中/取消复选框</td>
+                                        <td>CheckBox</td>
+                                        <td>JCheckBox</td>
+                                        <td>Button(SWT.CHECK)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>单选按钮选择</td>
+                                        <td>CheckBoxGroup</td>
+                                        <td>ButtonGroup 和 Menu</td>
+                                        <td>Group 和 Menu</td>
+                                    </tr>
+                                    <tr>
+                                        <td>从一个下拉列表中选择</td>
+                                        <td>Choice</td>
+                                        <td>JComboBox</td>
+                                        <td>Combo、CCombo</td>
+                                    </tr>
+                                    <tr>
+                                        <td>输入文本或从下拉列表中选择</td>
+                                        <td>N/A</td>
+                                        <td>JComboBox</td>
+                                        <td>Combo、CCombo</td>
+                                    </tr>
+                                    <tr>
+                                        <td>可滚动区域</td>
+                                        <td>ScrollPane</td>
+                                        <td>JScrollPane</td>
+                                        <td>创建 Scrollable 子类</td>
+                                    </tr>
+                                    <tr>
+                                        <td>顶层窗口</td>
+                                        <td>Dialog、Frame、Window</td>
+                                        <td>JDialog、JFrame、JWindow</td>
+                                        <td>具有不同风格的 Shell</td>
+                                    </tr>
+                                    <tr>
+                                        <td>通用窗口</td>
+                                        <td>Window</td>
+                                        <td>JWindow</td>
+                                        <td>Shell</td>
+                                    </tr>
+                                    <tr>
+                                        <td>框架窗口</td>
+                                        <td>Frame</td>
+                                        <td>JFrame</td>
+                                        <td>Shell(SWT.SHELL_TRIM)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>对话框窗口</td>
+                                        <td>Dialog</td>
+                                        <td>JDialog</td>
+                                        <td>Shell(SWT.DIALOG_TRIM)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>菜单</td>
+                                        <td>Menu</td>
+                                        <td>JMenu</td>
+                                        <td>Menu</td>
+                                    </tr>
+                                    <tr>
+                                        <td>MenuItem</td>
+                                        <td>MenuItem</td>
+                                        <td>JMenuItem</td>
+                                        <td>MenuItem</td>
+                                    </tr>
+                                    <tr>
+                                        <td>菜单快捷键</td>
+                                        <td>通用击键</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>依赖于主机的快捷键</td>
+                                    </tr>
+                                    <tr>
+                                        <td>弹出菜单</td>
+                                        <td>PopupMenu</td>
+                                        <td>JPopupMenu</td>
+                                        <td>Menu(SWT.POPUP)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>菜单条</td>
+                                        <td>MenuBar</td>
+                                        <td>JMenuBar</td>
+                                        <td>Menu(SWT.BAR)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>显示插入符号</td>
+                                        <td>N/A</td>
+                                        <td>Caret</td>
+                                        <td>Caret</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Web 浏览器</td>
+                                        <td>N/A</td>
+                                        <td>JTextPane（HTML 3.2）</td>
+                                        <td>Browser（通过嵌入式浏览器）</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Web 页面中的嵌入式控件</td>
+                                        <td>Applet</td>
+                                        <td>JApplet</td>
+                                        <td>主机控件（例如 OLE）</td>
+                                    </tr>
+                                    <tr>
+                                        <td>其他控件的通用容器</td>
+                                        <td>Panel</td>
+                                        <td>JPanel</td>
+                                        <td>Composite</td>
+                                    </tr>
+                                    <tr>
+                                        <td>其他控件的有边界通用容器</td>
+                                        <td>Panel（如果是手工画的）</td>
+                                        <td>具有 Border 的 JPanel</td>
+                                        <td>Composite(SWT.BORDER)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>其他控件的有边界和标题的通用容器</td>
+                                        <td>N/A</td>
+                                        <td>具有 TitledBorder 的 JPanel</td>
+                                        <td>Group</td>
+                                    </tr>
+                                    <tr>
+                                        <td>单选按钮（一个被选中）</td>
+                                        <td>Checkbox</td>
+                                        <td>JRadioButton</td>
+                                        <td>Button(SWT.RADIO)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>单选按钮的控件扩充</td>
+                                        <td>CheckboxGroup</td>
+                                        <td>RadioButtonGroup</td>
+                                        <td>Group</td>
+                                    </tr>
+                                    <tr>
+                                        <td>箭头按钮</td>
+                                        <td>N/A</td>
+                                        <td>具有图像的 JButton</td>
+                                        <td>Button(SWT.ARROW)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>支持文本显示方向</td>
+                                        <td>通过 ComponentOrientation</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>很多组件都可以支持这种风格</td>
+                                    </tr>
+                                    <tr>
+                                        <td>焦点切换</td>
+                                        <td>Policy 和 Manager 对象</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>下一个控件</td>
+                                    </tr>
+                                    <tr>
+                                        <td>定制对话框</td>
+                                        <td>Dialog 子类</td>
+                                        <td>JDialog 子类</td>
+                                        <td>Dialog 子类</td>
+                                    </tr>
+                                    <tr>
+                                        <td>访问系统事件</td>
+                                        <td>EventQueue 服务</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>Display 服务（不如 AWT 健壮）</td>
+                                    </tr>
+                                    <tr>
+                                        <td>系统访问对话框</td>
+                                        <td>FileDialog</td>
+                                        <td>JColorChooser、JFileChooser</td>
+                                        <td>ColorDialog、DirectoryDialog、FileDialog、FontDialog、PrintDialog</td>
+                                    </tr>
+                                    <tr>
+                                        <td>显示简单消息对话框</td>
+                                        <td>N/A（必须是 Dialog 子类）</td>
+                                        <td>JOptionPane 静态方法</td>
+                                        <td>具有很多风格的 MessageBox</td>
+                                    </tr>
+                                    <tr>
+                                        <td>显示简单提示对话框</td>
+                                        <td>N/A（必须是 Dialog 子类）</td>
+                                        <td>JOptionPane 静态方法</td>
+                                        <td>N/A（JFace 中用来实现这种功能的子类）</td>
+                                    </tr>
+                                    <tr>
+                                        <td>布局管理器</td>
+                                        <td>BorderLayout、CardLayout、FlowLayout、GridLayout、GridBagLayout</td>
+                                        <td>AWT 加上 BoxLayout、CenterLayout、SpringLayout</td>
+                                        <td>FillLayout、FormLayout、GridLayout、RowLayout、StackLayout</td>
+                                    </tr>
+                                    <tr>
+                                        <td>基本的绘图控件</td>
+                                        <td>Canvas</td>
+                                        <td>JPanel</td>
+                                        <td>Canvas</td>
+                                    </tr>
+                                    <tr>
+                                        <td>基本绘图</td>
+                                        <td>Graphics 和 Graphics2D 对象 —— 基本形状和文本，任意 Shapes 和 Strokes、Bezier 以及文件</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>GC 对象 —— 基本形状和文本</td>
+                                    </tr>
+                                    <tr>
+                                        <td>绘图转换</td>
+                                        <td>Affine，合成</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>N/A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>离屏绘图（Off screen drawing）</td>
+                                        <td>BufferedImage、drawImage</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>Image、drawImage</td>
+                                    </tr>
+                                    <tr>
+                                        <td>双缓冲区</td>
+                                        <td>手工</td>
+                                        <td>自动或手工</td>
+                                        <td>除非由主机控件提供，否则就是手工</td>
+                                    </tr>
+                                    <tr>
+                                        <td>打印</td>
+                                        <td>PrintJob 和 PrintGraphics</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>向 Printer 设备绘图</td>
+                                    </tr>
+                                    <tr>
+                                        <td>定制颜色</td>
+                                        <td>Color</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>Color</td>
+                                    </tr>
+                                    <tr>
+                                        <td>定制字体</td>
+                                        <td>Font、FontMetrics</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>Font</td>
+                                    </tr>
+                                    <tr>
+                                        <td>光标选择</td>
+                                        <td>Cursor</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>Cursor/td>
+                                    </tr>
+                                    <tr>
+                                        <td>图像特性</td>
+                                        <td>从文件中加载，动态创建，可扩充地编辑</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>从文件中加载，动态创建，基本编辑</td>
+                                    </tr>
+                                    <tr>
+                                        <td>输入自动化</td>
+                                        <td>Robot</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>N/A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>显示工具条</td>
+                                        <td>N/A</td>
+                                        <td>JToolBar</td>
+                                        <td>ToolBar、CoolBar</td>
+                                    </tr>
+                                    <tr>
+                                        <td>显示进度条</td>
+                                        <td>N/A</td>
+                                        <td>JProgressBar</td>
+                                        <td>ProgressBar</td>
+                                    </tr>
+                                    <tr>
+                                        <td>将空间划分成区域</td>
+                                        <td>N/A</td>
+                                        <td>JSplitPane</td>
+                                        <td>Sash 或 SashForm</td>
+                                    </tr>
+                                    <tr>
+                                        <td>显示一个分标签页的区域</td>
+                                        <td>N/A</td>
+                                        <td>JTabbedPane</td>
+                                        <td>TabFolder、CTabFolder</td>
+                                    </tr>
+                                    <tr>
+                                        <td>显示制表信息</td>
+                                        <td>N/A</td>
+                                        <td>JTable</td>
+                                        <td>Table</td>
+                                    </tr>
+                                    <tr>
+                                        <td>格式化表的列</td>
+                                        <td>N/A</td>
+                                        <td>TableColumn</td>
+                                        <td>TableColumn</td>
+                                    </tr>
+                                    <tr>
+                                        <td>显示层次化信息</td>
+                                        <td>N/A</td>
+                                        <td>JTree</td>
+                                        <td>Tree</td>
+                                    </tr>
+                                    <tr>
+                                        <td>从一定范围的值中进行选择</td>
+                                        <td>N/A</td>
+                                        <td>JSlider</td>
+                                        <td>Slider</td>
+                                    </tr>
+                                    <tr>
+                                        <td>从一组离散范围的值中进行选择</td>
+                                        <td>N/A</td>
+                                        <td>JSpinner</td>
+                                        <td>Scale</td>
+                                    </tr>
+                                    <tr>
+                                        <td>对于基本显示的访问</td>
+                                        <td>Toolkit、GraphicsConfiguration、GraphicsDevice</td>
+                                        <td>与 AWT 相同</td>
+                                        <td>Display</td>
+                                    </tr>
+                                    <tr>
+                                        <td>将条目添加到系统托盘（system tray）中</td>
+                                        <td>N/A</td>
+                                        <td>N/A</td>
+                                        <td>Tray</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4"><strong>关键</strong>：N/A —— 不适用。在很多情况中，这种特性都可以通过创建定制控件或控件容器或利用其他定制编程来实现，不过实现的难度会有所不同。</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
 				</div>
 				<!-- item over -->
 
@@ -186,8 +717,8 @@ public interface MenuContainer {
                                 <li><p><code>void 	setTitle(String title)</code> -- 将此窗体的标题设置为指定的字符串</p></li>
                                 <li><p><code>boolean 	isResizable()</code> -- 指示此窗体是否可由用户调整大小</p></li>
                                 <li><p><code>void 	setResizable(boolean resizable)</code> -- 设置此窗体是否可由用户调整大小</p></li>
+                                <li><p><code>void 	setUndecorated(boolean undecorated)</code> -- 禁用/启用窗体的装饰(true 将不显示窗口，关闭，最大化，最小化将不可见)</p></li>
                                 <li><p><code>boolean 	isUndecorated()</code> -- 指示此窗体是否未装饰</p></li>
-                                <li><p><code>void 	setUndecorated(boolean undecorated)</code> -- 禁用或启用此窗体的装饰</p></li>
                                 <li><p><code>void 	addNotify()</code> -- 通过将此窗体连接到本机屏幕资源，使其成为可显示的</p></li>
                                 <li><p><code>void 	removeNotify()</code> -- 通过移除与本机屏幕资源的连接，将此窗体设置为不可显示的</p></li>
 
@@ -349,7 +880,7 @@ public class Container extends Component {
                             <ol>
                                 <li><p><code>Component 	add(Component comp)</code> -- 将指定组件追加到此容器的尾部</p></li>
                                 <li><p><code>Component 	add(Component comp, int index)</code> -- 将指定组件添加到此容器的给定位置上</p></li>
-                                <li><p><code>void 	add(Component comp, Object constraints)</code> -- 将指定的组件添加到此容器的尾部</p></li>
+                                <li><p><code>void 	add(Component comp, Object constraints)</code> -- 将指定的组件按约束条件添加到此容器(不同的 LayoutManager 使用不同的约束类型，约束条件参照下面的 LayoutManager)</p></li>
                                 <li><p><code>void 	add(Component comp, Object constraints, int index)</code> -- 使用指定约束，将指定组件添加到此容器的指定索引所在的位置上</p></li>
                                 <li><p><code>Component 	add(String name, Component comp)</code> -- 将指定组件添加到此容器中</p></li>
                                 <li><p><code>protected void 	addImpl(Component comp, Object constraints, int index)</code> -- 将指定组件添加到此容器的指定索引所在的位置上</p></li>
@@ -1885,11 +2416,11 @@ public class JFrame extends Frame implements WindowConstants, Accessible, RootPa
     /** 可访问性支持 */
     protected class AccessibleJFrame extends AccessibleAWTFrame {}
 
-    public static final int EXIT_ON_CLOSE = 3;
+    public static final int EXIT_ON_CLOSE = 3; // 退出应用程序后的默认窗口关闭操作
 
-    protected JRootPane rootPane;
-    protected boolean rootPaneCheckingEnabled = false;
-    protected AccessibleContext accessibleContext = null;
+    protected JRootPane rootPane; // JRootPane 实例管理此窗体的 contentPane 和可选的 menuBar
+    protected boolean rootPaneCheckingEnabled = false; // 是否 对 add 和 setLayout 的调用转发到 contentPane
+    protected AccessibleContext accessibleContext = null; // 可访问的上下文属性
 
     public JFrame() {}
     public JFrame(GraphicsConfiguration gc) {}
@@ -1897,25 +2428,97 @@ public class JFrame extends Frame implements WindowConstants, Accessible, RootPa
     public JFrame(String title, GraphicsConfiguration gc) {}
 }
 
+/** 点击关闭按钮的默认操作 */
 public interface WindowConstants {
-    public static final int DO_NOTHING_ON_CLOSE = 0;
-    public static final int HIDE_ON_CLOSE = 1;
-    public static final int DISPOSE_ON_CLOSE = 2;
-    public static final int EXIT_ON_CLOSE = 3;
+    public static final int DO_NOTHING_ON_CLOSE = 0; // 无操作
+    public static final int HIDE_ON_CLOSE = 1;       // 隐藏窗口
+    public static final int DISPOSE_ON_CLOSE = 2;    // 移除窗口
+    public static final int EXIT_ON_CLOSE = 3;       // 退出应用程序
 }
 
+/** 根窗口容器，其实现类有：JApplet, JDialog, JFrame, JInternalFrame, JWindow */
 public interface RootPaneContainer {
-    JRootPane getRootPane();
-    void setContentPane(Container contentPane);
-    Container getContentPane();
-    void setLayeredPane(JLayeredPane layeredPane);
-    JLayeredPane getLayeredPane();
-    void setGlassPane(Component glassPane);
-    Component getGlassPane();
+    JRootPane getRootPane(); /** 返回此组件的单个 JRootPane 子组件 */
 
+    /** 应用程序应将子组件添加到 contentPane，设置它的布局管理器 */
+    Container getContentPane();
+    void setContentPane(Container contentPane);
+
+    /** 管理 contentPane 的 Container，在某些情况下为菜单栏 */
+    JLayeredPane getLayeredPane();
+    void setLayeredPane(JLayeredPane layeredPane);
+
+    /** 始终为 rootPane 的第一个子组件，rootPanes 布局管理器确保它始终与 rootPane 一样大 */
+    Component getGlassPane();
+    void setGlassPane(Component glassPane);
 }
 </pre>
                             <p><a href="docs/docs-java/api/javax/swing/JFrame.html" target="_blank">JFrame</a> 此类继承自 <code>java.awt.Frame</code>, 添加了对 JFC/Swing 组件架构的支持。Frame 参考： <a href="#java-awt-Frame">Frame  及父类</a></p>
+                            <p>JFrame 类与 Frame 轻微不兼容。与其他所有 JFC/Swing 顶层容器一样，JFrame 包含一个 JRootPane 作为其唯一的子容器。根据规定，根窗格所提供的内容窗格应该包含 JFrame 所显示的所有非菜单组件。这不同于 AWT Frame。为了方便地使用 add 及其变体，已经重写了 remove 和 setLayout，以在必要时将其转发到 contentPane。</p>
+                            <p>默认的内容窗格上会设置有 BorderLayout 管理器。</p>
+                            <ol>
+                                <li><p><code>protected void 	addImpl(Component comp, Object constraints, int index)</code> -- 添加指定的子 Component</p></li>
+                                <li><p><code>protected JRootPane 	createRootPane()</code> -- 由构造方法调用，以创建默认的 rootPane</p></li>
+                                <li><p><code>protected void 	frameInit()</code> -- 由构造方法调用，以适当地初始化 JFrame</p></li>
+                                <li><p><code>AccessibleContext 	getAccessibleContext()</code> -- 获得与此 JFrame 关联的 AccessibleContext</p></li>
+                                <li><p><code>Container 	getContentPane()</code> -- 返回此窗体的 contentPane 对象</p></li>
+                                <li><p><code>int 	getDefaultCloseOperation()</code> -- 返回用户在此窗体上发起 "close" 时执行的操作</p></li>
+                                <li><p><code>Component 	getGlassPane()</code> -- 返回此窗体的 glassPane 对象</p></li>
+                                <li><p><code>Graphics 	getGraphics()</code> -- 为组件创建一个图形上下文</p></li>
+                                <li><p><code>JMenuBar 	getJMenuBar()</code> --  返回此窗体上设置的菜单栏</p></li>
+                                <li><p><code>JLayeredPane 	getLayeredPane()</code> -- 返回此窗体的 layeredPane 对象</p></li>
+                                <li><p><code>JRootPane 	getRootPane()</code> -- 返回此窗体的 rootPane 对象</p></li>
+                                <li><p><code>TransferHandler 	getTransferHandler()</code> -- 获取 transferHandler 属性</p></li>
+                                <li><p><code>static boolean 	isDefaultLookAndFeelDecorated()</code> -- 是否创建的 JFrame 应该由当前外观为其提供 Window 装饰</p></li>
+                                <li><p><code>protected boolean 	isRootPaneCheckingEnabled()</code> -- 返回是否将对 add 和 setLayout 的调用转发到 contentPane</p></li>
+                                <li><p><code>protected String 	paramString()</code> -- 返回此 JFrame 的字符串表示形式</p></li>
+                                <li><p><code>protected void 	processWindowEvent(WindowEvent e)</code> -- 处理此组件上发生的窗口事件</p></li>
+                                <li><p><code>void 	remove(Component comp)</code> -- 从该容器中移除指定组件</p></li>
+                                <li><p><code>void 	repaint(long time, int x, int y, int width, int height)</code> -- 在 time 毫秒内重绘此组件的指定矩形区域</p></li>
+                                <li><p><code>void 	setContentPane(Container contentPane)</code> -- 设置 contentPane</p></li>
+                                <li><p><code>void 	setDefaultCloseOperation(int operation)</code> -- 设置用户在此窗体上发起 "close" 时默认执行的操作。</p></li>
+                                <li><p><code>static void 	setDefaultLookAndFeelDecorated(boolean defaultLookAndFeelDecorated)</code> -- 提供一个关于新创建的 JFrame 是否应该具有当前外观为其提供的 Window 装饰</p></li>
+                                <li><p><code>void 	setGlassPane(Component glassPane)</code> -- 设置 glassPane</p></li>
+                                <li><p><code>void 	setIconImage(Image image)</code> -- 设置要作为此窗口图标显示的图像</p></li>
+                                <li><p><code>void 	setJMenuBar(JMenuBar menubar)</code> -- 设置此窗体的菜单栏</p></li>
+                                <li><p><code>void 	setLayeredPane(JLayeredPane layeredPane)</code> -- 设置 layeredPane</p></li>
+                                <li><p><code>void 	setLayout(LayoutManager manager)</code> -- 设置 LayoutManager</p></li>
+                                <li><p><code>protected void 	setRootPane(JRootPane root)</code> -- 设置 rootPane</p></li>
+                                <li><p><code>protected void 	setRootPaneCheckingEnabled(boolean enabled)</code> -- 设置是否将对 add 和 setLayout 的调用转发到 contentPane</p></li>
+                                <li><p><code>void 	setTransferHandler(TransferHandler newHandler)</code> -- 设置 transferHandler 属性</p></li>
+                                <li><p><code>void 	update(Graphics g)</code> -- 调用 <code>paint(g)</code></p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    java.awt.Component
+        java.awt.Container
+            java.awt.Window
+                javax.swing.JWindow
+
+public class JWindow extends Window implements Accessible, RootPaneContainer {
+
+}
+</pre>
+                            <p><a href="docs/docs-java/api/javax/swing/JWindow.html" target="_blank">JWindow</a> </p>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    java.awt.Component
+        java.awt.Container
+            java.awt.Window
+                java.awt.Dialog
+                    javax.swing.JDialog
+
+public class JDialog extends Dialog implements WindowConstants, Accessible, RootPaneContainer {
+
+}
+</pre>
+                            <p><a href="docs/docs-java/api/javax/swing/JDialog.html" target="_blank">JDialog</a> </p>
                         </div>
                     </div>
                 </div>
@@ -1950,6 +2553,128 @@ public interface RootPaneContainer {
                     </div>
                 </div>
                 <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javax-swing-JComponent"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">JComponent 及子类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    java.awt.Component
+        java.awt.Container
+            javax.swing.JComponent
+
+public abstract class JComponent extends Container implements Serializable {
+
+}
+</pre>
+                            <p><a href="docs/docs-java/api/javax/swing/JComponent.html" target="_blank">JComponent</a> 是除顶层容器外所有 Swing 组件的基类。</p>
+                            <p>要使用继承自 JComponent 的组件，必须将该组件置于一个根为顶层 Swing 容器的包含层次结构中。顶层 Swing 容器（如 JFrame、JDialog 和 JApplet）是专门为其他 Swing 组件提供绘制自身场所的组件。</p>
+                            <p>此类的子类不同于 <code>java.awt.Component</code> 的子类, 此类继承自 <code>java.awt.Container</code> 类，而 <code>java.awt.Component</code> 的子类都不是继承<code>java.awt.Container</code> 类。</p>
+                            <p>JComponent 类提供： </p>
+                            <ul>
+                                <li><p>使用 Swing 架构的标准组件和自定义组件的基类；</p></li>
+                                <li><p>可由程序员指定，或者由用户在运行时选择（可选）的“可插入外观”(L&F)。每个组件的外观都由 UI 委托 提供，UI 委托是一个继承自 ComponentUI 的对象；</p></li>
+                                <li><p>全面的键击处理；</p></li>
+                                <li><p>对工具提示的支持：光标停留在组件时所弹出的简短描述；</p></li>
+                                <li><p>可访问性支持。JComponent 包含 Accessible 接口中的所有方法，但是它实际上不实现该接口。由扩展 JComponent 的每个类负责实现该接口；</p></li>
+                                <li><p>对特定于组件属性的支持。通过 putClientProperty(java.lang.Object, java.lang.Object) 和 getClientProperty(java.lang.Object) 方法，可以将“名称-对象”对与继承自 JComponent 的任意对象进行关联；</p></li>
+                                <li><p>用于绘制的基础设施，包括双缓冲和对边框的支持。</p></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javax-swing-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">...</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api/javax/swing/.html" target="_blank"></a> </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="swt-base"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">SWT 基础</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+                
+                </pre>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="swt-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">...</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+                                
+                                </pre>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javafx-base"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">JavaFx 基础</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+                                </pre>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javafx-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">...</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+                                </pre>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
 			</div>
 		</div>
 	</div>
@@ -1968,6 +2693,9 @@ public interface RootPaneContainer {
 		<a target="_blank" href="./docs/docs-java/api/index.html"
 		   type="button" class="btn btn-default dropdown-toggle btn-primary"
 		   data-toggle="dropup"> DOCS-8 </a>
+        <a target="_blank" href="./docs/docs-java/api-javafx/index.html"
+           type="button" class="btn btn-default dropdown-toggle btn-primary"
+           data-toggle="dropup"> JavaFX </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
