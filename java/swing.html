@@ -3504,9 +3504,11 @@ public class Pane extends Region {
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/Pane.html" target="_blank">Pane</a> 布局窗格的基类，需要将子类列表公开为公共的，以便子类的用户可以自由添加/删除子类。</p>
                             <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <p>子类导航: <a href="#javafx-scene-layout-AnchorPane">AnchorPane</a>, <a href="#javafx-scene-layout-BorderPane">BorderPane</a>, <a href="#javafx-scene-layout-FlowPane">FlowPane</a>, <a href="#javafx-scene-layout-GridPane">GridPane</a>, <a href="#javafx-scene-layout-StackPane">StackPane</a>, <a href="#javafx-scene-layout-TilePane">TilePane</a>, <a href="#javafx-scene-layout-Hbox">HBox</a>, <a href="#javafx-scene-layout-VBox">VBox</a>, <a href="#javafx-scene-control-DialogPane">DialogPane</a>, <a href="#javafx-scene-text-TextFlow">TextFlow</a></p>
                             <p>Pane 类可以直接用于需要对子类进行绝对定位的情况，因为除了将可调整大小的子类调整到其首选大小之外，它不执行布局。</p>
                         </div>
 
+                        <a id="javafx-scene-layout-AnchorPane" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class AnchorPane extends Pane {
@@ -3548,6 +3550,7 @@ root.getChildren().add(btn);
                             </ol>
                         </div>
 
+                        <a id="javafx-scene-layout-BorderPane" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class BorderPane extends Pane {
@@ -3601,6 +3604,7 @@ public class BorderPane extends Pane {
                             </ol>
                         </div>
 
+                        <a id="javafx-scene-layout-FlowPane" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class FlowPane extends Pane {
@@ -3668,6 +3672,7 @@ public class FlowPane extends Pane {
                             </ol>
                         </div>
 
+                        <a id="javafx-scene-layout-GridPane" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class GridPane extends Pane {
@@ -3766,6 +3771,7 @@ root.add(pane, 2, 0, 2, 2);
                             </ol>
                         </div>
 
+                        <a id="javafx-scene-layout-StackPane" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class StackPane extends Pane {
@@ -3806,6 +3812,7 @@ public class StackPane extends Pane {
                             </ol>
                         </div>
 
+                        <a id="javafx-scene-layout-TilePane" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class TilePane extends Pane {
@@ -3820,54 +3827,196 @@ public class TilePane extends Pane {
 }
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/TilePane.html" target="_blank">TilePane</a> 布局面板和 FlowPane 很相似。</p>
-                            <p>TilePane 将其包含的节点都放在一个网格中，其中每格或者每块磁贴的大小都是一样的。</p>
+                            <p>TilePane 将其包含的节点都放在一个网格中，其中<b>每格或者每块磁贴的大小都是一样的</b>。</p>
                             <p>节点可以按水平方向(行)进行排列，或者以垂直方向(列)进行排列。水平排列时会在 TilePane 的宽度边界处对 Tile 进行自动换行，垂直排列时会在 TilePane 的高度边界处对 Tile 进行自动换列。</p>
                             <p>使用 prefColumns 和 prefRows 属性可以设定 TilePane 的首选大小。</p>
                             <p>设置间隙属性(Gap)用来管理行和列之间间距。设置内边距属性(Padding)用来设管理节点元素和 TilePane 边缘之间的距离。</p>
                             <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
                             <ol>
+                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 获取与此类关联的 CSS 元数据</p></li>
 
+                                <li class="group"><p><code>static void 	clearConstraints(Node child)</code> -- 清除指定节点的约束</p></li>
+
+                                <li><p><code>static void 	setAlignment(Node node, Pos value)</code> -- 设置指定节点对齐方式</p></li>
+                                <li><p><code>static Pos 	getAlignment(Node node)</code> -- 获取指定节点对齐方式</p></li>
+
+                                <li class="group"><p><code>static void 	setMargin(Node child, Insets value)</code> -- 设置指定节点距离网格边界的距离</p></li>
+                                <li><p><code>static Insets 	getMargin(Node child)</code> -- 获取指定节点距离网格边界的距离</p></li>
+
+                                <li class="group"><p><code>void 	setAlignment(Pos value)</code> -- 设置对齐方式</p></li>
+                                <li><p><code>Pos 	getAlignment()</code> -- 获取对齐方式</p></li>
+                                <li><p><code>ObjectProperty&lt;Pos> 	alignmentProperty()</code> -- 属性形式读写对齐方式</p></li>
+
+                                <li class="group"><p><code>void 	setHgap(double value)</code> -- 设置纵向间距</p></li>
+                                <li><p><code>double 	getHgap()</code> -- 获取纵向间距</p></li>
+                                <li><p><code>DoubleProperty 	hgapProperty()</code> -- 属性形式读写纵向间距</p></li>
+
+                                <li class="group"><p><code>double 	getVgap()</code> -- 设置横向间距</p></li>
+                                <li><p><code>void 	setVgap(double value)</code> -- 获取横向间距</p></li>
+                                <li><p><code>DoubleProperty 	vgapProperty()</code> -- 属性形式读写横向间距</p></li>
+
+                                <li class="group"><p><code>void 	setOrientation(Orientation value)</code> -- 设置横/纵向排列</p></li>
+                                <li><p><code>Orientation 	getOrientation()</code> -- 获取排列方向</p></li>
+                                <li><p><code>ObjectProperty&lt;Orientation> 	orientationProperty()</code> -- 属性形式读写排列方向</p></li>
+
+                                <li class="group"><p><code>void 	setPrefColumns(int value)</code> -- 设置首选列数</p></li>
+                                <li><p><code>int 	getPrefColumns()</code> -- 获取首选列数</p></li>
+                                <li><p><code>IntegerProperty 	prefColumnsProperty()</code> -- 属性形式读写首选列数</p></li>
+
+                                <li class="group"><p><code>int 	getPrefRows()</code> -- 设置首选行数</p></li>
+                                <li><p><code>void 	setPrefRows(int value)</code> -- 获取首选行数</p></li>
+                                <li><p><code>IntegerProperty 	prefRowsProperty()</code> -- 属性形式读写首选行数</p></li>
+
+                                <li class="group"><p><code>void 	setPrefTileHeight(double value)</code> -- 设置首选磁贴高度</p></li>
+                                <li><p><code>double 	getPrefTileHeight()</code> -- 获取首选磁贴高度</p></li>
+                                <li><p><code>DoubleProperty 	prefTileHeightProperty()</code> -- 属性形式读写首选磁贴高度</p></li>
+
+                                <li class="group"><p><code>void 	setPrefTileWidth(double value)</code> -- 设置首选磁贴宽度</p></li>
+                                <li><p><code>double 	getPrefTileWidth()</code> -- 获取首选磁贴宽度</p></li>
+                                <li><p><code>DoubleProperty 	prefTileWidthProperty()</code> -- 属性形式读写首选磁贴宽度</p></li>
+
+                                <li class="group"><p><code>void 	setTileAlignment(Pos value)</code> -- 设置磁贴对齐方式</p></li>
+                                <li><p><code>Pos 	getTileAlignment()</code> -- 获取磁贴对齐方式</p></li>
+                                <li><p><code>ObjectProperty&lt;Pos> 	tileAlignmentProperty()</code> -- 属性形式读写磁贴对齐方式</p></li>
+
+                                <li class="group"><p><code>double 	getTileHeight()</code> -- 获取磁贴高度</p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	tileHeightProperty()</code> -- 属性形式读磁贴高度</p></li>
+
+                                <li class="group"><p><code>double 	getTileWidth()</code> -- 获取磁贴宽度</p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	tileWidthProperty()</code> -- 性形式读磁贴宽度</p></li>
+
+                                <li class="group"><p><code>void 	requestLayout()</code> -- 请求在呈现下一个场景之前执行的布局传递</p></li>
+                                <li><p><code>Orientation 	getContentBias()</code> -- 返回节点对布局目的的调整大小偏差的方向</p></li>
+                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- 获取与此实例关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>protected double 	computeMinHeight(double width)</code> -- 计算该区域的最小高度和</p></li>
+                                <li><p><code>protected double 	computeMinWidth(double height)</code> -- 计算该区域的最小宽度</p></li>
+                                <li><p><code>protected double 	computePrefHeight(double width)</code> -- 计算该区域的首选高度</p></li>
+                                <li><p><code>protected double 	computePrefWidth(double height)</code> -- 计算该区域的首选宽度</p></li>
+
+                                <li class="group"><p><code>protected void 	layoutChildren()</code> -- 在布局传递过程中调用，以布局父级中的子代。默认情况下，它只将托管的、可调整大小的内容设置为它们的首选大小，不执行任何节点定位</p></li>
                             </ol>
                         </div>
 
+                        <a id="javafx-scene-layout-Hbox" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class HBox extends Pane {
-
+    public HBox() {}
+    public HBox(double spacing) {}
+    public HBox(Node... children) {}
+    public HBox(double spacing, Node... children) {}
 }
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/HBox.html" target="_blank">HBox</a> 布局面板为将多个节点排列在一行中提供了一个简单的方法。</p>
                             <p>设置内边距(Padding)属性可以用于管理节点到 HBox 边缘的距离。设置间距(Spacing)属性可以用于管理节点之间的距离。设置外边距(Margin)属性可以为单个控件周围增加额外的空间。</p>
                             <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 获取与此类关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>static void 	clearConstraints(Node child)</code> -- 清除指定节点的约束</p></li>
+
+                                <li class="group"><p><code>static void 	setMargin(Node child, Insets value)</code> -- 设置指定节点距离网格边界的距离</p></li>
+                                <li><p><code>static Insets 	getMargin(Node child)</code> -- 获取指定节点距离网格边界的距离</p></li>
+
+                                <li class="group"><p><code>static void 	setHgrow(Node child, Priority value)</code> -- </p></li>
+                                <li><p><code>static Priority 	getHgrow(Node child)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setAlignment(Pos value)</code> -- 设置对齐方式</p></li>
+                                <li><p><code>Pos 	getAlignment()</code> -- 获取对齐方式</p></li>
+                                <li><p><code>ObjectProperty&lt;Pos> 	alignmentProperty()</code> -- 属性形式读写对齐方式</p></li>
+
+                                <li class="group"><p><code>void 	setSpacing(double value)</code> -- 设置间距</p></li>
+                                <li><p><code>double 	getSpacing()</code> -- 获取间距</p></li>
+                                <li><p><code>DoubleProperty 	spacingProperty()</code> -- 属性形式读写间距</p></li>
+
+                                <li class="group"><p><code>void 	setFillHeight(boolean value)</code> -- 设置是否纵向填充</p></li>
+                                <li><p><code>boolean 	isFillHeight()</code> -- 获取是否纵向填充</p></li>
+                                <li><p><code>BooleanProperty 	fillHeightProperty()</code> -- 属性形式读写是否纵向填充</p></li>
+
+                                <li class="group"><p><code>double 	getBaselineOffset()</code> -- 根据第一个托管子节点计算基线偏移量</p></li>
+
+                                <li class="group"><p><code>void 	requestLayout()</code> -- 请求在呈现下一个场景之前执行的布局传递</p></li>
+                                <li><p><code>Orientation 	getContentBias()</code> -- 返回节点对布局目的的调整大小偏差的方向</p></li>
+                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- 获取与此实例关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>protected double 	computeMinHeight(double width)</code> -- 计算该区域的最小高度和</p></li>
+                                <li><p><code>protected double 	computeMinWidth(double height)</code> -- 计算该区域的最小宽度</p></li>
+                                <li><p><code>protected double 	computePrefHeight(double width)</code> -- 计算该区域的首选高度</p></li>
+                                <li><p><code>protected double 	computePrefWidth(double height)</code> -- 计算该区域的首选宽度</p></li>
+
+                                <li class="group"><p><code>protected void 	layoutChildren()</code> -- 在布局传递过程中调用，以布局父级中的子代。默认情况下，它只将托管的、可调整大小的内容设置为它们的首选大小，不执行任何节点定位</p></li>
+
+                            </ol>
                         </div>
 
+                        <a id="javafx-scene-layout-VBox" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class VBox extends Pane {
-
+    public VBox() {}
+    public VBox(double spacing) {}
+    public VBox(Node... children) {}
+    public VBox(double spacing, Node... children) {}
 }
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/VBox.html" target="_blank">VBox</a> 布局面板和 HBox 很类似，只是其包含的节点是排成一列。</p>
                             <p>设置内边距(Padding)属性可以管理节点到VBox边缘的距离。设置间距(Spacing)属性可以管理节点之间的距离。设置外边距(Margin)属性可以为单个控件周围增加额外的空间。</p>
                             <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 获取与此类关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>static void 	clearConstraints(Node child)</code> -- 清除指定节点的约束</p></li>
+
+                                <li class="group"><p><code>static void 	setMargin(Node child, Insets value)</code> -- 设置指定节点距离网格边界的距离</p></li>
+                                <li><p><code>static Insets 	getMargin(Node child)</code> -- 获取指定节点距离网格边界的距离</p></li>
+
+                                <li class="group"><p><code>static void 	setVgrow(Node child, Priority value)</code> -- </p></li>
+                                <li><p><code>static Priority 	getVgrow(Node child)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setAlignment(Pos value)</code> -- 设置对齐方式</p></li>
+                                <li><p><code>Pos 	getAlignment()</code> -- 获取对齐方式</p></li>
+                                <li><p><code>ObjectProperty&lt;Pos> 	alignmentProperty()</code> -- 属性形式读写对齐方式</p></li>
+
+                                <li class="group"><p><code>void 	setSpacing(double value)</code> -- 设置间距</p></li>
+                                <li><p><code>double 	getSpacing()</code> -- 获取间距</p></li>
+                                <li><p><code>DoubleProperty 	spacingProperty()</code> -- 属性形式读写间距</p></li>
+
+                                <li class="group"><p><code>void 	setFillWidth(boolean value)</code> -- 设置是否横向填充</p></li>
+                                <li><p><code>boolean 	isFillWidth()</code> -- 获取是否横向填充</p></li>
+                                <li><p><code>BooleanProperty 	fillWidthProperty()</code> -- 属性形式读写是否横向填充</p></li>
+
+                                <li class="group"><p><code>void 	requestLayout()</code> -- 请求在呈现下一个场景之前执行的布局传递</p></li>
+                                <li><p><code>Orientation 	getContentBias()</code> -- 返回节点对布局目的的调整大小偏差的方向</p></li>
+                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- 获取与此实例关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>protected double 	computeMinHeight(double width)</code> -- 计算该区域的最小高度和</p></li>
+                                <li><p><code>protected double 	computeMinWidth(double height)</code> -- 计算该区域的最小宽度</p></li>
+                                <li><p><code>protected double 	computePrefHeight(double width)</code> -- 计算该区域的首选高度</p></li>
+                                <li><p><code>protected double 	computePrefWidth(double height)</code> -- 计算该区域的首选宽度</p></li>
+
+                                <li class="group"><p><code>protected void 	layoutChildren()</code> -- 在布局传递过程中调用，以布局父级中的子代。默认情况下，它只将托管的、可调整大小的内容设置为它们的首选大小，不执行任何节点定位</p></li>
+
+                            </ol>
                         </div>
 
-
-
+                        <a id="javafx-scene-control-DialogPane" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class DialogPane extends Pane {
-
+    public DialogPane() {}
 }
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/DialogPane.html" target="_blank">javafx.scene.control.DialogPane</a></p>
                             <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
                         </div>
 
+                        <a id="javafx-scene-text-TextFlow" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class TextFlow extends Pane {
-
+    public TextFlow() {}
+    public TextFlow(Node... children) {}
 }
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/scene/text/TextFlow.html" target="_blank">javafx.scene.text.TextFlow</a></p>
