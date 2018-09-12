@@ -100,7 +100,7 @@
                             <a href="#javafx-application-Application" class="list-group-item">Application 及顶级窗口类</a>
                             <a href="#javafx-scene-Scene" class="list-group-item">Scene 及相关类</a>
                             <a href="#javafx-scene-Node" class="list-group-item">图形基类: Node</a>
-                            <a href="#javafx-scene-layout-Region" class="list-group-item">布局类：Region 及相关类</a>
+                            <a href="#javafx-scene-layout-Pane" class="list-group-item">布局类：Pane 及子类</a>
                             <a href="#javafx-scene-control-Control" class="list-group-item">控件类：Control 及相关类</a>
                             <a href="#javafx-fxml" class="list-group-item">使用 FXML 进行布局</a>
                             <a href="#javafx-css" class="list-group-item">使用 CSS 控制样式</a>
@@ -2882,47 +2882,47 @@ Node
  │   └─ Arc, Line, Circle, Rectangle, Path, SVGPath, Polygon, Polyline, CubicCurve, QuadCurve, EllipseText
  └─ Parent
       ├─ WebView, Group
-      ├─ Region
-      │   ├─ Axis
-      │   │   ├─ CategoryAxis
-      │   │   └─ ValueAxis
-      │   │       └─ NumberAxis
-      │   ├─ Chart
-      │   │   ├─ PieChart
-      │   │   └─ XYChart
-      │   │       └─ AreaChart
-      │   │           └─ BarChart, BubbleChart, LineChart, ScatterChart, StackedAreaChart, StackedBarChart
-      │   └─ Pane
-      │       └─ AnchorPane, BorderPane, FlowPane, GridPane, HBox, VBox, StackPane, TilePane
-      └─ Control
-          ├─ Accordion, ChoiceBox, HTMLEditor, ListView, MenuBar, Pagination, ScrollBar,
-          ├─ ScrollPane, Separator, Slider, SplitPane, TableView, TabPane, ToolBar, TreeView
-          ├─ ComboBoxBas
-          │   └─ ComboBox, ColorPicker
-          ├─ ProgressIndicator
-          │   └─ ProgressBar
-          ├─ TextInputControl
-          │   ├─ TextArea
-          │   └─ TextField
-          │       └─ PasswordField
-          └─ Labeled
-              ├─ Label, TitledPane
-              ├─ ButtonBase
-              │    ├─ Hyperlink, Button, CheckBox
-              │    ├─ MenuButton
-              │    │   └─ SplitMenuButton
-              │    └─ ToggleButton
-              │        └─ RadioButton
-              └─ Cell
-                  └─ IndexedCell
-                      ├─ TableRow
-                      ├─ ListCell
-                      │   └─ CheckBoxListCell, ChoiceBoxListCell, ComboBoxListCell, TextFieldListCell
-                      ├─ TableCell
-                      │   ├─ CheckBoxTableCell, ChoiceBoxTableCell, ComboBoxTableCell,
-                      │   └─ ProgressBarTableCell, TextFieldTableCell
-                      └─ TreeCell
-                          └─ CheckBoxTreeCell, ChoiceBoxTreeCell, ComboBoxTreeCell, TextFieldTreeCell
+      └─ Region
+          ├─ Axis
+          │   ├─ CategoryAxis
+          │   └─ ValueAxis
+          │       └─ NumberAxis
+          ├─ Chart
+          │   ├─ PieChart
+          │   └─ XYChart
+          │       └─ AreaChart
+          │           └─ BarChart, BubbleChart, LineChart, ScatterChart, StackedAreaChart, StackedBarChart
+          ├─ Pane
+          │   └─ AnchorPane, BorderPane, FlowPane, GridPane, HBox, VBox, StackPane, TilePane
+          └─ Control
+              ├─ Accordion, ChoiceBox, HTMLEditor, ListView, MenuBar, Pagination, ScrollBar,
+              ├─ ScrollPane, Separator, Slider, SplitPane, TableView, TabPane, ToolBar, TreeView
+              ├─ ComboBoxBas
+              │   └─ ComboBox, ColorPicker
+              ├─ ProgressIndicator
+              │   └─ ProgressBar
+              ├─ TextInputControl
+              │   ├─ TextArea
+              │   └─ TextField
+              │       └─ PasswordField
+              └─ Labeled
+                  ├─ Label, TitledPane
+                  ├─ ButtonBase
+                  │    ├─ Hyperlink, Button, CheckBox
+                  │    ├─ MenuButton
+                  │    │   └─ SplitMenuButton
+                  │    └─ ToggleButton
+                  │        └─ RadioButton
+                  └─ Cell
+                      └─ IndexedCell
+                          ├─ TableRow
+                          ├─ ListCell
+                          │   └─ CheckBoxListCell, ChoiceBoxListCell, ComboBoxListCell, TextFieldListCell
+                          ├─ TableCell
+                          │   ├─ CheckBoxTableCell, ChoiceBoxTableCell, ComboBoxTableCell,
+                          │   └─ ProgressBarTableCell, TextFieldTableCell
+                          └─ TreeCell
+                              └─ CheckBoxTreeCell, ChoiceBoxTreeCell, ComboBoxTreeCell, TextFieldTreeCell
 java.lang.Object
     javafx.scene.Node
 
@@ -2958,10 +2958,11 @@ public interface Styleable {
                                 <li><p><code>DoubleProperty 	opacityProperty()</code> -- </p></li>
 
                                 <li class="group"><p><code>boolean 	isDisable()</code> -- </p></li>
-                                <li><p><code>boolean 	isDisabled()</code> -- </p></li>
                                 <li><p><code>void 	setDisable(boolean value)</code> -- </p></li>
-                                <li><p><code>protected void 	setDisabled(boolean value)</code> -- </p></li>
                                 <li><p><code>BooleanProperty 	disableProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>boolean 	isDisabled()</code> -- </p></li>
+                                <li><p><code>protected void 	setDisabled(boolean value)</code> -- </p></li>
                                 <li><p><code>ReadOnlyBooleanProperty 	disabledProperty()</code> -- </p></li>
 
                                 <li class="group"><p><code>String 	getId()</code> -- </p></li>
@@ -2975,6 +2976,9 @@ public interface Styleable {
                                 <li class="group"><p><code>Node 	lookup(String selector)</code> -- </p></li>
                                 <li><p><code>Set&lt;Node> 	lookupAll(String selector)</code> -- </p></li>
 
+                                <li class="group"><p><code>Styleable 	getStyleableParent()</code> -- </p></li>
+                                <li><p><code>String 	getTypeSelector()</code> -- </p></li>
+
                                 <li class="group"><p><code>void 	autosize()</code> -- 如果节点是可调整大小的，则将其布局边界设置为其当前优选的宽度和高度</p></li>
                                 <li><p><code>boolean 	isResizable()</code> -- 节点是否可改变大小(false)</p></li>
                                 <li><p><code>void 	resize(double width, double height)</code> -- 如果节点是可调整大小的，重置组件大小(空实现，看子类)</p></li>
@@ -2983,11 +2987,13 @@ public interface Styleable {
 
                                 <li class="group"><p><code>double 	getLayoutX()</code> -- </p></li>
                                 <li><p><code>void 	setLayoutX(double value)</code> -- </p></li>
-                                <li><p><code>double 	getLayoutY()</code> -- </p></li>
-                                <li><p><code>void 	setLayoutY(double value)</code> -- </p></li>
                                 <li><p><code>DoubleProperty 	layoutXProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>double 	getLayoutY()</code> -- </p></li>
+                                <li><p><code>void 	setLayoutY(double value)</code> -- </p></li>
                                 <li><p><code>DoubleProperty 	layoutYProperty()</code> -- </p></li>
-                                <li><p><code>Bounds 	getLayoutBounds()</code> -- </p></li>
+
+                                <li class="group"><p><code>Bounds 	getLayoutBounds()</code> -- </p></li>
                                 <li><p><code>ReadOnlyObjectProperty&lt;Bounds> 	layoutBoundsProperty()</code> -- </p></li>
 
                                 <li class="group"><p><code>boolean 	contains(double localX, double localY)</code> -- </p></li>
@@ -3001,31 +3007,36 @@ public interface Styleable {
                                 <li><p><code>double 	minWidth(double height)</code> -- </p></li>
 
                                 <li class="group"><p><code>double 	getTranslateX()</code> -- </p></li>
-                                <li><p><code>double 	getTranslateY()</code> -- </p></li>
-                                <li><p><code>double 	getTranslateZ()</code> -- </p></li>
-                                <li><p><code>double 	getScaleX()</code> -- </p></li>
-                                <li><p><code>double 	getScaleY()</code> -- </p></li>
-                                <li><p><code>double 	getScaleZ()</code> -- </p></li>
-                                <li><p><code>double 	getRotate()</code> -- </p></li>
-                                <li><p><code>Point3D 	getRotationAxis()</code> -- </p></li>
-
-                                <li class="group"><p><code>void 	setRotate(double value)</code> -- </p></li>
-                                <li><p><code>void 	setRotationAxis(Point3D value)</code> -- </p></li>
-                                <li><p><code>void 	setScaleX(double value)</code> -- </p></li>
-                                <li><p><code>void 	setScaleY(double value)</code> -- </p></li>
-                                <li><p><code>void 	setScaleZ(double value)</code> -- </p></li>
                                 <li><p><code>void 	setTranslateX(double value)</code> -- </p></li>
-                                <li><p><code>void 	setTranslateY(double value)</code> -- </p></li>
-                                <li><p><code>void 	setTranslateZ(double value)</code> -- </p></li>
-
-                                <li class="group"><p><code>DoubleProperty 	rotateProperty()</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;Point3D> 	rotationAxisProperty()</code> -- </p></li>
-                                <li><p><code>DoubleProperty 	scaleXProperty()</code> -- </p></li>
-                                <li><p><code>DoubleProperty 	scaleYProperty()</code> -- </p></li>
-                                <li><p><code>DoubleProperty 	scaleZProperty()</code> -- </p></li>
                                 <li><p><code>DoubleProperty 	translateXProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>double 	getTranslateY()</code> -- </p></li>
+                                <li><p><code>void 	setTranslateY(double value)</code> -- </p></li>
                                 <li><p><code>DoubleProperty 	translateYProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>double 	getTranslateZ()</code> -- </p></li>
+                                <li><p><code>void 	setTranslateZ(double value)</code> -- </p></li>
                                 <li><p><code>DoubleProperty 	translateZProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>double 	getScaleX()</code> -- </p></li>
+                                <li><p><code>void 	setScaleX(double value)</code> -- </p></li>
+                                <li><p><code>DoubleProperty 	scaleXProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>double 	getScaleY()</code> -- </p></li>
+                                <li><p><code>void 	setScaleY(double value)</code> -- </p></li>
+                                <li><p><code>DoubleProperty 	scaleYProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>double 	getScaleZ()</code> -- </p></li>
+                                <li><p><code>void 	setScaleZ(double value)</code> -- </p></li>
+                                <li><p><code>DoubleProperty 	scaleZProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>Point3D 	getRotationAxis()</code> -- </p></li>
+                                <li><p><code>void 	setRotationAxis(Point3D value)</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;Point3D> 	rotationAxisProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>double 	getRotate()</code> -- </p></li>
+                                <li><p><code>void 	setRotate(double value)</code> -- </p></li>
+                                <li><p><code>DoubleProperty 	rotateProperty()</code> -- </p></li>
 
                                 <li class="group"><p><code>BlendMode 	getBlendMode()</code> -- </p></li>
                                 <li><p><code>void 	setBlendMode(BlendMode value)</code> -- </p></li>
@@ -3051,16 +3062,18 @@ public interface Styleable {
                                 <li class="group"><p><code>CacheHint 	getCacheHint()</code> -- </p></li>
                                 <li><p><code>void 	setCacheHint(CacheHint value)</code> -- </p></li>
                                 <li><p><code>ObjectProperty&lt;CacheHint> 	cacheHintProperty()</code> -- </p></li>
-                                <li><p><code>boolean 	isCache()</code> -- </p></li>
+
+                                <li class="group"><p><code>boolean 	isCache()</code> -- </p></li>
                                 <li><p><code>void 	setCache(boolean value)</code> -- </p></li>
                                 <li><p><code>BooleanProperty 	cacheProperty()</code> -- </p></li>
 
                                 <li class="group"><p><code>boolean 	isFocused()</code> -- </p></li>
-                                <li><p><code>boolean 	isFocusTraversable()</code> -- </p></li>
-                                <li><p><code>void 	requestFocus()</code> -- </p></li>
                                 <li><p><code>protected void 	setFocused(boolean value)</code> -- </p></li>
-                                <li><p><code>void 	setFocusTraversable(boolean value)</code> -- </p></li>
                                 <li><p><code>ReadOnlyBooleanProperty 	focusedProperty()</code> -- </p></li>
+                                <li><p><code>void 	requestFocus()</code> -- </p></li>
+
+                                <li class="group"><p><code>boolean 	isFocusTraversable()</code> -- </p></li>
+                                <li><p><code>void 	setFocusTraversable(boolean value)</code> -- </p></li>
                                 <li><p><code>BooleanProperty 	focusTraversableProperty()</code> -- </p></li>
 
                                 <li class="group"><p><code>boolean 	isPressed()</code> -- </p></li>
@@ -3135,7 +3148,7 @@ public interface Styleable {
                                 <li class="group"><p><code>void 	snapshot(Callback&lt;SnapshotResult,java.lang.Void> callback, SnapshotParameters params, WritableImage image)</code> -- </p></li>
                                 <li><p><code>WritableImage 	snapshot(SnapshotParameters params, WritableImage image)</code> -- </p></li>
 
-                                <li class="group">ObservableSet&lt;PseudoClass> getPseudoClassStates()</code> -- </p></li>
+                                <li class="group"><p><code>ObservableSet&lt;PseudoClass> getPseudoClassStates()</code> -- </p></li>
                                 <li><p><code>void pseudoClassStateChanged(PseudoClass pseudoClass, boolean active)</code> -- </p></li>
 
                                 <li class="group"><p><code>Dragboard 	startDragAndDrop(TransferMode... transferModes)</code> -- </p></li>
@@ -3148,28 +3161,57 @@ public interface Styleable {
                                 <li><p><code>Orientation 	getContentBias()</code> -- </p></li>
                                 <li><p><code>ObservableList&lt;.String> 	getStyleClass()</code> -- </p></li>
                                 <li><p><code>ObservableList&lt;Transform> 	getTransforms()</code> -- </p></li>
-
-                                <li class="group"><p><code>Transform 	getLocalToParentTransform()</code> -- </p></li>
-                                <li><p><code>Transform 	getLocalToSceneTransform()</code> -- </p></li>
-                                <li><p><code>ReadOnlyObjectProperty&lt;Transform> 	localToParentTransformProperty()</code> -- </p></li>
-                                <li><p><code>ReadOnlyObjectProperty&lt;Transform> 	localToSceneTransformProperty()</code> -- </p></li>
+                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- </p></li>
 
                                 <li class="group"><p><code>Bounds 	localToParent(Bounds localBounds)</code> -- </p></li>
                                 <li><p><code>Point2D 	localToParent(double localX, double localY)</code> -- </p></li>
                                 <li><p><code>Point2D 	localToParent(Point2D localPoint)</code> -- </p></li>
-                                <li><p><code>Bounds 	localToScene(Bounds localBounds)</code> -- </p></li>
-                                <li><p><code>Point2D 	localToScene(double localX, double localY)</code> -- </p></li>
-                                <li><p><code>Point2D 	localToScene(Point2D localPoint)</code> -- </p></li>
+                                <li><p><code>Point3D 	localToParent(double x, double y, double z)</code> -- </p></li>
+                                <li><p><code>Point3D 	localToParent(Point3D localPoint)</code> -- </p></li>
+                                <li><p><code>Transform 	getLocalToParentTransform()</code> -- </p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Transform> 	localToParentTransformProperty()</code> -- </p></li>
 
                                 <li class="group"><p><code>Bounds 	parentToLocal(Bounds parentBounds)</code> -- </p></li>
                                 <li><p><code>Point2D 	parentToLocal(double parentX, double parentY)</code> -- </p></li>
                                 <li><p><code>Point2D 	parentToLocal(Point2D parentPoint)</code> -- </p></li>
-                                <li><p><code>Bounds 	sceneToLocal(Bounds sceneBounds)</code> -- </p></li>
-                                <li><p><code>Point2D 	sceneToLocal(double sceneX, double sceneY)</code> -- </p></li>
-                                <li><p><code>Point2D 	sceneToLocal(Point2D scenePoint)</code> -- </p></li>
+                                <li><p><code>Point3D 	parentToLocal(double parentX, double parentY, double parentZ)</code> -- </p></li>
+                                <li><p><code>Point3D 	parentToLocal(Point3D parentPoint)</code> -- </p></li>
+
+                                <li class="group"><p><code>Bounds 	localToScene(Bounds localBounds)</code> -- </p></li>
+                                <li><p><code>Bounds 	localToScene(Bounds localBounds, boolean rootScene)</code> -- </p></li>
+                                <li><p><code>Point2D 	localToScene(double localX, double localY)</code> -- </p></li>
+                                <li><p><code>Point2D 	localToScene(double x, double y, boolean rootScene)</code> -- </p></li>
+                                <li><p><code>Point2D 	localToScene(Point2D localPoint)</code> -- </p></li>
+                                <li><p><code>Point2D 	localToScene(Point2D localPoint, boolean rootScene)</code> -- </p></li>
+                                <li><p><code>Point3D 	localToScene(double x, double y, double z)</code> -- </p></li>
+                                <li><p><code>Point3D 	localToScene(double x, double y, double z, boolean rootScene)</code> -- </p></li>
+                                <li><p><code>Point3D 	localToScene(Point3D localPoint)</code> -- </p></li>
+                                <li><p><code>Point3D 	localToScene(Point3D localPoint, boolean rootScene)</code> -- </p></li>
+                                <li><p><code>Transform 	getLocalToSceneTransform()</code> -- </p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Transform> 	localToSceneTransformProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>Bounds 	sceneToLocal(Bounds sceneBounds))</code> -- </p></li>
+                                <li><p><code>Bounds 	sceneToLocal(Bounds bounds, boolean rootScene))</code> -- </p></li>
+                                <li><p><code>Point2D 	sceneToLocal(double sceneX, double sceneY))</code> -- </p></li>
+                                <li><p><code>Point2D 	sceneToLocal(double x, double y, boolean rootScene))</code> -- </p></li>
+                                <li><p><code>Point2D 	sceneToLocal(Point2D scenePoint))</code> -- </p></li>
+                                <li><p><code>Point2D 	sceneToLocal(Point2D point, boolean rootScene))</code> -- </p></li>
+                                <li><p><code>Point3D 	sceneToLocal(double sceneX, double sceneY, double sceneZ))</code> -- </p></li>
+                                <li><p><code>Point3D 	sceneToLocal(Point3D scenePoint))</code> -- </p></li>
+
+                                <li class="group"><p><code>Bounds 	localToScreen(Bounds localBounds)</code> -- </p></li>
+                                <li><p><code>Point2D 	localToScreen(double localX, double localY)</code> -- </p></li>
+                                <li><p><code>Point2D 	localToScreen(double localX, double localY, double localZ)</code> -- </p></li>
+                                <li><p><code>Point2D 	localToScreen(Point2D localPoint)</code> -- </p></li>
+                                <li><p><code>Point2D 	localToScreen(Point3D localPoint)</code> -- </p></li>
+
+                                <li class="group"><p><code>Bounds 	screenToLocal(Bounds screenBounds)</code> -- </p></li>
+                                <li><p><code>Point2D 	screenToLocal(double screenX, double screenY)</code> -- </p></li>
+                                <li><p><code>Point2D 	screenToLocal(Point2D screenPoint)</code> -- </p></li>
 
                                 <li class="group"><p><code>void applyCss()</code> -- </p></li>
                                 <li><p><code>double computeAreaInScreen()</code> -- </p></li>
+                                <li><p><code>boolean 	usesMirroring()</code> -- </p></li>
 
                                 <li class="group"><p><code>EventDispatcher 	getEventDispatcher()</code> -- </p></li>
                                 <li><p><code>void 	setEventDispatcher(EventDispatcher value)</code> -- </p></li>
@@ -3310,42 +3352,529 @@ public interface Styleable {
 
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public abstract class Parent extends Node {
+    protected Parent() {}
+}
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/Parent.html" target="_blank">Parent</a> 是具有子节点的所有节点的基类。</p>
+                            <p>Parent 类处理所有分层场景图操作，包括添加/移除子节点、为布局和渲染标记脏分支、挑选、边界计算以及在每个脉冲上执行布局传递。</p>
+                            <ol>
+                                <li><p><code>protected double 	computeMinHeight(double width)</code> -- </p></li>
+                                <li><p><code>protected double 	computeMinWidth(double height)</code> -- </p></li>
+                                <li><p><code>protected double 	computePrefHeight(double width)</code> -- </p></li>
+                                <li><p><code>protected double 	computePrefWidth(double height)</code> -- </p></li>
+                                <li><p><code>double 	getBaselineOffset()</code> -- </p></li>
+                                <li><p><code>protected ObservableList&lt;Node> 	getChildren()</code> -- </p></li>
+                                <li><p><code>ObservableList&lt;Node> 	getChildrenUnmodifiable()</code> -- </p></li>
+                                <li><p><code>protected &lt;E extends Node>List&lt;E> 	getManagedChildren()</code> -- </p></li>
+                                <li><p><code>ObservableList&lt;String> 	getStylesheets()</code> -- </p></li>
+                                <li><p><code>boolean 	isNeedsLayout()</code> -- </p></li>
+                                <li><p><code>void 	layout()</code> -- </p></li>
+                                <li><p><code>protected void 	layoutChildren()</code> -- </p></li>
+                                <li><p><code>Node 	lookup(String selector)</code> -- </p></li>
+                                <li><p><code>double 	minHeight(double width)</code> -- </p></li>
+                                <li><p><code>double 	minWidth(double height)</code> -- </p></li>
+                                <li><p><code>ReadOnlyBooleanProperty 	needsLayoutProperty()</code> -- </p></li>
+                                <li><p><code>double 	prefHeight(double width)</code> -- </p></li>
+                                <li><p><code>double 	prefWidth(double height)</code> -- </p></li>
+                                <li><p><code>Object 	queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- </p></li>
+                                <li><p><code>void 	requestLayout()</code> -- </p></li>
+                                <li><p><code>protected void 	requestParentLayout()</code> -- </p></li>
+                                <li><p><code>protected void 	setNeedsLayout(boolean value)</code> -- </p></li>
+                                <li><p><code>protected void 	updateBounds()</code> -- </p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Region extends Parent {
+    public static final double USE_PREF_SIZE = Double.NEGATIVE_INFINITY;
+    public static final double USE_COMPUTED_SIZE = -1;
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/Region.html" target="_blank">Region</a></p>
+                            <ol>
+                                <li><p><code>ObjectProperty&lt;Background> 	backgroundProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;Border> 	borderProperty()</code> -- </p></li>
+                                <li><p><code>BooleanProperty 	cacheShapeProperty()</code> -- </p></li>
+                                <li><p><code>BooleanProperty 	centerShapeProperty()</code> -- </p></li>
+                                <li><p><code>protected double 	computeMaxHeight(double width)</code> -- </p></li>
+                                <li><p><code>protected double 	computeMaxWidth(double height)</code> -- </p></li>
+                                <li><p><code>protected double 	computeMinHeight(double width)</code> -- </p></li>
+                                <li><p><code>protected double 	computeMinWidth(double height)</code> -- </p></li>
+                                <li><p><code>protected double 	computePrefHeight(double width)</code> -- </p></li>
+                                <li><p><code>protected double 	computePrefWidth(double height)</code> -- </p></li>
+                                <li><p><code>Background 	getBackground()</code> -- </p></li>
+                                <li><p><code>Border 	getBorder()</code> -- </p></li>
+                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
+                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- </p></li>
+                                <li><p><code>double 	getHeight()</code> -- </p></li>
+                                <li><p><code>Insets 	getInsets()</code> -- </p></li>
+                                <li><p><code>double 	getMaxHeight()</code> -- </p></li>
+                                <li><p><code>double 	getMaxWidth()</code> -- </p></li>
+                                <li><p><code>double 	getMinHeight()</code> -- </p></li>
+                                <li><p><code>double 	getMinWidth()</code> -- </p></li>
+                                <li><p><code>Insets 	getOpaqueInsets()</code> -- </p></li>
+                                <li><p><code>Insets 	getPadding()</code> -- </p></li>
+                                <li><p><code>double 	getPrefHeight()</code> -- </p></li>
+                                <li><p><code>double 	getPrefWidth()</code> -- </p></li>
+                                <li><p><code>Shape 	getShape()</code> -- </p></li>
+                                <li><p><code>String 	getUserAgentStylesheet()</code> -- </p></li>
+                                <li><p><code>double 	getWidth()</code> -- </p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	heightProperty()</code> -- </p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Insets> 	insetsProperty()</code> -- </p></li>
+                                <li><p><code>boolean 	isCacheShape()</code> -- </p></li>
+                                <li><p><code>boolean 	isCenterShape()</code> -- </p></li>
+                                <li><p><code>boolean 	isResizable()</code> -- </p></li>
+                                <li><p><code>boolean 	isScaleShape()</code> -- </p></li>
+                                <li><p><code>boolean 	isSnapToPixel()</code> -- </p></li>
+                                <li><p><code>protected void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, HPos halignment, VPos valignment)</code> -- </p></li>
+                                <li><p><code>protected void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, boolean fillWidth, boolean fillHeight, HPos halignment, VPos valignment)</code> -- </p></li>
+                                <li><p><code>static void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, boolean fillWidth, boolean fillHeight, HPos halignment, VPos valignment, boolean isSnapToPixel)</code> -- </p></li>
+                                <li><p><code>protected void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, HPos halignment, VPos valignment)</code> -- </p></li>
+                                <li><p><code>double 	maxHeight(double width)</code> -- </p></li>
+                                <li><p><code>DoubleProperty 	maxHeightProperty()</code> -- </p></li>
+                                <li><p><code>double 	maxWidth(double height)</code> -- </p></li>
+                                <li><p><code>DoubleProperty 	maxWidthProperty()</code> -- </p></li>
+                                <li><p><code>double 	minHeight(double width)</code> -- </p></li>
+                                <li><p><code>DoubleProperty 	minHeightProperty()</code> -- </p></li>
+                                <li><p><code>double 	minWidth(double height)</code> -- </p></li>
+                                <li><p><code>DoubleProperty 	minWidthProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;Insets> 	opaqueInsetsProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;Insets> 	paddingProperty()</code> -- </p></li>
+                                <li><p><code>protected void 	positionInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, HPos halignment, VPos valignment)</code> -- </p></li>
+                                <li><p><code>static void 	positionInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, HPos halignment, VPos valignment, boolean isSnapToPixel)</code> -- </p></li>
+                                <li><p><code>double 	prefHeight(double width)</code> -- </p></li>
+                                <li><p><code>DoubleProperty 	prefHeightProperty()</code> -- </p></li>
+                                <li><p><code>double 	prefWidth(double height)</code> -- </p></li>
+                                <li><p><code>DoubleProperty 	prefWidthProperty()</code> -- </p></li>
+                                <li><p><code>void 	resize(double width, double height)</code> -- </p></li>
+                                <li><p><code>BooleanProperty 	scaleShapeProperty()</code> -- </p></li>
+                                <li><p><code>void 	setBackground(Background value)</code> -- </p></li>
+                                <li><p><code>void 	setBorder(Border value)</code> -- </p></li>
+                                <li><p><code>void 	setCacheShape(boolean value)</code> -- </p></li>
+                                <li><p><code>void 	setCenterShape(boolean value)</code> -- </p></li>
+                                <li><p><code>protected void 	setHeight(double value)</code> -- </p></li>
+                                <li><p><code>void 	setMaxHeight(double value)</code> -- </p></li>
+                                <li><p><code>void 	setMaxSize(double maxWidth, double maxHeight)</code> -- </p></li>
+                                <li><p><code>void 	setMaxWidth(double value)</code> -- </p></li>
+                                <li><p><code>void 	setMinHeight(double value)</code> -- </p></li>
+                                <li><p><code>void 	setMinSize(double minWidth, double minHeight)</code> -- </p></li>
+                                <li><p><code>void 	setMinWidth(double value)</code> -- </p></li>
+                                <li><p><code>void 	setOpaqueInsets(Insets value)</code> -- </p></li>
+                                <li><p><code>void 	setPadding(Insets value)</code> -- </p></li>
+                                <li><p><code>void 	setPrefHeight(double value)</code> -- </p></li>
+                                <li><p><code>void 	setPrefSize(double prefWidth, double prefHeight)</code> -- </p></li>
+                                <li><p><code>void 	setPrefWidth(double value)</code> -- </p></li>
+                                <li><p><code>void 	setScaleShape(boolean value)</code> -- </p></li>
+                                <li><p><code>void 	setShape(Shape value)</code> -- </p></li>
+                                <li><p><code>void 	setSnapToPixel(boolean value)</code> -- </p></li>
+                                <li><p><code>protected void 	setWidth(double value)</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;Shape> 	shapeProperty()</code> -- </p></li>
+                                <li><p><code>double 	snappedBottomInset()</code> -- </p></li>
+                                <li><p><code>double 	snappedLeftInset()</code> -- </p></li>
+                                <li><p><code>double 	snappedRightInset()</code> -- </p></li>
+                                <li><p><code>double 	snappedTopInset()</code> -- </p></li>
+                                <li><p><code>protected double 	snapPosition(double value)</code> -- </p></li>
+                                <li><p><code>protected double 	snapSize(double value)</code> -- </p></li>
+                                <li><p><code>protected double 	snapSpace(double value)</code> -- </p></li>
+                                <li><p><code>BooleanProperty 	snapToPixelProperty()</code> -- </p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	widthProperty()</code> -- </p></li>
+                            </ol>
                         </div>
                     </div>
                 </div>
                 <!-- item over -->
 
                 <!-- item start -->
-                <a class="offset" id="javafx-scene-layout-Region"></a>
+                <a class="offset" id="javafx-scene-layout-Pane"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">布局类： Region 及相关类</h3>
+                        <h3 class="panel-title">布局类： Pane 及子类</h3>
                     </div>
                     <div class="panel-body">
                         <div class="sub-item">
                             <pre class="brush: java;">
-java.lang.Object
-    javafx.scene.Node
-        javafx.scene.Parent
-            javafx.scene.layout.Region
+public class Pane extends Region {
+    public Pane() {}
+    public Pane(Node... children) {}
 
-public class Region extends Parent {
-    public static final double USE_PREF_SIZE = Double.NEGATIVE_INFINITY;
-    public static final double USE_COMPUTED_SIZE = -1;
+    public ObservableList&lt;Node> getChildren() {}
 }
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/Region.html" target="_blank">Region</a> </p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/Pane.html" target="_blank">Pane</a> 布局窗格的基类，需要将子类列表公开为公共的，以便子类的用户可以自由添加/删除子类。</p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <p>Pane 类可以直接用于需要对子类进行绝对定位的情况，因为除了将可调整大小的子类调整到其首选大小之外，它不执行布局。</p>
                         </div>
 
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public class AnchorPane extends Pane {
+    public AnchorPane() {}
+    public AnchorPane(Node... children) {}
+}
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/AnchorPane.html" target="_blank">AnchorPane</a> 锚节点允许子节点的边缘锚定到锚面板边缘的偏移。如果锚窗格具有边框和/或填充集，偏移量将从这些插图的内边缘测量。</p>
+                            <p>AnchorPane 中每个节点的位置，都是设置其距离 AnchorPane 边界的上，下，左，右距离来控制其位置。实例：</p>
+                            <pre class="brush: java;">
+AnchorPane root = new AnchorPane();
+Button btn = new Button("Top10-Left20");
+AnchorPane.setTopAnchor(btn, 10.0);    // 距离顶部 10
+AnchorPane.setLeftAnchor(btn, 20.0);   // 距离左边 20
+root.getChildren().add(btn);
+</pre>
+                            <p>AnchorPane 对每个托管子节点进行布局，而不管子节点的可见属性值如何；对于所有布局计算，都将忽略非托管子节点。</p>
+                            <p>AnchorPane 可以使用 CSS 来设置背景和边界。</p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+                                <li><p><code>static void 	clearConstraints(Node child)</code> -- 清除指定节点的约束</p></li>
+
+                                <li class="group"><p><code>static Double 	getBottomAnchor(Node child)</code> -- 获取指定节点距离下边界的距离</p></li>
+                                <li><p><code>static Double 	getTopAnchor(Node child)</code> -- 获取指定节点距离上边界的距离</p></li>
+                                <li><p><code>static Double 	getLeftAnchor(Node child)</code> -- 获取指定节点距离左边界的距离</p></li>
+                                <li><p><code>static Double 	getRightAnchor(Node child)</code> -- 获取指定节点距离右边界的距离</p></li>
+
+                                <li class="group"><p><code>static void 	setBottomAnchor(Node child, Double value)</code> -- 设置指定节点距离下边界的距离</p></li>
+                                <li><p><code>static void 	setTopAnchor(Node child, Double value)</code> --  设置指定节点距离上边界的距离</p></li>
+                                <li><p><code>static void 	setLeftAnchor(Node child, Double value)</code> --  设置指定节点距离左边界的距离</p></li>
+                                <li><p><code>static void 	setRightAnchor(Node child, Double value)</code> --  设置指定节点距离右边界的距离</p></li>
+
+                                <li class="group"><p><code>protected double 	computeMinHeight(double width)</code> -- 计算该区域的最小高度和</p></li>
+                                <li><p><code>protected double 	computeMinWidth(double height)</code> -- 计算该区域的最小宽度</p></li>
+                                <li><p><code>protected double 	computePrefHeight(double width)</code> -- 计算该区域的首选高度</p></li>
+                                <li><p><code>protected double 	computePrefWidth(double height)</code> -- 计算该区域的首选宽度</p></li>
+
+                                <li class="group"><p><code>protected void 	layoutChildren()</code> -- 在布局传递过程中调用，以布局父级中的子代。默认情况下，它只将托管的、可调整大小的内容设置为它们的首选大小，不执行任何节点定位</p></li>
+                            </ol>
                         </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class BorderPane extends Pane {
+    public BorderPane() {}
+    public BorderPane(Node center) {}
+    public BorderPane(Node center, Node top, Node right, Node bottom, Node left) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/BorderPane.html" target="_blank">BorderPane</a> 将空间分为 中，上，下，左，右五个部分，中心节点将被调整大小以填充中间可用空间，顶部和底部的子元素调整到它们的首选高度并扩展边界窗格的宽度，左右子元素将被调整到它们的首选宽度，并延长顶部和底部节点之间的长度。</p>
+                            <p>BorderPane 常用于定义一个非常经典的布局效果：上方是菜单栏和工具栏，下方是状态栏，左边是导航面板，右边是附加信息面板，中间是核心工作区域。</p>
+                            <p>BorderPane 将在五个位置中设置每个子集，而不管子节点的可见属性值；忽略非托管子节点。</p>
+                            <p>BorderPane 可以使用 CSS 来设置背景和边框。</p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+                                <li><p><code>static void 	clearConstraints(Node child)</code> -- 清除指定节点的约束</p></li>
+
+                                <li class="group"><p><code>static Insets 	getMargin(Node child)</code> -- 获取指定节点的边距</p></li>
+                                <li><p><code>static void 	setMargin(Node child, Insets value)</code> -- 设置指定节点的边距</p></li>
+
+                                <li class="group"><p><code>static Pos 	getAlignment(Node child)</code> -- 获取指定节点的对齐方式</p></li>
+                                <li><p><code>static void 	setAlignment(Node child, Pos value)</code> -- 设置指定节点的对齐方式</p></li>
+
+                                <li class="group"><p><code>void 	setCenter(Node value)</code> -- 设置中心节点元素</p></li>
+                                <li><p><code>Node 	getCenter()</code> -- 获取中心节点元素</p></li>
+                                <li><p><code>ObjectProperty&lt;Node> 	centerProperty()</code> -- 属性形式读写中心节点元素</p></li>
+
+                                <li class="group"><p><code>void 	setTop(Node value)</code> -- 设置中心顶部节点元素</p></li>
+                                <li><p><code>Node 	getTop()</code> -- 获取顶部节点元素</p></li>
+                                <li><p><code>ObjectProperty&lt;Node> 	topProperty()</code> -- 属性形式读写中心节点元素</p></li>
+
+                                <li class="group"><p><code>void 	setBottom(Node value)</code> -- 设置底部顶部元素</p></li>
+                                <li><p><code>Node 	getBottom()</code> -- 获取底部节点元素</p></li>
+                                <li><p><code>ObjectProperty&lt;Node> 	bottomProperty()</code> -- 属性形式读写底部节点元素</p></li>
+
+                                <li class="group"><p><code>void 	setLeft(Node value)</code> -- 设置左节点元素</p></li>
+                                <li><p><code>Node 	getLeft()</code> -- 获取左节点元素</p></li>
+                                <li><p><code>ObjectProperty&lt;Node> 	leftProperty()</code> -- 属性形式读写左节点元素</p></li>
+
+                                <li class="group"><p><code>void 	setRight(Node value)</code> -- 设置右节点元素</p></li>
+                                <li><p><code>Node 	getRight()</code> -- 获取右节点元素</p></li>
+                                <li><p><code>ObjectProperty&lt;Node> 	rightProperty()</code> -- 属性形式读写右节点元素</p></li>
+
+                                <li class="group"><p><code>Orientation 	getContentBias()</code> -- 返回节点对布局目的的调整大小偏差的方向</p></li>
+
+                                <li class="group"><p><code>protected double 	computeMinHeight(double width)</code> -- 计算该区域的最小高度和</p></li>
+                                <li><p><code>protected double 	computeMinWidth(double height)</code> -- 计算该区域的最小宽度</p></li>
+                                <li><p><code>protected double 	computePrefHeight(double width)</code> -- 计算该区域的首选高度</p></li>
+                                <li><p><code>protected double 	computePrefWidth(double height)</code> -- 计算该区域的首选宽度</p></li>
+
+                                <li class="group"><p><code>protected void 	layoutChildren()</code> -- 在布局传递过程中调用，以布局父级中的子代。默认情况下，它只将托管的、可调整大小的内容设置为它们的首选大小，不执行任何节点定位</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class FlowPane extends Pane {
+    public FlowPane() {}
+    public FlowPane(double hgap, double vgap) {}
+    public FlowPane(double hgap, double vgap, Node... children) {}
+    public FlowPane(Node... children) {}
+    public FlowPane(Orientation orientation) {}
+    public FlowPane(Orientation orientation, double hgap, double vgap) {}
+    public FlowPane(Orientation orientation, double hgap, double vgap, Node... children) {}
+    public FlowPane(Orientation orientation, Node... children) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/FlowPane.html" target="_blank">FlowPane</a> 为流式布局，默认以横向流布局，并且到达面板的宽度会自动换行。</p>
+                            <p>可以使用 <code>Orientation.VERTICAL</code> 将流修改为纵向流，到高度不够是自动布局到下一列。</p>
+                            <p>FlowPane 对每个托管子节点进行布局，而不管子节点的可见属性值如何；对于所有布局计算，都将忽略非托管子节点。</p>
+                            <p>FlowPane 可以使用 CSS 来设置背景和边界。</p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+                                <li><p><code>static void 	clearConstraints(Node child)</code> -- 清除指定节点的约束</p></li>
+
+                                <li class="group"><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 获取与此类关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>static Insets 	getMargin(Node child)</code> -- 获取指定节点的边距</p></li>
+                                <li><p><code>static void 	setMargin(Node child, Insets value)</code> -- 设置指定节点的边距</p></li>
+
+                                <li class="group"><p><code>void 	setOrientation(Orientation value)</code> -- 设置横/纵向排列</p></li>
+                                <li><p><code>Orientation 	getOrientation()</code> -- 获取排列方向</p></li>
+                                <li><p><code>ObjectProperty&lt;Orientation> 	orientationProperty()</code> -- 属性形式读写排列方向</p></li>
+
+                                <li class="group"><p><code>void 	setAlignment(Pos value)</code> -- 设置对齐方式</p></li>
+                                <li><p><code>Pos 	getAlignment()</code> -- 获取对齐方式</p></li>
+                                <li><p><code>ObjectProperty&lt;Pos> 	alignmentProperty()</code> -- 属性形式读写对齐方式</p></li>
+
+                                <li class="group"><p><code>void 	setRowValignment(VPos value)</code> -- 设置行对齐方式(同一行的元素高度不一时其对齐方式)</p></li>
+                                <li><p><code>VPos 	getRowValignment()</code> -- 获取行对齐方式</p></li>
+                                <li><p><code>ObjectProperty&lt;VPos> 	rowValignmentProperty()</code> -- 属性形式读写行对齐方式</p></li>
+
+                                <li class="group"><p><code>void 	setColumnHalignment(HPos value)</code> -- 设置列对齐方式(同一列的元素宽度不一时其对齐方式)</p></li>
+                                <li><p><code>HPos 	getColumnHalignment()</code> -- 获取列对齐方式</p></li>
+                                <li><p><code>ObjectProperty&lt;HPos> 	columnHalignmentProperty()</code> -- 属性形式读写列对齐方式</p></li>
+
+                                <li class="group"><p><code>void 	setPrefWrapLength(double value)</code> -- 内容应该在水平流窗格中的优选宽度或内容应该在垂直流窗格中的优选高度</p></li>
+                                <li><p><code>double 	getPrefWrapLength()</code> -- 获取其首选宽度/高度</p></li>
+                                <li><p><code>DoubleProperty 	prefWrapLengthProperty()</code> -- 属性形式读写其首选宽度/高度</p></li>
+
+                                <li class="group"><p><code>void 	setHgap(double value)</code> -- 设置子元素间横向间距</p></li>
+                                <li><p><code>double 	getHgap()</code> -- 获取子元素间横向间距</p></li>
+                                <li><p><code>DoubleProperty 	hgapProperty()</code> -- 属性形式读写子元素间横向间距</p></li>
+
+                                <li class="group"><p><code>void 	setVgap(double value)</code> -- 设置子元素间纵向间距</p></li>
+                                <li><p><code>double 	getVgap()</code> -- 获取子元素间纵向间距</p></li>
+                                <li><p><code>DoubleProperty 	vgapProperty()</code> -- 属性形式读写子元素间纵向间距</p></li>
+
+                                <li class="group"><p><code>void 	requestLayout()</code> -- 请求在呈现下一个场景之前执行的布局传递</p></li>
+                                <li><p><code>Orientation 	getContentBias()</code> -- 返回节点对布局目的的调整大小偏差的方向</p></li>
+                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- 获取与此实例关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>protected double 	computeMinHeight(double width)</code> -- 计算该区域的最小高度和</p></li>
+                                <li><p><code>protected double 	computeMinWidth(double height)</code> -- 计算该区域的最小宽度</p></li>
+                                <li><p><code>protected double 	computePrefHeight(double width)</code> -- 计算该区域的首选高度</p></li>
+                                <li><p><code>protected double 	computePrefWidth(double height)</code> -- 计算该区域的首选宽度</p></li>
+
+                                <li class="group"><p><code>protected void 	layoutChildren()</code> -- 在布局传递过程中调用，以布局父级中的子代。默认情况下，它只将托管的、可调整大小的内容设置为它们的首选大小，不执行任何节点定位</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class GridPane extends Pane {
+    public static final int REMAINING = Integer.MAX_VALUE;
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/GridPane.html" target="_blank">GridPane</a> 布局面板使你可以创建灵活的基于行和列的网格来放置节点。</p>
+                            <p>节点可以被放置到任意一个单元格中，也可以根据需要设置一个节点跨越多个单元格(行或者列)。</p>
+                            <p>GridPane 对于创建表单或者其他以行和列来组织的界面来说是非常有用的。</p>
+                            <p>设置垂直(Vertical)和水平(Horizontal)对齐属性(Alignment)能够控制单元格中的各个控件的对齐方式。</p>
+                            <p><b>GridPane 的行和列坐标都是从 0 开始。</b></p>
+                            <p>GRIDANE 可以使用 CSS 来设置背景和边框。</p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 获取与此类关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>static void 	clearConstraints(Node child)</code> -- 清除指定节点的约束</p></li>
+
+                                <li class="group"><p><code>static void 	setColumnIndex(Node child, Integer value)</code> -- 设置指定节点所在的列(未添加到节点)</p></li>
+                                <li><p><code>static Integer 	getColumnIndex(Node child)</code> -- 获取指定节点所在的行</p></li>
+                                <li><p><code>static void 	setRowIndex(Node child, Integer value)</code> -- 设置指定节点所在的行(未添加到节点)</p></li>
+                                <li><p><code>static Integer 	getRowIndex(Node child)</code> -- 获取指定节点所在的行</p></li>
+
+                                <li class="group"><p><code>static void 	setColumnSpan(Node child, Integer value)</code> -- 设置指定节点占用的列</p></li>
+                                <li><p><code>static Integer 	getColumnSpan(Node child)</code> -- 获取指定节点占用的列</p></li>
+                                <li><p><code>static void 	setRowSpan(Node child, Integer value)</code> -- 设置指定节点占用的行</p></li>
+                                <li><p><code>static Integer 	getRowSpan(Node child)</code> -- 获取指定节点占用的行</p></li>
+
+                                <li class="group"><p><code>static void 	setHgrow(Node child, Priority value)</code> -- 设置子节点的横向增长优先级(不清楚怎么用)</p></li>
+                                <li><p><code>static Priority 	getHgrow(Node child)</code> -- 获取子节点的横向增长优先级(不清楚怎么用)</p></li>
+                                <li><p><code>static void 	setVgrow(Node child, Priority value)</code> -- 设置子节点的纵向增长优先级(不清楚怎么用)</p></li>
+                                <li><p><code>static Priority 	getVgrow(Node child)</code> -- 获取子节点的纵向增长优先级(不清楚怎么用)</p></li>
+
+                                <li class="group"><p><code>static void 	setFillWidth(Node child, Boolean value)</code> -- 设置是否横向填充网格(针对某些首选大小为包含子节点的节点)</p></li>
+                                <li><p><code>static Boolean 	isFillWidth(Node child)</code> -- 获取是否横向填充网格</p></li>
+                                <li><p><code>static void 	setFillHeight(Node n, Boolean value)</code> -- 设置是否纵向填充网格(针对某些首选大小为包含子节点的节点)</p></li>
+                                <li><p><code>static Boolean 	isFillHeight(Node child)</code> -- 获取是否纵向填充网格</p>
+                                    <pre class="brush: java;">
+Pane pane = new Pane();
+pane.getChildren().add(new Button("N-2, 0"));
+pane.getStyleClass().add("cl-05");
+GridPane.setFillWidth(pane, false); // 宽度为包含组件大小
+GridPane.setFillHeight(btn, true);  // 高度填充网格
+root.add(pane, 2, 0, 2, 2);
+</pre>
+</li>
+
+                                <li class="group"><p><code>static void 	setMargin(Node child, Insets value)</code> -- 设置指定节点距离网格边界的距离</p></li>
+                                <li><p><code>static Insets 	getMargin(Node child)</code> -- 获取指定节点距离网格边界的距离</p></li>
+
+                                <li class="group"><p><code>static void 	setHalignment(Node child, HPos v)</code> -- 设置指定节点横向对齐方式，默认左对齐(当节点宽度小于网格宽度)</p></li>
+                                <li><p><code>static HPos 	getHalignment(Node child)</code> -- 获取横向对齐方式</p></li>
+                                <li><p><code>static void 	setValignment(Node n, VPos v)</code> -- 设置指定节点纵向对齐方式，默认居中对齐(当节点高度小于网格高度)</p></li>
+                                <li><p><code>static VPos 	getValignment(Node child)</code> -- 获取纵向对齐方式</p></li>
+
+                                <li class="group"><p><code>static void 	setConstraints(Node child, int columnIndex, int rowIndex)</code> -- 设置指定节点的列和行</p></li>
+                                <li><p><code>static void 	setConstraints(Node child, int columnIndex, int rowIndex, int columnspan, int rowspan)</code> -- 设置指定节点的列和行，和其占用的列和行数量</p></li>
+                                <li><p><code>static void 	setConstraints(Node child, int columnIndex, int rowIndex, int columnspan, int rowspan, HPos halignment, VPos valignment)</code> -- 设置指定节点的列和行，其占用的列和行数量，并指定横纵向对齐方式</p></li>
+                                <li><p><code>static void 	setConstraints(Node child, int columnIndex, int rowIndex, int columnspan, int rowspan, HPos halignment, VPos valignment, Priority hgrow, Priority vgrow)</code> -- 设置指定节点的列和行，其占用的列和行数量，并指定横纵向对齐方式，并指定优先级</p></li>
+                                <li><p><code>static void 	setConstraints(Node child, int columnIndex, int rowIndex, int columnspan, int rowspan, HPos halignment, VPos valignment, Priority hgrow, Priority vgrow, Insets margin)</code> -- 设置指定节点的列和行，其占用的列和行数量，并指定横纵向对齐方式，并指定优先级，并指定边距</p></li>
+
+                                <li class="group"><p><code>void 	setAlignment(Pos value)</code> -- 设置对齐方式</p></li>
+                                <li><p><code>Pos 	getAlignment()</code> -- 获取对齐方式</p></li>
+                                <li><p><code>ObjectProperty&lg;Pos> 	alignmentProperty()</code> -- 属性形式读写对齐方式</p></li>
+
+                                <li class="group"><p><code>void 	setVgap(double value)</code> -- 设置纵向间距</p></li>
+                                <li><p><code>double 	getVgap()</code> -- 获取纵向间距</p></li>
+                                <li><p><code>DoubleProperty 	vgapProperty()</code> -- 属性形式读写纵向间距</p></li>
+
+                                <li class="group"><p><code>void 	setHgap(double value)</code> -- 设置横向间距</p></li>
+                                <li><p><code>double 	getHgap()</code> -- 获取横向间距</p></li>
+                                <li><p><code>DoubleProperty 	hgapProperty()</code> -- 属性形式读写横向间距</p></li>
+
+                                <li class="group"><p><code>void 	setGridLinesVisible(boolean value)</code> -- 设置网格线是否可见</p></li>
+                                <li><p><code>boolean 	isGridLinesVisible()</code> -- 获取网格线是否可见</p></li>
+                                <li><p><code>BooleanProperty 	gridLinesVisibleProperty()</code> -- 属性形式读写网格线是否可见</p></li>
+
+                                <li class="group"><p><code>void 	add(Node child, int columnIndex, int rowIndex)</code> -- 在指定列和行添加一个节点</p></li>
+                                <li><p><code>void 	addRow(int row, Node... children)</code> -- 在指定行中顺序放置指定节点，如果此行已经存在，那么顺序添加到最后</p></li>
+                                <li><p><code>void 	addColumn(int column, Node... children)</code> -- 在指定列中顺序放置指定节点，如果列已存在，那么顺序添加到最后</p></li>
+                                <li><p><code>void 	add(Node child, int columnIndex, int rowIndex, int colspan, int rowspan)</code> -- 在指定列和行添加一个节点, 并指定其占用的列和行数量(节点可以占用多行和多列，后边添加的可能覆盖前面添加的元素)</p></li>
+
+                                <li class="group"><p><code>ObservableList&lt;ColumnConstraints> 	getColumnConstraints()</code> -- 获取列约束列表</p></li>
+                                <li><p><code>ObservableList&lt;RowConstraints> 	getRowConstraints()</code> -- 获取行约束列表</p></li>
+
+                                <li class="group"><p><code>void 	requestLayout()</code> -- 请求在呈现下一个场景之前执行的布局传递</p></li>
+                                <li><p><code>Orientation 	getContentBias()</code> -- 返回节点对布局目的的调整大小偏差的方向</p></li>
+                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- 获取与此实例关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>protected double 	computeMinHeight(double width)</code> -- 计算该区域的最小高度和</p></li>
+                                <li><p><code>protected double 	computeMinWidth(double height)</code> -- 计算该区域的最小宽度</p></li>
+                                <li><p><code>protected double 	computePrefHeight(double width)</code> -- 计算该区域的首选高度</p></li>
+                                <li><p><code>protected double 	computePrefWidth(double height)</code> -- 计算该区域的首选宽度</p></li>
+
+                                <li class="group"><p><code>protected void 	layoutChildren()</code> -- 在布局传递过程中调用，以布局父级中的子代。默认情况下，它只将托管的、可调整大小的内容设置为它们的首选大小，不执行任何节点定位</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class StackPane extends Pane {
+    public StackPane() {}
+    public StackPane(Node... children) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/StackPane.html" target="_blank">StackPane</a> 布局面板将所有的节点放在一个堆栈中进行布局管理，后添加进去的节点会显示在前一个添加进去的节点之上。</p>
+                            <p>这个布局为将文本(Text)覆盖到一个图形(Shape)或者图像(Image)之上，或者将普通图形相互覆盖来创建更复杂的图形，提供了一个简单的方案。</p>
+                            <p>通过设置对齐属性(Alignment)来控制子节点在 StackPane 中的位置。这个属性会影响所有的子节点，而设置外边距属性(Margin)可以控制在 StackPane 中的单个子节点位置。</p>
+                            <p>StackPane 在 Pane 的基础上加了设置对齐方式的方法： <code>setAlignment(Pos)</code>， 默认全部堆叠在指定的位置(由对齐方式指定)，但是可以静态方法：<code>StackPane.setAlignment(Node, Pos)</code> 来使指定的节点使用不同的对齐方式。</p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+                                <li><p><code>static void 	clearConstraints(Node child)</code> -- 清除指定节点的约束</p></li>
+
+                                <li class="group"><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 获取与此类关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>static Insets 	getMargin(Node child)</code> -- 获取指定节点的边距</p></li>
+                                <li><p><code>static void 	setMargin(Node child, Insets value)</code> -- 设置指定节点的边距</p></li>
+
+                                <li class="group"><p><code>static void 	setAlignment(Node child, Pos value)</code> -- 设置指定节点对齐方式</p></li>
+                                <li><p><code>static Pos 	getAlignment(Node child)</code> -- 获取指定节点对齐方式</p></li>
+
+                                <li class="group"><p><code>void 	setAlignment(Pos value)</code> -- 设置对齐方式</p></li>
+                                <li><p><code>Pos 	getAlignment()</code> -- 获取对齐方式</p></li>
+                                <li><p><code>ObjectProperty&lt;Pos> 	alignmentProperty()</code> -- 属性形式读写对齐方式</p></li>
+
+                                <li class="group"><p><code>void 	requestLayout()</code> -- 请求在呈现下一个场景之前执行的布局传递</p></li>
+                                <li><p><code>Orientation 	getContentBias()</code> -- 返回节点对布局目的的调整大小偏差的方向</p></li>
+                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- 获取与此实例关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>protected double 	computeMinHeight(double width)</code> -- 计算该区域的最小高度和</p></li>
+                                <li><p><code>protected double 	computeMinWidth(double height)</code> -- 计算该区域的最小宽度</p></li>
+                                <li><p><code>protected double 	computePrefHeight(double width)</code> -- 计算该区域的首选高度</p></li>
+                                <li><p><code>protected double 	computePrefWidth(double height)</code> -- 计算该区域的首选宽度</p></li>
+
+                                <li class="group"><p><code>protected void 	layoutChildren()</code> -- 在布局传递过程中调用，以布局父级中的子代。默认情况下，它只将托管的、可调整大小的内容设置为它们的首选大小，不执行任何节点定位。</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class TilePane extends Pane {
+    public TilePane() {}
+    public TilePane(double hgap, double vgap) {}
+    public TilePane(double hgap, double vgap, Node... children) {}
+    public TilePane(Node... children) {}
+    public TilePane(Orientation orientation) {}
+    public TilePane(Orientation orientation, double hgap, double vgap) {}
+    public TilePane(Orientation orientation, double hgap, double vgap, Node... children) {}
+    public TilePane(Orientation orientation, Node... children) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/TilePane.html" target="_blank">TilePane</a> 布局面板和 FlowPane 很相似。</p>
+                            <p>TilePane 将其包含的节点都放在一个网格中，其中每格或者每块磁贴的大小都是一样的。</p>
+                            <p>节点可以按水平方向(行)进行排列，或者以垂直方向(列)进行排列。水平排列时会在 TilePane 的宽度边界处对 Tile 进行自动换行，垂直排列时会在 TilePane 的高度边界处对 Tile 进行自动换列。</p>
+                            <p>使用 prefColumns 和 prefRows 属性可以设定 TilePane 的首选大小。</p>
+                            <p>设置间隙属性(Gap)用来管理行和列之间间距。设置内边距属性(Padding)用来设管理节点元素和 TilePane 边缘之间的距离。</p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class HBox extends Pane {
+
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/HBox.html" target="_blank">HBox</a> 布局面板为将多个节点排列在一行中提供了一个简单的方法。</p>
+                            <p>设置内边距(Padding)属性可以用于管理节点到 HBox 边缘的距离。设置间距(Spacing)属性可以用于管理节点之间的距离。设置外边距(Margin)属性可以为单个控件周围增加额外的空间。</p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class VBox extends Pane {
+
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/VBox.html" target="_blank">VBox</a> 布局面板和 HBox 很类似，只是其包含的节点是排成一列。</p>
+                            <p>设置内边距(Padding)属性可以管理节点到VBox边缘的距离。设置间距(Spacing)属性可以管理节点之间的距离。设置外边距(Margin)属性可以为单个控件周围增加额外的空间。</p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                        </div>
+
+
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class DialogPane extends Pane {
+
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/DialogPane.html" target="_blank">javafx.scene.control.DialogPane</a></p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class TextFlow extends Pane {
+
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/text/TextFlow.html" target="_blank">javafx.scene.text.TextFlow</a></p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                        </div>
+
+
                     </div>
                 </div>
                 <!-- item over -->
@@ -3376,6 +3905,7 @@ public interface Skinnable {
 }
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
                         </div>
 
                         <div class="sub-item">
@@ -3383,6 +3913,7 @@ public interface Skinnable {
 
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
                         </div>
                     </div>
                 </div>
