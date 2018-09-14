@@ -3048,25 +3048,34 @@ public class Scene implements EventTarget {
                                 <li class="group"><p><code>void 	snapshot(Callback&lt;SnapshotResult,Void> callback, WritableImage image)</code> -- </p></li>
                                 <li><p><code>WritableImage 	snapshot(WritableImage image)</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setNodeOrientation(NodeOrientation orientation)</code> -- </p></li>
-                                <li><p><code>NodeOrientation 	getNodeOrientation()</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;NodeOrientation> 	nodeOrientationProperty()</code> -- </p></li>
+                                <li class="group"><p><code>void setNodeOrientation(NodeOrientation orientation)</code> -- 设置布局方向(LTR / RTL)</p></li>
+                                <li><p><code>NodeOrientation getNodeOrientation()</code> -- 获取布局方向</p></li>
+                                <li><p><code>ObjectProperty&lt;NodeOrientation> nodeOrientationProperty()</code> -- 属性形式读写布局方向</p></li>
 
                                 <li class="group"><p><code>NodeOrientation 	getEffectiveNodeOrientation()</code> -- </p></li>
                                 <li><p><code>ReadOnlyObjectProperty&lt;NodeOrientation> 	effectiveNodeOrientationProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setFill(Paint value)</code> -- </p></li>
-                                <li><p><code>Paint 	getFill()</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;Paint> 	fillProperty()</code> -- </p></li>
+                                <li class="group"><p><code>void 	setFill(Paint value)</code> -- 设置背景色(把里面的节点背景色设置为透明才能看到效果)</p></li>
+                                <li><p><code>Paint 	getFill()</code> -- 获取背景色</p></li>
+                                <li><p><code>ObjectProperty&lt;Paint> 	fillProperty()</code> -- 属性形式读写背景色</p>
+                                    <pre class="brush: java;">
+Pane root = new Pane();
+root.setStyle("-fx-background-color: transparent;");
 
-                                <li class="group"><p><code>void 	setUserAgentStylesheet(String url)</code> -- </p></li>
-                                <li><p><code>String 	getUserAgentStylesheet()</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;String> 	userAgentStylesheetProperty()</code> -- </p></li>
-                                <li><p><code>ObservableList&lt;String> 	getStylesheets()</code> -- </p></li>
+Scene scene = new Scene(root, 640, 320);
+scene.setFill(Color.RED);
+...
+</pre>
+                                </li>
 
-                                <li class="group"><p><code>void 	setRoot(Parent value)</code> -- </p></li>
-                                <li><p><code>Parent 	getRoot()</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;Parent> 	rootProperty()</code> -- </p></li>
+                                <li class="group"><p><code>void 	setUserAgentStylesheet(String url)</code> -- 设置用于次场景的 CSS 文件路径</p></li>
+                                <li><p><code>String 	getUserAgentStylesheet()</code> -- 获取用于次场景的 CSS 文件路径</p></li>
+                                <li><p><code>ObjectProperty&lt;String> 	userAgentStylesheetProperty()</code> -- 属性形式读写用于次场景的 CSS 文件路径</p></li>
+                                <li><p><code>ObservableList&lt;String> 	getStylesheets()</code> -- 获取一个可链接到样式表的字符串 URL 列表</p></li>
+
+                                <li class="group"><p><code>void 	setRoot(Parent value)</code> -- 更改构造方法传入的 root 节点</p></li>
+                                <li><p><code>Parent 	getRoot()</code> -- 获取 root 节点</p></li>
+                                <li><p><code>ObjectProperty&lt;Parent> 	rootProperty()</code> -- 属性形式读写 root 节点</p></li>
 
                                 <li><p><code>void 	setUserData(Object value)</code> -- 存储一个数据</p></li>
                                 <li><p><code>Object 	getUserData()</code> -- 获取存储的数据</p></li>
@@ -3074,22 +3083,22 @@ public class Scene implements EventTarget {
                                 <li class="group"><p><code>ObservableMap&lt;Object,Object> 	getProperties()</code> -- 以 Map 的形式存储数据，可以读写</p></li>
                                 <li><p><code>boolean 	hasProperties()</code> -- 方法 <code>getProperties()</code> 是否为空</p></li>
 
-                                <li class="group"><p><code>double 	getWidth()</code> -- </p></li>
+                                <li class="group"><p><code>double 	getWidth()</code> -- 获取场景的宽度</p></li>
                                 <li><p><code>ReadOnlyDoubleProperty 	widthProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>double 	getHeight()</code> -- </p></li>
+                                <li class="group"><p><code>double 	getHeight()</code> -- 获取场景的高度</p></li>
                                 <li><p><code>ReadOnlyDoubleProperty 	heightProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>double 	getX()</code> -- </p></li>
+                                <li class="group"><p><code>double 	getX()</code> -- 获取场景相对与窗口的开始 X 坐标(一般为 0)</p></li>
                                 <li><p><code>ReadOnlyDoubleProperty 	xProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>double 	getY()</code> -- </p></li>
+                                <li class="group"><p><code>double 	getY()</code> -- 获取场景相对与窗口的开始 Y 坐标(如果窗口有装饰,那么为其高度)</p></li>
                                 <li><p><code>ReadOnlyDoubleProperty 	yProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>Window 	getWindow()</code> -- </p></li>
+                                <li class="group"><p><code>Window 	getWindow()</code> -- 获取场景所在的窗口</p></li>
                                 <li><p><code>ReadOnlyObjectProperty&lt;Window> 	windowProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setCursor(Cursor value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setCursor(Cursor value)</code> -- 设置场景的默认游标类型</p></li>
                                 <li><p><code>Cursor 	getCursor()</code> -- </p></li>
                                 <li><p><code>ObjectProperty&lt;Cursor> 	cursorProperty()</code> -- </p></li>
 
@@ -3097,12 +3106,12 @@ public class Scene implements EventTarget {
                                 <li><p><code>Camera 	getCamera()</code> -- </p></li>
                                 <li><p><code>ObjectProperty&lt;Camera> 	cameraProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>Node 	getFocusOwner()</code> -- </p></li>
+                                <li class="group"><p><code>Node 	getFocusOwner()</code> -- 获取焦点所有者节点</p></li>
                                 <li><p><code>ReadOnlyObjectProperty&lt;Node> 	focusOwnerProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	addMnemonic(Mnemonic m)</code> -- </p></li>
-                                <li><p><code>void 	removeMnemonic(Mnemonic m)</code> -- </p></li>
-                                <li><p><code>ObservableMap&lt;KeyCombination,ObservableList&lt;Mnemonic>> 	getMnemonics()</code> -- </p></li>
+                                <li class="group"><p><code>void 	addMnemonic(Mnemonic m)</code> -- 注册指定的助记符(助记符是由节点和键组合构成的,按下键,目标节点将被发送一个 ActionEvent)</p></li>
+                                <li><p><code>void 	removeMnemonic(Mnemonic m)</code> -- 移除指定的助记符</p></li>
+                                <li><p><code>ObservableMap&lt;KeyCombination,ObservableList&lt;Mnemonic>> 	getMnemonics()</code> -- 获取所有助记符列表</p></li>
 
                                 <li class="group"><p><code>void 	setEventDispatcher(EventDispatcher value)</code> -- 设置场景事件分发器</p></li>
                                 <li><p><code>EventDispatcher 	getEventDispatcher()</code> -- 获取场景事件分发器</p></li>
