@@ -2718,6 +2718,52 @@ public void start(Stage primaryStage) throws Exception {
                             </ol>
                         </div>
 
+                        <a id="Platform" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public final class Platform {
+    private Platform() {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/application/Platform.html" target="_blank">Platform</a> 是应用平台支持类。</p>
+                            <ol>
+                                <li><p><code>static boolean 	isAccessibilityActive()</code> -- 指示可访问性是否为活动的。此属性通常在辅助技术（如屏幕阅读器）第一次请求有关任何 JavaFX 窗口或其子窗口的信息时设置为 true。</p></li>
+                                <li><p><code>static ReadOnlyBooleanProperty 	accessibilityActiveProperty()</code> -- 属性形式获取以上值</p></li>
+
+                                <li class="group"><p><code>static boolean 	isImplicitExit()</code> -- 默认为 true</p></li>
+                                <li><p><code>static void 	setImplicitExit(boolean implicitExit)</code> -- 如果这个属性为真，那么当最后一个窗口关闭时，JavaFX 运行时将隐式关闭，JavaFX 启动程序将调用 Application.stop() 方法并终止 JavaFX 应用程序线程；如果此属性为 false，则应用程序将继续正常运行，甚至在最后一个窗口关闭之后，直到应用程序调用 exit() 方法。</p></li>
+
+                                <li class="group"><p><code>static void 	exit()</code> -- 促使程序退出</p></li>
+                                <li><p><code>static boolean 	isFxApplicationThread()</code> -- 当前线程是否是 JavaFX 应用程序线程</p></li>
+                                <li><p><code>static void 	runLater(Runnable runnable)</code> -- 将来的某个特定时间在 JavaFX 应用程序线程运行 Runnable</p></li>
+                                <li><p><code>static boolean 	isSupported(ConditionalFeature feature)</code> -- 当前平台是否支持指定功能</p>
+                                    <pre class="brush: java;">
+/** 定义一组条件特征, 这些特征可能不适用于所有平台，可用 Platform.isSupported(ConditionalFeature) 检测 */
+public enum ConditionalFeature {
+    CONTROLS,               // 指示 UI 控件的 JavaFX 类可用性
+    EFFECT,                 // 指示筛选器效果在平台上可用性
+    FXML,                   // 指示XML 库存在于 JRE 中，并且 FXML API 在平台上可用性
+    GRAPHICS,               // 指示图形能力的 JavaFX 类可在此平台上可用性
+    INPUT_METHOD,           // 指示文本输入方法在平台上可用性
+    INPUT_POINTER,          // 指示是否附加了鼠标、轨迹板或轨迹球等相对运动指针设备
+    INPUT_TOUCH,            // 指示触摸屏是否连接到运行 JavaFX 的设备上
+    INPUT_MULTITOUCH,       // 指示是否附加了提供多点触摸输入的触摸屏
+    SCENE3D,                // 指示 3D 可在平台上可用
+    SHAPE_CLIP,             // 指示对任意形状的剪辑在平台上可用
+    SWING,                  // 指示 Swing 库存在于 JRE 中，并且与 JavaFX 的 Swing 集成在平台上可用
+    SWT,                    // 指示平台上有与 JavaFX 的 SWT 集成在平台上可用
+    TRANSPARENT_WINDOW,     // 指示系统支持完全窗口透明性
+    TWO_LEVEL_FOCUS,        // 指示控件是否应该使用两级焦点
+    VIRTUAL_KEYBOARD,       // 指示屏幕上的虚拟键盘是否用于文本输入
+    UNIFIED_WINDOW,         // 指示系统支持 StageStyle.UNIFIED
+    MEDIA,                  // 指示 javafx.scene.media 包可在该平台上使用
+    WEB                     // 指示 javafx.scene.web 包可在该平台上使用
+}
+</pre>
+                                </li>
+                            </ol>
+                        </div>
+
                         <a id="Stage" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
@@ -2748,49 +2794,90 @@ public class Stage extends Window {
                                 <li><p><code>StageStyle 	getStyle()</code> -- 获取窗体样式</p>
                                     <pre class="brush: java;">
 public enum StageStyle {
-    DECORATED,          // 正常窗口，默认
-    UNDECORATED,        // 无边框窗口
-    TRANSPARENT,        // 透明背景，无边框
-    UTILITY,            //
-    UNIFIED             //
+    DECORATED,   // 正常窗口，默认
+    UNDECORATED, // 无装饰窗口
+    TRANSPARENT, // 透明背景窗口(测试还是白色背景)，无装饰
+    UTILITY,     // 装饰只有关闭按钮，无最大化和最小化按钮，用于 primaryStage 则不显示窗口
+    UNIFIED      // 我的环境不支持(Platform.isSupported(ConditionalFeature.UNIFIED_WINDOW) == false)
 }
 </pre>
                                 </li>
 
-                                <li class="group"><p><code>boolean 	isFullScreen()</code> -- 是否为全屏</p></li>
-                                <li><p><code>void 	setFullScreen(boolean value)</code> -- 设置是否全屏</p></li>
-                                <li><p><code>ReadOnlyBooleanProperty 	fullScreenProperty()</code> -- 属性形式读取和修改标题</p></li>
+                                <li class="group"><p><code>boolean 	isResizable()</code> -- 是否可调节大小</p></li>
+                                <li><p><code>void 	setResizable(boolean value)</code> -- 设置是否可调节大小(如果为 false, 那么无法全屏，也无最大化按钮)</p></li>
+                                <li><p><code>BooleanProperty 	resizableProperty()</code> -- 属性形式读写调节是否可大小</p></li>
 
                                 <li class="group"><p><code>boolean isMaximized()</code> -- 是否最大化</p></li>
                                 <li><p><code>void setMaximized(boolean value)</code> -- 设置最大化</p></li>
                                 <li><p><code>ReadOnlyBooleanProperty maximizedProperty()</code> -- 属性形式读写最大化</p></li>
 
-                                <li class="group"><p><code>boolean 	isResizable()</code> -- 是否可调节大小</p></li>
-                                <li><p><code>void 	setResizable(boolean value)</code> -- 设置是否可调节大小(如果为 false, 那么无法全屏，也无最大化按钮)</p></li>
-                                <li><p><code>BooleanProperty 	resizableProperty()</code> -- 属性形式读写调节大小</p></li>
+                                <li class="group"><p><code>boolean 	isIconified()</code> -- 是否已经最小化</p></li>
+                                <li><p><code>void 	setIconified(boolean value)</code> -- 设置为最小化</p></li>
+                                <li><p><code>ReadOnlyBooleanProperty 	iconifiedProperty()</code> -- 属性形式读写是否已经最小化</p>
 
-                                <li class="group"><p><code>boolean 	isIconified()</code> -- </p></li>
-                                <li><p><code>void 	setIconified(boolean value)</code> -- </p></li>
-                                <li><p><code>ReadOnlyBooleanProperty 	iconifiedProperty()</code> -- </p>
+                                <li class="group"><p><code>boolean 	isFullScreen()</code> -- 是否为全屏</p></li>
+                                <li><p><code>void 	setFullScreen(boolean value)</code> -- 设置是否全屏</p></li>
+                                <li><p><code>ReadOnlyBooleanProperty 	fullScreenProperty()</code> -- 属性形式读取和修改标题</p></li>
 
-                                <li class="group"><p><code>String getFullScreenExitHint()</code> -- </p></li>
-                                <li><p><code>void setFullScreenExitHint(String value)</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;String> fullScreenExitHintProperty()</code> -- </p></li>
+                                <li class="group"><p><code>String getFullScreenExitHint()</code> -- 获取进入全屏模式时显示的文本</p></li>
+                                <li><p><code>void setFullScreenExitHint(String value)</code> -- 指定当用户进入全屏模式时显示的文本</p></li>
+                                <li><p><code>ObjectProperty&lt;String> fullScreenExitHintProperty()</code> -- 属性形式读写进入全屏模式时显示的文本</p></li>
 
-                                <li class="group"><p><code>KeyCombination getFullScreenExitKeyCombination()</code> -- </p></li>
-                                <li><p><code>void setFullScreenExitKeyCombination(KeyCombination keyCombination)</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;KeyCombination> fullScreenExitKeyProperty()</code> -- </p></li>
+                                <li class="group"><p><code>KeyCombination getFullScreenExitKeyCombination()</code> -- 获取退出全屏模式的快捷键</p></li>
+                                <li><p><code>void setFullScreenExitKeyCombination(KeyCombination keyCombination)</code> -- 设置退出全屏模式的快捷键</p></li>
+                                <li><p><code>ObjectProperty&lt;KeyCombination> fullScreenExitKeyProperty()</code> -- 属性形式读写退出全屏模式的快捷键</p>
+                                    <pre class="brush: java;">
+/** 退出全屏模式的快捷键设置为 F12 */
+stage.setFullScreenExitKeyCombination(KeyCharacterCombination.keyCombination("F12"));
+</pre>
+                                </li>
 
-                                <li class="group"><p><code>void setAlwaysOnTop(boolean value)</code> -- </p>
-                                <li><p><code>boolean isAlwaysOnTop()</code> -- </p>
-                                <li><p><code>ReadOnlyBooleanProperty alwaysOnTopProperty()</code> -- </p>
+                                <li class="group"><p><code>void setAlwaysOnTop(boolean value)</code> -- 设置始终保持在其它窗口前(此方法不能确定结果，因为底层平台可能会更改此值)</p>
+                                <li><p><code>boolean isAlwaysOnTop()</code> -- 获取是否始终保持在其它窗口前</p>
+                                <li><p><code>ReadOnlyBooleanProperty alwaysOnTopProperty()</code> -- 属性形式读始终保持在其它窗口前</p>
 
-                                <li class="group"><p><code>ObservableList&lt;Image> 	getIcons()</code> -- </p></li>
+                                <li class="group"><p><code>ObservableList&lt;Image> 	getIcons()</code> -- 获取要在窗口装饰中使用的图标图像，并在最小化时使用；图像应该是不同大小的同一图像，最好的大小将被选择</p>
+                                    <pre class="brush: java;">
+primaryStage.getIcons().addAll(
+    new Image("image/icon_16x16.png"),
+    new Image("image/icon_32x32.png"),
+    new Image("image/icon_48x48.png"),
+    new Image("image/icon_72x72.png"),
+    new Image("image/icon_96x96.png"),
+    new Image("image/icon_144x144.png"),
+    new Image("image/icon_192x192.png")
+);
+</pre>
+                                </li>
 
-                                <li class="group"><p><code>void 	initModality(Modality modality)</code> -- </p></li>
-                                <li><p><code>Modality 	getModality()</code> -- </p></li>
-                                <li><p><code>void 	initOwner(Window owner)</code> -- </p></li>
-                                <li><p><code>Window 	getOwner()</code> -- </p></li>
+                                <li class="group"><p><code>void 	initModality(Modality modality)</code> -- 设置其模态类型，此方法只可调用一次</p></li>
+                                <li><p><code>Modality 	getModality()</code> -- 获取其模态类型</p>
+                                    <pre class="brush: java;">
+/** 定义了一个 Stage 的可能模态类型 */
+public enum Modality {
+    /** 默认值，非模态，不阻塞任何其他窗口 */
+    NONE,
+    /** 阻止事件传递到整个所有者窗口层次结构。此窗口关闭前，其他窗口不可关闭，并且最大化按钮自动隐藏
+     * 注意：如果其 getOwner() == null，则将其视为其 Modality 设置为 NONE
+     */
+    WINDOW_MODAL,
+    /** 阻止事件传递到任何其他应用程序窗口，primaryStage 不可使用。
+     * 此窗口关闭前，其他窗口不可关闭，并且最大化按钮自动隐藏
+     */
+    APPLICATION_MODAL
+}
+
+/** 如果要设置为 Modality.WINDOW_MODAL 类型，那么要先调用 initOwner(Window) */
+stage.initOwner(primaryStage);
+if(stage.getModality() == Modality.NONE) {
+    stage.initModality(Modality.WINDOW_MODAL);
+}
+</pre>
+                                </li>
+
+
+                                <li class="group"><p><code>void 	initOwner(Window owner)</code> -- 设置持有此窗口的窗口(窗口可以被其他窗口持有，此窗口一直在持有者前面，并且当持有这关闭时，此窗口也会关闭)</p></li>
+                                <li><p><code>Window 	getOwner()</code> -- 获取持有此窗口的窗口</p></li>
 
                                 <li class="group"><p><code>double 	getMaxHeight()</code> -- 获取最大高度</p></li>
                                 <li><p><code>void 	setMaxHeight(double value)</code> -- 设置最大高度</p></li>
@@ -2808,25 +2895,111 @@ public enum StageStyle {
                                 <li><p><code>void 	setMinWidth(double value)</code> -- 设置最大小宽度</p></li>
                                 <li><p><code>DoubleProperty 	minWidthProperty()</code> -- 属性形式读写最小宽度</p></li>
 
-                                <li class="group"><p><code>void 	toBack()</code> -- </p></li>
-                                <li><p><code>void 	toFront()</code> -- </p></li>
+                                <li class="group"><p><code>void 	toBack()</code> -- 将当前窗口移到后面</p></li>
+                                <li><p><code>void 	toFront()</code> -- 将当前窗口移到前面</p></li>
                             </ol>
                         </div>
 
+                        <a id="Window" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
-java.lang.Object
-    javafx.stage.Window
+Window
+ ├─ Stage
+ └─ PopupWindow
+     ├─ Popup
+     └─ PopupControl
+         ├─ ContextMenu
+         └─ Tooltip
 
 public class Window implements EventTarget {
-
+    protected Window() {}
 }
 
 public interface EventTarget {
     EventDispatchChain buildEventDispatchChain(EventDispatchChain tail);
 }
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/stage/Window.html" target="_blank">Window</a></p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/stage/Window.html" target="_blank">Window</a> 是 Stage 的父类。</p>
+                            <ol>
+                                <li><p><code>void 	setUserData(Object value)</code> -- 存储一个数据</p></li>
+                                <li><p><code>Object 	getUserData()</code> -- 获取存储的数据</p></li>
+
+                                <li class="group"><p><code>ObservableMap&lt;Object,Object> 	getProperties()</code> -- 以 Map 的形式存储数据，可以读写</p></li>
+                                <li><p><code>boolean 	hasProperties()</code> -- 方法 <code>getProperties()</code> 是否为空</p></li>
+
+                                <li class="group"><p><code>void 	sizeToScene()</code> -- 将窗口大小设为 Scece 的大小</p></li>
+                                <li><p><code>void 	centerOnScreen()</code> -- 居中显示窗口</p></li>
+
+                                <li class="group"><p><code>void 	requestFocus()</code> -- 获取焦点</p></li>
+                                <li><p><code>void 	fireEvent(Event event)</code> -- 触发指定的事件</p></li>
+
+                                <li class="group"><p><code>protected void 	show()</code> -- 显示窗口</p></li>
+                                <li><p><code>void 	hide()</code> -- 应藏窗口</p></li>
+
+                                <li class="group"><p><code>boolean 	isShowing()</code> -- 是否已调用 <code>show()</code> 方法</p></li>
+                                <li><p><code>ReadOnlyBooleanProperty 	showingProperty()</code> -- 属性方式读是否已经调用显示方法</p></li>
+
+                                <li class="group"><p><code>void 	setOnShowing(EventHandler&lt;WindowEvent> value)</code> -- 调用 <code>show()</code> 会执行此方法设定的回调(要在 <code>show()</code> 前设定)</p></li>
+                                <li><p><code>EventHandler&lt;WindowEvent> 	getOnShowing()</code> -- 获取回调事件</p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;WindowEvent>> 	onShowingProperty()</code> -- 属性方式读写显示回调</p></li>
+
+                                <li class="group"><p><code>EventHandler&lt;WindowEvent> 	getOnShown()</code> -- 执行完此回调马上显示窗口(要在 <code>show()</code> 前设定)</p></li>
+                                <li><p><code>void 	setOnShown(EventHandler&lt;WindowEvent> value)</code> --获取回调事件</p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;WindowEvent>> 	onShownProperty()</code> -- 属性方式读写显示回调</p></li>
+
+                                <li class="group"><p><code>void 	setOnCloseRequest(EventHandler&lt;WindowEvent> value)</code> -- 设置请求关闭时的回调，执行完此方法将会执行 <code>setOnHidden()</code> 设定的回调，但是可以在此处阻止</p></li>
+                                <li><p><code>EventHandler&lt;WindowEvent> 	getOnCloseRequest()</code> -- 获取回调事件</p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;WindowEvent>> 	onCloseRequestProperty()</code> -- 属性方式读写关闭请求回调</p>
+                                    <pre class="brush: java;">stage.setOnCloseRequest(e -> e.consume()); // 阻止继续执行</pre>
+                                </li>
+
+                                <li class="group"><p><code>void 	setOnHiding(EventHandler&lt;WindowEvent> value)</code> -- 调用 <code>hide()</code> 会执行此方法设定的回调(点击关闭按钮也是一样)</p></li>
+                                <li><p><code>EventHandler&lt;WindowEvent> 	getOnHiding()</code> -- 获取回调事件</p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;WindowEvent>> 	onHidingProperty()</code> -- 属性方式读写隐藏回调</p></li>
+
+                                <li class="group"><p><code>void 	setOnHidden(EventHandler&lt;WindowEvent> value)</code> -- 执行此方法设定的回调后窗口马上不可见</p></li>
+                                <li><p><code>EventHandler&lt;WindowEvent> 	getOnHidden()</code> -- 获取回调事件</p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;WindowEvent>> 	onHiddenProperty()</code> -- 属性方式读写隐藏回调</p></li>
+
+                                <li class="group"><p><code>protected void 	setScene(Scene value)</code> -- 窗口使用的场景</p></li>
+                                <li><p><code>Scene 	getScene()</code> -- 获取窗口使用的场景</p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Scene> 	sceneProperty()</code> -- 属性形式读窗口使用的场景</p></li>
+
+                                <li class="group"><p><code>void 	setHeight(double value)</code> -- 设置窗口的高度(默认为 Scene 的高度)</p></li>
+                                <li><p><code>double 	getHeight()</code> -- 获取窗口高度(如果没有明确指定，那么在 show() 方法后才能获取到)</p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	heightProperty()</code> -- 属性形式读窗口的高度</p></li>
+
+                                <li class="group"><p><code>void 	setWidth(double value)</code> -- 设置窗口的宽度(默认为 Scene 的宽度)</p></li>
+                                <li><p><code>double 	getWidth()</code> -- 获取窗口宽度(如果没有明确指定，那么在 show() 方法后才能获取到)</p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	widthProperty()</code> -- 属性形式读窗口的宽度</p></li>
+
+                                <li class="group"><p><code>void 	setX(double value)</code> -- 设置窗口左上角的 X 坐标</p></li>
+                                <li><p><code>double 	getX()</code> -- 获取窗口左上角的 X 坐标(如果没有明确指定，那么在 show() 方法后才能获取到)</p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	xProperty()</code> -- 属性形式读窗口左上角的 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setY(double value)</code> -- 设置窗口左上角的 Y 坐标</p></li>
+                                <li><p><code>double 	getY()</code> -- 获取窗口左上角的 Y 坐标(如果没有明确指定，那么在 show() 方法后才能获取到)</p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	yProperty()</code> -- 属性形式读窗口左上角的 Y 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setOpacity(double value)</code> -- 设置窗口透明度(影响窗体的所有组件)</p></li>
+                                <li><p><code>double 	getOpacity()</code> -- 获取窗口透明度</p></li>
+                                <li><p><code>DoubleProperty 	opacityProperty()</code> -- 属性方式读写窗口透明度</p></li>
+
+                                <li class="group"><p><code>boolean 	isFocused()</code> -- 是否获取到焦点</p></li>
+                                <li><p><code>ReadOnlyBooleanProperty 	focusedProperty()</code> -- 属性方式读是否获取到焦点</p></li>
+
+                                <li class="group"><p><code>void 	setEventDispatcher(EventDispatcher value)</code> -- 设置窗口事件分发器</p></li>
+                                <li><p><code>EventDispatcher 	getEventDispatcher()</code> -- 获取窗口事件分发器</p></li>
+                                <li><p><code>ObjectProperty&lt;EventDispatcher> 	eventDispatcherProperty()</code> -- 属性方式读写窗口事件分发器</p></li>
+                                <li><p><code>EventDispatchChain 	buildEventDispatchChain(EventDispatchChain tail)</code> -- 为这个窗口构造事件调度链</p></li>
+
+                                <li class="group"><p><code>&lt;T extends Event> void 	addEventFilter(EventType&lt;T> eventType, EventHandler&lt;? super T> eventFilter)</code> -- 当节点在事件交付的捕获阶段接收指定类型的事件时，调用该过滤器</p></li>
+                                <li><p><code>&lt;T extends Event> void 	removeEventFilter(EventType&lt;T> eventType, EventHandler&lt;? super T> eventFilter)</code> -- 移除事件过滤器</p></li>
+
+                                <li class="group"><p><code>&lt;T extends Event> void 	addEventHandler(EventType&lt;T> eventType, EventHandler&lt;? super T> eventHandler)</code> -- 当节点在事件传递的冒泡阶段接收指定类型的事件时，调用该处理程序</p></li>
+                                <li><p><code>&lt;T extends Event> void 	removeEventHandler(EventType&lt;T> eventType, EventHandler&lt;? super T> eventHandler)</code> -- 移除处理程序</p></li>
+                                <li><p><code>protected &lt;T extends Event> void 	setEventHandler(EventType&lt;T> eventType, EventHandler&lt;? super T> eventHandler)</code> -- 设置事件处理器处理指定的事件</p></li>
+                            </ol>
                         </div>
                     </div>
                 </div>
@@ -2844,17 +3017,226 @@ public interface EventTarget {
 java.lang.Object
     javafx.scene.Scene
 
-@DefaultProperty("root")
 public class Scene implements EventTarget {
     public Scene(Parent root) {}
-    public Scene(Parent root, double width, double height) {}
     public Scene(Parent root, Paint fill) {}
+    public Scene(Parent root, double width, double height) {}
+
+    /** 指定根节点和填充颜色，宽度和高度受窗口大小和内部节点的影响，可能不会是设定的值 */
     public Scene(Parent root, double width, double height, Paint fill) {}
+
+    /** 深度缓冲 和 抗锯齿，仅具有 2D 形状和没有任何 3D 变换的场景不需要深度缓冲器或抗锯齿支持。，同时 3D 需要平台支持：
+     * Platform.isSupported(ConditionalFeature.SCENE3D) == true;
+     * SceneAntialiasing 只有两个内部实例值： BALANCED 和 DISABLED
+     */
     public Scene(Parent root, double width, double height, boolean depthBuffer) {}
     public Scene(Parent root, double w, double h, boolean depthBuffer, SceneAntialiasing anti) {}
 }
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/Scene.html" target="_blank">Scene</a> </p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/Scene.html" target="_blank">Scene</a> 是场景图中所有内容的容器，场景的背景由填充属性指定，应用程序必须通过设置根属性来指定场景图的根节点。</p>
+                            <p>场景的大小可以由应用程序在构建过程中初始化。如果没有指定大小，场景将根据其内容的优选大小自动计算其初始大小。如果只指定一个维度，则使用指定的维度计算另一个维度，这与根的内容偏差有关。</p>
+                            <p>应用程序可以在创建场景时请求深度缓冲支持或抗锯齿支持。<b>仅具有 2D 形状和没有任何 3D 变换的场景不需要深度缓冲器或抗锯齿支持。</b>包含 3D 形状或具有 3D 变换的 2D 形状的场景可以使用深度缓冲支持进行适当的深度排序渲染。</p>
+                            <ol>
+                                <li><p><code>boolean 	isDepthBuffer()</code> -- 是否开启了深度缓冲支持</p></li>
+                                <li><p><code>SceneAntialiasing 	getAntiAliasing()</code> -- 是否开启了抗锯齿支持</p></li>
+
+                                <li class="group"><p><code>Node 	lookup(String selector)</code> -- </p></li>
+                                <li><p><code>Dragboard 	startDragAndDrop(TransferMode... transferModes)</code> -- </p></li>
+                                <li><p><code>void 	startFullDrag()</code> -- </p></li>
+                                <li><p><code>ObservableMap&lt;KeyCombination,Runnable> 	getAccelerators()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	snapshot(Callback&lt;SnapshotResult,Void> callback, WritableImage image)</code> -- </p></li>
+                                <li><p><code>WritableImage 	snapshot(WritableImage image)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setNodeOrientation(NodeOrientation orientation)</code> -- </p></li>
+                                <li><p><code>NodeOrientation 	getNodeOrientation()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;NodeOrientation> 	nodeOrientationProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>NodeOrientation 	getEffectiveNodeOrientation()</code> -- </p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;NodeOrientation> 	effectiveNodeOrientationProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setFill(Paint value)</code> -- </p></li>
+                                <li><p><code>Paint 	getFill()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;Paint> 	fillProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setUserAgentStylesheet(String url)</code> -- </p></li>
+                                <li><p><code>String 	getUserAgentStylesheet()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;String> 	userAgentStylesheetProperty()</code> -- </p></li>
+                                <li><p><code>ObservableList&lt;String> 	getStylesheets()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setRoot(Parent value)</code> -- </p></li>
+                                <li><p><code>Parent 	getRoot()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;Parent> 	rootProperty()</code> -- </p></li>
+
+                                <li><p><code>void 	setUserData(Object value)</code> -- 存储一个数据</p></li>
+                                <li><p><code>Object 	getUserData()</code> -- 获取存储的数据</p></li>
+
+                                <li class="group"><p><code>ObservableMap&lt;Object,Object> 	getProperties()</code> -- 以 Map 的形式存储数据，可以读写</p></li>
+                                <li><p><code>boolean 	hasProperties()</code> -- 方法 <code>getProperties()</code> 是否为空</p></li>
+
+                                <li class="group"><p><code>double 	getWidth()</code> -- </p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	widthProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>double 	getHeight()</code> -- </p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	heightProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>double 	getX()</code> -- </p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	xProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>double 	getY()</code> -- </p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	yProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>Window 	getWindow()</code> -- </p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Window> 	windowProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setCursor(Cursor value)</code> -- </p></li>
+                                <li><p><code>Cursor 	getCursor()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;Cursor> 	cursorProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setCamera(Camera value)</code> -- </p></li>
+                                <li><p><code>Camera 	getCamera()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;Camera> 	cameraProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>Node 	getFocusOwner()</code> -- </p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Node> 	focusOwnerProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	addMnemonic(Mnemonic m)</code> -- </p></li>
+                                <li><p><code>void 	removeMnemonic(Mnemonic m)</code> -- </p></li>
+                                <li><p><code>ObservableMap&lt;KeyCombination,ObservableList&lt;Mnemonic>> 	getMnemonics()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setEventDispatcher(EventDispatcher value)</code> -- 设置场景事件分发器</p></li>
+                                <li><p><code>EventDispatcher 	getEventDispatcher()</code> -- 获取场景事件分发器</p></li>
+                                <li><p><code>ObjectProperty&lt;EventDispatcher> 	eventDispatcherProperty()</code> -- 属性方式读写场景事件分发器</p></li>
+                                <li><p><code>EventDispatchChain 	buildEventDispatchChain(EventDispatchChain tail)</code> -- 为这个场景构造事件调度链</p></li>
+
+                                <li class="group"><p><code>&lt;T extends Event> void 	addEventFilter(EventType&lt;T> eventType, EventHandler&lt;? super T> eventFilter)</code> -- 当节点在事件交付的捕获阶段接收指定类型的事件时，调用该过滤器</p></li>
+                                <li><p><code>&lt;T extends Event> void 	removeEventFilter(EventType&lt;T> eventType, EventHandler&lt;? super T> eventFilter)</code> -- 移除事件过滤器</p></li>
+
+                                <li class="group"><p><code>&lt;T extends Event> void 	addEventHandler(EventType&lt;T> eventType, EventHandler&lt;? super T> eventHandler)</code> -- 当节点在事件传递的冒泡阶段接收指定类型的事件时，调用该处理程序</p></li>
+                                <li><p><code>&lt;T extends Event> void 	removeEventHandler(EventType&lt;T> eventType, EventHandler&lt;? super T> eventHandler)</code> -- 移除处理程序</p></li>
+                                <li><p><code>protected &lt;T extends Event> void 	setEventHandler(EventType&lt;T> eventType, EventHandler&lt;? super T> eventHandler)</code> -- 设置事件处理器处理指定的事件</p></li>
+
+                                <li class="group"><p><code>void 	setOnContextMenuRequested(EventHandler&lt;? super ContextMenuEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnDragDetected(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnDragDone(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnDragDropped(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnDragEntered(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnDragExited(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnDragOver(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnInputMethodTextChanged(EventHandler&lt;? super InputMethodEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnKeyPressed(EventHandler&lt;? super KeyEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnKeyReleased(EventHandler&lt;? super KeyEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnKeyTyped(EventHandler&lt;? super KeyEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnMouseClicked(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnMouseDragEntered(EventHandler&lt;? super MouseDragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnMouseDragExited(EventHandler&lt;? super MouseDragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnMouseDragged(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnMouseDragOver(EventHandler&lt;? super MouseDragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnMouseDragReleased(EventHandler&lt;? super MouseDragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnMouseEntered(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnMouseExited(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnMouseMoved(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnMousePressed(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnMouseReleased(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnRotate(EventHandler&lt;? super RotateEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnRotationFinished(EventHandler&lt;? super RotateEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnRotationStarted(EventHandler&lt;? super RotateEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnScroll(EventHandler&lt;? super ScrollEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnScrollFinished(EventHandler&lt;? super ScrollEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnScrollStarted(EventHandler&lt;? super ScrollEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnSwipeDown(EventHandler&lt;? super SwipeEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnSwipeLeft(EventHandler&lt;? super SwipeEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnSwipeRight(EventHandler&lt;? super SwipeEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnSwipeUp(EventHandler&lt;? super SwipeEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnTouchMoved(EventHandler&lt;? super TouchEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnTouchPressed(EventHandler&lt;? super TouchEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnTouchReleased(EventHandler&lt;? super TouchEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnTouchStationary(EventHandler&lt;? super TouchEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnZoom(EventHandler&lt;? super ZoomEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnZoomFinished(EventHandler&lt;? super ZoomEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnZoomStarted(EventHandler&lt;? super ZoomEvent> value)</code> -- </p></li>
+
+
+                                <li class="group"><p><code>EventHandler&lt;? super ContextMenuEvent> 	getOnContextMenuRequested()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? super MouseEvent> 	getOnDragDetected()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? super DragEvent> 	getOnDragDone()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? super DragEvent> 	getOnDragDropped()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? super DragEvent> 	getOnDragEntered()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper DragEvent> 	getOnDragExited()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper DragEvent> 	getOnDragOver()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper InputMethodEvent> 	getOnInputMethodTextChanged()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper KeyEvent> 	getOnKeyPressed()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper KeyEvent> 	getOnKeyReleased()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper KeyEvent> 	getOnKeyTyped()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper MouseEvent> 	getOnMouseClicked()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper MouseDragEvent> 	getOnMouseDragEntered()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper MouseDragEvent> 	getOnMouseDragExited()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper MouseEvent> 	getOnMouseDragged()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper MouseDragEvent> 	getOnMouseDragOver()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper MouseDragEvent> 	getOnMouseDragReleased()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper MouseEvent> 	getOnMouseEntered()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper MouseEvent> 	getOnMouseExited()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper MouseEvent> 	getOnMouseMoved()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper MouseEvent> 	getOnMousePressed()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper MouseEvent> 	getOnMouseReleased()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper RotateEvent> 	getOnRotate()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper RotateEvent> 	getOnRotationFinished()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper RotateEvent> 	getOnRotationStarted()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper ScrollEvent> 	getOnScroll()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper ScrollEvent> 	getOnScrollFinished()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper ScrollEvent> 	getOnScrollStarted()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper SwipeEvent> 	getOnSwipeDown()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper SwipeEvent> 	getOnSwipeLeft()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper SwipeEvent> 	getOnSwipeRight()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper SwipeEvent> 	getOnSwipeUp()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper TouchEvent> 	getOnTouchMoved()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper TouchEvent> 	getOnTouchPressed()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper TouchEvent> 	getOnTouchReleased()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper TouchEvent> 	getOnTouchStationary()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper ZoomEvent> 	getOnZoom()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper ZoomEvent> 	getOnZoomFinished()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;? supper ZoomEvent> 	getOnZoomStarted()</code> -- </p></li>
+
+                                <li class="group"><p><code>ObjectProperty&lt;EventHandler&lt;? super ContextMenuEvent>> 	onContextMenuRequestedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super MouseEvent>> 	onDragDetectedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super DragEvent>> 	onDragDoneProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super DragEvent>> 	onDragDroppedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super DragEvent>> 	onDragEnteredProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super DragEvent>> 	onDragExitedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super DragEvent>> 	onDragOverProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super InputMethodEvent>> 	onInputMethodTextChangedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super KeyEvent>> 	onKeyPressedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super KeyEvent>> 	onKeyReleasedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super KeyEvent>> 	onKeyTypedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super MouseEvent>> 	onMouseClickedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super MouseDragEvent>> 	onMouseDragEnteredProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super MouseDragEvent>> 	onMouseDragExitedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super MouseEvent>> 	onMouseDraggedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super MouseDragEvent>> 	onMouseDragOverProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super MouseDragEvent>> 	onMouseDragReleasedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? super MouseEvent>> 	onMouseEnteredProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper MouseEvent>> 	onMouseExitedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper MouseEvent>> 	onMouseMovedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper MouseEvent>> 	onMousePressedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper MouseEvent>> 	onMouseReleasedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper RotateEvent>> 	onRotateProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper RotateEvent>> 	onRotationFinishedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper RotateEvent>> 	onRotationStartedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper ScrollEvent>> 	onScrollFinishedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper ScrollEvent>> 	onScrollProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper ScrollEvent>> 	onScrollStartedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper SwipeEvent>> 	onSwipeDownProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper SwipeEvent>> 	onSwipeLeftProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper SwipeEvent>> 	onSwipeRightProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper SwipeEvent>> 	onSwipeUpProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper TouchEvent>> 	onTouchMovedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper TouchEvent>> 	onTouchPressedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper TouchEvent>> 	onTouchReleasedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper TouchEvent>> 	onTouchStationaryProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper ZoomEvent>> 	onZoomFinishedProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper ZoomEvent>> 	onZoomProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;? supper ZoomEvent>> 	onZoomStartedProperty()</code> -- </p></li>
+                            </ol>
                         </div>
 
                         <div class="sub-item">
@@ -2877,9 +3259,15 @@ public class Scene implements EventTarget {
                         <div class="sub-item">
                             <pre class="brush: java;">
 Node
- ├─ Canvas, ImageView, MediaView
+ ├─ Canvas, ImageView, MediaView, SubScene, SwingNode
+ ├─ Camera
+ │   └─ ParallelCamera, PerspectiveCamera
+ ├─ LightBase
+ │   └─ AmbientLight, PointLight
  ├─ Shape
- │   └─ Arc, Line, Circle, Rectangle, Path, SVGPath, Polygon, Polyline, CubicCurve, QuadCurve, EllipseText
+ │   └─ Arc, Circle, CubicCurve, Ellipse, Line, Path, Polygon, Polyline, QuadCurve, Rectangle, SVGPath, Text
+ ├─ Shape3D
+ │   └─ Box, Cylinder, MeshView, Sphere
  └─ Parent
       ├─ WebView, Group
       └─ Region
@@ -2890,15 +3278,16 @@ Node
           ├─ Chart
           │   ├─ PieChart
           │   └─ XYChart
-          │       └─ AreaChart
-          │           └─ BarChart, BubbleChart, LineChart, ScatterChart, StackedAreaChart, StackedBarChart
+          │       ├─ AreaChart, BarChart, BubbleChart, LineChart,
+          │       └─ AScatterChart, StackedAreaChart, StackedBarChart
           ├─ Pane
-          │   └─ AnchorPane, BorderPane, FlowPane, GridPane, HBox, VBox, StackPane, TilePane
+          │   └─ AnchorPane, BorderPane, FlowPane, GridPane, HBox, VBox, StackPane, TilePane, DialogPane
           └─ Control
-              ├─ Accordion, ChoiceBox, HTMLEditor, ListView, MenuBar, Pagination, ScrollBar,
-              ├─ ScrollPane, Separator, Slider, SplitPane, TableView, TabPane, ToolBar, TreeView
-              ├─ ComboBoxBas
-              │   └─ ComboBox, ColorPicker
+              ├─ Accordion, ButtonBar, ChoiceBox, HTMLEditor, ListView, MenuBar, Pagination,
+              ├─ ScrollBar, ScrollPane, Separator, Slider, Spinner, SplitPane,  TabPane, ToolBar,
+              ├─ TreeView, TableView, TreeTableView
+              ├─ ComboBoxBase
+              │   └─ ComboBox, ColorPicker, DatePicker
               ├─ ProgressIndicator
               │   └─ ProgressBar
               ├─ TextInputControl
@@ -2914,15 +3303,19 @@ Node
                   │    └─ ToggleButton
                   │        └─ RadioButton
                   └─ Cell
+                      ├─ DateCell
                       └─ IndexedCell
-                          ├─ TableRow
+                          ├─ TableRow, TreeTableRow
                           ├─ ListCell
                           │   └─ CheckBoxListCell, ChoiceBoxListCell, ComboBoxListCell, TextFieldListCell
                           ├─ TableCell
                           │   ├─ CheckBoxTableCell, ChoiceBoxTableCell, ComboBoxTableCell,
                           │   └─ ProgressBarTableCell, TextFieldTableCell
-                          └─ TreeCell
-                              └─ CheckBoxTreeCell, ChoiceBoxTreeCell, ComboBoxTreeCell, TextFieldTreeCell
+                          ├─ TreeCell
+                          │   └─ CheckBoxTreeCell, ChoiceBoxTreeCell, ComboBoxTreeCell, TextFieldTreeCell
+                          └─ TreeTableCell
+                              ├─ CheckBoxTreeTableCell, ChoiceBoxTreeTableCell, ComboBoxTreeTableCell,
+                              └─ ProgressBarTreeTableCell, TextFieldTreeTableCell
 java.lang.Object
     javafx.scene.Node
 
@@ -3059,9 +3452,18 @@ public interface Styleable {
                                 <li class="group"><p><code>Scene 	getScene()</code> -- 获取 Scene</p></li>
                                 <li><p><code>ReadOnlyObjectProperty&lt;Scene> 	sceneProperty()</code> -- 属性形式获取 Scene</p></li>
 
-                                <li class="group"><p><code>Effect 	getEffect()</code> -- </p></li>
-                                <li><p><code>void 	setEffect(Effect value)</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;Effect> 	effectProperty()</code> -- </p></li>
+                                <li class="group"><p><code>Effect 	getEffect()</code> -- 设置效果</p></li>
+                                <li><p><code>void 	setEffect(Effect value)</code> -- 获取效果</p></li>
+                                <li><p><code>ObjectProperty&lt;Effect> 	effectProperty()</code> -- 性形式读写效果</p>
+                                    <pre class="brush: java;">
+Text text = new Text("Bloom");
+text.setFill(Color.ALICEBLUE);
+
+Bloom bloom = new Bloom();
+bloom.setThreshold(0.8);
+text.setEffect(bloom);
+</pre>
+                                </li>
 
                                 <li class="group"><p><code>CacheHint 	getCacheHint()</code> -- </p></li>
                                 <li><p><code>void 	setCacheHint(CacheHint value)</code> -- </p></li>
