@@ -3040,13 +3040,26 @@ public class Scene implements EventTarget {
                                 <li><p><code>boolean 	isDepthBuffer()</code> -- 是否开启了深度缓冲支持</p></li>
                                 <li><p><code>SceneAntialiasing 	getAntiAliasing()</code> -- 是否开启了抗锯齿支持</p></li>
 
-                                <li class="group"><p><code>Node 	lookup(String selector)</code> -- </p></li>
-                                <li><p><code>Dragboard 	startDragAndDrop(TransferMode... transferModes)</code> -- </p></li>
-                                <li><p><code>void 	startFullDrag()</code> -- </p></li>
-                                <li><p><code>ObservableMap&lt;KeyCombination,Runnable> 	getAccelerators()</code> -- </p></li>
+                                <li class="group"><p><code>Node 	lookup(String selector)</code> -- 使用选择器查找第一个符合条件的节点</p></li>
+                                <li><p><code>ObservableMap&lt;KeyCombination,Runnable> 	getAccelerators()</code> -- 获取可操作的快捷键列表</p>
+                                    <pre class="brush: java;">
+/** 当 F10 按下在 JavaFX Thread 运行 Runnable */
+ObservableMap&lt;KeyCombination, Runnable> map = scene.getAccelerators();
+map.put(KeyCombination.keyCombination("F10"), new Runnable() {
+    @Override
+    public void run() {
+        log("F10 is pressed!", Thread.currentThread().getName());
+    }
+});
 
-                                <li class="group"><p><code>void 	snapshot(Callback&lt;SnapshotResult,Void> callback, WritableImage image)</code> -- </p></li>
-                                <li><p><code>WritableImage 	snapshot(WritableImage image)</code> -- </p></li>
+</pre>
+                                </li>
+
+
+
+
+                                <li class="group"><p><code>WritableImage 	snapshot(WritableImage image)</code> -- 获取该场景的快照，并在准备好后返回渲染的图像</p></li>
+                                <li><p><code>void 	snapshot(Callback&lt;SnapshotResult,Void> callback, WritableImage image)</code> -- </p></li>
 
                                 <li class="group"><p><code>void setNodeOrientation(NodeOrientation orientation)</code> -- 设置布局方向(LTR / RTL)</p></li>
                                 <li><p><code>NodeOrientation getNodeOrientation()</code> -- 获取布局方向</p></li>
@@ -3084,39 +3097,44 @@ scene.setFill(Color.RED);
                                 <li><p><code>boolean 	hasProperties()</code> -- 方法 <code>getProperties()</code> 是否为空</p></li>
 
                                 <li class="group"><p><code>double 	getWidth()</code> -- 获取场景的宽度</p></li>
-                                <li><p><code>ReadOnlyDoubleProperty 	widthProperty()</code> -- </p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	widthProperty()</code> -- 属性形式获取</p></li>
 
                                 <li class="group"><p><code>double 	getHeight()</code> -- 获取场景的高度</p></li>
-                                <li><p><code>ReadOnlyDoubleProperty 	heightProperty()</code> -- </p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	heightProperty()</code> -- 属性形式获取</p></li>
 
                                 <li class="group"><p><code>double 	getX()</code> -- 获取场景相对与窗口的开始 X 坐标(一般为 0)</p></li>
-                                <li><p><code>ReadOnlyDoubleProperty 	xProperty()</code> -- </p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	xProperty()</code> -- 属性形式获取</p></li>
 
                                 <li class="group"><p><code>double 	getY()</code> -- 获取场景相对与窗口的开始 Y 坐标(如果窗口有装饰,那么为其高度)</p></li>
-                                <li><p><code>ReadOnlyDoubleProperty 	yProperty()</code> -- </p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	yProperty()</code> -- 属性形式获取</p></li>
 
                                 <li class="group"><p><code>Window 	getWindow()</code> -- 获取场景所在的窗口</p></li>
-                                <li><p><code>ReadOnlyObjectProperty&lt;Window> 	windowProperty()</code> -- </p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Window> 	windowProperty()</code> -- 属性形式获取</p></li>
 
                                 <li class="group"><p><code>void 	setCursor(Cursor value)</code> -- 设置场景的默认游标类型</p></li>
-                                <li><p><code>Cursor 	getCursor()</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;Cursor> 	cursorProperty()</code> -- </p></li>
+                                <li><p><code>Cursor 	getCursor()</code> -- 获取游标类型</p></li>
+                                <li><p><code>ObjectProperty&lt;Cursor> 	cursorProperty()</code> -- 属性形式读写以上属性</p></li>
 
                                 <li class="group"><p><code>void 	setCamera(Camera value)</code> -- </p></li>
                                 <li><p><code>Camera 	getCamera()</code> -- </p></li>
                                 <li><p><code>ObjectProperty&lt;Camera> 	cameraProperty()</code> -- </p></li>
 
                                 <li class="group"><p><code>Node 	getFocusOwner()</code> -- 获取焦点所有者节点</p></li>
-                                <li><p><code>ReadOnlyObjectProperty&lt;Node> 	focusOwnerProperty()</code> -- </p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Node> 	focusOwnerProperty()</code> -- 属性形式获取</p></li>
 
                                 <li class="group"><p><code>void 	addMnemonic(Mnemonic m)</code> -- 注册指定的助记符(助记符是由节点和键组合构成的,按下键,目标节点将被发送一个 ActionEvent)</p></li>
                                 <li><p><code>void 	removeMnemonic(Mnemonic m)</code> -- 移除指定的助记符</p></li>
                                 <li><p><code>ObservableMap&lt;KeyCombination,ObservableList&lt;Mnemonic>> 	getMnemonics()</code> -- 获取所有助记符列表</p></li>
 
+
+
                                 <li class="group"><p><code>void 	setEventDispatcher(EventDispatcher value)</code> -- 设置场景事件分发器</p></li>
                                 <li><p><code>EventDispatcher 	getEventDispatcher()</code> -- 获取场景事件分发器</p></li>
                                 <li><p><code>ObjectProperty&lt;EventDispatcher> 	eventDispatcherProperty()</code> -- 属性方式读写场景事件分发器</p></li>
                                 <li><p><code>EventDispatchChain 	buildEventDispatchChain(EventDispatchChain tail)</code> -- 为这个场景构造事件调度链</p></li>
+
+                                <li class="group"><p><code>Dragboard 	startDragAndDrop(TransferMode... transferModes)</code> -- 确认在该场景中识别的潜在拖放手势, 只能从 DRAG_DETECTED 鼠标事件处理程序调用</p></li>
+                                <li><p><code>void 	startFullDrag()</code> -- 以这个场景作为手势源启动一个完整的按下拖拽手势, 此方法只能从 DRAG_DETECTED 鼠标事件处理程序调用</p></li>
 
                                 <li class="group"><p><code>&lt;T extends Event> void 	addEventFilter(EventType&lt;T> eventType, EventHandler&lt;? super T> eventFilter)</code> -- 当节点在事件交付的捕获阶段接收指定类型的事件时，调用该过滤器</p></li>
                                 <li><p><code>&lt;T extends Event> void 	removeEventFilter(EventType&lt;T> eventType, EventHandler&lt;? super T> eventFilter)</code> -- 移除事件过滤器</p></li>
@@ -3125,45 +3143,54 @@ scene.setFill(Color.RED);
                                 <li><p><code>&lt;T extends Event> void 	removeEventHandler(EventType&lt;T> eventType, EventHandler&lt;? super T> eventHandler)</code> -- 移除处理程序</p></li>
                                 <li><p><code>protected &lt;T extends Event> void 	setEventHandler(EventType&lt;T> eventType, EventHandler&lt;? super T> eventHandler)</code> -- 设置事件处理器处理指定的事件</p></li>
 
-                                <li class="group"><p><code>void 	setOnContextMenuRequested(EventHandler&lt;? super ContextMenuEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnDragDetected(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnDragDone(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnDragDropped(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnDragEntered(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnDragExited(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnDragOver(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnInputMethodTextChanged(EventHandler&lt;? super InputMethodEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnKeyPressed(EventHandler&lt;? super KeyEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnKeyReleased(EventHandler&lt;? super KeyEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnKeyTyped(EventHandler&lt;? super KeyEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnMouseClicked(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnMouseDragEntered(EventHandler&lt;? super MouseDragEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnMouseDragExited(EventHandler&lt;? super MouseDragEvent> value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setOnMouseEntered(EventHandler&lt;? super MouseEvent> value)</code> -- 鼠标进入 Scene</p></li>
+                                <li><p><code>void 	setOnMouseMoved(EventHandler&lt;? super MouseEvent> value)</code> -- 鼠标移动</p></li>
+                                <li><p><code>void 	setOnMousePressed(EventHandler&lt;? super MouseEvent> value)</code> -- 鼠标按键按下(任何一个按键)</p></li>
+                                <li><p><code>void 	setOnMouseReleased(EventHandler&lt;? super MouseEvent> value)</code> -- 鼠标按键弹起</p></li>
+                                <li><p><code>void 	setOnMouseClicked(EventHandler&lt;? super MouseEvent> value)</code> -- 鼠标点击(一次按下和一次弹起为一个点击事件)</p></li>
+                                <li><p><code>void 	setOnMouseExited(EventHandler&lt;? super MouseEvent> value)</code> -- 鼠标退出 Scene</p></li>
+
+                                <li class="group"><p><code>void 	setOnMouseDragEntered(EventHandler&lt;? super MouseDragEvent> value)</code> -- </p></li>
                                 <li><p><code>void 	setOnMouseDragged(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
                                 <li><p><code>void 	setOnMouseDragOver(EventHandler&lt;? super MouseDragEvent> value)</code> -- </p></li>
                                 <li><p><code>void 	setOnMouseDragReleased(EventHandler&lt;? super MouseDragEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnMouseEntered(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnMouseExited(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnMouseMoved(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnMousePressed(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnMouseReleased(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnRotate(EventHandler&lt;? super RotateEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnMouseDragExited(EventHandler&lt;? super MouseDragEvent> value)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setOnDragEntered(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnDragOver(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnDragDropped(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnDragDone(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnDragDetected(EventHandler&lt;? super MouseEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnDragExited(EventHandler&lt;? super DragEvent> value)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setOnTouchPressed(EventHandler&lt;? super TouchEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnTouchMoved(EventHandler&lt;? super TouchEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnTouchStationary(EventHandler&lt;? super TouchEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnTouchReleased(EventHandler&lt;? super TouchEvent> value)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setOnKeyPressed(EventHandler&lt;? super KeyEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnKeyReleased(EventHandler&lt;? super KeyEvent> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnKeyTyped(EventHandler&lt;? super KeyEvent> value)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setOnRotate(EventHandler&lt;? super RotateEvent> value)</code> -- </p></li>
                                 <li><p><code>void 	setOnRotationFinished(EventHandler&lt;? super RotateEvent> value)</code> -- </p></li>
                                 <li><p><code>void 	setOnRotationStarted(EventHandler&lt;? super RotateEvent> value)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setOnScrollStarted(EventHandler&lt;? super ScrollEvent> value)</code> -- </p></li>
                                 <li><p><code>void 	setOnScroll(EventHandler&lt;? super ScrollEvent> value)</code> -- </p></li>
                                 <li><p><code>void 	setOnScrollFinished(EventHandler&lt;? super ScrollEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnScrollStarted(EventHandler&lt;? super ScrollEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnSwipeDown(EventHandler&lt;? super SwipeEvent> value)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setOnSwipeDown(EventHandler&lt;? super SwipeEvent> value)</code> -- </p></li>
                                 <li><p><code>void 	setOnSwipeLeft(EventHandler&lt;? super SwipeEvent> value)</code> -- </p></li>
                                 <li><p><code>void 	setOnSwipeRight(EventHandler&lt;? super SwipeEvent> value)</code> -- </p></li>
                                 <li><p><code>void 	setOnSwipeUp(EventHandler&lt;? super SwipeEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnTouchMoved(EventHandler&lt;? super TouchEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnTouchPressed(EventHandler&lt;? super TouchEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnTouchReleased(EventHandler&lt;? super TouchEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnTouchStationary(EventHandler&lt;? super TouchEvent> value)</code> -- </p></li>
-                                <li><p><code>void 	setOnZoom(EventHandler&lt;? super ZoomEvent> value)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setOnZoom(EventHandler&lt;? super ZoomEvent> value)</code> -- </p></li>
                                 <li><p><code>void 	setOnZoomFinished(EventHandler&lt;? super ZoomEvent> value)</code> -- </p></li>
                                 <li><p><code>void 	setOnZoomStarted(EventHandler&lt;? super ZoomEvent> value)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setOnContextMenuRequested(EventHandler&lt;? super ContextMenuEvent> value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setOnInputMethodTextChanged(EventHandler&lt;? super InputMethodEvent> value)</code> -- </p></li>
 
 
                                 <li class="group"><p><code>EventHandler&lt;? super ContextMenuEvent> 	getOnContextMenuRequested()</code> -- </p></li>
