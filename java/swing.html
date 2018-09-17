@@ -102,6 +102,7 @@
                             <a href="#javafx-scene-Node" class="list-group-item">图形基类: Node</a>
                             <a href="#javafx-scene-layout-Pane" class="list-group-item">布局类：Pane 及子类</a>
                             <a href="#javafx-scene-control-Control" class="list-group-item">控件类：Control 及相关类</a>
+                            <a href="#javafx-scene-shape-Shape" class="list-group-item">绘制类：Shape 及相关类</a>
                             <a href="#javafx-fxml" class="list-group-item">使用 FXML 进行布局</a>
                             <a href="#javafx-css" class="list-group-item">使用 CSS 控制样式</a>
                             <a href="#JFoenix-intro" class="list-group-item">JFoenix -- JavaFX 美化</a>
@@ -3059,7 +3060,7 @@ map.put(KeyCombination.keyCombination("F10"), new Runnable() {
 
 
                                 <li class="group"><p><code>WritableImage 	snapshot(WritableImage image)</code> -- 获取该场景的快照，并在准备好后返回渲染的图像</p></li>
-                                <li><p><code>void 	snapshot(Callback&lt;SnapshotResult,Void> callback, WritableImage image)</code> -- </p></li>
+                                <li><p><code>void 	snapshot(Callback&lt;SnapshotResult,Void> callback, WritableImage image)</code> -- 在下一帧中获取此场景的快照，并在图像准备就绪时调用指定的回调方法</p></li>
 
                                 <li class="group"><p><code>void setNodeOrientation(NodeOrientation orientation)</code> -- 设置布局方向(LTR / RTL)</p></li>
                                 <li><p><code>NodeOrientation getNodeOrientation()</code> -- 获取布局方向</p></li>
@@ -3386,6 +3387,19 @@ public interface Styleable {
                             <ol>
                                 <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable, ?>> getClassCssMetaData()</code> -- 与此类关联的 CSS 元数据</p></li>
 
+                                <li class="group"><p><code>void applyCss()</code> -- 请将样式应用于此节点及其子节点，此方法通常不需要直接调用</p></li>
+                                <li><p><code>double computeAreaInScreen()</code> -- 以像素单位返回该节点投影到物理屏幕上的区域</p></li>
+                                <li><p><code>boolean 	usesMirroring()</code> -- 确定当节点方向从右到左时是否应左右镜像该节点(默认返回 true)</p></li>
+
+                                <li class="group"><p><code>void 	toBack()</code> -- 按 Z 顺序将此节点移动到其兄弟节点的后部（如果此节点不是 Group 的一部分，则此函数不起作用）</p></li>
+                                <li><p><code>void 	toFront()</code> -- 按 Z 顺序将此节点移动到其兄弟节点的前部（如果此节点不是 Group 的一部分，则此函数不起作用）</p></li>
+
+                                <li class="group"><p><code>double 	getBaselineOffset()</code> -- 根据第一个托管子节点计算基线偏移量</p></li>
+                                <li><p><code>Orientation 	getContentBias()</code> -- 返回节点对布局目的的调整大小偏差的方向</p></li>
+                                <li><p><code>ObservableList&lt;.String> 	getStyleClass()</code> -- 获取应用于此节点的可操作的样式类列表</p></li>
+                                <li><p><code>ObservableList&lt;Transform> 	getTransforms()</code> -- 获取应用于此节点的可操作的变换列表</p></li>
+                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- 获取与此实例关联的 CSS 元数据列表</p></li>
+
                                 <li class="group"><p><code>boolean 	isVisible()</code> -- 节点是否可见</p></li>
                                 <li><p><code>void 	setVisible(boolean value)</code> -- 设置节点可见性</p></li>
                                 <li><p><code>BooleanProperty 	visibleProperty()</code> -- 属性形式读写节点可见性</p></li>
@@ -3430,11 +3444,9 @@ public interface Styleable {
                                 <li><p><code>void 	setLayoutY(double value)</code> -- 设置定位点 Y 值</p></li>
                                 <li><p><code>DoubleProperty 	layoutYProperty()</code> -- 属性形式读写定位点 Y 值</p></li>
 
-                                <li class="group"><p><code>Bounds 	getLayoutBounds()</code> -- 获取布局边界</p></li>
-                                <li><p><code>ReadOnlyObjectProperty&lt;Bounds> 	layoutBoundsProperty()</code> -- 属性形式读布局边界</p></li>
-
                                 <li class="group"><p><code>boolean 	contains(double localX, double localY)</code> -- 是否包含指定点</p></li>
                                 <li><p><code>boolean 	contains(Point2D localPoint)</code> -- 是否包含指定点</p></li>
+
 
                                 <li class="group"><p><code>double 	maxHeight(double width)</code> -- 默认返回首选高度,具体看子类实现</p></li>
                                 <li><p><code>double 	maxWidth(double height)</code> -- 默认返回首选宽度,具体看子类实现</p></li>
@@ -3560,132 +3572,126 @@ container.add(imageView); // imageView 添加到容器中,和 clip 无关
                                 <li><p><code>void 	setCursor(Cursor value)</code> -- 设置鼠标悬停在此节点上时的游标类型</p></li>
                                 <li><p><code>ObjectProperty&lt;Cursor> 	cursorProperty()</code> -- 属性形式读写游标类型</p></li>
 
-                                <li class="group"><p><code>boolean 	isManaged()</code> -- </p></li>
-                                <li><p><code>void 	setManaged(boolean value)</code> -- </p></li>
-                                <li><p><code>BooleanProperty 	managedProperty()</code> -- </p></li>
+                                <li class="group"><p><code>void 	setManaged(boolean value)</code> -- 设置布局是否将由其父节点管理，如果节点被管理，它的父节点会将节点的几何因素分解成它自己的首选大小和布局界限，并将在场景的布局传递过程中进行布局；如果节点是非托管的，它的父节点将在优选的大小计算和布局中忽略该子节点</p></li>
+                                <li><p><code>boolean 	isManaged()</code> -- 布局是否将由其父节点管理</p></li>
+                                <li><p><code>BooleanProperty 	managedProperty()</code> -- 属性形式读写布局是否将由其父节点管理</p></li>
 
-                                <li class="group"><p><code>boolean 	hasProperties()</code> -- </p></li>
-                                <li><p><code>ObservableMap&lt;Object,Object> 	getProperties()</code> -- </p></li>
+                                <li class="group"><p><code>ObservableMap&lt;Object,Object> 	getProperties()</code> -- 获取并读写用户自定义的属性列表</p></li>
+                                <li><p><code>boolean 	hasProperties()</code> -- 属性列表是否为空</p></li>
 
-                                <li class="group"><p><code>InputMethodRequests 	getInputMethodRequests()</code> -- </p></li>
-                                <li><p><code>void 	setInputMethodRequests(InputMethodRequests value)</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;InputMethodRequests> 	inputMethodRequestsProperty()</code> -- </p></li>
+                                <li class="group"><p><code>InputMethodRequests 	getInputMethodRequests()</code> -- 获取输入法请求</p></li>
+                                <li><p><code>void 	setInputMethodRequests(InputMethodRequests value)</code> -- 设置输入法请求</p></li>
+                                <li><p><code>ObjectProperty&lt;InputMethodRequests> 	inputMethodRequestsProperty()</code> -- 属性形式读写输入法请求</p></li>
 
-                                <li class="group"><p><code>DepthTest 	getDepthTest()</code> -- </p></li>
-                                <li><p><code>void 	setDepthTest(DepthTest value)</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;DepthTest> 	depthTestProperty()</code> -- </p></li>
+                                <li class="group"><p><code>DepthTest 	getDepthTest()</code> -- 获取是否使用深度缓冲（由其值可以判断）</p></li>
+                                <li><p><code>void 	setDepthTest(DepthTest value)</code> -- 设置深度缓冲是否使用深度缓冲(ENABLE, DISABLE, INHERIT)</p></li>
+                                <li><p><code>ObjectProperty&lt;DepthTest> 	depthTestProperty()</code> -- 属性形式读写是否使用深度缓冲</p></li>
 
-                                <li class="group"><p><code>String getAccessibleText()</code> -- </p></li>
-                                <li><p><code>void setAccessibleText(String value)</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;String> accessibleTextProperty()</code> -- </p></li>
+                                <li class="group"><p><code>String getAccessibleText()</code> -- 获取屏幕阅读器将要发言的文本</p></li>
+                                <li><p><code>void setAccessibleText(String value)</code> -- 设置屏幕阅读器将要发言的文本</p></li>
+                                <li><p><code>ObjectProperty&lt;String> accessibleTextProperty()</code> -- 属性形式读写屏幕阅读器将要发言的文本</p></li>
 
-                                <li class="group"><p><code>String getAccessibleHelp()</code> -- </p></li>
-                                <li><p><code>void setAccessibleHelp(String value)</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;String> accessibleHelpProperty()</code> -- </p></li>
+                                <li class="group"><p><code>String getAccessibleHelp()</code> -- 帮助文本对节点的屏幕阅读器文本提供了更详细的描述</p></li>
+                                <li><p><code>void setAccessibleHelp(String value)</code> -- 设置屏幕阅读器文本的帮助信息</p></li>
+                                <li><p><code>ObjectProperty&lt;String> accessibleHelpProperty()</code> -- 属性形式读写以上属性</p></li>
 
-                                <li class="group"><p><code>AccessibleRole getAccessibleRole()</code> -- </p></li>
-                                <li><p><code>void setAccessibleRole(AccessibleRole value)</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;AccessibleRole> accessibleRoleProperty()</code> -- </p></li>
+                                <li class="group"><p><code>AccessibleRole getAccessibleRole()</code> -- 获取可访问形角色</p></li>
+                                <li><p><code>void setAccessibleRole(AccessibleRole value)</code> -- 设置可访问形角色</p></li>
+                                <li><p><code>ObjectProperty&lt;AccessibleRole> accessibleRoleProperty()</code> -- 属性形式读写可访问形角色</p></li>
 
-                                <li class="group"><p><code>String getAccessibleRoleDescription()</code> -- </p></li>
-                                <li><p><code>void setAccessibleRoleDescription(String value)</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;String> accessibleRoleDescriptionProperty()</code> -- </p></li>
+                                <li class="group"><p><code>String getAccessibleRoleDescription()</code> -- 获取可访问形角色描述信息</p></li>
+                                <li><p><code>void setAccessibleRoleDescription(String value)</code> -- 可访问形角色描述信息</p></li>
+                                <li><p><code>ObjectProperty&lt;String> accessibleRoleDescriptionProperty()</code> -- 属性形式读写可访问形角色描述信息</p></li>
 
-                                <li class="group"><p><code>Object queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- </p></li>
-                                <li><p><code>void executeAccessibleAction(AccessibleAction action, Object... parameters)</code> -- </p></li>
-                                <li><p><code>void notifyAccessibleAttributeChanged(AccessibleAttribute attributes)</code> -- </p></li>
+                                <li class="group"><p><code>Object queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- 查询可访问性属性</p></li>
+                                <li><p><code>void executeAccessibleAction(AccessibleAction action, Object... parameters)</code> -- 执行可访问性动作</p></li>
+                                <li><p><code>void notifyAccessibleAttributeChanged(AccessibleAttribute attributes)</code> -- 通知可访问性属性改变</p></li>
 
-                                <li class="group"><p><code>boolean 	isPickOnBounds()</code> -- </p></li>
-                                <li><p><code>void 	setPickOnBounds(boolean value)</code> -- </p></li>
-                                <li><p><code>BooleanProperty 	pickOnBoundsProperty()</code> -- </p></li>
+                                <li class="group"><p><code>WritableImage 	snapshot(WritableImage image)</code> -- 获取该场景的快照，并在准备好后返回渲染的图像</p></li>
+                                <li><p><code>void 	snapshot(Callback&lt;SnapshotResult,Void> callback, WritableImage image)</code> -- 在下一帧中获取此场景的快照，并在图像准备就绪时调用指定的回调方法</p></li>
 
-                                <li class="group"><p><code>Bounds 	getBoundsInLocal()</code> -- </p></li>
-                                <li><p><code>Bounds 	getBoundsInParent()</code> -- </p></li>
-                                <li><p><code>ReadOnlyObjectProperty&lt;Bounds> 	boundsInLocalProperty()</code> -- </p></li>
-                                <li><p><code>ReadOnlyObjectProperty&lt;Bounds> 	boundsInParentProperty()</code> -- </p></li>
-                                <li><p><code>boolean 	intersects(Bounds localBounds)</code> -- </p></li>
-                                <li><p><code>boolean 	intersects(double localX, double localY, double localWidth, double localHeight)</code> -- </p></li>
+                                <li class="group"><p><code>ObservableSet&lt;PseudoClass> getPseudoClassStates()</code> -- 返回可操作的伪类状态列表</p></li>
+                                <li><p><code>void pseudoClassStateChanged(PseudoClass pseudoClass, boolean active)</code> -- 触发伪类状态改变</p></li>
 
-                                <li class="group"><p><code>void 	snapshot(Callback&lt;SnapshotResult,java.lang.Void> callback, SnapshotParameters params, WritableImage image)</code> -- </p></li>
-                                <li><p><code>WritableImage 	snapshot(SnapshotParameters params, WritableImage image)</code> -- </p></li>
+                                <li class="group"><p><code>Dragboard 	startDragAndDrop(TransferMode... transferModes)</code> --  确认在该节点中识别的潜在拖放手势, 只能从 DRAG_DETECTED 鼠标事件处理程序调用</p></li>
+                                <li><p><code>void 	startFullDrag()</code> -- 以这个节点作为手势源启动一个完整的按下拖拽手势, 此方法只能从 DRAG_DETECTED 鼠标事件处理程序调用</p></li>
 
-                                <li class="group"><p><code>ObservableSet&lt;PseudoClass> getPseudoClassStates()</code> -- </p></li>
-                                <li><p><code>void pseudoClassStateChanged(PseudoClass pseudoClass, boolean active)</code> -- </p></li>
 
-                                <li class="group"><p><code>Dragboard 	startDragAndDrop(TransferMode... transferModes)</code> -- </p></li>
-                                <li><p><code>void 	startFullDrag()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	toBack()</code> -- </p></li>
-                                <li><p><code>void 	toFront()</code> -- </p></li>
+                                <li class="group"><p><code>Bounds 	getLayoutBounds()</code> -- 获取布局边界</p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Bounds> 	layoutBoundsProperty()</code> -- 属性形式读布局边界</p></li>
 
-                                <li class="group"><p><code>double 	getBaselineOffset()</code> -- </p></li>
-                                <li><p><code>Orientation 	getContentBias()</code> -- </p></li>
-                                <li><p><code>ObservableList&lt;.String> 	getStyleClass()</code> -- </p></li>
-                                <li><p><code>ObservableList&lt;Transform> 	getTransforms()</code> -- </p></li>
-                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- </p></li>
+                                <li class="group"><p><code>void 	setPickOnBounds(boolean value)</code> -- 定义当由鼠标事件或包含函数调用触发时，如何对该节点进行拣选计算。如果为 true，则通过与该节点的边界相交来计算拾取，否则通过与该节点的几何形状相交来计算拾取</p></li>
+                                <li><p><code>boolean 	isPickOnBounds()</code> -- 获取此属性值</p></li>
+                                <li><p><code>BooleanProperty 	pickOnBoundsProperty()</code> -- 属性形式读写以上值</p></li>
 
-                                <li class="group"><p><code>Bounds 	localToParent(Bounds localBounds)</code> -- </p></li>
-                                <li><p><code>Point2D 	localToParent(double localX, double localY)</code> -- </p></li>
-                                <li><p><code>Point2D 	localToParent(Point2D localPoint)</code> -- </p></li>
-                                <li><p><code>Point3D 	localToParent(double x, double y, double z)</code> -- </p></li>
-                                <li><p><code>Point3D 	localToParent(Point3D localPoint)</code> -- </p></li>
-                                <li><p><code>Transform 	getLocalToParentTransform()</code> -- </p></li>
-                                <li><p><code>ReadOnlyObjectProperty&lt;Transform> 	localToParentTransformProperty()</code> -- </p></li>
+                                <li class="group"><p><code>Bounds 	getBoundsInLocal()</code> -- 获取节点在未经变换的局部坐标空间中的矩形边界，注意，每当节点的几何结构发生变化时，就会自动重新计算边界局部</p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Bounds> 	boundsInLocalProperty()</code> -- 属性形式读以上值</p></li>
+                                <li><p><code>Bounds 	getBoundsInParent()</code> -- 获取用于该节点布局计算的矩形边界</p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Bounds> 	boundsInParentProperty()</code> -- 属性形式读以上值</p></li>
+                                <li><p><code>boolean 	intersects(Bounds localBounds)</code> -- 检查节点的的形状是否与给定的坐标边界相交</p></li>
+                                <li><p><code>boolean 	intersects(double localX, double localY, double localWidth, double localHeight)</code> -- 检查节点的的形状是否与给定的坐标边界相交</p></li>
 
-                                <li class="group"><p><code>Bounds 	parentToLocal(Bounds parentBounds)</code> -- </p></li>
-                                <li><p><code>Point2D 	parentToLocal(double parentX, double parentY)</code> -- </p></li>
-                                <li><p><code>Point2D 	parentToLocal(Point2D parentPoint)</code> -- </p></li>
-                                <li><p><code>Point3D 	parentToLocal(double parentX, double parentY, double parentZ)</code> -- </p></li>
-                                <li><p><code>Point3D 	parentToLocal(Point3D parentPoint)</code> -- </p></li>
+                                <li class="group"><p><code>Bounds 	localToParent(Bounds localBounds)</code> -- 将局部边界转换为相对于 Parent 类型边界</p></li>
+                                <li><p><code>Point2D 	localToParent(double localX, double localY)</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	localToParent(Point2D localPoint)</code> -- 同上</p></li>
+                                <li><p><code>Point3D 	localToParent(double x, double y, double z)</code> -- 同上</p></li>
+                                <li><p><code>Point3D 	localToParent(Point3D localPoint)</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>Bounds 	localToScene(Bounds localBounds)</code> -- </p></li>
-                                <li><p><code>Bounds 	localToScene(Bounds localBounds, boolean rootScene)</code> -- </p></li>
-                                <li><p><code>Point2D 	localToScene(double localX, double localY)</code> -- </p></li>
-                                <li><p><code>Point2D 	localToScene(double x, double y, boolean rootScene)</code> -- </p></li>
-                                <li><p><code>Point2D 	localToScene(Point2D localPoint)</code> -- </p></li>
-                                <li><p><code>Point2D 	localToScene(Point2D localPoint, boolean rootScene)</code> -- </p></li>
-                                <li><p><code>Point3D 	localToScene(double x, double y, double z)</code> -- </p></li>
-                                <li><p><code>Point3D 	localToScene(double x, double y, double z, boolean rootScene)</code> -- </p></li>
-                                <li><p><code>Point3D 	localToScene(Point3D localPoint)</code> -- </p></li>
-                                <li><p><code>Point3D 	localToScene(Point3D localPoint, boolean rootScene)</code> -- </p></li>
-                                <li><p><code>Transform 	getLocalToSceneTransform()</code> -- </p></li>
-                                <li><p><code>ReadOnlyObjectProperty&lt;Transform> 	localToSceneTransformProperty()</code> -- </p></li>
+                                <li class="group"><p><code>Transform 	getLocalToParentTransform()</code> -- 获取局部边界转换为相对于 Parent 类型边界的转换器</p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Transform> 	localToParentTransformProperty()</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>Bounds 	sceneToLocal(Bounds sceneBounds))</code> -- </p></li>
-                                <li><p><code>Bounds 	sceneToLocal(Bounds bounds, boolean rootScene))</code> -- </p></li>
-                                <li><p><code>Point2D 	sceneToLocal(double sceneX, double sceneY))</code> -- </p></li>
-                                <li><p><code>Point2D 	sceneToLocal(double x, double y, boolean rootScene))</code> -- </p></li>
-                                <li><p><code>Point2D 	sceneToLocal(Point2D scenePoint))</code> -- </p></li>
-                                <li><p><code>Point2D 	sceneToLocal(Point2D point, boolean rootScene))</code> -- </p></li>
-                                <li><p><code>Point3D 	sceneToLocal(double sceneX, double sceneY, double sceneZ))</code> -- </p></li>
-                                <li><p><code>Point3D 	sceneToLocal(Point3D scenePoint))</code> -- </p></li>
+                                <li class="group"><p><code>Bounds 	parentToLocal(Bounds parentBounds)</code> -- 将相对于 Parent 类型边界转换为局部边界</p></li>
+                                <li><p><code>Point2D 	parentToLocal(double parentX, double parentY)</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	parentToLocal(Point2D parentPoint)</code> -- 同上</p></li>
+                                <li><p><code>Point3D 	parentToLocal(double parentX, double parentY, double parentZ)</code> -- 同上</p></li>
+                                <li><p><code>Point3D 	parentToLocal(Point3D parentPoint)</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>Bounds 	localToScreen(Bounds localBounds)</code> -- </p></li>
-                                <li><p><code>Point2D 	localToScreen(double localX, double localY)</code> -- </p></li>
-                                <li><p><code>Point2D 	localToScreen(double localX, double localY, double localZ)</code> -- </p></li>
-                                <li><p><code>Point2D 	localToScreen(Point2D localPoint)</code> -- </p></li>
-                                <li><p><code>Point2D 	localToScreen(Point3D localPoint)</code> -- </p></li>
+                                <li class="group"><p><code>Bounds 	localToScene(Bounds localBounds)</code> -- 将局部边界转换为相对于 Scene 类型边界</p></li>
+                                <li><p><code>Bounds 	localToScene(Bounds localBounds, boolean rootScene)</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	localToScene(double localX, double localY)</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	localToScene(double x, double y, boolean rootScene)</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	localToScene(Point2D localPoint)</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	localToScene(Point2D localPoint, boolean rootScene)</code> -- 同上</p></li>
+                                <li><p><code>Point3D 	localToScene(double x, double y, double z)</code> -- 同上</p></li>
+                                <li><p><code>Point3D 	localToScene(double x, double y, double z, boolean rootScene)</code> -- 同上</p></li>
+                                <li><p><code>Point3D 	localToScene(Point3D localPoint)</code> -- 同上</p></li>
+                                <li><p><code>Point3D 	localToScene(Point3D localPoint, boolean rootScene)</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>Bounds 	screenToLocal(Bounds screenBounds)</code> -- </p></li>
-                                <li><p><code>Point2D 	screenToLocal(double screenX, double screenY)</code> -- </p></li>
-                                <li><p><code>Point2D 	screenToLocal(Point2D screenPoint)</code> -- </p></li>
+                                <li class="group"><p><code>Transform 	getLocalToSceneTransform()</code> -- 获取局部边界转换为相对于 Scene 类型边界的转换器</p></li>
+                                <li><p><code>ReadOnlyObjectProperty&lt;Transform> 	localToSceneTransformProperty()</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>void applyCss()</code> -- </p></li>
-                                <li><p><code>double computeAreaInScreen()</code> -- </p></li>
-                                <li><p><code>boolean 	usesMirroring()</code> -- </p></li>
+                                <li class="group"><p><code>Bounds 	sceneToLocal(Bounds sceneBounds))</code> -- 将相对于 Scene 类型边界转换为局部边界</p></li>
+                                <li><p><code>Bounds 	sceneToLocal(Bounds bounds, boolean rootScene))</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	sceneToLocal(double sceneX, double sceneY))</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	sceneToLocal(double x, double y, boolean rootScene))</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	sceneToLocal(Point2D scenePoint))</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	sceneToLocal(Point2D point, boolean rootScene))</code> -- 同上</p></li>
+                                <li><p><code>Point3D 	sceneToLocal(double sceneX, double sceneY, double sceneZ))</code> -- 同上</p></li>
+                                <li><p><code>Point3D 	sceneToLocal(Point3D scenePoint))</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>EventDispatcher 	getEventDispatcher()</code> -- </p></li>
-                                <li><p><code>void 	setEventDispatcher(EventDispatcher value)</code> -- </p></li>
-                                <li><p><code>ObjectProperty&lt;EventDispatcher> 	eventDispatcherProperty()</code> -- </p></li>
+                                <li class="group"><p><code>Bounds 	localToScreen(Bounds localBounds)</code> -- 将局部边界转换为相对于 Sceen 类型边界</p></li>
+                                <li><p><code>Point2D 	localToScreen(double localX, double localY)</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	localToScreen(double localX, double localY, double localZ)</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	localToScreen(Point2D localPoint)</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	localToScreen(Point3D localPoint)</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>void 	fireEvent(Event event)</code> -- </p></li>
-                                <li><p><code>protected &lt;T extends Event> void 	setEventHandler(EventType&lt;T> eventType, EventHandler&lt;? super T> eventHandler)</code> -- </p></li>
-                                <li><p><code>EventDispatchChain 	buildEventDispatchChain(EventDispatchChain tail)</code> -- </p></li>
+                                <li class="group"><p><code>Bounds 	screenToLocal(Bounds screenBounds)</code> -- 将相对于 Screen 类型边界转换为局部边界</p></li>
+                                <li><p><code>Point2D 	screenToLocal(double screenX, double screenY)</code> -- 同上</p></li>
+                                <li><p><code>Point2D 	screenToLocal(Point2D screenPoint)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>EventDispatcher 	getEventDispatcher()</code> -- 获取事件分发器</p></li>
+                                <li><p><code>void 	setEventDispatcher(EventDispatcher value)</code> -- 设置事件分发器</p></li>
+                                <li><p><code>ObjectProperty&lt;EventDispatcher> 	eventDispatcherProperty()</code> -- 属性方式读写事件分发器</p></li>
+                                <li><p><code>EventDispatchChain 	buildEventDispatchChain(EventDispatchChain tail)</code> -- 构造事件调度链</p></li>
+
+                                <li class="group"><p><code>void 	fireEvent(Event event)</code> -- 在此节点上触发指定的事件</p></li>
 
                                 <li class="group"><p><code>&lt;T extends Event> void 	addEventFilter(EventType&lt;T> eventType, EventHandler&lt;? super T> eventFilter)</code> -- 添加指定类型的事件过滤器, 当节点在事件交付的 <b>捕获阶段</b> 接收指定类型的事件时，调用该过滤器</p></li>
                                 <li><p><code>&lt;T extends Event> void 	removeEventFilter(EventType&lt;T> eventType, EventHandler&lt;? super T> eventFilter)</code> -- 移除指定类型的事件处理器</p></li>
                                 <li><p><code>&lt;T extends Event> void 	addEventHandler(EventType&lt;T> eventType, EventHandler&lt;? super T> eventHandler)</code> -- 添加指定类型的事件处理器, 当节点在事件传递的 <b>冒泡阶段</b> 接收指定类型的事件时，调用该处理程序</p></li>
                                 <li><p><code>&lt;T extends Event> void 	removeEventHandler(EventType&lt;T> eventType, EventHandler&lt;? super T> eventHandler)</code> -- 移除指定类型的事件处理器</p></li>
+                                <li><p><code>protected &lt;T extends Event> void 	setEventHandler(EventType&lt;T> eventType, EventHandler&lt;? super T> eventHandler)</code> -- 设置事件处理器处理指定的事件</p></li>
 
                                 <li class="group"><p><code>void 	setOnMouseEntered(EventHandler&lt;? super MouseEvent> value)</code> -- 鼠标进入</p></li>
                                 <li><p><code>void 	setOnMouseMoved(EventHandler&lt;? super MouseEvent> value)</code> -- 鼠标移动</p></li>
@@ -4526,6 +4532,384 @@ public interface Skinnable {
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
                             <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javafx-scene-shape-Shape"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">绘制类：Shape 及相关类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    javafx.scene.Node
+        javafx.scene.shape.Shape
+
+public abstract class Shape extends Node {}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/Shape.html" target="_blank">Shape</a> 类为表示某种几何形状的对象提供了公共属性的定义。</p>
+                            <p>Shape 类继承自 Node 类，有以下直接子类： <a href="#shape-Line">Line(线)</a>, <a href="#shape-Polyline">Polyline(折线)</a>, <a href="#shape-Rectangle">Rectangle(矩形)</a>, <a href="#shape-Polygon">Polygon(多边形)</a>, <a href="#shape-Circle">Circle(圆)</a>, <a href="#shape-Ellipse">Ellipse(椭圆)</a>, <a href="#shape-Arc">Arc(弧线)</a>, <a href="#shape-QuadCurve">QuadCurve(二次贝塞尔曲线)</a>, <a href="#shape-CubicCurve">CubicCurve(三次贝塞尔曲线)</a>, <a href="#shape-Path">Path(路径)</a>, <a href="#shape-SVGPath">SVGPath(SVG 路径)</a>, <a href="#shape-Text">Text(文本)</a>。 </p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+                                <li><p><code>static Shape 	intersect(Shape s1, Shape s1)</code> -- 返回 s1 和 s2 的相交部分形状</p></li>
+                                <li><p><code>static Shape 	subtract(Shape s1, Shape s2)</code> -- 返回属于 s1 但不属于 s2 的部分形状</p></li>
+                                <li><p><code>static Shape 	union(Shape s1, Shape s2)</code> -- 返回 s1 和 s2 的合集形状</p></li>
+
+                                <li class="group"><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 与此类关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- 与此实例关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>void 	setSmooth(boolean value)</code> -- 是否使用平滑过度（抗锯齿）</p></li>
+                                <li><p><code>boolean 	isSmooth()</code> -- 获取是否使用平滑过度</p></li>
+                                <li><p><code>BooleanProperty 	smoothProperty()</code> -- 属性形式读写是否使用平滑过度</p></li>
+
+                                <li class="group"><code>void 	setFill(<a href="docs/docs-java/api-javafx8/javafx/scene/paint/Paint.html" target="_blank">Paint</a> value)</code> -- 设置其内部填充，Paint 的子类： <a href="docs/docs-java/api-javafx8/javafx/scene/paint/Color.html" target="_blank">Color</a>, <a href="docs/docs-java/api-javafx8/javafx/scene/paint/ImagePattern.html" target="_blank">ImagePattern</a>, <a href="docs/docs-java/api-javafx8/javafx/scene/paint/LinearGradient.html" target="_blank">LinearGradient</a>, <a href="docs/docs-java/api-javafx8/javafx/scene/paint/RadialGradient.html" target="_blank">RadialGradient</a></p></li>
+                                <li><p><code>Paint 	getFill()</code> -- 获取内部填充(默认为黑色)</p></li>
+                                <li><p><code>ObjectProperty&lt;Paint> 	fillProperty()</code> -- 属性形式读写内部填充</p>
+                                    <pre class="brush: java;">
+/** Paint 的子类:
+ * Color -- 颜色常量和一些方法用于操作颜色
+ * ImagePattern -- 使用图像模式的形状
+ * LinearGradient -- 线性渐变
+ * RadialGradient -- 径向渐变
+ */
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>void 	setStroke(Paint value)</code> -- 设置边框填充(默认 width 为 0，不可见)</p></li>
+                                <li><p><code>Paint 	getStroke()</code> -- 获取边框填充</p></li>
+                                <li><p><code>ObjectProperty&lt;Paint> 	strokeProperty()</code> -- 属性形式读写边框填充</p></li>
+
+                                <li class="group"><p><code>void 	setStrokeWidth(double value)</code> -- 设置边框厚度(默认此值一半在形状内部，一半在形状外部，通过 <code>setStrokeType(StrokeType)</code> 调整)</p></li>
+                                <li><p><code>double 	getStrokeWidth()</code> -- 获取边框厚度</p></li>
+                                <li><p><code>DoubleProperty 	strokeWidthProperty()</code> -- 属性形式读写边框厚度</p></li>
+
+                                <li class="group"><p><code>void 	setStrokeType(StrokeType value)</code> -- 设置边框类型（<code>CENTERED</code>, <code>INSIDE</code>, <code>OUTSIDE</code>）</p></li>
+                                <li><p><code>StrokeType 	getStrokeType()</code> -- 获取边框类型</p></li>
+                                <li><p><code>ObjectProperty&lt;StrokeType> 	strokeTypeProperty()</code> -- 属性形式读写边框类型</p></li>
+
+                                <li class="group"><p><code>ObservableList&lt;Double> 	getStrokeDashArray()</code> -- 虚线数组，此数组第一个值必须大于 2 倍线宽才会显示</p>
+                                    <pre class="brush: java;">
+/** 边框的绘制方向为：左上 -> 左下 -> 右下 -> 右上 -> 左上
+ * 此数组可以为一个或多个值，当有多个值时候，奇数为实线长度，偶数为虚线长度，并不断循环；
+ * 虚线默认有一个 StrokeLineCap.SQUARE 的方块笔帽，可以去掉它，也可以设置为圆角 */
+
+Rectangle rect = new Rectangle(200, 200, 300,  200);
+rect.setFill(Color.valueOf("#990066"));
+rect.setStroke(Color.YELLOW);
+rect.setStrokeType(StrokeType.INSIDE);
+
+rect.setStrokeLineCap(StrokeLineCap.BUTT); // 去掉线帽
+/** 实线(12) -> 虚线(8) -> 实线(8) -> 虚线(12) -> 实线(12) -> 虚线(8) -> ... */
+rect.getStrokeDashArray().addAll(12.0, 8.0, 8.0, 12.0);
+rect.setStrokeWidth(2);
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>void 	setStrokeDashOffset(double value)</code> -- 虚线数组偏移量，必须设置虚线数组此值才有意义</p></li>
+                                <li><p><code>double 	getStrokeDashOffset()</code> -- 获取虚线数组偏移量</p></li>
+                                <li><p><code>DoubleProperty 	strokeDashOffsetProperty()</code> -- 属性形式读写虚线数组偏移量</p></li>
+
+                                <li class="group"><p><code>void 	setStrokeLineCap(StrokeLineCap value)</code> -- 线条的末端处理，线帽类型设置(<code>BUTT</code>, <code>ROUND</code>, <code>SQUARE</code>)</p></li>
+                                <li><p><code>StrokeLineCap 	getStrokeLineCap()</code> -- 获取线帽类型设置</p></li>
+                                <li><p><code>ObjectProperty&lt;StrokeLineCap> 	strokeLineCapProperty()</code> -- 属性形式读写线帽类型设置</p></li>
+
+                                <li class="group"><p><code>void 	setStrokeLineJoin(StrokeLineJoin value)</code> -- 多线条连接拐角弧度的处理(<code>MITER</code>, <code>BEVEL</code>, <code>ROUND</code>)</p></li>
+                                <li><p><code>StrokeLineJoin 	getStrokeLineJoin()</code> -- 获取多线条连接拐角弧度的处理</p></li>
+                                <li><p><code>ObjectProperty&lt;StrokeLineJoin> 	strokeLineJoinProperty()</code> -- 属性形式读写拐角弧度的处理</p></li>
+
+                                <li class="group"><p><code>void 	setStrokeMiterLimit(double value)</code> -- 当 <code>getStrokeLineJoin() -- StrokeLineJoin.MITER</code> 时，设置其值</p></li>
+                                <li><p><code>double 	getStrokeMiterLimit()</code> -- 获取尖锐直角的延伸值</p></li>
+                                <li><p><code>DoubleProperty 	strokeMiterLimitProperty()</code> -- 属性形式读写尖锐直角的延伸值</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="shape-Line" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Line extends Shape {
+    public Line() {}
+    public Line(double startX, double startY, double endX, double endY) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/Line.html" target="_blank">Line</a> 用于绘制直线。</p>
+                            <p>Line 没有内部填充，设置直线的属性可用 <code>setStrokeXXX</code> 方法。</p>
+                            <ol>
+                                <li><p><code>void 	setStartX(double value)</code> -- 设置起点 X 坐标</p></li>
+                                <li><p><code>double 	getStartX()</code> -- 获取起点 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	startXProperty()</code> -- 属性形式读写起点 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setStartY(double value)</code> -- 设置起点 Y 坐标</p></li>
+                                <li><p><code>double 	getStartY()</code> -- 获取起点 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	startYProperty()</code> -- 属性形式读写起点 Y 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setEndX(double value)</code> -- 设置终点 X 坐标</p></li>
+                                <li><p><code>double 	getEndX()</code> -- 获取终点 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	endXProperty()</code> -- 属性形式读写终点 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setEndY(double value)</code> -- 设置终点 Y 坐标</p></li>
+                                <li><p><code>double 	getEndY()</code> -- 获取终点 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	endYProperty()</code> -- 属性形式读写终点 Y 坐标</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="shape-Polyline" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Polyline extends Shape {
+    public Polyline() {}
+    public Polyline(double... points) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/Polyline.html" target="_blank">Polyline</a> 用于绘制折线。</p>
+                            <p>指定的点为偶数，分别用作其 X, Y 坐标，如果为奇数，那么最后一个点被丢弃。</p>
+                            <p>Polyline 可以使用填充，但需要理解什么是 "内部"，参见父类 Shape 类。</p>
+                            <ol>
+                                <li><p><code>ObservableList&lt;Double> 	getPoints()</code> -- 获取可操作的点数组</p>
+                                    <pre class="brush: java;">
+Polyline pl1 = new Polyline(50, 150, 200, 100, 350, 150);
+pl1.getPoints().addAll(300.0,  200.0, 200.0, 150.0);
+pl1.setStroke(Color.GREEN);
+pl1.setStrokeWidth(5);
+pl1.setFill(Color.RED); // 使用填充需要理解如何定义其 “内部”
+</pre>
+                                </li>
+                            </ol>
+                            <p><img src="images/shape-Polyline.png" class="img-responsive center-block"></p>
+                        </div>
+
+                        <a id="shape-Rectangle" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Rectangle extends Shape {
+    public Rectangle() {}
+    public Rectangle(double width, double height)  {}
+    public Rectangle(double x, double y, double width, double height) {}
+    public Rectangle(double width, double height, Paint fill) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/Rectangle.html" target="_blank">Rectangle</a> 是矩形，并且支持圆角。</p>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <pre class="brush: java;">
+Rectangle rectangle = new Rectangle(100, 100, 200, 100);
+
+rectangle.setStrokeWidth(5);
+rectangle.setStrokeType(StrokeType.INSIDE);
+rectangle.setStroke(Color.GREEN);
+
+rectangle.setFill(Color.RED);
+
+rectangle.setArcWidth(50);
+rectangle.setArcHeight(30);
+</pre>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><img src="images/shape-Rectangle.png" class="img-responsive center-block"></p>
+                                </div>
+                            </div>
+
+                            <ol>
+                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 与此类关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- 与此实例关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>void 	setX(double value)</code> -- 设置左上角 X 坐标</p></li>
+                                <li><p><code>double 	getX()</code> -- 获取左上角 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	xProperty()</code> -- 属性形式读写左上角 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setY(double value)</code> -- 设置左上角 Y 坐标</p></li>
+                                <li><p><code>double 	getY()</code> -- 获取左上角 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	yProperty()</code> -- 属性形式读写左上角 Y 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setWidth(double value)</code> -- 设置宽度</p></li>
+                                <li><p><code>double 	getWidth()</code> -- 获取宽度</p></li>
+                                <li><p><code>DoubleProperty 	widthProperty()</code> -- 属性形式读写宽度</p></li>
+
+                                <li class="group"><p><code>double 	getHeight()</code> -- 设置高度</p></li>
+                                <li><p><code>void 	setHeight(double value)</code> -- 获取高度</p></li>
+                                <li><p><code>DoubleProperty 	heightProperty()</code> -- 属性形式读写高度</p></li>
+
+                                <li class="group"><p><code>void 	setArcWidth(double value)</code> -- 设置圆角宽度</p></li>
+                                <li><p><code>double 	getArcWidth()</code> -- 获取圆角宽度</p></li>
+                                <li><p><code>DoubleProperty 	arcWidthProperty()</code> -- 属性形式读写圆角宽度</p></li>
+
+                                <li class="group"><p><code>void 	setArcHeight(double value)</code> -- 设置圆角高度</p></li>
+                                <li><p><code>double 	getArcHeight()</code> -- 获取圆角高度</p></li>
+                                <li><p><code>DoubleProperty 	arcHeightProperty()</code> -- 属性形式读写圆角高度</p></li>
+                            </ol>
+
+                        </div>
+
+                        <a id="shape-Polygon" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public  class Polygon extends Shape {
+    public Polygon() {}
+    public Polygon(double... points) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/Polygon.html" target="_blank">Polygon</a> 用于绘制多边形，和折线的区别在于多边形能自动封闭。</p>
+                            <p>指定的点为偶数，分别用作其 X, Y 坐标，如果为奇数，那么最后一个点被丢弃。</p>
+                            <ol>
+                                <li><p><code>ObservableList&lt;Double> 	getPoints()</code> -- 获取可操作的点数组</p></li>
+                            </ol>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <pre class="brush: java;">
+/** 指定的点并未封闭，但是自动封闭了 */
+Polygon pl1 = new Polygon(50, 150, 200, 100, 350, 150);
+pl1.getPoints().addAll(300.0,  200.0, 200.0, 150.0);
+pl1.setStroke(Color.GREEN);
+pl1.setStrokeWidth(5);
+pl1.setFill(Color.RED);
+</pre>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><img src="images/shape-Polygon.png" class="img-responsive center-block"></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a id="shape-Circle" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Circle extends Shape {
+    public Circle() {}
+    public Circle(double radius) {}
+    public Circle(double centerX, double centerY, double radius) {}
+    public Circle(double centerX, double centerY, double radius, Paint fill) {}
+    public Circle(double radius, Paint fill) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/Circle.html" target="_blank">Circle</a> 用于绘制圆形。</p>
+                            <ol>
+                                <li><p><code>void 	setCenterX(double value)</code> -- 设置圆心 X 坐标</p></li>
+                                <li><p><code>double 	getCenterX()</code> -- 获取圆心 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	centerXProperty()</code> -- 属性形式读写圆心 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setCenterY(double value)</code> -- 设置圆心 Y 坐标</p></li>
+                                <li><p><code>double 	getCenterY()</code> -- 获取圆心 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	centerYProperty()</code> -- 属性形式读写圆心 Y 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setRadius(double value)</code> -- 设置圆半径</p></li>
+                                <li><p><code>double 	getRadius()</code> -- 获取圆半径</p></li>
+                                <li><p><code>DoubleProperty 	radiusProperty()</code> -- 属性形式读写圆半径</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="shape-Ellipse" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Ellipse extends Shape {
+    public Ellipse() {}
+    public Ellipse(double radiusX, double radiusY) {}
+    public Ellipse(double centerX, double centerY, double radiusX, double radiusY) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/Ellipse.html" target="_blank">Ellipse</a> 用于绘制椭圆。</p>
+                            <ol>
+                                <li><p><code>void 	setCenterX(double value)</code> -- 设置圆心 X 坐标</p></li>
+                                <li><p><code>double 	getCenterX()</code> -- 获取圆心 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	centerXProperty()</code> -- 属性形式读写圆心 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setCenterY(double value)</code> -- 设置圆心 Y 坐标</p></li>
+                                <li><p><code>double 	getCenterY()</code> -- 获取圆心 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	centerYProperty()</code> -- 属性形式读写圆心 Y 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setRadiusX(double value)</code> -- 设置 X 方向半径</p></li>
+                                <li><p><code>double 	getRadiusX()</code> -- 获取 X 方向半径</p></li>
+                                <li><p><code>DoubleProperty 	radiusXProperty()</code> -- 属性形式读写 X 方向半径</p></li>
+
+                                <li class="group"><p><code>void 	setRadiusY(double value)</code> -- 设置 Y 方向半径</p></li>
+                                <li><p><code>double 	getRadiusY()</code> -- 获取 Y 方向半径</p></li>
+                                <li><p><code>DoubleProperty 	radiusYProperty()</code> -- 属性形式读写 Y 方向半径</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="shape-Arc" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Arc extends Shape {
+    public Arc() {}
+    public Arc(double centerX, double centerY, double radiusX, double radiusY, double startAngle, double length) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/Arc.html" target="_blank">Arc</a> 用于绘制圆弧，是椭圆上的一部分。</p>
+                            <ol>
+                                <li><p><code>void 	setCenterX(double value)</code> -- 设置圆心 X 坐标</p></li>
+                                <li><p><code>double 	getCenterX()</code> -- 获取圆心 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	centerXProperty()</code> -- 属性形式读写圆心 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setCenterY(double value)</code> -- 设置圆心 Y 坐标</p></li>
+                                <li><p><code>double 	getCenterY()</code> -- 获取圆心 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	centerYProperty()</code> -- 属性形式读写圆心 Y 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setRadiusX(double value)</code> -- 设置 X 方向半径</p></li>
+                                <li><p><code>double 	getRadiusX()</code> -- 获取 X 方向半径</p></li>
+                                <li><p><code>DoubleProperty 	radiusXProperty()</code> -- 属性形式读写 X 方向半径</p></li>
+
+                                <li class="group"><p><code>void 	setRadiusY(double value)</code> -- 设置 Y 方向半径</p></li>
+                                <li><p><code>double 	getRadiusY()</code> -- 获取 Y 方向半径</p></li>
+                                <li><p><code>DoubleProperty 	radiusYProperty()</code> -- 属性形式读写 Y 方向半径</p></li>
+
+                                <li class="group"><p><code>void 	setStartAngle(double value)</code> -- 设置起始角度(0.0-360.0)</p></li>
+                                <li><p><code>double 	getStartAngle()</code> -- 获取</p></li>
+                                <li><p><code>DoubleProperty 	startAngleProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setLength(double value)</code> -- 设置跨越的角度(0.0-360.0)</p></li>
+                                <li><p><code>double 	getLength()</code> -- 获取</p></li>
+                                <li><p><code>DoubleProperty 	lengthProperty()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setType(ArcType value)</code> -- 设置</p></li>
+                                <li><p><code>ArcType 	getType()</code> -- 获取</p></li>
+                                <li><p><code>ObjectProperty&lt;ArcType> 	typeProperty()</code> -- </p></li>
+                            </ol>
+                        </div>
+
+                        <a id="shape-QuadCurve" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                        </div>
+
+                        <a id="shape-CubicCurve" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                        </div>
+
+                        <a id="shape-Path" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                        </div>
+
+                        <a id="shape-SVGPath" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                        </div>
+
+                        <a id="shape-Text" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
                         </div>
                     </div>
                 </div>
