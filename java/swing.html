@@ -4837,10 +4837,42 @@ public class Ellipse extends Shape {
                             <pre class="brush: java;">
 public class Arc extends Shape {
     public Arc() {}
-    public Arc(double centerX, double centerY, double radiusX, double radiusY, double startAngle, double length) {}
+    public Arc(double cX, double cY, double rX, double rY, double startAngle, double length) {}
 }
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/Arc.html" target="_blank">Arc</a> 用于绘制圆弧，是椭圆上的一部分。</p>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <pre class="brush: java;">
+public enum ArcType {
+    CHORD,  // 通过从圆弧段的开始到圆弧段的结束画一条直线段来闭合
+    ROUND,  // 从弧线的开始连接圆心,再连接到弧线的结尾构成的封闭类型
+    OPEN,   // 从圆弧段的开始到圆弧段的结束画一条直线段,并不封闭
+}
+
+Arc a1 = new Arc(400, 100, 100, 50, 0, 235);
+a1.setType(ArcType.CHORD);
+a1.setStroke(Color.RED);
+a1.setStrokeWidth(5);
+a1.setFill(Color.valueOf("#336699"));
+
+Arc a2 = new Arc(400, 200, 100, 50, 0, 235);
+a2.setType(ArcType.ROUND);
+a2.setStroke(Color.RED);
+a2.setStrokeWidth(5);
+a2.setFill(Color.valueOf("#336699"));
+
+Arc a3 = new Arc(400, 300, 100, 50, 0, 235);
+a3.setType(ArcType.OPEN);
+a3.setStroke(Color.RED);
+a3.setStrokeWidth(5);
+a3.setFill(Color.valueOf("#336699"));
+</pre>
+                                </div>
+                                <div class="col-md-4">
+                                    <img src="images/shape-Arc.png" class="img-responsive center-block">
+                                </div>
+                            </div>
                             <ol>
                                 <li><p><code>void 	setCenterX(double value)</code> -- 设置圆心 X 坐标</p></li>
                                 <li><p><code>double 	getCenterX()</code> -- 获取圆心 X 坐标</p></li>
@@ -4859,33 +4891,70 @@ public class Arc extends Shape {
                                 <li><p><code>DoubleProperty 	radiusYProperty()</code> -- 属性形式读写 Y 方向半径</p></li>
 
                                 <li class="group"><p><code>void 	setStartAngle(double value)</code> -- 设置起始角度(0.0-360.0)</p></li>
-                                <li><p><code>double 	getStartAngle()</code> -- 获取</p></li>
-                                <li><p><code>DoubleProperty 	startAngleProperty()</code> -- </p></li>
+                                <li><p><code>double 	getStartAngle()</code> -- 获取起始角度</p></li>
+                                <li><p><code>DoubleProperty 	startAngleProperty()</code> -- 属性形式读写</p></li>
 
                                 <li class="group"><p><code>void 	setLength(double value)</code> -- 设置跨越的角度(0.0-360.0)</p></li>
-                                <li><p><code>double 	getLength()</code> -- 获取</p></li>
-                                <li><p><code>DoubleProperty 	lengthProperty()</code> -- </p></li>
+                                <li><p><code>double 	getLength()</code> -- 获取跨越的角度</p></li>
+                                <li><p><code>DoubleProperty 	lengthProperty()</code> -- 属性形式读写跨越的角度起始角度</p></li>
 
-                                <li class="group"><p><code>void 	setType(ArcType value)</code> -- 设置</p></li>
-                                <li><p><code>ArcType 	getType()</code> -- 获取</p></li>
-                                <li><p><code>ObjectProperty&lt;ArcType> 	typeProperty()</code> -- </p></li>
+                                <li class="group"><p><code>void 	setType(ArcType value)</code> -- 设置封闭类型</p></li>
+                                <li><p><code>ArcType 	getType()</code> -- 获取封闭类型</p></li>
+                                <li><p><code>ObjectProperty&lt;ArcType> 	typeProperty()</code> -- 属性形式读写封闭类型</p></li>
                             </ol>
                         </div>
 
                         <a id="shape-QuadCurve" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public  class QuadCurve extends Shape {
+    public QuadCurve() {}
+    public QuadCurve(double sX, double sY, double cX, double cY, double eX, double eY) {}
+}
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/QuadCurve.html" target="_blank">QuadCurve</a> 用于绘制二次贝塞尔曲线。</p>
+                            <p><img src="images/VectorDrawable-pathdata-3.gif" class="img-responsive center-block">
+                            <p><img src="images/VectorDrawable-pathdata-2.png" class="img-responsive center-block"></p>
+                            <div class="row">
+                                <div class="col-md-7">
+                            <pre class="brush: java;">
+/** 如右图，A 为起点，C 为终点，B 为控制点:
+ * 1.在 AB 上任意取一点 D, BC 上任意取一点 E, 使得：
+ *     AD : AB = BE : BC
+ * 2.连接 DE，在 DE 上取一点 F, 使得:
+ *     DF : DE = AD : AB = BE : BC
+ * 3.那么 F 点就是 二阶贝塞尔曲线 上的点。
+ */
+                            </pre>
+                                </div>
+                                <div class="col-md-5"><img src="images/VectorDrawable-pathdata-bei2.png" class="img-responsive center-block"></div>
+                            </div>
                         </div>
 
                         <a id="shape-CubicCurve" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public class CubicCurve extends Shape {
+    public CubicCurve() {}
+    public CubicCurve(double startX, double startY, double controlX1, double controlY1,
+            double controlX2, double controlY2, double endX, double endY) {}
+}
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/CubicCurve.html" target="_blank">CubicCurve</a> 用于绘制三阶贝塞尔曲线.</p>
+                            <p><img src="images/VectorDrawable-pathdata-5.gif" class="img-responsive center-block"></p>
+                            <p><img src="images/VectorDrawable-pathdata-4.png" class="img-responsive center-block"></p>
+                            <div class="row">
+                                <div class="col-md-7">
+                             <pre class="brush: java;">
+/** 如右图，A 为起点，D 为终点，B, C 为控制点:
+ * 如 二阶贝塞尔曲线 上的取点，可得：
+ *     AE:AB = BF:BC = CG:CD = EH:EF = FI:FG = HJ:HI
+ * 那么 J 点就是 三阶贝塞尔曲线 上的点。
+ */
+                                </pre>
+                                </div>
+                                <div class="col-md-5"><img src="images/VectorDrawable-pathdata-bei3.png" class="img-responsive center-block"></div>
+                            </div>
                         </div>
 
                         <a id="shape-Path" class="offset"></a>
