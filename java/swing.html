@@ -2795,10 +2795,10 @@ public class Stage extends Window {
                                 <li><p><code>StageStyle 	getStyle()</code> -- 获取窗体样式</p>
                                     <pre class="brush: java;">
 public enum StageStyle {
-    DECORATED,   // 正常窗口，默认
-    UNDECORATED, // 无装饰窗口
-    TRANSPARENT, // 透明背景窗口(测试还是白色背景)，无装饰
-    UTILITY,     // 装饰只有关闭按钮，无最大化和最小化按钮，用于 primaryStage 则不显示窗口
+    DECORATED,   // 正常窗口，白色背景，默认
+    UNDECORATED, // 无装饰窗口，白色背景
+    TRANSPARENT, // 透明背景窗口(还需要调用 scene.setFill(null))，无装饰
+    UTILITY,     // 装饰只有关闭按钮，无最大化和最小化按钮，白色背景，用于 primaryStage 则不显示窗口
     UNIFIED      // 我的环境不支持(Platform.isSupported(ConditionalFeature.UNIFIED_WINDOW) == false)
 }
 </pre>
@@ -3381,6 +3381,7 @@ public interface Styleable {
 }
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/scene/Node.html" target="_blank">Node</a> 类是所有控件和图形类的基类。</p>
+                            <p>Node 类的几个直接和间接子类：<a href="#javafx-scene-Parent">Parent</a>, <a href="#javafx-scene-Region">Region</a>, <a href="#javafx-scene-Group">Group</a>, <a href="#javafx-scene-web-WebView">WebView</a></p>
                             <p>Node 是节点，只有一个节点将没有父节点，这被称为“根”节点。其它每个节点都有零个或一个父项，并且每个节点要么是具有零个子项的“叶子”，要么是具有零个或多个子项的“分支”。</p>
                             <p>Node 类定义了传统的计算机图形“局部”坐标系，其中 x 轴向右增加，y 轴向下增加。形状的具体节点类提供了用于定义该局部坐标空间中形状的几何形状和位置的变量。</p>
                             <p>任何节点都可以有应用于它的转换。这些包括平移、旋转、缩放或剪切。</p>
@@ -3845,6 +3846,7 @@ container.add(imageView); // imageView 添加到容器中,和 clip 无关
                             </ol>
                         </div>
 
+                        <a id="javafx-scene-Parent" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public abstract class Parent extends Node {
@@ -3854,32 +3856,40 @@ public abstract class Parent extends Node {
                             <p><a href="docs/docs-java/api-javafx8/javafx/scene/Parent.html" target="_blank">Parent</a> 是具有子节点的所有节点的基类。</p>
                             <p>Parent 类处理所有分层场景图操作，包括添加/移除子节点、为布局和渲染标记脏分支、挑选、边界计算以及在每个脉冲上执行布局传递。</p>
                             <ol>
-                                <li><p><code>protected double 	computeMinHeight(double width)</code> -- </p></li>
-                                <li><p><code>protected double 	computeMinWidth(double height)</code> -- </p></li>
-                                <li><p><code>protected double 	computePrefHeight(double width)</code> -- </p></li>
-                                <li><p><code>protected double 	computePrefWidth(double height)</code> -- </p></li>
-                                <li><p><code>double 	getBaselineOffset()</code> -- </p></li>
-                                <li><p><code>protected ObservableList&lt;Node> 	getChildren()</code> -- </p></li>
-                                <li><p><code>ObservableList&lt;Node> 	getChildrenUnmodifiable()</code> -- </p></li>
-                                <li><p><code>protected &lt;E extends Node>List&lt;E> 	getManagedChildren()</code> -- </p></li>
-                                <li><p><code>ObservableList&lt;String> 	getStylesheets()</code> -- </p></li>
-                                <li><p><code>boolean 	isNeedsLayout()</code> -- </p></li>
-                                <li><p><code>void 	layout()</code> -- </p></li>
-                                <li><p><code>protected void 	layoutChildren()</code> -- </p></li>
-                                <li><p><code>Node 	lookup(String selector)</code> -- </p></li>
-                                <li><p><code>double 	minHeight(double width)</code> -- </p></li>
-                                <li><p><code>double 	minWidth(double height)</code> -- </p></li>
-                                <li><p><code>ReadOnlyBooleanProperty 	needsLayoutProperty()</code> -- </p></li>
-                                <li><p><code>double 	prefHeight(double width)</code> -- </p></li>
-                                <li><p><code>double 	prefWidth(double height)</code> -- </p></li>
-                                <li><p><code>Object 	queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- </p></li>
-                                <li><p><code>void 	requestLayout()</code> -- </p></li>
-                                <li><p><code>protected void 	requestParentLayout()</code> -- </p></li>
-                                <li><p><code>protected void 	setNeedsLayout(boolean value)</code> -- </p></li>
-                                <li><p><code>protected void 	updateBounds()</code> -- </p></li>
+                                <li><p><code>ObservableList&lt;String> 	getStylesheets()</code> -- 获取一个可链接到样式表的字符串 URL 列表</p></li>
+
+                                <li class="group"><p><code>protected ObservableList&lt;Node> 	getChildren()</code> -- 获取可操作的子节点列表(可以添加子节点)</p></li>
+                                <li><p><code>ObservableList&lt;Node> 	getChildrenUnmodifiable()</code> -- 将子列表作为只读列表获取</p></li>
+                                <li><p><code>protected &lt;E extends Node>List&lt;E> 	getManagedChildren()</code> -- 获取所有托管子节点列表</p></li>
+
+                                <li class="group"><p><code>double 	minHeight(double width)</code> -- 默认返回首选高度,具体看子类实现</p></li>
+                                <li><p><code>double 	minWidth(double height)</code> -- 默认返回首选宽度,具体看子类实现</p></li>
+                                <li><p><code>double 	prefHeight(double width)</code> -- 默认返回首选高度,具体看子类实现</p></li>
+                                <li><p><code>double 	prefWidth(double height)</code> -- 默认返回首选宽度,具体看子类实现</p></li>
+
+                                <li class="group"><p><code>protected double 	computeMinHeight(double width)</code> -- 计算该区域的最小高度</p></li>
+                                <li><p><code>protected double 	computeMinWidth(double height)</code> -- 计算该区域的最小宽度</p></li>
+                                <li><p><code>protected double 	computePrefHeight(double width)</code> -- 计算该区域的首选高度</p></li>
+                                <li><p><code>protected double 	computePrefWidth(double height)</code> -- 计算该区域的首选宽度</p></li>
+
+                                <li class="group"><p><code>protected void 	setNeedsLayout(boolean value)</code> -- 指示此节点及其子节点需要在下一个脉冲上进行布局</p></li>
+                                <li><p><code>boolean 	isNeedsLayout()</code> -- 获取是否需要布局</p></li>
+                                <li><p><code>ReadOnlyBooleanProperty 	needsLayoutProperty()</code> -- 属性方式读取以上值</p></li>
+
+                                <li class="group"><p><code>void 	layout()</code> -- 在该父对象下执行场景图的自顶向下的布局传递</p></li>
+                                <li><p><code>protected void 	layoutChildren()</code> -- 以布局子节点(在布局传递过程中调用)</p></li>
+                                <li><p><code>void 	requestLayout()</code> -- 请求在呈现下一个场景之前执行的布局传递</p></li>
+                                <li><p><code>protected void 	requestParentLayout()</code> -- 请求要在下一个场景呈现之前执行父级的布局传递</p></li>
+
+                                <li class="group"><p><code>Node 	lookup(String selector)</code> -- 使用选择器获取第一个子节点</p></li>
+
+                                <li class="group"><p><code>double 	getBaselineOffset()</code> -- 根据第一个托管子计算基线偏移量</p></li>
+                                <li><p><code>protected void 	updateBounds()</code> -- 更新边界</p></li>
+                                <li><p><code>Object 	queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- 该方法由辅助技术调用，以请求属性的值</p></li>
                             </ol>
                         </div>
 
+                        <a id="javafx-scene-Region" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class Region extends Parent {
@@ -3887,8 +3897,17 @@ public class Region extends Parent {
     public static final double USE_COMPUTED_SIZE = -1;
 }
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/Region.html" target="_blank">Region</a></p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/layout/Region.html" target="_blank">Region</a> 是所有基于 JavaFX 节点的 UI 控件和所有布局容器的基类。</p>
+                            <p>Region 是一个可调整的父节点，可以有多个背景和边界。它被 JavaFX 设计为支持 CSS3 规范的背景和边界。</p>
+                            <p>默认情况下，区域显示为矩形。背景填充半径可能导致矩形出现圆形。这不仅影响使视觉看起来像圆形矩形，而且还导致区域的拾取行为像圆形矩形，从而忽略角半径之外的位置。然而，可以通过指定形状属性来使用区域来使用任何形状。</p>
+                            <p>缺省情况下，Region 继承其超类（Parent）的布局行为，这意味着它将根据其首选大小调整任何可调整大小的子节点的大小，但不会重新定位它们。</p>
                             <ol>
+                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
+
+                                <li><p><code>static void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, boolean fillWidth, boolean fillHeight, HPos halignment, VPos valignment, boolean isSnapToPixel)</code> -- </p></li>
+
+                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- </p></li>
+
                                 <li><p><code>ObjectProperty&lt;Background> 	backgroundProperty()</code> -- </p></li>
                                 <li><p><code>ObjectProperty&lt;Border> 	borderProperty()</code> -- </p></li>
                                 <li><p><code>BooleanProperty 	cacheShapeProperty()</code> -- </p></li>
@@ -3901,8 +3920,7 @@ public class Region extends Parent {
                                 <li><p><code>protected double 	computePrefWidth(double height)</code> -- </p></li>
                                 <li><p><code>Background 	getBackground()</code> -- </p></li>
                                 <li><p><code>Border 	getBorder()</code> -- </p></li>
-                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
-                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- </p></li>
+
                                 <li><p><code>double 	getHeight()</code> -- </p></li>
                                 <li><p><code>Insets 	getInsets()</code> -- </p></li>
                                 <li><p><code>double 	getMaxHeight()</code> -- </p></li>
@@ -3925,7 +3943,6 @@ public class Region extends Parent {
                                 <li><p><code>boolean 	isSnapToPixel()</code> -- </p></li>
                                 <li><p><code>protected void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, HPos halignment, VPos valignment)</code> -- </p></li>
                                 <li><p><code>protected void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, boolean fillWidth, boolean fillHeight, HPos halignment, VPos valignment)</code> -- </p></li>
-                                <li><p><code>static void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, boolean fillWidth, boolean fillHeight, HPos halignment, VPos valignment, boolean isSnapToPixel)</code> -- </p></li>
                                 <li><p><code>protected void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, HPos halignment, VPos valignment)</code> -- </p></li>
                                 <li><p><code>double 	maxHeight(double width)</code> -- </p></li>
                                 <li><p><code>DoubleProperty 	maxHeightProperty()</code> -- </p></li>
@@ -3976,6 +3993,22 @@ public class Region extends Parent {
                                 <li><p><code>BooleanProperty 	snapToPixelProperty()</code> -- </p></li>
                                 <li><p><code>ReadOnlyDoubleProperty 	widthProperty()</code> -- </p></li>
                             </ol>
+                        </div>
+
+                        <a id="javafx-scene-Group" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/Group.html" target="_blank">Group</a></p>
+                        </div>
+
+                        <a id="javafx-scene-web-WebView" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/web/WebView.html" target="_blank">WebView</a></p>
                         </div>
                     </div>
                 </div>
@@ -4036,7 +4069,7 @@ root.getChildren().add(btn);
                                 <li><p><code>static void 	setLeftAnchor(Node child, Double value)</code> --  设置指定节点距离左边界的距离</p></li>
                                 <li><p><code>static void 	setRightAnchor(Node child, Double value)</code> --  设置指定节点距离右边界的距离</p></li>
 
-                                <li class="group"><p><code>protected double 	computeMinHeight(double width)</code> -- 计算该区域的最小高度和</p></li>
+                                <li class="group"><p><code>protected double 	computeMinHeight(double width)</code> -- 计算该区域的最小高度</p></li>
                                 <li><p><code>protected double 	computeMinWidth(double height)</code> -- 计算该区域的最小宽度</p></li>
                                 <li><p><code>protected double 	computePrefHeight(double width)</code> -- 计算该区域的首选高度</p></li>
                                 <li><p><code>protected double 	computePrefWidth(double height)</code> -- 计算该区域的首选宽度</p></li>
@@ -4929,6 +4962,31 @@ public  class QuadCurve extends Shape {
                                 </div>
                                 <div class="col-md-5"><img src="images/VectorDrawable-pathdata-bei2.png" class="img-responsive center-block"></div>
                             </div>
+                            <ol>
+                                <li><p><code>void 	setStartX(double value)</code> -- 设置起点 X 坐标</p></li>
+                                <li><p><code>double 	getStartX()</code> -- 获取起点 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	startXProperty()</code> -- 属性形式读写起点 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setStartY(double value)</code> -- 设置起点 Y 坐标</p></li>
+                                <li><p><code>double 	getStartY()</code> -- 获取起点 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	startYProperty()</code> -- 属性形式读写起点 Y 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setControlX(double value)</code> -- 设置控制点 X 坐标</p></li>
+                                <li><p><code>double 	getControlX()</code> -- 获取控制点 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	controlXProperty()</code> -- 属性形式读写控制点 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setControlY(double value)</code> -- 设置控制点 Y 坐标</p></li>
+                                <li><p><code>double 	getControlY()</code> -- 获取控制点 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	controlYProperty()</code> -- 属性形式读写控制点 Y 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setEndX(double value)</code> -- 设置终点 X 坐标</p></li>
+                                <li><p><code>double 	getEndX()</code> -- 获取终点 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	endXProperty()</code> -- 属性形式读写终点 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setEndY(double value)</code> -- 设置终点 Y 坐标</p></li>
+                                <li><p><code>double 	getEndY()</code> -- 获取终点 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	endYProperty()</code> -- 属性形式读写终点 Y 坐标</p></li>
+                            </ol>
                         </div>
 
                         <a id="shape-CubicCurve" class="offset"></a>
@@ -4955,30 +5013,251 @@ public class CubicCurve extends Shape {
                                 </div>
                                 <div class="col-md-5"><img src="images/VectorDrawable-pathdata-bei3.png" class="img-responsive center-block"></div>
                             </div>
+                            <ol>
+                                <li><p><code>void 	setStartX(double value)</code> -- 设置起点 X 坐标</p></li>
+                                <li><p><code>double 	getStartX()</code> -- 获取起点 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	startXProperty()</code> -- 属性形式读写起点 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setStartY(double value)</code> -- 设置起点 Y 坐标</p></li>
+                                <li><p><code>double 	getStartY()</code> -- 获取起点 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	startYProperty()</code> -- 属性形式读写起点 Y 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setControlX1(double value)</code> -- 设置第一个控制点 X 坐标</p></li>
+                                <li><p><code>double 	getControlX1()</code> -- 获取第一个控制点 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	controlX1Property()</code> -- 属性形式读写第一个控制点 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setControlY1(double value)</code> -- 设置第一个控制点 Y 坐标</p></li>
+                                <li><p><code>double 	getControlY1()</code> -- 获取第一个控制点 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	controlY1Property()</code> -- 属性形式读写第一个控制点 Y 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setControlX2(double value)</code> -- 设置第二个控制点 X 坐标</p></li>
+                                <li><p><code>double 	getControlX2()</code> -- 获取第二个控制点 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	controlX2Property()</code> -- 属性形式读写第二个控制点 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setControlY2(double value)</code> -- 设置第二个控制点 Y 坐标</p></li>
+                                <li><p><code>double 	getControlY2()</code> -- 获取第二个控制点 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	controlY2Property()</code> -- 属性形式读写第二个控制点 Y 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setEndX(double value)</code> -- 设置终点 X 坐标</p></li>
+                                <li><p><code>double 	getEndX()</code> -- 获取终点 X 坐标</p></li>
+                                <li><p><code>DoubleProperty 	endXProperty()</code> -- 属性形式读写终点 X 坐标</p></li>
+
+                                <li class="group"><p><code>void 	setEndY(double value)</code> -- 设置终点 Y 坐标</p></li>
+                                <li><p><code>double 	getEndY()</code> -- 获取终点 Y 坐标</p></li>
+                                <li><p><code>DoubleProperty 	endYProperty()</code> -- 属性形式读写终点 Y 坐标</p></li>
+                            </ol>
                         </div>
 
                         <a id="shape-Path" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public class Path extends Shape {
+    public Path() {}
+    public Path(PathElement... elements) {}
+    public Path(Collection&lt;? extends PathElement> elements) {}
+}
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/Path.html" target="_blank">Path</a> 用于绘制路径。</p>
+                            <p>Path 将要绘制的形状全部保存在 PathElement 列表中，前的的非封闭形状有一个对应的类为 <a href="docs/docs-java/api-javafx8/javafx/scene/shape/PathElement.html" target="_blank">PathElement</a> 的子类： <a href="docs/docs-java/api-javafx8/javafx/scene/shape/MoveTo.html" target="_blank">MoveTo(移动)</a>, <a href="docs/docs-java/api-javafx8/javafx/scene/shape/LineTo.html" target="_blank">LineTo(直线)</a>, <a href="docs/docs-java/api-javafx8/javafx/scene/shape/HLineTo.html" target="_blank">HLineTo(横向线)</a>, <a href="docs/docs-java/api-javafx8/javafx/scene/shape/VLineTo.html" target="_blank">VLineTo(纵向线)</a>, <a href="docs/docs-java/api-javafx8/javafx/scene/shape/ArcTo.html" target="_blank">ArcTo(弧线)</a>, <a href="docs/docs-java/api-javafx8/javafx/scene/shape/QuadCurveTo.html" target="_blank">QuadCurveTo(二阶贝塞尔曲线)</a>, <a href="docs/docs-java/api-javafx8/javafx/scene/shape/CubicCurveTo.html" target="_blank">CubicCurveTo(三阶贝塞尔曲线)</a>, <a href="docs/docs-java/api-javafx8/javafx/scene/shape/ClosePath.html" target="_blank">ClosePath(封闭路径)</a></p>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <pre class="brush: java;">
+Path shape = new Path();
+shape.setStroke(Color.RED);
+shape.setStrokeWidth(3);
+
+shape.setFill(Color.valueOf("#336699"));
+// 填充如何确定内部： EVEN_ODD(奇-偶规则), NON_ZERO(非零环绕数规则)
+shape.setFillRule(FillRule.EVEN_ODD);
+
+PathElement p1 = new MoveTo(50, 50);
+PathElement p2 = new LineTo(350, 150);
+PathElement p3 = new VLineTo(350);
+PathElement p4 = new HLineTo(250);
+
+
+/** 圆弧以 p4 终点点为起点
+ * radiusX, radiusY 分别为椭圆的 X， Y 方向半径
+ * xAxisRotation 为在 X 方向的旋转角度
+ * x, y 为圆弧的终点
+ * largeArcFlag 为指定大弧或小弧
+ * sweepFlag 指定画弧的方向(true 为顺时针， false 为逆时针)
+ */
+PathElement p5 = new ArcTo(50, 100, 0, 250, 250, true,  true);
+
+PathElement p6 = new QuadCurveTo(300, 300, 300, 200);
+PathElement p7 = new CubicCurveTo(100, 100, 300, 100, 150, 150);
+PathElement p8 = new ClosePath();
+
+shape.getElements().addAll(p1, p2, p3, p4, p5, p6, p7, p8);
+</pre>
+                                </div>
+                                <div class="col-md-4">
+                                    <img src="images/shape-Path.png" class="img-responsive center-block">
+                                    <p><b>下图为 ArcTo 的参数：</b></p>
+                                    <img src="images/VectorDrawable-pathdata.png" class="img-responsive center-block">
+
+                                </div>
+                            </div>
+                            <ol>
+                                <li><p><code>ObservableList&lt;PathElement> 	getElements()</code> -- 获取可操作的 PathElement 列表</p>
+                                    <pre class="brush: java;">
+public abstract class PathElement {
+    public void setAbsolute(boolean value) {}
+    public boolean isAbsolute() {}
+    public BooleanProperty absoluteProperty() {}
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>void 	setFillRule(FillRule value)</code> -- 设置填充的内部确定规则</p></li>
+                                <li><p><code>FillRule 	getFillRule()</code> -- 获取填充的内部确定规则</p></li>
+                                <li><p><code>ObjectProperty&lt;FillRule> 	fillRuleProperty()</code> -- 属性形式读写填充的内部确定规则</p></li>
+                            </ol>
                         </div>
 
                         <a id="shape-SVGPath" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public class SVGPath extends Shape {}
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/shape/SVGPath.html" target="_blank">SVGPath</a> 用于绘制路径。和 Path 的区别是 SVGPath 使用 String 来构建 PathElement，其它都一样。</p>
+                            <pre class="brush: java;">
+/** 下面的内容实现的是和 Path 的实例是同样的效果： */
+shape.setContent("M50,50L350,150V350H250A50,100,0,1,1,250,250Q300,300,300,200C100,100,300,100,150,150Z");
+
+/** 以下所有命令均允许小写字母, 大写表示绝对位置，小写表示相对位置。
+ * M = MoveTo(x, y)
+ *
+ * L = LineTo(x, y)
+ * H = HLineTo(x)，横向线条，指定 x 位置
+ * V = VLineTo(y)，纵向线条，指定 y 位置
+ *
+ * Z = ClosePath()，关闭路径
+ *
+ * A = (rx, ry, x-axis-rotation, large-arc-flag, sweep-flag, x, y)，圆弧，这个参数顺序和原始方法有出入
+ *   rx, ry -- 椭圆半径
+ *   x-axis-rotation -- X 轴旋转角度
+ *   large-arc-flag -- 为 0 时表示取小弧度，1 时取大弧度（要长的还是短的）
+ *   sweep-flag -- 0 取逆时针方向，1 取顺时针方向
+ *   x, y -- 终点的位置
+ *
+ * Q = QuadCurveTo(centerX, centerY, endX, endY)，二次贝塞尔曲线
+ * T = (endX, endY) 二次贝塞尔曲线，只指定终点，控制点被默认为上一次的控制点关于上次终点的中心对称点
+ *
+ * C = CubicCurveTo(centerX1, centerY1, centerX2, centerY2, endX, endY)，三次贝塞尔曲线
+ * S = (centerX2, centerY2, endX, endY), 比 C 少一个控制点，默认是上一次最后一个控制点相对上次的终点的中心对称点
+ */
+</pre>
+                            <ol>
+                                <li><p><code>void 	setContent(String value)</code> -- 设置用于构建 Path 的元素</p></li>
+                                <li><p><code>String 	getContent()</code> -- 获取用于构建 Path 的元素</p></li>
+                                <li><p><code>StringProperty 	contentProperty()</code> --  属性形式读写用于构建 Path 的元素</p></li>
+
+                                <li class="group"><p><code>void 	setFillRule(FillRule value)</code> -- 设置填充的内部确定规则</p></li>
+                                <li><p><code>FillRule 	getFillRule()</code> -- 获取填充的内部确定规则</p></li>
+                                <li><p><code>ObjectProperty&lt;FillRule> 	fillRuleProperty()</code> -- 属性形式读写填充的内部确定规则</p></li>
+                            </ol>
                         </div>
 
                         <a id="shape-Text" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
-
+public class Text extends Shape {
+    public Text() {}
+    public Text(String text) {}
+    public Text(double x, double y, String text) {}
+}
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/text/Text.html" target="_blank">Text</a> 用于绘制文本。</p>
+                            <ol>
+                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> --  获取与此类关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>List&lt;ssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> --  获取与此实例关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>void 	setX(double value)</code> -- 设置文本基线的 X 位置</p></li>
+                                <li><p><code>double 	getX()</code> -- 获取文本基线的 X 位置</p></li>
+                                <li><p><code>DoubleProperty 	xProperty()</code> -- 属性形式读写文本基线的 X 位置</p></li>
+
+                                <li class="group"><p><code>void 	setY(double value)</code> -- 设置文本基线的 Y 位置</p></li>
+                                <li><p><code>double 	getY()</code> -- 获取文本基线的 Y 位置</p></li>
+                                <li><p><code>DoubleProperty 	yProperty()</code> -- 属性形式读写文本基线的 Y 位置</p></li>
+
+                                <li class="group"><p><code>void 	setText(String value)</code> -- 设置要绘制的文本</p></li>
+                                <li><p><code>String 	getText()</code> -- 获取要绘制的文本</p></li>
+                                <li><p><code>StringProperty 	textProperty()</code> -- 属性形式读写要绘制的文本</p></li>
+
+                                <li class="group"><p><code>void 	setFont(<a href="docs/docs-java/api-javafx8/javafx/scene/text/Font.html" target="_blank">Font</a> value)</code> -- 获取文本使用的字体</p></li>
+                                <li><p><code><a href="docs/docs-java/api-javafx8/javafx/scene/text/Font.html" target="_blank">Font</a> 	getFont()</code> -- 设置文本使用的字体</p></li>
+                                <li><p><code>ObjectProperty&lt;<a href="docs/docs-java/api-javafx8/javafx/scene/text/Font.html" target="_blank">Font</a>> 	fontProperty()</code> -- 属性形式读写文本使用的字体</p>
+                                    <pre class="brush: java;">
+Font.getFamilies().forEach(family -> log(family)); // 获取用户系统上安装的所有字体系列
+Font.getFontNames().forEach( name -> log(name));   // 获取用户系统上安装的所有字体的名称
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>void 	setLineSpacing(double spacing)</code> -- 设置行高(像素)</p></li>
+                                <li><p><code>double 	getLineSpacing()</code> -- 获取行高</p></li>
+                                <li><p><code>DoubleProperty 	lineSpacingProperty()</code> -- 属性形式读写行高</p></li>
+
+                                <li class="group"><p><code>void 	setTextAlignment(TextAlignment value)</code> -- 设置文本横向对齐方式</p></li>
+                                <li><p><code>TextAlignment 	getTextAlignment()</code> -- 获取文本横向对齐方式</p></li>
+                                <li><p><code>ObjectProperty&lt;TextAlignment> 	textAlignmentProperty()</code> -- 属性形式读写文本横向对齐方式</p>
+                                    <pre class="brush: java;">
+public enum TextAlignment {
+    LEFT,       // 左对齐
+    CENTER,     // 居中对齐
+    RIGHT,      // 右对齐
+    JUSTIFY     // 表示正确的文本对齐方式
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>void 	setTextOrigin(VPos value)</code> -- 设置文本纵向对齐方式</p></li>
+                                <li><p><code>VPos 	getTextOrigin()</code> -- 获取文本纵向对齐方式</p></li>
+                                <li><p><code>ObjectProperty&lt;VPos> 	textOriginProperty()</code> -- 属性形式读写文本纵向对齐方式</p></li>
+
+                                <li class="group"><p><code>void 	setUnderline(boolean value)</code> -- 设置有否有下划线</p></li>
+                                <li><p><code>boolean 	isUnderline()</code> -- 获取有否有下划线</p></li>
+                                <li><p><code>BooleanProperty 	underlineProperty()</code> -- 属性形式读写有否有下划线</p></li>
+
+                                <li class="group"><p><code>void 	setStrikethrough(boolean value)</code> -- 设置有否有删除线</p></li>
+                                <li><p><code>boolean 	isStrikethrough()</code> -- 获取有否有删除线</p></li>
+                                <li><p><code>BooleanProperty 	strikethroughProperty()</code> -- 属性形式读写有否有删除线</p></li>
+
+                                <li class="group"><p><code>void 	setWrappingWidth(double value)</code> -- 设置文本可显示的宽度(单行超过此宽度自动换行)</p></li>
+                                <li><p><code>double 	getWrappingWidth()</code> -- 获取文本可显示的宽度</p></li>
+                                <li><p><code>DoubleProperty 	wrappingWidthProperty()</code> -- 属性形式读写文本可显示的宽度</p></li>
+
+                                <li class="group"><p><code>void 	setBoundsType(TextBoundsType value)</code> -- 设置文本节点的边界报告行为</p></li>
+                                <li><p><code>TextBoundsType 	getBoundsType()</code> -- 获取文本节点的边界报告行为</p></li>
+                                <li><p><code>ObjectProperty&lt;TextBoundsType> 	boundsTypeProperty()</code> -- 属性形式读写文本节点的边界报告行为</p>
+                                    <pre class="brush: java;">
+public enum TextBoundsType {
+    LOGICAL,                    // 使用逻辑界限作为计算边界的基础
+    LOGICAL_VERTICAL_CENTER,    // 使用逻辑垂直中心边界作为计算边界的基础
+    VISUAL                      // 使用视觉边界作为计算边界的基础
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>void 	setFontSmoothingType(FontSmoothingType value)</code> -- 设置屏幕文本上平滑字体边缘的首选机制</p></li>
+                                <li><p><code>FontSmoothingType 	getFontSmoothingType()</code> -- 获取屏幕文本上平滑字体边缘的首选机制</p></li>
+                                <li><p><code>ObjectProperty&lt;FontSmoothingType> 	fontSmoothingTypeProperty()</code> -- 属性形式读写屏幕文本上平滑字体边缘的首选机制</p>
+                                    <pre class="brush: java;">
+public enum FontSmoothingType {
+    GRAY,   // 默认灰度级平滑，最适合图形和动画使用
+    LCD     // 子像素 LCD 文本，利用数字 LCD 显示面板的特性来实现增加的像素分辨率
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>double 	getBaselineOffset()</code> -- 获取文本基线偏移量</p></li>
+                                <li><p><code>ReadOnlyDoubleProperty 	baselineOffsetProperty()</code> -- 属性形式读文本基线偏移量</p></li>
+
+                                <li class="group"><p><code>boolean 	usesMirroring()</code> -- 确定当节点方向从右到左时是否应反射节点</p></li>
+                                <li><p><code>Object 	queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- 查询屏幕阅读属性</p></li>
+                            </ol>
                         </div>
                     </div>
                 </div>
