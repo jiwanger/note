@@ -3902,34 +3902,27 @@ public class Region extends Parent {
                             <p>默认情况下，区域显示为矩形。背景填充半径可能导致矩形出现圆形。这不仅影响使视觉看起来像圆形矩形，而且还导致区域的拾取行为像圆形矩形，从而忽略角半径之外的位置。然而，可以通过指定形状属性来使用区域来使用任何形状。</p>
                             <p>缺省情况下，Region 继承其超类（Parent）的布局行为，这意味着它将根据其首选大小调整任何可调整大小的子节点的大小，但不会重新定位它们。</p>
                             <ol>
-                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
+                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 获取与此类关联的 CSS 元数据</p></li>
+                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- 获取与此实例关联的 CSS 元数据</p></li>
 
-                                <li class="group"><p><code>static void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, boolean fillWidth, boolean fillHeight, HPos halignment, VPos valignment, boolean isSnapToPixel)</code> -- </p></li>
+                                <li class="group"><p><code>static void 	layoutInArea(Node child, double x, double y, double w, double h, double offset, Insets margin, boolean fW, boolean fH, HPos hP, VPos vP, boolean isSnapToPixel)</code> -- 在由 (x, y, w, h) 指定的区域内布局 node, 如果子节点是可调整大小的，则此方法将使用 fW 和 fH 来确定是调整其大小以填充该区域还是将子节点保持在其首选维度</p></li>
 
-                                <li class="group"><p><code>static void 	positionInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, HPos halignment, VPos valignment, boolean isSnapToPixel)</code> -- </p></li>
+                                <li class="group"><p><code>static void 	positionInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, HPos halignment, VPos valignment, boolean isSnapToPixel)</code> -- 此函数不调整节点的大小，而是使用节点的布局边界宽度和高度来确定节点应该如何定位在区域内</p></li>
 
-                                <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- </p></li>
-
-                                <li class="group"><p><code>protected void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, HPos halignment, VPos valignment)</code> -- </p></li>
-                                <li><p><code>protected void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, boolean fillWidth, boolean fillHeight, HPos halignment, VPos valignment)</code> -- </p></li>
-                                <li><p><code>protected void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, HPos halignment, VPos valignment)</code> -- </p></li>
-
-                                <li class="group"><p><code>protected void 	positionInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, HPos halignment, VPos valignment)</code> -- </p></li>
-
-                                <li class="group"><p><code>protected void 	setWidth(double value)</code> -- </p></li>
+                                <li class="group"><p><code>protected void 	setWidth(double value)</code> -- 设置节点的宽度，在布局期间由父对象设置，并且可能不由应用程序设置</p></li>
                                 <li><p><code>double 	getWidth()</code> -- </p></li>
                                 <li><p><code>ReadOnlyDoubleProperty 	widthProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>protected void 	setHeight(double value)</code> -- </p></li>
+                                <li class="group"><p><code>protected void 	setHeight(double value)</code> -- 设置节点的高度，在布局期间由父对象设置，并且可能不由应用程序设置</p></li>
                                 <li><p><code>double 	getHeight()</code> -- </p></li>
                                 <li><p><code>ReadOnlyDoubleProperty 	heightProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setPrefHeight(double value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setPrefHeight(double value)</code> -- 设置首选的宽度</p></li>
                                 <li><p><code>double 	getPrefHeight()</code> -- </p></li>
                                 <li><p><code>DoubleProperty 	prefHeightProperty()</code> -- </p></li>
                                 <li><p><code>double 	prefHeight(double width)</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setPrefWidth(double value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setPrefWidth(double value)</code> -- 设置首选的高度</p></li>
                                 <li><p><code>double 	getPrefWidth()</code> -- </p></li>
                                 <li><p><code>DoubleProperty 	prefWidthProperty()</code> -- </p></li>
                                 <li><p><code>double 	prefWidth(double height)</code> -- </p></li>
@@ -3940,51 +3933,51 @@ public class Region extends Parent {
                                 <li><p><code>void 	setPrefSize(double prefWidth, double prefHeight)</code> -- </p></li>
                                 <li><p><code>void 	setMinSize(double minWidth, double minHeight)</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setMaxHeight(double value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setMaxHeight(double value)</code> -- 设置最大高度</p></li>
                                 <li><p><code>double 	getMaxHeight()</code> -- </p></li>
                                 <li><p><code>DoubleProperty 	maxHeightProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setMaxWidth(double value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setMaxWidth(double value)</code> -- 设置最大宽度</p></li>
                                 <li><p><code>double 	getMaxWidth()</code> -- </p></li>
                                 <li><p><code>DoubleProperty 	maxWidthProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setMinHeight(double value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setMinHeight(double value)</code> -- 设置最小高度</p></li>
                                 <li><p><code>double 	getMinHeight()</code> -- </p></li>
                                 <li><p><code>DoubleProperty 	minHeightProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setMinWidth(double value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setMinWidth(double value)</code> -- 设置最小宽度</p></li>
                                 <li><p><code>double 	getMinWidth()</code> -- </p></li>
                                 <li><p><code>DoubleProperty 	minWidthProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setPadding(Insets value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setPadding(Insets value)</code> -- 设置内部填充</p></li>
                                 <li><p><code>Insets 	getPadding()</code> -- </p></li>
                                 <li><p><code>ObjectProperty&lt;Insets> 	paddingProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setShape(Shape value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setShape(Shape value)</code> -- 设置背景填充的形状(形状的一些属性将被忽略)</p></li>
                                 <li><p><code>Shape 	getShape()</code> -- </p></li>
                                 <li><p><code>ObjectProperty&lt;Shape> 	shapeProperty()</code> -- </p></li>
 
                                 <li class="group"><p><code>void 	setScaleShape(boolean value)</code> -- </p></li>
-                                <li><p><code>boolean 	isScaleShape()</code> -- </p></li>
+                                <li><p><code>boolean 	isScaleShape()</code> -- 默认为 true, <code>setShape(Shape)</code> 指定的形状被缩放在此区域内</p></li>
                                 <li><p><code>BooleanProperty 	scaleShapeProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setBackground(Background value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setBackground(<a href="docs/docs-java/api-javafx8/javafx/scene/layout/Background.html" target="_blank">Background</a> value)</code> -- 设置此区域背景(可以包括多个填充和多图图像)</p></li>
                                 <li><p><code>Background 	getBackground()</code> -- </p></li>
                                 <li><p><code>ObjectProperty&lt;Background> 	backgroundProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setBorder(Border value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setBorder(<a href="docs/docs-java/api-javafx8/javafx/scene/layout/Border.html" target="_blank">Border</a> value)</code> -- 设置边框</p></li>
                                 <li><p><code>Border 	getBorder()</code> -- </p></li>
                                 <li><p><code>ObjectProperty&lt;Border> 	borderProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setCacheShape(boolean value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setCacheShape(boolean value)</code> -- 设置是否使用图形缓存, 以提高性能</p></li>
                                 <li><p><code>boolean 	isCacheShape()</code> -- </p></li>
                                 <li><p><code>BooleanProperty 	cacheShapeProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	setCenterShape(boolean value)</code> -- </p></li>
+                                <li class="group"><p><code>void 	setCenterShape(boolean value)</code> -- 定义形状是否以区域的宽度或高度为中心</p></li>
                                 <li><p><code>boolean 	isCenterShape()</code> -- </p></li>
                                 <li><p><code>BooleanProperty 	centerShapeProperty()</code> -- </p></li>
 
-                                <li class="group"><p><code>Insets 	getInsets()</code> -- </p></li>
+                                <li class="group"><p><code>Insets 	getInsets()</code> -- 获取区域的四边偏移</p></li>
                                 <li><p><code>ReadOnlyObjectProperty&lt;Insets> 	insetsProperty()</code> -- </p></li>
 
                                 <li class="group"><p><code>void 	setOpaqueInsets(Insets value)</code> -- </p></li>
@@ -3995,13 +3988,17 @@ public class Region extends Parent {
                                 <li><p><code>boolean 	isSnapToPixel()</code> -- </p></li>
                                 <li><p><code>BooleanProperty 	snapToPixelProperty()</code> -- </p></li>
 
-
                                 <li class="group"><p><code>String 	getUserAgentStylesheet()</code> -- </p></li>
 
                                 <li class="group"><p><code>double 	snappedTopInset()</code> -- </p></li>
                                 <li><p><code>double 	snappedBottomInset()</code> -- </p></li>
                                 <li><p><code>double 	snappedLeftInset()</code> -- </p></li>
                                 <li><p><code>double 	snappedRightInset()</code> -- </p></li>
+
+                                <li class="group"><p><code>double 	maxHeight(double width)</code> -- </p></li>
+                                <li><p><code>double 	maxWidth(double height)</code> -- </p></li>
+                                <li><p><code>double 	minHeight(double width)</code> -- </p></li>
+                                <li><p><code>double 	minWidth(double height)</code> -- </p></li>
 
                                 <li class="group"><p><code>protected double 	snapPosition(double value)</code> -- </p></li>
                                 <li><p><code>protected double 	snapSize(double value)</code> -- </p></li>
@@ -4014,10 +4011,11 @@ public class Region extends Parent {
                                 <li><p><code>protected double 	computePrefHeight(double width)</code> -- </p></li>
                                 <li><p><code>protected double 	computePrefWidth(double height)</code> -- </p></li>
 
-                                <li class="group"><p><code>double 	maxHeight(double width)</code> -- </p></li>
-                                <li><p><code>double 	maxWidth(double height)</code> -- </p></li>
-                                <li><p><code>double 	minHeight(double width)</code> -- </p></li>
-                                <li><p><code>double 	minWidth(double height)</code> -- </p></li>
+                                <li class="group"><p><code>protected void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, HPos halignment, VPos valignment)</code> -- </p></li>
+                                <li><p><code>protected void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, boolean fillWidth, boolean fillHeight, HPos halignment, VPos valignment)</code> -- </p></li>
+                                <li><p><code>protected void 	layoutInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, Insets margin, HPos halignment, VPos valignment)</code> -- </p></li>
+
+                                <li class="group"><p><code>protected void 	positionInArea(Node child, double areaX, double areaY, double areaWidth, double areaHeight, double areaBaselineOffset, HPos halignment, VPos valignment)</code> -- </p></li>
 
                             </ol>
                         </div>
