@@ -2612,6 +2612,46 @@ public abstract class JComponent extends Container implements Serializable {
                         <h3 class="panel-title">JavaFx 基础</h3>
                     </div>
                     <div class="panel-body">
+                        <pre class="brush: java;">
+/** 使用 GSON 做 json 转换，OkHttp 做网络请求， RxJava 做线程调度, RxJavaFX 提供了 JavaFX 线程支持 */
+compile 'com.google.code.gson:gson:2.8.5'
+compile 'com.squareup.okhttp3:okhttp:3.9.0'
+compile "io.reactivex.rxjava2:rxjava:2.1.10"
+compile 'io.reactivex.rxjava2:rxjavafx:2.2.2'
+
+String url = "...";
+Observable.create((ObservableOnSubscribe&lt;Response>) e -> {
+    // 工作线程，执行请求
+    Request.Builder builder = new Request.Builder().url(url).get();
+    Request request = builder.build();
+    Call call = new OkHttpClient().newCall(request);
+    Response response = call.execute();
+    e.onNext(response);
+}).map(response -> {
+    // 工作线程，转换数据
+    if (response.isSuccessful()) {
+        ResponseBody body = response.body();
+        if (body != null) {
+            ListBack&lt;RobotData> dataList = new Gson().fromJson(body.string(),
+                    new TypeToken&lt;ListBack&lt;RobotData>>() {}.getType());
+            return dataList;
+        }
+    }
+    return null;
+}).subscribeOn(Schedulers.io())         // Http 请求工作在 io 线程
+.observeOn(JavaFxScheduler.platform())  // 结果在 JavaFX 线程
+.subscribe(data -> {
+    List&lt;RobotData> list = data.getDatas();
+    StringBuilder builder = new StringBuilder();
+    list.forEach(item -> {
+        builder.append(item.getId()).append(", ").append(item.getName())
+                    .append(", ").append(item.getUrl()).append("\n");
+    });
+    info.setText(builder.toString());
+}, throwable -> {
+    Log.d("查询失败！");
+});
+</pre>
 
                         <p>JavaFX 主要包括以下包：</p>
                         <ul>
@@ -3364,6 +3404,7 @@ Node
 java.lang.Object
     javafx.scene.Node
 
+@IDProperty(value="id")
 public abstract class Node implements EventTarget, Styleable {
     public static final double BASELINE_OFFSET_SAME_AS_HEIGHT = Double.NEGATIVE_INFINITY;
 
@@ -4024,6 +4065,7 @@ public class Region extends Parent {
                         <a id="javafx-scene-Group" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
+@DefaultProperty(value="children")
 public class Group extends Parent {
     public Group() {}
     public Group(Node... children) {}
@@ -4060,6 +4102,7 @@ public class Group extends Parent {
                     <div class="panel-body">
                         <div class="sub-item">
                             <pre class="brush: java;">
+@DefaultProperty(value="children")
 public class Pane extends Region {
     public Pane() {}
     public Pane(Node... children) {}
@@ -4593,6 +4636,7 @@ public interface Skinnable {
 }
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Control.html" target="_blank">Control</a> 是用户界面控件的基类，是场景图中的一个节点，它可以由用户操作。</p>
+                            <p>Control 的常见子类：<a href="#control-SplitPane">SplitPane</a>, <a href="#control-ScrollPane">ScrollPane</a>, <a href="#control-TabPane">TabPane</a>, <a href="#control-MenuBar">MenuBar</a>, <a href="#control-Accordion">Accordion</a>, <a href="#control-ListView">ListView</a>, <a href="#control-TreeView">TreeView</a></p>
                             <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
                             <ol>
                                 <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 获取与此类关联的 CSS 元数据</p></li>
@@ -4629,6 +4673,322 @@ public interface Skinnable {
                             </ol>
                         </div>
 
+                        <a id="control-SplitPane" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+@DefaultProperty(value="items")
+public class SplitPane extends Control {
+    public static class Divider {}
+
+    public SplitPane() {}
+    public SplitPane(Node... items) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/SplitPane.html" target="_blank">SplitPane</a> 可以将区域分为两个或者多个子区域，区域间使用分隔器分隔，用户可以拖动该分隔器以给其中一个边提供更多的空间，从而导致另一边收缩相同量。</p>
+                            <p>分割可以是横向的，也可以是纵向的，使用 <code>setOrientation(Orientation)</code> 方法调整。默认为横向。</p>
+                            <p>一个子区域的大小可以由子区域的最小/最大的宽度/高度指定，当到达此值时，分割器不能再往指定方向拖动。</p>
+                            <p>SplitPane 默认有背景色，并且其分割器也有一个背景色。可以如些调整：</p>
+                            <pre class="brush: java;">
+/** 具体参照 caspian.css 或 modena.css 调整 */
+.split-pane {
+    -fx-background-color: #336699;
+}
+
+.split-pane > .split-pane-divider {
+    -fx-pref-width: 2px;
+    -fx-pref-height: 2px;
+    -fx-background-color: #996699;
+}
+</pre>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+                                <li><p><code>static void 	setResizableWithParent(Node node, Boolean value)</code> -- 设置某个节点当分割器调整大小时是否可调节大小(测试无效)</p></li>
+                                <li><p><code>static Boolean 	isResizableWithParent(Node node)</code> -- 返回某个节点当分割器调整大小时是否可调节大小</p></li>
+
+                                <li class="group"><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 此类关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- 控件的 CSS 可修改属性的不可修改列表</p></li>
+
+                                <li class="group"><p><code>void 	setOrientation(Orientation value)</code> -- 设置分割的方向</p></li>
+                                <li><p><code>Orientation 	getOrientation()</code> -- 获取分割的方向</p></li>
+                                <li><p><code>ObjectProperty&lt;Orientation> 	orientationProperty()</code> -- 属性形式读写分割器的方向</p></li>
+
+                                <li class="group"><p><code>void 	setDividerPosition(int dividerIndex, double position)</code> -- 设置指定索引的分割器的位置(0-1.0)</p></li>
+                                <li><p><code>void 	setDividerPositions(double... positions)</code> -- 同时设置多个分割器的位置</p></li>
+                                <li><p><code>double[] 	getDividerPositions()</code> -- 获取所有的分割器的位置数组</p></li>
+
+                                <li class="group"><p><code>ObservableList&lt;SplitPane.Divider> 	getDividers()</code> -- 获取所有可操作的分割器列表</p></li>
+                                <li><p><code>ObservableList&lt;Node> 	getItems()</code> -- 获取所有的节点列表</p></li>
+
+                                <li class="group"><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="control-ScrollPane" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+@DefaultProperty("content")
+public class ScrollPane extends Control {
+    /* 滚动条显示策略 */
+    public static enum ScrollBarPolicy {
+        NEVER,      // 总是不显示滚动条
+        ALWAYS,     // 总是显示滚动条
+        AS_NEEDED   // 当宽度或高度超出时显示滚动条，默认
+    }
+
+    public ScrollPane() {}
+    public ScrollPane(Node content) {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/ScrollPane.html" target="_blank">ScrollPane</a> 提供滚动的、剪切的内容视图的控件。当超出显示区域时，显示滚动条滚动。</p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 此类关联的 CSS 元数据</p></li>
+
+                                <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- 控件的 CSS 可修改属性的不可修改列表</p></li>
+
+                                <li class="group"><p><code>void 	setContent(Node value)</code> -- 设置内容节点，一般是一个 Pane 的子类</p></li>
+                                <li><p><code>Node 	getContent()</code> -- 获取内容节点</p></li>
+                                <li><p><code>ObjectProperty&lt;Node> 	contentProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setVbarPolicy(ScrollPane.ScrollBarPolicy value)</code> -- 设置纵向滚动条的显示策略</p></li>
+                                <li><p><code>ScrollPane.ScrollBarPolicy 	getVbarPolicy()</code> -- 获取纵向滚动条的显示策略</p></li>
+                                <li><p><code>ObjectProperty&lt;ScrollPane.ScrollBarPolicy> 	vbarPolicyProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setHbarPolicy(ScrollPane.ScrollBarPolicy value)</code> -- 设置横向滚动条的显示策略</p></li>
+                                <li><p><code>ScrollPane.ScrollBarPolicy 	getHbarPolicy()</code> -- 获取横向滚动条的显示策略</p></li>
+                                <li><p><code>ObjectProperty&lt;ScrollPane.ScrollBarPolicy> 	hbarPolicyProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setFitToHeight(boolean value)</code> -- 是否自动调整可调整宽度的子控件高度使其总高度和 ScrollPane 一样，如果为 true, 那么子控件到达最小宽度前，缩放或者拉升控件，不用显示横向进度条</p></li>
+                                <li><p><code>boolean 	isFitToHeight()</code> -- 获取是否自动调整可调整宽度的子控件高度</p></li>
+                                <li><p><code>BooleanProperty 	fitToHeightProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setFitToWidth(boolean value)</code> -- 是否自动调整可调整宽度的子控件宽度使其总宽度和 ScrollPane 一样，如果为 true, 那么子控件到达最小高度前，缩放或者拉升控件，不用显示纵向进度条</p></li>
+                                <li><p><code>boolean 	isFitToWidth()</code> -- 获取是否自动调整可调整宽度的子控件高度</p></li>
+                                <li><p><code>BooleanProperty 	fitToWidthProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setHvalue(double value)</code> -- 设置横向滚动条的位置(hmin-hmax)，可以使用代码控制滚动条的位置，滚动条滚动时，此值自动改变</p></li>
+                                <li><p><code>double 	getHvalue()</code> -- 获取横向滚动条的位置</p></li>
+                                <li><p><code>DoubleProperty 	hvalueProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setVvalue(double value)</code> -- 设置横向滚动的最大位置(vmin-vmax)，可以使用代码控制滚动条的位置，滚动条滚动时，此值自动改变</p></li>
+                                <li><p><code>double 	getVvalue()</code> -- 获取横向滚动的最大位置</p></li>
+                                <li><p><code>DoubleProperty 	vvalueProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setHmax(double value)</code> -- 设置横向滚动的最大位置(当滚动时，影响生成的 hvalue 值)，默认为 1</p></li>
+                                <li><p><code>double 	getHmax()</code> -- 获取横向滚动的最大位置</p></li>
+                                <li><p><code>DoubleProperty 	hmaxProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setHmin(double value)</code> -- 设置横向滚动的最小位置(此值最好不要改动，否则将会造成视图的偏移，可能使其里面的节点部分不可见)，默认为 0</p></li>
+                                <li><p><code>double 	getHmin()</code> -- 获取横向滚动的最小位置</p></li>
+                                <li><p><code>DoubleProperty 	hminProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setVmax(double value)</code> -- 设置纵向滚动的最大位置(当滚动时，影响生成的 hvalue 值)，默认为 1</p></li>
+                                <li><p><code>double 	getVmax()</code> -- 获取纵向滚动的最大位置</p></li>
+                                <li><p><code>DoubleProperty 	vmaxProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setVmin(double value)</code> -- 设置纵向滚动的最小位置(此值最好不要改动，否则将会造成视图的偏移，可能使其里面的节点部分不可见)，默认为 0</p></li>
+                                <li><p><code>double 	getVmin()</code> -- 获取纵向滚动的最小位置</p></li>
+                                <li><p><code>DoubleProperty 	vminProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setMinViewportHeight(double value)</code> -- 设置最小视口高度</p></li>
+                                <li><p><code>double 	getMinViewportHeight()</code> -- 获取最小视口高度</p></li>
+                                <li><p><code>DoubleProperty 	minViewportHeightProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setMinViewportWidth(double value)</code> -- 设置最小视口宽度</p></li>
+                                <li><p><code>double 	getMinViewportWidth()</code> -- 获取最小视口宽度</p></li>
+                                <li><p><code>DoubleProperty 	minViewportWidthProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setPrefViewportHeight(double value)</code> -- 设置首选视口高度</p></li>
+                                <li><p><code>double 	getPrefViewportHeight()</code> -- 获取首选视口高度</p></li>
+                                <li><p><code>DoubleProperty 	prefViewportHeightProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setPrefViewportWidth(double value)</code> -- 设置首选视口宽度</p></li>
+                                <li><p><code>double 	getPrefViewportWidth()</code> -- 获取首选视口宽度</p></li>
+                                <li><p><code>DoubleProperty 	prefViewportWidthProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setViewportBounds(Bounds value)</code> -- 设置视口实际边界，这是内容节点的边界</p></li>
+                                <li><p><code>Bounds 	getViewportBounds()</code> -- 获取视口实际边界</p></li>
+                                <li><p><code>ObjectProperty&lt;Bounds> 	viewportBoundsProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>void 	setPannable(boolean value)</code> -- 设置用户是否能够通过使用鼠标按住拖动来平移视口</p></li>
+                                <li><p><code>boolean 	isPannable()</code> -- 默认为 false，必须通过滚动条类滚动</p></li>
+                                <li><p><code>BooleanProperty 	pannableProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>protected Skin<?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
+                                <li><p><code>Object 	queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- 查询辅助技术属性</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="control-TabPane" class="offset"></a>
+                        <div class="sub-item">
+                            <div class="split-item">
+                                <pre class="brush: java;">
+@DefaultProperty("tabs")
+public class TabPane extends Control {
+    /** 标签的关闭策略 */
+    public enum TabClosingPolicy {
+        SELECTED_TAB,  // 默认，只在当前选中的 Tab 显示关闭按钮
+        ALL_TABS,      // 所有 Tab 上显示关闭按钮
+        UNAVAILABLE    // 所有 Tab 上不显示关闭按钮
+    }
+
+    public static final String STYLE_CLASS_FLOATING = "floating";
+
+    public TabPane() {}
+    public TabPane(Tab... tabs) {}
+}
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/TabPane.html" target="_blank">TabPane</a></p>
+                                <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                                <ol>
+                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
+
+                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- </p></li>
+
+                                    <li class="group"><p><code>ObservableList&lt;Tab> 	getTabs()</code> -- 获取可操作的可观察的 Tab 列表</p></li>
+
+                                    <li class="group"><p><code>void 	setTabClosingPolicy(TabPane.TabClosingPolicy value)</code> -- 指定 Tab 的关闭按钮显示策略</p></li>
+                                    <li><p><code>TabPane.TabClosingPolicy 	getTabClosingPolicy()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;TabPane.TabClosingPolicy> 	tabClosingPolicyProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setSelectionModel(<a href="docs/docs-java/api-javafx8/javafx/scene/control/SingleSelectionModel.html" target="_blank">SingleSelectionModel</a>&lt;Tab> value)</code> -- 设置选择器，可以使用代码进行 Tab 的选择（一般不要设置，直接获取就行了）</p></li>
+                                    <li><p><code><a href="docs/docs-java/api-javafx8/javafx/scene/control/SingleSelectionModel.html" target="_blank">SingleSelectionModel</a>&lt;Tab> 	getSelectionModel()</code> -- 获取选择器，内部已经有一个，并且在构造方法已经设置进去</p></li>
+                                    <li><p><code>ObjectProperty&lt;<a href="docs/docs-java/api-javafx8/javafx/scene/control/SingleSelectionModel.html" target="_blank">SingleSelectionModel</a>&lt;Tab>> 	selectionModelProperty()</code> -- 属性方式读写以上属性</p>
+                                        <pre class="brush: java;">
+SingleSelectionModel singleSelectionModel = mainTabPane.getSelectionModel();
+singleSelectionModel.selectNext();
+singleSelectionModel.select(int index);
+singleSelectionModel.selectLast();
+...
+</pre>
+                                    </li>
+
+                                    <li class="group"><p><code>void 	setSide(Side value)</code> -- 设置 Tab 所在的位置(如果是 <code>Side.LEFT</code>，<code>Side.RIGHT</code> 那么标签上的文字是纵向的)</p></li>
+                                    <li><p><code>Side 	getSide()</code> -- 默认为<code>Side.TOP</code></p></li>
+                                    <li><p><code>ObjectProperty&lt;Side> 	sideProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setTabMaxHeight(double value)</code> -- </p></li>
+                                    <li><p><code>double 	getTabMaxHeight()</code> -- </p></li>
+                                    <li><p><code>DoubleProperty 	tabMaxHeightProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setTabMaxWidth(double value)</code> -- </p></li>
+                                    <li><p><code>double 	getTabMaxWidth()</code> -- </p></li>
+                                    <li><p><code>DoubleProperty 	tabMaxWidthProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setTabMinHeight(double value)</code> -- </p></li>
+                                    <li><p><code>double 	getTabMinHeight()</code> -- </p></li>
+                                    <li><p><code>DoubleProperty 	tabMinHeightProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setTabMinWidth(double value)</code> -- </p></li>
+                                    <li><p><code>double 	getTabMinWidth()</code> -- </p></li>
+                                    <li><p><code>DoubleProperty 	tabMinWidthProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setRotateGraphic(boolean value)</code> -- </p></li>
+                                    <li><p><code>boolean 	isRotateGraphic()</code> -- </p></li>
+                                    <li><p><code>BooleanProperty 	rotateGraphicProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>Node 	lookup(String selector)</code> -- </p></li>
+                                    <li><p><code>Set&lt;Node> 	lookupAll(String selector)</code> -- </p></li>
+
+                                    <li class="group"><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- </p></li>
+                                </ol>
+                            </div>
+
+                            <div class="split-item">
+                                <pre class="brush: java;">
+@DefaultProperty("content")
+@IDProperty("id")
+public class Tab implements EventTarget, Styleable {
+    public static final EventType&lt;Event> SELECTION_CHANGED_EVENT =
+                new EventType&lt;Event> (Event.ANY, "SELECTION_CHANGED_EVENT");
+    public static final EventType&lt;Event> TAB_CLOSE_REQUEST_EVENT =
+                new EventType&lt;Event> (Event.ANY, "TAB_CLOSE_REQUEST_EVENT");
+    public static final EventType&lt;Event> CLOSED_EVENT = new EventType&lt;Event>(Event.ANY, "TAB_CLOSED");
+
+    public Tab() {}
+    public Tab(String text) {}
+    public Tab(String text, Node content) {}
+}
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Tab.html" target="_blank">Tab</a> </p>
+                                <ol>
+                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
+
+                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setText(String value)</code> -- </p></li>
+                                    <li><p><code>String 	getText()</code> -- </p></li>
+                                    <li><p><code>StringProperty 	textProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setContent(Node value)</code> -- </p></li>
+                                    <li><p><code>Node 	getContent()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;Node> 	contentProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>TabPane 	getTabPane()</code> -- </p></li>
+                                    <li><p><code>ReadOnlyObjectProperty&lt;TabPane> 	tabPaneProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setId(String value)</code> -- </p></li>
+                                    <li><p><code>String 	getId()</code> -- </p></li>
+                                    <li><p><code>StringProperty 	idProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setContextMenu(ContextMenu value)</code> -- </p></li>
+                                    <li><p><code>ContextMenu 	getContextMenu()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;ContextMenu> 	contextMenuProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setTooltip(Tooltip value)</code> -- </p></li>
+                                    <li><p><code>Tooltip 	getTooltip()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;Tooltip> 	tooltipProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setClosable(boolean value)</code> -- </p></li>
+                                    <li><p><code>boolean 	isClosable()</code> -- </p></li>
+                                    <li><p><code>BooleanProperty 	closableProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setDisable(boolean value)</code> -- </p></li>
+                                    <li><p><code>boolean 	isDisable()</code> -- </p></li>
+                                    <li><p><code>BooleanProperty 	disableProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>boolean 	isDisabled()</code> -- </p></li>
+                                    <li><p><code>ReadOnlyBooleanProperty 	disabledProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setOnClosed(EventHandler&lt;Event> value)</code> -- </p></li>
+                                    <li><p><code>EventHandler&lt;Event> 	getOnClosed()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> 	onClosedProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setOnCloseRequest(EventHandler&lt;Event> value)</code> -- </p></li>
+                                    <li><p><code>EventHandler&lt;Event> 	getOnCloseRequest()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> 	onCloseRequestProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>boolean 	isSelected()</code> -- </p></li>
+                                    <li><p><code>ReadOnlyBooleanProperty 	selectedProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setOnSelectionChanged(EventHandler&lt;Event> value)</code> -- </p></li>
+                                    <li><p><code>EventHandler&lt;Event> 	getOnSelectionChanged()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> 	onSelectionChangedProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setStyle(String value)</code> -- </p></li>
+                                    <li><p><code>String 	getStyle()</code> -- </p></li>
+                                    <li><p><code>StringProperty 	styleProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setGraphic(Node value)</code> -- </p></li>
+                                    <li><p><code>Node 	getGraphic()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;Node> 	graphicProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>ObservableList&lt;String> 	getStyleClass()</code> -- </p></li>
+                                    <li><p><code>ObservableSet&lt;PseudoClass> 	getPseudoClassStates()</code> -- </p></li>
+                                    <li><p><code>Styleable 	getStyleableParent()</code> -- </p></li>
+                                    <li><p><code>String 	getTypeSelector()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setUserData(Object value)</code> -- </p></li>
+                                    <li><p><code>Object 	getUserData()</code> -- </p></li>
+
+                                    <li class="group"><p><code>boolean 	hasProperties()</code> -- </p></li>
+                                    <li><p><code>ObservableMap&lt;Object,Object> 	getProperties()</code> -- </p></li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <a id="control-MenuBar" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 
@@ -4637,6 +4997,25 @@ public interface Skinnable {
                             <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
                         </div>
 
+                        <a id="control-Accordion" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                        </div>
+
+                        <a id="control-ListView" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                        </div>
+
+                        <a id="control-TreeView" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
 
@@ -5241,6 +5620,7 @@ shape.setContent("M50,50L350,150V350H250A50,100,0,1,1,250,250Q300,300,300,200C10
                         <a id="shape-Text" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
+@DefaultProperty(value="text")
 public class Text extends Shape {
     public Text() {}
     public Text(String text) {}
