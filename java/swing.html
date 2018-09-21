@@ -934,7 +934,7 @@ public class Container extends Component {
                                 <li><p><code>boolean 	isFocusTraversalPolicyProvider()</code> -- 返回此容器是否提供焦点遍历策略</p></li>
                                 <li><p><code>boolean 	isFocusCycleRoot()</code> -- 返回此 Container 是否是某个焦点遍历循环的根</p></li>
                                 <li><p><code>void 	setFocusCycleRoot(boolean focusCycleRoot)</code> -- 设置此 Container 是否是某个焦点遍历循环的根</p></li>
-                                <li><p><code>boolean 	isFocusCycleRoot(Container container)</code> -- 返回指定的 Container 是否是此 Container 的焦点遍历循环的焦点循环根</p></li>
+                                <li><p><code>boolean 	isFocusCycleRoot(Container c)</code> -- 返回指定的 Container 是否是此 Container 的焦点遍历循环的焦点循环根</p></li>
                                 <li><p><code>void 	transferFocusDownCycle()</code> -- 将焦点向下传输一个焦点遍历循环</p></li>
 
                                 <li class="group"><p><code>Dimension 	getMaximumSize()</code> -- 返回此容器的最大大小</p></li>
@@ -1144,7 +1144,7 @@ public interface MenuContainer {
                                 <li><p><code>boolean 	isDoubleBuffered()</code> -- 如果将此组件绘制到一个随后复制到屏幕上的屏幕外图像（“缓冲区”），则返回 true</p></li>
                                 <li><p><code>boolean 	isEnabled()</code> -- 确定此组件是否已启用</p></li>
                                 <li><p><code>boolean 	isFocusable()</code> -- 返回此 Component 是否可以获得焦点</p></li>
-                                <li><p><code>boolean 	isFocusCycleRoot(Container container)</code> -- 返回指定的 Container 是否为此 Component 焦点遍历循环的焦点循环根</p></li>
+                                <li><p><code>boolean 	isFocusCycleRoot(Container c)</code> -- 返回指定的 Container 是否为此 Component 焦点遍历循环的焦点循环根</p></li>
                                 <li><p><code>boolean 	isFocusOwner()</code> -- 如果此 Component 是焦点所有者，则返回 true</p></li>
                                 <li><p><code>boolean 	isFontSet()</code> -- 返回是否已为此组件显示地设置了字体</p></li>
                                 <li><p><code>boolean 	isForegroundSet()</code> -- 返回是否已为此组件显式地设置了前景色</p></li>
@@ -4833,24 +4833,26 @@ public class TabPane extends Control {
         UNAVAILABLE    // 所有 Tab 上不显示关闭按钮
     }
 
+    /** 选项卡可为浮动模式： mainTabPane.getStyleClass().add(TabPane.STYLE_CLASS_FLOATING); */
     public static final String STYLE_CLASS_FLOATING = "floating";
 
     public TabPane() {}
     public TabPane(Tab... tabs) {}
 }
 </pre>
-                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/TabPane.html" target="_blank">TabPane</a></p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/TabPane.html" target="_blank">TabPane</a> 允许在一组选项卡之间切换的控件。每次智能看见一个选项卡，已经内置了选项卡的控制。</p>
+                                <p>同左 Side 可以控制其选项卡在内容区域的四周显示。</p>
                                 <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
                                 <ol>
-                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
+                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 此类关联的 CSS 元数据</p></li>
 
-                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- </p></li>
+                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- 控件的 CSS 可修改属性的不可修改列表</p></li>
 
                                     <li class="group"><p><code>ObservableList&lt;Tab> 	getTabs()</code> -- 获取可操作的可观察的 Tab 列表</p></li>
 
                                     <li class="group"><p><code>void 	setTabClosingPolicy(TabPane.TabClosingPolicy value)</code> -- 指定 Tab 的关闭按钮显示策略</p></li>
-                                    <li><p><code>TabPane.TabClosingPolicy 	getTabClosingPolicy()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;TabPane.TabClosingPolicy> 	tabClosingPolicyProperty()</code> -- </p></li>
+                                    <li><p><code>TabPane.TabClosingPolicy 	getTabClosingPolicy()</code> -- 获取 Tab 的关闭按钮显示策略</p></li>
+                                    <li><p><code>ObjectProperty&lt;TabPane.TabClosingPolicy> 	tabClosingPolicyProperty()</code> -- 属性形式读写 Tab 的关闭按钮显示策略</p></li>
 
                                     <li class="group"><p><code>void 	setSelectionModel(<a href="docs/docs-java/api-javafx8/javafx/scene/control/SingleSelectionModel.html" target="_blank">SingleSelectionModel</a>&lt;Tab> value)</code> -- 设置选择器，可以使用代码进行 Tab 的选择（一般不要设置，直接获取就行了）</p></li>
                                     <li><p><code><a href="docs/docs-java/api-javafx8/javafx/scene/control/SingleSelectionModel.html" target="_blank">SingleSelectionModel</a>&lt;Tab> 	getSelectionModel()</code> -- 获取选择器，内部已经有一个，并且在构造方法已经设置进去</p></li>
@@ -4865,33 +4867,33 @@ singleSelectionModel.selectLast();
                                     </li>
 
                                     <li class="group"><p><code>void 	setSide(Side value)</code> -- 设置 Tab 所在的位置(如果是 <code>Side.LEFT</code>，<code>Side.RIGHT</code> 那么标签上的文字是纵向的)</p></li>
-                                    <li><p><code>Side 	getSide()</code> -- 默认为<code>Side.TOP</code></p></li>
-                                    <li><p><code>ObjectProperty&lt;Side> 	sideProperty()</code> -- </p></li>
+                                    <li><p><code>Side 	getSide()</code> -- 获取 Tab 所在的位置，默认为<code>Side.TOP</code></p></li>
+                                    <li><p><code>ObjectProperty&lt;Side> 	sideProperty()</code> -- 属性形式读写 Tab 所在的位置</p></li>
 
-                                    <li class="group"><p><code>void 	setTabMaxHeight(double value)</code> -- </p></li>
-                                    <li><p><code>double 	getTabMaxHeight()</code> -- </p></li>
-                                    <li><p><code>DoubleProperty 	tabMaxHeightProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setTabMaxHeight(double value)</code> -- 设置最大高度</p></li>
+                                    <li><p><code>double 	getTabMaxHeight()</code> -- 获取最大高度</p></li>
+                                    <li><p><code>DoubleProperty 	tabMaxHeightProperty()</code> -- 属性形式读写最大高度</p></li>
 
-                                    <li class="group"><p><code>void 	setTabMaxWidth(double value)</code> -- </p></li>
-                                    <li><p><code>double 	getTabMaxWidth()</code> -- </p></li>
-                                    <li><p><code>DoubleProperty 	tabMaxWidthProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setTabMaxWidth(double value)</code> -- 设置最大宽度</p></li>
+                                    <li><p><code>double 	getTabMaxWidth()</code> -- 获取最大宽度</p></li>
+                                    <li><p><code>DoubleProperty 	tabMaxWidthProperty()</code> -- 属性形式读写最大宽度</p></li>
 
-                                    <li class="group"><p><code>void 	setTabMinHeight(double value)</code> -- </p></li>
-                                    <li><p><code>double 	getTabMinHeight()</code> -- </p></li>
-                                    <li><p><code>DoubleProperty 	tabMinHeightProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setTabMinHeight(double value)</code> -- 设置最小高度</p></li>
+                                    <li><p><code>double 	getTabMinHeight()</code> -- 获取最小高度</p></li>
+                                    <li><p><code>DoubleProperty 	tabMinHeightProperty()</code> -- 属性形式读写最小高度</p></li>
 
-                                    <li class="group"><p><code>void 	setTabMinWidth(double value)</code> -- </p></li>
-                                    <li><p><code>double 	getTabMinWidth()</code> -- </p></li>
-                                    <li><p><code>DoubleProperty 	tabMinWidthProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setTabMinWidth(double value)</code> -- 设置最小宽度</p></li>
+                                    <li><p><code>double 	getTabMinWidth()</code> -- 获取最小宽度</p></li>
+                                    <li><p><code>DoubleProperty 	tabMinWidthProperty()</code> -- 属性形式读写最小宽度</p></li>
 
-                                    <li class="group"><p><code>void 	setRotateGraphic(boolean value)</code> -- </p></li>
-                                    <li><p><code>boolean 	isRotateGraphic()</code> -- </p></li>
-                                    <li><p><code>BooleanProperty 	rotateGraphicProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setRotateGraphic(boolean value)</code> -- 设置在选项卡中显示的图形是否旋转，参见: Tab 的 <code>setGraphic(Node)</code>  方法</p></li>
+                                    <li><p><code>boolean 	isRotateGraphic()</code> -- 获取在选项卡中显示的图形是否旋转</p></li>
+                                    <li><p><code>BooleanProperty 	rotateGraphicProperty()</code> -- 属性形式读写在选项卡中显示的图形是否旋转</p></li>
 
-                                    <li class="group"><p><code>Node 	lookup(String selector)</code> -- </p></li>
-                                    <li><p><code>Set&lt;Node> 	lookupAll(String selector)</code> -- </p></li>
+                                    <li class="group"><p><code>Node 	lookup(String selector)</code> -- 使用 CSS 选择器查找第一个子节点</p></li>
+                                    <li><p><code>Set&lt;Node> 	lookupAll(String selector)</code> -- 使用 CSS 选择器查找所有子节点</p></li>
 
-                                    <li class="group"><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- </p></li>
+                                    <li class="group"><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
                                 </ol>
                             </div>
 
@@ -4911,90 +4913,281 @@ public class Tab implements EventTarget, Styleable {
     public Tab(String text, Node content) {}
 }
 </pre>
-                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Tab.html" target="_blank">Tab</a> </p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Tab.html" target="_blank">Tab</a> 是 TabPane 的一个子项，包括一个标签(包括一个图形，一个文本和一个关闭按钮)和一个内容节点。</p>
                                 <ol>
-                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
+                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 此类关联的 CSS 元数据</p></li>
 
-                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- </p></li>
+                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- 此实例关联的 CSS 元数据</p></li>
 
-                                    <li class="group"><p><code>void 	setText(String value)</code> -- </p></li>
-                                    <li><p><code>String 	getText()</code> -- </p></li>
-                                    <li><p><code>StringProperty 	textProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setText(String value)</code> -- 设置标签的文本</p></li>
+                                    <li><p><code>String 	getText()</code> -- 获取标签的文本</p></li>
+                                    <li><p><code>StringProperty 	textProperty()</code> -- 属性形式读写标签的文本</p></li>
 
-                                    <li class="group"><p><code>void 	setContent(Node value)</code> -- </p></li>
-                                    <li><p><code>Node 	getContent()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;Node> 	contentProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setContent(Node value)</code> -- 设置内容区域节点，一般是一个布局元素</p></li>
+                                    <li><p><code>Node 	getContent()</code> -- 获取内容区域节点</p></li>
+                                    <li><p><code>ObjectProperty&lt;Node> 	contentProperty()</code> -- 属性形式读写内容区域节点</p></li>
 
-                                    <li class="group"><p><code>TabPane 	getTabPane()</code> -- </p></li>
-                                    <li><p><code>ReadOnlyObjectProperty&lt;TabPane> 	tabPaneProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>TabPane 	getTabPane()</code> -- 获取此 Tab 所属的 TabPane 实例</p></li>
+                                    <li><p><code>ReadOnlyObjectProperty&lt;TabPane> 	tabPaneProperty()</code> -- 此 Tab 所属的 TabPane 实例</p></li>
 
-                                    <li class="group"><p><code>void 	setId(String value)</code> -- </p></li>
-                                    <li><p><code>String 	getId()</code> -- </p></li>
-                                    <li><p><code>StringProperty 	idProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setId(String value)</code> -- 设置 ID</p></li>
+                                    <li><p><code>String 	getId()</code> -- 获取 ID</p></li>
+                                    <li><p><code>StringProperty 	idProperty()</code> -- 属性形式读写 ID</p></li>
 
-                                    <li class="group"><p><code>void 	setContextMenu(ContextMenu value)</code> -- </p></li>
-                                    <li><p><code>ContextMenu 	getContextMenu()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;ContextMenu> 	contextMenuProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setContextMenu(ContextMenu value)</code> -- 设置上下文菜单(右击标签时显示)</p></li>
+                                    <li><p><code>ContextMenu 	getContextMenu()</code> -- 获取上下文菜单</p></li>
+                                    <li><p><code>ObjectProperty&lt;ContextMenu> 	contextMenuProperty()</code> -- 属性形式读写上下文菜单</p></li>
 
-                                    <li class="group"><p><code>void 	setTooltip(Tooltip value)</code> -- </p></li>
-                                    <li><p><code>Tooltip 	getTooltip()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;Tooltip> 	tooltipProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setTooltip(Tooltip value)</code> -- 设置提示信息(鼠标落在标签时显示)</p></li>
+                                    <li><p><code>Tooltip 	getTooltip()</code> -- 获取提示信息</p></li>
+                                    <li><p><code>ObjectProperty&lt;Tooltip> 	tooltipProperty()</code> -- 属性形式读写提示信息</p></li>
 
-                                    <li class="group"><p><code>void 	setClosable(boolean value)</code> -- </p></li>
-                                    <li><p><code>boolean 	isClosable()</code> -- </p></li>
-                                    <li><p><code>BooleanProperty 	closableProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setClosable(boolean value)</code> -- 设置是否允许关闭</p></li>
+                                    <li><p><code>boolean 	isClosable()</code> -- 获取是否允许关闭</p></li>
+                                    <li><p><code>BooleanProperty 	closableProperty()</code> -- 属性形式读写是否允许关闭</p></li>
 
-                                    <li class="group"><p><code>void 	setDisable(boolean value)</code> -- </p></li>
-                                    <li><p><code>boolean 	isDisable()</code> -- </p></li>
-                                    <li><p><code>BooleanProperty 	disableProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setDisable(boolean value)</code> -- 设置是否为关闭状态(灰度模式，并且用户不能点击)</p></li>
+                                    <li><p><code>boolean 	isDisable()</code> -- 获取是否为关闭状态</p></li>
+                                    <li><p><code>BooleanProperty 	disableProperty()</code> -- 属性形式读写是否为关闭状态</p></li>
 
-                                    <li class="group"><p><code>boolean 	isDisabled()</code> -- </p></li>
-                                    <li><p><code>ReadOnlyBooleanProperty 	disabledProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>boolean 	isDisabled()</code> -- 获取是否已经是关闭状态</p></li>
+                                    <li><p><code>ReadOnlyBooleanProperty 	disabledProperty()</code> -- 属性形式读是否已经是关闭状态</p></li>
 
-                                    <li class="group"><p><code>void 	setOnClosed(EventHandler&lt;Event> value)</code> -- </p></li>
-                                    <li><p><code>EventHandler&lt;Event> 	getOnClosed()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> 	onClosedProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setOnClosed(EventHandler&lt;Event> value)</code> -- 设置关闭回调</p></li>
+                                    <li><p><code>EventHandler&lt;Event> 	getOnClosed()</code> -- 获取关闭回调</p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> 	onClosedProperty()</code> -- 属性形式读写关闭回调</p></li>
 
-                                    <li class="group"><p><code>void 	setOnCloseRequest(EventHandler&lt;Event> value)</code> -- </p></li>
-                                    <li><p><code>EventHandler&lt;Event> 	getOnCloseRequest()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> 	onCloseRequestProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setOnCloseRequest(EventHandler&lt;Event> value)</code> -- 设置关闭请求回调（可以中断关闭）</p></li>
+                                    <li><p><code>EventHandler&lt;Event> 	getOnCloseRequest()</code> -- 关闭请求回调</p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> 	onCloseRequestProperty()</code> -- 属性形式读写关闭请求回调</p></li>
 
-                                    <li class="group"><p><code>boolean 	isSelected()</code> -- </p></li>
-                                    <li><p><code>ReadOnlyBooleanProperty 	selectedProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>boolean 	isSelected()</code> -- 获取是否为选中标签</p></li>
+                                    <li><p><code>ReadOnlyBooleanProperty 	selectedProperty()</code> -- 属性形式读是否为选中标签</p></li>
 
-                                    <li class="group"><p><code>void 	setOnSelectionChanged(EventHandler&lt;Event> value)</code> -- </p></li>
-                                    <li><p><code>EventHandler&lt;Event> 	getOnSelectionChanged()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> 	onSelectionChangedProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setOnSelectionChanged(EventHandler&lt;Event> value)</code> -- 设置改变选中状态回调</p></li>
+                                    <li><p><code>EventHandler&lt;Event> 	getOnSelectionChanged()</code> -- 获取改变选中状态回调</p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> 	onSelectionChangedProperty()</code> -- 改变选中状态回调</p></li>
 
-                                    <li class="group"><p><code>void 	setStyle(String value)</code> -- </p></li>
-                                    <li><p><code>String 	getStyle()</code> -- </p></li>
-                                    <li><p><code>StringProperty 	styleProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setStyle(String value)</code> -- 设置 Tab 的样式</p></li>
+                                    <li><p><code>String 	getStyle()</code> -- 获取 Tab 的样式</p></li>
+                                    <li><p><code>StringProperty 	styleProperty()</code> -- 属性形式读写 Tab 的样式</p></li>
 
-                                    <li class="group"><p><code>void 	setGraphic(Node value)</code> -- </p></li>
-                                    <li><p><code>Node 	getGraphic()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;Node> 	graphicProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setGraphic(Node value)</code> -- 设置在选项卡中显示的图形(如：左侧小图片)</p></li>
+                                    <li><p><code>Node 	getGraphic()</code> -- 获取在选项卡中显示的图形</p></li>
+                                    <li><p><code>ObjectProperty&lt;Node> 	graphicProperty()</code> -- 属性形式读写在选项卡中显示的图形</p></li>
 
-                                    <li class="group"><p><code>ObservableList&lt;String> 	getStyleClass()</code> -- </p></li>
-                                    <li><p><code>ObservableSet&lt;PseudoClass> 	getPseudoClassStates()</code> -- </p></li>
-                                    <li><p><code>Styleable 	getStyleableParent()</code> -- </p></li>
-                                    <li><p><code>String 	getTypeSelector()</code> -- </p></li>
+                                    <li class="group"><p><code>ObservableList&lt;String> 	getStyleClass()</code> -- 获取应用于此选项卡的样式类的可观察列表</p></li>
+                                    <li><p><code>ObservableSet&lt;PseudoClass> 	getPseudoClassStates()</code> -- 返回此类的伪类状态的可观察列表</p></li>
+                                    <li><p><code>Styleable 	getStyleableParent()</code> -- 返回 Parent 样式</p></li>
+                                    <li><p><code>String 	getTypeSelector()</code> -- 获取 CSS 样式类型选项器(Tab)</p></li>
 
-                                    <li class="group"><p><code>void 	setUserData(Object value)</code> -- </p></li>
-                                    <li><p><code>Object 	getUserData()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setUserData(Object value)</code> -- 绑定一个用户数据</p></li>
+                                    <li><p><code>Object 	getUserData()</code> -- 获取绑定的用户数据</p></li>
 
-                                    <li class="group"><p><code>boolean 	hasProperties()</code> -- </p></li>
-                                    <li><p><code>ObservableMap&lt;Object,Object> 	getProperties()</code> -- </p></li>
+                                    <li class="group"><p><code>ObservableMap&lt;Object,Object> 	getProperties()</code> -- 以可观察的 Map 保存用户数据</p></li>
+                                    <li><p><code>boolean 	hasProperties()</code> -- 上述列表是否为空</p></li>
                                 </ol>
                             </div>
                         </div>
 
                         <a id="control-MenuBar" class="offset"></a>
                         <div class="sub-item">
-                            <pre class="brush: java;">
-
+                            <div class="split-item">
+                                <pre class="brush: java;">
+@DefaultProperty(value="menus")
+public class MenuBar extends Control {
+    public MenuBar() {}
+    public MenuBar(Menu... menus) {}
+}
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
-                            <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/MenuBar.html" target="_blank">MenuBar</a> 用于存放菜单栏，每一个 MenuItem 是一个菜单项，每一个 Menu 即是一个菜单项目，还可以包括一组菜单项。</p>
+                                <p>如果是 Menu 下面还是 Menu，那么支持多级菜单。</p>
+                                <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                                <ol>
+                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 此类关联的 CSS 元数据</p></li>
+
+                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- 控件的 CSS 可修改属性的不可修改列表</p></li>
+
+                                    <li class="group"><p><code>ObservableList&lt;Menu> 	getMenus()</code> -- 获取可操作的可观察的 Menu 列表</p></li>
+
+                                    <li class="group"><p><code>void 	setUseSystemMenuBar(boolean value)</code> -- 设置是否使用系统菜单栏(需要平台支持)</p></li>
+                                    <li><p><code>boolean 	isUseSystemMenuBar()</code> -- 获取是否使用系统菜单栏</p></li>
+                                    <li><p><code>BooleanProperty 	useSystemMenuBarProperty()</code> -- 属性形式读写是否使用系统菜单栏</p></li>
+
+                                    <li class="group"><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
+                                </ol>
+                            </div>
+
+                            <div class="split-item">
+                                <pre class="brush: java;">
+MenuItem
+ ├─ Menu
+ ├─ RadioMenuItem
+ ├─ CheckMenuItem
+ └─ CustomMenuItem
+      └─ SeparatorMenuItem
+
+@IDProperty(value="id")
+public class MenuItem implements EventTarget, Styleable {
+    public static final EventType&lt;Event> MENU_VALIDATION_EVENT = new EventType&lt;Event>
+            (Event.ANY, "MENU_VALIDATION_EVENT");
+
+    public MenuItem() {}
+    public MenuItem(String text) {}
+    public MenuItem(String text, Node graphic) {}
+}
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/MenuItem.html" target="_blank">MenuItem</a> 是一个菜单项，不仅可以作为 Menu 的子项，还可以作文 ContextMenu 的子项。</p>
+                                <ol>
+                                    <li><p><code>void 	setText(String value)</code> -- 设置菜单项的文本</p></li>
+                                    <li><p><code>String 	getText()</code> -- </p></li>
+                                    <li><p><code>StringProperty 	textProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setGraphic(Node value)</code> -- 设置菜单项的图形(左侧小图标)</p></li>
+                                    <li><p><code>Node 	getGraphic()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;Node> 	graphicProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setId(String value)</code> -- 设置 ID</p></li>
+                                    <li><p><code>String 	getId()</code> -- </p></li>
+                                    <li><p><code>StringProperty 	idProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setVisible(boolean value)</code> -- 设置可见性</p></li>
+                                    <li><p><code>boolean 	isVisible()</code> -- </p></li>
+                                    <li><p><code>BooleanProperty 	visibleProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setOnAction(EventHandler&lt;ActionEvent> value)</code> -- 设置点击事件处理器</p></li>
+                                    <li><p><code>EventHandler&lt;ActionEvent> 	getOnAction()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;ActionEvent>> 	onActionProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setStyle(String value)</code> -- 设置 CSS 样式</p></li>
+                                    <li><p><code>String 	getStyle()</code> -- </p></li>
+                                    <li><p><code>StringProperty 	styleProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>protected void 	setParentMenu(Menu value)</code> -- 设置所属的 Menu</p></li>
+                                    <li><p><code>Menu 	getParentMenu()</code> -- </p></li>
+                                    <li><p><code>ReadOnlyObjectProperty&lt;Menu> 	parentMenuProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>protected void 	setParentPopup(ContextMenu value)</code> -- 设置所属的 ContextMenu</p></li>
+                                    <li><p><code>ContextMenu 	getParentPopup()</code> -- </p></li>
+                                    <li><p><code>ReadOnlyObjectProperty&lt;ContextMenu> 	parentPopupProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setDisable(boolean value)</code> -- 设置是否为关闭状态</p></li>
+                                    <li><p><code>boolean 	isDisable()</code> -- </p></li>
+                                    <li><p><code>BooleanProperty 	disableProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setAccelerator(KeyCombination value)</code> -- 设置访问的快捷键</p></li>
+                                    <li><p><code>KeyCombination 	getAccelerator()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;KeyCombination> 	acceleratorProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setMnemonicParsing(boolean value)</code> -- 是否启用文本解析</p></li>
+                                    <li><p><code>boolean 	isMnemonicParsing()</code> -- </p></li>
+                                    <li><p><code>BooleanProperty 	mnemonicParsingProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setOnMenuValidation(EventHandler&lt;Event> value)</code> -- </p></li>
+                                    <li><p><code>EventHandler&lt;Event> 	getOnMenuValidation()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> 	onMenuValidationProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setUserData(Object value)</code> -- 绑定用户数据</p></li>
+                                    <li><p><code>Object 	getUserData()</code> -- 获取用户数据</p></li>
+                                    <li><p><code>ObservableMap&lt;Object,Object> 	getProperties()</code> -- 绑定 Map 类型的数据</p></li>
+
+                                    <li class="group"><p><code>void 	fire()</code> -- 触发此 MenuItem 的事件</p></li>
+
+                                    <li class="group"><p><code>ObservableList&lt;String> 	getStyleClass()</code> -- 获取可观察的样式类列表</p></li>
+                                    <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getCssMetaData()</code> -- 获取 CSS 元数据</p></li>
+                                    <li><p><code>ObservableSet&lt;PseudoClass> 	getPseudoClassStates()</code> -- 返回此类的伪类状态的可观察列表</p></li>
+                                    <li><p><code>Styleable 	getStyleableParent()</code> -- 获取 Parent 样式</p></li>
+                                    <li><p><code>String 	getTypeSelector()</code> -- 获取类型选择器(MenuItem)</p></li>
+
+                                    <li class="group"><p><code>&lt;E extends Event> void 	addEventHandler(EventType&lt;E> eventType, EventHandler&lt;E> eventHandler)</code> -- 添加一个指定类型的事件回调</p></li>
+                                    <li><p><code>&lt;E extends Event> void 	removeEventHandler(EventType&lt;E> eventType, EventHandler&lt;E> eventHandler)</code> -- 移除一个指定类型的事件回调</p></li>
+                                    <li><p><code>EventDispatchChain 	buildEventDispatchChain(EventDispatchChain tail)</code> -- 构建一个事件调度链</p></li>
+                                </ol>
+                            </div>
+
+                            <div class="split-item">
+                                <pre class="brush: java;">
+@DefaultProperty(value="items")
+public class Menu extends MenuItem {
+    public static final EventType&lt;Event> ON_SHOWING = new EventType&lt;Event>(Event.ANY, "MENU_ON_SHOWING");
+    public static final EventType&lt;Event> ON_SHOWN = new EventType&lt;Event>(Event.ANY, "MENU_ON_SHOWN");
+    public static final EventType&lt;Event> ON_HIDING = new EventType&lt;Event>(Event.ANY, "MENU_ON_HIDING");
+    public static final EventType&lt;Event> ON_HIDDEN = new EventType&lt;Event>(Event.ANY, "MENU_ON_HIDDEN");
+
+    public Menu() {}
+    public Menu(String text) {}
+    public Menu(String text, Node graphic) {}
+    public Menu(String text, Node graphic, MenuItem... items) {}
+}
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Menu.html" target="_blank">Menu</a> 即是一个 MenuItem，还可以包括一个 MenuItem 子项目。</p>
+                                <ol>
+                                    <li><p><code>ObservableList&lt;MenuItem> 	getItems()</code> -- 获取可观察的菜单子项列表</p></li>
+
+                                    <li class="group"><p><code>void 	show()</code> -- 显示菜单</p></li>
+                                    <li><p><code>void 	hide()</code> -- 隐藏菜单</p></li>
+
+                                    <li class="group"><p><code>boolean 	isShowing()</code> -- 是否正在显示</p></li>
+                                    <li><p><code>ReadOnlyBooleanProperty 	showingProperty()</code> -- 属性形式读写是否正在显示</p></li>
+
+                                    <li class="group"><p><code>void 	setOnShowing(EventHandler&lt;Event> value)</code> -- 设置菜单正在显示回调</p></li>
+                                    <li><p><code>EventHandler&lt;Event> 	getOnShowing()</code> -- 获取菜单正在显示回调</p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> onShowingProperty()</code> -- 属性形式读写菜单正在显示回调</p></li>
+
+                                    <li class="group"><p><code>void 	setOnShown(EventHandler&lt;Event> value)</code> -- 设置菜单已经显示回调</p></li>
+                                    <li><p><code>EventHandler&lt;Event> 	getOnShown()</code> -- 获取菜单已经显示回调</p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> onShownProperty()</code> -- 属性形式读写菜单已经显示回调</p></li>
+
+                                    <li class="group"><p><code>void 	setOnHiding(EventHandler&lt;Event> value)</code> -- 设置菜单正在隐藏回调</p></li>
+                                    <li><p><code>EventHandler&lt;Event> 	getOnHiding()</code> -- 获取菜单正在隐藏回调</p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> onHidingProperty()</code> -- 属性形式读写菜单正在隐藏回调</p></li>
+
+                                    <li class="group"><p><code>void 	setOnHidden(EventHandler&lt;Event> value)</code> -- 设置菜单已经隐藏回调</p></li>
+                                    <li><p><code>EventHandler&lt;Event> 	getOnHidden()</code> -- 获取菜单已经隐藏回调</p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;Event>> onHiddenProperty()</code> -- 属性形式读写菜单已经隐藏回调</p></li>
+
+                                    <li class="group"><p><code>&lt;E extends Event> void 	addEventHandler(EventType&lt;E> eventType, EventHandler&lt;E> eventHandler)</code> -- 添加一个指定类型的事件回调</p></li>
+                                    <li><p><code>&lt;E extends Event> void 	removeEventHandler(EventType&lt;E> eventType, EventHandler&lt;E> eventHandler)</code> -- 移除一个指定类型的事件回调</p></li>
+                                    <li><p><code>EventDispatchChain 	buildEventDispatchChain(EventDispatchChain tail)</code> -- 构建一个事件调度链</p></li>
+                                </ol>
+                            </div>
+
+                            <div class="split-item">
+                                <pre class="brush: java;">
+@IDProperty(value="id")
+public class RadioMenuItem extends MenuItem {
+
+}
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/RadioMenuItem.html" target="_blank">RadioMenuItem</a> </p>
+                            </div>
+
+                            <div class="split-item">
+                                <pre class="brush: java;">
+public class CheckMenuItem extends MenuItem {
+
+}
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/CheckMenuItem.html" target="_blank">CheckMenuItem</a> </p>
+                            </div>
+
+                            <div class="split-item">
+                                <pre class="brush: java;">
+public class CustomMenuItem extends MenuItem {
+
+}
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/CustomMenuItem.html" target="_blank">CustomMenuItem</a> </p>
+                            </div>
+
+                            <div class="split-item">
+                                <pre class="brush: java;">
+public class SeparatorMenuItem extends CustomMenuItem {
+
+}
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/SeparatorMenuItem.html" target="_blank">SeparatorMenuItem</a> </p>
+                            </div>
                         </div>
 
                         <a id="control-Accordion" class="offset"></a>
