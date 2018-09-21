@@ -2703,7 +2703,7 @@ public abstract class Application {
     public static final String STYLESHEET_CASPIAN = "CASPIAN"; // JavaFX 2.x"s CASPIAN Look and Feel
     public static final String STYLESHEET_MODENA = "MODENA";   // JavaFX 8"s Modena Look and Feel
 }
-                                </pre>
+</pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/application/Application.html" target="_blank">Application</a> 是应用程序，JavaFX 应用程序扩展的应用程序类。</p>
                             <ol>
                                 <li><p><code>static void 	launch(Class&lt;? extends Application> appClass, String... args)</code> -- 启动指定的 Application(此方法可在非 Application 子类中调用)</p></li>
@@ -4636,7 +4636,7 @@ public interface Skinnable {
 }
 </pre>
                             <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Control.html" target="_blank">Control</a> 是用户界面控件的基类，是场景图中的一个节点，它可以由用户操作。</p>
-                            <p>Control 的常见子类：<a href="#control-SplitPane">SplitPane</a>, <a href="#control-ScrollPane">ScrollPane</a>, <a href="#control-TabPane">TabPane</a>, <a href="#control-MenuBar">MenuBar</a>, <a href="#control-Accordion">Accordion</a>, <a href="#control-ListView">ListView</a>, <a href="#control-TreeView">TreeView</a></p>
+                            <p>Control 的常见子类：<a href="#control-SplitPane">SplitPane</a>, <a href="#control-ScrollPane">ScrollPane</a>, <a href="#control-TabPane">TabPane</a>, <a href="#control-MenuBar">MenuBar</a>, <a href="#control-Labeled">Labeled</a>, <a href="#control-Accordion">Accordion</a>, <a href="#control-ListView">ListView</a>, <a href="#control-TreeView">TreeView</a></p>
                             <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
                             <ol>
                                 <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 获取与此类关联的 CSS 元数据</p></li>
@@ -5190,12 +5190,221 @@ public class SeparatorMenuItem extends CustomMenuItem {
                             </div>
                         </div>
 
+                        <a id="control-Labeled" class="offset"></a>
+                        <div class="sub-item">
+                            <div class="split-item">
+                                <pre class="brush: java;">
+...
+ └─ Labeled
+      ├─ Label, TitledPane
+      ├─ ButtonBase
+      │    ├─ Hyperlink, Button, CheckBox
+      │    ├─ MenuButton
+      │    │   └─ SplitMenuButton
+      │    └─ ToggleButton
+      │        └─ RadioButton
+      └─ Cell
+          └─ ...
+
+@DefaultProperty(value="text")
+public abstract class Labeled extends Control {
+    public Labeled() {}
+    public Labeled(String text) {}
+    public Labeled(String text, Node graphic) {}
+}
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Labeled.html" target="_blank">Labeled</a> 是文本显示控件的抽象父类。</p>
+                                <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                                <ol>
+                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
+
+                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setText(String value)</code> -- </p></li>
+                                    <li><p><code>String 	getText()</code> -- </p></li>
+                                    <li><p><code>StringProperty 	textProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setTextFill(Paint value)</code> -- </p></li>
+                                    <li><p><code>Paint 	getTextFill()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;Paint> 	textFillProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setGraphic(Node value)</code> -- </p></li>
+                                    <li><p><code>Node 	getGraphic()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;Node> 	graphicProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setAlignment(Pos value)</code> -- </p></li>
+                                    <li><p><code>Pos 	getAlignment()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;Pos> 	alignmentProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setTextAlignment(TextAlignment value)</code> -- </p></li>
+                                    <li><p><code>TextAlignment 	getTextAlignment()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;TextAlignment> 	textAlignmentProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setContentDisplay(ContentDisplay value)</code> -- </p></li>
+                                    <li><p><code>ContentDisplay 	getContentDisplay()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;ContentDisplay> 	contentDisplayProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setEllipsisString(String value)</code> -- </p></li>
+                                    <li><p><code>String 	getEllipsisString()</code> -- </p></li>
+                                    <li><p><code>StringProperty 	ellipsisStringProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setFont(Font value)</code> -- </p></li>
+                                    <li><p><code>Font 	getFont()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;Font> 	fontProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setGraphicTextGap(double value)</code> -- </p></li>
+                                    <li><p><code>double 	getGraphicTextGap()</code> -- </p></li>
+                                    <li><p><code>DoubleProperty 	graphicTextGapProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setLineSpacing(double value)</code> -- </p></li>
+                                    <li><p><code>double 	getLineSpacing()</code> -- </p></li>
+                                    <li><p><code>DoubleProperty 	lineSpacingProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>Insets 	getLabelPadding()</code> -- </p></li>
+                                    <li><p><code>ReadOnlyObjectProperty&lt;Insets> 	labelPaddingProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setTextOverrun(OverrunStyle value)</code> -- </p></li>
+                                    <li><p><code>OverrunStyle 	getTextOverrun()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;OverrunStyle> 	textOverrunProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setMnemonicParsing(boolean value)</code> -- </p></li>
+                                    <li><p><code>boolean 	isMnemonicParsing()</code> -- </p></li>
+                                    <li><p><code>BooleanProperty 	mnemonicParsingProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setUnderline(boolean value)</code> -- </p></li>
+                                    <li><p><code>boolean 	isUnderline()</code> -- </p></li>
+                                    <li><p><code>BooleanProperty 	underlineProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setWrapText(boolean value)</code> -- </p></li>
+                                    <li><p><code>boolean 	isWrapText()</code> -- </p></li>
+                                    <li><p><code>BooleanProperty 	wrapTextProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>Orientation 	getContentBias()</code> -- </p></li>
+                                </ol>
+                            </div>
+                            
+                            <a id="control-TitledPane" class="offset"></a>
+                            <div class="split-item">
+                                <pre class="brush: java;">
+@DefaultProperty("content")
+public class TitledPane extends Labeled {
+    public TitledPane() {}
+    public TitledPane(String title, Node content) {}
+}
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/TitledPane.html" target="_blank">TitledPane</a> </p>
+                                <ol>
+                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
+
+                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setAnimated(boolean value)</code> -- </p></li>
+                                    <li><p><code>boolean 	isAnimated()</code> -- </p></li>
+                                    <li><p><code>BooleanProperty 	animatedProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setContent(Node value)</code> -- </p></li>
+                                    <li><p><code>Node 	getContent()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;Node> 	contentProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setExpanded(boolean value)</code> -- </p></li>
+                                    <li><p><code>boolean 	isExpanded()</code> -- </p></li>
+                                    <li><p><code>BooleanProperty 	expandedProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setCollapsible(boolean value)</code> -- </p></li>
+                                    <li><p><code>boolean 	isCollapsible()</code> -- </p></li>
+                                    <li><p><code>BooleanProperty 	collapsibleProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>Orientation 	getContentBias()</code> -- </p></li>
+                                    <li><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	executeAccessibleAction(AccessibleAction action, Object... parameters)</code> -- </p></li>
+                                    <li><p><code>Object 	queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- </p></li>
+                                </ol>
+                            </div>
+
+                            <a id="control-Label" class="offset"></a>
+                            <div class="split-item">
+                                <pre class="brush: java;">
+
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Label.html" target="_blank">Label</a> </p>
+                            </div>
+
+                            <a id="control-ButtonBase" class="offset"></a>
+                            <div class="split-item">
+                                <pre class="brush: java;">
+
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/ButtonBase.html" target="_blank">ButtonBase</a> </p>
+                            </div>
+
+                            <a id="control-Button" class="offset"></a>
+                            <div class="split-item">
+                                <pre class="brush: java;">
+
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Button.html" target="_blank">Button</a> </p>
+                            </div>
+
+                            <a id="control-Hyperlink" class="offset"></a>
+                            <div class="split-item">
+                                <pre class="brush: java;">
+
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Hyperlink.html" target="_blank">Hyperlink</a> </p>
+                            </div>
+
+                            <a id="control-CheckBox" class="offset"></a>
+                            <div class="split-item">
+                                <pre class="brush: java;">
+
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/CheckBox.html" target="_blank">CheckBox</a> </p>
+                            </div>
+
+                            <a id="control-ToggleButton" class="offset"></a>
+                            <div class="split-item">
+                                <pre class="brush: java;">
+
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/ToggleButton.html" target="_blank">ToggleButton</a> </p>
+                            </div>
+
+                            <a id="control-RadioButton" class="offset"></a>
+                            <div class="split-item">
+                                <pre class="brush: java;">
+
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/RadioButton.html" target="_blank">RadioButton</a> </p>
+                            </div>
+
+                            <a id="control-MenuButton" class="offset"></a>
+                            <div class="split-item">
+                                <pre class="brush: java;">
+
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/MenuButton.html" target="_blank">RadioButton</a> </p>
+                            </div>
+
+                            <a id="control-SplitMenuButton" class="offset"></a>
+                            <div class="split-item">
+                                <pre class="brush: java;">
+
+</pre>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/SplitMenuButton.html" target="_blank">SplitMenuButton</a> </p>
+                            </div>
+
+
+                        </div>
+
                         <a id="control-Accordion" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
+public class Accordion extends Control {
 
+}
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Accordion.html" target="_blank">Accordion</a> </p>
                             <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
                         </div>
 
@@ -5659,7 +5868,7 @@ public class CubicCurve extends Shape {
  *     AE:AB = BF:BC = CG:CD = EH:EF = FI:FG = HJ:HI
  * 那么 J 点就是 三阶贝塞尔曲线 上的点。
  */
-                                </pre>
+</pre>
                                 </div>
                                 <div class="col-md-5"><img src="images/VectorDrawable-pathdata-bei3.png" class="img-responsive center-block"></div>
                             </div>
