@@ -5229,10 +5229,10 @@ public class SeparatorMenuItem extends CustomMenuItem {
       ├─ Label, TitledPane
       ├─ ButtonBase
       │    ├─ Hyperlink, Button, CheckBox
-      │    ├─ MenuButton
-      │    │   └─ SplitMenuButton
-      │    └─ ToggleButton
-      │        └─ RadioButton
+      │    ├─ ToggleButton
+      │    │    └─ RadioButton
+      │    └─ MenuButton
+      │       └─ SplitMenuButton
       └─ Cell
           └─ ...
 
@@ -5246,70 +5246,96 @@ public abstract class Labeled extends Control {
                                 <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Labeled.html" target="_blank">Labeled</a> 是文本显示控件的抽象父类。</p>
                                 <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
                                 <ol>
-                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
+                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 此类关联的 CSS 元数据</p></li>
 
-                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- </p></li>
+                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- 控件的 CSS 可修改属性的不可修改列表</p></li>
 
-                                    <li class="group"><p><code>void 	setText(String value)</code> -- </p></li>
-                                    <li><p><code>String 	getText()</code> -- </p></li>
-                                    <li><p><code>StringProperty 	textProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setText(String value)</code> -- 设置此文本标签的文本</p></li>
+                                    <li><p><code>String 	getText()</code> -- 获取此文本标签的文本</p></li>
+                                    <li><p><code>StringProperty 	textProperty()</code> -- 属性形式读写此文本标签的文本</p></li>
 
-                                    <li class="group"><p><code>void 	setTextFill(Paint value)</code> -- </p></li>
-                                    <li><p><code>Paint 	getTextFill()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;Paint> 	textFillProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setTextFill(Paint value)</code> -- 设置文本颜色</p></li>
+                                    <li><p><code>Paint 	getTextFill()</code> -- 获取文本颜色</p></li>
+                                    <li><p><code>ObjectProperty&lt;Paint> 	textFillProperty()</code> -- 属性形式读写文本颜色</p></li>
 
-                                    <li class="group"><p><code>void 	setGraphic(Node value)</code> -- </p></li>
-                                    <li><p><code>Node 	getGraphic()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;Node> 	graphicProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setAlignment(Pos value)</code> -- 设置对齐方式(文本和 Graphic 在此控件区域的位置)</p></li>
+                                    <li><p><code>Pos 	getAlignment()</code> -- 默认为横向(LEFT)纵向(CENTER)</p></li>
+                                    <li><p><code>ObjectProperty&lt;Pos> 	alignmentProperty()</code> -- 属性形式读写对齐方式</p></li>
 
-                                    <li class="group"><p><code>void 	setAlignment(Pos value)</code> -- </p></li>
-                                    <li><p><code>Pos 	getAlignment()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;Pos> 	alignmentProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setTextAlignment(TextAlignment value)</code> -- 设置多行文本对齐方式（第二行左，中，右）</p></li>
+                                    <li><p><code>TextAlignment 	getTextAlignment()</code> -- 获取</p></li>
+                                    <li><p><code>ObjectProperty&lt;TextAlignment> 	textAlignmentProperty()</code> -- 属性形式读写多行文本对齐方式</p></li>
 
-                                    <li class="group"><p><code>void 	setTextAlignment(TextAlignment value)</code> -- </p></li>
-                                    <li><p><code>TextAlignment 	getTextAlignment()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;TextAlignment> 	textAlignmentProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setGraphic(Node value)</code> -- 设置文本的图形节点</p></li>
+                                    <li><p><code>Node 	getGraphic()</code> -- 获取文本的图形节点</p></li>
+                                    <li><p><code>ObjectProperty&lt;Node> 	graphicProperty()</code> -- 属性形式读写文本的图形节点</p></li>
 
-                                    <li class="group"><p><code>void 	setContentDisplay(ContentDisplay value)</code> -- </p></li>
-                                    <li><p><code>ContentDisplay 	getContentDisplay()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;ContentDisplay> 	contentDisplayProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setGraphicTextGap(double value)</code> -- 设置 setGraphic 指定的节点和文本的距离</p></li>
+                                    <li><p><code>double 	getGraphicTextGap()</code> -- 获取图形节点和文本的距离</p></li>
+                                    <li><p><code>DoubleProperty 	graphicTextGapProperty()</code> -- 属性形式读写图形节点和文本的距离</p></li>
 
-                                    <li class="group"><p><code>void 	setEllipsisString(String value)</code> -- </p></li>
-                                    <li><p><code>String 	getEllipsisString()</code> -- </p></li>
-                                    <li><p><code>StringProperty 	ellipsisStringProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setContentDisplay(ContentDisplay value)</code> -- 设置 setGraphic 指定的节点相对于文本的位置</p></li>
+                                    <li><p><code>ContentDisplay 	getContentDisplay()</code> -- 默认值为: LEFT</p></li>
+                                    <li><p><code>ObjectProperty&lt;ContentDisplay> 	contentDisplayProperty()</code> -- 属性形式读写图形节点和文本的位置</p>
+                                        <pre class="brush: java;">
+public enum ContentDisplay {
+    TOP,            // 上
+    RIGHT,          // 右
+    BOTTOM,         // 下
+    LEFT,           // 左
+    CENTER,         // 中间，Graphic 将会位于文本下面，相当于背景
+    GRAPHIC_ONLY,   // 只显示 Graphic
+    TEXT_ONLY;      // 只显示文本
+}
+</pre>
+                                    </li>
 
-                                    <li class="group"><p><code>void 	setFont(Font value)</code> -- </p></li>
-                                    <li><p><code>Font 	getFont()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;Font> 	fontProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setTextOverrun(OverrunStyle value)</code> -- 设置文本超出空间时的默认行为</p></li>
+                                    <li><p><code>OverrunStyle 	getTextOverrun()</code> -- 获取文本超出空间时的默认行为</p></li>
+                                    <li><p><code>ObjectProperty&lt;OverrunStyle> 	textOverrunProperty()</code> -- 属性形式读写文本超出空间时的默认行为</p>
+                                        <pre class="brush: java;">
+public enum OverrunStyle {
+    ELLIPSIS,                   // 默认，按长度从尾部截断，显示 setEllipsisString(str) 指定字符
+    CLIP,                       // 直接尾部截断
+    WORD_ELLIPSIS,              // 从最后一个合适的单词截断，填充合适的符号
+    CENTER_ELLIPSIS,            // 中间截断
+    CENTER_WORD_ELLIPSIS,       // 中间合适的单词截断
+    LEADING_ELLIPSIS,           // 开头截断
+    LEADING_WORD_ELLIPSIS       // 开头合适的单词处截断
+}
+</pre>
+                                    </li>
 
-                                    <li class="group"><p><code>void 	setGraphicTextGap(double value)</code> -- </p></li>
-                                    <li><p><code>double 	getGraphicTextGap()</code> -- </p></li>
-                                    <li><p><code>DoubleProperty 	graphicTextGapProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setEllipsisString(String value)</code> -- 设置在截断文本时省略号显示的字符串（默认为: ...）</p></li>
+                                    <li><p><code>String 	getEllipsisString()</code> -- 获取截断文本时省略号显示的字符串</p></li>
+                                    <li><p><code>StringProperty 	ellipsisStringProperty()</code> -- 属性形式读写截断文本时省略号显示的字符串</p></li>
 
-                                    <li class="group"><p><code>void 	setLineSpacing(double value)</code> -- </p></li>
-                                    <li><p><code>double 	getLineSpacing()</code> -- </p></li>
-                                    <li><p><code>DoubleProperty 	lineSpacingProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setFont(Font value)</code> -- 设置字体</p></li>
+                                    <li><p><code>Font 	getFont()</code> -- 获取字体</p></li>
+                                    <li><p><code>ObjectProperty&lt;Font> 	fontProperty()</code> -- 属性形式读写字体</p></li>
 
-                                    <li class="group"><p><code>Insets 	getLabelPadding()</code> -- </p></li>
-                                    <li><p><code>ReadOnlyObjectProperty&lt;Insets> 	labelPaddingProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setLineSpacing(double value)</code> -- 设置行间距</p></li>
+                                    <li><p><code>double 	getLineSpacing()</code> -- 获取行间距</p></li>
+                                    <li><p><code>DoubleProperty 	lineSpacingProperty()</code> -- 属性形式读写行间距</p></li>
 
-                                    <li class="group"><p><code>void 	setTextOverrun(OverrunStyle value)</code> -- </p></li>
-                                    <li><p><code>OverrunStyle 	getTextOverrun()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;OverrunStyle> 	textOverrunProperty()</code> -- </p></li>
 
-                                    <li class="group"><p><code>void 	setMnemonicParsing(boolean value)</code> -- </p></li>
-                                    <li><p><code>boolean 	isMnemonicParsing()</code> -- </p></li>
-                                    <li><p><code>BooleanProperty 	mnemonicParsingProperty()</code> -- </p></li>
 
-                                    <li class="group"><p><code>void 	setUnderline(boolean value)</code> -- </p></li>
-                                    <li><p><code>boolean 	isUnderline()</code> -- </p></li>
-                                    <li><p><code>BooleanProperty 	underlineProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setMnemonicParsing(boolean value)</code> -- 是否启用文本解析</p></li>
+                                    <li><p><code>boolean 	isMnemonicParsing()</code> -- 获取是否启用文本解析</p></li>
+                                    <li><p><code>BooleanProperty 	mnemonicParsingProperty()</code> -- 属性形式读写是否启用文本解析</p></li>
 
-                                    <li class="group"><p><code>void 	setWrapText(boolean value)</code> -- </p></li>
-                                    <li><p><code>boolean 	isWrapText()</code> -- </p></li>
-                                    <li><p><code>BooleanProperty 	wrapTextProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setUnderline(boolean value)</code> -- 是否使用下划线</p></li>
+                                    <li><p><code>boolean 	isUnderline()</code> -- 获取是否使用下划线</p></li>
+                                    <li><p><code>BooleanProperty 	underlineProperty()</code> -- 属性形式读写是否使用下划线</p></li>
 
-                                    <li class="group"><p><code>Orientation 	getContentBias()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setWrapText(boolean value)</code> -- 是否使用自动换行</p></li>
+                                    <li><p><code>boolean 	isWrapText()</code> -- 默认不启动</p></li>
+                                    <li><p><code>BooleanProperty 	wrapTextProperty()</code> -- 属性形式读写是否使用自动换行</p></li>
+
+                                    <li class="group"><p><code>Insets 	getLabelPadding()</code> -- 获取填充</p></li>
+                                    <li><p><code>ReadOnlyObjectProperty&lt;Insets> 	labelPaddingProperty()</code> -- 属性形式读填充</p></li>
+
+                                    <li class="group"><p><code>Orientation 	getContentBias()</code> -- 获取内容方向</p></li>
                                 </ol>
                             </div>
                             
@@ -5322,50 +5348,79 @@ public class TitledPane extends Labeled {
     public TitledPane(String title, Node content) {}
 }
 </pre>
-                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/TitledPane.html" target="_blank">TitledPane</a> </p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/TitledPane.html" target="_blank">TitledPane</a> 是由一个标题栏和一个内容节点（一般为一个布局文件）构成。允许展开和关闭，默认为展开的。</p>
                                 <ol>
-                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
+                                    <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- 此类关联的 CSS 元数据</p></li>
 
-                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- </p></li>
+                                    <li class="group"><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- 控件的 CSS 可修改属性的不可修改列表</p></li>
 
-                                    <li class="group"><p><code>void 	setAnimated(boolean value)</code> -- </p></li>
-                                    <li><p><code>boolean 	isAnimated()</code> -- </p></li>
-                                    <li><p><code>BooleanProperty 	animatedProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setAnimated(boolean value)</code> -- 是否启用动画</p></li>
+                                    <li><p><code>boolean 	isAnimated()</code> -- 默认为 true</p></li>
+                                    <li><p><code>BooleanProperty 	animatedProperty()</code> -- 属性形式读写是否启用动画</p></li>
 
-                                    <li class="group"><p><code>void 	setContent(Node value)</code> -- </p></li>
-                                    <li><p><code>Node 	getContent()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;Node> 	contentProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setContent(Node value)</code> -- 设置内容节点</p></li>
+                                    <li><p><code>Node 	getContent()</code> -- 获取内容节点</p></li>
+                                    <li><p><code>ObjectProperty&lt;Node> 	contentProperty()</code> -- 属性形式读写内容节点</p></li>
 
-                                    <li class="group"><p><code>void 	setExpanded(boolean value)</code> -- </p></li>
-                                    <li><p><code>boolean 	isExpanded()</code> -- </p></li>
-                                    <li><p><code>BooleanProperty 	expandedProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setExpanded(boolean value)</code> -- 是否展开</p></li>
+                                    <li><p><code>boolean 	isExpanded()</code> -- 默认为展开的</p></li>
+                                    <li><p><code>BooleanProperty 	expandedProperty()</code> -- 属性形式读写</p></li>
 
-                                    <li class="group"><p><code>void 	setCollapsible(boolean value)</code> -- </p></li>
-                                    <li><p><code>boolean 	isCollapsible()</code> -- </p></li>
-                                    <li><p><code>BooleanProperty 	collapsibleProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setCollapsible(boolean value)</code> -- 是否允许折叠</p></li>
+                                    <li><p><code>boolean 	isCollapsible()</code> -- 默认为 true</p></li>
+                                    <li><p><code>BooleanProperty 	collapsibleProperty()</code> -- 属性形式读写否允许折叠</p></li>
 
-                                    <li class="group"><p><code>Orientation 	getContentBias()</code> -- </p></li>
-                                    <li><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- </p></li>
+                                    <li class="group"><p><code>Orientation 	getContentBias()</code> -- 获取内容方向</p></li>
+                                    <li><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
 
-                                    <li class="group"><p><code>void 	executeAccessibleAction(AccessibleAction action, Object... parameters)</code> -- </p></li>
-                                    <li><p><code>Object 	queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- </p></li>
+                                    <li class="group"><p><code>void 	executeAccessibleAction(AccessibleAction action, Object... parameters)</code> -- 执行辅助技术动作</p></li>
+                                    <li><p><code>Object 	queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- 查询辅助技术属性</p></li>
                                 </ol>
                             </div>
 
                             <a id="control-Label" class="offset"></a>
                             <div class="split-item">
                                 <pre class="brush: java;">
-
+public class Label extends Labeled {
+    public Label() {}
+    public Label(String text) {}
+    public Label(String text, Node graphic) {}
+}
 </pre>
-                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Label.html" target="_blank">Label</a> </p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Label.html" target="_blank">Label</a> 可以绑定到另外一个节点，当点击此 Lable 的时候，可以将焦点事件传输到另外的一个节点(比如一个输入框)。</p>
+                                <ol>
+                                    <li><p><code>void 	setLabelFor(Node value)</code> -- 设置要绑定焦点事件的节点</p></li>
+                                    <li><p><code>Node 	getLabelFor()</code> -- 获取以上节点</p></li>
+                                    <li><p><code>ObjectProperty&lt;Node> 	labelForProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                    <li class="group"><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
+                                </ol>
                             </div>
 
                             <a id="control-ButtonBase" class="offset"></a>
                             <div class="split-item">
                                 <pre class="brush: java;">
-
+public class Button extends ButtonBase {
+    public ButtonBase() {}
+    public ButtonBase(String text) {}
+    public ButtonBase(String text, Node graphic) {}
+}
 </pre>
-                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/ButtonBase.html" target="_blank">ButtonBase</a> </p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/ButtonBase.html" target="_blank">ButtonBase</a> 是按钮类 UI 控件的基类，包括 Hyperlink, Button, ToggleButton, CheckBox, RadioButtons, MenuButton, SplitMenuButton 。</p>
+                                <ol>
+                                    <li><p><code>void 	arm()</code> -- </p></li>
+                                    <li><p><code>void 	disarm()</code> -- </p></li>
+
+                                    <li class="group"><p><code>boolean 	isArmed()</code> -- </p></li>
+                                    <li><p><code>ReadOnlyBooleanProperty 	armedProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>void 	setOnAction(EventHandler&lt;ActionEvent> value)</code> -- </p></li>
+                                    <li><p><code>EventHandler&lt;ActionEvent> 	getOnAction()</code> -- </p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;ActionEvent>> 	onActionProperty()</code> -- </p></li>
+
+                                    <li class="group"><p><code>abstract void 	fire()</code> -- </p></li>
+                                    <li><p><code>void 	executeAccessibleAction(AccessibleAction action, Object... parameters)</code> -- </p></li>
+                                </ol>
                             </div>
 
                             <a id="control-Button" class="offset"></a>
