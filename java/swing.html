@@ -5408,75 +5408,206 @@ public class Button extends ButtonBase {
 </pre>
                                 <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/ButtonBase.html" target="_blank">ButtonBase</a> 是按钮类 UI 控件的基类，包括 Hyperlink, Button, ToggleButton, CheckBox, RadioButtons, MenuButton, SplitMenuButton 。</p>
                                 <ol>
-                                    <li><p><code>void 	arm()</code> -- </p></li>
-                                    <li><p><code>void 	disarm()</code> -- </p></li>
+                                    <li><p><code>void 	arm()</code> -- 触发按下动作(就想手动按下按钮，但是不释放)</p></li>
+                                    <li><p><code>void 	disarm()</code> -- 退出按下动作</p></li>
 
-                                    <li class="group"><p><code>boolean 	isArmed()</code> -- </p></li>
-                                    <li><p><code>ReadOnlyBooleanProperty 	armedProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>boolean 	isArmed()</code> -- 是否处于 Armed 状态</p></li>
+                                    <li><p><code>ReadOnlyBooleanProperty 	armedProperty()</code> -- 属性形式读取以上属性</p></li>
 
-                                    <li class="group"><p><code>void 	setOnAction(EventHandler&lt;ActionEvent> value)</code> -- </p></li>
-                                    <li><p><code>EventHandler&lt;ActionEvent> 	getOnAction()</code> -- </p></li>
-                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;ActionEvent>> 	onActionProperty()</code> -- </p></li>
+                                    <li class="group"><p><code>void 	setOnAction(EventHandler&lt;ActionEvent> value)</code> -- 设置事件处理回调</p></li>
+                                    <li><p><code>EventHandler&lt;ActionEvent> 	getOnAction()</code> -- 获取事件回调</p></li>
+                                    <li><p><code>ObjectProperty&lt;EventHandler&lt;ActionEvent>> 	onActionProperty()</code> -- 属性形式读写事件回调</p></li>
 
-                                    <li class="group"><p><code>abstract void 	fire()</code> -- </p></li>
-                                    <li><p><code>void 	executeAccessibleAction(AccessibleAction action, Object... parameters)</code> -- </p></li>
+                                    <li class="group"><p><code>abstract void 	fire()</code> -- 触发点击动作</p></li>
+                                    <li><p><code>void 	executeAccessibleAction(AccessibleAction action, Object... parameters)</code> -- 执行辅助技术动作</p></li>
                                 </ol>
                             </div>
 
                             <a id="control-Button" class="offset"></a>
                             <div class="split-item">
                                 <pre class="brush: java;">
-
+public class Button extends ButtonBase {
+    public Button() {}
+    public Button(String text) {}
+    public Button(String text, Node graphic) {}
+}
 </pre>
-                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Button.html" target="_blank">Button</a> </p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Button.html" target="_blank">Button</a> 一个简单的按钮控件。按钮控件可以包含文本 和/或 图形。</p>
+                                <p>当按钮被按下并释放时，将发送 ActionEvent 事件(由 <code>setOnAction(EventHanlder&lt;ActionEvent>)</code> 进行监听)。</p>
+                                <ol>
+                                    <li><p><code>void 	setDefaultButton(boolean value)</code> -- 设置是否是默认按钮(按 Enter 键可以触发 Button 的点击事件)</p></li>
+                                    <li><p><code>boolean 	isDefaultButton()</code> -- 获取是否是默认按钮</p></li>
+                                    <li><p><code>BooleanProperty 	defaultButtonProperty()</code> -- 属性形式读写是否是默认按钮</p></li>
+
+                                    <li class="group"><p><code>void 	setCancelButton(boolean value)</code> -- 设置是否是取消按钮(按 Esc 键可以触发 Button 的点击事件)</p></li>
+                                    <li><p><code>boolean 	isCancelButton()</code> -- 获取是否是取消按钮</p></li>
+                                    <li><p><code>BooleanProperty 	cancelButtonProperty()</code> -- 属性形式读写是否是取消按钮</p></li>
+
+                                    <li class="group"><p><code>void 	fire()</code> -- 触发点击事件</p></li>
+                                    <li><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
+                                </ol>
                             </div>
 
                             <a id="control-Hyperlink" class="offset"></a>
                             <div class="split-item">
                                 <pre class="brush: java;">
-
+public class Hyperlink extends ButtonBase {
+    public Hyperlink()  {}
+    public Hyperlink(String text) {}
+    public Hyperlink(String text, Node graphic) {}
+}
 </pre>
-                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Hyperlink.html" target="_blank">Hyperlink</a> </p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Hyperlink.html" target="_blank">Hyperlink</a> 是一个类似 HTML 超连接的节点，自动保存了是否被访问过的属性，并且不同的状态。</p>
+                                <ol>
+                                    <li><p><code>void 	setVisited(boolean value)</code> -- 设置是否访问过此连接</p></li>
+                                    <li><p><code>boolean 	isVisited()</code> -- 获取是否访问过此连接(被点击过一次此属性自动变为 true)</p></li>
+                                    <li><p><code>BooleanProperty 	visitedProperty()</code> -- 属性形式读写是否访问过此连接</p></li>
+
+                                    <li class="group"><p><code>void 	fire()</code> -- 触发点击事件</p></li>
+                                    <li><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
+                                    <li><p><code>Object queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- 该方法由辅助技术调用，以请求属性的值</p></li>
+                                </ol>
                             </div>
 
                             <a id="control-CheckBox" class="offset"></a>
                             <div class="split-item">
                                 <pre class="brush: java;">
-
+public class CheckBox extends ButtonBase {
+    public CheckBox() {}
+    public CheckBox(String text) {}
+}
 </pre>
-                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/CheckBox.html" target="_blank">CheckBox</a> </p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/CheckBox.html" target="_blank">CheckBox</a> 是复选框。</p>
+                                <p>复选框有三种状态：不确定(显示方框加一个减号)，选中(显示方框加一个勾号)，未选中(显示方框)</p>
+                                <ol>
+                                    <li><p><code>void 	setSelected(boolean value)</code> -- 设置是否为选中状态</p></li>
+                                    <li><p><code>boolean 	isSelected()</code> -- 获取是否为选中状态</p></li>
+                                    <li><p><code>BooleanProperty 	selectedProperty()</code> -- 属性形式读写是否为选中状态</p></li>
+
+                                    <li class="group"><p><code>void 	setIndeterminate(boolean value)</code> -- 设置初始化是否为不确定状态(只是在未点击的时候为不确定状态)</p></li>
+                                    <li><p><code>boolean 	isIndeterminate()</code> -- 获取初始化是否为不确定状态</p></li>
+                                    <li><p><code>BooleanProperty 	indeterminateProperty()</code> -- 属性形式读写初始化是否为不确定状态</p></li>
+
+                                    <li class="group"><p><code>void 	setAllowIndeterminate(boolean value)</code> -- 设置是否允许不确定状态(如果为 true，那么将在三种状态间切换)</p></li>
+                                    <li><p><code>boolean 	isAllowIndeterminate()</code> -- 获取是否允许不确定状态</p></li>
+                                    <li><p><code>BooleanProperty 	allowIndeterminateProperty()</code> -- 属性形式读写是否允许不确定状态</p></li>
+
+                                    <li class="group"><p><code>void 	fire()</code> -- 触发点击事件</p></li>
+                                    <li><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
+                                    <li><p><code>Object queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- 该方法由辅助技术调用，以请求属性的值</p></li>
+                                </ol>
                             </div>
 
                             <a id="control-ToggleButton" class="offset"></a>
                             <div class="split-item">
                                 <pre class="brush: java;">
+public class ToggleButton extends ButtonBase implements Toggle {
+    public ToggleButton() {}
+    public ToggleButton(String text) {}
+    public ToggleButton(String text, Node graphic) {}
+}
 
+public interface Toggle {
+    void setSelected(boolean selected);
+    boolean isSelected();
+    BooleanProperty selectedProperty();
+
+    void setToggleGroup(ToggleGroup toggleGroup);
+    ToggleGroup getToggleGroup();
+    ObjectProperty&lt;ToggleGroup> toggleGroupProperty();
+
+    void setUserData(Object value);
+    Object getUserData();
+    ObservableMap&lt;Object, Object> getProperties();
+}
 </pre>
-                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/ToggleButton.html" target="_blank">ToggleButton</a> </p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/ToggleButton.html" target="_blank">ToggleButton</a> 是具有选中状态的按钮，一般配合 ToggleGroup 来使用，在同一个组中，只有一个可以为选中状态的。</p>
+                                <ol>
+                                    <li><p><code>void 	setToggleGroup(ToggleGroup value)</code> -- 设置所属的组</p></li>
+                                    <li><p><code>ToggleGroup 	getToggleGroup()</code> -- 获取所属的组</p></li>
+                                    <li><p><code>ObjectProperty&lt;ToggleGroup> 	toggleGroupProperty()</code> -- 属性形式读写所属的组</p></li>
+
+                                    <li class="group"><p><code>void 	setSelected(boolean value)</code> -- 设置是否为选中状态</p></li>
+                                    <li><p><code>boolean 	isSelected()</code> -- 获取是否为选中状态</p></li>
+                                    <li><p><code>BooleanProperty 	selectedProperty()</code> -- 属性形式读写是否为选中状态</p></li>
+
+                                    <li class="group"><p><code>void 	fire()</code> -- 触发点击事件</p></li>
+                                    <li><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
+                                    <li><p><code>Object queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- 该方法由辅助技术调用，以请求属性的值</p></li>
+                                </ol>
                             </div>
 
                             <a id="control-RadioButton" class="offset"></a>
                             <div class="split-item">
                                 <pre class="brush: java;">
-
+public class RadioButton extends ToggleButton {
+    public RadioButton() {}
+    public RadioButton(String text) {}
+}
 </pre>
-                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/RadioButton.html" target="_blank">RadioButton</a> </p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/RadioButton.html" target="_blank">RadioButton</a> 是单选按钮，是 ToggleButton 的子类。</p>
+                                <ol>
+                                    <li><p><code>void 	fire()</code> -- 触发点击事件</p></li>
+                                    <li><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
+                                    <li><p><code>Object queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- 该方法由辅助技术调用，以请求属性的值</p></li>
+                                </ol>
                             </div>
 
                             <a id="control-MenuButton" class="offset"></a>
                             <div class="split-item">
                                 <pre class="brush: java;">
+public class MenuButton extends ButtonBase {
+    public static final EventType&lt;Event> ON_SHOWING =
+            new EventType&lt;Event>(Event.ANY, "MENU_BUTTON_ON_SHOWING");
+    public static final EventType&lt;Event> ON_SHOWN =
+            new EventType&lt;Event>(Event.ANY, "MENU_BUTTON_ON_SHOWN");
+    public static final EventType&lt;Event> ON_HIDING =
+            new EventType&lt;Event>(Event.ANY, "MENU_BUTTON_ON_HIDING");
+    public static final EventType&lt;Event> ON_HIDDEN =
+            new EventType&lt;Event>(Event.ANY, "MENU_BUTTON_ON_HIDDEN");
 
+    public MenuButton() {}
+    public MenuButton(String text) {}
+    public MenuButton(String text, Node graphic) {}
+    public MenuButton(String text, Node graphic, MenuItem... items) {}
+}
 </pre>
-                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/MenuButton.html" target="_blank">RadioButton</a> </p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/MenuButton.html" target="_blank">MenuButton</a> 是自带菜单项的按钮，按钮右侧会有一个三角形小图标。点击时会弹出一个弹出菜单。</p>
+                                <ol>
+                                    <li><p><code>ObservableList&lt;MenuItem> 	getItems()</code> -- 获取可观察的可操作的下拉菜单列表</p></li>
+
+                                    <li class="group"><p><code>void 	show()</code> -- 显示弹出菜单</p></li>
+                                    <li><p><code>void 	hide()</code> -- 隐藏弹出菜单</p></li>
+
+                                    <li class="group"><p><code>boolean 	isShowing()</code> -- 弹出菜单是否已经显示</p></li>
+                                    <li><p><code>ReadOnlyBooleanProperty 	showingProperty()</code> -- 属性形式读以上属性</p></li>
+
+                                    <li class="group"><p><code>void 	setPopupSide(Side value)</code> -- 设置弹出菜单的位置</p></li>
+                                    <li><p><code>Side 	getPopupSide()</code> -- 获取弹出菜单的位置</p></li>
+                                    <li><p><code>ObjectProperty&lt;Side> 	popupSideProperty()</code> -- 设置弹出菜单的位置</p></li>
+
+                                    <li class="group"><p><code>void 	fire()</code> -- 触发点击事件</p></li>
+                                    <li><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
+                                    <li><p><code>Object queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- 该方法由辅助技术调用，以请求属性的值</p></li>
+                                </ol>
                             </div>
 
                             <a id="control-SplitMenuButton" class="offset"></a>
                             <div class="split-item">
                                 <pre class="brush: java;">
-
+public class SplitMenuButton extends MenuButton {
+    public SplitMenuButton() {}
+    public SplitMenuButton(MenuItem... items) {}
+}
 </pre>
-                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/SplitMenuButton.html" target="_blank">SplitMenuButton</a> </p>
+                                <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/SplitMenuButton.html" target="_blank">SplitMenuButton</a> 是 MenuButton 的子类，功能没有区别，只是按钮右侧有一个分割符，将按钮和三角形小图标分成两部分。</p>
+                                <ol>
+                                    <li><p><code>void 	fire()</code> -- 触发点击事件</p></li>
+                                    <li><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
+                                    <li><p><code>Object queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- 该方法由辅助技术调用，以请求属性的值</p></li>
+                                    <li><p><code>void 	executeAccessibleAction(AccessibleAction action, Object... parameters)</code> -- 执行辅助技术操作</p></li>
+
+                                </ol>
                             </div>
 
 
@@ -5486,20 +5617,90 @@ public class Button extends ButtonBase {
                         <div class="sub-item">
                             <pre class="brush: java;">
 public class Accordion extends Control {
-
+    public Accordion() {}
+    public Accordion(TitledPane... titledPanes) {}
 }
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Accordion.html" target="_blank">Accordion</a> </p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/Accordion.html" target="_blank">Accordion</a> 是一个 <a href="#control-TitledPane">TitledPane</a> 组，同一时间只有一个 TitledPane 是可以展开的（就想二级 ListView，但是同一时间只有一个项目可以展开）。</p>
                             <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+                                <li><p><code>ObservableList&lt;TitledPane> 	getPanes()</code> -- 获取 TitledPane 的列表</p></li>
+
+                                <li class="group"><p><code>void 	setExpandedPane(TitledPane value)</code> -- 展开一个指定的 TitledPane</p></li>
+                                <li><p><code>TitledPane 	getExpandedPane()</code> -- 获取展开的 TitledPane</p></li>
+                                <li><p><code>ObjectProperty&lt;TitledPane> 	expandedPaneProperty()</code> -- 属性形式读写以上属性</p></li>
+
+                                <li class="group"><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- 创建默认皮肤</p></li>
+                            </ol>
                         </div>
 
                         <a id="control-ListView" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
+@DefaultProperty("items")
+public class ListView&lt;T> extends Control {
+    public static class EditEvent&lt;T> extends Event {}
 
+    public ListView() {}
+    public ListView(ObservableList&lt;T> items) {}
+}
 </pre>
-                            <p><a href="docs/docs-java/api-javafx8/javafx/" target="_blank"></a></p>
+                            <p><a href="docs/docs-java/api-javafx8/javafx/scene/control/ListView.html" target="_blank">ListView</a> </p>
                             <p>此类的继承结构查看： <a href="#javafx-scene-Node">图形基类: Node</a></p>
+                            <ol>
+                                <li><p><code>ObjectProperty&lt;Callback&lt;ListView&lt;T>,ListCell&lt;T>>> 	cellFactoryProperty()</code> -- </p></li>
+                                <li><p><code>protected Skin&lt;?> 	createDefaultSkin()</code> -- </p></li>
+                                <li><p><code>void 	edit(int itemIndex)</code> -- </p></li>
+                                <li><p><code>BooleanProperty 	editableProperty()</code> -- </p></li>
+                                <li><p><code>static &lt;T> EventType&lt;ListView.EditEvent&lt;T>> 	editAnyEvent()</code> -- </p></li>
+                                <li><p><code>static &lt;T> EventType&lt;ListView.EditEvent&lt;T>> 	editCancelEvent()</code> -- </p></li>
+                                <li><p><code>static &lt;T> EventType&lt;ListView.EditEvent&lt;T>> 	editCommitEvent()</code> -- </p></li>
+                                <li><p><code>ReadOnlyIntegerProperty 	editingIndexProperty()</code> -- </p></li>
+                                <li><p><code>static &lt;T> EventType&lt;ListView.EditEvent&lt;T>> 	editStartEvent()</code> -- </p></li>
+                                <li><p><code>DoubleProperty 	fixedCellSizeProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;FocusModel&lt;T>> 	focusModelProperty()</code> -- </p></li>
+                                <li><p><code>Callback&lt;ListView&lt;T>,ListCell&lt;T>> 	getCellFactory()</code> -- </p></li>
+                                <li><p><code>static List&lt;CssMetaData&lt;? extends Styleable,?>> 	getClassCssMetaData()</code> -- </p></li>
+                                <li><p><code>List&lt;CssMetaData&lt;? extends Styleable,?>> 	getControlCssMetaData()</code> -- </p></li>
+                                <li><p><code>int 	getEditingIndex()</code> -- </p></li>
+                                <li><p><code>double 	getFixedCellSize()</code> -- </p></li>
+                                <li><p><code>FocusModel&lt;T> 	getFocusModel()</code> -- </p></li>
+                                <li><p><code>ObservableList&lt;T> 	getItems()</code> -- </p></li>
+                                <li><p><code>Orientation 	getOrientation()</code> -- </p></li>
+                                <li><p><code>Node 	getPlaceholder()</code> -- </p></li>
+                                <li><p><code>MultipleSelectionModel&lt;T> 	getSelectionModel()</code> -- </p></li>
+                                <li><p><code>boolean 	isEditable()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;ObservableList&lt;T>> 	itemsProperty()</code> -- </p></li>
+                                <li><p><code>void 	setOrientation(Orientation value)</code> -- </p></li>
+                                <li><p><code>void 	setPlaceholder(Node value)</code> -- </p></li>
+                                <li><p><code>void 	setSelectionModel(MultipleSelectionModel&lt;T> value)</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;Orientation> 	orientationProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;Node> 	placeholderProperty()</code> -- </p></li>
+                                <li><p><code>Object 	queryAccessibleAttribute(AccessibleAttribute attribute, Object... parameters)</code> -- </p></li>
+                                <li><p><code>void 	scrollTo(int index)</code> -- </p></li>
+                                <li><p><code>void 	scrollTo(T object)</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;MultipleSelectionModel&lt;T>> 	selectionModelProperty()</code> -- </p></li>
+                                <li><p><code>void 	setCellFactory(Callback&lt;ListView&lt;T>,ListCell&lt;T>> value)</code> -- </p></li>
+                                <li><p><code>void 	setEditable(boolean value)</code> -- </p></li>
+                                <li><p><code>void 	setFixedCellSize(double value)</code> -- </p></li>
+                                <li><p><code>void 	setFocusModel(FocusModel&lt;T> value)</code> -- </p></li>
+                                <li><p><code>void 	setItems(ObservableList&lt;T> value)</code> -- </p></li>
+
+                                <li><p><code>void 	setOnEditCancel(EventHandler&lt;ListView.EditEvent&lt;T>> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnEditCommit(EventHandler&lt;ListView.EditEvent&lt;T>> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnEditStart(EventHandler&lt;ListView.EditEvent&lt;T>> value)</code> -- </p></li>
+                                <li><p><code>void 	setOnScrollTo(EventHandler&lt;ScrollToEvent&lt;Integer>> value)</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;ListView.EditEvent&lt;T>> 	getOnEditCancel()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;ListView.EditEvent&lt;T>> 	getOnEditCommit()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;ListView.EditEvent&lt;T>> 	getOnEditStart()</code> -- </p></li>
+                                <li><p><code>EventHandler&lt;ScrollToEvent&lt;Integer>> 	getOnScrollTo()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;ListView.EditEvent&lt;T>>> 	onEditCancelProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;ListView.EditEvent&lt;T>>> 	onEditCommitProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;ListView.EditEvent&lt;T>>> 	onEditStartProperty()</code> -- </p></li>
+                                <li><p><code>ObjectProperty&lt;EventHandler&lt;ScrollToEvent&lt;Integer>>> 	onScrollToProperty()</code> -- </p></li>
+
+
+                            </ol>
                         </div>
 
                         <a id="control-TreeView" class="offset"></a>
