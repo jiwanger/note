@@ -66,16 +66,28 @@
 					</div>
 					<div class="list-group">
 						<a href="#" class="list-group-item">简介</a>
+                        <a href="#javaee-web-xml" class="list-group-item"><code>web.xml</code></a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+							data-parent="#accordion" href="#javax-servlet-http" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+							<code>javax.servlet.http</code><span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="javax-servlet-http" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#javax-servlet-http-HttpServlet" class="list-group-item">HttpServlet 及相关类</a>
+                            <a href="#javax-servlet-http-HttpSession" class="list-group-item">HttpSession 及相关类</a>
+                            <a href="#javax-servlet-http-HttpFilter" class="list-group-item">HttpFilter 及相关类</a>
 							<a href="#" class="list-group-item">...</a>
 						</div>
+                        <a class="list-group-item active dropdown" data-toggle="collapse"
+                           data-parent="#accordion" href="#javaee-tag" aria-expanded="true"   style="border-top: 1px solid #DDDDDD;">
+                            <code>JSTL, EL, ONGL</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+                        </a>
+                        <div id="javaee-tag" class="panel-collapse collapse"
+                             role="tabpanel">
+                            <a href="#javaee-jstl" class="list-group-item">JSTL -- Java 标准标签库</a>
+                            <a href="#javaee-el" class="list-group-item">EL 表达式</a>
+                            <a href="#javaee-ongl" class="list-group-item">ONGL -- 对象图导航语言</a>
+                        </div>
 						<a href="#javaee-" class="list-group-item">...</a>
 					</div>
 				</div>
@@ -103,6 +115,18 @@
                             <p>2005 年 6 月，JavaOne 大会召开，SUN 公司公开 Java SE 6。此时，Java 的各种版本已经更名以取消其中的数字“2”：J2EE 更名为 Java EE, J2SE更名为 Java SE，J2ME 更名为Java ME。Java EE 是在 Java SE 的基础上构建的，它提供 Web 服务、组件模型、管理和通信 API，可以用来实现企业级的面向服务体系结构（service-oriented architecture，SOA）和 Web 2.0 应用程序。</p>
                             <p>JavaEE 技术架构，包含许多组件及标准规范，用来简化且规范应用系统的开发与部署，提高其安全、复用性、维护性及可移植性。JavaEE 核心是一组技术规范与指南，其中所包含的各类组件、服务架构及技术层次，均有共同的标准及规格，让各种依循 JavaEE 架构的不同平台之间，存在良好的兼容性，解决过去企业后端使用的信息产品彼此之间无法兼容，企业内部或外部难以互通的窘境。</p>
                         </div>
+
+                        <div class="sub-item">
+                            <p><b>JavaEE 包：</b></p>
+                            <pre class="brush: java;">compile 'javax:javaee-api:8.0'</pre>
+                            <ul>
+                                <li><p><a href="docs/docs-javaee-8/javax/servlet/package-summary.html" target="_blank">javax.servlet</a> -- 描述和定义 servlet 类与由符合 servlet 容器为此类实例提供的运行时环境之间的契约。包括接口：<code>Servlet</code>, <code>ServletConfig</code>, <code>ServletRequest</code>, <code>ServletResponse</code>, <code>ServletRequestListener</code>, <code>Filter</code>, <code>FilterConfig</code> ... 包括类： <code>GenericServlet</code>, <code>GenericFilter</code>, <code>ServletRequestEvent</code> ...</p></li>
+                                <li><p><a href="docs/docs-javaee-8/javax/servlet/http/package-summary.html" target="_blank">javax.servlet.http</a> -- 描述和定义在 HTTP 协议下运行的 servlet 类与由符合的 servlet 容器为此类实例提供的运行时环境之间的契约。包括接口：<code>HttpSession</code>, <code>HttpServletRequest</code>, <code>HttpServletResponse</code>, <code>HttpServletMapping</code>, <code>HttpSessionIdListener</code>, <code>HttpSessionListener</code>, <code>HttpSessionAttributeListener</code> ... 包括类： <code>HttpServlet</code>, <code>HttpFilter</code>, <code>Cookie</code>, <code>HttpSessionEvent</code>, <code>HttpServletRequestWrapper</code>, <code>HttpServletResponseWrapper</code>, <code>HttpSessionBindingEvent</code></p></li>
+                                <li><p><a href="docs/docs-javaee-8/javax/servlet/jsp/package-summary.html" target="_blank">javax.servlet.jsp</a> -- </p></li>
+                                <li><p><a href="docs/docs-javaee-8/javax/.../package-summary.html" target="_blank">javax.</a> -- </p></li>
+                            </ul>
+                        </div>
+
                         <div class="sub-item">
                             <p><b>JavaEE 的 13 种核心技术规范：</b></p>
                             <ol type="I">
@@ -132,21 +156,662 @@
 				</div>
 				<!-- item over -->
 
+                <!-- item start -->
+                <a class="offset" id="javaee-web-xml"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><code>web.xml</code> 配置</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <p><b>不同 Servlet 版本对应的的 <code>web.xml</code> 配置：</b></p>
+                            <div class="split-item">
+                                <p><b>Servlet 4.0</b></p>
+                                <pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="UTF-8"?>
+
+&lt;web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
+  version="4.0">
+  ...
+&lt;/web-app>
+</pre>
+                                </div>
+                            <div class="split-item">
+                                <p><b>Servlet 3.1</b></p>
+                                <pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="UTF-8"?>
+
+&lt;web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1">
+  ...
+&lt;/web-app>
+</pre>
+                            </div>
+                            <div class="split-item">
+                                <p><b>Servlet 3.0</b></p>
+                                <pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="UTF-8"?>
+
+&lt;web-app xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    version="3.0">
+    ...
+&lt;/web-app>
+</pre>
+                                </div>
+                            <div class="split-item">
+                                <p><b>Servlet 2.5</b></p>
+                                <pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="UTF-8"?>
+
+&lt;web-app xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+    version="2.5">
+    ...
+&lt;/web-app>
+</pre>
+                            </div>
+                            <div class="split-item">
+                                <p><b>Servlet 2.4</b></p>
+                                <pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="UTF-8"?>
+
+&lt;web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+    ...
+&lt;/web-app>
+</pre>
+                            </div>
+
+                        </div>
+
+                        <div class="sub-item">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
 				<!-- item start -->
-				<a class="offset" id="..."></a>
+				<a class="offset" id="javax-servlet-http-HttpServlet"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">HttpServlet</h3>
+					</div>
+					<div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public abstract class HttpServlet extends GenericServlet {}
+</pre>
+							<p><a href="docs/docs-javaee-8/javax/servlet/http/HttpServlet.html" target="_blank">HttpServlet</a> 是一个抽象类，通常继承此类类创建一个 HttpServlet。</p>
+                            <p>Servlet 通常在多线程服务器上运行，因此请注意 Servlet 必须处理并发请求，并注意同步对共享资源的访问。共享资源包括内存中的数据，比如实例或类变量，以及外部对象，比如文件、数据库连接和网络连接。</p>
+                            <p>Servlet 的生命周期：</p>
+                            <pre class="brush: java;">
+/* 只关注 GET / POST 方法
+ * 1. Construct -- 启动调用，只调用一次
+ * 2. init -- 构造方法调用完后就调用此方法，只调用一次(此方法中可以获取 ServletConfig 和 ServletContext 的参数)
+
+ * 3. service(ServletRequest, ServletResponse) -- 每次访问都会调用，不管是 Get / Post 方法
+ * 4. service(HttpServletRequest, HttpServletResponse) -- 每次访问都会调用，不管是 Get / Post 方法
+ * 5. getLastModified -- 每次在 doGet 方法前会调用， doPost 不调用此方法
+ * 6. doGet -- 每次 Get 请求调用
+ * 7. doPost -- 每次 Post 请求调用
+
+ * 8. destroy -- 关闭服务调用，只调用一次
+ */
+</pre>
+
+                            <p><b>Servlet 在 <code>web.xml</code> 中的配置:</b></p>
+                            <pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="UTF-8"?>
+
+&lt;web-app
+  xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1">
+
+  <!-- 下面的参数可以在任何一个 Servlet 的 init 方法中获取，每个应用共享一个 ServletContext 对象  -->
+  &lt;context-param>
+    &lt;param-name>phone&lt;/param-name>
+    &lt;param-value>1388888888&lt;/param-value>
+  &lt;/context-param>
+
+  &lt;servlet>
+    &lt;servlet-name>TestServlet&lt;/servlet-name>  <!-- Servlet 别名 -->
+    &lt;servlet-class>io.jiwanger.site.servlet.TestServlet&lt;/servlet-class> <!-- Servlet 完全限定名 -->
+    <!-- 下面的参数可以在 Servlet 的 init 方法中获取()，每个 Servlet 有唯一对应 ServletConfig 对象 -->
+    &lt;init-param>
+      &lt;param-name>user&lt;/param-name>
+      &lt;param-value>root&lt;/param-value>
+    &lt;/init-param>
+    &lt;init-param>
+      &lt;param-name>password&lt;/param-name>
+      &lt;param-value>123456&lt;/param-value>
+    &lt;/init-param>
+  &lt;/servlet>
+  &lt;servlet-mapping>
+    &lt;servlet-name>TestServlet&lt;/servlet-name>  <!-- Servlet 别名 -->
+    &lt;url-pattern>/T&lt;/url-pattern>             <!-- Servlet 访问路径 -->
+  &lt;/servlet-mapping>
+
+&lt;/web-app>
+</pre>
+                            <ol>
+                                <li><p><code>void 	service(ServletRequest req, ServletResponse res)</code> -- 每次访问调用此方法，将两个参数强制转换再调用以下方法</p></li>
+                                <li><p><code>protected void 	service(HttpServletRequest req, HttpServletResponse resp)</code> -- 每次访问调用此方法，在此方法中根据请求调用 doGet / doPost / 	doHead / ... 的哪一个方法</p>
+                                    <pre class="brush: java;">
+protected void service(HttpServletRequest req, HttpServletResponse resp)
+        throws ServletException, IOException {
+    String method = req.getMethod();
+    if (method.equals(METHOD_GET)) {
+        ...
+    } else if (method.equals(METHOD_HEAD)) {
+        ...
+    } else if (method.equals(METHOD_POST)) {
+       ...
+    } else if ...
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>protected void 	doGet(HttpServletRequest req, HttpServletResponse resp)</code> -- GET 请求调用此方法</p></li>
+                                <li><p><code>protected void 	doPost(HttpServletRequest req, HttpServletResponse resp)</code> -- POST 请求调用此方法</p></li>
+                                <li><p><code>protected void 	doHead(HttpServletRequest req, HttpServletResponse resp)</code> -- HEAD 请求调用此方法</p></li>
+                                <li><p><code>protected void 	doPut(HttpServletRequest req, HttpServletResponse resp)</code> -- PUT 请求调用此方法</p></li>
+                                <li><p><code>protected void 	doDelete(HttpServletRequest req, HttpServletResponse resp)</code> -- DELETE 请求调用此方法</p></li>
+                                <li><p><code>protected void 	doTrace(HttpServletRequest req, HttpServletResponse resp)</code> -- TRACE 请求调用此方法</p></li>
+                                <li><p><code>protected void 	doOptions(HttpServletRequest req, HttpServletResponse resp)</code> -- OPTIONS 请求调用此方法</p></li>
+
+                                <li class="group"><p><code>protected long 	getLastModified(HttpServletRequest req)</code> -- GET 和 HEAD 请求都会先调用此方法，在 Http 协议中，浏览器对访问过的页面缓存后，它将会在以后访问该页面时，将会根据 LastModified 头字段指定的时间值生成 If-Modified-Since 头字段，作为缓存页面的最新更新时间。如果网页的最后修改时间比 If-Modified-Since 头字段指定的时间早的话，web 服务器就会请求的页面，如果自 If-modified-Since 指定的时间以来，网页内容没有被修改的话，服务器就会返回一个 304 响应头，一次告诉浏览器继续使用已缓存的页面。</p>
+                                    <p>由于在动态网页程序中，网页内容随时在变化，因此我们要保证在每次的访问请求中都要返回最新的内容。<b>注意：HttpServlet 类中的 getLastModified() 方法的返回值是一个负数。</b></p>
+                                    <p>继承 HttpServlet 的 servlet 程序在接收到客户端的 GET 请求后，HttpServlet 的重载 service 方法会先调用 getLastModified() 方法，根据这个方法的返回值来决定是否要调用 doGet 方法和生成 Last-Modified 头字段。主要有以下三种决定方式：</p>
+                                    <ol>
+                                        <li><p>如果 getLastModified() 方法的返回值是一个负数的话，不管客户端的请求信息如何，service 方法都会调用 doGet 方法生成响应信息返回给客户端。</p></li>
+                                        <li><p>如果 getLastModified() 方法的返回值是一个正数，并且客户端的请求消息中没有包含 If-Modified-Since 头字段的(这种情况是第一次访问该页面时)或者是请求消息中包含 If-Modified-Since 头字段，但是返回值比 If-Modified-Since 头字段指定的时间新的话，则 service 方法调用 doGet 方法生成响应信息和 Last-Modified 消息头返回给客户端。</p></li>
+                                        <li><p>如果 getLastModified() 方法的返回值是一个正数，并且返回值比客户端发出的请求消息中 If-Modified-Since 头字段指定的时间值旧的话，那么 service 方法将不会调用 doGet 方法和生成 Last-Modified 头字段，而是返回一个 304 状态给客户端，表示让客户端继续使用以前缓存的页面。</p></li>
+                                    </ol>
+                                </li>
+
+
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public abstract class GenericServlet implements Servlet, ServletConfig, Serializable {}
+
+public interface Servlet {
+    void init(ServletConfig config);
+    void service(ServletRequest req, ServletResponse res);
+    ServletConfig getServletConfig();
+    String getServletInfo();
+    void destroy();
+}
+
+public interface ServletConfig {
+    String getInitParameter(String name);
+    Enumeration&lt;String> getInitParameterNames();
+    ServletContext getServletContext();
+    String getServletName();
+}
+</pre>
+                            <p><a href="docs/docs-javaee-8/javax/servlet/GenericServlet.html" target="_blank">GenericServlet</a></p>
+                            <ol>
+                                <li><p><code>void 	init()</code> -- 在此方法中可以获取 ServletConfig 和 ServletContext 的数据，Servlet 初始化时回调(第一次有客户端访问此 Servlet 时)</p>
+                                    <pre class="brush: java;">
+@Override
+public void init() throws ServletException {
+    /** 配置在 web.xml 中(参见前面的 Servlet 在 web.xml 中的配置)，对应此 Servlet 的 ServletConfig 对象 */
+    ServletConfig config = getServletConfig();
+    String user = config.getInitParameter("user");
+
+    /** 配置在 web.xml 中(参见前面的 Servlet 在 web.xml 中的配置)， 整个应用的的 ServletContext 对象 */
+    ServletContext context = getServletContext();
+    String phone = context.getInitParameter("phone");
+    Log.d("=== init ===", user, phone);
+}
+</pre>
+                                </li>
+                                <li><p><code>void 	init(ServletConfig config)</code> -- 将此 config 存储到当前实例</p></li>
+                                <li><p><code>abstract void 	service(ServletRequest req, ServletResponse res)</code> -- 参见 HttpServlet 的同名方法</p></li>
+
+                                <li class="group"><p><code>ServletConfig 	getServletConfig()</code> -- 获取 init(ServletConfig) 传过来的 config 实例</p></li>
+                                <li><p><code>String 	getInitParameter(String name)</code> -- 调用 config 实例的同名方法</p></li>
+                                <li><p><code>Enumeration&lt;String> 	getInitParameterNames()</code> -- 调用 config 实例的同名方法</p></li>
+
+                                <li class="group"><p><code>ServletContext 	getServletContext()</code> -- 获取应用共享的 ServletContext 实例</p></li>
+
+                                <li class="group"><p><code>String 	getServletInfo()</code> -- 返回有关 Servlet 的信息，如作者、版本和版权。默认情况下，此方法返回空字符串</p></li>
+                                <li><p><code>String 	getServletName()</code> -- 返回 Servlet 在 <code>web.xml</code> 中配置的别名</p></li>
+
+                                <li class="group"><p><code>void 	log(String msg)</code> -- 将指定的消息写入 servlet 日志文件，调用 getServletContext() 的 log 方法</p></li>
+                                <li><p><code>void 	log(String message, Throwable t)</code> -- 将指定的消息写入 servlet 日志文件，调用 getServletContext() 的 log 方法</p></li>
+
+                                <li class="group"><p><code>void 	destroy()</code> -- 应用移除或者关闭回调</p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <div class="split-item">
+                                <pre class="brush: java;">
+public interface HttpServletRequest extends ServletRequest {
+    public static final String BASIC_AUTH = "BASIC";
+    public static final String FORM_AUTH = "FORM";
+    public static final String CLIENT_CERT_AUTH = "CLIENT_CERT";
+    public static final String DIGEST_AUTH = "DIGEST";
+}
+</pre>
+                                <p><a href="docs/docs-javaee-8/javax/servlet/http/HttpServletRequest.html" target="_blank">HttpServletRequest</a> 是客户端发送给服务器的请求报文。</p>
+                                <p>该对象由服务器(如:Tomcat)创建，最终作为参数传递到 doGet 或 doPost 方法中，我们可以在这两个方法中直接使用。</p>
+                                <p>可以将客户端请求转发，对客户端来说是透明的(比如浏览器地址不会改变)。</p>
+                                <p>有一个实现类：<a href="docs/docs-javaee-8/javax/servlet/http/HttpServletRequestWrapper.html" target="_blank">HttpServletRequestWrapper</a></p>
+                                <ol>
+                                    <li><p><code>String 	getMethod()</code> -- 获取请求的方法(主要是在 service 方法中区分请求的方法)</p></li>
+
+                                    <li><p><code>String 	getContextPath()</code> -- 获取应用路径(如: /site)</p></li>
+                                    <li><p><code>String 	getPathInfo()</code> -- 获取额外路径信息，一般返回 NULL</p></li>
+                                    <li><p><code>String 	getPathTranslated()</code> -- 额外路径信息转化为实际路径，一般返回 NULL</p></li>
+
+                                    <li><p><code>Enumeration&lt;String> 	getHeaderNames()</code> -- 获取所有请求头的名字枚举列表</p></li>
+                                    <li><p><code>String 	getHeader(String name)</code> -- 获取指定的请求头</p>
+                                        <pre class="brush: java;">
+Enumeration&lt;String> names = request.getHeaderNames();
+while(names.hasMoreElements()) {
+    String name = names.nextElement();
+    System.out.println(name + ":" + request.getHeader(name));
+}
+
+/* 常见的 Http 头（可以自定义 Http 头）：
+ * // 浏览器端可以接受的媒体类型
+ * Accept:text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+ * // 浏览器申明自己接收的编码方法，通常指定压缩方法，是否支持压缩
+ * Accept-Encoding:gzip, deflate
+ * // 浏览器申明自己接收的语言
+ * Accept-Language:zh-CN,zh;q=0.8,en-US;q=0.5,en;q=0.3
+ * // 是否使用已经建立的连接
+ * Connection:keep-alive
+ * // 必须，请求资源的 Internet 主机和端口号
+ * Host:localhost:8080
+ * // 客户端使用的操作系统和浏览器的名称和版本
+ * User-Agent:Mozilla/5.0 (X11; Linux i686; rv:62.0) Gecko/20100101 Firefox/62.0
+ * // 本地数据 Cookie
+ * Cookie:JSESSIONID=31uuwk5cgyvanvrcxystclu; android_developer_api_level=24; ...
+ */
+</pre>
+                                    </li>
+                                    <li><p><code>Enumeration&lt;String> 	getHeaders(String name)</code> -- 客户端作为多个报头发送同一个名字，每个报头具有不同的值，而不是将报头作为逗号分隔列表发送</p></li>
+                                    <li><p><code>int 	getIntHeader(String name)</code> -- 将获取的指定头转换为 int 类型</p></li>
+                                    <li><p><code>long 	getDateHeader(String name)</code> -- 将获取的指定头转换为日期类型的 long 表示</p></li>
+
+                                    <li><p><code>HttpSession 	getSession()</code> -- 获取 Session</p></li>
+                                    <li><p><code>HttpSession 	getSession(boolean create)</code> -- 获取 Session, 如果为空则创建一个</p></li>
+                                    <li><p><code>String 	getRequestedSessionId()</code> -- </p></li>
+                                    <li><p><code>String 	changeSessionId()</code> -- </p></li>
+                                    <li><p><code>boolean 	isRequestedSessionIdFromCookie()</code> -- </p></li>
+                                    <li><p><code>boolean 	isRequestedSessionIdFromURL()</code> -- </p></li>
+                                    <li><p><code>boolean 	isRequestedSessionIdValid()</code> -- </p></li>
+
+                                    <li><p><code>Cookie[] 	getCookies()</code> -- </p></li>
+
+                                    <li><p><code>String 	getRequestURI()</code> -- </p></li>
+                                    <li><p><code>StringBuffer 	getRequestURL()</code> -- </p></li>
+                                    <li><p><code>String 	getQueryString()</code> -- </p></li>
+                                    <li><p><code>String 	getServletPath()</code> -- </p></li>
+
+                                    <li><p><code>default HttpServletMapping 	getHttpServletMapping()</code> -- </p></li>
+
+                                    <li><p><code>Part 	getPart(String name)</code> -- </p></li>
+                                    <li><p><code>Collection&lt;Part> 	getParts()</code> -- </p></li>
+
+
+                                    <li><p><code>default Map&lt;String,String> 	getTrailerFields()</code> -- </p></li>
+                                    <li><p><code>default boolean 	isTrailerFieldsReady()</code> -- </p></li>
+
+                                    <li><p><code>boolean 	isUserInRole(String role)</code> -- </p></li>
+                                    <li><p><code>String 	getRemoteUser()</code> -- </p></li>
+                                    <li><p><code>Principal 	getUserPrincipal()</code> -- </p></li>
+
+                                    <li><p><code>void 	login(String username, String password)</code> -- </p></li>
+                                    <li><p><code>void 	logout()</code> -- </p></li>
+                                    <li><p><code>boolean 	authenticate(HttpServletResponse response)</code> -- </p></li>
+
+                                    <li><p><code>String 	getAuthType()</code> -- </p></li>
+
+                                    <li><p><code>default PushBuilder 	newPushBuilder()</code> -- </p></li>
+                                    <li><p><code>&lt;T extends HttpUpgradeHandler> upgrade(Class&lt;T> handlerClass)</code> -- </p></li>
+                                </ol>
+                            </div>
+
+                            <div class="split-item">
+                                <pre class="brush: java;">
+public interface ServletRequest {}
+</pre>
+                                <p><a href="docs/docs-javaee-8/javax/servlet/ServletRequest.html" target="_blank">ServletRequest</a></p>
+                                <ol>
+                                    <li><p><code>AsyncContext 	getAsyncContext()</code> -- </p></li>
+                                    <li><p><code>Object 	getAttribute(String name)</code> -- </p></li>
+                                    <li><p><code>Enumeration&lt;String> 	getAttributeNames()</code> -- </p></li>
+                                    <li><p><code>String 	getCharacterEncoding()</code> -- </p></li>
+                                    <li><p><code>int 	getContentLength()</code> -- </p></li>
+                                    <li><p><code>long 	getContentLengthLong()</code> -- </p></li>
+                                    <li><p><code>String 	getContentType()</code> -- </p></li>
+                                    <li><p><code>DispatcherType 	getDispatcherType()</code> -- </p></li>
+                                    <li><p><code>ServletInputStream 	getInputStream()</code> -- </p></li>
+                                    <li><p><code>String 	getLocalAddr()</code> -- </p></li>
+                                    <li><p><code>Locale 	getLocale()</code> -- </p></li>
+                                    <li><p><code>Enumeration&lt;Locale> 	getLocales()</code> -- </p></li>
+                                    <li><p><code>String 	getLocalName()</code> -- </p></li>
+                                    <li><p><code>int 	getLocalPort()</code> -- </p></li>
+                                    <li><p><code>String 	getParameter(String name)</code> -- </p></li>
+                                    <li><p><code>Map&lt;String,String[]> 	getParameterMap()</code> -- </p></li>
+                                    <li><p><code>Enumeration&lt;String> 	getParameterNames()</code> -- </p></li>
+                                    <li><p><code>String[] 	getParameterValues(String name)</code> -- </p></li>
+                                    <li><p><code>String 	getProtocol()</code> -- </p></li>
+                                    <li><p><code>BufferedReader 	getReader()</code> -- </p></li>
+                                    <li><p><code>String 	getRemoteAddr()</code> -- </p></li>
+                                    <li><p><code>String 	getRemoteHost()</code> -- </p></li>
+                                    <li><p><code>int 	getRemotePort()</code> -- </p></li>
+                                    <li><p><code>RequestDispatcher 	getRequestDispatcher(String path)</code> -- </p></li>
+                                    <li><p><code>String 	getScheme()</code> -- </p></li>
+                                    <li><p><code>String 	getServerName()</code> -- </p></li>
+                                    <li><p><code>int 	getServerPort()</code> -- </p></li>
+                                    <li><p><code>ServletContext 	getServletContext()</code> -- </p></li>
+                                    <li><p><code>boolean 	isAsyncStarted()</code> -- </p></li>
+                                    <li><p><code>boolean 	isAsyncSupported()</code> -- </p></li>
+                                    <li><p><code>boolean 	isSecure()</code> -- </p></li>
+                                    <li><p><code>void 	removeAttribute(String name)</code> -- </p></li>
+                                    <li><p><code>void 	setAttribute(String name, Object o)</code> -- </p></li>
+                                    <li><p><code>void 	setCharacterEncoding(String env)</code> -- </p></li>
+                                    <li><p><code>AsyncContext 	startAsync()</code> -- </p></li>
+                                    <li><p><code>AsyncContext 	startAsync(ServletRequest servletRequest, ServletResponse servletResponse)</code> -- </p></li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="sub-item">
+                            <div class="split-item">
+                                <pre class="brush: java;">
+public interface HttpServletResponse extends ServletResponse {
+    public static final int SC_CONTINUE = 100;
+    public static final int SC_SWITCHING_PROTOCOLS = 101;
+    public static final int SC_OK = 200;
+    public static final int SC_CREATED = 201;
+    public static final int SC_ACCEPTED = 202;
+    public static final int SC_NON_AUTHORITATIVE_INFORMATION = 203;
+    public static final int SC_NO_CONTENT = 204;
+    public static final int SC_RESET_CONTENT = 205;
+    public static final int SC_PARTIAL_CONTENT = 206;
+    public static final int SC_MULTIPLE_CHOICES = 300;
+    public static final int SC_MOVED_PERMANENTLY = 301;
+    public static final int SC_MOVED_TEMPORARILY = 302;
+    public static final int SC_FOUND = 302;
+    public static final int SC_SEE_OTHER = 303;
+    public static final int SC_NOT_MODIFIED = 304;
+    public static final int SC_USE_PROXY = 305;
+    public static final int SC_TEMPORARY_REDIRECT = 307;
+    public static final int SC_BAD_REQUEST = 400;
+    public static final int SC_UNAUTHORIZED = 401;
+    public static final int SC_PAYMENT_REQUIRED = 402;
+    public static final int SC_FORBIDDEN = 403;
+    public static final int SC_NOT_FOUND = 404;
+    public static final int SC_METHOD_NOT_ALLOWED = 405;
+    public static final int SC_NOT_ACCEPTABLE = 406;
+    public static final int SC_PROXY_AUTHENTICATION_REQUIRED = 407;
+    public static final int SC_REQUEST_TIMEOUT = 408;
+    public static final int SC_CONFLICT = 409;
+    public static final int SC_GONE = 410;
+    public static final int SC_LENGTH_REQUIRED = 411;
+    public static final int SC_PRECONDITION_FAILED = 412;
+    public static final int SC_REQUEST_ENTITY_TOO_LARGE = 413;
+    public static final int SC_REQUEST_URI_TOO_LONG = 414;
+    public static final int SC_UNSUPPORTED_MEDIA_TYPE = 415;
+    public static final int SC_REQUESTED_RANGE_NOT_SATISFIABLE = 416;
+    public static final int SC_EXPECTATION_FAILED = 417;
+    public static final int SC_INTERNAL_SERVER_ERROR = 500;
+    public static final int SC_NOT_IMPLEMENTED = 501;
+    public static final int SC_BAD_GATEWAY = 502;
+    public static final int SC_SERVICE_UNAVAILABLE = 503;
+    public static final int SC_GATEWAY_TIMEOUT = 504;
+    public static final int SC_HTTP_VERSION_NOT_SUPPORTED = 505;
+}
+</pre>
+                                <p><a href="docs/docs-javaee-8/javax/servlet/http/HttpServletResponse.html" target="_blank">HttpServletResponse</a> 服务器发送给客户端的响应报文。</p>
+                                <p>该对象由服务器(如:Tomcat)创建，最终作为参数传递到 doGet 或 doPost 方法中，我们可以在这两个方法中直接使用。</p>
+                                <p>可以将客户端请求重定向，客户端会知道被重定向了(比如浏览器地址会跳转)。</p>
+                                <p>有一个实现类：<a href="docs/docs-javaee-8/javax/servlet/http/HttpServletResponseWrapper.html" target="_blank">HttpServletResponseWrapper</a></p>
+                                <ol>
+                                    <li><p><code>void 	addCookie(Cookie cookie)</code> -- </p></li>
+                                    <li><p><code>void 	addDateHeader(String name, long date)</code> -- </p></li>
+                                    <li><p><code>void 	addHeader(String name, String value)</code> -- </p></li>
+                                    <li><p><code>void 	addIntHeader(String name, int value)</code> -- </p></li>
+                                    <li><p><code>boolean 	containsHeader(String name)</code> -- </p></li>
+                                    <li><p><code>String 	encodeRedirectURL(String url)</code> -- </p></li>
+                                    <li><p><code>String 	encodeURL(String url)</code> -- </p></li>
+                                    <li><p><code>String 	getHeader(String name)</code> -- </p></li>
+                                    <li><p><code>Collection&lt;String> 	getHeaderNames()</code> -- </p></li>
+                                    <li><p><code>Collection&lt;String> 	getHeaders(String name)</code> -- </p></li>
+                                    <li><p><code>int 	getStatus()</code> -- </p></li>
+                                    <li><p><code>efault Supplier&lt;Map&lt;String,String>> 	getTrailerFields()</code> -- </p></li>
+                                    <li><p><code>void 	sendError(int sc)</code> -- </p></li>
+                                    <li><p><code>void 	sendError(int sc, String msg)</code> -- </p></li>
+                                    <li><p><code>void 	sendRedirect(String location)</code> -- </p></li>
+                                    <li><p><code>void 	setDateHeader(String name, long date)</code> -- </p></li>
+                                    <li><p><code>void 	setHeader(String name, String value)</code> -- </p></li>
+                                    <li><p><code>void 	setIntHeader(String name, int value)</code> -- </p></li>
+                                    <li><p><code>void 	setStatus(int sc)</code> -- </p></li>
+                                    <li><p><code>default void 	setTrailerFields(Supplier&lt;Map&lt;String,String>> supplier)</code> -- </p></li>
+                                </ol>
+                            </div>
+
+                            <div class="split-item">
+                                <pre class="brush: java;">
+public interface ServletResponse {}
+</pre>
+                                <p><a href="docs/docs-javaee-8/javax/servlet/ServletResponse.html" target="_blank">ServletResponse</a></p>
+                                <ol>
+                                    <li><p><code>void 	flushBuffer()</code> -- </p></li>
+                                    <li><p><code>int 	getBufferSize()</code> -- </p></li>
+                                    <li><p><code>String 	getCharacterEncoding()</code> -- </p></li>
+                                    <li><p><code>String 	getContentType()</code> -- </p></li>
+                                    <li><p><code>Locale 	getLocale()</code> -- </p></li>
+                                    <li><p><code>ServletOutputStream 	getOutputStream()</code> -- </p></li>
+                                    <li><p><code>PrintWriter 	getWriter()</code> -- </p></li>
+                                    <li><p><code>boolean 	isCommitted()</code> -- </p></li>
+                                    <li><p><code>void 	reset()</code> -- </p></li>
+                                    <li><p><code>void 	resetBuffer()</code> -- </p></li>
+                                    <li><p><code>void 	setBufferSize(int size)</code> -- </p></li>
+                                    <li><p><code>void 	setCharacterEncoding(String charset)</code> -- </p></li>
+                                    <li><p><code>void 	setContentLength(int len)</code> -- </p></li>
+                                    <li><p><code>void 	setContentLengthLong(long len)</code> -- </p></li>
+                                    <li><p><code>void 	setContentType(String type)</code> -- </p></li>
+                                    <li><p><code>void 	setLocale(Locale loc)</code> -- </p></li>
+                                </ol>
+                            </div>
+                        </div>
+					</div>
+				</div>
+				<!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javax-servlet-http-HttpSession"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">HttpSession 及相关类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface HttpSession {}
+</pre>
+                            <p><a href="docs/docs-javaee-8/javax/servlet/http/HttpSession.html" target="_blank">HttpSession</a></p>
+                            <ol>
+                                <li><p><code>String 	getId()</code> -- </p></li>
+
+                                <li><p><code>void 	setAttribute(String name, Object value)</code> -- </p></li>
+                                <li><p><code>Object 	getAttribute(String name)</code> -- </p></li>
+                                <li><p><code>void 	removeAttribute(String name)</code> -- </p></li>
+
+                                <li><p><code>boolean 	isNew()</code> -- </p></li>
+                                <li><p><code>long 	getCreationTime()</code> -- </p></li>
+                                <li><p><code>long 	getLastAccessedTime()</code> -- </p></li>
+
+                                <li><p><code>void 	setMaxInactiveInterval(int interval)</code> -- </p></li>
+                                <li><p><code>int 	getMaxInactiveInterval()</code> -- </p></li>
+
+                                <li><p><code>void 	invalidate()</code> -- </p></li>
+                                <li><p><code>ServletContext 	getServletContext()</code> -- </p></li>
+                                <li><p><code>Enumeration&lt;String> 	getAttributeNames()</code> -- </p></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="javax-servlet-http-HttpFilter"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">HttpFilter 及相关类</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+                            <pre class="brush: java;">
+public abstract class HttpFilter extends GenericFilter {}
+</pre>
+							<p><a href="docs/docs-javaee-8/javax/servlet/http/HttpFilter.html" target="_blank">HttpFilter</a></p>
+                            <ol>
+                                <li><p><code>protected void 	doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain)</code> -- </p></li>
+                                <li><p><code>void 	doFilter(ServletRequest req, ServletResponse res, FilterChain chain)</code> -- </p></li>
+                            </ol>
+						</div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public abstract class GenericFilter implements Filter, FilterConfig, Serializable {}
+
+public interface Filter {
+    void doFilter(ServletRequest request, ServletResponse response, FilterChain chain);
+    default void init(FilterConfig filterConfig);
+    default void destroy();
+}
+
+public interface FilterConfig {
+    String getFilterName();
+    String getInitParameter(String name);
+    Enumeration&lt;String> getInitParameterNames();
+    ServletContext getServletContext();
+}
+</pre>
+                            <p><a href="docs/docs-javaee-8/javax/servlet/GenericFilter.html" target="_blank">GenericFilter</a></p>
+                            <ol>
+                                <li><p><code>FilterConfig 	getFilterConfig()</code> -- </p></li>
+                                <li><p><code>String 	getFilterName()</code> -- </p></li>
+                                <li><p><code>String 	getInitParameter(String name)</code> -- </p></li>
+                                <li><p><code>Enumeration&lt;String> 	getInitParameterNames()</code> -- </p></li>
+                                <li><p><code>ServletContext 	getServletContext()</code> -- </p></li>
+                                <li><p><code>void 	init()</code> -- </p></li>
+                                <li><p><code>void 	init(FilterConfig config)</code> -- </p></li>
+                            </ol>
+                        </div>
+					</div>
+				</div>
+				<!-- item over -->
+
+
+
+                <!-- item start -->
+                <a class="offset" id="javax-servlet-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">...</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-javaee-8/javax/servlet/" target="_blank"></a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="javax-"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">...</h3>
 					</div>
 					<div class="panel-body">
-                        <div class="sub-item">
+						<div class="sub-item">
                             <pre class="brush: java;">
-compile 'javax:javaee-api:8.0'
+
 </pre>
-                        </div>
+							<p><a href="docs/docs-javaee-8/javax/" target="_blank"></a></p>
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javaee-jstl"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">JSTL -- Java 标准标签库</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-javaee-8/javax/" target="_blank"></a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javaee-el"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">EL 表达式</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-javaee-8/javax/" target="_blank"></a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javaee-ongl"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">ONGL -- 对象图导航语言</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+
+</pre>
+                            <p><a href="docs/docs-javaee-8/javax/" target="_blank"></a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
 
 
 			</div>
