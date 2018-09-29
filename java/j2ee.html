@@ -66,17 +66,19 @@
 					</div>
 					<div class="list-group">
 						<a href="#" class="list-group-item">简介</a>
-                        <a href="#javaee-web-xml" class="list-group-item"><code>web.xml</code></a>
+                        <a href="#javaee-web-xml" class="list-group-item">JavaEE 项目启动流程及 <code>web.xml</code> 文件</a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
 							data-parent="#accordion" href="#javax-servlet-http" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
 							<code>javax.servlet.http</code><span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
 						<div id="javax-servlet-http" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#javax-servlet-http-HttpServlet" class="list-group-item">HttpServlet 及相关类</a>
+                            <a href="#javax-servlet-ServletContext" class="list-group-item">ServletContext 及相关类</a>
+                            <a href="#javax-servlet-http-HttpServlet" class="list-group-item">HttpServlet 及相关类</a>
                             <a href="#javax-servlet-http-HttpSession" class="list-group-item">HttpSession 及相关类</a>
                             <a href="#javax-servlet-http-HttpFilter" class="list-group-item">HttpFilter 及相关类</a>
-							<a href="#" class="list-group-item">...</a>
+                            <a href="#javax-servlet-http-Listener" class="list-group-item">ServletContextListener 及相关类</a>
+                            <a href="#" class="list-group-item">...</a>
 						</div>
                         <a class="list-group-item active dropdown" data-toggle="collapse"
                            data-parent="#accordion" href="#javaee-tag" aria-expanded="true"   style="border-top: 1px solid #DDDDDD;">
@@ -160,9 +162,26 @@
                 <a class="offset" id="javaee-web-xml"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title"><code>web.xml</code> 配置</h3>
+                        <h3 class="panel-title">JavaEE 项目启动流程及 <code>web.xml</code> 文件</h3>
                     </div>
                     <div class="panel-body">
+                        <div class="sub-item">
+                            <p><b>相同的组件，根据其在 <code>web.xml</code> 中的配置顺序依次执行。</b></p>
+                            <p><b>WEB 项目启动及初始化流程：</b></p>
+                            <ol>
+                                <li><p>在启动 WEB 项目时，WEB 容器(如: Tomcat)会读 <code>web.xml</code> 配置文件中的两个节点 <code>&lt;listener></code> 和 <code>&lt;context-param></code>；</p></li>
+                                <li><p>接着 WEB 容器会创建一个 ServletContext 对象，应用范围内即整个 WEB 项目都能使用这个上下文对象；</p></li>
+                                <li><p>接着容器会将读取到 <code>&lt;context-param> </code> 转化为键值对,并交给 ServletContext对象；</p></li>
+                                <li><p>接着 WEB 容器创建 <code>&lt;listener></code> 中的类实例，即创建监听（备注：Listener 为自定义的类但必须需要实现 ServletContextListener 接口）；</p></li>
+                                <li><p>接着会执行 <code>&lt;listener></code> 中的 <code>contextInitialized(ServletContextEvent)</code> 方法，此处可以读取到 <code>web.xml</code> 中配置的 <code>context-parm</code> 值，并且可以设置值(<code>setInitParameter(String, String)</code>)；</p>
+                                    <p>在此类中还必须有一个 <code>contextDestroyed(ServletContextEvent)</code> 销毁方法，用于关闭应用前释放资源，比如说数据库连接的关闭；</p>
+                                </li>
+                                <li><p>接着会执行 Filter 的 <code>init(FilterConfig)</code> 方法；</p></li>
+                                <li><p>到这一步，应用启动完成。</p></li>
+                                <li><p>在客户端有请求时在根据相应配置执行不懂的逻辑，比如 Servlet 请求，先执行 Servlet 的 <code>init</code> 方法。 </p></li>
+                            </ol>
+
+                        </div>
                         <div class="sub-item">
                             <p><b>不同 Servlet 版本对应的的 <code>web.xml</code> 配置：</b></p>
                             <div class="split-item">
@@ -235,6 +254,171 @@
 
                         <div class="sub-item">
 
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javax-servlet-ServletContext"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">ServletContext</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface ServletContext {
+    public static final String TEMPDIR = "javax.servlet.context.tempdir";
+    public static final String ORDERED_LIBS = "javax.servlet.context.orderedLibs";
+}
+</pre>
+                            <p><a href="docs/docs-javaee-8/javax/servlet/ServletContext.html" target="_blank">ServletContext</a> 是整个应用共享的上下问对象。</p>
+                            <p>在同一个应用中，不管是哪个 Listener, Filter, Servlet 或者 JSP 页面，获取到的都是同一个上下文对象实例。</p>
+                            <pre class="brush: java;">
+/** 在 Listener 中获取(此方法来自实现的 ServletContextListener 接口)： */
+public void contextInitialized(ServletContextEvent sce) {
+  ServletContext C0 = sce.getServletContext();
+}
+
+/** 在 Filter 中获取(此方法来自实现的 Filter 接口)： */
+public void init(FilterConfig config) throws ServletException {
+    ServletContext C1 = config.getServletContext();
+}
+
+/** 在 Servlet 中获取(init 方法及以后才能获取到)： */
+ @Override
+public void init() throws ServletException {
+    ServletContext C2 = getServletContext();
+}
+
+/** 在 JSP 页面中也可以获取到此对象: */
+ServletContext C3 = getServletConfig().getServletContext();
+
+/** 同一个应用中，都是同一个实例对象： */
+C0 == C1 == C2 == C3 == Cn...
+</pre>
+                            <p>ServletContext 由 Servlet 容器在装载的时候实例化，并且可以在 <code>web.xml</code> 文件中以键值对的形式配置。</p>
+                            <pre class="brush: xml;">
+&lt;?xml version="1.0" encoding="UTF-8"?>
+
+&lt;web-app
+  xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1">
+
+  <!-- 下面的参数可以在任何一个 Servlet 的 init 方法中获取，每个应用共享一个 ServletContext 对象  -->
+  &lt;context-param>
+    &lt;param-name>phone&lt;/param-name>
+    &lt;param-value>1388888888&lt;/param-value>
+  &lt;/context-param>
+  &lt;context-param>
+    &lt;param-name>...&lt;/param-name>
+    &lt;param-value>...&lt;/param-value>
+  &lt;/context-param>
+
+  ...
+&lt;web-app>
+</pre>
+                            <ol>
+                                <li><p><code>Enumeration&lt;String> 	getInitParameterNames()</code> -- 获取所有的出世参数名称列表(<code>web.xml</code> 中配置，Servlet 容器(如: Tomcat)可能有一些初始化参数)</p></li>
+                                <li><p><code>String 	getInitParameter(String name)</code> -- 获取指定的初始参数<code>web.xml</code> 中配置</p></li>
+                                <li><p><code>boolean 	setInitParameter(String name, String value)</code> -- 设置一个初始化参数，如果已经初始化，那么将抛出异常(此方法不可以在 Servlet 中调用，因为 ServletContext 已经初始化过了)</p></li>
+
+                                <li class="group"><p><code>void 	setRequestCharacterEncoding(String encoding)</code> -- 设置请求的编码</p></li>
+                                <li><p><code>String 	getRequestCharacterEncoding()</code> -- 获取请求的编码</p></li>
+                                <li><p><code>void 	setResponseCharacterEncoding(String encoding)</code> -- 设置响应的编码</p></li>
+                                <li><p><code>String 	getResponseCharacterEncoding()</code> -- 获取响应的编码</p></li>
+
+                                <li class="group"><p><code>Enumeration&lt;String> 	getAttributeNames()</code> -- 获取所有属性名列表(Servlet 容器配置了很多属性)</p></li>
+                                <li><p><code>void 	setAttribute(String name, Object object)</code> -- 设置一个指定的属性</p></li>
+                                <li><p><code>Object 	getAttribute(String name)</code> -- 获取一个指定的属性</p></li>
+                                <li><p><code>void 	removeAttribute(String name)</code> -- 移除一个指定的属性</p>
+                                    <pre class="brush: java;">
+ServletContext context = getServletContext();
+Enumeration&lt;String> params = context.getAttributeNames();
+while(params.hasMoreElements()) {
+    String name = params.nextElement();
+    Log.d(name, context.getAttribute(name));
+}
+
+/** Servlet 容器(这里使用的是 Gretty)配置的属性名：
+ * javax.servlet.context.tempdir -- 临时存储目录
+ * org.eclipse.jetty.tmpdirConfigured --临时目录是否已经配置
+ * org.apache.catalina.jsp_classpath -- JSP 的 CLASSPATH
+ * ...
+ */
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>void 	setSessionTimeout(int sessionTimeout)</code> -- 设置 Session 超时分钟数(Servlet 4.0)</p></li>
+                                <li><p><code>int 	getSessionTimeout()</code> -- 获取 Session 超时分钟数(Servlet 4.0)</p></li>
+                                <li><p><code><a href="docs/docs-javaee-8/javax/servlet/SessionCookieConfig.html" target="_blank">SessionCookieConfig</a> 	getSessionCookieConfig()</code> -- 获取 SessionCookieConfig 对象，可用于配置用于会话跟踪目的的 Cookie 的各种属性</p></li>
+                                <li><p><code>void 	setSessionTrackingModes(Set&lt;SessionTrackingMode> sessionTrackingModes)</code> -- 设置要对该 ServletContext 有效的会话跟踪模式</p>
+                                    <pre class="brush: java;">
+public enum SessionTrackingMode {
+    COOKIE,  // Cookie 模式
+    URL,     // URL 模式
+    SSL      // Https 模式
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>FilterRegistration.Dynamic 	addFilter(String filterName, Class&lt;? extends Filter> filterClass)</code> -- </p></li>
+                                <li><p><code>FilterRegistration.Dynamic 	addFilter(String filterName, Filter filter)</code> -- </p></li>
+                                <li><p><code>FilterRegistration.Dynamic 	addFilter(String filterName, String className)</code> -- </p></li>
+                                <li><p><code>&lt;T extends Filter> T 	createFilter(Class&lt;T> clazz)</code> -- </p></li>
+
+                                <li class="group"><p><code>ServletRegistration.Dynamic 	addServlet(String servletName, Class&lt;? extends Servlet> servletClass)</code> -- </p></li>
+                                <li><p><code>ServletRegistration.Dynamic 	addServlet(String servletName, Servlet servlet)</code> -- </p></li>
+                                <li><p><code>ServletRegistration.Dynamic 	addServlet(String servletName, String className)</code> -- </p></li>
+                                <li><p><code>&lt;T extends Servlet> T 	createServlet(Class&lt;T> clazz)</code> -- </p></li>
+
+                                <li class="group"><p><code>ServletRegistration.Dynamic 	addJspFile(String servletName, String jspFile)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	addListener(Class&lt;? extends EventListener> listenerClass)</code> -- </p></li>
+                                <li><p><code>void 	addListener(String className)</code> -- </p></li>
+                                <li><p><code>&lt;T extends EventListener> void 	addListener(T t)</code> -- </p></li>
+                                <li><p><code>&lt;T extends EventListener> T 	createListener(Class&lt;T> clazz)</code> -- </p></li>
+
+                                <li class="group"><p><code>Set&lt;String> 	getResourcePaths(String path)</code> -- </p></li>
+                                <li><p><code>URL 	getResource(String path)</code> -- </p></li>
+                                <li><p><code>String 	getContextPath()</code> -- </p></li>
+                                <li><p><code>String 	getRealPath(String path)</code> -- </p></li>
+
+                                <li class="group"><p><code>ServletRegistration 	getServletRegistration(String servletName)</code> -- </p></li>
+                                <li><p><code>Map&lt;String,? extends ServletRegistration> 	getServletRegistrations()</code> -- </p></li>
+                                <li><p><code>FilterRegistration 	getFilterRegistration(String filterName)</code> -- </p></li>
+                                <li><p><code>Map&lt;String,? extends FilterRegistration> 	getFilterRegistrations()</code> -- </p></li>
+
+                                <li class="group"><p><code>RequestDispatcher 	getRequestDispatcher(String path)</code> -- </p></li>
+                                <li><p><code>JspConfigDescriptor 	getJspConfigDescriptor()</code> -- </p></li>
+                                <li><p><code>RequestDispatcher 	getNamedDispatcher(String name)</code> -- </p></li>
+
+                                <li class="group"><p><code>String 	getVirtualServerName()</code> -- </p></li>
+
+                                <li class="group"><p><code>ServletContext 	getContext(String uripath)</code> -- </p></li>
+                                <li><p><code>String 	getServletContextName()</code> -- </p></li>
+                                <li><p><code>ClassLoader 	getClassLoader()</code> -- </p></li>
+
+                                <li class="group"><p><code>int 	getMajorVersion()</code> -- </p></li>
+                                <li><p><code>int 	getMinorVersion()</code> -- </p></li>
+                                <li><p><code>int 	getEffectiveMajorVersion()</code> -- </p></li>
+                                <li><p><code>int 	getEffectiveMinorVersion()</code> -- </p></li>
+
+                                <li class="group"><p><code>String 	getServerInfo()</code> -- </p></li>
+                                <li><p><code>String 	getMimeType(String file)</code> -- </p></li>
+                                <li><p><code>InputStream 	getResourceAsStream(String path)</code> -- </p></li>
+
+                                <li class="group"><p><code>Set&lt;SessionTrackingMode> 	getDefaultSessionTrackingModes()</code> -- </p></li>
+                                <li><p><code>Set&lt;SessionTrackingMode> 	getEffectiveSessionTrackingModes()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	declareRoles(String... roleNames)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	log(String msg)</code> -- </p></li>
+                                <li><p><code>void 	log(String message, Throwable throwable)</code> -- </p></li>
+                            </ol>
                         </div>
                     </div>
                 </div>
@@ -417,12 +601,14 @@ public interface HttpServletRequest extends ServletRequest {
                                 <ol>
                                     <li><p><code>String 	getMethod()</code> -- 获取请求的方法(主要是在 service 方法中区分请求的方法)</p></li>
 
-                                    <li><p><code>String 	getContextPath()</code> -- 获取应用路径(如: /site)</p></li>
-                                    <li><p><code>String 	getServletPath()</code> -- </p></li>
+                                    <li class="group"><p><code>String 	getContextPath()</code> -- 获取应用路径(如: /site)</p></li>
+                                    <li><p><code>String 	getServletPath()</code> -- 获取在 <code>web.xml</code> 配置的 Servlet 路径(如： /T)</p></li>
                                     <li><p><code>String 	getPathInfo()</code> -- 获取额外路径信息，一般返回 NULL</p></li>
                                     <li><p><code>String 	getPathTranslated()</code> -- 额外路径信息转化为实际路径，一般返回 NULL</p></li>
+                                    <li><p><code>default HttpServletMapping 	getHttpServletMapping()</code> -- 获取 HttpServletMapping 对象，在 <code>web.xml</code> 中，有 <code>servlet-mapping</code> 标签配置</p></li>
 
-                                    <li><p><code>Enumeration&lt;String> 	getHeaderNames()</code> -- 获取所有请求头的名字枚举列表</p></li>
+
+                                    <li class="group"><p><code>Enumeration&lt;String> 	getHeaderNames()</code> -- 获取所有请求头的名字枚举列表</p></li>
                                     <li><p><code>String 	getHeader(String name)</code> -- 获取指定的请求头</p>
                                         <pre class="brush: java;">
 Enumeration&lt;String> names = request.getHeaderNames();
@@ -453,41 +639,39 @@ while(names.hasMoreElements()) {
                                     <li><p><code>int 	getIntHeader(String name)</code> -- 将获取的指定头转换为 int 类型</p></li>
                                     <li><p><code>long 	getDateHeader(String name)</code> -- 将获取的指定头转换为日期类型的 long 表示</p></li>
 
-                                    <li><p><code>HttpSession 	getSession()</code> -- 获取 Session</p></li>
+                                    <li class="group"><p><code>HttpSession 	getSession()</code> -- 获取 Session</p></li>
                                     <li><p><code>HttpSession 	getSession(boolean create)</code> -- 获取 Session, 如果为空则创建一个</p></li>
-                                    <li><p><code>String 	getRequestedSessionId()</code> -- </p></li>
-                                    <li><p><code>String 	changeSessionId()</code> -- </p></li>
-                                    <li><p><code>boolean 	isRequestedSessionIdFromCookie()</code> -- </p></li>
-                                    <li><p><code>boolean 	isRequestedSessionIdFromURL()</code> -- </p></li>
-                                    <li><p><code>boolean 	isRequestedSessionIdValid()</code> -- </p></li>
+                                    <li><p><code>String 	getRequestedSessionId()</code> -- 返回客户端指定的会话 ID。这可能与此请求的当前有效会话的 ID 不相同</p></li>
+                                    <li><p><code>String 	changeSessionId()</code> -- 更改 SessionId</p></li>
+                                    <li><p><code>boolean 	isRequestedSessionIdFromCookie()</code> -- 检查所请求的会话 ID 是否作为 HTTP Cookie 传送到服务器(浏览器返回为 true, OkHttp 返回 false, 因为 OkHttp 默认并未存储 Cookie)</p></li>
+                                    <li><p><code>boolean 	isRequestedSessionIdFromURL()</code> -- 检查请求的会话 ID 是否作为请求 URL 的一部分传送到服务器</p></li>
+                                    <li><p><code>boolean 	isRequestedSessionIdValid()</code> -- 如果客户端没有指定任何会话 ID，则此方法返回 false</p></li>
 
-                                    <li><p><code>Cookie[] 	getCookies()</code> -- </p></li>
+                                    <li class="group"><p><code><a href="docs/docs-javaee-8/javax/servlet/http/Cookie.html" target="_blank">Cookie</a>[] 	getCookies()</code> -- 获取所有的 Cookie</p>
+                                        <pre class="brush: java;">
+Cookie[] cookies = request.getCookies();
+if(null != cookies) {
+    for (Cookie cookie : cookies) {
+        Log.d(cookie.getDomain(), cookie.getName(), cookie.getValue());
+    }
+}
+</pre>
+                                    </li>
 
-                                    <li><p><code>String 	getRequestURI()</code> -- </p></li>
-                                    <li><p><code>StringBuffer 	getRequestURL()</code> -- </p></li>
-                                    <li><p><code>String 	getQueryString()</code> -- </p></li>
+                                    <li class="group"><p><code>StringBuffer 	getRequestURL()</code> -- 获取 URL,括括完整的 URL，但不包括查询参数(如：http://localhost:8080/site/T)</p></li>
+                                    <li><p><code>String 	getRequestURI()</code> -- 获取 URI，只包括应用到查询参数前的一部分(如：/site/T)</p></li>
+                                    <li><p><code>String 	getQueryString()</code> -- 获取查询参数，问好后面的部分(如：x=value)</p></li>
 
-
-                                    <li><p><code>default HttpServletMapping 	getHttpServletMapping()</code> -- </p></li>
-
-                                    <li><p><code>Part 	getPart(String name)</code> -- </p></li>
-                                    <li><p><code>Collection&lt;Part> 	getParts()</code> -- </p></li>
-
-
-                                    <li><p><code>default Map&lt;String,String> 	getTrailerFields()</code> -- </p></li>
-                                    <li><p><code>default boolean 	isTrailerFieldsReady()</code> -- </p></li>
+                                    <li class="group"><p><code>Collection&lt;<a href="docs/docs-javaee-8/javax/servlet/http/Part.html" target="_blank">Part</a>> 	getParts()</code> -- 获取 POST 提交的表单数据(用于表单提交数据，比如上传二进制文件)</p></li>
+                                    <li><p><code><a href="docs/docs-javaee-8/javax/servlet/http/Part.html" target="_blank">Part</a> 	getPart(String name)</code> -- 获取指定项</p></li>
 
                                     <li><p><code>boolean 	isUserInRole(String role)</code> -- </p></li>
                                     <li><p><code>String 	getRemoteUser()</code> -- </p></li>
                                     <li><p><code>Principal 	getUserPrincipal()</code> -- </p></li>
-
                                     <li><p><code>void 	login(String username, String password)</code> -- </p></li>
                                     <li><p><code>void 	logout()</code> -- </p></li>
                                     <li><p><code>boolean 	authenticate(HttpServletResponse response)</code> -- </p></li>
-
                                     <li><p><code>String 	getAuthType()</code> -- </p></li>
-
-                                    <li><p><code>default PushBuilder 	newPushBuilder()</code> -- </p></li>
                                     <li><p><code>&lt;T extends HttpUpgradeHandler> upgrade(Class&lt;T> handlerClass)</code> -- </p></li>
                                 </ol>
                             </div>
@@ -498,41 +682,64 @@ public interface ServletRequest {}
 </pre>
                                 <p><a href="docs/docs-javaee-8/javax/servlet/ServletRequest.html" target="_blank">ServletRequest</a></p>
                                 <ol>
+                                    <li><p><code>void 	setCharacterEncoding(String env)</code> -- 设置请求的字符编码</p></li>
+                                    <li><p><code>String 	getCharacterEncoding()</code> -- 获取字符编码，如果未设置则返回 NULL</p></li>
+
+                                    <li class="group"><p><code>String 	getLocalAddr()</code> -- 获取本机 IP 地址</p></li>
+                                    <li><p><code>String 	getLocalName()</code> -- 获取本机主机名</p></li>
+                                    <li><p><code>int 	getLocalPort()</code> -- 获取本机服务端口</p></li>
+
+                                    <li class="group"><p><code>String 	getScheme()</code> -- 获取 Scheme(如：http 或者 https)</p></li>
+                                    <li><p><code>String 	getProtocol()</code> -- 获取协议(如：HTTP/1.1)</p></li>
+
+                                    <li class="group"><p><code>String 	getServerName()</code> -- 获取本机名(localhost， 域名或者 IP)</p></li>
+                                    <li><p><code>int 	getServerPort()</code> -- 获取端口</p></li>
+
+                                    <li class="group"><p><code>Locale 	getLocale()</code> -- 获取当前语言环境</p></li>
+                                    <li><p><code>Enumeration&lt;Locale> 	getLocales()</code> -- 获取所有支持的语言环境</p></li>
+
+                                    <li class="group"><p><code>String 	getRemoteAddr()</code> -- 获取请求的客户端地址</p></li>
+                                    <li><p><code>String 	getRemoteHost()</code> -- 获取请求的客户端主机</p></li>
+                                    <li><p><code>int 	getRemotePort()</code> -- 获取请求的客户端端口(此端口为客户端的随机端口)</p></li>
+
+                                    <li class="group"><p><code>Enumeration&lt;String> 	getAttributeNames()</code> -- 获取所有的属性名列表</p></li>
+                                    <li><p><code>void 	setAttribute(String name, Object o)</code> -- 设置一个属性(在转发的时候可以从之请求中获取)</p></li>
+                                    <li><p><code>Object 	getAttribute(String name)</code> -- 获取一个属性</p></li>
+                                    <li><p><code>void 	removeAttribute(String name)</code> -- 移除一个属性</p></li>
+
+                                    <li class="group"><p><code>Enumeration&lt;String> 	getParameterNames()</code> -- 获取所有的参数名字列表</p></li>
+                                    <li><p><code>String[] 	getParameterValues(String name)</code> -- 获取指定的参数值列表(Http 允许同一个参数名字有多个值)</p></li>
+                                    <li><p><code>String 	getParameter(String name)</code> -- 获取一个指定的参数</p></li>
+                                    <li><p><code>Map&lt;String,String[]> 	getParameterMap()</code> -- 将参数转换为 Map 的形式</p></li>
+
+                                    <li class="group"><p><code>int 	getContentLength()</code> -- 获取请求内容长度(Post 上传文件)</p></li>
+                                    <li><p><code>long 	getContentLengthLong()</code> -- 获取 long 值的请求内容长度(Post 上传文件)</p></li>
+                                    <li><p><code>String 	getContentType()</code> -- 获取请求内容类型(Post 请求才有)</p></li>
+
+                                    <li class="group"><p><code>ServletInputStream 	getInputStream()</code> -- 获取请求体的二进制流(Post 上传文件)</p></li>
+                                    <li><p><code>BufferedReader 	getReader()</code> -- 获取请求体的字符流(Post 上传文件)</p></li>
+
+                                    <li class="group"><p><code>DispatcherType 	getDispatcherType()</code> -- 获取此请求的调度器类型</p>
+                                        <pre class="brush: java;">
+public enum DispatcherType {
+    FORWARD,
+    INCLUDE,
+    REQUEST,
+    ASYNC,
+    ERROR
+}
+</pre>
+                                    </li>
+                                    <li><p><code>RequestDispatcher 	getRequestDispatcher(String path)</code> -- 返回一个 RequestDispatcher 对象，该对象作为位于给定路径的资源的包装器，可用于向资源转发请求或在响应中包含资源</p></li>
+
+                                    <li class="group"><p><code>ServletContext 	getServletContext()</code> -- 获取应用共享的 ServletContext 实例</p></li>
+
+                                    <li class="group"><p><code>boolean 	isSecure()</code> -- 是否是 Https 链接</p></li>
+
+                                    <li class="group"><p><code>boolean 	isAsyncSupported()</code> -- </p></li>
                                     <li><p><code>AsyncContext 	getAsyncContext()</code> -- </p></li>
-                                    <li><p><code>Object 	getAttribute(String name)</code> -- </p></li>
-                                    <li><p><code>Enumeration&lt;String> 	getAttributeNames()</code> -- </p></li>
-                                    <li><p><code>String 	getCharacterEncoding()</code> -- </p></li>
-                                    <li><p><code>int 	getContentLength()</code> -- </p></li>
-                                    <li><p><code>long 	getContentLengthLong()</code> -- </p></li>
-                                    <li><p><code>String 	getContentType()</code> -- </p></li>
-                                    <li><p><code>DispatcherType 	getDispatcherType()</code> -- </p></li>
-                                    <li><p><code>ServletInputStream 	getInputStream()</code> -- </p></li>
-                                    <li><p><code>String 	getLocalAddr()</code> -- </p></li>
-                                    <li><p><code>Locale 	getLocale()</code> -- </p></li>
-                                    <li><p><code>Enumeration&lt;Locale> 	getLocales()</code> -- </p></li>
-                                    <li><p><code>String 	getLocalName()</code> -- </p></li>
-                                    <li><p><code>int 	getLocalPort()</code> -- </p></li>
-                                    <li><p><code>String 	getParameter(String name)</code> -- </p></li>
-                                    <li><p><code>Map&lt;String,String[]> 	getParameterMap()</code> -- </p></li>
-                                    <li><p><code>Enumeration&lt;String> 	getParameterNames()</code> -- </p></li>
-                                    <li><p><code>String[] 	getParameterValues(String name)</code> -- </p></li>
-                                    <li><p><code>String 	getProtocol()</code> -- </p></li>
-                                    <li><p><code>BufferedReader 	getReader()</code> -- </p></li>
-                                    <li><p><code>String 	getRemoteAddr()</code> -- </p></li>
-                                    <li><p><code>String 	getRemoteHost()</code> -- </p></li>
-                                    <li><p><code>int 	getRemotePort()</code> -- </p></li>
-                                    <li><p><code>RequestDispatcher 	getRequestDispatcher(String path)</code> -- </p></li>
-                                    <li><p><code>String 	getScheme()</code> -- </p></li>
-                                    <li><p><code>String 	getServerName()</code> -- </p></li>
-                                    <li><p><code>int 	getServerPort()</code> -- </p></li>
-                                    <li><p><code>ServletContext 	getServletContext()</code> -- </p></li>
-                                    <li><p><code>boolean 	isAsyncStarted()</code> -- </p></li>
-                                    <li><p><code>boolean 	isAsyncSupported()</code> -- </p></li>
-                                    <li><p><code>boolean 	isSecure()</code> -- </p></li>
-                                    <li><p><code>void 	removeAttribute(String name)</code> -- </p></li>
-                                    <li><p><code>void 	setAttribute(String name, Object o)</code> -- </p></li>
-                                    <li><p><code>void 	setCharacterEncoding(String env)</code> -- </p></li>
                                     <li><p><code>AsyncContext 	startAsync()</code> -- </p></li>
+                                    <li><p><code>boolean 	isAsyncStarted()</code> -- </p></li>
                                     <li><p><code>AsyncContext 	startAsync(ServletRequest servletRequest, ServletResponse servletResponse)</code> -- </p></li>
                                 </ol>
                             </div>
@@ -727,7 +934,43 @@ public interface FilterConfig {
 				</div>
 				<!-- item over -->
 
+                <!-- item start -->
+                <a class="offset" id="javax-servlet-http-Listener"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">ServletContextListener 及相关类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+/** Listener 不继承某个类，必须实现 ServletContextListener 接口，一般实现以下几个接口： */
+public class XXX implements ServletContextListener, HttpSessionListener, HttpSessionAttributeListener {}
 
+/** */
+public interface ServletContextListener extends EventListener {
+    public void contextInitialized(ServletContextEvent sce);
+    public void contextDestroyed(ServletContextEvent sce);
+}
+
+/** */
+public interface HttpSessionListener extends EventListener {
+    public void sessionCreated(HttpSessionEvent se);
+    public void sessionDestroyed(HttpSessionEvent se);
+}
+
+/** */
+public interface HttpSessionAttributeListener extends EventListener {
+    public void attributeAdded(HttpSessionBindingEvent event);
+    public void attributeRemoved(HttpSessionBindingEvent event);
+    public void attributeReplaced(HttpSessionBindingEvent event);
+
+}
+</pre>
+                            <p><a href="docs/docs-javaee-8/javax/servlet/" target="_blank"></a></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
 
                 <!-- item start -->
                 <a class="offset" id="javax-servlet-"></a>
