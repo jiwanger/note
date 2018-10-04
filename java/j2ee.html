@@ -182,6 +182,7 @@
                             </ol>
 
                         </div>
+
                         <div class="sub-item">
                             <p><b>不同 Servlet 版本对应的的 <code>web.xml</code> 配置：</b></p>
                             <div class="split-item">
@@ -253,7 +254,18 @@
                         </div>
 
                         <div class="sub-item">
+                            <p><b><code>web.xml</code> 常用配置</b></p>
+                            <ul>
+                                <li><p><code>welcome-file-list</code> -- 默认文件列表</p></li>
+                                <li><p><code>error-page</code> -- 错误页面，一般一个错误码对应一个错误页面</p></li>
+                                <li><p><code>context-param</code> -- 初始化的上下文参数，参见： <a href="#javax-servlet-ServletContext">ServletContext</a></p></li>
+                                <li><p><code>jsp-config</code> -- jsp 相关配置，参见： <a href="#javax-servlet-ServletContext">ServletContext</a> 的 <code>getJspConfigDescriptor()</code> 方法</p></li>
+                                <li><p><code>listener</code> -- Listener 配置，参见： <a href="#javax-servlet-http-Listener">ServletContextListener</a></p></li>
+                                <li><p><code>filter, filter-mapping</code> -- Filter 配置，参见： <a href="#javax-servlet-http-HttpFilter">HttpFilter</a></p></li>
+                                <li><p><code>servlet, servlet-mapping</code> -- Servlet 器配置，参见： <a href="#javax-servlet-http-HttpServlet">HttpServlet</a></p></li>
+                                <li><p><code>...</code> -- </p></li>
 
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -355,7 +367,9 @@ while(params.hasMoreElements()) {
                                 <li class="group"><p><code>void 	setSessionTimeout(int sessionTimeout)</code> -- 设置 Session 超时分钟数(Servlet 4.0)</p></li>
                                 <li><p><code>int 	getSessionTimeout()</code> -- 获取 Session 超时分钟数(Servlet 4.0)</p></li>
                                 <li><p><code><a href="docs/docs-javaee-8/javax/servlet/SessionCookieConfig.html" target="_blank">SessionCookieConfig</a> 	getSessionCookieConfig()</code> -- 获取 SessionCookieConfig 对象，可用于配置用于会话跟踪目的的 Cookie 的各种属性</p></li>
-                                <li><p><code>void 	setSessionTrackingModes(Set&lt;SessionTrackingMode> sessionTrackingModes)</code> -- 设置要对该 ServletContext 有效的会话跟踪模式</p>
+                                <li><p><code>Set&lt;SessionTrackingMode> 	getDefaultSessionTrackingModes()</code> -- 返回的默认会话跟踪模式</p></li>
+                                <li><p><code>Set&lt;SessionTrackingMode> 	getEffectiveSessionTrackingModes()</code> --  获取对该 ServletContext 有效的会话跟踪模式</p></li>
+                                <li><p><code>void 	setSessionTrackingModes(Set&lt;SessionTrackingMode> sessionTrackingModes)</code> -- 设置对该 ServletContext 有效的会话跟踪模式</p>
                                     <pre class="brush: java;">
 public enum SessionTrackingMode {
     COOKIE,  // Cookie 模式
@@ -402,37 +416,34 @@ Log.d(cx.getResource("/WEB-INF")); // 转换为 URL 形式的却对路径： fil
  </pre>
                                 </li>
 
-                                <li class="group"><p><code>ServletRegistration 	getServletRegistration(String servletName)</code> -- </p></li>
-                                <li><p><code>Map&lt;String,? extends ServletRegistration> 	getServletRegistrations()</code> -- </p></li>
-                                <li><p><code>FilterRegistration 	getFilterRegistration(String filterName)</code> -- </p></li>
-                                <li><p><code>Map&lt;String,? extends FilterRegistration> 	getFilterRegistrations()</code> -- </p></li>
+                                <li class="group"><p><code>Map&lt;String,? extends ServletRegistration> 	getServletRegistrations()</code> -- 获取所有的已经注册的 Servlet 的信息</p></li>
+                                <li><p><code>ServletRegistration 	getServletRegistration(String servletName)</code> -- 获取指定的 Servlet 信息(参数为 Servlet 的别名)</p></li>
+                                <li><p><code>Map&lt;String,? extends FilterRegistration> 	getFilterRegistrations()</code> --  获取所有的已经注册的 Filter 的信息</p></li>
+                                <li><p><code>FilterRegistration 	getFilterRegistration(String filterName)</code> -- 获取指定的 Filter 注册信息(参数为 Filter 的别名)</p></li>
 
-                                <li class="group"><p><code>RequestDispatcher 	getRequestDispatcher(String path)</code> -- </p></li>
-                                <li><p><code>JspConfigDescriptor 	getJspConfigDescriptor()</code> -- </p></li>
-                                <li><p><code>RequestDispatcher 	getNamedDispatcher(String name)</code> -- </p></li>
+                                <li class="group"><p><code>RequestDispatcher 	getRequestDispatcher(String path)</code> -- 获取 RequestDispatcher 对象，路径以 "/" 开头，可用于向资源转发请求或在响应中包含资源</p></li>
+                                <li><p><code>RequestDispatcher 	getNamedDispatcher(String name)</code> -- 同上，只是参数不同，如果是 Servlet, 那么参数为 Servlet 的别名</p></li>
 
-                                <li class="group"><p><code>String 	getVirtualServerName()</code> -- </p></li>
+                                <li class="group"><p><code><a href="docs/docs-javaee-8/javax/servlet/descriptor/JspConfigDescriptor.html" target="_blank">JspConfigDescriptor</a> 	getJspConfigDescriptor()</code> -- 获取 jsp 相关配置(在 <code>web.xml</code> 中由 <code>&lt;jsp-config></code> 配置)</p></li>
 
-                                <li class="group"><p><code>ServletContext 	getContext(String uripath)</code> -- </p></li>
-                                <li><p><code>String 	getServletContextName()</code> -- </p></li>
-                                <li><p><code>ClassLoader 	getClassLoader()</code> -- </p></li>
+                                <li class="group"><p><code>String 	getServletContextName()</code> -- 此应用的名称(如: /site)</p></li>
+                                <li><p><code>String 	getVirtualServerName()</code> -- 返回部署此应用的的逻辑主机的配置名称</p></li>
+                                <li><p><code>ServletContext 	getContext(String uripath)</code> -- 允许访问此服务上的其他应用的上下文对象(/site, /javaee), 但是在安全的环境中(如: Tomcat 中)一般返回 NULL</p></li>
+                                <li><p><code>ClassLoader 	getClassLoader()</code> -- 获取类加载器</p></li>
 
-                                <li class="group"><p><code>int 	getMajorVersion()</code> -- </p></li>
-                                <li><p><code>int 	getMinorVersion()</code> -- </p></li>
-                                <li><p><code>int 	getEffectiveMajorVersion()</code> -- </p></li>
-                                <li><p><code>int 	getEffectiveMinorVersion()</code> -- </p></li>
+                                <li class="group"><p><code>int 	getMajorVersion()</code> -- 返回 Servlet 容器支持的 Servlet API 的主要版本</p></li>
+                                <li><p><code>int 	getMinorVersion()</code> -- 返回 Servlet 容器支持的 Servlet API 的最低版本</p></li>
+                                <li><p><code>int 	getEffectiveMajorVersion()</code> -- 获取由该 ServletContext 表示的应用程序的 Servlet 规范的主要版本</p></li>
+                                <li><p><code>int 	getEffectiveMinorVersion()</code> -- 获取由该 ServletContext 表示的应用程序的 Servlet 规范的最低版本</p></li>
 
-                                <li class="group"><p><code>String 	getServerInfo()</code> -- </p></li>
-                                <li><p><code>String 	getMimeType(String file)</code> -- </p></li>
-                                <li><p><code>InputStream 	getResourceAsStream(String path)</code> -- </p></li>
+                                <li class="group"><p><code>String 	getServerInfo()</code> -- 获取 Servlet 容器的信息</p></li>
+                                <li><p><code>String 	getMimeType(String file)</code> -- 获取指定文件的 Mime 类型(路径以 "/" 开头，如: "/index.jsp)</p></li>
+                                <li><p><code>InputStream 	getResourceAsStream(String path)</code> -- 流的形式读取资源</p></li>
 
-                                <li class="group"><p><code>Set&lt;SessionTrackingMode> 	getDefaultSessionTrackingModes()</code> -- </p></li>
-                                <li><p><code>Set&lt;SessionTrackingMode> 	getEffectiveSessionTrackingModes()</code> -- </p></li>
+                                <li class="group"><p><code>void 	declareRoles(String... roleNames)</code> -- 声明使用 isUserInRole 角色测试的角色名称</p></li>
 
-                                <li class="group"><p><code>void 	declareRoles(String... roleNames)</code> -- </p></li>
-
-                                <li class="group"><p><code>void 	log(String msg)</code> -- </p></li>
-                                <li><p><code>void 	log(String message, Throwable throwable)</code> -- </p></li>
+                                <li class="group"><p><code>void 	log(String msg)</code> -- 将指定的消息写入 servlet 日志文件</p></li>
+                                <li><p><code>void 	log(String message, Throwable throwable)</code> -- 将指定的消息和异常写入 servlet 日志文件</p></li>
                             </ol>
                         </div>
                     </div>
