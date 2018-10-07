@@ -74,10 +74,10 @@
 						<div id="javax-servlet-http" class="panel-collapse collapse in"
 							role="tabpanel">
                             <a href="#javax-servlet-ServletContext" class="list-group-item">ServletContext 及相关类</a>
+                            <a href="#javax-servlet-http-Listener" class="list-group-item">Listener 相关类</a>
+                            <a href="#javax-servlet-http-HttpFilter" class="list-group-item">HttpFilter 及相关类</a>
                             <a href="#javax-servlet-http-HttpServlet" class="list-group-item">HttpServlet 及相关类</a>
                             <a href="#javax-servlet-http-HttpSession" class="list-group-item">HttpSession 及相关类</a>
-                            <a href="#javax-servlet-http-HttpFilter" class="list-group-item">HttpFilter 及相关类</a>
-                            <a href="#javax-servlet-http-Listener" class="list-group-item">ServletContextListener 及相关类</a>
                             <a href="#" class="list-group-item">...</a>
 						</div>
                         <a class="list-group-item active dropdown" data-toggle="collapse"
@@ -379,22 +379,46 @@ public enum SessionTrackingMode {
 </pre>
                                 </li>
 
-                                <li class="group"><p><code>FilterRegistration.Dynamic 	addFilter(String filterName, Class&lt;? extends Filter> filterClass)</code> -- </p></li>
-                                <li><p><code>FilterRegistration.Dynamic 	addFilter(String filterName, Filter filter)</code> -- </p></li>
-                                <li><p><code>FilterRegistration.Dynamic 	addFilter(String filterName, String className)</code> -- </p></li>
-                                <li><p><code>&lt;T extends Filter> T 	createFilter(Class&lt;T> clazz)</code> -- </p></li>
+                                <li class="group"><p><code>FilterRegistration.Dynamic 	addFilter(String filterName, Class&lt;? extends Filter> filterClass)</code> -- 动态添加 Filter(在 Filter 和 Listener 中的 init 方法中可以调用，在 Servlet 中不能调用)</p></li>
+                                <li><p><code>FilterRegistration.Dynamic 	addFilter(String filterName, Filter filter)</code> -- 同上</p></li>
+                                <li><p><code>FilterRegistration.Dynamic 	addFilter(String filterName, String className)</code> -- 同上</p></li>
+                                <li><p><code>&lt;T extends Filter> T 	createFilter(Class&lt;T> clazz)</code> -- 创建 Filter</p>
+                                    <pre class="brush: java;">
+/** 在 Filter(以下实例继承自 HttpFilter) 的 init 方法中动态添加 Filter: *.jsp */
+public void init(FilterConfig config) throws ServletException {
+    super.init(config);
+    ServletContext context = getServletContext();
 
-                                <li class="group"><p><code>ServletRegistration.Dynamic 	addServlet(String servletName, Class&lt;? extends Servlet> servletClass)</code> -- </p></li>
-                                <li><p><code>ServletRegistration.Dynamic 	addServlet(String servletName, Servlet servlet)</code> -- </p></li>
-                                <li><p><code>ServletRegistration.Dynamic 	addServlet(String servletName, String className)</code> -- </p></li>
-                                <li><p><code>&lt;T extends Servlet> T 	createServlet(Class&lt;T> clazz)</code> -- </p></li>
+    FilterRegistration.Dynamic filterDynamic = context.addFilter("jsp", JspFilter.class);
+    filterDynamic.addMappingForUrlPatterns(null, true, "*.jsp");
+}
+</pre>
+                                </li>
 
-                                <li class="group"><p><code>ServletRegistration.Dynamic 	addJspFile(String servletName, String jspFile)</code> -- </p></li>
+                                <li class="group"><p><code>ServletRegistration.Dynamic 	addServlet(String servletName, Class&lt;? extends Servlet> servletClass)</code> -- 动态添加 Servlet(在 Filter 和 Listener 中的 init 方法中可以调用，在 Servlet 中不能调用)</p></li>
+                                <li><p><code>ServletRegistration.Dynamic 	addServlet(String servletName, Servlet servlet)</code> -- 同上</p></li>
+                                <li><p><code>ServletRegistration.Dynamic 	addServlet(String servletName, String className)</code> -- 同上</p></li>
+                                <li><p><code>&lt;T extends Servlet> T 	createServlet(Class&lt;T> clazz)</code> -- 创建一个 Servlet</p>
+                                    <pre class="brush: java;">
+/** 在 Filter(以下实例继承自 HttpFilter) 的 init 方法中动态添加 Servlet: /s */
+public void init(FilterConfig config) throws ServletException {
+    super.init(config);
+    ServletContext context = getServletContext();
 
-                                <li class="group"><p><code>void 	addListener(Class&lt;? extends EventListener> listenerClass)</code> -- </p></li>
-                                <li><p><code>void 	addListener(String className)</code> -- </p></li>
-                                <li><p><code>&lt;T extends EventListener> void 	addListener(T t)</code> -- </p></li>
-                                <li><p><code>&lt;T extends EventListener> T 	createListener(Class&lt;T> clazz)</code> -- </p></li>
+    ServletRegistration.Dynamic Dynamic = context.addServlet("s", ServerServlet.class);
+    Dynamic.addMapping("/s");
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>ServletRegistration.Dynamic 	addJspFile(String servletName, String jspFile)</code> -- 动态添加一个 JSP 文件，同 <code>addServlet(String, String)</code> 方法(一般用来添加在 webapp 目录外的文件)</p></li>
+
+                                <li class="group"><p><code>void 	addListener(Class&lt;? extends EventListener> listenerClass)</code> -- 动态添加 Listener,<b>注意：动态添加的监听器不能监听到 ServletContextListener 的 contextInitialized 方法</b>(在 Filter 和 Listener 中的 init 方法中可以调用，在 Servlet 中不能调用)</p></li>
+                                <li><p><code>void 	addListener(String className)</code> -- 同上</p></li>
+                                <li><p><code>&lt;T extends EventListener> void 	addListener(T t)</code> -- 同上</p></li>
+                                <li><p><code>&lt;T extends EventListener> T 	createListener(Class&lt;T> clazz)</code> -- 创建一个 Listener</p></li>
+
+
 
                                 <li class="group"><p><code>Set&lt;String> 	getResourcePaths(String path)</code> -- 获取指定路径下的文件和目录集合(根目录为: "/")</p></li>
                                 <li><p><code>URL 	getResource(String path)</code> -- 转换为 URL 形式的却对路径</p></li>
@@ -444,6 +468,153 @@ Log.d(cx.getResource("/WEB-INF")); // 转换为 URL 形式的却对路径： fil
 
                                 <li class="group"><p><code>void 	log(String msg)</code> -- 将指定的消息写入 servlet 日志文件</p></li>
                                 <li><p><code>void 	log(String message, Throwable throwable)</code> -- 将指定的消息和异常写入 servlet 日志文件</p></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javax-servlet-http-Listener"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Listener 及相关类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <p>JavaEE 监听器用来监听容器(如: Tomcat)中某一执行动作，并根据其要求做出相应的响应。</p>
+                            <p>JavaEE 监听器主要分为以下几类：</p>
+                            <ul>
+                                <li><p><b>上下文监听器，与 ServletContext 相关</b> -- 包括接口： <a href="docs/docs-javaee-8/javax/servlet/ServletContextListener.html" target="_blank">ServletContextListener</a> 和 <a href="docs/docs-javaee-8/javax/servlet/ServletContextAttributeListener.html" target="_blank">ServletContextAttributeListener</a>；</p>
+                                    <pre class="brush: java;">
+/** 监听上下文的初始化和销毁 */
+public interface ServletContextListener extends EventListener {
+    public void contextInitialized(ServletContextEvent sce);
+    public void contextDestroyed(ServletContextEvent sce);
+}
+
+/** 监听上下文的属性变化 */
+public interface HttpSessionAttributeListener extends EventListener {
+    /** 在任何一个地方修改上下文属性都会触发监听器的相应的方法回调：
+     * ServletContext cx = request.getServletContext();
+     * cx.setAttribute("aa", "aaaaaa");
+     * cx.setAttribute("aa", "bbbbbb");
+     * cx.removeAttribute("aa");
+     */
+    public void attributeAdded(HttpSessionBindingEvent event);
+    public void attributeRemoved(HttpSessionBindingEvent event);
+    public void attributeReplaced(HttpSessionBindingEvent event);
+}
+</pre>
+                                </li>
+                                <li><p><b>会话监听器，与 HttpSession 相关</b> -- 包括接口： <a href="docs/docs-javaee-8/javax/servlet/http/HttpSessionListener.html" target="_blank">HttpSessionListener</a>、<a href="docs/docs-javaee-8/javax/servlet/http/HttpSessionAttributeListener.html" target="_blank">HttpSessionAttributeListener</a>、<a href="docs/docs-javaee-8/javax/servlet/http/HttpSessionIdListener.html" target="_blank">HttpSessionIdListener</a>、<a href="docs/docs-javaee-8/javax/servlet/http/HttpSessionBindingListener.html" target="_blank">HttpSessionBindingListener</a> 和 <a href="docs/docs-javaee-8/javax/servlet/http/HttpSessionActivationListener.html" target="_blank">HttpSessionActivationListener</a>；</p>
+                                    <pre class="brush: java;">
+
+/** 监听会话创建和销毁，客户端第一次访问创建，会话超时或者退出销毁（比如监听在线用户数） */
+public interface HttpSessionListener extends EventListener {
+    public void sessionCreated(HttpSessionEvent se);
+    public void sessionDestroyed(HttpSessionEvent se);
+}
+
+/** 监听会话的属性变化 */
+public interface HttpSessionAttributeListener extends EventListener {
+    /** 一般根据 SessionId 来做监听，在任何一个地方修改 Session 属性都会触发监听器的相应的方法回调：
+     * HttpSession session = request.getSession(true);
+     * if(null != session) {
+     *   session.setAttribute(session.getId(), user);
+     *   session.removeAttribute(session.getId());
+     * }
+     */
+    public void attributeAdded(HttpSessionBindingEvent event);
+    public void attributeRemoved(HttpSessionBindingEvent event);
+    public void attributeReplaced(HttpSessionBindingEvent event);
+}
+
+/** 监听 SessionId 的改变，比如 HttpServletRequest 的 changeSessionId() 方法 */
+public interface HttpSessionIdListener extends EventListener {
+    public void sessionIdChanged(HttpSessionEvent event, String oldSessionId);
+}
+
+/** */
+public interface HttpSessionBindingListener extends EventListener {
+    public void valueBound(HttpSessionBindingEvent event);
+    public void valueUnbound(HttpSessionBindingEvent event);
+}
+
+/** */
+public interface HttpSessionActivationListener extends EventListener {
+    public void sessionWillPassivate(HttpSessionEvent se);
+    public void sessionDidActivate(HttpSessionEvent se);
+}
+</pre>
+                                </li>
+                                <li><p><b>请求监听器，与 ServletRequest 相关</b> -- 包括接口： <a href="docs/docs-javaee-8/javax/servlet/ServletRequestListener.html" target="_blank">ServletRequestListener</a> 和 <a href="docs/docs-javaee-8/javax/servlet/ServletRequestAttributeListener.html" target="_blank">ServletRequestAttributeListener</a>。</p>
+                                    <pre class="brush: java;">
+
+/** */
+public interface ServletRequestListener extends EventListener {
+    public void requestDestroyed(ServletRequestEvent sre);
+    public void requestInitialized(ServletRequestEvent sre);
+}
+
+/** */
+public interface ServletRequestAttributeListener extends EventListener {
+    public void attributeAdded(ServletRequestAttributeEvent srae);
+    public void attributeRemoved(ServletRequestAttributeEvent srae);
+    public void attributeReplaced(ServletRequestAttributeEvent srae);
+}
+</pre>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="javax-servlet-http-HttpFilter"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">HttpFilter 及相关类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public abstract class HttpFilter extends GenericFilter {}
+</pre>
+                            <p><a href="docs/docs-javaee-8/javax/servlet/http/HttpFilter.html" target="_blank">HttpFilter</a></p>
+                            <ol>
+                                <li><p><code>protected void 	doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain)</code> -- </p></li>
+                                <li><p><code>void 	doFilter(ServletRequest req, ServletResponse res, FilterChain chain)</code> -- </p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public abstract class GenericFilter implements Filter, FilterConfig, Serializable {}
+
+public interface Filter {
+    void doFilter(ServletRequest request, ServletResponse response, FilterChain chain);
+    default void init(FilterConfig filterConfig);
+    default void destroy();
+}
+
+public interface FilterConfig {
+    String getFilterName();
+    String getInitParameter(String name);
+    Enumeration&lt;String> getInitParameterNames();
+    ServletContext getServletContext();
+}
+</pre>
+                            <p><a href="docs/docs-javaee-8/javax/servlet/GenericFilter.html" target="_blank">GenericFilter</a></p>
+                            <ol>
+                                <li><p><code>FilterConfig 	getFilterConfig()</code> -- </p></li>
+                                <li><p><code>String 	getFilterName()</code> -- </p></li>
+                                <li><p><code>String 	getInitParameter(String name)</code> -- </p></li>
+                                <li><p><code>Enumeration&lt;String> 	getInitParameterNames()</code> -- </p></li>
+                                <li><p><code>ServletContext 	getServletContext()</code> -- </p></li>
+                                <li><p><code>void 	init()</code> -- </p></li>
+                                <li><p><code>void 	init(FilterConfig config)</code> -- </p></li>
                             </ol>
                         </div>
                     </div>
@@ -905,94 +1076,6 @@ public interface HttpSession {}
                                 <li><p><code>ServletContext 	getServletContext()</code> -- </p></li>
                                 <li><p><code>Enumeration&lt;String> 	getAttributeNames()</code> -- </p></li>
                             </ol>
-                        </div>
-                    </div>
-                </div>
-                <!-- item over -->
-
-				<!-- item start -->
-				<a class="offset" id="javax-servlet-http-HttpFilter"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">HttpFilter 及相关类</h3>
-					</div>
-					<div class="panel-body">
-						<div class="sub-item">
-                            <pre class="brush: java;">
-public abstract class HttpFilter extends GenericFilter {}
-</pre>
-							<p><a href="docs/docs-javaee-8/javax/servlet/http/HttpFilter.html" target="_blank">HttpFilter</a></p>
-                            <ol>
-                                <li><p><code>protected void 	doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain)</code> -- </p></li>
-                                <li><p><code>void 	doFilter(ServletRequest req, ServletResponse res, FilterChain chain)</code> -- </p></li>
-                            </ol>
-						</div>
-
-                        <div class="sub-item">
-                            <pre class="brush: java;">
-public abstract class GenericFilter implements Filter, FilterConfig, Serializable {}
-
-public interface Filter {
-    void doFilter(ServletRequest request, ServletResponse response, FilterChain chain);
-    default void init(FilterConfig filterConfig);
-    default void destroy();
-}
-
-public interface FilterConfig {
-    String getFilterName();
-    String getInitParameter(String name);
-    Enumeration&lt;String> getInitParameterNames();
-    ServletContext getServletContext();
-}
-</pre>
-                            <p><a href="docs/docs-javaee-8/javax/servlet/GenericFilter.html" target="_blank">GenericFilter</a></p>
-                            <ol>
-                                <li><p><code>FilterConfig 	getFilterConfig()</code> -- </p></li>
-                                <li><p><code>String 	getFilterName()</code> -- </p></li>
-                                <li><p><code>String 	getInitParameter(String name)</code> -- </p></li>
-                                <li><p><code>Enumeration&lt;String> 	getInitParameterNames()</code> -- </p></li>
-                                <li><p><code>ServletContext 	getServletContext()</code> -- </p></li>
-                                <li><p><code>void 	init()</code> -- </p></li>
-                                <li><p><code>void 	init(FilterConfig config)</code> -- </p></li>
-                            </ol>
-                        </div>
-					</div>
-				</div>
-				<!-- item over -->
-
-                <!-- item start -->
-                <a class="offset" id="javax-servlet-http-Listener"></a>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">ServletContextListener 及相关类</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="sub-item">
-                            <pre class="brush: java;">
-/** Listener 不继承某个类，必须实现 ServletContextListener 接口，一般实现以下几个接口： */
-public class XXX implements ServletContextListener, HttpSessionListener, HttpSessionAttributeListener {}
-
-/** */
-public interface ServletContextListener extends EventListener {
-    public void contextInitialized(ServletContextEvent sce);
-    public void contextDestroyed(ServletContextEvent sce);
-}
-
-/** */
-public interface HttpSessionListener extends EventListener {
-    public void sessionCreated(HttpSessionEvent se);
-    public void sessionDestroyed(HttpSessionEvent se);
-}
-
-/** */
-public interface HttpSessionAttributeListener extends EventListener {
-    public void attributeAdded(HttpSessionBindingEvent event);
-    public void attributeRemoved(HttpSessionBindingEvent event);
-    public void attributeReplaced(HttpSessionBindingEvent event);
-
-}
-</pre>
-                            <p><a href="docs/docs-javaee-8/javax/servlet/" target="_blank"></a></p>
                         </div>
                     </div>
                 </div>
