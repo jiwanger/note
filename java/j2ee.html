@@ -67,11 +67,11 @@
 					<div class="list-group">
 						<a href="#" class="list-group-item">简介</a>
                         <a href="#javaee-web-xml" class="list-group-item">JavaEE 项目启动流程及 <code>web.xml</code> 文件</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
+						<a class="list-group-item active dropdown" data-toggle="collapse"
 							data-parent="#accordion" href="#javax-servlet-http" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
 							<code>javax.servlet.http</code><span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="javax-servlet-http" class="panel-collapse collapse in"
+						<div id="javax-servlet-http" class="panel-collapse collapse"
 							role="tabpanel">
                             <a href="#javax-servlet-ServletContext" class="list-group-item">ServletContext 及相关类</a>
                             <a href="#javax-servlet-http-Listener" class="list-group-item">Listener 相关类</a>
@@ -79,14 +79,14 @@
                             <a href="#javax-servlet-http-HttpServlet" class="list-group-item">HttpServlet 及相关类</a>
                             <a href="#javax-servlet-http-HttpSession" class="list-group-item">HttpSession 及相关类</a>
 						</div>
-                        <a class="list-group-item active dropdown" data-toggle="collapse"
+                        <a class="list-group-item active dropup" data-toggle="collapse"
                            data-parent="#accordion" href="#javaee-websocket" aria-expanded="true"   style="border-top: 1px solid #DDDDDD;">
                             <code>javax.websocket</code><span class="caret pull-right" style="margin-top: 5px;"></span>
                         </a>
-                        <div id="javaee-websocket" class="panel-collapse collapse"
+                        <div id="javaee-websocket" class="panel-collapse collapse in"
                              role="tabpanel">
-                            <a href="#javax-websocket-WebSocket" class="list-group-item">WebSocket</a>
-                            <a href="#javax-websocket-" class="list-group-item"></a>
+                            <a href="#javax-websocket-server" class="list-group-item">WebSocket Server API</a>
+                            <a href="#javax-websocket-client" class="list-group-item">WebSocket Client API</a>
                         </div>
                         <a class="list-group-item active dropdown" data-toggle="collapse"
                            data-parent="#accordion" href="#javaee-tag" aria-expanded="true"   style="border-top: 1px solid #DDDDDD;">
@@ -132,6 +132,7 @@
                             <ul>
                                 <li><p><a href="docs/docs-javaee-8/javax/servlet/package-summary.html" target="_blank">javax.servlet</a> -- 描述和定义 servlet 类与由符合 servlet 容器为此类实例提供的运行时环境之间的契约。包括接口：<code>Servlet</code>, <code>ServletContext</code>, <code>ServletContextListener</code>, <code>ServletConfig</code>, <code>ServletRequest</code>, <code>ServletResponse</code>, <code>ServletRequestListener</code>, <code>ServletRequestAttributeListener</code>, <code>Filter</code>, <code>FilterConfig</code>, <code>FilterChain</code> ... 包括类： <code>GenericServlet</code>, <code>GenericFilter</code>, <code>ServletRequestEvent</code> ...</p></li>
                                 <li><p><a href="docs/docs-javaee-8/javax/servlet/http/package-summary.html" target="_blank">javax.servlet.http</a> -- 描述和定义在 HTTP 协议下运行的 servlet 类与由符合的 servlet 容器为此类实例提供的运行时环境之间的契约。包括接口：<code>HttpSession</code>, <code>HttpServletRequest</code>, <code>HttpServletResponse</code>, <code>HttpServletMapping</code>, <code>HttpSessionIdListener</code>, <code>HttpSessionListener</code>, <code>HttpSessionAttributeListener</code> ... 包括类： <code>HttpServlet</code>, <code>HttpFilter</code>, <code>Cookie</code>, <code>HttpSessionEvent</code>, <code>HttpServletRequestWrapper</code>, <code>HttpServletResponseWrapper</code>, <code>HttpSessionBindingEvent</code> ...</p></li>
+                                <li><p><a href="docs/docs-javaee-8/javax/websocket/package-summary.html" target="_blank">javax.websocket / javax.websocket.server</a> -- WebSocket API。WebSocket 是 HTML5 开始提供的一种在单个 TCP 连接上进行全双工通讯的协议。</p></li>
                                 <li><p><a href="docs/docs-javaee-8/javax/servlet/jsp/package-summary.html" target="_blank">javax.servlet.jsp</a> -- </p></li>
                                 <li><p><a href="docs/docs-javaee-8/javax/.../package-summary.html" target="_blank">javax.</a> -- </p></li>
                             </ul>
@@ -1213,10 +1214,10 @@ public interface HttpSession {}
                 <!-- item over -->
 
                 <!-- item start -->
-                <a class="offset" id="javax-websocket-WebSocket"></a>
+                <a class="offset" id="javax-websocket-server"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">WebSocket</h3>
+                        <h3 class="panel-title">WebSocket Server API</h3>
                     </div>
                     <div class="panel-body">
                         <div class="sub-item">
@@ -1230,20 +1231,414 @@ public interface HttpSession {}
                         </div>
 
                         <div class="sub-item">
-                            <pre class="brush: java;">
+                            <p>JavaEE 的 WebSocket 服务端 API 主要有以下注解类型：</p>
+                            <ul>
+                                <li><p><a href="docs/docs-javaee-8/javax/websocket/server/ServerEndpoint.html" target="_blank">ServerEndpoint</a> -- 将目前的类定义成一个 WebSocket 服务器端, 注解的值将被用于监听用户连接的终端访问 URL 地址,客户端可以通过这个 URL 来连接到 WebSocket 服务器端。</p>
+                                    <pre class="brush: java;">
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface ServerEndpoint {
+    public String value();
+    public String[] subprotocols() default {};
+    public Class&lt;? extends Decoder>[] decoders() default {};
+    public Class&lt;? extends Encoder>[] encoders() default {};
+    public Class&lt;? extends ServerEndpointConfig.Configurator> configurator() default
+                     ServerEndpointConfig.Configurator.class;
+}
+</pre>
+                                </li>
+                                <li><p><a href="docs/docs-javaee-8/javax/websocket/OnOpen.html" target="_blank">OnOpen</a> -- WebSocket 连接建立成功调用的方法，参数是可选的</p>
+                                    <pre class="brush: java;">
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface OnOpen {}
+
+/** 实例，参数都是可选的，其中最后一个参数 PathParam 可以有多个
+ * Session -- 与某个客户端的连接会话，需要通过它来给客户端发送数据
+ * EndpointConfig -- 端点配置包含在该端点的握手过程中需要的所有信息
+ * @PathParam -- 是 ServerEndpoint 的 value 中的变量，可以有多个，如: @ServerEndpoint("/websocket/{item}")
+ */
+@OnOpen
+public void onOpen(Session session, EndpointConfig config, @PathParam("item") String item) {
+    ...
+}
+</pre>
+                                </li>
+                                <li><p><a href="docs/docs-javaee-8/javax/websocket/OnClose.html" target="_blank">OnClose</a> -- WebSocket 连接关闭调用的方法，参数是可选的</p>
+                                    <pre class="brush: java;">
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface OnClose {}
+
+/** 实例，参数都是可选的，其中最后一个参数 PathParam 可以有多个
+ * Session -- 与某个客户端的连接会话，可以知道哪个会话被关掉了
+ * CloseReason -- 关闭原因
+ * @PathParam -- 是 ServerEndpoint 的 value 中的变量，可以有多个，如: @ServerEndpoint("/websocket/{item}")
+ */
+@OnClose
+public void onClose(Session session, CloseReason reason, @PathParam("item") String item) {
+    ...
+}
+</pre>
+                                </li>
+                                <li><p><a href="docs/docs-javaee-8/javax/websocket/OnMessage.html" target="_blank">OnMessage</a> -- 收到客户端消息后调用的方法，允许的参数类型如下表:</p>
+                                    <ul>
+                                        <li><p><b>Session</b> -- 与客户端的会话</p></li>
+                                        <li><p><b>@PathParam</b> -- 是 ServerEndpoint 的 value 中的变量，可以有多个</p></li>
+                                        <li><p><b>以下的任何一个选择：</b></p>
+                                            <ul>
+                                                <li><p>如果该方法处理文本消息:</p>
+                                                    <ul><li><p>String</p></li></ul>
+                                                    <ul><li><p>Java 基本类型及实体类</p></li></ul>
+                                                    <ul><li><p>String 和 boolean 组成的对(接受分段的消息)</p></li></ul>
+                                                    <ul><li><p>Reader</p></li></ul>
+                                                </li>
+                                                <li><p>如果该方法处理二进制消息:</p>
+                                                    <ul><li><p>byte[] 或者 ByteBuffer</p></li></ul>
+                                                    <ul><li><p>byte[] 和 boolean 组成的对 或者 ByteBuffer和 boolean 组成的对(接受分段的消息)</p></li></ul>
+                                                    <ul><li><p>InputStream</p></li></ul>
+                                                </li>
+                                                <li><p>如果该方法处理 PONG 消息:</p>
+                                                    <ul><li><p>PongMessage</p></li></ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+                                    </ul>
+                                    <pre class="brush: java;">
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface OnMessage {
+    public long maxMessageSize() default -1;
+}
+</pre>
+                                </li>
+                                <li><p><a href="docs/docs-javaee-8/javax/websocket/OnError.html" target="_blank">OnError</a> -- 发生错误时调用的方法，参数也是可选的</p>
+                                    <pre class="brush: java;">
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface OnError {}
+
+/** 实例，参数都是可选的，其中最后一个参数 PathParam 可以有多个
+ * Session -- 与某个客户端的连接会话，可以知道哪个会话发生错误
+ * Throwable -- 错误类型
+ * @PathParam -- 是 ServerEndpoint 的 value 中的变量，可以有多个，如: @ServerEndpoint("/websocket/{item}")
+ */
+@OnError
+public void OnError(Session session, Throwable throwable, @PathParam("item") String item) {
+    ...
+}
+</pre>
+                                </li>
+                            </ul>
+
+                        </div>
+
+                        <div class="sub-item">
+                            <p><b>WebSocket Server 的相关类：</b></p>
+                            <ul>
+                                <li><p><a href="docs/docs-javaee-8/javax/websocket/server/PathParam.html" target="_blank">@PathParam</a> -- 用于方法的参数，表示 @ServerEndpoint 的参数</p>
+                                    <pre class="brush: java;">
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER)
+public @interface PathParam {
+    public String value();
+}
+
+/** 实例，可以根据参数创建不同的 WebSocket 连接 */
+@ServerEndpoint("/websocket/{item}")
+public class CustomWebsocket {
+    @OnOpen
+    public void onOpen(Session session, EndpointConfig config, @PathParam("item") String item) {
+        ...
+    }
+}
+</pre>
+                                </li>
+                                <li><p><a href="docs/docs-javaee-8/javax/websocket/EndpointConfig.html" target="_blank">EndpointConfig</a> -- </p>
+                                    <pre class="brush: java;">
 
 </pre>
-                            <p><a href="docs/docs-javaee-8/javax/ejb/" target="_blank"></a></p>
+                                </li>
+                                <li><p><a href="docs/docs-javaee-8/javax/websocket/CloseReason.html" target="_blank">CloseReason</a> -- </p>
+                                    <pre class="brush: java;">
+
+</pre>
+                                </li>
+                                <li><p><a href="docs/docs-javaee-8/javax/websocket/Session.html" target="_blank">Session</a> -- 是 WebSocket 连接的会话，需要通过它来给客户端发送数据</p>
+                                    <pre class="brush: java;">
+public interface Session extends Closeable {}
+
+public interface Closeable extends java.io.AutoCloseable {
+    public void close() throws IOException;
+}
+
+public interface java.lang.AutoCloseable {
+    void close() throws Exception;
+}
+</pre>
+                                    <ol>
+                                        <li><p><code>String 	getId()</code> -- 获取会话 ID</p></li>
+
+                                        <li class="group"><p><code>long 	getMaxIdleTimeout()</code> -- 获取超时时间(测试默认为 5 分钟)</p></li>
+                                        <li><p><code>void 	setMaxIdleTimeout(long milliseconds)</code> -- 设置超时时间（单位为毫秒）</p></li>
+
+                                        <li class="group"><p><code>RemoteEndpoint.Basic 	getBasicRemote()</code> -- </p></li>
+                                        <li><p><code>RemoteEndpoint.Async 	getAsyncRemote()</code> -- </p></li>
+
+                                        <li class="group"><p><code>Set&lt;MessageHandler> 	getMessageHandlers()</code> -- </p></li>
+                                        <li><p><code>&lt;T> void 	addMessageHandler(Class&lt;T> clazz, MessageHandler.Partial&lt;T> handler)</code> -- </p></li>
+                                        <li><p><code>&lt;T> void 	addMessageHandler(Class&lt;T> clazz, MessageHandler.Whole&lt;T> handler)</code> -- </p></li>
+                                        <li><p><code>void 	addMessageHandler(MessageHandler handler)</code> -- </p></li>
+                                        <li><p><code>void 	removeMessageHandler(MessageHandler handler)</code> -- </p></li>
+
+                                        <li class="group"><p><code>void 	close()</code> -- </p></li>
+                                        <li><p><code>void 	close(CloseReason closeReason)</code> -- </p></li>
+
+                                        <li class="group"><p><code>void 	setMaxBinaryMessageBufferSize(int length)</code> -- </p></li>
+                                        <li><p><code>int 	getMaxBinaryMessageBufferSize()</code> -- </p></li>
+
+                                        <li class="group"><p><code>void 	setMaxTextMessageBufferSize(int length)</code> -- </p></li>
+                                        <li><p><code>int 	getMaxTextMessageBufferSize()</code> -- </p></li>
+
+
+
+                                        <li class="group"><p><code>Set&lt;Session> 	getOpenSessions()</code> -- </p></li>
+                                        <li><p><code>boolean 	isOpen()</code> -- </p></li>
+
+                                        <li class="group"><p><code>Map&lt;String,String> 	getPathParameters()</code> -- </p></li>
+                                        <li><p><code>Map&lt;String,List&lt;String>> 	getRequestParameterMap()</code> -- </p></li>
+                                        <li><p><code>URI 	getRequestURI()</code> -- </p></li>
+
+                                        <li class="group"><p><code>List&lt;Extension> 	getNegotiatedExtensions()</code> -- </p></li>
+                                        <li><p><code>Map&lt;String,Object> 	getUserProperties()</code> -- </p></li>
+
+                                        <li class="group"><p><code>boolean 	isSecure()</code> -- </p></li>
+                                        <li><p><code>String 	getNegotiatedSubprotocol()</code> -- </p></li>
+                                        <li><p><code>String 	getProtocolVersion()</code> -- </p></li>
+                                        <li><p><code>String 	getQueryString()</code> -- </p></li>
+                                        <li><p><code>Principal 	getUserPrincipal()</code> -- </p></li>
+                                        <li><p><code>WebSocketContainer 	getContainer()</code> -- </p></li>
+
+
+                                    </ol>
+                                </li>
+                                <li><p><a href="docs/docs-javaee-8/javax/websocket/RemoteEndpoint.html" target="_blank">RemoteEndpoint</a> -- 是远程端点(客户端)</p>
+                                    <pre class="brush: java;">
+public interface RemoteEndpoint {
+    void setBatchingAllowed(boolean allowed) throws IOException;
+    boolean getBatchingAllowed();
+    void flushBatch() throws IOException;
+    void sendPing(ByteBuffer applicationData) throws IOException, IllegalArgumentException;
+    void sendPong(ByteBuffer applicationData) throws IOException, IllegalArgumentException;
+
+    interface Async extends RemoteEndpoint {
+        long getSendTimeout();
+        void setSendTimeout(long timeoutmillis);
+
+        void sendText(String text, SendHandler handler);
+        Future&lt;Void> sendText(String text);
+        Future&lt;Void> sendBinary(ByteBuffer data);
+        void sendBinary(ByteBuffer data, SendHandler handler);
+        Future&lt;Void> sendObject(Object data);
+        void sendObject(Object data, SendHandler handler);
+    }
+
+    interface Basic extends RemoteEndpoint {
+        void sendText(String text) throws IOException;
+        void sendText(String partialMessage, boolean isLast) throws IOException;
+        void sendBinary(ByteBuffer data) throws IOException;
+        void sendBinary(ByteBuffer partialByte, boolean isLast) throws IOException;
+        void sendObject(Object data) throws IOException, EncodeException;
+
+        OutputStream getSendStream() throws IOException;
+        Writer getSendWriter() throws IOException;
+    }
+}
+</pre>
+                                </li>
+                                <li><p><a href="docs/docs-javaee-8/javax/websocket/" target="_blank"></a> -- </p>
+                                    <pre class="brush: java;">
+
+</pre>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><b>WebSocket 实例：</b></p>
+                            <div class="split-item">
+                                <p>Server 端:</p>
+                                <ol>
+                                    <li><p>构建 WebSocket 服务端</p>
+                                        <pre class="brush: java;">
+/**
+ * @ServerEndpoint 注解将目前的类定义成一个 websocket 服务器端,
+ * 注解的值将被用于监听用户连接的终端访问 URL 地址,客户端可以通过这个 URL 来连接到 WebSocket 服务器端
+ */
+@ServerEndpoint(value = "/websocket/{item}", configurator = GetHttpSessionConfigurator.class)
+public class CustomWebsocket {
+
+    // 静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
+    private static int onlineCount = 0;
+
+    // 线程安全 Set，用来存放每个客户端对应的 CustomWebsocket 对象
+    private static CopyOnWriteArraySet&lt;CustomWebsocket> webSocketSet = new CopyOnWriteArraySet<>();
+
+    // 与某个客户端的连接会话，需要通过它来给客户端发送数据
+    private Session session;
+    //
+    private HttpSession httpSession;
+
+    /** 连接建立成功调用的方法, session 为与某个客户端的连接会话，需要通过它来给客户端发送数据 */
+    @OnOpen
+    public void onOpen(Session session, EndpointConfig config) {
+        this.session = session;
+        httpSession = (HttpSession) config.getUserProperties().get(HttpSession.class.getName());
+
+        webSocketSet.add(this);     // 加入 set 中
+        onlineCount++;              // 在线数加 1
+        System.out.println("有新连接加入:" + httpSession.getId() + ", 当前在线人数为" + onlineCount);
+    }
+
+    /**
+     * 连接关闭调用的方法
+     */
+    @OnClose
+    public void onClose(Session session, CloseReason reason, @PathParam("item") String item) {
+        webSocketSet.remove(this);  //从 set 中删除
+        onlineCount--;           // 在线数减 1
+        System.out.println("有一连接关闭！当前在线人数为" + onlineCount);
+    }
+
+    /** 收到客户端消息后调用的方法，此处的参数参见 @OnMessage 注解 */
+    @OnMessage
+    public void onMessage(String message) {
+        System.out.println("来自客户端的消息:" + message);
+        // 群发消息
+        for (CustomWebsocket item : webSocketSet) {
+            try {
+                item.sendMessage(message);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /** 发生错误时调用 */
+    @OnError
+    public void onError(Session session, Throwable error) {
+        System.out.println("发生错误");
+        error.printStackTrace();
+    }
+
+    /** 发送消息 */
+    public void sendMessage(String message) throws IOException {
+        this.session.getBasicRemote().sendText(message);
+    }
+
+}
+</pre>
+                                    </li>
+                                    <li><p>获取 HttpSession, 并添加到 ServerEndpointConfig 中(要在 Listener 中获取，否则这一步还为空)</p>
+                                        <pre class="brush: java;">
+public class GetHttpSessionConfigurator extends ServerEndpointConfig.Configurator {
+    @Override
+    public void modifyHandshake(ServerEndpointConfig config, HandshakeRequest request,
+                                            HandshakeResponse response) {
+        HttpSession httpSession = (HttpSession) request.getHttpSession();
+        config.getUserProperties().put(HttpSession.class.getName(), httpSession);
+    }
+}
+</pre>
+                                    </li>
+                                    <li><p>请求监听器，并获取到 HttpSession</p>
+                                        <pre class="brush: java;">
+/** 在 web.xml 配置 Listener
+ * &lt;listener>
+ *   &lt;listener-class>io.jiwanger.site.listener.RequestListener&lt;/listener-class>
+ * &lt;/listener>
+ */
+
+@WebListener()
+public class RequestListener implements ServletRequestListener {
+    public RequestListener() {}
+
+    @Override
+    public void requestDestroyed(ServletRequestEvent sre) {}
+
+    @Override
+    public void requestInitialized(ServletRequestEvent sre) {
+        // 经过此步骤，才能在 WebSocket 中获取到 HttpSession
+        ((HttpServletRequest) sre.getServletRequest()).getSession();
+    }
+}
+</pre>
+                                    </li>
+                                </ol>
+                            </div>
+                            <div class="split-item">
+                                <p>WebSocket Client 端(HTML 5 支持)</p>
+                                <pre class="brush: js;">
+var url = "ws://192.168.0.104:8080/site/websocket/shop";
+
+var websocket = null;
+// 判断当前浏览器是否支持 WebSocket
+if ('WebSocket' in window) {
+    websocket = new WebSocket(url);
+} else {
+    alert('当前浏览器不支持 WebSocket!')
+}
+
+// 连接发生错误的回调方法
+websocket.onerror = function () {
+    // 将连接发生错误显示在页面上，此方法在页面中定义
+    setMessageInnerHTML("WebSocket 连接发生错误!");
+};
+
+// 连接成功建立的回调方法
+websocket.onopen = function () {
+    // 将连接成功显示在页面上，此方法在页面中定义
+    setMessageInnerHTML("WebSocket 连接成功!");
+};
+
+// 接收到消息的回调方法
+websocket.onmessage = function (event) {
+    // 将接收的消息显示在页面上，此方法在页面中定义
+    setMessageInnerHTML(event.data);
+};
+
+// 连接关闭的回调方法
+websocket.onclose = function () {
+    setMessageInnerHTML("WebSocket 连接关闭!");
+};
+
+// 监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+window.onbeforeunload = function () {
+    closeWebSocket();
+};
+
+// 关闭WebSocket连接
+function closeWebSocket() {
+    websocket.close();
+}
+
+// 发送消息
+function send(message) {
+    websocket.send(message);
+}
+</pre>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <!-- item over -->
 
                 <!-- item start -->
-                <a class="offset" id="javax-websocket-"></a>
+                <a class="offset" id="javax-websocket-client"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">...</h3>
+                        <h3 class="panel-title">WebSocket Client API</h3>
                     </div>
                     <div class="panel-body">
                         <div class="sub-item">
@@ -1356,6 +1751,7 @@ public interface HttpSession {}
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
     <script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
+    <script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
