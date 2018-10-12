@@ -112,19 +112,15 @@
                     </a>
                     <div id="android-view" class="panel-collapse collapse"
                          role="tabpanel">
-                        <a href="#android-view-View" class="list-group-item">View</a>
-                        <a href="#android-view-Fragment" class="list-group-item">Fragment</a>
-                        <a href="#android-view-SufaceView" class="list-group-item">SufaceView</a>
                         <a href="#android-view-Window" class="list-group-item">Window</a>
-                        <a href="#android-view-KeyEvent" class="list-group-item">KeyEvent</a>
+                        <a href="#android-view-Fragment" class="list-group-item">Fragment</a>
+                        <a href="view.html" class="list-group-item" target="_blank">View 及其常见子类</a>
+                        <a href="#android-view-KeyEvent" class="list-group-item">KeyEvent 及相关类</a>
                         <a href="#android-view-MotionEvent" class="list-group-item">MotionEvent</a>
                         <a href="#android-view-DragEvent" class="list-group-item">DragEvent</a>
                         <a href="#android-view-GestureDetector" class="list-group-item">GestureDetector</a>
                         <a href="#android-view-ActionMode" class="list-group-item">ActionMode</a>
-                        <a href="#android-view-LayoutInflater" class="list-group-item">LayoutInflater</a>
-                        <a href="#android-view-Menu" class="list-group-item">Menu</a>
-                        <a href="#android-view-MenuInflater"
-                           class="list-group-item">MenuInflater</a>
+                        <a href="#android-view-Menu" class="list-group-item">Menu 及相关类</a>
                     </div>
                     <a class="list-group-item active dropdown" data-toggle="collapse"
                        data-parent="#accordion" href="#android-os" aria-expanded="true"
@@ -3451,12 +3447,15 @@ protected void attachBaseContext(Context newBase) {
             <!-- item over -->
 
             <!-- item start -->
-            <a class="offset" id="android-view-View"></a>
+            <a class="offset" id="android-view-Window"></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">View</h3>
+                    <h3 class="panel-title">Window</h3>
                 </div>
                 <div class="panel-body">
+                    <p><a href="docs/reference/android/view/Window.html">Window</a> --
+                        是一个抽象类，Activity 使用的是其子类的实例: <code>com.android.internal.policy.impl.PhoneWindow</code>
+                    </p>
 
                 </div>
             </div>
@@ -3474,32 +3473,6 @@ protected void attachBaseContext(Context newBase) {
             </div>
             <!-- item over -->
 
-            <!-- item start -->
-            <a class="offset" id="android-view-SufaceView"></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">SufaceView</h3>
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="android-view-Window"></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Window</h3>
-                </div>
-                <div class="panel-body">
-                    <p><a href="docs/reference/android/view/Window.html">Window</a> --
-                        是一个抽象类，Activity 使用的是其子类的实例: <code>com.android.internal.policy.impl.PhoneWindow</code>
-                    </p>
-
-                </div>
-            </div>
-            <!-- item over -->
 
             <!-- item start -->
             <a class="offset" id="android-view-KeyEvent"></a>
@@ -3508,9 +3481,80 @@ protected void attachBaseContext(Context newBase) {
                     <h3 class="panel-title">KeyEvent</h3>
                 </div>
                 <div class="panel-body">
-                    <p><a href="docs/reference/android/view/KeyEvent.html">KeyEvent</a>
-                        -- 按键事件，</p>
+                    <div class="sub-item">
+                        <pre class="brush: java;">
+java.lang.Object
+    android.view.InputEvent
+  	    android.view.KeyEvent
 
+public abstract class InputEvent implements Parcelable {
+    abstract int getDeviceId();
+    abstract long getEventTime();
+    abstract int getSource();
+    int describeContents() {}
+    final InputDevice getDevice() {}
+    boolean isFromSource(int source) {}
+}
+
+public class KeyEvent extends InputEvent implements Parcelable {
+    /** 按键动作，参见： getAction() */
+    public static final int ACTION_DOWN             = 0;
+    public static final int ACTION_UP               = 1;
+    public static final int ACTION_MULTIPLE         = 2;
+
+    /** 一些常见的键值，更多键值参见文档 */
+    public static final int KEYCODE_UNKNOWN         = 0;
+    public static final int KEYCODE_HOME            = 3;
+    public static final int KEYCODE_BACK            = 4;
+    public static final int KEYCODE_CALL            = 5;
+    public static final int KEYCODE_ENDCALL         = 6;
+
+    public static final int KEYCODE_VOLUME_UP       = 24;
+    public static final int KEYCODE_VOLUME_DOWN     = 25;
+    public static final int KEYCODE_POWER           = 26;
+
+    public static final int KEYCODE_MEDIA_PLAY_PAUSE= 85;
+    public static final int KEYCODE_MEDIA_STOP      = 86;
+    public static final int KEYCODE_MEDIA_NEXT      = 87;
+    public static final int KEYCODE_MEDIA_PREVIOUS  = 88;
+    public static final int KEYCODE_MEDIA_REWIND    = 89;
+    public static final int KEYCODE_MEDIA_FAST_FORWARD = 90;
+
+    /** 按键事件回调接口 */
+    public interface Callback {
+        boolean onKeyDown(int keyCode, KeyEvent event);
+        boolean onKeyLongPress(int keyCode, KeyEvent event);
+        boolean onKeyUp(int keyCode, KeyEvent event);
+        boolean onKeyMultiple(int keyCode, int count, KeyEvent event);
+    }
+
+    public static class DispatcherState {
+        public void reset() {}
+        public void reset(Object target) {}
+        public void startTracking(KeyEvent event, Object target) {}
+        public boolean isTracking(KeyEvent event) {}
+        public void performedLongPress(KeyEvent event) {}
+        public void handleUpEvent(KeyEvent event) {}
+    }
+
+    private KeyEvent() {}
+    public KeyEvent(int action, int code)  {}
+    public KeyEvent(long downTime, long eventTime, int action, int code, int repeat) {}
+    public KeyEvent(long downTime, long eventTime, int action, int code, int repeat, int metaState) {}
+    public KeyEvent(long downTime, long eventTime, int action, int code, int repeat, int metaState,
+                            int deviceId, int scancode) {}
+    public KeyEvent(long downTime, long eventTime, int action, int code, int repeat, int metaState,
+                            int deviceId, int scancode, int flags) {}
+    public KeyEvent(long downTime, long eventTime, int action, int code, int repeat, int metaState,
+                            int deviceId, int scancode, int flags, int source) {}
+    public KeyEvent(long time, String characters, int deviceId, int flags) {}
+    public KeyEvent(KeyEvent origEvent) {}
+    public KeyEvent(KeyEvent origEvent, long eventTime, int newRepeat) {}
+}
+</pre>
+                        <p><a href="docs/reference/android/view/KeyEvent.html">KeyEvent</a> -- 按键事件，</p>
+
+                    </div>
                 </div>
             </div>
             <!-- item over -->
@@ -3522,8 +3566,7 @@ protected void attachBaseContext(Context newBase) {
                     <h3 class="panel-title">MotionEvent</h3>
                 </div>
                 <div class="panel-body">
-                    <p><a href="docs/reference/android/view/MotionEvent.html">MotionEvent</a>
-                        -- 触摸事件，</p>
+                    <p><a href="docs/reference/android/view/MotionEvent.html">MotionEvent</a> -- 触摸事件，</p>
                 </div>
             </div>
             <!-- item over -->
@@ -3567,34 +3610,10 @@ protected void attachBaseContext(Context newBase) {
             <!-- item over -->
 
             <!-- item start -->
-            <a class="offset" id="android-view-LayoutInflater"></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">LayoutInflater</h3>
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
             <a class="offset" id="android-view-Menu"></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Menu</h3>
-                </div>
-                <div class="panel-body">
-
-                </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="android-view-MenuInflater"></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">MenuInflater</h3>
                 </div>
                 <div class="panel-body">
 
