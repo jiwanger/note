@@ -2037,7 +2037,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
                                 <li><p><code>void 	dispatchWindowVisibilityChanged(int visibility)</code> -- </p></li>
                                 <li><p><code>void 	endViewTransition(View view)</code> -- </p></li>
                                 <li><p><code>View 	findFocus()</code> -- </p></li>
-                                <li><p><code>void 	findViewsWithText(ArrayList<View> outViews, CharSequence text, int flags)</code> -- </p></li>
+                                <li><p><code>void 	findViewsWithText(ArrayList&lt;View> outViews, CharSequence text, int flags)</code> -- </p></li>
                                 <li><p><code>View 	focusSearch(View focused, int direction)</code> -- </p></li>
                                 <li><p><code>void 	focusableViewAvailable(View v)</code> -- </p></li>
                                 <li><p><code>boolean 	gatherTransparentRegion(Region region)</code> -- </p></li>
@@ -2244,14 +2244,12 @@ for (String img : Value.Image.Icon.J256x256) {
                         <div class="sub-item">
 						    <pre class="brush: java;">
 /** ConstraintLayout 属于 support 内容，需要单独引入，此包中包含以下内容(还有一个 values.xml)：
- * Barrier --
- * ConstraintHelper --
- * ConstraintLayout --
- * Constraints --
- * ConstraintSet --
- * Group --
- * Guideline --
- * Placeholder --
+ * ConstraintLayout -- 约束布局，使用 ConstraintSet 保存子元素的 constraints，margins 和 padding
+ * ConstraintSet -- 允许以编程方式定义与约束布局一起使用的一组约束。允许您创建和保存约束，并将它们应用到现有的约束布局中
+ * Placeholder -- View 的子类，提供可以定位现有对象的虚拟对象
+ * Guideline -- View 的子类，锚向基线，是条不可见的线，可以是横向/纵向的，可以作为一条参考线
+ * Barrier -- 翻译为栅栏，是 ConstraintHelper 的子类，栅栏的位置可以根据其中的内容改变。
+ * Group -- 用于控制多个控件的可见性，是 ConstraintHelper 的子类
  */
 implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
@@ -2276,11 +2274,12 @@ public class ConstraintLayout extends ViewGroup {
         public static final int MATCH_CONSTRAINT_SPREAD = 0;
         public static final int MATCH_CONSTRAINT_PERCENT = 2;
 
+        /** 对应 xml 属性为: layout_constraint[Vertical|Horizontal]_chainStyle 值 */
         public static final int CHAIN_SPREAD = 0;
         public static final int CHAIN_SPREAD_INSIDE = 1;
         public static final int CHAIN_PACKED = 2;
 
-        /** 约束，对应 xml 属性为 layout_constraintXXX_toYYYOf */
+        /** 约束，对应 xml 属性为: layout_constraintXXX_toYYYOf */
         public int leftToLeft = -1;
         public int leftToRight = -1;
         public int rightToLeft = -1;
@@ -2295,9 +2294,9 @@ public class ConstraintLayout extends ViewGroup {
         public int endToEnd = -1;
         public int baselineToBaseline = -1;
 
-        /** 约束力强度 */
-        public float horizontalWeight = -1.0F;
-        public float verticalWeight = -1.0F;
+        /** 横向/纵向约束力强度 */
+        public float horizontalBias = 0.5F;
+        public float verticalBias = 0.5F;
 
         /** 参照点可见性 */
         public int goneLeftMargin = -1;
@@ -2310,18 +2309,29 @@ public class ConstraintLayout extends ViewGroup {
         /** 宽高比 */
         public String dimensionRatio = null;
 
+        /** 锚向指示线 */
         public int guideBegin = -1;
         public int guideEnd = -1;
         public float guidePercent = -1.0F;
+
+        /** 圆形定位 */
         public int circleConstraint = -1;
         public int circleRadius = 0;
         public float circleAngle = 0.0F;
-        public float horizontalBias = 0.5F;
-        public float verticalBias = 0.5F;
 
+        /** 横向/纵向重力比例 */
+        public float horizontalWeight = -1.0F;
+        public float verticalWeight = -1.0F;
 
+        /** 当控件不能填满 ConstraintLayout 时，空白部分和控件如何排列 */
         public int horizontalChainStyle = 0;
         public int verticalChainStyle = 0;
+
+        /** 约束宽度/高度 */
+        public boolean constrainedWidth = false;
+        public boolean constrainedHeight = false;
+
+        /** MATCH_CONSTRAINT dimensions（填充父窗体约束） */
         public int matchConstraintDefaultWidth = 0;
         public int matchConstraintDefaultHeight = 0;
         public int matchConstraintMinWidth = 0;
@@ -2330,11 +2340,11 @@ public class ConstraintLayout extends ViewGroup {
         public int matchConstraintMaxHeight = 0;
         public float matchConstraintPercentWidth = 1.0F;
         public float matchConstraintPercentHeight = 1.0F;
+
         public int editorAbsoluteX = -1;
         public int editorAbsoluteY = -1;
         public int orientation = -1;
-        public boolean constrainedWidth = false;
-        public boolean constrainedHeight = false;
+
         public boolean helped = false;
 
         public LayoutParams(ConstraintLayout.LayoutParams source) {...}
@@ -2354,11 +2364,12 @@ public class ConstraintLayout extends ViewGroup {
                             <p><b>ConstraintLayout</b>  还有一个优点，它可以有效地解决布局嵌套过多的问题。</p>
                             <p><b>ConstraintLayout</b> 的 <code>xml</code> 属性：</p>
                             <ol type="I">
-                                <li><p><code>layout_constraintXXX_toYYYOf</code> 格式的属性 -- View 的方向 XXX 边与指定 View 的 YYY 边对齐，如果添加了互斥的约束，比如：
+                                <li>
+                                    <p><code>layout_constraintXXX_toYYYOf</code> 格式的属性 -- View 的方向 XXX 边与指定 View 的 YYY 边对齐，如果添加了互斥的约束，比如：
                                     <code>layout_constraintLeft_toLeftOf="parent" layout_constraintRight_toRightOf="parent"</code>，那么此 View 是左右居中的，还可以使用 <code>ayout_constraintHorizontal_bias="0.2"</code> 来控制约束力强度；</p>
                                     <code>layout_constraintTop_toTopOf="parent" layout_constraintBottom_toBottomOf="parent"</code>，那么此 View 是左右居中的，还可以使用 <code>layout_constraintVertical_bias ="0.1"</code> 来控制约束力强度；</p>
                                     <pre class="brush: xml;">
-<!-- 约束，此类属性公 13 个，其值对应 ConstaintLayout.LayoutParams 的 xxxToYyy 值
+<!-- 约束，此类属性公 13 个，其值对应 ConstraintLayout.LayoutParams 的 xxxToYyy 值
     layout_constraintLeft_toLeftOf         -- 左侧和指定 View(parent / @+id/xx) 的左侧对齐
     layout_constraintLeft_toRightOf        -- 左侧和指定 View(parent / @+id/xx) 的右侧对齐
     layout_constraintRight_toLeftOf        -- 右侧和指定 View(parent / @+id/xx) 的左侧对齐
@@ -2423,7 +2434,8 @@ constraintLayout.addView(button02);
 constraintLayout.requestLayout();
 </pre>
                                 </li>
-                                <li><p><code>layout_goneMarginXXX</code> 格式的属性 -- 当参照的 View 的 <code>android:visibility="gone"</code> 时候，View 的位置会发生改变(此时参照点为原来的 View 的中心位置)，还可以使用设置边距的形式来设置其位置，但是这些属性只在参照点为不可见的时候才起作用。</p>
+                                <li>
+                                    <p><code>layout_goneMarginXXX</code> 格式的属性 -- 当参照的 View 的 <code>android:visibility="gone"</code> 时候，View 的位置会发生改变(此时参照点为原来的 View 的中心位置)，还可以使用设置边距的形式来设置其位置，但是这些属性只在参照点为不可见的时候才起作用。</p>
                                     <pre class="brush: xml;">
 &lt;!-- 参照点的 android:visibility="gone" 时，设置和原参照点的中点的距离
     layout_goneMarginLeft   -- 左侧和原参照点中点的距离
@@ -2448,9 +2460,10 @@ constraintLayout.requestLayout();
 &lt;/android.support.constraint.ConstraintLayout>
 </pre>
                                 </li>
-                                <li><p><code>layout_constraintDimensionRatio</code> 属性 -- 用于根据屏幕或容器的宽度来为 View 设置固定的宽高比。要使用 <code>layout_constraintDimensionRatio</code> 属性，需要至少设置宽度或者高度为 0dp。</p>
+                                <li>
+                                    <p><code>layout_constraintDimensionRatio</code> 属性 -- 用于根据屏幕或容器的宽度来为 View 设置固定的宽高比。要使用 <code>layout_constraintDimensionRatio</code> 属性，需要至少设置宽度或者高度为 0dp。</p>
                                     <pre class="brush: xml;">
-<!-- 宽高比 layout_constraintDimensionRatio 的值有以下三种写法：
+<!-- 宽高比 layout_constraintDimensionRatio 的值有以下三种写法：(w, h 不区分大小写)
     h,float:float -- 指定约束高度
     w,float:float -- 指定约束宽度
     float:float   -- 根据情况决定约束高度/宽度(如果指定了宽度，就是约束高度；如果指定了高度，就是约束宽度)
@@ -2495,7 +2508,332 @@ constraintLayout.requestLayout();
         app:layout_constraintTop_toBottomOf="@+id/layout_03"/>
 </pre>
                                 </li>
-                                <li><p><code>layout_constraintDimensionRatio</code></p>
+                                <li>
+                                    <p><code>layout_constraintHorizontal_weight</code> 属性 -- 像 LinearLayout 的 weight, ConstraintLayout 也支持重力布局。</p>
+                                    <pre class="brush: xml;">
+&lt;android.support.constraint.ConstraintLayout ...
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+	<!-- 横向比例 -->
+    &lt;android.support.constraint.ConstraintLayout
+		android:id="@+id/layout_01"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintDimensionRatio="h,4:1"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent">
+        &lt;View
+			android:id="@+id/c1"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:background="#336699"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintHorizontal_weight="2"
+			app:layout_constraintRight_toLeftOf="@id/c2"/>
+        &lt;View
+			android:id="@+id/c2"
+			android:layout_width="0dp"
+			android:layout_height="match_parent"
+			android:background="#996699"
+			app:layout_constraintHorizontal_weight="1"
+			app:layout_constraintLeft_toRightOf="@id/c1"
+			app:layout_constraintRight_toRightOf="parent"/>
+    &lt;/android.support.constraint.ConstraintLayout>
+
+	<!-- 纵向比例 -->
+    &lt;android.support.constraint.ConstraintLayout
+		android:id="@+id/layout_02"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintDimensionRatio="h,3:1"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/layout_01">
+        &lt;View
+			android:id="@+id/c3"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:background="#33DD99"
+			app:layout_constraintVertical_weight="2"
+			app:layout_constraintLeft_toLeftOf="parent"
+			app:layout_constraintRight_toRightOf="parent"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintBottom_toTopOf="@id/c4"/>
+        <&lt;View
+			android:id="@+id/c4"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:background="#DD6699"
+			app:layout_constraintVertical_weight="1"
+			app:layout_constraintTop_toBottomOf="@id/c3"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintLeft_toLeftOf="@+id/c3"
+			app:layout_constraintRight_toRightOf="parent"/>
+    &lt;/android.support.constraint.ConstraintLayout>
+&lt;/android.support.constraint.ConstraintLayout>
+</pre>
+                                </li>
+                                <li>
+                                    <p><code>layout_constraint[Horizontal|Vertical]_chainStyle</code> 属性 -- 用于指定当控件不能填满空间时，里面的空白和控件如何分布。使用时只需要在第一个控件中指定就可以了。当其宽度/高度设置成 <code>0dp</code> 时，效果相当于使用 weight 一样。 </p>
+                                    <pre class="brush: xml;">
+<!-- layout_constraint[Horizontal|Vertical]_chainStyle 有以下值：
+    假设方括号代表 ConstraintLayout 的宽度，* 号代表控件，空格代表空白部分，以下三种值排列如下：
+    [ * * * ]spread -- 默认值，将所有的间距均匀分布到控件和 两侧/上下
+    [*  *  *]spread_inside -- 将所有的间距均匀分布到控件之间，两侧/上下 不留空间
+    [  ***  ]packed -- 控件间不留间距，两侧/上下 均匀分布间距
+-->
+&lt;android.support.constraint.ConstraintLayout
+    android:id="@+id/layout_01"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    app:layout_constraintDimensionRatio="h,4:1"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent">
+    &lt;View
+        android:id="@+id/c1"
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:background="#336699"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintRight_toLeftOf="@id/c2"/>
+    &lt;View
+        android:id="@+id/c2"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:background="#996699"
+        app:layout_constraintLeft_toRightOf="@id/c1"
+        app:layout_constraintRight_toLeftOf="@+id/c5"
+        app:layout_constraintRight_toRightOf="parent"/>
+    &lt;View
+        android:id="@+id/c5"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:background="#DD6699"
+        app:layout_constraintLeft_toRightOf="@id/c2"
+        app:layout_constraintRight_toRightOf="parent"/>
+&lt;android.support.constraint.ConstraintLayout>
+</pre>
+                                </li>
+                                <li>
+                                    <p><code>layout_constraintCircle</code> 等属性 -- 圆形定位，可以使 View 的中点基于某个参照 View 的中点为原心，再分别指定其半径和角度来定位。</p>
+                                    <pre class="brush: xml;">
+<!-- 圆形定位主要有以下属性：
+    layout_constraintCircle       -- 指定参照点的 View 的 ID
+    layout_constraintCircleAngle  -- 指定角度(0-360)
+    layout_constraintCircleRadius -- 指定半径(带单位的尺寸值)
+-->
+&lt;android.support.constraint.ConstraintLayout ...
+    xmlns:app="http://schemas.android.com/apk/res-auto"">
+    &lt;View
+        android:id="@+id/v_01"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:background="#336699"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    &lt;View
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:background="#dd3366"
+        app:layout_constraintCircle="@+id/v_01"     <!-- 参照点,以参照点的中点为圆心 -->
+        app:layout_constraintCircleAngle="45"       <!-- 角度(顺时针方向，12 点方向为 0) -->
+        app:layout_constraintCircleRadius="100dp"/> <!-- 半径，参照点的中点到此 View 的中点的距离 -->
+&lt;/android.support.constraint.ConstraintLayout>
+</pre>
+                                </li>
+                                <li>
+                                    <p><code>MATCH_CONSTRAINT</code> -- 填充父窗体约束,在约束布局中宽高的维度 <code>match_parent</code> 被 <code>0dp</code> 代替，默认生成的大小占所有的可用空间。</p>
+                                    <pre class="brush: xml;">
+<!-- 可用的属性如下：
+    layout_constraintWidth_min      -- 最小宽度
+    layout_constraintHeight_min     -- 最小高度
+    layout_constraintWidth_max      -- 最大宽度
+    layout_constraintHeight_max     -- 最大高度
+    layout_constraintWidth_default  -- 默认宽度
+    layout_constraintHeight_default -- 默认高度
+    layout_constraintWidth_percent  -- 宽度占比
+    layout_constraintHeight_percent -- 高度占比
+-->
+&lt;android.support.constraint.ConstraintLayout ..
+    xmlns:app="http://schemas.android.com/apk/res-auto"">
+
+    &lt;View
+        android:id="@+id/v_01"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#336699"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintHeight_min="50dp"/>
+
+&lt;/android.support.constraint.ConstraintLayout>
+</pre>
+                                </li>
+                                <li>
+                                    <p><code>layout_constrained[Width|Height]</code> 属性 -- 当 宽度/高度 使用 wrap_content 时，如果不使用以下属性，其 宽度/高度 的约束可能会失效。</p>
+                                    <pre class="brush: xml;">
+<!-- 当 宽度/高度 使用 wrap_content 时，如果不使用以下属性，其 宽度/高度 的约束可能会失效
+    layout_constrainedWidth  -- 约束宽度
+    layout_constrainedHeight -- 约束高度
+-->
+&lt;android.support.constraint.ConstraintLayout ...
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    &lt;View ...
+        android:id="@+id/v_01"/>
+    &lt;TextView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="#dd3366"
+        android:text="aaaaaaaaaaaaaaa"
+        android:gravity="center"
+        app:layout_constrainedWidth="true"  <!-- 如果没有此属性，那么当 text 长度超出时，宽度约束将会失效 -->
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v_01"
+        app:layout_constraintLeft_toRightOf="@+id/v_01"/>
+&lt;/android.support.constraint.ConstraintLayout>
+</pre>
+                                </li>
+                            </ol>
+                            <p><b>ConstraintLayout</b> 包中的其他几个类：</p>
+                            <ol type="I">
+                                <li>
+                                    <p><b>android.support.constraint.Guideline</b> 类 -- 是锚向指示线，是 View 的子类，相当于一条不可见的无宽高的线条，添加约束的时候，可以将其作为参考点。</p>
+                                    <pre class="brush: xml;">
+<!-- Guideline 主要有以下属性：
+    layout_constraintGuide_begin -- 带单位的尺寸值，横向锚线为距离左侧的距离，纵向锚线为距离顶部的距离
+    layout_constraintGuide_end   -- 带单位的尺寸值，横向锚线为距离右侧的距离，纵向锚线为距离底部的距离
+    layout_constraintGuide_percent -- 浮点值(-1.0F - 1.0F)，横向为距离左侧的百分比，纵向为距离顶部的百分比
+-->
+&lt;android.support.constraint.ConstraintLayout ...
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    &lt;android.support.constraint.Guideline
+        android:id="@+id/gl_v1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"                  <!-- 纵向锚线 -->
+        app:layout_constraintGuide_percent="0.5" />     <!-- 居中 -->
+
+    &lt;android.support.constraint.Guideline
+        android:id="@+id/gl_h1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"                <!-- 横向锚线 -->
+        app:layout_constraintGuide_begin="100dp" />     <!-- 距离顶部 100dp -->
+
+    &lt;TextView
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:background="#f5ec7e"
+        android:gravity="center"
+        android:text="Hello World!"
+        app:layout_constraintLeft_toRightOf="@+id/gl_v1"    <!-- 基于锚线的约束-->
+        app:layout_constraintTop_toBottomOf="@+id/gl_h1" /> <!-- 基于锚线的约束-->
+
+&lt;/android.support.constraint.ConstraintLayout>
+</pre>
+                                </li>
+                                <li>
+                                    <p><b>android.support.constraint.Barrier</b> 类 -- 可以翻译为栅栏，是 ConstraintHelper 的子类，栅栏的位置可以根据其中的内容改变。也有点类似锚向指示线，其他的 View 可以参照 Barrier 的位置添加约束。</p>
+                                    <pre class="brush: xml;">
+<!-- Barrier 的位置始终在 tv_name,tv_contract 的右侧 -->
+&lt;android.support.constraint.ConstraintLayout ...
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    &lt;TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="姓名："
+        app:layout_constraintBottom_toBottomOf="@+id/et_name"
+        app:layout_constraintTop_toTopOf="@+id/et_name" />
+
+    &lt;TextView
+        android:id="@+id/tv_contract"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="联系方式："
+        app:layout_constraintBottom_toBottomOf="@+id/et_contract"
+        app:layout_constraintTop_toTopOf="@+id/et_contract" />
+
+    &lt;android.support.constraint.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="right" <!-- 栅栏的位置在 constraint_referenced_ids 引用的所有控件右侧 -->
+        app:constraint_referenced_ids="tv_name,tv_contract" /> <!-- 指定引用的控件(多个 id 以逗号隔开) -->
+
+    &lt;EditText
+        android:id="@+id/et_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="请输入姓名"
+        app:layout_constraintLeft_toLeftOf="@+id/barrier"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    &lt;EditText
+        android:id="@+id/et_contract"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="请输入联系方式"
+        app:layout_constraintLeft_toLeftOf="@+id/barrier"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_name" />
+&lt;/android.support.constraint.ConstraintLayout>
+</pre>
+                                </li>
+                                <li>
+                                    <p><b>android.support.constraint.Group</b> 类 -- 用于控制多个控件的可见性。是 ConstraintHelper 的子类。将 Group 设为不可见时，其引用的控件也将不可见。</p>
+                                    <pre class="brush: xml;">
+&lt;android.support.constraint.ConstraintLayout ...
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    &lt;TextView ...
+        android:id="@+id/tv_name" />
+
+    &lt;TextView ...
+        android:id="@+id/tv_contract" />
+
+    &lt;android.support.constraint.Group
+        android:id="@+id/group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="tv_name, tv_contract"/> <!-- 指定引用的控件(多个 id 以逗号隔开) -->
+
+&lt;/android.support.constraint.ConstraintLayout>
+</pre>
+                                </li>
+                                <li>
+                                    <p><b>android.support.constraint.Placeholder</b> 类 -- View 的子类，提供可以定位现有对象的虚拟对象。</p>
+                                    <pre class="brush: xml;">
+&lt;android.support.constraint.ConstraintLayout ...
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    &lt;android.support.constraint.Placeholder
+        android:id="@+id/placeholder"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"/>
+    &lt;Button
+        android:id="@+id/event"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/placeholder"
+        android:text="Event" />
+&lt;/android.support.constraint.ConstraintLayout>
+</pre>
+                                </li>
+                                <li>
+                                    <p><b></b></p>
+                                    <pre class="brush: xml;">
+
+</pre>
+                                </li>
+                                <li>
+                                    <p><b></b></p>
                                     <pre class="brush: xml;">
 
 </pre>
