@@ -2264,7 +2264,7 @@ public class ConstraintLayout extends ViewGroup {
         public static final int BOTTOM = 4;
         public static final int BASELINE = 5;
         public static final int START = 6;
-        public static final int END = 7;
+        public static final int END = 7;o
 
         public static final int HORIZONTAL = 0;
         public static final int VERTICAL = 1;
@@ -2435,6 +2435,60 @@ constraintLayout.requestLayout();
 </pre>
                                 </li>
                                 <li>
+                                    <p><code>MATCH_CONSTRAINT</code> -- 填充父窗体约束,在约束布局中宽高的维度 <code>match_parent</code> 被 <code>0dp</code> 代替，默认生成的大小占所有的可用空间。</p>
+                                    <pre class="brush: xml;">
+<!-- 可用的属性如下：
+    layout_constraintWidth_min      -- 最小宽度
+    layout_constraintHeight_min     -- 最小高度
+    layout_constraintWidth_max      -- 最大宽度
+    layout_constraintHeight_max     -- 最大高度
+    layout_constraintWidth_default  -- 默认宽度
+    layout_constraintHeight_default -- 默认高度
+    layout_constraintWidth_percent  -- 宽度占比
+    layout_constraintHeight_percent -- 高度占比
+-->
+&lt;android.support.constraint.ConstraintLayout ..
+    xmlns:app="http://schemas.android.com/apk/res-auto"">
+
+    &lt;View
+        android:id="@+id/v_01"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#336699"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintHeight_min="50dp"/>
+
+&lt;/android.support.constraint.ConstraintLayout>
+</pre>
+                                </li>
+                                <li>
+                                    <p><code>layout_constrained[Width|Height]</code> 属性 -- 当 宽度/高度 使用 wrap_content 时，如果不使用以下属性，其 宽度/高度 的约束可能会失效。</p>
+                                    <pre class="brush: xml;">
+<!-- 当 宽度/高度 使用 wrap_content 时，如果不使用以下属性，其 宽度/高度 的约束可能会失效
+    layout_constrainedWidth  -- 约束宽度
+    layout_constrainedHeight -- 约束高度
+-->
+&lt;android.support.constraint.ConstraintLayout ...
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    &lt;View ...
+        android:id="@+id/v_01"/>
+    &lt;TextView
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:background="#dd3366"
+        android:text="aaaaaaaaaaaaaaa"
+        android:gravity="center"
+        app:layout_constrainedWidth="true"  <!-- 如果没有此属性，那么当 text 长度超出时，宽度约束将会失效 -->
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/v_01"
+        app:layout_constraintLeft_toRightOf="@+id/v_01"/>
+&lt;/android.support.constraint.ConstraintLayout>
+</pre>
+                                </li>
+                                <li>
                                     <p><code>layout_goneMarginXXX</code> 格式的属性 -- 当参照的 View 的 <code>android:visibility="gone"</code> 时候，View 的位置会发生改变(此时参照点为原来的 View 的中心位置)，还可以使用设置边距的形式来设置其位置，但是这些属性只在参照点为不可见的时候才起作用。</p>
                                     <pre class="brush: xml;">
 &lt;!-- 参照点的 android:visibility="gone" 时，设置和原参照点的中点的距离
@@ -2509,7 +2563,7 @@ constraintLayout.requestLayout();
 </pre>
                                 </li>
                                 <li>
-                                    <p><code>layout_constraintHorizontal_weight</code> 属性 -- 像 LinearLayout 的 weight, ConstraintLayout 也支持重力布局。</p>
+                                    <p><code>layout_constraint[Horizontal|Vertical]_weight</code> 属性 -- 像 LinearLayout 的 weight, ConstraintLayout 也支持重力布局。</p>
                                     <pre class="brush: xml;">
 &lt;android.support.constraint.ConstraintLayout ...
 	xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -2643,60 +2697,7 @@ constraintLayout.requestLayout();
 &lt;/android.support.constraint.ConstraintLayout>
 </pre>
                                 </li>
-                                <li>
-                                    <p><code>MATCH_CONSTRAINT</code> -- 填充父窗体约束,在约束布局中宽高的维度 <code>match_parent</code> 被 <code>0dp</code> 代替，默认生成的大小占所有的可用空间。</p>
-                                    <pre class="brush: xml;">
-<!-- 可用的属性如下：
-    layout_constraintWidth_min      -- 最小宽度
-    layout_constraintHeight_min     -- 最小高度
-    layout_constraintWidth_max      -- 最大宽度
-    layout_constraintHeight_max     -- 最大高度
-    layout_constraintWidth_default  -- 默认宽度
-    layout_constraintHeight_default -- 默认高度
-    layout_constraintWidth_percent  -- 宽度占比
-    layout_constraintHeight_percent -- 高度占比
--->
-&lt;android.support.constraint.ConstraintLayout ..
-    xmlns:app="http://schemas.android.com/apk/res-auto"">
 
-    &lt;View
-        android:id="@+id/v_01"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#336699"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintWidth_percent="0.5"
-        app:layout_constraintHeight_min="50dp"/>
-
-&lt;/android.support.constraint.ConstraintLayout>
-</pre>
-                                </li>
-                                <li>
-                                    <p><code>layout_constrained[Width|Height]</code> 属性 -- 当 宽度/高度 使用 wrap_content 时，如果不使用以下属性，其 宽度/高度 的约束可能会失效。</p>
-                                    <pre class="brush: xml;">
-<!-- 当 宽度/高度 使用 wrap_content 时，如果不使用以下属性，其 宽度/高度 的约束可能会失效
-    layout_constrainedWidth  -- 约束宽度
-    layout_constrainedHeight -- 约束高度
--->
-&lt;android.support.constraint.ConstraintLayout ...
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    &lt;View ...
-        android:id="@+id/v_01"/>
-    &lt;TextView
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        android:background="#dd3366"
-        android:text="aaaaaaaaaaaaaaa"
-        android:gravity="center"
-        app:layout_constrainedWidth="true"  <!-- 如果没有此属性，那么当 text 长度超出时，宽度约束将会失效 -->
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/v_01"
-        app:layout_constraintLeft_toRightOf="@+id/v_01"/>
-&lt;/android.support.constraint.ConstraintLayout>
-</pre>
-                                </li>
                             </ol>
                             <p><b>ConstraintLayout</b> 包中的其他几个类：</p>
                             <ol type="I">
@@ -2827,16 +2828,236 @@ constraintLayout.requestLayout();
 </pre>
                                 </li>
                                 <li>
-                                    <p><b></b></p>
-                                    <pre class="brush: xml;">
-
+                                    <p><b>android.support.constraint.ConstraintSet</b> 类 -- 以 Java 代码的形式类指定 ConstraintLayout 中的控件添加约束，内部有一个 HashMap 以 ViewId 为键, Constraint 为值保存了所有的 View 的约束条件。</p>
+                                    <p><code>ConstraintLayout.LayoutParams</code> 也可以为 ConstraintLayout 中的控件添加约束，但此类更加方便。</p>
+                                    <p>比如将控件通过 xml 的形式加入到 ConstraintLayout 布局中，而不指定其约束条件，通过 ConstraintSet 在 Java 代码中为控件添加约束：</p>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <p><b>内部的控件并未添加任何约束，默认堆叠在左上角:</b></p>
+                                            <pre class="brush: xml; gutter: false;">
+&lt;android.support.constraint.ConstraintLayout
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:background="#99ccdd"
+    android:layout_height="200dp">
+    <!-- 布局中的约束也能被 clone 过去 -->
+    &lt;Button
+        android:id="@+id/top_left"
+        android:text="Top Left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    &lt;Button
+        android:id="@+id/center"
+        android:text="Center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    &lt;Button
+        android:id="@+id/bottom_right"
+        android:text="Bottom Right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+&lt;/android.support.constraint.ConstraintLayout>
 </pre>
-                                </li>
-                                <li>
-                                    <p><b></b></p>
-                                    <pre class="brush: xml;">
+                                        </div>
+                                        <div class="col-md-6" style="position:relative; margin-left:-20px;">
+                                            <p><b>通过 ConstraintSet 实现第一个按钮在容器左上角，第二个按钮在容器中央，第三个按钮在容器右下角：</b></p>
+                                            <pre class="brush: java; gutter: false;">
+ConstraintLayout l = findViewById(R.id.container);
+ConstraintSet s = new ConstraintSet();
+s.clone(l); // 复制 xml 已有的约束
 
+// 第一个按钮左上角，这里可以省略，默认就是左上角
+s.connect(R.id.top_left, ConstraintSet.LEFT,
+    ConstraintSet.PARENT_ID, ConstraintSet.LEFT);
+s.connect(R.id.top_left, ConstraintSet.TOP,
+    ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+
+// 第二个按钮横向和纵向居中
+s.centerHorizontally(R.id.c,ConstraintSet.PARENT_ID);
+s.centerVertically(R.id.c, ConstraintSet.PARENT_ID);
+
+// 第三个按钮在容器右下角
+s.connect(R.id.bottom_right, ConstraintSet.BOTTOM,
+    ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+s.connect(R.id.bottom_right, ConstraintSet.RIGHT,
+    ConstraintSet.PARENT_ID, ConstraintSet.RIGHT);
+s.applyTo(l); // 应用到指定的 ConstraintLayout 中
 </pre>
+                                        </div>
+                                    </div>
+                                    <pre class="brush: java;">
+public class ConstraintSet {
+    public static final int UNSET = -1;
+    public static final int MATCH_CONSTRAINT = 0;
+    public static final int WRAP_CONTENT = -2;
+    public static final int MATCH_CONSTRAINT_WRAP = 1;
+    public static final int MATCH_CONSTRAINT_SPREAD = 0;
+
+    public static final int PARENT_ID = 0; // 通指 parent, 相当于 xml 的的 parent
+
+    public static final int HORIZONTAL = 0;
+    public static final int VERTICAL = 1;
+
+    public static final int HORIZONTAL_GUIDELINE = 0;
+    public static final int VERTICAL_GUIDELINE = 1;
+
+    public static final int VISIBLE = 0;
+    public static final int INVISIBLE = 4;
+    public static final int GONE = 8;
+
+    public static final int LEFT = 1;
+    public static final int RIGHT = 2;
+    public static final int TOP = 3;
+    public static final int BOTTOM = 4;
+    public static final int BASELINE = 5;
+    public static final int START = 6;
+    public static final int END = 7;
+
+    public static final int CHAIN_SPREAD = 0;
+    public static final int CHAIN_SPREAD_INSIDE = 1;
+    public static final int CHAIN_PACKED = 2;
+
+    /** 内部有一个 HashMap 以 ViewId 为键, Constraint 为值保存了所有的 View 的约束条件 */
+    private HashMap&lt;Integer, Constraint> mConstraints = new HashMap();
+    /** 此类用于般保存约束条件，类似于 ConstraintLayout.LayoutParams 类 */
+    private static class Constraint {...}
+}
+</pre>
+                                    <p><b>按照前面的 ConstraintLayout 的 xml 属性顺序来排列来分析其 API:</b></p>
+									<ol>
+
+                                        <li><p><code>void 	clone(ConstraintLayout constraintLayout)</code> -- 从 ConstraintLayout 复制已有的约束</p></li>
+                                        <li><p><code>void 	clone(Constraints constraints)</code> -- 从 Constraints 复制已有的约束</p></li>
+                                        <li><p><code>void 	clone(ConstraintSet set)</code> -- 从 ConstraintSet 复制已有的约束</p></li>
+                                        <li><p><code>void 	clone(Context context, int constraintLayoutId)</code> -- 从 布局文件 复制已有的约束</p></li>
+
+                                        <li class="group"><p><code>void 	load(Context context, XmlPullParser parser)</code> -- 从 布局文件 加载 ConstraintSet</p></li>
+                                        <li><p><code>void 	load(Context context, int resourceId)</code> -- 从 布局文件 加载 ConstraintSet</p></li>
+
+                                        <li class="group"><p><code>void 	clear(int viewId)</code> -- 清除指定 viewId 的所有方向的约束</p></li>
+                                        <li><p><code>void 	clear(int viewId, int anchor)</code> -- 清除指定 viewId 的指定方向的约束</p></li>
+
+                                        <li class="group"><p><code>ConstraintSet.Constraint 	getParameters(int viewId)</code> -- 获取某个指定 View 的布局参数</p></li>
+
+                                        <li class="group"><p><code>void 	applyTo(ConstraintLayout constraintLayout)</code> -- 将此 ConstraintSet 应用到 ConstraintLayout 中</p></li>
+
+                                        <li class="group"><p><code>void 	connect(int startID, int startSide, int endID, int endSide)</code> -- 添加约束</p></li>
+                                        <li><p><code>void 	connect(int startID, int startSide, int endID, int endSide, int margin)</code> -- 添加约束，并有一个边距</p></li>
+                                        <li><p><code>void 	setHorizontalBias(int viewId, float bias)</code> -- 横向约束力强度</p></li>
+                                        <li><p><code>void 	setVerticalBias(int viewId, float bias)</code> -- 纵向约束力强度</p></li>
+                                        <li><p><code>void 	setMargin(int viewId, int anchor, int value)</code> -- 设置指定方向的边距</p>
+                                            <pre class="brush: java;">
+/** 此部分的 API，相当于 ConstraintLayout 的 layout_constraintXXX_toYYYOf 属性和 layout_marginXXX */
+ConstraintSet set = new ConstraintSet();
+
+Button cancel = new Button(this);
+int cancelId = View.generateViewId(); // 生成一个和 R.id 不冲突的 id 值, ok 为参照点 View
+cancel.setId(cancelId);
+cancel.setText("取 消");
+constraintContent.addView(cancel);
+
+set.constrainWidth(cancelId, ConstraintSet.WRAP_CONTENT);
+set.setMargin(cancelId, ConstraintSet.RIGHT, ScreenUtil.dip2Px(this, 10));  // 指定边距
+set.connect(cancelId, ConstraintSet.TOP, ok.getId(), ConstraintSet.TOP);    // topToTop
+set.connect(cancelId, ConstraintSet.RIGHT, ok.getId(), ConstraintSet.LEFT); // rightToLeft
+
+constraintSet.applyTo(constraintContent); // 应用到指定的 ConstraintLayout 容器中
+</pre>
+                                        </li>
+
+                                        <li class="group"><p><code>void 	centerHorizontally(int viewId, int toView)</code> -- View 的中点横向和 toView 的中点对齐</p></li>
+                                        <li><p><code>void 	centerHorizontally(int vID, int lvId, int leftSide, int leftMargin, int rvId, int rightSide, int rightMargin, float bias)</code> -- 横向将左侧与指点 lvId 的指定边对齐，右侧与 rvId  的指定边对齐，并可以指定边距和横向束力强度</p>
+                                            <pre class="brush: java;">
+/** 此方法调用了以下代码: */
+this.connect(vID, LEFT, lvId, leftSide, leftMargin);    // 左侧和参照点的指定边对齐，并有一个边距
+this.connect(vID, RIGHT, rvId, rightSide, rightMargin); // 右侧和参照点的指定边对齐，并有一个边距
+ConstraintSet.Constraint constraint = (ConstraintSet.Constraint)this.mConstraints.get(centerID);
+constraint.horizontalBias = bias; // 横向重力设置为指定值
+</pre>
+                                        </li>
+                                        <li><p><code>void 	centerHorizontallyRtl(int viewId, int toView)</code> -- RTL 布局</p></li>
+                                        <li><p><code>void 	centerHorizontallyRtl(int centerID, int startId, int startSide, int startMargin, int endId, int endSide, int endMargin, float bias)</code> -- RTL 布局， 同 centerHorizontally(...) 将 LEFT, RIGHT 换成 START, END</p></li>
+                                        <li><p><code>void 	centerVertically(int viewId, int toView)</code> -- View 的中点纵向和 toView 的中点对齐</p></li>
+                                        <li><p><code>void 	centerVertically(int centerID, int tvId, int topSide, int topMargin, int bvId, int bottomSide, int bottomMargin, float bias)</code> -- 纵向将顶部与指点 tvId 的指定边对齐，底部与 bvId  的指定边对齐，并可以指定边距和纵向约束力强度</p>
+                                            <pre class="brush: java;">
+/** 此方法调用了以下代码: */
+this.connect(vID, TOP, tvId, topSide, topMargin);          // 顶部和参照点的指定边对齐，并有一个边距
+this.connect(vID, BOTTOM, bvId, bottomSide, bottomMargin); // 底部和参照点的指定边对齐，并有一个边距
+ConstraintSet.Constraint constraint = (ConstraintSet.Constraint)this.mConstraints.get(centerID);
+constraint.verticalBias = bias; // 横向重力设置为指定值
+</pre>
+                                        </li>
+                                        <li><p><code>void 	center(int centerID, int firstID, int firstSide, int firstMargin, int secondId, int secondSide, int secondMargin, float bias)</code> -- 参照前面，根据 firstSide 的值判断</p></li>
+
+                                        <li class="group"><p><code>void 	constrainWidth(int viewId, int w)</code> -- 宽度，w 可以为: 像素 或者 <code>WRAP_CONTENT</code>, <code>MATCH_CONSTRAINT</code></p></li>
+                                        <li><p><code>void 	constrainHeight(int viewId, int h)</code> -- 高度，h 可以为: 像素 或者 <code>WRAP_CONTENT</code>, <code>MATCH_CONSTRAINT</code></p></li>
+
+                                        <li class="group"><p><code>void 	constrainDefaultHeight(int viewId, int height)</code> -- 默认高度</p></li>
+                                        <li><p><code>void 	constrainDefaultWidth(int viewId, int width)</code> -- 默认宽度</p></li>
+                                        <li><p><code>void 	constrainMaxHeight(int viewId, int height)</code> -- 最大高度</p></li>
+                                        <li><p><code>void 	constrainMaxWidth(int viewId, int width)</code> -- 最大宽度</p></li>
+                                        <li><p><code>void 	constrainMinHeight(int viewId, int height)</code> -- 最小高度</p></li>
+                                        <li><p><code>void 	constrainMinWidth(int viewId, int width)</code> -- 最小宽度</p></li>
+                                        <li><p><code>void 	constrainPercentHeight(int viewId, float percent)</code> -- 高度占比</p></li>
+                                        <li><p><code>void 	constrainPercentWidth(int viewId, float percent)</code> -- 宽度占比</p></li>
+
+                                        <li class="group"><p><code>void 	setVisibility(int viewId, int visibility)</code> -- 设置可见性</p></li>
+                                        <li><p><code>void 	setGoneMargin(int viewId, int anchor, int value)</code> -- 当参照点不可时，设置指定边(anchor = LEFT, RIGHT...)的边距，参见前面: layout_goneMarginXXX 格式的属性</p></li>
+
+                                        <li class="group"><p><code>void 	setHorizontalWeight(int viewId, float weight)</code> -- 横向重力</p></li>
+                                        <li><p><code>void 	setVerticalWeight(int viewId, float weight)</code> -- 纵向重力</p></li>
+
+                                        <li class="group"><p><code>void 	addToHorizontalChain(int viewId, int leftId, int rightId)</code> -- 添加横向 chain</p></li>
+                                        <li><p><code>void 	addToHorizontalChainRTL(int viewId, int leftId, int rightId)</code> -- RTL 布局</p></li>
+                                        <li><p><code>void 	addToVerticalChain(int viewId, int topId, int bottomId)</code> -- 添加纵向 chain</p></li>
+                                        <li><p><code>void 	removeFromHorizontalChain(int viewId)</code> -- 移除横向 chain</p></li>
+                                        <li><p><code>void 	removeFromVerticalChain(int viewId)</code> -- 移除纵向 chain</p></li>
+
+                                        <li class="group"><p><code>void 	setHorizontalChainStyle(int viewId, int chainStyle)</code> -- 设置横向 chain 样式，只需要在链头的元素设置：<code>CHAIN_SPREAD</code>, <code>CHAIN_SPREAD_INSIDE</code>, <code>CHAIN_PACKED</code></p></li>
+                                        <li><p><code>void 	setVerticalChainStyle(int viewId, int chainStyle)</code> -- 设置纵向 chain 样式，只需要在链头的元素设置：<code>CHAIN_SPREAD</code>, <code>CHAIN_SPREAD_INSIDE</code>, <code>CHAIN_PACKED</code></p></li>
+
+                                        <li class="group"><p><code>void 	createHorizontalChain(int leftId, int leftSide, int rightId, int rightSide, int[] chainIds, float[] weights, int style)</code> -- 将 chainIds 指定的多个元素添加到此横向 chain 中类</p></li>
+                                        <li><p><code>void 	createHorizontalChainRtl(int startId, int startSide, int endId, int endSide, int[] chainIds, float[] weights, int style)</code> -- 同上，RTL 布局</p></li>
+                                        <li><p><code>void 	createVerticalChain(int topId, int topSide, int bottomId, int bottomSide, int[] chainIds, float[] weights, int style)</code> -- 将 chainIds 指定的多个元素添加到此纵向 chain 中类</p></li>
+
+                                        <li class="group"><p><code>void 	setDimensionRatio(int viewId, String ratio)</code> -- 宽高比</p></li>
+
+                                        <li class="group"><p><code>void 	constrainCircle(int viewId, int id, int radius, float angle)</code> -- 圆形约束</p></li>
+
+                                        <li class="group"><p><code>void 	create(int guidelineID, int orientation)</code> -- 创建一条 Guideline，并指定方向</p></li>
+                                        <li><p><code>void 	setGuidelineBegin(int guidelineID, int margin)</code> -- 设置 Guideline 开始位置</p></li>
+                                        <li><p><code>void 	setGuidelineEnd(int guidelineID, int margin)</code> -- 设置 Guideline 结束位置</p></li>
+                                        <li><p><code>void 	setGuidelinePercent(int guidelineID, float ratio)</code> -- 百分比设置 Guideline 位置</p>
+                                            <pre class="brush: java;">
+int gId = View.generateViewId();
+set.create(gId, ConstraintSet.VERTICAL_GUIDELINE);
+set.setGuidelinePercent(gId, 0.2f);
+set.connect(R.id.guide_line, ConstraintSet.LEFT, gId, ConstraintSet.RIGHT);
+set.connect(R.id.guide_line, ConstraintSet.TOP, R.id.center, ConstraintSet.BOTTOM);
+</pre>
+                                        </li>
+
+                                        <li class="group"><p><code>void 	createBarrier(int id, int direction, int... referenced)</code> -- 创建一个栅栏(Barrier), 指定方向和引用的元素</p></li>
+                                        <li><p><code>void 	setBarrierType(int id, int type)</code> -- 指定栅栏(Barrier)类型，空方法<code></code></p></li>
+
+                                        <li class="group"><p><code>void 	setAlpha(int viewId, float alpha)</code> -- 设置透明度，调用 <code>applyTo()</code> 生效</p></li>
+                                        <li><p><code>void 	setTranslation(int viewId, float translationX, float translationY)</code> -- 设置偏移，调用 <code>applyTo()</code> 生效</p></li>
+                                        <li><p><code>void 	setTranslationX(int viewId, float translationX)</code> -- 设置 X 偏移，调用 <code>applyTo()</code> 生效</p></li>
+                                        <li><p><code>void 	setTranslationY(int viewId, float translationY)</code> -- 设置 Y 偏移，调用 <code>applyTo()</code> 生效</p></li>
+                                        <li><p><code>void 	setTranslationZ(int viewId, float translationZ)</code> -- 设置 Z 偏移，调用 <code>applyTo()</code> 生效</p></li>
+                                        <li><p><code>void 	setRotation(int viewId, float rotation)</code> -- 中心点旋转，调用 <code>applyTo()</code> 生效</p></li>
+                                        <li><p><code>void 	setRotationX(int viewId, float rotationX)</code> -- X 轴旋转，调用 <code>applyTo()</code> 生效</p></li>
+                                        <li><p><code>void 	setRotationY(int viewId, float rotationY)</code> -- Y 轴旋转，调用 <code>applyTo()</code> 生效</p></li>
+                                        <li><p><code>void 	setScaleX(int viewId, float scaleX)</code> -- X 方向缩放，调用 <code>applyTo()</code> 生效</p></li>
+                                        <li><p><code>void 	setScaleY(int viewId, float scaleY)</code> -- Y 方向缩放，调用 <code>applyTo()</code> 生效</p></li>
+                                        <li><p><code>void 	setTransformPivot(int viewId, float transformPivotX, float transformPivotY)</code> -- 设置变换中点，调用 <code>applyTo()</code> 生效</p></li>
+                                        <li><p><code>void 	setTransformPivotX(int viewId, float transformPivotX)</code> -- 设置变换 X 坐标，调用 <code>applyTo()</code> 生效</p></li>
+                                        <li><p><code>void 	setTransformPivotY(int viewId, float transformPivotY)</code> -- 设置变换 X 坐标，调用 <code>applyTo()</code> 生效</p></li>
+
+                                        <li class="group"><p><code>void 	setApplyElevation(int viewId, boolean apply)</code> -- 是否应用高度</p></li>
+                                        <li><p><code>boolean 	getApplyElevation(int viewId)</code> -- 获取是否应用高度，默认不启用</p></li>
+                                        <li><p><code>void 	setElevation(int viewId, float elevation)</code> -- 设置高度值</p></li>
+                                    </ol>
                                 </li>
                             </ol>
                             <p><b>ConstraintLayout</b> 的 API：</p>
