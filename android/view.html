@@ -77,6 +77,7 @@
 						</a>
 						<div id="view-Child" class="panel-collapse collapse"
 							role="tabpanel">
+
 							<a href="#view-TextView" class="list-group-item">TextView</a>
 							<a href="#view-ImageView" class="list-group-item">ImageView</a>
 							<a href="#view-EditText" class="list-group-item">EditText</a>
@@ -102,6 +103,7 @@
 						</a>
 						<div id="view-layout-container" class="panel-collapse collapse in" role="tabpanel">
 							<a href="#android-support-constraint-ConstraintLayout" class="list-group-item">ConstraintLayout</a>
+                            <a href="#android-support-v7-widget-RecyclerView" class="list-group-item">RecyclerView 及子类</a>
 							<a href="#view-LinearLayout" class="list-group-item">LinearLayout</a>
 							<a href="#view-FrameLayout" class="list-group-item">FrameLayout</a>
 							<a href="#view-RelativeLayout" class="list-group-item">RelativeLayout</a>
@@ -3093,6 +3095,225 @@ set.connect(R.id.guide_line, ConstraintSet.TOP, R.id.center, ConstraintSet.BOTTO
 					</div>
 				</div>
 				<!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="android-support-v7-widget-RecyclerView"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">RecyclerView 及子类</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+public class RecyclerView extends ViewGroup implements ScrollingView, NestedScrollingChild {
+    public static final int HORIZONTAL = 0;
+    public static final int VERTICAL = 1;
+
+    public static final int NO_POSITION = -1;
+    public static final long NO_ID = -1L;
+    public static final int INVALID_TYPE = -1;
+
+    public static final int TOUCH_SLOP_DEFAULT = 0;
+    public static final int TOUCH_SLOP_PAGING = 1;
+
+    public static final int SCROLL_STATE_IDLE = 0;
+    public static final int SCROLL_STATE_DRAGGING = 1;
+    public static final int SCROLL_STATE_SETTLING = 2;
+
+    public interface RecyclerListener {
+        void onViewRecycled(@NonNull ViewHolder holder);
+    }
+
+    public interface ChildDrawingOrderCallback {
+        int onGetChildDrawingOrder(int var1, int var2);
+    }
+
+    public interface OnChildAttachStateChangeListener {
+        void onChildViewAttachedToWindow(@NonNull View var1);
+        void onChildViewDetachedFromWindow(@NonNull View var1);
+    }
+
+    public interface OnItemTouchListener {
+        boolean onInterceptTouchEvent(@NonNull RecyclerView var1, @NonNull MotionEvent var2);
+        void onTouchEvent(@NonNull RecyclerView var1, @NonNull MotionEvent var2);
+        void onRequestDisallowInterceptTouchEvent(boolean var1);
+    }
+
+    public static class SimpleOnItemTouchListener implements OnItemTouchListener {
+        public SimpleOnItemTouchListener() {}
+        public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {...}
+        public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {}
+        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
+    }
+
+    public abstract static class OnScrollListener {
+        public OnScrollListener() {}
+        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {}
+        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {}
+    }
+
+    public abstract static class OnFlingListener {
+        public OnFlingListener() {}
+        public abstract boolean onFling(int var1, int var2);
+    }
+
+    public abstract static class Adapter&lt;VH extends ViewHolder> {...}
+    public abstract static class AdapterDataObserver {...}
+    public abstract static class ItemAnimator {...}
+    public abstract static class ItemDecoration {...}
+    public static class State {...}
+    public static class SavedState extends AbsSavedState {...}
+    public abstract static class SmoothScroller {...}
+    public static class LayoutParams extends MarginLayoutParams {...}
+    public abstract static class ViewHolder {...}
+    public abstract static class LayoutManager {...}
+    public abstract static class ViewCacheExtension {...}
+    public final class Recycler {...}
+    public static class RecycledViewPool {...}
+    public static class EdgeEffectFactory {...}
+
+    public RecyclerView(Context context) {}
+    public RecyclerView(Context context, AttributeSet attrs) {}
+    public RecyclerView(Context context, AttributeSet attrs, int defStyle) {}
+}
+</pre>
+                            <p><a href="docs/reference/android/support/v7/widget/RecyclerView.html" target="_blank">RecyclerView</a> 一种灵活的视图，用于向大数据集提供有限窗口。可以用来代替传统的 ListView，更加强大和灵活</p>
+                            <ol>
+                                <li><p><code>void 	addFocusables(ArrayList&lt;View> views, int direction, int focusableMode)</code> -- </p></li>
+                                <li><p><code>void 	addItemDecoration(RecyclerView.ItemDecoration decor)</code> -- </p></li>
+                                <li><p><code>oid 	addItemDecoration(RecyclerView.ItemDecoration decor, int index)</code> -- </p></li>
+                                <li><p><code>void 	addOnChildAttachStateChangeListener(RecyclerView.OnChildAttachStateChangeListener listener)</code> -- </p></li>
+                                <li><p><code>void 	addOnItemTouchListener(RecyclerView.OnItemTouchListener listener)</code> -- </p></li>
+                                <li><p><code>void 	addOnScrollListener(RecyclerView.OnScrollListener listener)</code> -- </p></li>
+                                <li><p><code>void 	clearOnChildAttachStateChangeListeners()</code> -- </p></li>
+                                <li><p><code>void 	clearOnScrollListeners()</code> -- </p></li>
+                                <li><p><code>int 	computeHorizontalScrollExtent()</code> -- </p></li>
+                                <li><p><code>int 	computeHorizontalScrollOffset()</code> -- </p></li>
+                                <li><p><code>int 	computeHorizontalScrollRange()</code> -- </p></li>
+                                <li><p><code>int 	computeVerticalScrollExtent()</code> -- </p></li>
+                                <li><p><code>int 	computeVerticalScrollOffset()</code> -- </p></li>
+                                <li><p><code>int 	computeVerticalScrollRange()</code> -- </p></li>
+                                <li><p><code>boolean 	dispatchNestedFling(float velocityX, float velocityY, boolean consumed)</code> -- </p></li>
+                                <li><p><code>boolean 	dispatchNestedPreFling(float velocityX, float velocityY)</code> -- </p></li>
+                                <li><p><code>boolean 	dispatchNestedPreScroll(int dx, int dy, int[] consumed, int[] offsetInWindow)</code> -- </p></li>
+                                <li><p><code>boolean 	dispatchNestedPreScroll(int dx, int dy, int[] consumed, int[] offsetInWindow, int type)</code> -- </p></li>
+                                <li><p><code>boolean 	dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int[] offsetInWindow, int type)</code> -- </p></li>
+                                <li><p><code>boolean 	dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int[] offsetInWindow)</code> -- </p></li>
+                                <li><p><code>void 	draw(Canvas c)</code> -- </p></li>
+                                <li><p><code>boolean 	drawChild(Canvas canvas, View child, long drawingTime)</code> -- </p></li>
+                                <li><p><code>View 	findChildViewUnder(float x, float y)</code> -- </p></li>
+                                <li><p><code>View 	findContainingItemView(View view)</code> -- </p></li>
+                                <li><p><code>RecyclerView.ViewHolder 	findContainingViewHolder(View view)</code> -- </p></li>
+                                <li><p><code>RecyclerView.ViewHolder 	findViewHolderForAdapterPosition(int position)</code> -- </p></li>
+                                <li><p><code>RecyclerView.ViewHolder 	findViewHolderForItemId(long id)</code> -- </p></li>
+                                <li><p><code>RecyclerView.ViewHolder 	findViewHolderForLayoutPosition(int position)</code> -- </p></li>
+                                <li><p><code>boolean 	fling(int velocityX, int velocityY)</code> -- </p></li>
+                                <li><p><code>View 	focusSearch(View focused, int direction)</code> -- </p></li>
+                                <li><p><code>ViewGroup.LayoutParams 	generateLayoutParams(AttributeSet attrs)</code> -- </p></li>
+                                <li><p><code>Adapter 	getAdapter()</code> -- </p></li>
+                                <li><p><code>int 	getBaseline()</code> -- </p></li>
+                                <li><p><code>int 	getChildAdapterPosition(View child)</code> -- </p></li>
+                                <li><p><code>long 	getChildItemId(View child)</code> -- </p></li>
+                                <li><p><code>int 	getChildLayoutPosition(View child)</code> -- </p></li>
+                                <li><p><code>RecyclerView.ViewHolder 	getChildViewHolder(View child)</code> -- </p></li>
+                                <li><p><code>boolean 	getClipToPadding()</code> -- </p></li>
+                                <li><p><code>RecyclerViewAccessibilityDelegate 	getCompatAccessibilityDelegate()</code> -- </p></li>
+                                <li><p><code>void 	getDecoratedBoundsWithMargins(View view, Rect outBounds)</code> -- </p></li>
+                                <li><p><code>RecyclerView.EdgeEffectFactory 	getEdgeEffectFactory()</code> -- </p></li>
+                                <li><p><code>RecyclerView.ItemAnimator 	getItemAnimator()</code> -- </p></li>
+                                <li><p><code>RecyclerView.ItemDecoration 	getItemDecorationAt(int index)</code> -- </p></li>
+                                <li><p><code>int 	getItemDecorationCount()</code> -- </p></li>
+                                <li><p><code>RecyclerView.LayoutManager 	getLayoutManager()</code> -- </p></li>
+                                <li><p><code>int 	getMaxFlingVelocity()</code> -- </p></li>
+                                <li><p><code>int 	getMinFlingVelocity()</code> -- </p></li>
+                                <li><p><code>RecyclerView.OnFlingListener 	getOnFlingListener()</code> -- </p></li>
+                                <li><p><code>boolean 	getPreserveFocusAfterLayout()</code> -- </p></li>
+                                <li><p><code>RecyclerView.RecycledViewPool 	getRecycledViewPool()</code> -- </p></li>
+                                <li><p><code>int 	getScrollState()</code> -- </p></li>
+                                <li><p><code>boolean 	hasFixedSize()</code> -- </p></li>
+                                <li><p><code>boolean 	hasNestedScrollingParent()</code> -- </p></li>
+                                <li><p><code>boolean 	hasNestedScrollingParent(int type)</code> -- </p></li>
+                                <li><p><code>boolean 	hasPendingAdapterUpdates()</code> -- </p></li>
+                                <li><p><code>void 	invalidateItemDecorations()</code> -- </p></li>
+                                <li><p><code>boolean 	isAnimating()</code> -- </p></li>
+                                <li><p><code>boolean 	isAttachedToWindow()</code> -- </p></li>
+                                <li><p><code>boolean 	isComputingLayout()</code> -- </p></li>
+                                <li><p><code>boolean 	isLayoutFrozen()</code> -- </p></li>
+                                <li><p><code>boolean 	isNestedScrollingEnabled()</code> -- </p></li>
+                                <li><p><code>void 	offsetChildrenHorizontal(int dx)</code> -- </p></li>
+                                <li><p><code>void 	offsetChildrenVertical(int dy)</code> -- </p></li>
+                                <li><p><code>void 	onChildAttachedToWindow(View child)</code> -- </p></li>
+                                <li><p><code>void 	onChildDetachedFromWindow(View child)</code> -- </p></li>
+                                <li><p><code>void 	onDraw(Canvas c)</code> -- </p></li>
+                                <li><p><code>boolean 	onGenericMotionEvent(MotionEvent event)</code> -- </p></li>
+                                <li><p><code>boolean 	onInterceptTouchEvent(MotionEvent e)</code> -- </p></li>
+                                <li><p><code>void 	onScrollStateChanged(int state)</code> -- </p></li>
+                                <li><p><code>void 	onScrolled(int dx, int dy)</code> -- </p></li>
+                                <li><p><code>boolean 	onTouchEvent(MotionEvent e)</code> -- </p></li>
+                                <li><p><code>void 	removeItemDecoration(RecyclerView.ItemDecoration decor)</code> -- </p></li>
+                                <li><p><code>void 	removeItemDecorationAt(int index)</code> -- </p></li>
+                                <li><p><code>void 	removeOnChildAttachStateChangeListener(RecyclerView.OnChildAttachStateChangeListener listener)</code> -- </p></li>
+                                <li><p><code>void 	removeOnItemTouchListener(RecyclerView.OnItemTouchListener listener)</code> -- </p></li>
+                                <li><p><code>void 	removeOnScrollListener(RecyclerView.OnScrollListener listener)</code> -- </p></li>
+                                <li><p><code>void 	requestChildFocus(View child, View focused)</code> -- </p></li>
+                                <li><p><code>boolean 	requestChildRectangleOnScreen(View child, Rect rect, boolean immediate)</code> -- </p></li>
+                                <li><p><code>void 	requestDisallowInterceptTouchEvent(boolean disallowIntercept)</code> -- </p></li>
+                                <li><p><code>void 	requestLayout()</code> -- </p></li>
+                                <li><p><code>void 	scrollBy(int x, int y)</code> -- </p></li>
+                                <li><p><code>void 	scrollTo(int x, int y)</code> -- </p></li>
+                                <li><p><code>void 	scrollToPosition(int position)</code> -- </p></li>
+                                <li><p><code>void 	sendAccessibilityEventUnchecked(AccessibilityEvent event)</code> -- </p></li>
+                                <li><p><code>void 	setAccessibilityDelegateCompat(RecyclerViewAccessibilityDelegate accessibilityDelegate)</code> -- </p></li>
+                                <li><p><code>void 	setAdapter(Adapter adapter)</code> -- </p></li>
+                                <li><p><code>void 	setChildDrawingOrderCallback(RecyclerView.ChildDrawingOrderCallback childDrawingOrderCallback)</code> -- </p></li>
+                                <li><p><code>void 	setClipToPadding(boolean clipToPadding)</code> -- </p></li>
+                                <li><p><code>void 	setEdgeEffectFactory(RecyclerView.EdgeEffectFactory edgeEffectFactory)</code> -- </p></li>
+                                <li><p><code>void 	setHasFixedSize(boolean hasFixedSize)</code> -- </p></li>
+                                <li><p><code>void 	setItemAnimator(RecyclerView.ItemAnimator animator)</code> -- </p></li>
+                                <li><p><code>void 	setItemViewCacheSize(int size)</code> -- </p></li>
+                                <li><p><code>void 	setLayoutFrozen(boolean frozen)</code> -- </p></li>
+                                <li><p><code>void 	setLayoutManager(RecyclerView.LayoutManager layout)</code> -- </p></li>
+                                <li><p><code>void 	setNestedScrollingEnabled(boolean enabled)</code> -- </p></li>
+                                <li><p><code>void 	setOnFlingListener(RecyclerView.OnFlingListener onFlingListener)</code> -- </p></li>
+                                <li><p><code>void 	setPreserveFocusAfterLayout(boolean preserveFocusAfterLayout)</code> -- </p></li>
+                                <li><p><code>void 	setRecycledViewPool(RecyclerView.RecycledViewPool pool)</code> -- </p></li>
+                                <li><p><code>void 	setRecyclerListener(RecyclerView.RecyclerListener listener)</code> -- </p></li>
+                                <li><p><code>void 	setScrollingTouchSlop(int slopConstant)</code> -- </p></li>
+                                <li><p><code>void 	setViewCacheExtension(RecyclerView.ViewCacheExtension extension)</code> -- </p></li>
+                                <li><p><code>void 	smoothScrollBy(int dx, int dy)</code> -- </p></li>
+                                <li><p><code>void 	smoothScrollBy(int dx, int dy, Interpolator interpolator)</code> -- </p></li>
+                                <li><p><code>void 	smoothScrollToPosition(int position)</code> -- </p></li>
+                                <li><p><code>boolean 	startNestedScroll(int axes)</code> -- </p></li>
+                                <li><p><code>boolean 	startNestedScroll(int axes, int type)</code> -- </p></li>
+                                <li><p><code>void 	stopNestedScroll()</code> -- </p></li>
+                                <li><p><code>void 	stopNestedScroll(int type)</code> -- </p></li>
+                                <li><p><code>void 	stopScroll()</code> -- </p></li>
+                                <li><p><code>void 	swapAdapter(Adapter adapter, boolean removeAndRecycleExistingViews)</code> -- </p></li>
+
+                                <li class="group"><p><code>boolean 	checkLayoutParams(ViewGroup.LayoutParams p)</code> -- </p></li>
+                                <li><p><code>void 	dispatchRestoreInstanceState(SparseArray&lt;Parcelable> container)</code> -- </p></li>
+                                <li><p><code>void 	dispatchSaveInstanceState(SparseArray&lt;Parcelable> container)</code> -- </p></li>
+                                <li><p><code>ViewGroup.LayoutParams 	generateDefaultLayoutParams()</code> -- </p></li>
+                                <li><p><code>ViewGroup.LayoutParams 	generateLayoutParams(ViewGroup.LayoutParams p)</code> -- </p></li>
+                                <li><p><code>int 	getChildDrawingOrder(int childCount, int i)</code> -- </p></li>
+                                <li><p><code>void 	onAttachedToWindow()</code> -- </p></li>
+                                <li><p><code>void 	onDetachedFromWindow()</code> -- </p></li>
+                                <li><p><code>void 	onLayout(boolean changed, int l, int t, int r, int b)</code> -- </p></li>
+                                <li><p><code>void 	onMeasure(int widthSpec, int heightSpec)</code> -- </p></li>
+                                <li><p><code>boolean 	onRequestFocusInDescendants(int direction, Rect previouslyFocusedRect)</code> -- </p></li>
+                                <li><p><code>void 	onRestoreInstanceState(Parcelable state)</code> -- </p></li>
+                                <li><p><code>Parcelable 	onSaveInstanceState()</code> -- </p></li>
+                                <li><p><code>void 	onSizeChanged(int w, int h, int oldw, int oldh)</code> -- </p></li>
+                                <li><p><code>void 	removeDetachedView(View child, boolean animate)</code> -- </p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
 
 				<!-- item start -->
 				<a class="offset" id="view-LinearLayout"></a>
