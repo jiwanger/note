@@ -738,7 +738,7 @@ public class View implements Drawable.Callback, Drawable.Callback2, KeyEvent.Cal
 	public interface OnTouchListener { boolean onTouch(View v, MotionEvent event); }
 	/** 拖动 */
 	public interface OnDragListener { boolean onDrag(View v, DragEvent event); }
-	/** 手势 */
+	/** 响应鼠标滚轮等事件 */
 	public interface OnGenericMotionListener { boolean onGenericMotion(View v, MotionEvent event); }
 	/** 点击 */
 	public interface OnClickListener { void onClick(View v); }
@@ -1261,7 +1261,7 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	onDrawForeground(Canvas canvas)</code> -- 绘制前景内容时回调，比如滚动条</p></li>
                                 <li><p><code>boolean 	onFilterTouchEventForSecurity(MotionEvent event)</code> -- </p></li>
                                 <li><p><code>void 	onFinishTemporaryDetach()</code> -- </p></li>
-                                <li><p><code>boolean 	onGenericMotionEvent(MotionEvent event)</code> -- </p></li>
+                                <li><p><code>boolean 	onGenericMotionEvent(MotionEvent event)</code> -- 响应鼠标滚轮等事件</p></li>
                                 <li><p><code>void 	onHoverChanged(boolean hovered)</code> -- </p></li>
                                 <li><p><code>boolean 	onHoverEvent(MotionEvent event)</code> -- </p></li>
                                 <li><p><code>void 	onInitializeAccessibilityEvent(AccessibilityEvent event)</code> -- </p></li>
@@ -1291,7 +1291,7 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	setOnCreateContextMenuListener(View.OnCreateContextMenuListener l)</code> -- </p></li>
                                 <li><p><code>void 	setOnDragListener(View.OnDragListener l)</code> -- </p></li>
                                 <li><p><code>void 	setOnFocusChangeListener(View.OnFocusChangeListener l)</code> -- </p></li>
-                                <li><p><code>void 	setOnGenericMotionListener(View.OnGenericMotionListener l)</code> -- </p></li>
+                                <li><p><code>void 	setOnGenericMotionListener(View.OnGenericMotionListener l)</code> -- 设置响应鼠标滚轮等事件监听器</p></li>
                                 <li><p><code>void 	setOnHoverListener(View.OnHoverListener l)</code> -- </p></li>
                                 <li><p><code>void 	setOnKeyListener(View.OnKeyListener l)</code> -- </p></li>
                                 <li><p><code>void 	setOnLongClickListener(View.OnLongClickListener l)</code> -- </p></li>
@@ -1569,7 +1569,6 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	offsetLeftAndRight(int offset)</code> -- </p></li>
                                 <li><p><code>void 	offsetTopAndBottom(int offset)</code> -- </p></li>
 
-
                                 <li><p><code>void 	playSoundEffect(int soundConstant)</code> -- </p></li>
                                 <li><p><code>boolean 	post(Runnable action)</code> -- </p></li>
                                 <li><p><code>boolean 	postDelayed(Runnable action, long delayMillis)</code> -- </p></li>
@@ -1727,6 +1726,33 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>boolean 	willNotDraw()</code> -- </p></li>
                             </ol>
 						</div>
+
+                        <div class="sub-item">
+                            <div class="split-item">
+                                <p><a href="https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.LayoutManager" target="_blank">RecyclerView.LayoutManager</a> 用于管理 RecyclerView 的布局。</p>
+                                <pre class="brush: java;">
+
+</pre>
+                            </div>
+                            <div class="split-item">
+                                <p><a href="https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.LayoutManager" target="_blank">RecyclerView.LayoutManager</a> 用于管理 RecyclerView 的布局。</p>
+                                <pre class="brush: java;">
+
+</pre>
+                            </div>
+                            <div class="split-item">
+                                <p><a href="https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.LayoutManager" target="_blank">RecyclerView.LayoutManager</a> 用于管理 RecyclerView 的布局。</p>
+                                <pre class="brush: java;">
+
+</pre>
+                            </div>
+                            <div class="split-item">
+                                <p><a href="https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.LayoutManager" target="_blank">RecyclerView.LayoutManager</a> 用于管理 RecyclerView 的布局。</p>
+                                <pre class="brush: java;">
+
+</pre>
+                            </div>
+                        </div>
 
 					</div>
 				</div>
@@ -2266,7 +2292,7 @@ public class ConstraintLayout extends ViewGroup {
         public static final int BOTTOM = 4;
         public static final int BASELINE = 5;
         public static final int START = 6;
-        public static final int END = 7;o
+        public static final int END = 7;
 
         public static final int HORIZONTAL = 0;
         public static final int VERTICAL = 1;
@@ -3106,39 +3132,45 @@ set.connect(R.id.guide_line, ConstraintSet.TOP, R.id.center, ConstraintSet.BOTTO
                         <div class="sub-item">
 						    <pre class="brush: java;">
 public class RecyclerView extends ViewGroup implements ScrollingView, NestedScrollingChild {
-    public static final int HORIZONTAL = 0;
-    public static final int VERTICAL = 1;
+	public static final int HORIZONTAL = LinearLayout.HORIZONTAL;
+    public static final int VERTICAL = LinearLayout.VERTICAL;
 
     public static final int NO_POSITION = -1;
-    public static final long NO_ID = -1L;
+    public static final long NO_ID = -1;
     public static final int INVALID_TYPE = -1;
 
     public static final int TOUCH_SLOP_DEFAULT = 0;
     public static final int TOUCH_SLOP_PAGING = 1;
 
-    public static final int SCROLL_STATE_IDLE = 0;
-    public static final int SCROLL_STATE_DRAGGING = 1;
-    public static final int SCROLL_STATE_SETTLING = 2;
+    /** 滚动状态，参见： onScrollStateChanged(int) */
+    public static final int SCROLL_STATE_IDLE     = 0; // 滚动停止
+    public static final int SCROLL_STATE_DRAGGING = 1; // 正在拖动
+    public static final int SCROLL_STATE_SETTLING = 2; // 已经停止拖动，但还是在滚动
 
+    /** 条目被回收监听 */
     public interface RecyclerListener {
         void onViewRecycled(@NonNull ViewHolder holder);
     }
 
+    /** 可以用来改变 RecyclerView 子项目的绘制顺序的回调接口 */
     public interface ChildDrawingOrderCallback {
         int onGetChildDrawingOrder(int var1, int var2);
     }
 
+    /** Item 从 RecyclerView 添加/移除事件监听器 */
     public interface OnChildAttachStateChangeListener {
         void onChildViewAttachedToWindow(@NonNull View var1);
         void onChildViewDetachedFromWindow(@NonNull View var1);
     }
 
+    /** 添加 Item 触摸监听器(ItemClick 等事件可以从此处实现) */
     public interface OnItemTouchListener {
         boolean onInterceptTouchEvent(@NonNull RecyclerView var1, @NonNull MotionEvent var2);
         void onTouchEvent(@NonNull RecyclerView var1, @NonNull MotionEvent var2);
         void onRequestDisallowInterceptTouchEvent(boolean var1);
     }
 
+    /** OnItemTouchListener 的简单实现 */
     public static class SimpleOnItemTouchListener implements OnItemTouchListener {
         public SimpleOnItemTouchListener() {}
         public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {...}
@@ -3146,27 +3178,43 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
         public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {}
     }
 
+    /** 滚动监听器 */
     public abstract static class OnScrollListener {
         public OnScrollListener() {}
         public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {}
         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {}
     }
 
+    /** 滚动速度监听 */
     public abstract static class OnFlingListener {
         public OnFlingListener() {}
-        public abstract boolean onFling(int var1, int var2);
+        public abstract boolean onFling(int velocityX, int velocityY);
     }
 
+    /** 适配器提供了展示在 RecyclerView 中的特定数据集从应用程序到视图上的绑定 */
     public abstract static class Adapter&lt;VH extends ViewHolder> {...}
+
+    /**  观察 RecyclerView.Adapter 的更改的观察者基类 */
     public abstract static class AdapterDataObserver {...}
+
+    /** 定义了当适配器中的子项目发生变化时所发生的动画 */
     public abstract static class ItemAnimator {...}
+
+    /** Item 装饰,比如分隔符 */
     public abstract static class ItemDecoration {...}
+
+    /** 标准化的 ViewHodler 类，写 ViewHolder 要继承子类 */
+    public abstract static class ViewHolder {...}
+
+    /** 布局管理器，一般使用它的几个子类，也可以继承此类来自定义布局管理器 */
+    public abstract static class LayoutManager {...}
+
+    /** 布局参数 */
+    public static class LayoutParams extends MarginLayoutParams {...}
+
     public static class State {...}
     public static class SavedState extends AbsSavedState {...}
     public abstract static class SmoothScroller {...}
-    public static class LayoutParams extends MarginLayoutParams {...}
-    public abstract static class ViewHolder {...}
-    public abstract static class LayoutManager {...}
     public abstract static class ViewCacheExtension {...}
     public final class Recycler {...}
     public static class RecycledViewPool {...}
@@ -3176,23 +3224,194 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
     public RecyclerView(Context context, AttributeSet attrs) {}
     public RecyclerView(Context context, AttributeSet attrs, int defStyle) {}
 }
+
+public interface ScrollingView {
+    int computeHorizontalScrollRange();
+    int computeHorizontalScrollOffset();
+    int computeHorizontalScrollExtent();
+    int computeVerticalScrollRange();
+    int computeVerticalScrollOffset();
+    int computeVerticalScrollExtent();
+}
+
+public interface NestedScrollingChild2 extends NestedScrollingChild {
+    boolean startNestedScroll(@ScrollAxis int axes, @NestedScrollType int type);
+    void stopNestedScroll(@NestedScrollType int type);
+    boolean hasNestedScrollingParent(@NestedScrollType int type);
+    boolean dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed,
+        int dyUnconsumed, @Nullable int[] offsetInWindow, @NestedScrollType int type);
+    boolean dispatchNestedPreScroll(int dx, int dy, @Nullable int[] consumed,
+        @Nullable int[] offsetInWindow, @NestedScrollType int type);
+}
+
+public interface NestedScrollingChild {
+    void setNestedScrollingEnabled(boolean enabled);
+    boolean isNestedScrollingEnabled();
+    boolean startNestedScroll(@ScrollAxis int axes);
+    void stopNestedScroll();
+    boolean hasNestedScrollingParent();
+    boolean dispatchNestedScroll(int dxConsumed, int dyConsumed,
+            int dxUnconsumed, int dyUnconsumed, @Nullable int[] offsetInWindow);
+    boolean dispatchNestedPreScroll(int dx, int dy, @Nullable int[] consumed,
+            @Nullable int[] offsetInWindow);
+    boolean dispatchNestedFling(float velocityX, float velocityY, boolean consumed);
+    boolean dispatchNestedPreFling(float velocityX, float velocityY);
+}
 </pre>
                             <p><a href="docs/reference/android/support/v7/widget/RecyclerView.html" target="_blank">RecyclerView</a> 一种灵活的视图，用于向大数据集提供有限窗口。可以用来代替传统的 ListView，更加强大和灵活</p>
+                            <p><b>RecyclerView</b> 的使用需要引入依赖：</p>
+                            <pre class="brush: java;">
+implementation 'androidx.recyclerview:recyclerview:1.0.0'          // androidx
+// implementation 'com.android.support:recyclerview-v7:28.0.0'     // support
+</pre>
+                            <p><code>recyclerview</code> 包内主要还包括了以下类：</p>
+                            <ul>
+                                <li><p><a href="docs/reference/android/support/v7/widget/LinearLayoutManager.html" target="_blank">LinearLayoutManager</a> -- 是 RecyclerView.LayoutManager 的子类。参照：<a href="#RecyclerView-LayoutManager">RecyclerView.LayoutManager</a></p></li>
+                                <li><p><a href="docs/reference/android/support/v7/widget/GridLayoutManager.html" target="_blank">GridLayoutManager</a> -- 是 LinearLayoutManager 的子类。参照：<a href="#RecyclerView-LayoutManager">RecyclerView.LayoutManager</a></p></li>
+                                <li><p><a href="docs/reference/android/support/v7/widget/StaggeredGridLayoutManager.html" target="_blank">StaggeredGridLayoutManager</a> -- 是 RecyclerView.LayoutManager 的子类。参照：<a href="#RecyclerView-LayoutManager">RecyclerView.LayoutManager</a></p></li>
+                                <li><p><a href="docs/reference/android/support/v7/widget/ListAdapter.html" target="_blank">ListAdapter</a> -- 是 RecyclerView.Adapter 的子类。参照：<a href="#RecyclerView-Adapter">RecyclerView.Adapter</a></p></li>
+                                <li><p><a href="https://developer.android.com/reference/androidx/recyclerview/widget/DividerItemDecoration" target="_blank">DividerItemDecoration,</a> -- 是 RecyclerView.ItemDecoration 的子类。参照：<a href="#RecyclerView-ItemDecoration">RecyclerView.ItemDecoration</a></p></li>
+                                <li><p><a href="docs/reference/android/support/v7/widget/helper/ItemTouchHelper.html" target="_blank">ItemTouchHelper</a> -- 是 RecyclerView.ItemDecoration 的子类。参照：<a href="#RecyclerView-LayoutManager">RecyclerView.ItemDecoration</a></p></li>
+                                <li><p><a href="docs/reference/android/support/v7/widget/SimpleItemAnimator.html" target="_blank">SimpleItemAnimator</a> -- 是 RecyclerView.ItemAnimator 的子类。参照：<a href="#RecyclerView-ItemAnimator">RecyclerView.ItemAnimator</a></p></li>
+                                <li><p><a href="docs/reference/android/support/v7/widget/DefaultItemAnimator.html" target="_blank">DefaultItemAnimator</a> -- 是 SimpleItemAnimator 的子类。参照：<a href="#RecyclerView-ItemAnimator">RecyclerView.ItemAnimator</a></p></li>
+                                <li><p><a href="docs/reference/android/support/v7/widget/...html" target="_blank">...</a> -- </p></li>
+                            </ul>
+                            <p>在使用 <b>RecyclerView</b> 时候，必须指定一个适配器 Adapter 和一个布局管理器 LayoutManager。适配器继承 Adapter 类，具体实现类似 ListView 的适配器，取决于数据信息以及展示的 UI。布局管理器用于确定 RecyclerView 中 Item 的展示方式以及决定何时复用已经不可见的 Item，避免重复创建以及执行高成本的 findViewById() 方法。</p>
+                            <p><b>RecyclerView</b> 关于 Item 的点击和长按事件，需要用户自己去实现。</p>
+                            <p><b>RecyclerView</b> 相对于 ListView 的优点罗列如下：</p>
+                            <ul>
+                                <li><p>封装了 ViewHolder 的回收复用，也就是说 RecyclerView 标准化了 ViewHolder，编写 Adapter 面向的是 ViewHolder 而不再是 View 了，复用的逻辑被封装了，写起来更加简单。</p></li>
+                                <li><p>提供了一种插拔式的体验，高度的解耦，异常的灵活，针对一个 Item 的显示 RecyclerView 专门抽取出了相应的类，来控制 Item 的显示，使其的扩展性非常强。</p></li>
+                                <li><p>设置布局管理器以控制 Item 的布局方式，横向、竖向以及瀑布流方式，也就是说 RecyclerView 不再拘泥于 ListView 的线性展示方式，它也可以实现 GridView 的效果等多种效果。</p></li>
+                                <li><p>可设置 Item 的间隔样式（可绘制），通过继承 RecyclerView 的 ItemDecoration 这个类，然后针对自己的业务需求去书写代码。</p></li>
+                                <li><p>可以控制 Item 增删的动画，可以通过 ItemAnimator 这个类进行控制，当然针对增删的动画，RecyclerView 有其自己默认的实现。</p></li>
+                            </ul>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#RecyclerView-example" aria-expanded="false" class="code-header collapsed">
+                                        <span class="glyphicon glyphicon-plus"></span> View Code
+                                    </a>
+                                </div>
+                                <div id="RecyclerView-example" class="panel-collapse collapse" style="height: 0px;" aria-expanded="false">
+                                    <pre class="brush: java;">
+LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+// 设置为垂直布局，默认
+layoutManager.setOrientation(OrientationHelper.VERTICAL);
+// 布局管理器
+recyclerView.setLayoutManager(layoutManager);
+// Adapter
+recyclerView.setAdapter(new NormalAdapter(datas));
+// 分割线，可以设置其方向（比如当布局为为水平时，就应该设置为水平分割线）
+recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.VERTICAL));
+// 默认，添加/移除 Item 时候的动画，动画的展示要调用 Adapter 的 notityItemXXX(int) 方法
+recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+public class NormalAdapter extends RecyclerView.Adapter&lt;NormalAdapter.VH> {
+    private List&lt;String> mDatas;
+
+    public NormalAdapter(List&lt;String> data) { this.mDatas = data; }
+
+    // 创建 ViewHolder
+    public class VH extends RecyclerView.ViewHolder {
+        public final ImageView icon;
+        public final TextView title, description;
+
+        public VH(View v) {
+            super(v);
+            icon = v.findViewById(R.id.icon);
+            title = v.findViewById(R.id.title);
+            description = v.findViewById(R.id.description);
+        }
+    }
+
+
+    @Override
+    public void onBindViewHolder(VH holder, int position) {
+        holder.title.setText(mDatas.get(position));
+        // ...
+        holder.itemView.setOnClickListener(v -> {
+            // ...
+        });
+        holder.itemView.setOnLongClickListener(v -> {
+            // ...
+            return true;
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return mDatas.size();
+    }
+
+    @Override
+    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+        /** 注意这里的 inflater 和 ListView 等不一样
+         * 如果要 Ripple 效果：android:background/foreground="?android:attr/selectableItemBackground"
+         */
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.img_txt2line, parent, false);
+        return new VH(v);
+    }
+}
+</pre>
+                                </div>
+                            </div>
+
                             <ol>
-                                <li><p><code>void 	addFocusables(ArrayList&lt;View> views, int direction, int focusableMode)</code> -- </p></li>
-                                <li><p><code>void 	addItemDecoration(RecyclerView.ItemDecoration decor)</code> -- </p></li>
-                                <li><p><code>oid 	addItemDecoration(RecyclerView.ItemDecoration decor, int index)</code> -- </p></li>
-                                <li><p><code>void 	addOnChildAttachStateChangeListener(RecyclerView.OnChildAttachStateChangeListener listener)</code> -- </p></li>
-                                <li><p><code>void 	addOnItemTouchListener(RecyclerView.OnItemTouchListener listener)</code> -- </p></li>
-                                <li><p><code>void 	addOnScrollListener(RecyclerView.OnScrollListener listener)</code> -- </p></li>
-                                <li><p><code>void 	clearOnChildAttachStateChangeListeners()</code> -- </p></li>
-                                <li><p><code>void 	clearOnScrollListeners()</code> -- </p></li>
-                                <li><p><code>int 	computeHorizontalScrollExtent()</code> -- </p></li>
+                                <li><p><code>void 	setLayoutManager(RecyclerView.LayoutManager layout)</code> -- 设置布局管理器</p></li>
+                                <li><p><code>RecyclerView.LayoutManager 	getLayoutManager()</code> -- 获取布局管理器</p></li>
+
+                                <li class="group"><p><code>void 	setAdapter(Adapter adapter)</code> -- 设置数据适配器</p></li>
+                                <li><p><code>Adapter 	getAdapter()</code> -- 获取适配器</p></li>
+
+                                <li class="group"><p><code>void 	setItemAnimator(RecyclerView.ItemAnimator animator)</code> -- 设置添加/删除条目动画</p></li>
+                                <li><p><code>RecyclerView.ItemAnimator 	getItemAnimator()</code> -- 获取添加/删除条目动画</p></li>
+
+                                <li class="group"><p><code>void 	addItemDecoration(RecyclerView.ItemDecoration decor)</code> -- 添加 Item 条目装饰，比如分隔符</p></li>
+                                <li><p><code>void 	removeItemDecoration(RecyclerView.ItemDecoration decor)</code> -- 移除条目装饰</p></li>
+                                <li><p><code>oid 	addItemDecoration(RecyclerView.ItemDecoration decor, int index)</code> -- 添加 Item 条目装饰(装饰可以有多个)</p></li>
+                                <li><p><code>void 	removeItemDecorationAt(int index)</code> -- 移除指定索引的条目装饰</p></li>
+                                <li><p><code>RecyclerView.ItemDecoration 	getItemDecorationAt(int index)</code> -- 获取指定索引的 Item 装饰</p></li>
+                                <li><p><code>int 	getItemDecorationCount()</code> -- 获取 Item 装饰的数量</p></li>
+
+                                <li class="group"><p><code>void 	addFocusables(ArrayList&lt;View> views, int direction, int focusableMode)</code> -- 将需要获得焦点的 View 添加到获得焦点视图的列表中</p></li>
+
+                                <li class="group"><p><code>void 	addOnChildAttachStateChangeListener(RecyclerView.OnChildAttachStateChangeListener listener)</code> -- 添加一个 Item 从 RecyclerView 添加/移除 监听器</p></li>
+                                <li><p><code>void 	removeOnChildAttachStateChangeListener(RecyclerView.OnChildAttachStateChangeListener listener)</code> -- 移除指定的 Item 添加/移除 监听器</p></li>
+                                <li><p><code>void 	clearOnChildAttachStateChangeListeners()</code> -- 清除 Item 添加/移除 监听器</p></li>
+
+                                <li class="group"><p><code>void 	addOnItemTouchListener(RecyclerView.OnItemTouchListener listener)</code> -- 添加 Item 触摸监听器(ItemClick 等事件可以从此处实现)</p></li>
+                                <li><p><code>void 	removeOnItemTouchListener(RecyclerView.OnItemTouchListener listener)</code> -- 移除指定的触摸监听器</p></li>
+
+                                <li class="group"><p><code>void 	addOnScrollListener(RecyclerView.OnScrollListener listener)</code> -- 添加滚动监听器</p></li>
+                                <li><p><code>void 	removeOnScrollListener(RecyclerView.OnScrollListener listener)</code> -- 移除指定的滚动监听器</p></li>
+                                <li><p><code>void 	clearOnScrollListeners()</code> -- 清除滚动监听器</p></li>
+
+                                <li class="group"><p><code>void 	setOnFlingListener(RecyclerView.OnFlingListener onFlingListener)</code> -- 设置滚动速度监听器</p></li>
+                                <li><p><code>RecyclerView.OnFlingListener 	getOnFlingListener()</code> -- 获取滚动速度监听器</p></li>
+
+                                <li class="group"><p><code>void 	onChildAttachedToWindow(View child)</code> -- Item 添加监听回调</p></li>
+                                <li><p><code>void 	onChildDetachedFromWindow(View child)</code> -- Item 移除监听回调</p></li>
+                                <li><p><code>void 	onDraw(Canvas c)</code> -- 绘制方法回调</p></li>
+                                <li><p><code>void 	onScrollStateChanged(int state)</code> -- 滚动状态监听回调，参见常量</p></li>
+                                <li><p><code>void 	onScrolled(int dx, int dy)</code> -- 滚动位置监听回调</p></li>
+                                <li><p><code>boolean 	onTouchEvent(MotionEvent e)</code> -- 触摸事件回调</p></li>
+                                <li><p><code>boolean 	onGenericMotionEvent(MotionEvent event)</code> -- 响应鼠标滚轮等事件回调</p></li>
+                                <li><p><code>boolean 	onInterceptTouchEvent(MotionEvent e)</code> -- 触摸事件拦截方法回调</p></li>
+
+                                <li class="group"><p><code>RecyclerView.ViewHolder 	findViewHolderForLayoutPosition(int position)</code> -- 获取指定位置的 ViewHolder,可能为 NULL</p></li>
+                                <li><p><code>RecyclerView.ViewHolder 	findViewHolderForAdapterPosition(int pos)</code> -- 获取指定位置的 ViewHolder,可能为 NULL</p></li>
+                                <li><p><code>RecyclerView.ViewHolder 	findContainingViewHolder(View view)</code> -- 查询包括指定 View 的 ViewHolder</p></li>
+                                <li><p><code>RecyclerView.ViewHolder 	findViewHolderForItemId(long id)</code> -- 查询包括指定 id 的 ViewHolder</p></li>
+                                <li><p><code>View 	findChildViewUnder(float x, float y)</code> -- 查询指定位置的 View</p></li>
+                                <li><p><code>View 	findContainingItemView(View view)</code> -- 遍历给定视图的祖先并返回包含它的项视图</p></li>
+
+                                <li class="group"><p><code>int 	computeHorizontalScrollExtent()</code> -- </p></li>
                                 <li><p><code>int 	computeHorizontalScrollOffset()</code> -- </p></li>
                                 <li><p><code>int 	computeHorizontalScrollRange()</code> -- </p></li>
                                 <li><p><code>int 	computeVerticalScrollExtent()</code> -- </p></li>
                                 <li><p><code>int 	computeVerticalScrollOffset()</code> -- </p></li>
                                 <li><p><code>int 	computeVerticalScrollRange()</code> -- </p></li>
+
                                 <li><p><code>boolean 	dispatchNestedFling(float velocityX, float velocityY, boolean consumed)</code> -- </p></li>
                                 <li><p><code>boolean 	dispatchNestedPreFling(float velocityX, float velocityY)</code> -- </p></li>
                                 <li><p><code>boolean 	dispatchNestedPreScroll(int dx, int dy, int[] consumed, int[] offsetInWindow)</code> -- </p></li>
@@ -3201,16 +3420,11 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                                 <li><p><code>boolean 	dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int[] offsetInWindow)</code> -- </p></li>
                                 <li><p><code>void 	draw(Canvas c)</code> -- </p></li>
                                 <li><p><code>boolean 	drawChild(Canvas canvas, View child, long drawingTime)</code> -- </p></li>
-                                <li><p><code>View 	findChildViewUnder(float x, float y)</code> -- </p></li>
-                                <li><p><code>View 	findContainingItemView(View view)</code> -- </p></li>
-                                <li><p><code>RecyclerView.ViewHolder 	findContainingViewHolder(View view)</code> -- </p></li>
-                                <li><p><code>RecyclerView.ViewHolder 	findViewHolderForAdapterPosition(int position)</code> -- </p></li>
-                                <li><p><code>RecyclerView.ViewHolder 	findViewHolderForItemId(long id)</code> -- </p></li>
-                                <li><p><code>RecyclerView.ViewHolder 	findViewHolderForLayoutPosition(int position)</code> -- </p></li>
+
                                 <li><p><code>boolean 	fling(int velocityX, int velocityY)</code> -- </p></li>
                                 <li><p><code>View 	focusSearch(View focused, int direction)</code> -- </p></li>
                                 <li><p><code>ViewGroup.LayoutParams 	generateLayoutParams(AttributeSet attrs)</code> -- </p></li>
-                                <li><p><code>Adapter 	getAdapter()</code> -- </p></li>
+
                                 <li><p><code>int 	getBaseline()</code> -- </p></li>
                                 <li><p><code>int 	getChildAdapterPosition(View child)</code> -- </p></li>
                                 <li><p><code>long 	getChildItemId(View child)</code> -- </p></li>
@@ -3220,13 +3434,12 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                                 <li><p><code>RecyclerViewAccessibilityDelegate 	getCompatAccessibilityDelegate()</code> -- </p></li>
                                 <li><p><code>void 	getDecoratedBoundsWithMargins(View view, Rect outBounds)</code> -- </p></li>
                                 <li><p><code>RecyclerView.EdgeEffectFactory 	getEdgeEffectFactory()</code> -- </p></li>
-                                <li><p><code>RecyclerView.ItemAnimator 	getItemAnimator()</code> -- </p></li>
-                                <li><p><code>RecyclerView.ItemDecoration 	getItemDecorationAt(int index)</code> -- </p></li>
-                                <li><p><code>int 	getItemDecorationCount()</code> -- </p></li>
-                                <li><p><code>RecyclerView.LayoutManager 	getLayoutManager()</code> -- </p></li>
+
+
+
                                 <li><p><code>int 	getMaxFlingVelocity()</code> -- </p></li>
                                 <li><p><code>int 	getMinFlingVelocity()</code> -- </p></li>
-                                <li><p><code>RecyclerView.OnFlingListener 	getOnFlingListener()</code> -- </p></li>
+
                                 <li><p><code>boolean 	getPreserveFocusAfterLayout()</code> -- </p></li>
                                 <li><p><code>RecyclerView.RecycledViewPool 	getRecycledViewPool()</code> -- </p></li>
                                 <li><p><code>int 	getScrollState()</code> -- </p></li>
@@ -3242,19 +3455,8 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                                 <li><p><code>boolean 	isNestedScrollingEnabled()</code> -- </p></li>
                                 <li><p><code>void 	offsetChildrenHorizontal(int dx)</code> -- </p></li>
                                 <li><p><code>void 	offsetChildrenVertical(int dy)</code> -- </p></li>
-                                <li><p><code>void 	onChildAttachedToWindow(View child)</code> -- </p></li>
-                                <li><p><code>void 	onChildDetachedFromWindow(View child)</code> -- </p></li>
-                                <li><p><code>void 	onDraw(Canvas c)</code> -- </p></li>
-                                <li><p><code>boolean 	onGenericMotionEvent(MotionEvent event)</code> -- </p></li>
-                                <li><p><code>boolean 	onInterceptTouchEvent(MotionEvent e)</code> -- </p></li>
-                                <li><p><code>void 	onScrollStateChanged(int state)</code> -- </p></li>
-                                <li><p><code>void 	onScrolled(int dx, int dy)</code> -- </p></li>
-                                <li><p><code>boolean 	onTouchEvent(MotionEvent e)</code> -- </p></li>
-                                <li><p><code>void 	removeItemDecoration(RecyclerView.ItemDecoration decor)</code> -- </p></li>
-                                <li><p><code>void 	removeItemDecorationAt(int index)</code> -- </p></li>
-                                <li><p><code>void 	removeOnChildAttachStateChangeListener(RecyclerView.OnChildAttachStateChangeListener listener)</code> -- </p></li>
-                                <li><p><code>void 	removeOnItemTouchListener(RecyclerView.OnItemTouchListener listener)</code> -- </p></li>
-                                <li><p><code>void 	removeOnScrollListener(RecyclerView.OnScrollListener listener)</code> -- </p></li>
+
+
                                 <li><p><code>void 	requestChildFocus(View child, View focused)</code> -- </p></li>
                                 <li><p><code>boolean 	requestChildRectangleOnScreen(View child, Rect rect, boolean immediate)</code> -- </p></li>
                                 <li><p><code>void 	requestDisallowInterceptTouchEvent(boolean disallowIntercept)</code> -- </p></li>
@@ -3264,17 +3466,17 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                                 <li><p><code>void 	scrollToPosition(int position)</code> -- </p></li>
                                 <li><p><code>void 	sendAccessibilityEventUnchecked(AccessibilityEvent event)</code> -- </p></li>
                                 <li><p><code>void 	setAccessibilityDelegateCompat(RecyclerViewAccessibilityDelegate accessibilityDelegate)</code> -- </p></li>
-                                <li><p><code>void 	setAdapter(Adapter adapter)</code> -- </p></li>
+
                                 <li><p><code>void 	setChildDrawingOrderCallback(RecyclerView.ChildDrawingOrderCallback childDrawingOrderCallback)</code> -- </p></li>
                                 <li><p><code>void 	setClipToPadding(boolean clipToPadding)</code> -- </p></li>
                                 <li><p><code>void 	setEdgeEffectFactory(RecyclerView.EdgeEffectFactory edgeEffectFactory)</code> -- </p></li>
                                 <li><p><code>void 	setHasFixedSize(boolean hasFixedSize)</code> -- </p></li>
-                                <li><p><code>void 	setItemAnimator(RecyclerView.ItemAnimator animator)</code> -- </p></li>
+
                                 <li><p><code>void 	setItemViewCacheSize(int size)</code> -- </p></li>
                                 <li><p><code>void 	setLayoutFrozen(boolean frozen)</code> -- </p></li>
-                                <li><p><code>void 	setLayoutManager(RecyclerView.LayoutManager layout)</code> -- </p></li>
+
                                 <li><p><code>void 	setNestedScrollingEnabled(boolean enabled)</code> -- </p></li>
-                                <li><p><code>void 	setOnFlingListener(RecyclerView.OnFlingListener onFlingListener)</code> -- </p></li>
+
                                 <li><p><code>void 	setPreserveFocusAfterLayout(boolean preserveFocusAfterLayout)</code> -- </p></li>
                                 <li><p><code>void 	setRecycledViewPool(RecyclerView.RecycledViewPool pool)</code> -- </p></li>
                                 <li><p><code>void 	setRecyclerListener(RecyclerView.RecyclerListener listener)</code> -- </p></li>
@@ -3308,8 +3510,53 @@ public class RecyclerView extends ViewGroup implements ScrollingView, NestedScro
                             </ol>
                         </div>
 
+                        <a id="RecyclerView-LayoutManager" class="offset"></a>
                         <div class="sub-item">
+                            <div class="split-item">
+                                <p><a href="docs/reference/android/support/v7/widget/RecyclerView.LayoutManager.html">RecyclerView.LayoutManager</a> </p>
+                                <p>LayoutManager 有以下子类：</p>
+                                <ul>
+                                    <li><p><a href="">LinearLayoutManager</a> -- 以垂直或者水平滚动列表方式显示 Item。</p></li>
+                                    <li><p><a href="">GridLayoutManager</a> -- 以网格方式显示 Item。</p></li>
+                                    <li><p><a href="">StaggeredGridLayoutManager</a> -- 在分散对齐网格中显示 Item(瀑布流)。</p></li>
+                                </ul>
+                                <pre class="brush: java;">
 
+</pre>
+                            </div>
+
+                        </div>
+
+                        <a id="RecyclerView-Adapter" class="offset"></a>
+                        <div class="sub-item">
+                            <p><a href="docs/reference/android/support/v7/widget/RecyclerView.Adapter.html">RecyclerView.Adapter</a> </p>
+                            <pre class="brush: java;">
+
+</pre>
+                        </div>
+
+                        <a id="RecyclerView-ItemDecoration" class="offset"></a>
+                        <div class="sub-item">
+                            <p><a href="docs/reference/android/support/v7/widget/RecyclerView.ItemDecoration.html">RecyclerView.ItemDecoration</a> </p>
+                            <pre class="brush: java;">
+
+</pre>
+                        </div>
+
+                        <a id="RecyclerView-ItemAnimator" class="offset"></a>
+                        <div class="sub-item">
+                            <p><a href="docs/reference/android/support/v7/widget/RecyclerView.ItemAnimator.html">RecyclerView.ItemAnimator</a> </p>
+                            <pre class="brush: java;">
+
+</pre>
+                        </div>
+
+                        <a id="RecyclerView-..." class="offset"></a>
+                        <div class="sub-item">
+                            <p><a href="docs/reference/android/support/v7/widget/"></a> </p>
+                            <pre class="brush: java;">
+
+</pre>
                         </div>
                     </div>
                 </div>

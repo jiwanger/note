@@ -66,13 +66,13 @@
                 </div>
                 <div class="list-group">
                     <a href="#" class="list-group-item">简介</a>
-                    <a class="list-group-item active dropup" data-toggle="collapse"
+                    <a class="list-group-item active dropdown" data-toggle="collapse"
                        data-parent="#accordion" href="#android" aria-expanded="true"
                        style="border-top: 1px solid #DDDDDD;">
                         <code>android</code><span class="caret pull-right"
                                                           style="margin-top: 5px;"></span>
                     </a>
-                    <div id="android" class="panel-collapse collapse in"
+                    <div id="android" class="panel-collapse collapse"
                          role="tabpanel">
                         <a href="#android-Manifest" class="list-group-item">Manifest</a>
                         <a href="#android-R" class="list-group-item">R</a>
@@ -167,28 +167,16 @@
                     </div>
 
 
-                    <a class="list-group-item active dropdown" data-toggle="collapse"
-                       data-parent="#accordion" href="#android-support-v4" aria-expanded="true"
+                    <a class="list-group-item active dropup" data-toggle="collapse"
+                       data-parent="#accordion" href="#androidx-base" aria-expanded="true"
                        style="border-top: 1px solid #DDDDDD;">
-                        <code>android.support.v4</code><span class="caret pull-right"
+                        <code>androidx && support</code><span class="caret pull-right"
                                                              style="margin-top: 5px;"></span>
                     </a>
-                    <div id="android-support-v4" class="panel-collapse collapse"
+                    <div id="androidx-base" class="panel-collapse collapse in"
                          role="tabpanel">
-                        <a href="#" class="list-group-item">...</a>
-                        <a href="#" class="list-group-item">...</a>
-                        <a href="#" class="list-group-item">...</a>
-                    </div>
-                    <a class="list-group-item active dropdown" data-toggle="collapse"
-                       data-parent="#accordion" href="#android-support-v7" aria-expanded="true"
-                       style="border-top: 1px solid #DDDDDD;">
-                        <code>android.support.v7</code><span class="caret pull-right"
-                                                             style="margin-top: 5px;"></span>
-                    </a>
-                    <div id="android-support-v7" class="panel-collapse collapse"
-                         role="tabpanel">
-                        <a href="#android-support-v7-widget-RecyclerView" class="list-group-item">RecyclerView</a>
-                        <a href="#" class="list-group-item">...</a>
+                        <a href="#android-support" class="list-group-item"><code>Android Support Library</code></a>
+                        <a href="#androidx" class="list-group-item"><code>androidx</code> 简介</a>
                         <a href="#" class="list-group-item">...</a>
                     </div>
                     <a class="list-group-item active dropdown" data-toggle="collapse"
@@ -3637,7 +3625,6 @@ protected void attachBaseContext(Context newBase) {
             </div>
             <!-- item over -->
 
-
             <!-- item start -->
             <a class="offset" id="android-view-KeyEvent"></a>
             <div class="panel panel-default">
@@ -6000,6 +5987,436 @@ uri.getAuthority();             // -> nate:123456@lesson.com:8080
             <!-- item over -->
 
             <!-- item start -->
+            <a class="offset" id="android-support"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><code>Android Support Library</code> 简介</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="sub-item">
+                        <p>Android Support Library 允许开发人员在旧版本的 Android 上支持新的 OS 特性，或者回退到等效的功能，是一种可以部分地减轻 Android 生态系统碎片化的有效方式。</p>
+                        <p>Android Support Library 提供一系列不同的功能：</p>
+                        <ul>
+                            <li><p>向后兼容版本的框架组件。</p></li>
+                            <li><p>用于实现建议的 Android 布局模式的 UI 元素。</p></li>
+                            <li><p>支持不同的设备类型。</p></li>
+                            <li><p>其他实用程序功能。</p></li>
+                        </ul>
+                    </div>
+                    <div class="sub-item">
+                        <div class="split-item">
+                            <h4>Constraint Layout Library</h4>
+                            <p><b>ConstraintLayout</b> 为约束布局，也有人把它称作增强型的相对布局，由 2016 年 Google I/O 推出。</p>
+                            <p><b>ConstraintLayout</b> 是 Android Studio 2.2 中主要的新增功能之一，也是 Google 在 I/O 大会上重点宣传的一个功能。</p>
+                            <p><b>ConstraintLayout</b> 参照此处：<a href="view.html#android-support-constraint-ConstraintLayout">ConstraintLayout</a></p>
+                            <pre class="brush: java;">
+implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+// implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+</pre>
+                        </div>
+                        <div class="split-item">
+                            <h4>v4 支持库</h4>
+                            <p><b>v4 支持库</b> -- 库旨在与 Android 1.6（API 级别 4）及更高版本搭配使用。与其他支持库相比，它们包含的 API 集合最大，包括对应用组件、用户界面功能、辅助功能、数据处理、网络连接以及编程实用工具的支持。 </p>
+                            <p>Android Support Library 24.2.0 将 V4 和 V7支持的最低版本改为 Android 2.3 即 API Level 9。</p>
+                            <p class="alert alert-warning"><b>注：在支持库修订版 24.2.0 之前，存在一个 v4 支持库。为了提高效率，此库拆分成多个模块。出于向后兼容的考虑，如果您在 Gradle 脚本中列出了 support-v4，您的 APK 将包含所有的 v4 模块。不过，要减少 APK 大小，我们建议仅列出应用需要的特定模块。</b> </p>
+                            <ul>
+                                <li><p><b>v4 compat 库</b> -- 为众多框架 API 提供兼容性包装器。</p>
+                                    <pre class="brush: java;">com.android.support:support-compat:28.0.0</pre>
+                                </li>
+                                <li><p><b>v4 core-utils 库</b> -- 提供大量实用程序类。</p>
+                                    <pre class="brush: java;">com.android.support:support-core-utils:28.0.0</pre>
+                                </li>
+                                <li><p><b>v4 core-ui 库</b> -- 实现各种 UI 相关组件，例如 ViewPager、NestedScrollView 和 ExploreByTouchHelper。</p>
+                                    <pre class="brush: java;">com.android.support:support-core-ui:28.0.0</pre>
+                                </li>
+                                <li><p><b>v4 media-compat 库</b> -- 向后移植部分媒体框架，包括 MediaBrowser 和 MediaSession。</p>
+                                    <pre class="brush: java;">com.android.support:support-media-compat:28.0.0</pre>
+                                </li>
+                                <li><p><b>v4 fragment 库</b> --  添加对使用片段封装用户界面和功能的支持，从而使应用能够提供可以在大屏幕设备与小屏幕设备之间进行调节的布局。</p>
+                                    <p>此模块依赖于 compat、core-utils、core-ui 和 media-compat。</p>
+                                    <pre class="brush: java;">com.android.support:support-fragment:28.0.0</pre>
+                                </li>
+                                <li><p><b>Dalvik 可执行文件分包支持库</b> -- 此库可以为使用多个 Dalvik Executable (DEX) 文件开发应用提供支持。引用超过 65536 个方法的应用须使用 Dalvik 可执行文件分包配置。</p>
+                                    <pre class="brush: java;">com.android.support:multidex:1.0.0</pre>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="split-item">
+                            <h4>v7 支持库</h4>
+                            <p><b>v7 支持库</b> 旨在与 Android 2.1（API 级别 7）及更高版本搭配使用。这些库提供了特定的功能集，并且可以单独添加到应用中，与其他库互不影响。</p>
+                            <ul>
+                                <li><p><b>v7 appcompat 库</b> -- 添加了对操作栏用户界面设计模式的支持。此库包含对 Material Design 用户界面实现的支持。 </p>
+                                    <p>此库依赖于 v4 支持库。 </p>
+                                    <pre class="brush: java;">com.android.support:appcompat-v7:28.0.0</pre>
+                                </li>
+                                <li><p><b>v7 cardview 库</b> -- 添加了对 CardView 小部件的支持，让您能够在卡片内显示信息，从而使应用具备一致的外观。这些卡片对 Material Design 实现非常有用，并在电视应用布局中广为使用。</p>
+                                    <pre class="brush: java;">com.android.support:cardview-v7:28.0.0</pre>
+                                </li>
+                                <li><p><b>v7 gridlayout 库</b> -- 可以添加对 GridLayout 类的支持，让您能够使用网状方格安排用户界面元素。</p>
+                                    <pre class="brush: java;">com.android.support:gridlayout-v7:28.0.0</pre>
+                                </li>
+                                <li><p><b>v7 mediarouter 库</b> -- 一般而言，利用 v7 mediarouter 库中的 API，您可以控制当前设备到外部屏幕、扬声器和其他目标设备的媒体渠道和流的路由。此库包含的 API 可以用于发布应用特定的媒体路由提供程序、发现和选择目标设备，以及检查媒体状态，等等。</p>
+                                    <pre class="brush: java;">com.android.support:mediarouter-v7:28.0.0</pre>
+                                </li>
+                                <li><p><b>v7 palette 库</b> -- 包含 Palette 类，此类让您可以从图像中抽取突出颜色。例如，音乐应用可以使用 Palette 对象从专辑封面抽取主要颜色，然后使用这些颜色创建一个色彩协调的歌曲标题卡。</p>
+                                    <pre class="brush: java;">com.android.support:palette-v7:28.0.0</pre>
+                                </li>
+                                <li><p><b>v7 recyclerview 库</b> -- 添加了 RecyclerView 类。此类能够为 RecyclerView 小部件提供支持，RecyclerView 是一种通过提供有限的数据项窗口有效显示大数据集的视图。</p>
+                                    <pre class="brush: java;">com.android.support:recyclerview-v7:28.0.0</pre>
+                                </li>
+                                <li><p><b>v7 Preference 库</b> -- 提供的 API 支持添加 preference 对象（例如 CheckBoxPreference 和 ListPreference），方便用户修改 UI 设置。 </p>
+                                    <pre class="brush: java;">com.android.support:preference-v7:28.0.0</pre>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="split-item">
+                            <h4>其他 支持库</h4>
+                            <div class="split-item">
+                                <h4>v8 支持库</h4>
+                                <p><b>v8 renderscript 库</b> -- 添加了对 RenderScript 计算框架的支持。</p>
+                                <p>请注意，在应用中添加这些 API 的步骤与添加其他支持库 API 迥然不同。<b>注：</b> Android Studio 和 Gradle 构建支持使用带支持库的 RenderScript。renderscript 库位于 build-tools/$VERSION/renderscript/ 文件夹中。 </p>
+                                <pre class="brush: java;">
+defaultConfig {
+    renderscriptTargetApi 18
+    renderscriptSupportModeEnabled true
+}
+</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>v13 支持库</h4>
+                                <p>添加了对带有 (FragmentCompat) 类和其他片段支持类的 Fragment 用户界面模式的支持。</p>
+                                <pre class="brush: java;">com.android.support:support-v13:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>v14 Preference 支持库</h4>
+                                <p>提供的 API 添加了对首选项接口的支持。</p>
+                                <pre class="brush: java;">com.android.support:preference-v14:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>适用于电视的 v17 Preference 支持库</h4>
+                                <p>提供的 API 可以在电视设备上提供首选项接口，包括对 LeanbackListPreferenceDialogFragment.ViewHolder.OnItemClickListener 接口和类的支持。</p>
+                                <pre class="brush: java;">com.android.support:preference-leanback-v17:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>v17 Leanback 库</h4>
+                                <p>提供的 API 支持在电视设备上构建用户界面。它为电视应用提供了一些重要的小部件。</p>
+                                <pre class="brush: java;">com.android.support:leanback-v17:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>注解支持库</h4>
+                                <p>提供的 API 支持向应用中添加注解元数据。 </p>
+                                <pre class="brush: java;">com.android.support:support-annotations:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>设计支持库</h4>
+                                <p>提供的 API 支持向应用中添加 Material Design 组件和模式。 </p>
+                                <p>设计支持库添加了对应用开发者依赖的各种 Material Design 组件和模式的支持，例如抽屉式导航栏、浮动操作按钮 (FAB)、快捷信息栏和标签页。 </p>
+                                <pre class="brush: java;">com.android.support:design:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>自定义标签页支持库</h4>
+                                <p>提供的 API 支持向应用中添加自定义标签页并对其进行管理。 </p>
+                                <p>自定义标签页支持库添加了对自定义标签页服务和自定义标签页回调等各种类的支持。 </p>
+                                <pre class="brush: java;">com.android.support:customtabs:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>百分比支持库</h4>
+                                <p>提供的 API 支持向应用中添加基于百分比的尺寸并对其进行管理。 </p>
+                                <pre class="brush: java;">com.android.support:percent:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>适用于电视的应用建议支持库</h4>
+                                <p>提供的 API 支持向电视设备上运行的应用中添加内容建议。 </p>
+                                <pre class="brush: java;">com.android.support:recommendation:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>Vector Drawable Library</h4>
+                                <pre class="brush: java;">com.android.support:support-vector-drawable:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>Animated Vector Drawable Library</h4>
+                                <pre class="brush: java;">com.android.support:animated-vector-drawable:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>ExifInterface Support Library</h4>
+                                <pre class="brush: java;">com.android.support:exifinterface:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>App Recommendation Support Library for TV</h4>
+                                <pre class="brush: java;">com.android.support:recommendation:28.0.0</pre>
+                            </div>
+                            <div class="split-item">
+                                <h4>Wear UI Library</h4>
+                                <pre class="brush: java;">com.android.support:wear:28.0.0</pre>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- item over -->
+
+
+            <!-- item start -->
+            <a class="offset" id="androidx"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title"><code>androidx</code> 简介</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="sub-item">
+                        <p>Google 2018 IO 大会推出了 Android 新的扩展库 AndroidX，用于替换原来的 Android Support 库。</p>
+                        <p>AndroidX 为了解决 support 包的版本都需要和 compileSdkVersion 是一致的问题。</p>
+                        <p><b>AndroidX 需要使用 API 28 的 SDK 版本编译，并在 <code>gradle.properties</code> 如下配置：</b></p>
+                        <pre class="brush: bash;">
+android.useAndroidX=true
+android.enableJetifier=true|false
+</pre>
+                        <p>AndroidX 和以往的部分包对应关系：(更多查看此处: <a href="https://developer.android.com/jetpack/androidx/migrate" target="_blank">AndroidX</a>)</p>
+                        <p><code>support</code> 包的依赖使用 <code>androidx.*</code> 替换，相应的类也要做相应的替换：</p>
+                        <pre class="brush: java;">
+implementation 'androidx.core:core:1.0.0'
+// implementation 'com.android.support:support-compat:28.0.0'
+
+implementation 'androidx.appcompat:appcompat:1.0.0'
+// implementation 'com.android.support:appcompat-v7:28.0.0'
+
+implementation 'com.google.android.material:material:1.0.0'
+// implementation 'com.android.support:design:28.0.0'
+
+implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+// implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+
+implementation 'androidx.recyclerview:recyclerview:1.0.0'
+// implementation 'com.android.support:recyclerview-v7'
+</pre>
+                        <table class="table table-response table-bordered">
+                            <tr>
+                                <td><b>链接</b></td>
+                                <td><b>AndroidX</b></td>
+                                <td><b>原来的包</b></td>
+                            </tr>
+                            <tr>
+                                <td><a href="view.html#android-support-constraint-ConstraintLayout">detail</a></td>
+                                <td><code>androidx.constraintlayout:constraintlayout:1.1.3</code></td>
+                                <td><code>com.android.support.constraint:constraint-layout</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#core">detail</a></td>
+                                <td><code>androidx.core:core:1.0.0</code></td>
+                                <td><code>com.android.support:support-compat</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#appcompat">detail</a></td>
+                                <td><code>androidx.appcompat:appcompat:1.0.0</code></td>
+                                <td><code>com.android.support:appcompat-v7</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#design">detail</a></td>
+                                <td><code>com.google.android.material:material:1.0.0</code></td>
+                                <td><code>com.android.support:design</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#recyclerview">detail</a></td>
+                                <td><code>androidx.recyclerview:recyclerview:1.0.0</code></td>
+                                <td><code>com.android.support:recyclerview-v7</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="#cardview">detail</a></td>
+                                <td><code>androidx.cardview:cardview:1.0.0</code></td>
+                                <td><code>com.android.support:cardview-v7</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.coordinatorlayout:coordinatorlayout:1.0.0</code></td>
+                                <td><code>com.android.support:coordinatorlayout</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.browser:browser:1.0.0</code></td>
+                                <td><code>com.android.support:customtabs</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.customview:customview:1.0.0</code></td>
+                                <td><code>com.android.support:customview</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.vectordrawable:vectordrawable-animated:1.0.0</code></td>
+                                <td><code>com.android.support:animated-vector-drawable</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.vectordrawable:vectordrawable:1.0.0</code></td>
+                                <td><code>com.android.support:support-vector-drawable</code></td>
+                            </tr>
+
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.drawerlayout:drawerlayout:1.0.0</code></td>
+                                <td><code>com.android.support:drawerlayout</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.gridlayout:gridlayout:1.0.0</code></td>
+                                <td><code>com.android.support:gridlayout-v7</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.leanback:leanback:1.0.0</code></td>
+                                <td><code>com.android.support:leanback-v17</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.multidex:multidex:2.0.0</code></td>
+                                <td><code>com.android.support:multidex</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.palette:palette:1.0.0</code></td>
+                                <td><code>com.android.support:palette-v7</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.percentlayout:percentlayout:1.0.0</code></td>
+                                <td><code>com.android.support:percent</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.annotation:annotation:1.0.0</code></td>
+                                <td><code>com.android.support:support-annotations</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.slidingpanelayout:slidingpanelayout:1.0.0</code></td>
+                                <td><code>com.android.support:slidingpanelayout</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.legacy:legacy-support-core-ui:1.0.0</code></td>
+                                <td><code>com.android.support:support-core-ui</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.legacy:legacy-support-core-utils:1.0.0</code></td>
+                                <td><code>com.android.support:support-core-utils</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.fragment:fragment:1.0.0</code></td>
+                                <td><code>com.android.support:support-fragment</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.viewpager:viewpager:1.0.0</code></td>
+                                <td><code>com.android.support:viewpager</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.transition:transition:1.0.0</code></td>
+                                <td><code>com.android.support:transition</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">detail</a></td>
+                                <td><code>androidx.swiperefreshlayout:swiperefreshlayout:1.0.0</code></td>
+                                <td><code>com.android.support:swiperefreshlayout</code></td>
+                            </tr>
+                            <tr>
+                                <td><a href="">...</a></td>
+                                <td><code>...</code></td>
+                                <td><code>...</code></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <a id="core" class="offset"></a>
+                    <div class="sub-item">
+                        <p><code>androidx.core:core:1.0.0</code> 用于替代原 <code>support-compat</code> 包，比如:<code>com.android.support:support-compat:28.0.0</code>。</p>
+                        <pre class="brush: java;">
+implementation 'androidx.core:core:1.0.0'
+// implementation 'com.android.support:support-compat:28.0.0'
+
+androidx.core
+    ├── widget
+    ├── app
+    ├── content
+    ├── database
+    ├── graphics
+    ├── hardware
+    ├── internal
+    ├── math
+    ├── net
+    ├── os
+    ├── provider
+    ├── text
+    ├── util
+    ├── view
+    └── accessibilityservice
+</pre>
+                    </div>
+
+                    <a id="appcompat" class="offset"></a>
+                    <div class="sub-item">
+                        <p><code>androidx.appcompat:appcompat:1.0.0</code> 用于替代原 <code>appcompat-v7</code> 包，比如:<code>com.android.support:appcompat-v7:28.0.0</code>。</p>
+                        <pre class="brush: java;">
+implementation 'androidx.appcompat:appcompat:1.0.0'
+// implementation 'com.android.support:appcompat-v7:28.0.0'
+
+androidx.appcompat
+    ├── app 包括以下类：AppCompatActivity, ActionBar, AppCompatDialog, AppCompatDialogFragment ...
+    ├── content
+    ├── custom
+    ├── graphics
+    ├── res
+    ├── text
+    ├── view
+    ├── widget 包括以下类：Toolbar,
+    └── testutils
+</pre>
+                    </div>
+
+                    <a id="design" class="offset"></a>
+                    <div class="sub-item">
+                        <p><code>com.google.android.material:material:1.0.0</code> 用于替代原 <code>design</code> 包，比如:<code>com.android.support:design:28.0.0</code>。</p>
+                        <pre class="brush: java;">
+implementation: 'com.google.android.material:material:1.0.0'
+// implementation 'com.android.support:design:28.0.0'
+
+</pre>
+                    </div>
+
+                    <a id="recyclerview" class="offset"></a>
+                    <div class="sub-item">
+                        <p><code>androidx.recyclerview:recyclerview:1.0.0</code> 用于替代原 <code>recyclerview-v7</code> 包，比如:<code>com.android.support:recyclerview-v7:28.0.0</code>。</p>
+                        <pre class="brush: java;">
+implementation 'androidx.recyclerview:recyclerview:1.0.0'
+// implementation ' com.android.support:recyclerview-v7'
+</pre>
+                    </div>
+
+                    <a id="cardview" class="offset"></a>
+                    <div class="sub-item">
+                        <p><code>androidx.cardview:cardview:1.0.0</code> 用于替代原 <code>cardview-v7</code> 包，比如:<code>com.android.support:cardview-v7:28.0.0</code>。</p>
+                        <pre class="brush: java;">
+
+</pre>
+                    </div>
+
+                    <a id="" class="offset"></a>
+                    <div class="sub-item">
+                        <p><code>androidx.</code> 用于替代原 <code></code> 包，比如:<code>28.0.0</code>。</p>
+                        <pre class="brush: java;">
+
+</pre>
+                    </div>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
             <a class="offset" id="..."></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -6037,6 +6454,7 @@ uri.getAuthority();             // -> nate:123456@lesson.com:8080
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="../support/bootstrap/js/bootstrap.min.js"></script>
 <script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
+<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 <script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 <script src="../support/syntaxhighlighter/scripts/shBrushXml.js"></script>
 <script src="res/menu.js"></script>
