@@ -3513,16 +3513,364 @@ public class NormalAdapter extends RecyclerView.Adapter&lt;NormalAdapter.VH> {
                         <a id="RecyclerView-LayoutManager" class="offset"></a>
                         <div class="sub-item">
                             <div class="split-item">
-                                <p><a href="docs/reference/android/support/v7/widget/RecyclerView.LayoutManager.html">RecyclerView.LayoutManager</a> </p>
-                                <p>LayoutManager 有以下子类：</p>
-                                <ul>
-                                    <li><p><a href="">LinearLayoutManager</a> -- 以垂直或者水平滚动列表方式显示 Item。</p></li>
-                                    <li><p><a href="">GridLayoutManager</a> -- 以网格方式显示 Item。</p></li>
-                                    <li><p><a href="">StaggeredGridLayoutManager</a> -- 在分散对齐网格中显示 Item(瀑布流)。</p></li>
-                                </ul>
-                                <pre class="brush: java;">
+                                <p><a href="docs/reference/android/support/v7/widget/RecyclerView.LayoutManager.html" target="_blank">RecyclerView.LayoutManager</a> </p>
+								<pre class="brush: java;">
+public abstract static class LayoutManager {
+	public interface LayoutPrefetchRegistry {
+		void addPosition(int layoutPosition, int pixelDistance);
+	}
 
+	public static class Properties {
+		public int orientation;
+		public int spanCount;
+		public boolean reverseLayout;
+		public boolean stackFromEnd;
+	}
+}
 </pre>
+								<ol>
+                                    <li><p><code>void 	addDisappearingView(View child, int index)</code> -- </p></li>
+                                    <li><p><code>void 	addDisappearingView(View child)</code> -- </p></li>
+                                    <li><p><code>void 	addView(View child, int index)</code> -- </p></li>
+                                    <li><p><code>void 	addView(View child)</code> -- </p></li>
+                                    <li><p><code>void 	assertInLayoutOrScroll(String message)</code> -- </p></li>
+                                    <li><p><code>void 	assertNotInLayoutOrScroll(String message)</code> -- </p></li>
+                                    <li><p><code>void 	attachView(View child)</code> -- </p></li>
+                                    <li><p><code>void 	attachView(View child, int index, RecyclerView.LayoutParams lp)</code> -- </p></li>
+                                    <li><p><code>void 	attachView(View child, int index)</code> -- </p></li>
+                                    <li><p><code>void 	calculateItemDecorationsForChild(View child, Rect outRect)</code> -- </p></li>
+                                    <li><p><code>boolean 	canScrollHorizontally()</code> -- </p></li>
+                                    <li><p><code>boolean 	canScrollVertically()</code> -- </p></li>
+                                    <li><p><code>boolean 	checkLayoutParams(RecyclerView.LayoutParams lp)</code> -- </p></li>
+                                    <li><p><code>static int 	chooseSize(int spec, int desired, int min)</code> -- </p></li>
+                                    <li><p><code>void 	collectAdjacentPrefetchPositions(int dx, int dy, RecyclerView.State state, RecyclerView.LayoutManager.LayoutPrefetchRegistry layoutPrefetchRegistry)</code> -- </p></li>
+                                    <li><p><code>void 	collectInitialPrefetchPositions(int adapterItemCount, RecyclerView.LayoutManager.LayoutPrefetchRegistry layoutPrefetchRegistry)</code> -- </p></li>
+                                    <li><p><code>int 	computeHorizontalScrollExtent(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeHorizontalScrollOffset(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeHorizontalScrollRange(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeVerticalScrollExtent(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeVerticalScrollOffset(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeVerticalScrollRange(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	detachAndScrapAttachedViews(RecyclerView.Recycler recycler)</code> -- </p></li>
+                                    <li><p><code>void 	detachAndScrapView(View child, RecyclerView.Recycler recycler)</code> -- </p></li>
+                                    <li><p><code>void 	detachAndScrapViewAt(int index, RecyclerView.Recycler recycler)</code> -- </p></li>
+                                    <li><p><code>void 	detachView(View child)</code> -- </p></li>
+                                    <li><p><code>void 	detachViewAt(int index)</code> -- </p></li>
+                                    <li><p><code>void 	endAnimation(View view)</code> -- </p></li>
+                                    <li><p><code>View 	findContainingItemView(View view)</code> -- </p></li>
+                                    <li><p><code>View 	findViewByPosition(int position)</code> -- </p></li>
+                                    <li><p><code>abstract RecyclerView.LayoutParams 	generateDefaultLayoutParams()</code> -- </p></li>
+                                    <li><p><code>RecyclerView.LayoutParams 	generateLayoutParams(Context c, AttributeSet attrs)</code> -- </p></li>
+                                    <li><p><code>RecyclerView.LayoutParams 	generateLayoutParams(ViewGroup.LayoutParams lp)</code> -- </p></li>
+                                    <li><p><code>int 	getBaseline()</code> -- </p></li>
+                                    <li><p><code>int 	getBottomDecorationHeight(View child)</code> -- </p></li>
+                                    <li><p><code>View 	getChildAt(int index)</code> -- </p></li>
+                                    <li><p><code>int 	getChildCount()</code> -- </p></li>
+                                    <li><p><code>static int 	getChildMeasureSpec(int parentSize, int parentMode, int padding, int childDimension, boolean canScroll)</code> -- </p></li>
+                                    <li><p><code>static int 	getChildMeasureSpec(int parentSize, int padding, int childDimension, boolean canScroll)</code> -- </p></li>
+                                    <li><p><code>boolean 	getClipToPadding()</code> -- </p></li>
+                                    <li><p><code>int 	getColumnCountForAccessibility(RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	getDecoratedBottom(View child)</code> -- </p></li>
+                                    <li><p><code>void 	getDecoratedBoundsWithMargins(View view, Rect outBounds)</code> -- </p></li>
+                                    <li><p><code>int 	getDecoratedLeft(View child)</code> -- </p></li>
+                                    <li><p><code>int 	getDecoratedMeasuredHeight(View child)</code> -- </p></li>
+                                    <li><p><code>int 	getDecoratedMeasuredWidth(View child)</code> -- </p></li>
+                                    <li><p><code>int 	getDecoratedRight(View child)</code> -- </p></li>
+                                    <li><p><code>int 	getDecoratedTop(View child)</code> -- </p></li>
+                                    <li><p><code>View 	getFocusedChild()</code> -- </p></li>
+                                    <li><p><code>int 	getHeight()</code> -- </p></li>
+                                    <li><p><code>int 	getHeightMode()</code> -- </p></li>
+                                    <li><p><code>int 	getItemCount()</code> -- </p></li>
+                                    <li><p><code>int 	getItemViewType(View view)</code> -- </p></li>
+                                    <li><p><code>int 	getLayoutDirection()</code> -- </p></li>
+                                    <li><p><code>int 	getLeftDecorationWidth(View child)</code> -- </p></li>
+                                    <li><p><code>int 	getMinimumHeight()</code> -- </p></li>
+                                    <li><p><code>int 	getMinimumWidth()</code> -- </p></li>
+                                    <li><p><code>int 	getPaddingBottom()</code> -- </p></li>
+                                    <li><p><code>int 	getPaddingEnd()</code> -- </p></li>
+                                    <li><p><code>int 	getPaddingLeft()</code> -- </p></li>
+                                    <li><p><code>int 	getPaddingRight()</code> -- </p></li>
+                                    <li><p><code>int 	getPaddingStart()</code> -- </p></li>
+                                    <li><p><code>int 	getPaddingTop()</code> -- </p></li>
+                                    <li><p><code>int 	getPosition(View view)</code> -- </p></li>
+                                    <li><p><code>static RecyclerView.LayoutManager.Properties 	getProperties(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes)</code> -- </p></li>
+                                    <li><p><code>int 	getRightDecorationWidth(View child)</code> -- </p></li>
+                                    <li><p><code>int 	getRowCountForAccessibility(RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	getSelectionModeForAccessibility(RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	getTopDecorationHeight(View child)</code> -- </p></li>
+                                    <li><p><code>void 	getTransformedBoundingBox(View child, boolean includeDecorInsets, Rect out)</code> -- </p></li>
+                                    <li><p><code>int 	getWidth()</code> -- </p></li>
+                                    <li><p><code>int 	getWidthMode()</code> -- </p></li>
+                                    <li><p><code>boolean 	hasFocus()</code> -- </p></li>
+                                    <li><p><code>void 	ignoreView(View view)</code> -- </p></li>
+                                    <li><p><code>boolean 	isAttachedToWindow()</code> -- </p></li>
+                                    <li><p><code>boolean 	isAutoMeasureEnabled()</code> -- </p></li>
+                                    <li><p><code>boolean 	isFocused()</code> -- </p></li>
+                                    <li><p><code>final boolean 	isItemPrefetchEnabled()</code> -- </p></li>
+                                    <li><p><code>boolean 	isLayoutHierarchical(RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>boolean 	isMeasurementCacheEnabled()</code> -- </p></li>
+                                    <li><p><code>boolean 	isSmoothScrolling()</code> -- </p></li>
+                                    <li><p><code>boolean 	isViewPartiallyVisible(View child, boolean completelyVisible, boolean acceptEndPointInclusion)</code> -- </p></li>
+                                    <li><p><code>void 	layoutDecorated(View child, int left, int top, int right, int bottom)</code> -- </p></li>
+                                    <li><p><code>void 	layoutDecoratedWithMargins(View child, int left, int top, int right, int bottom)</code> -- </p></li>
+                                    <li><p><code>void 	measureChild(View child, int widthUsed, int heightUsed)</code> -- </p></li>
+                                    <li><p><code>void 	measureChildWithMargins(View child, int widthUsed, int heightUsed)</code> -- </p></li>
+                                    <li><p><code>void 	moveView(int fromIndex, int toIndex)</code> -- </p></li>
+                                    <li><p><code>void 	offsetChildrenHorizontal(int dx)</code> -- </p></li>
+                                    <li><p><code>void 	offsetChildrenVertical(int dy)</code> -- </p></li>
+                                    <li><p><code>void 	onAdapterChanged(Adapter oldAdapter, Adapter newAdapter)</code> -- </p></li>
+                                    <li><p><code>boolean 	onAddFocusables(RecyclerView recyclerView, ArrayList&lt;View> views, int direction, int focusableMode)</code> -- </p></li>
+                                    <li><p><code>void 	onAttachedToWindow(RecyclerView view)</code> -- </p></li>
+                                    <li><p><code>void 	onDetachedFromWindow(RecyclerView view)</code> -- </p></li>
+                                    <li><p><code>void 	onDetachedFromWindow(RecyclerView view, RecyclerView.Recycler recycler)</code> -- </p></li>
+                                    <li><p><code>View 	onFocusSearchFailed(View focused, int direction, RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	onInitializeAccessibilityEvent(AccessibilityEvent event)</code> -- </p></li>
+                                    <li><p><code>void 	onInitializeAccessibilityEvent(RecyclerView.Recycler recycler, RecyclerView.State state, AccessibilityEvent event)</code> -- </p></li>
+                                    <li><p><code>void 	onInitializeAccessibilityNodeInfo(RecyclerView.Recycler recycler, RecyclerView.State state, AccessibilityNodeInfoCompat info)</code> -- </p></li>
+                                    <li><p><code>void 	onInitializeAccessibilityNodeInfoForItem(RecyclerView.Recycler recycler, RecyclerView.State state, View host, AccessibilityNodeInfoCompat info)</code> -- </p></li>
+                                    <li><p><code>View 	onInterceptFocusSearch(View focused, int direction)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsAdded(RecyclerView recyclerView, int positionStart, int itemCount)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsChanged(RecyclerView recyclerView)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsMoved(RecyclerView recyclerView, int from, int to, int itemCount)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsRemoved(RecyclerView recyclerView, int positionStart, int itemCount)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsUpdated(RecyclerView recyclerView, int positionStart, int itemCount)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsUpdated(RecyclerView recyclerView, int positionStart, int itemCount, Object payload)</code> -- </p></li>
+                                    <li><p><code>void 	onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	onLayoutCompleted(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	onMeasure(RecyclerView.Recycler recycler, RecyclerView.State state, int widthSpec, int heightSpec)</code> -- </p></li>
+                                    <li><p><code>boolean 	onRequestChildFocus(RecyclerView parent, View child, View focused)</code> -- </p></li>
+                                    <li><p><code>boolean 	onRequestChildFocus(RecyclerView parent, RecyclerView.State state, View child, View focused)</code> -- </p></li>
+                                    <li><p><code>void 	onRestoreInstanceState(Parcelable state)</code> -- </p></li>
+                                    <li><p><code>Parcelable 	onSaveInstanceState()</code> -- </p></li>
+                                    <li><p><code>void 	onScrollStateChanged(int state)</code> -- </p></li>
+                                    <li><p><code>boolean 	performAccessibilityAction(RecyclerView.Recycler recycler, RecyclerView.State state, int action, Bundle args)</code> -- </p></li>
+                                    <li><p><code>boolean 	performAccessibilityActionForItem(RecyclerView.Recycler recycler, RecyclerView.State state, View view, int action, Bundle args)</code> -- </p></li>
+                                    <li><p><code>void 	postOnAnimation(Runnable action)</code> -- </p></li>
+                                    <li><p><code>void 	removeAllViews()</code> -- </p></li>
+                                    <li><p><code>void 	removeAndRecycleAllViews(RecyclerView.Recycler recycler)</code> -- </p></li>
+                                    <li><p><code>void 	removeAndRecycleView(View child, RecyclerView.Recycler recycler)</code> -- </p></li>
+                                    <li><p><code>void 	removeAndRecycleViewAt(int index, RecyclerView.Recycler recycler)</code> -- </p></li>
+                                    <li><p><code>boolean 	removeCallbacks(Runnable action)</code> -- </p></li>
+                                    <li><p><code>void 	removeDetachedView(View child)</code> -- </p></li>
+                                    <li><p><code>void 	removeView(View child)</code> -- </p></li>
+                                    <li><p><code>void 	removeViewAt(int index)</code> -- </p></li>
+                                    <li><p><code>boolean 	requestChildRectangleOnScreen(RecyclerView parent, View child, Rect rect, boolean immediate, boolean focusedChildVisible)</code> -- </p></li>
+                                    <li><p><code>boolean 	requestChildRectangleOnScreen(RecyclerView parent, View child, Rect rect, boolean immediate)</code> -- </p></li>
+                                    <li><p><code>void 	requestLayout()</code> -- </p></li>
+                                    <li><p><code>void 	requestSimpleAnimationsInNextLayout()</code> -- </p></li>
+                                    <li><p><code>int 	scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	scrollToPosition(int position)</code> -- </p></li>
+                                    <li><p><code>int 	scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	setAutoMeasureEnabled(boolean enabled)</code> -- </p></li>
+                                    <li><p><code>final void 	setItemPrefetchEnabled(boolean enabled)</code> -- </p></li>
+                                    <li><p><code>void 	setMeasuredDimension(int widthSize, int heightSize)</code> -- </p></li>
+                                    <li><p><code>void 	setMeasuredDimension(Rect childrenBounds, int wSpec, int hSpec)</code> -- </p></li>
+                                    <li><p><code>void 	setMeasurementCacheEnabled(boolean measurementCacheEnabled)</code> -- </p></li>
+                                    <li><p><code>void 	smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position)</code> -- </p></li>
+                                    <li><p><code>void 	startSmoothScroll(RecyclerView.SmoothScroller smoothScroller)</code> -- </p></li>
+                                    <li><p><code>void 	stopIgnoringView(View view)</code> -- </p></li>
+                                    <li><p><code>boolean 	supportsPredictiveItemAnimations()</code> -- </p></li>
+                                </ol>
+
+                            </div>
+
+                            <div class="split-item">
+                                <p><b>LayoutManager 有以下子类：</b></p>
+                                <p><a href="">LinearLayoutManager</a> -- 以垂直或者水平滚动列表方式显示 Item。</p>
+                                <pre class="brush: java;">
+public class LinearLayoutManager extends RecyclerView.LayoutManager implements
+    ItemTouchHelper.ViewDropHandler, RecyclerView.SmoothScroller.ScrollVectorProvider {
+
+    public static final int HORIZONTAL = RecyclerView.HORIZONTAL;
+    public static final int VERTICAL = RecyclerView.VERTICAL;
+
+    public static final int INVALID_OFFSET = Integer.MIN_VALUE;
+
+    protected static class LayoutChunkResult {
+        public int mConsumed;
+        public boolean mFinished;
+        public boolean mIgnoreConsumed;
+        public boolean mFocusable;
+
+        void resetInternal() {
+            mConsumed = 0;
+            mFinished = false;
+            mIgnoreConsumed = false;
+            mFocusable = false;
+        }
+    }
+
+    public LinearLayoutManager(Context cx) {}
+    public LinearLayoutManager(Context cx, int orientation, boolean reverseLayout) {}
+    public LinearLayoutManager(Context cx, AttributeSet attrs, int defStyleAttr, int defStlRes) {}
+}
+</pre>
+                                <ol>
+                                    <li><p><code>void 	assertNotInLayoutOrScroll(String message)</code> -- </p></li>
+                                    <li><p><code>boolean 	canScrollHorizontally()</code> -- </p></li>
+                                    <li><p><code>boolean 	canScrollVertically()</code> -- </p></li>
+                                    <li><p><code>void 	collectAdjacentPrefetchPositions(int dx, int dy, RecyclerView.State state, RecyclerView.LayoutManager.LayoutPrefetchRegistry layoutPrefetchRegistry)</code> -- </p></li>
+                                    <li><p><code>void 	collectInitialPrefetchPositions(int adapterItemCount, RecyclerView.LayoutManager.LayoutPrefetchRegistry layoutPrefetchRegistry)</code> -- </p></li>
+                                    <li><p><code>int 	computeHorizontalScrollExtent(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeHorizontalScrollOffset(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeHorizontalScrollRange(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>PointF 	computeScrollVectorForPosition(int targetPosition)</code> -- </p></li>
+                                    <li><p><code>int 	computeVerticalScrollExtent(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeVerticalScrollOffset(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeVerticalScrollRange(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	findFirstCompletelyVisibleItemPosition()</code> -- </p></li>
+                                    <li><p><code>int 	findFirstVisibleItemPosition()</code> -- </p></li>
+                                    <li><p><code>int 	findLastCompletelyVisibleItemPosition()</code> -- </p></li>
+                                    <li><p><code>int 	findLastVisibleItemPosition()</code> -- </p></li>
+                                    <li><p><code>View 	findViewByPosition(int position)</code> -- </p></li>
+                                    <li><p><code>RecyclerView.LayoutParams 	generateDefaultLayoutParams()</code> -- </p></li>
+                                    <li><p><code>int 	getInitialPrefetchItemCount()</code> -- </p></li>
+                                    <li><p><code>int 	getOrientation()</code> -- </p></li>
+                                    <li><p><code>boolean 	getRecycleChildrenOnDetach()</code> -- </p></li>
+                                    <li><p><code>boolean 	getReverseLayout()</code> -- </p></li>
+                                    <li><p><code>boolean 	getStackFromEnd()</code> -- </p></li>
+                                    <li><p><code>boolean 	isAutoMeasureEnabled()</code> -- </p></li>
+                                    <li><p><code>boolean 	isSmoothScrollbarEnabled()</code> -- </p></li>
+                                    <li><p><code>void 	onDetachedFromWindow(RecyclerView view, RecyclerView.Recycler recycler)</code> -- </p></li>
+                                    <li><p><code>View 	onFocusSearchFailed(View focused, int focusDirection, RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	onInitializeAccessibilityEvent(AccessibilityEvent event)</code> -- </p></li>
+                                    <li><p><code>void 	onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	onLayoutCompleted(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	onRestoreInstanceState(Parcelable state)</code> -- </p></li>
+                                    <li><p><code>Parcelable 	onSaveInstanceState()</code> -- </p></li>
+                                    <li><p><code>int 	scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	scrollToPosition(int position)</code> -- </p></li>
+                                    <li><p><code>void 	scrollToPositionWithOffset(int position, int offset)</code> -- </p></li>
+                                    <li><p><code>int 	scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	setInitialPrefetchItemCount(int itemCount)</code> -- </p></li>
+                                    <li><p><code>void 	setOrientation(int orientation)</code> -- </p></li>
+                                    <li><p><code>void 	setRecycleChildrenOnDetach(boolean recycleChildrenOnDetach)</code> -- </p></li>
+                                    <li><p><code>void 	setReverseLayout(boolean reverseLayout)</code> -- </p></li>
+                                    <li><p><code>void 	setSmoothScrollbarEnabled(boolean enabled)</code> -- </p></li>
+                                    <li><p><code>void 	setStackFromEnd(boolean stackFromEnd)</code> -- </p></li>
+                                    <li><p><code>void 	smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position)</code> -- </p></li>
+                                    <li><p><code>boolean 	supportsPredictiveItemAnimations()</code> -- </p></li>
+
+                                    <li class="group"><p><code>int 	getExtraLayoutSpace(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>boolean 	isLayoutRTL()</code> -- </p></li>
+                                </ol>
+                            </div>
+                            <div class="split-item">
+                                <p><a href="">GridLayoutManager</a> -- 以网格方式显示 Item。</p>
+                                <pre class="brush: java;">
+public class GridLayoutManager extends LinearLayoutManager {
+    public static final int DEFAULT_SPAN_COUNT = -1;
+
+    public abstract static class SpanSizeLookup {}
+    public static final class DefaultSpanSizeLookup extends SpanSizeLookup {}
+    public static class LayoutParams extends RecyclerView.LayoutParams {}
+
+    public GridLayoutManager(Context context, int spanCount) {}
+    public GridLayoutManager(Context context, int spanCount, int orientation, boolean reverseLayout) {}
+    public GridLayoutManager(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {}
+}
+</pre>
+                                <ol>
+                                    <li><p><code>boolean 	checkLayoutParams(RecyclerView.LayoutParams lp)</code> -- </p></li>
+                                    <li><p><code>RecyclerView.LayoutParams 	generateDefaultLayoutParams()</code> -- </p></li>
+                                    <li><p><code>RecyclerView.LayoutParams 	generateLayoutParams(Context c, AttributeSet attrs)</code> -- </p></li>
+                                    <li><p><code>RecyclerView.LayoutParams 	generateLayoutParams(ViewGroup.LayoutParams lp)</code> -- </p></li>
+                                    <li><p><code>int 	getColumnCountForAccessibility(RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	getRowCountForAccessibility(RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	getSpanCount()</code> -- </p></li>
+                                    <li><p><code>GridLayoutManager.SpanSizeLookup 	getSpanSizeLookup()</code> -- </p></li>
+                                    <li><p><code>View 	onFocusSearchFailed(View focused, int focusDirection, RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	onInitializeAccessibilityNodeInfoForItem(RecyclerView.Recycler recycler, RecyclerView.State state, View host, AccessibilityNodeInfoCompat info)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsAdded(RecyclerView recyclerView, int positionStart, int itemCount)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsChanged(RecyclerView recyclerView)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsMoved(RecyclerView recyclerView, int from, int to, int itemCount)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsRemoved(RecyclerView recyclerView, int positionStart, int itemCount)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsUpdated(RecyclerView recyclerView, int positionStart, int itemCount, Object payload)</code> -- </p></li>
+                                    <li><p><code>void 	onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	onLayoutCompleted(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	setMeasuredDimension(Rect childrenBounds, int wSpec, int hSpec)</code> -- </p></li>
+                                    <li><p><code>void 	setSpanCount(int spanCount)</code> -- </p></li>
+                                    <li><p><code>void 	setSpanSizeLookup(GridLayoutManager.SpanSizeLookup spanSizeLookup)</code> -- </p></li>
+                                    <li><p><code>void 	setStackFromEnd(boolean stackFromEnd)</code> -- </p></li>
+                                    <li><p><code>boolean 	supportsPredictiveItemAnimations()</code> -- </p></li>
+                                </ol>
+                            </div>
+
+                            <div class="split-item">
+                                <p><a href="">StaggeredGridLayoutManager</a> -- 在分散对齐网格中显示 Item(瀑布流)。</p>
+                                <pre class="brush: java;">
+public class StaggeredGridLayoutManager extends RecyclerView.LayoutManager implements
+        RecyclerView.SmoothScroller.ScrollVectorProvider {
+
+    public static final int HORIZONTAL = RecyclerView.HORIZONTAL;
+    public static final int VERTICAL = RecyclerView.VERTICAL;
+
+    public static final int GAP_HANDLING_NONE = 0;
+    public static final int GAP_HANDLING_MOVE_ITEMS_BETWEEN_SPANS = 2;
+
+    public static class LayoutParams extends RecyclerView.LayoutParams {}
+
+    public StaggeredGridLayoutManager(int spanCount, int orientation) {}
+    public StaggeredGridLayoutManager(Context cx, AttributeSet attrs, int defStyleAttr, int defStyleRes) {}
+}
+</pre>
+                                <ol>
+                                    <li><p><code>void 	assertNotInLayoutOrScroll(String message)</code> -- </p></li>
+                                    <li><p><code>boolean 	canScrollHorizontally()</code> -- </p></li>
+                                    <li><p><code>boolean 	canScrollVertically()</code> -- </p></li>
+                                    <li><p><code>boolean 	checkLayoutParams(RecyclerView.LayoutParams lp)</code> -- </p></li>
+                                    <li><p><code>int 	computeHorizontalScrollExtent(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeHorizontalScrollOffset(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeHorizontalScrollRange(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>PointF 	computeScrollVectorForPosition(int targetPosition)</code> -- </p></li>
+                                    <li><p><code>int 	computeVerticalScrollExtent(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeVerticalScrollOffset(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	computeVerticalScrollRange(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int[] 	findFirstCompletelyVisibleItemPositions(int[] into)</code> -- </p></li>
+                                    <li><p><code>int[] 	findFirstVisibleItemPositions(int[] into)</code> -- </p></li>
+                                    <li><p><code>int[] 	findLastCompletelyVisibleItemPositions(int[] into)</code> -- </p></li>
+                                    <li><p><code>int[] 	findLastVisibleItemPositions(int[] into)</code> -- </p></li>
+                                    <li><p><code>RecyclerView.LayoutParams 	generateDefaultLayoutParams()</code> -- </p></li>
+                                    <li><p><code>RecyclerView.LayoutParams 	generateLayoutParams(Context c, AttributeSet attrs)</code> -- </p></li>
+                                    <li><p><code>RecyclerView.LayoutParams 	generateLayoutParams(ViewGroup.LayoutParams lp)</code> -- </p></li>
+                                    <li><p><code>int 	getColumnCountForAccessibility(RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	getGapStrategy()</code> -- </p></li>
+                                    <li><p><code>int 	getOrientation()</code> -- </p></li>
+                                    <li><p><code>boolean 	getReverseLayout()</code> -- </p></li>
+                                    <li><p><code>int 	getRowCountForAccessibility(RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>int 	getSpanCount()</code> -- </p></li>
+                                    <li><p><code>void 	invalidateSpanAssignments()</code> -- </p></li>
+                                    <li><p><code>boolean 	isAutoMeasureEnabled()</code> -- </p></li>
+                                    <li><p><code>void 	offsetChildrenHorizontal(int dx)</code> -- </p></li>
+                                    <li><p><code>void 	offsetChildrenVertical(int dy)</code> -- </p></li>
+                                    <li><p><code>void 	onDetachedFromWindow(RecyclerView view, RecyclerView.Recycler recycler)</code> -- </p></li>
+                                    <li><p><code>View 	onFocusSearchFailed(View focused, int direction, RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	onInitializeAccessibilityEvent(AccessibilityEvent event)</code> -- </p></li>
+                                    <li><p><code>void 	onInitializeAccessibilityNodeInfoForItem(RecyclerView.Recycler recycler, RecyclerView.State state, View host, AccessibilityNodeInfoCompat info)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsAdded(RecyclerView recyclerView, int positionStart, int itemCount)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsChanged(RecyclerView recyclerView)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsMoved(RecyclerView recyclerView, int from, int to, int itemCount)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsRemoved(RecyclerView recyclerView, int positionStart, int itemCount)</code> -- </p></li>
+                                    <li><p><code>void 	onItemsUpdated(RecyclerView recyclerView, int positionStart, int itemCount, Object payload)</code> -- </p></li>
+                                    <li><p><code>void 	onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	onLayoutCompleted(RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	onRestoreInstanceState(Parcelable state)</code> -- </p></li>
+                                    <li><p><code>Parcelable 	onSaveInstanceState()</code> -- </p></li>
+                                    <li><p><code>void 	onScrollStateChanged(int state)</code> -- </p></li>
+                                    <li><p><code>int 	scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	scrollToPosition(int position)</code> -- </p></li>
+                                    <li><p><code>void 	scrollToPositionWithOffset(int position, int offset)</code> -- </p></li>
+                                    <li><p><code>int 	scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state)</code> -- </p></li>
+                                    <li><p><code>void 	setGapStrategy(int gapStrategy)</code> -- </p></li>
+                                    <li><p><code>void 	setMeasuredDimension(Rect childrenBounds, int wSpec, int hSpec)</code> -- </p></li>
+                                    <li><p><code>void 	setOrientation(int orientation)</code> -- </p></li>
+                                    <li><p><code>void 	setReverseLayout(boolean reverseLayout)</code> -- </p></li>
+                                    <li><p><code>void 	setSpanCount(int spanCount)</code> -- </p></li>
+                                    <li><p><code>void 	smoothScrollToPosition(RecyclerView recyclerView, RecyclerView.State state, int position)</code> -- </p></li>
+                                    <li><p><code>boolean 	supportsPredictiveItemAnimations()</code> -- </p></li>
+                                </ol>
                             </div>
 
                         </div>
