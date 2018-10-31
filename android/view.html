@@ -70,6 +70,7 @@
 						<a href="#view-layout" class="list-group-item">View 框架的 layout 机制</a>
 						<a href="#view-draw" class="list-group-item">View 框架的 draw 机制</a>
 						<a href="#view-event" class="list-group-item">View 框架的事件分发机制</a>
+						<a href="#view-ViewModel" class="list-group-item">ViewModel 的使用</a>
 						<a href="#view-View" class="list-group-item">View 类</a>
 						<a class="list-group-item active dropdown" data-toggle="collapse"
 							data-parent="#accordion" href="#view-Child" aria-expanded="true">
@@ -180,9 +181,9 @@
 						</ol>
 						<p>那么限制类型又分为三种类型(int 值的最高两位表示, 另外还有一个 <code>MEASURED_STATE_TOO_SMALL = 0x01000000</code> 表示测量的大小小于视图希望拥有的空间, 剩下的 24 位表示尺寸大小)：</p>
 						<ol>
-							<li><p><b>MeasureSpec.UNSPECIFIED(<code>0 << 30</code>)</b></p> -- 不限定。意思就是，子 View 想要多大，我就可以给你多大，你放心大胆的 measure 吧，不用管其他的。也不用管我传递给你的尺寸值。（其实 Android 高版本中推荐，只要是这个模式，尺寸设置为 0）;</li>
-							<li><p><b>MeasureSpec.EXACTLY(<code>1 << 30</code>)</b></p> -- 精确的。意思就是，根据我当前的状况，结合你指定的尺寸参数来考虑，你就应该是这个尺寸，具体大小在 MeasureSpec 的尺寸属性中，自己去查看吧，你也不要管你的 content 有多大了，就用这个尺寸吧;</li>
-							<li><p><b>MeasureSpec.AT_MOST(<code>2 << 30</code>)</b></p> -- 最多的。意思就是，根据我当前的情况，结合你指定的尺寸参数来考虑，在不超过我给你限定的尺寸的前提下，你测量一个恰好能包裹你内容的尺寸就可以了。</li>
+                            <li><p><b>MeasureSpec.UNSPECIFIED(<code>0 << 30</code>)</b></p> -- 不限定(<b>ScrollView 等的子 View 的 onMeasure() 传入的值</b>)。意思就是，子 View 想要多大，我就可以给你多大，你放心大胆的 measure 吧，不用管其他的。也不用管我传递给你的尺寸值。（其实 Android 高版本中推荐，只要是这个模式，尺寸设置为 0）;</li>
+							<li><p><b>MeasureSpec.EXACTLY(<code>1 << 30</code>)</b></p> -- 精确的(<b>match_parent / 尺寸值</b>)。意思就是，根据我当前的状况，结合你指定的尺寸参数来考虑，你就应该是这个尺寸，具体大小在 MeasureSpec 的尺寸属性中，自己去查看吧，你也不要管你的 content 有多大了，就用这个尺寸吧;</li>
+							<li><p><b>MeasureSpec.AT_MOST(<code>2 << 30</code>)</b></p> -- 最多的(<b>wrap_content</b>)。意思就是，根据我当前的情况，结合你指定的尺寸参数来考虑，在不超过我给你限定的尺寸的前提下，你测量一个恰好能包裹你内容的尺寸就可以了。</li>
 						</ol>
 						<h5 class="text-primary">MeasureSpec 类:</h5>
 						<ul>
@@ -245,9 +246,9 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 						<p>
 							<img src="images/view-layout-2.png" class="center-block img-responsive">
 						</p>
-                        <p class="text-primary">ViewGroup 的 layout 相关方法：(View 的 onLayout 方法是空实现)</p>
+                        <p class="text-primary">ViewGroup 的 onLayout 方法：</p>
                         <pre class="brush: java;">
-/** ViewGroup 的 onLayout 方法，指定子 View 的位置: */
+/** ViewGroup 的 onLayout 方法，可以指定子 View 的位置: */
 @Override
 protected void onLayout(boolean changed, int l, int t, int r, int b) {
     int count = getChildCount();
@@ -258,7 +259,7 @@ protected void onLayout(boolean changed, int l, int t, int r, int b) {
         child = getChildAt(i);
         int right = left + child.getMeasuredWidth();
         int bottom = top + child.getMeasuredHeight();
-        /** 这个方法指定子 View 的位置和大小 */
+        /** 指定子 View 的位置和大小 */
         child.layout(left, top, right, bottom);
         left = (left + right) / 2;
         top = (top + bottom) / 2;
@@ -583,6 +584,21 @@ public class MyListView exdents ListView {
 					</div>
 				</div>
 				<!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="view-ViewModel"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">ViewModel 的使用</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-rc01'
+// implementation 'android.arch.lifecycle:extensions:28.0.0'
+</pre>
+                    </div>
+                </div>
+                <!-- item over -->
 
 				<!-- item start -->
 				<a class="offset" id="view-View"></a>
@@ -1153,11 +1169,25 @@ public interface AccessibilityEventSource {
 
                             <p><b>View 类的 <code>protected</code> API:</b></p>
                             <ol start="7">
+                                <li><p><code>protected static int[] 	mergeDrawableStates(int[] baseState, int[] additionalState)</code> -- </p></li>
+
 								<li class="group"><p><code>protected void 	onFinishInflate()</code> -- 如果是从 xml 加载的 View, 会调用此方法</p></li>
 								<li><p><code>protected void 	onAttachedToWindow()</code> -- 当 View 添加到 Window 的时候调用（在 Activity 第一次执行完 onResume 方法后被调用）</p></li>
 								<li><p><code>protected void 	onWindowVisibilityChanged(int visibility)</code> -- 窗口可见性变化时候回调(比如：每次窗口进入前台或回到后台，但是电源键不会触发)</p></li>
-								<li><p><code>protected void 	onMeasure(int widthMeasureSpec, int heightMeasureSpec)</code> -- 测量方法，可能会调用多次</p></li>
-								<li><p><code>protected void 	onLayout(boolean changed, int left, int top, int right, int bottom)</code> -- 布局方法，可能会调用多次</p></li>
+								<li><p><code>protected void 	onMeasure(int widthMeasureSpec, int heightMeasureSpec)</code> -- 测量方法，可能会调用多次</p>
+                                    <pre class="brush: java;">
+@Override
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    int mode = MeasureSpec.getMode(heightMeasureSpec);
+    if(MeasureSpec.AT_MOST == mode) { // 如果自定义 View 的高度为 wrap_content, 可以在这里指定高度
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(ScreenUtil.dip2Px(context,140),
+                                        MeasureSpec.EXACTLY);
+    }
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+}
+</pre>
+                                </li>
+								<li><p><code>protected void 	onLayout(boolean changed, int left, int top, int right, int bottom)</code> -- 布局方法，用于 ViewGroup 布局子元素，可能会调用多次</p></li>
 								<li><p><code>protected void 	onSizeChanged(int w, int h, int oldw, int oldh)</code> -- 尺寸大小改变回调</p></li>
 								<li><p><code>protected void 	onDraw(Canvas canvas)</code> -- 绘制 View(比如：每次窗口进入前台)</p></li>
 								<li><p><code>protected void 	onVisibilityChanged(View changedView, int visibility)</code> -- 可见性改变回调</p></li>
@@ -1203,8 +1233,6 @@ protected void onRestoreInstanceState(Parcelable state) {
 								<li><p><code>protected boolean 	onSetAlpha(int alpha)</code> -- 设置透明度回调(透明度动画也会调用此方法)</p></li>
 								<li><p><code>protected void 	onDisplayHint(int hint)</code> -- 显示提示信息回调</p></li>
 
-								<li class="group"><p><code>protected void 	onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY)</code> -- 调用 overScroll(...) 方法回调</p></li>
-								<li><p><code>protected void 	onScrollChanged(int l, int t, int oldl, int oldt)</code> -- 滚动改变回调(调用 <code>scrollTo(int,  int)</code> 等方法可能会回调)</p></li>
 
                                 <li class="group"><p><code>protected void 	dispatchDraw(Canvas canvas)</code> -- </p></li>
                                 <li><p><code>protected boolean 	dispatchGenericFocusedEvent(MotionEvent event)</code> -- </p></li>
@@ -1217,46 +1245,36 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>protected void 	dispatchSetSelected(boolean selected)</code> -- </p></li>
                                 <li><p><code>protected void 	dispatchVisibilityChanged(View changedView, int visibility)</code> -- </p></li>
 
-                                <li><p><code>boolean 	awakenScrollBars(int startDelay, boolean invalidate)</code> -- </p></li>
-                                <li><p><code>boolean 	awakenScrollBars(int startDelay)</code> -- </p></li>
-                                <li><p><code>boolean 	awakenScrollBars()</code> -- </p></li>
-                                <li><p><code>int 	computeHorizontalScrollExtent()</code> -- </p></li>
-                                <li><p><code>int 	computeHorizontalScrollOffset()</code> -- </p></li>
-                                <li><p><code>int 	computeHorizontalScrollRange()</code> -- </p></li>
-                                <li><p><code>int 	computeVerticalScrollExtent()</code> -- </p></li>
-                                <li><p><code>int 	computeVerticalScrollOffset()</code> -- </p></li>
-                                <li><p><code>int 	computeVerticalScrollRange()</code> -- </p></li>
-                                <li><p><code>protected boolean 	overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX, int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent)</code> -- </p></li>
-                                <li><p><code>void 	drawableStateChanged()</code> -- </p></li>
-                                <li><p><code>boolean 	fitSystemWindows(Rect insets)</code> -- </p></li>
-                                <li><p><code>float 	getBottomFadingEdgeStrength()</code> -- </p></li>
-                                <li><p><code>int 	getBottomPaddingOffset()</code> -- </p></li>
-                                <li><p><code>ContextMenu.ContextMenuInfo 	getContextMenuInfo()</code> -- </p></li>
-                                <li><p><code>int 	getHorizontalScrollbarHeight()</code> -- </p></li>
-                                <li><p><code>float 	getLeftFadingEdgeStrength()</code> -- </p></li>
-                                <li><p><code>int 	getLeftPaddingOffset()</code> -- </p></li>
-                                <li><p><code>float 	getRightFadingEdgeStrength()</code> -- </p></li>
-                                <li><p><code>int 	getRightPaddingOffset()</code> -- </p></li>
-                                <li><p><code>int 	getSuggestedMinimumHeight()</code> -- </p></li>
-                                <li><p><code>int 	getSuggestedMinimumWidth()</code> -- </p></li>
-                                <li><p><code>float 	getTopFadingEdgeStrength()</code> -- </p></li>
-                                <li><p><code>int 	getTopPaddingOffset()</code> -- </p></li>
-                                <li><p><code>int 	getWindowAttachCount()</code> -- </p></li>
-                                <li><p><code>boolean 	isPaddingOffsetRequired()</code> -- </p></li>
-                                <li><p><code>static int[] 	mergeDrawableStates(int[] baseState, int[] additionalState)</code> -- </p></li>
-                                <li><p><code>final void 	setMeasuredDimension(int measuredWidth, int measuredHeight)</code> -- </p></li>
-                                <li><p><code>boolean 	verifyDrawable(Drawable who)</code> -- </p></li>
+                                <li><p><code>protected void 	drawableStateChanged()</code> -- </p></li>
+                                <li><p><code>protected boolean 	fitSystemWindows(Rect insets)</code> -- </p></li>
+                                <li><p><code>protected float 	getBottomFadingEdgeStrength()</code> -- </p></li>
+                                <li><p><code>protected ContextMenu.ContextMenuInfo 	getContextMenuInfo()</code> -- </p></li>
+                                <li><p><code>protected float 	getLeftFadingEdgeStrength()</code> -- </p></li>
+
+                                <li class="group"><p><code>protected int 	getLeftPaddingOffset()</code> -- </p></li>
+                                <li><p><code>protected int 	getTopPaddingOffset()</code> -- </p></li>
+                                <li><p><code>protected int 	getBottomPaddingOffset()</code> -- </p></li>
+                                <li><p><code>protected int 	getRightPaddingOffset()</code> -- </p></li>
+                                <li><p><code>protected boolean 	isPaddingOffsetRequired()</code> -- </p></li>
+
+                                <li><p><code>protected float 	getRightFadingEdgeStrength()</code> -- </p></li>
+                                <li><p><code>protected int 	getSuggestedMinimumHeight()</code> -- </p></li>
+                                <li><p><code>protected int 	getSuggestedMinimumWidth()</code> -- </p></li>
+                                <li><p><code>protected float 	getTopFadingEdgeStrength()</code> -- </p></li>
+                                <li><p><code>protected int 	getWindowAttachCount()</code> -- </p></li>
+
+                                <li><p><code>protected final void 	setMeasuredDimension(int measuredWidth, int measuredHeight)</code> -- </p></li>
+                                <li><p><code>protected boolean 	verifyDrawable(Drawable who)</code> -- </p></li>
                             </ol>
 
                             <p><b>View 类的 <code>public</code> API:</b></p>
-                            <ol start="68">
+                            <ol start="54">
                                 <li class="group"><p><code>void 	onWindowSystemUiVisibilityChanged(int visible)</code> -- 状态栏可见性改变回调，参数参见常量</p></li>
                                 <li><p><code>void 	onScreenStateChanged(int screenState)</code> -- 屏幕状态改变回调（按下电源键），参数参见常量</p></li>
                                 <li><p><code>void 	onWindowFocusChanged(boolean hasWindowFocus)</code> -- 窗口焦点改变回调</p></li>
                                 <li><p><code>void 	onVisibilityAggregated(boolean isVisible)</code> -- 可见性改变</p></li>
 
                                 <li class="group"><p><code>WindowInsets 	onApplyWindowInsets(WindowInsets insets)</code> -- </p></li>
-
                                 <li><p><code>void 	onCancelPendingInputEvents()</code> -- </p></li>
                                 <li><p><code>boolean 	onCheckIsTextEditor()</code> -- </p></li>
                                 <li><p><code>InputConnection 	onCreateInputConnection(EditorInfo outAttrs)</code> -- </p></li>
@@ -1271,38 +1289,24 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info)</code> -- </p></li>
 
 
-                                <li><p><code>boolean 	onKeyDown(int keyCode, KeyEvent event)</code> -- </p></li>
-                                <li><p><code>boolean 	onKeyLongPress(int keyCode, KeyEvent event)</code> -- </p></li>
-                                <li><p><code>boolean 	onKeyMultiple(int keyCode, int repeatCount, KeyEvent event)</code> -- </p></li>
-                                <li><p><code>boolean 	onKeyPreIme(int keyCode, KeyEvent event)</code> -- </p></li>
-                                <li><p><code>boolean 	onKeyShortcut(int keyCode, KeyEvent event)</code> -- </p></li>
-                                <li><p><code>boolean 	onKeyUp(int keyCode, KeyEvent event)</code> -- </p></li>
+                                <li class="group"><p><code>boolean 	onKeyDown(int keyCode, KeyEvent event)</code> -- 按下</p></li>
+                                <li><p><code>boolean 	onKeyLongPress(int keyCode, KeyEvent event)</code> -- 长按</p></li>
+                                <li><p><code>boolean 	onKeyMultiple(int keyCode, int repeatCount, KeyEvent event)</code> -- 组合键</p></li>
+                                <li><p><code>boolean 	onKeyPreIme(int keyCode, KeyEvent event)</code> -- 关键事件</p></li>
+                                <li><p><code>boolean 	onKeyShortcut(int keyCode, KeyEvent event)</code> -- 快捷键</p></li>
+                                <li><p><code>boolean 	onKeyUp(int keyCode, KeyEvent event)</code> -- 弹起</p></li>
 
-                                <li><p><code>void 	onPopulateAccessibilityEvent(AccessibilityEvent event)</code> -- </p></li>
+                                <li class="group"><p><code>void 	onPopulateAccessibilityEvent(AccessibilityEvent event)</code> -- </p></li>
                                 <li><p><code>void 	onProvideStructure(ViewStructure structure)</code> -- </p></li>
                                 <li><p><code>void 	onProvideVirtualStructure(ViewStructure structure)</code> -- </p></li>
                                 <li><p><code>PointerIcon 	onResolvePointerIcon(MotionEvent event, int pointerIndex)</code> -- </p></li>
                                 <li><p><code>void 	onRtlPropertiesChanged(int layoutDirection)</code> -- </p></li>
 
-                                <li><p><code>void 	onStartTemporaryDetach()</code> -- </p></li>
+                                <li class="group"><p><code>void 	onStartTemporaryDetach()</code> -- </p></li>
                                 <li><p><code>boolean 	onTouchEvent(MotionEvent event)</code> -- </p></li>
                                 <li><p><code>boolean 	onTrackballEvent(MotionEvent event)</code> -- </p></li>
 
-                                <li><p><code>void 	setOnApplyWindowInsetsListener(View.OnApplyWindowInsetsListener listener)</code> -- </p></li>
-                                <li><p><code>void 	setOnClickListener(View.OnClickListener l)</code> -- </p></li>
-                                <li><p><code>void 	setOnContextClickListener(View.OnContextClickListener l)</code> -- </p></li>
-                                <li><p><code>void 	setOnCreateContextMenuListener(View.OnCreateContextMenuListener l)</code> -- </p></li>
-                                <li><p><code>void 	setOnDragListener(View.OnDragListener l)</code> -- </p></li>
-                                <li><p><code>void 	setOnFocusChangeListener(View.OnFocusChangeListener l)</code> -- </p></li>
-                                <li><p><code>void 	setOnGenericMotionListener(View.OnGenericMotionListener l)</code> -- 设置响应鼠标滚轮等事件监听器</p></li>
-                                <li><p><code>void 	setOnHoverListener(View.OnHoverListener l)</code> -- </p></li>
-                                <li><p><code>void 	setOnKeyListener(View.OnKeyListener l)</code> -- </p></li>
-                                <li><p><code>void 	setOnLongClickListener(View.OnLongClickListener l)</code> -- </p></li>
-                                <li><p><code>void 	setOnScrollChangeListener(View.OnScrollChangeListener l)</code> -- </p></li>
-                                <li><p><code>void 	setOnSystemUiVisibilityChangeListener(View.OnSystemUiVisibilityChangeListener l)</code> -- </p></li>
-                                <li><p><code>void 	setOnTouchListener(View.OnTouchListener l)</code> -- </p></li>
-
-                                <li><p><code>WindowInsets 	dispatchApplyWindowInsets(WindowInsets insets)</code> -- </p></li>
+                                <li class="group"><p><code>WindowInsets 	dispatchApplyWindowInsets(WindowInsets insets)</code> -- </p></li>
                                 <li><p><code>void 	dispatchConfigurationChanged(Configuration newConfig)</code> -- </p></li>
                                 <li><p><code>void 	dispatchDisplayHint(int hint)</code> -- </p></li>
                                 <li><p><code>boolean 	dispatchDragEvent(DragEvent event)</code> -- </p></li>
@@ -1315,8 +1319,9 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>boolean 	dispatchNestedFling(float velocityX, float velocityY, boolean consumed)</code> -- </p></li>
                                 <li><p><code>boolean 	dispatchNestedPreFling(float velocityX, float velocityY)</code> -- </p></li>
                                 <li><p><code>boolean 	dispatchNestedPrePerformAccessibilityAction(int action, Bundle arguments)</code> -- </p></li>
-                                <li><p><code>boolean 	dispatchNestedPreScroll(int dx, int dy, int[] consumed, int[] offsetInWindow)</code> -- </p></li>
-                                <li><p><code>boolean 	dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int[] offsetInWindow)</code> -- </p></li>
+
+
+
                                 <li><p><code>boolean 	dispatchPopulateAccessibilityEvent(AccessibilityEvent event)</code> -- </p></li>
                                 <li><p><code>void 	dispatchProvideStructure(ViewStructure structure)</code> -- </p></li>
                                 <li><p><code>void 	dispatchStartTemporaryDetach()</code> -- </p></li>
@@ -1328,7 +1333,211 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	dispatchWindowSystemUiVisiblityChanged(int visible)</code> -- </p></li>
                                 <li><p><code>void 	dispatchWindowVisibilityChanged(int visibility)</code> -- </p></li>
 
+                                <li class="group"><p><code>void 	setOnApplyWindowInsetsListener(View.OnApplyWindowInsetsListener listener)</code> -- </p></li>
+                                <li><p><code>void 	setOnClickListener(View.OnClickListener l)</code> -- </p></li>
+                                <li><p><code>void 	setOnContextClickListener(View.OnContextClickListener l)</code> -- </p></li>
+                                <li><p><code>void 	setOnCreateContextMenuListener(View.OnCreateContextMenuListener l)</code> -- </p></li>
+                                <li><p><code>void 	setOnDragListener(View.OnDragListener l)</code> -- </p></li>
+                                <li><p><code>void 	setOnFocusChangeListener(View.OnFocusChangeListener l)</code> -- </p></li>
+                                <li><p><code>void 	setOnGenericMotionListener(View.OnGenericMotionListener l)</code> -- 设置响应鼠标滚轮等事件监听器</p></li>
+                                <li><p><code>void 	setOnHoverListener(View.OnHoverListener l)</code> -- </p></li>
+                                <li><p><code>void 	setOnKeyListener(View.OnKeyListener l)</code> -- </p></li>
+                                <li><p><code>void 	setOnLongClickListener(View.OnLongClickListener l)</code> -- </p></li>
+
+                                <li><p><code>void 	setOnSystemUiVisibilityChangeListener(View.OnSystemUiVisibilityChangeListener l)</code> -- </p></li>
+                                <li><p><code>void 	setOnTouchListener(View.OnTouchListener l)</code> -- </p></li>
+
                                 <li><p><code>View.OnFocusChangeListener 	getOnFocusChangeListener()</code> -- </p></li>
+
+                                <li class="group"><p><code>final int 	getWidth()</code> -- 获取最终显示宽度，使用下面的方法获取</p></li>
+                                <li><p><code>final int 	getHeight()</code> -- 获取最终显示高度，使用下面的方法获取</p>
+                                    <pre class="brush: java;">
+/** 获取
+ * 在 Activity 的 onCreate() 或 Fragment 的 onViewCreated() 获取都是返回 0，因为 layout 未完成 */
+LogUtil.log("def", myView.getWidth(), myView.getHeight());
+
+/** 应该使用以下几种方法获取： */
+myView.post(() -> LogUtil.log("POST", myView.getWidth(), myView.getHeight()));
+
+myView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+    @Override
+    public void onGlobalLayout() {
+        LogUtil.log("onGlobalLayout", myView.getWidth(), myView.getHeight());
+        myView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+    }
+});
+
+@Override
+public void onWindowFocusChanged(boolean hasFocus) {
+    super.onWindowFocusChanged(hasFocus);
+    LogUtil.log("WindowFocusChanged", myView.getWidth(), myView.getHeight());
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>final int 	getMeasuredWidth()</code> -- 获取测量宽度，由 onMeasure(...) 返回，可能不是最终的显示宽度</p></li>
+                                <li><p><code>final int 	getMeasuredHeight()</code> -- 获取测量宽度，由 onMeasure(...) 返回，可能不是最终的显示高度</p>
+                                    <pre class="brush: java;">
+/** 如果在自定义的 ViewGroup 中的 onLayout 改变 View 的宽高， getWidth() != getMeasuredWidth() */
+@Override
+protected void onLayout(boolean changed, int l, int t, int r, int b) {
+    int count = getChildCount();
+    View child = null;
+
+    int width = getMeasuredWidth();   // ViewGroup 本身的宽度
+    int height = getMeasuredHeight(); // ViewGroup 本身的高度
+    for (int i = 0; i < count; i++) {
+        child = getChildAt(i);
+        int childWidth = child.getMeasuredWidth();   // 测量到的 ChildView 的宽度
+        int childHeight = child.getMeasuredHeight(); // 测量到的 ChildView 的高度
+        int left = (width - childWidth) / 2;
+        int top = (height - childHeight) / 2;
+        /** 指定子 View 的位置和大小，这里强行改变高度，那么 getHeight() != getMeasuredHeight() */
+        child.layout(left, top, left + childWidth, top + childHeight + 100);
+    }
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>final int 	getMeasuredState()</code> -- 获取测量的状态位</p></li>
+                                <li><p><code>final int 	getMeasuredWidthAndState()</code> -- 获取测量的包括状态位的宽度</p></li>
+                                <li><p><code>final int 	getMeasuredHeightAndState()</code> -- 获取测量的包括状态位的高度</p></li>
+
+                                <li class="group"><p><code>void 	setMinimumHeight(int minHeight)</code> -- 设置最小高度</p></li>
+                                <li><p><code>void 	setMinimumWidth(int minWidth)</code> -- 设置最小宽度</p></li>
+                                <li><p><code>int 	getMinimumHeight()</code> -- 获取最小高度</p></li>
+                                <li><p><code>int 	getMinimumWidth()</code> -- 获取最小宽度</p></li>
+
+                                <li class="group"><p><code>final void 	setLeft(int left)</code> -- 左侧距离 parent 的左侧距离</p></li>
+                                <li><p><code>final void 	setTop(int top)</code> -- 顶部距离 parent 的顶部距离</p></li>
+                                <li><p><code>final void 	setRight(int right)</code> -- 右侧距离 parent 的左侧距离</p></li>
+                                <li><p><code>final void 	setBottom(int bottom)</code> -- 底部距离 parent 的顶部距离</p></li>
+                                <li><p><code>final int 	getLeft()</code> -- 获取左侧距离 parent 的左侧距离</p></li>
+                                <li><p><code>final int 	getTop()</code> -- 获取顶部距离 parent 的顶部距离</p></li>
+                                <li><p><code>final int 	getRight()</code> -- 获取右侧距离 parent 的左侧距离</p></li>
+                                <li><p><code>final int 	getBottom()</code> -- 获取底部距离 parent 的顶部距离</p></li>
+
+                                <li class="group"><p><code>void 	offsetLeftAndRight(int offset)</code> -- 横向偏移，相对于当前位置</p></li>
+                                <li><p><code>void 	offsetTopAndBottom(int offset)</code> -- 纵向偏移，相对于当前位置</p></li>
+
+                                <li class="group"><p><code>void 	setX(float x)</code> -- 设置 X 位置，相对于 parent 的位置</p></li>
+                                <li><p><code>void 	setY(float y)</code> -- 设置 Y 位置，相对于 parent 的位置</p></li>
+                                <li><p><code>void 	setZ(float z)</code> -- 设置 Z 位置，相对于 parent 的位置</p></li>
+                                <li><p><code>float 	getX()</code> -- 获取 X 位置</p></li>
+                                <li><p><code>float 	getY()</code> -- 获取 Y 位置</p></li>
+                                <li><p><code>float 	getZ()</code> -- 获取 Z 位置</p></li>
+
+                                <li class="group"><p><code>void 	setTranslationX(float translationX)</code> -- 在 X 方向移动，只相对于最开始的位置</p></li>
+                                <li><p><code>void 	setTranslationY(float translationY)</code> -- 在 Y 方向移动，只相对于最开始的位置</p></li>
+                                <li><p><code>void 	setTranslationZ(float translationZ)</code> -- 在 Z 方向移动，只相对于最开始的位置</p></li>
+                                <li><p><code>float 	getTranslationX()</code> -- 获取在 X 方向移动</p></li>
+                                <li><p><code>float 	getTranslationY()</code> -- 获取在 Y 方向移动</p></li>
+                                <li><p><code>float 	getTranslationZ()</code> -- 获取在 Z 方向移动</p></li>
+
+                                <li class="group"><p><code>void 	setScaleX(float scaleX)</code> -- 设置 X 方向缩放因子</p></li>
+                                <li><p><code>void 	setScaleY(float scaleY)</code> -- 设置 Y 方向缩放因子</p></li>
+                                <li><p><code>float 	getScaleX()</code> -- 获取 X 方向缩放因子</p></li>
+                                <li><p><code>float 	getScaleY()</code> -- 获取 Y 方向缩放因子</p></li>
+
+                                <li class="group"><p><code>void 	setRotation(float rotation)</code> -- 设置平面旋转角度(0-360)</p></li>
+                                <li><p><code>void 	setRotationX(float rotationX)</code> -- 设置 X 旋转角度，中心 X 轴不变，上半部分往里，下半部分往外(0-360)</p></li>
+                                <li><p><code>void 	setRotationY(float rotationY)</code> -- 设置 Y 旋转角度，中心 Y 轴不变，右半部分往里，左半部分往外(0-360)</p></li>
+                                <li><p><code>float 	getRotation()</code> -- 获取旋转值</p></li>
+                                <li><p><code>float 	getRotationX()</code> -- 获取 X 旋转值</p></li>
+                                <li><p><code>float 	getRotationY()</code> -- 获取 Y 旋转值</p></li>
+
+								<li class="group"><p><code>void 	setPivotX(float pivotX)</code> -- 设置旋转或缩放中心点 X 坐标，默认 View 的中心点</p></li>
+								<li><p><code>void 	setPivotY(float pivotY)</code> -- 设置旋转或缩放中心点 Y 坐标，默认 View 的中心点</p></li>
+								<li><p><code>float 	getPivotX()</code> -- 获取旋转或缩放中心点 X 坐标</p></li>
+								<li><p><code>float 	getPivotY()</code> -- 获取设置旋转或缩放中心点 Y 坐标</p></li>
+
+                                <li class="group"><p><code>int 	getPaddingLeft()</code> -- 获取左侧填充值</p></li>
+                                <li><p><code>int 	getPaddingTop()</code> -- 获取顶部填充值</p></li>
+                                <li><p><code>int 	getPaddingRight()</code> -- 获取右侧填充值</p></li>
+                                <li><p><code>int 	getPaddingBottom()</code> -- 获取底部填充值</p></li>
+                                <li><p><code>int 	getPaddingStart()</code> -- 获取左侧/右侧(LTR/RTL)填充值</p></li>
+                                <li><p><code>int 	getPaddingEnd()</code> -- 获取右侧/左侧(LTR/RTL)填充值</p></li>
+                                <li><p><code>void 	setPadding(int left, int top, int right, int bottom)</code> -- 设置填充</p></li>
+                                <li><p><code>void 	setPaddingRelative(int start, int top, int end, int bottom)</code> -- 设置填充，适配了 LTR 和 RTL</p></li>
+                                <li><p><code>boolean 	isPaddingRelative()</code> -- 是否为 Relative 填充</p></li>
+
+                                <li class="group"><p><code>void 	scrollBy(int x, int y)</code> -- 在当前位置滚动指定值</p></li>
+                                <li><p><code>void 	scrollTo(int x, int y)</code> -- 滚动到相对于 parent 的绝对位置</p></li>
+
+                                <li class="group"><p><code>void 	setScrollX(int value)</code> -- 同 ScrollTo 方法</p></li>
+                                <li><p><code>void 	setScrollY(int value)</code> -- 同 ScrollTo 方法</p></li>
+                                <li><p><code>final int 	getScrollX()</code> -- 获取滚动的 X 距离</p></li>
+                                <li><p><code>final int 	getScrollY()</code> -- 获取滚动的 Y 距离</p></li>
+
+                                <li class="group"><p><code>boolean 	canScrollHorizontally(int direction)</code> -- 是否可以指定方向水平滚动(参数负数为左，参数正数为右)，根据 ScrollX 判断</p></li>
+                                <li><p><code>boolean 	canScrollVertically(int direction)</code> -- 是否可以指定方向上下滚动(参数负数为上，参数正数为下)，根据 ScrollY 判断</p></li>
+
+                                <li class="group"><p><code>void 	setHorizontalScrollBarEnabled(boolean horizontalScrollBarEnabled)</code> -- </p></li>
+                                <li><p><code>boolean 	isHorizontalScrollBarEnabled()</code> -- </p></li>
+                                <li><p><code>void 	setVerticalScrollBarEnabled(boolean verticalScrollBarEnabled)</code> -- </p></li>
+                                <li><p><code>boolean 	isVerticalScrollBarEnabled()</code> -- </p></li>
+                                <li><p><code>void 	setOverScrollMode(int overScrollMode)</code> -- </p></li>
+                                <li><p><code>int 	getOverScrollMode()</code> -- </p></li>
+                                <li><p><code>void 	setScrollBarDefaultDelayBeforeFade(int scrollBarDefaultDelayBeforeFade)</code> -- </p></li>
+                                <li><p><code>int 	getScrollBarDefaultDelayBeforeFade()</code> -- </p></li>
+                                <li><p><code>void 	setScrollbarFadingEnabled(boolean fadeScrollbars)</code> -- </p></li>
+                                <li><p><code>boolean 	isScrollbarFadingEnabled()</code> -- </p></li>
+                                <li><p><code>void 	setScrollBarFadeDuration(int scrollBarFadeDuration)</code> -- </p></li>
+                                <li><p><code>int 	getScrollBarFadeDuration()</code> -- </p></li>
+                                <li><p><code>void 	setScrollBarSize(int scrollBarSize)</code> -- </p></li>
+                                <li><p><code>int 	getScrollBarSize()</code> -- </p></li>
+                                <li><p><code>void 	setScrollBarStyle(int style)</code> -- </p></li>
+                                <li><p><code>int 	getScrollBarStyle()</code> -- </p></li>
+                                <li><p><code>void 	setScrollIndicators(int indicators)</code> -- </p></li>
+                                <li><p><code>void 	setScrollIndicators(int indicators, int mask)</code> -- </p></li>
+                                <li><p><code>int 	getScrollIndicators()</code> -- </p></li>
+                                <li><p><code>void 	setVerticalScrollbarPosition(int position)</code> -- </p></li>
+                                <li><p><code>int 	getVerticalScrollbarPosition()</code> -- </p></li>
+                                <li><p><code>void 	setScrollContainer(boolean isScrollContainer)</code> -- </p></li>
+                                <li><p><code>boolean 	isScrollContainer()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setNestedScrollingEnabled(boolean enabled)</code> -- </p></li>
+                                <li><p><code>boolean 	isNestedScrollingEnabled()</code> -- </p></li>
+                                <li><p><code>boolean 	startNestedScroll(int axes)</code> -- </p></li>
+                                <li><p><code>void 	stopNestedScroll()</code> -- </p></li>
+                                <li><p><code>boolean 	hasNestedScrollingParent()</code> -- </p></li>
+
+                                <li class="group"><p><code>int 	getVerticalScrollbarWidth()</code> -- </p></li>
+                                <li><p><code>protected int 	getHorizontalScrollbarHeight()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setOnScrollChangeListener(View.OnScrollChangeListener l)</code> -- </p></li>
+
+                                <li class="group"><p><code>boolean 	dispatchNestedPreScroll(int dx, int dy, int[] consumed, int[] offsetInWindow)</code> -- </p></li>
+                                <li><p><code>boolean 	dispatchNestedScroll(int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed, int[] offsetInWindow)</code> -- </p></li>
+
+                                <li class="group"><p><code>protected void 	onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY)</code> -- 调用 overScroll(...) 方法回调</p></li>
+                                <li><p><code>protected void 	onScrollChanged(int l, int t, int oldl, int oldt)</code> -- 滚动改变回调(调用 <code>scrollTo(int,  int)</code> 等方法可能会回调)</p></li>
+                                <li><p><code>protected boolean 	overScrollBy(int deltaX, int deltaY, int scrollX, int scrollY, int scrollRangeX, int scrollRangeY, int maxOverScrollX, int maxOverScrollY, boolean isTouchEvent)</code> -- </p></li>
+
+                                <li class="group"><p><code>protected boolean 	awakenScrollBars(int startDelay, boolean invalidate)</code> -- </p></li>
+                                <li><p><code>protected boolean 	awakenScrollBars(int startDelay)</code> -- </p></li>
+                                <li><p><code>protected boolean 	awakenScrollBars()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	computeScroll()</code> -- </p></li>
+
+                                <li class="group"><p><code>protected int 	computeHorizontalScrollExtent()</code> -- </p></li>
+                                <li><p><code>protected int 	computeHorizontalScrollOffset()</code> -- </p></li>
+                                <li><p><code>protected int 	computeHorizontalScrollRange()</code> -- </p></li>
+                                <li><p><code>protected int 	computeVerticalScrollExtent()</code> -- </p></li>
+                                <li><p><code>protected int 	computeVerticalScrollOffset()</code> -- </p></li>
+                                <li><p><code>protected int 	computeVerticalScrollRange()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setAlpha(float alpha)</code> -- </p></li>
+                                <li><p><code>float 	getAlpha()</code> -- </p></li>
+
+                                <li class="group"><p><code>Animation 	getAnimation()</code> -- </p></li>
+                                <li><p><code>void 	startAnimation(Animation animation)</code> -- </p></li>
+                                <li><p><code>void 	clearAnimation()</code> -- </p></li>
+
+                                <li><p><code>ViewPropertyAnimator 	animate()</code> -- </p></li>
+                                <li><p><code>String 	getTransitionName()</code> -- </p></li>
+
+                                <li><p><code>int 	getBaseline()</code> -- </p></li>
 
                                 <li><p><code>boolean 	performAccessibilityAction(int action, Bundle arguments)</code> -- </p></li>
                                 <li><p><code>boolean 	performClick()</code> -- </p></li>
@@ -1349,7 +1558,7 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	addFocusables(ArrayList&lt;View> views, int direction, int focusableMode)</code> -- </p></li>
 
                                 <li><p><code>void 	addTouchables(ArrayList&lt;View> views)</code> -- </p></li>
-                                <li><p><code>ViewPropertyAnimator 	animate()</code> -- </p></li>
+
                                 <li><p><code>void 	announceForAccessibility(CharSequence text)</code> -- </p></li>
                                 <li><p><code>void 	bringToFront()</code> -- </p></li>
                                 <li><p><code>void 	buildDrawingCache(boolean autoScale)</code> -- </p></li>
@@ -1359,16 +1568,15 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>boolean 	canResolveLayoutDirection()</code> -- </p></li>
                                 <li><p><code>boolean 	canResolveTextAlignment()</code> -- </p></li>
                                 <li><p><code>boolean 	canResolveTextDirection()</code> -- </p></li>
-                                <li><p><code>boolean 	canScrollHorizontally(int direction)</code> -- </p></li>
-                                <li><p><code>boolean 	canScrollVertically(int direction)</code> -- </p></li>
+
                                 <li><p><code>final void 	cancelDragAndDrop()</code> -- </p></li>
                                 <li><p><code>void 	cancelLongPress()</code> -- </p></li>
                                 <li><p><code>final void 	cancelPendingInputEvents()</code> -- </p></li>
                                 <li><p><code>boolean 	checkInputConnectionProxy(View view)</code> -- </p></li>
-                                <li><p><code>void 	clearAnimation()</code> -- </p></li>
+
                                 <li><p><code>void 	clearFocus()</code> -- </p></li>
 
-                                <li><p><code>void 	computeScroll()</code> -- </p></li>
+
                                 <li><p><code>WindowInsets 	computeSystemWindowInsets(WindowInsets in, Rect outLocalInsets)</code> -- </p></li>
                                 <li><p><code>AccessibilityNodeInfo 	createAccessibilityNodeInfo()</code> -- </p></li>
                                 <li><p><code>void 	createContextMenu(ContextMenu menu)</code> -- </p></li>
@@ -1377,9 +1585,11 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	draw(Canvas canvas)</code> -- </p></li>
                                 <li><p><code>void 	drawableHotspotChanged(float x, float y)</code> -- </p></li>
                                 <li><p><code>View 	findFocus()</code> -- </p></li>
+
                                 <li><p><code>final View 	findViewById(int id)</code> -- </p></li>
                                 <li><p><code>final View 	findViewWithTag(Object tag)</code> -- </p></li>
                                 <li><p><code>void 	findViewsWithText(ArrayList&lt;View> outViews, CharSequence searched, int flags)</code> -- </p></li>
+
                                 <li><p><code>View 	focusSearch(int direction)</code> -- </p></li>
                                 <li><p><code>void 	forceHasOverlappingRendering(boolean hasOverlappingRendering)</code> -- </p></li>
                                 <li><p><code>void 	forceLayout()</code> -- </p></li>
@@ -1389,20 +1599,19 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>AccessibilityNodeProvider 	getAccessibilityNodeProvider()</code> -- </p></li>
                                 <li><p><code>int 	getAccessibilityTraversalAfter()</code> -- </p></li>
                                 <li><p><code>int 	getAccessibilityTraversalBefore()</code> -- </p></li>
-                                <li><p><code>float 	getAlpha()</code> -- </p></li>
-                                <li><p><code>Animation 	getAnimation()</code> -- </p></li>
+
+
                                 <li><p><code>IBinder 	getApplicationWindowToken()</code> -- </p></li>
                                 <li><p><code>Drawable 	getBackground()</code> -- </p></li>
                                 <li><p><code>ColorStateList 	getBackgroundTintList()</code> -- </p></li>
                                 <li><p><code>PorterDuff.Mode 	getBackgroundTintMode()</code> -- </p></li>
-                                <li><p><code>int 	getBaseline()</code> -- </p></li>
-                                <li><p><code>final int 	getBottom()</code> -- </p></li>
+
                                 <li><p><code>float 	getCameraDistance()</code> -- </p></li>
                                 <li><p><code>boolean 	getClipBounds(Rect outRect)</code> -- </p></li>
                                 <li><p><code>Rect 	getClipBounds()</code> -- </p></li>
                                 <li><p><code>final boolean 	getClipToOutline()</code> -- </p></li>
                                 <li><p><code>CharSequence 	getContentDescription()</code> -- </p></li>
-                                <li><p><code>final Context 	getContext()</code> -- </p></li>
+                                <li><p><code>final Context 	getContext()</code> -- 获取上下文</p></li>
 
                                 <li><p><code>Display 	getDisplay()</code> -- </p></li>
                                 <li><p><code>final int[] 	getDrawableState()</code> -- </p></li>
@@ -1425,29 +1634,28 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>boolean 	getGlobalVisibleRect(Rect r, Point globalOffset)</code> -- </p></li>
                                 <li><p><code>Handler 	getHandler()</code> -- </p></li>
                                 <li><p><code>final boolean 	getHasOverlappingRendering()</code> -- </p></li>
-                                <li><p><code>final int 	getHeight()</code> -- </p></li>
+
                                 <li><p><code>void 	getHitRect(Rect outRect)</code> -- </p></li>
                                 <li><p><code>int 	getHorizontalFadingEdgeLength()</code> -- </p></li>
-                                <li><p><code>int 	getId()</code> -- </p></li>
+
                                 <li><p><code>int 	getImportantForAccessibility()</code> -- </p></li>
                                 <li><p><code>boolean 	getKeepScreenOn()</code> -- </p></li>
                                 <li><p><code>KeyEvent.DispatcherState 	getKeyDispatcherState()</code> -- </p></li>
                                 <li><p><code>int 	getLabelFor()</code> -- </p></li>
                                 <li><p><code>int 	getLayerType()</code> -- </p></li>
-                                <li><p><code>int 	getLayoutDirection()</code> -- </p></li>
+
+                                <li><p><code>Resources 	getResources()</code> -- </p></li>
+                                <li><p><code>int 	getId()</code> -- </p></li>
                                 <li><p><code>ViewGroup.LayoutParams 	getLayoutParams()</code> -- </p></li>
-                                <li><p><code>final int 	getLeft()</code> -- </p></li>
+                                <li><p><code>final ViewParent 	getParent()</code> -- </p></li>
+
+                                <li><p><code>int 	getLayoutDirection()</code> -- </p></li>
+
                                 <li><p><code>final boolean 	getLocalVisibleRect(Rect r)</code> -- </p></li>
                                 <li><p><code>void 	getLocationInWindow(int[] outLocation)</code> -- </p></li>
                                 <li><p><code>void 	getLocationOnScreen(int[] outLocation)</code> -- </p></li>
                                 <li><p><code>Matrix 	getMatrix()</code> -- </p></li>
-                                <li><p><code>final int 	getMeasuredHeight()</code> -- </p></li>
-                                <li><p><code>final int 	getMeasuredHeightAndState()</code> -- </p></li>
-                                <li><p><code>final int 	getMeasuredState()</code> -- </p></li>
-                                <li><p><code>final int 	getMeasuredWidth()</code> -- </p></li>
-                                <li><p><code>final int 	getMeasuredWidthAndState()</code> -- </p></li>
-                                <li><p><code>int 	getMinimumHeight()</code> -- </p></li>
-                                <li><p><code>int 	getMinimumWidth()</code> -- </p></li>
+
                                 <li><p><code>int 	getNextFocusDownId()</code> -- </p></li>
                                 <li><p><code>int 	getNextFocusForwardId()</code> -- </p></li>
                                 <li><p><code>int 	getNextFocusLeftId()</code> -- </p></li>
@@ -1455,35 +1663,19 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>int 	getNextFocusUpId()</code> -- </p></li>
 
                                 <li><p><code>ViewOutlineProvider 	getOutlineProvider()</code> -- </p></li>
-                                <li><p><code>int 	getOverScrollMode()</code> -- </p></li>
+
                                 <li><p><code>ViewOverlay 	getOverlay()</code> -- </p></li>
-                                <li><p><code>int 	getPaddingBottom()</code> -- </p></li>
-                                <li><p><code>int 	getPaddingEnd()</code> -- </p></li>
-                                <li><p><code>int 	getPaddingLeft()</code> -- </p></li>
-                                <li><p><code>int 	getPaddingRight()</code> -- </p></li>
-                                <li><p><code>int 	getPaddingStart()</code> -- </p></li>
-                                <li><p><code>int 	getPaddingTop()</code> -- </p></li>
-                                <li><p><code>final ViewParent 	getParent()</code> -- </p></li>
+
+
                                 <li><p><code>ViewParent 	getParentForAccessibility()</code> -- </p></li>
-                                <li><p><code>float 	getPivotX()</code> -- </p></li>
-                                <li><p><code>float 	getPivotY()</code> -- </p></li>
+
                                 <li><p><code>PointerIcon 	getPointerIcon()</code> -- </p></li>
-                                <li><p><code>Resources 	getResources()</code> -- </p></li>
-                                <li><p><code>final int 	getRight()</code> -- </p></li>
+
+
                                 <li><p><code>View 	getRootView()</code> -- </p></li>
                                 <li><p><code>WindowInsets 	getRootWindowInsets()</code> -- </p></li>
-                                <li><p><code>float 	getRotation()</code> -- </p></li>
-                                <li><p><code>float 	getRotationX()</code> -- </p></li>
-                                <li><p><code>float 	getRotationY()</code> -- </p></li>
-                                <li><p><code>float 	getScaleX()</code> -- </p></li>
-                                <li><p><code>float 	getScaleY()</code> -- </p></li>
-                                <li><p><code>int 	getScrollBarDefaultDelayBeforeFade()</code> -- </p></li>
-                                <li><p><code>int 	getScrollBarFadeDuration()</code> -- </p></li>
-                                <li><p><code>int 	getScrollBarSize()</code> -- </p></li>
-                                <li><p><code>int 	getScrollBarStyle()</code> -- </p></li>
-                                <li><p><code>int 	getScrollIndicators()</code> -- </p></li>
-                                <li><p><code>final int 	getScrollX()</code> -- </p></li>
-                                <li><p><code>final int 	getScrollY()</code> -- </p></li>
+
+
                                 <li><p><code>int 	getSolidColor()</code> -- </p></li>
                                 <li><p><code>StateListAnimator 	getStateListAnimator()</code> -- </p></li>
                                 <li><p><code>int 	getSystemUiVisibility()</code> -- </p></li>
@@ -1491,30 +1683,25 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>Object 	getTag(int key)</code> -- </p></li>
                                 <li><p><code>int 	getTextAlignment()</code> -- </p></li>
                                 <li><p><code>int 	getTextDirection()</code> -- </p></li>
-                                <li><p><code>final int 	getTop()</code> -- </p></li>
+
                                 <li><p><code>TouchDelegate 	getTouchDelegate()</code> -- </p></li>
                                 <li><p><code>ArrayList&lt;View> 	getTouchables()</code> -- </p></li>
-                                <li><p><code>String 	getTransitionName()</code> -- </p></li>
-                                <li><p><code>float 	getTranslationX()</code> -- </p></li>
-                                <li><p><code>float 	getTranslationY()</code> -- </p></li>
-                                <li><p><code>float 	getTranslationZ()</code> -- </p></li>
+
+
                                 <li><p><code>int 	getVerticalFadingEdgeLength()</code> -- </p></li>
-                                <li><p><code>int 	getVerticalScrollbarPosition()</code> -- </p></li>
-                                <li><p><code>int 	getVerticalScrollbarWidth()</code> -- </p></li>
+
                                 <li><p><code>ViewTreeObserver 	getViewTreeObserver()</code> -- </p></li>
                                 <li><p><code>int 	getVisibility()</code> -- </p></li>
-                                <li><p><code>final int 	getWidth()</code> -- </p></li>
+
                                 <li><p><code>WindowId 	getWindowId()</code> -- </p></li>
                                 <li><p><code>int 	getWindowSystemUiVisibility()</code> -- </p></li>
                                 <li><p><code>IBinder 	getWindowToken()</code> -- </p></li>
                                 <li><p><code>int 	getWindowVisibility()</code> -- </p></li>
                                 <li><p><code>void 	getWindowVisibleDisplayFrame(Rect outRect)</code> -- </p></li>
-                                <li><p><code>float 	getX()</code> -- </p></li>
-                                <li><p><code>float 	getY()</code> -- </p></li>
-                                <li><p><code>float 	getZ()</code> -- </p></li>
+
                                 <li><p><code>boolean 	hasFocus()</code> -- </p></li>
                                 <li><p><code>boolean 	hasFocusable()</code> -- </p></li>
-                                <li><p><code>boolean 	hasNestedScrollingParent()</code> -- </p></li>
+
                                 <li><p><code>boolean 	hasOnClickListeners()</code> -- </p></li>
                                 <li><p><code>boolean 	hasOverlappingRendering()</code> -- </p></li>
                                 <li><p><code>boolean 	hasTransientState()</code> -- </p></li>
@@ -1525,6 +1712,7 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	invalidate(int l, int t, int r, int b)</code> -- </p></li>
                                 <li><p><code>void 	invalidateDrawable(Drawable drawable)</code> -- </p></li>
                                 <li><p><code>void 	invalidateOutline()</code> -- </p></li>
+
                                 <li><p><code>boolean 	isAccessibilityFocused()</code> -- </p></li>
                                 <li><p><code>boolean 	isActivated()</code> -- </p></li>
                                 <li><p><code>boolean 	isAttachedToWindow()</code> -- </p></li>
@@ -1540,7 +1728,7 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>boolean 	isHapticFeedbackEnabled()</code> -- </p></li>
                                 <li><p><code>boolean 	isHardwareAccelerated()</code> -- </p></li>
                                 <li><p><code>boolean 	isHorizontalFadingEdgeEnabled()</code> -- </p></li>
-                                <li><p><code>boolean 	isHorizontalScrollBarEnabled()</code> -- </p></li>
+
                                 <li><p><code>boolean 	isHovered()</code> -- </p></li>
                                 <li><p><code>boolean 	isImportantForAccessibility()</code> -- </p></li>
                                 <li><p><code>boolean 	isInEditMode()</code> -- </p></li>
@@ -1550,14 +1738,13 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>boolean 	isLayoutDirectionResolved()</code> -- </p></li>
                                 <li><p><code>boolean 	isLayoutRequested()</code> -- </p></li>
                                 <li><p><code>boolean 	isLongClickable()</code> -- </p></li>
-                                <li><p><code>boolean 	isNestedScrollingEnabled()</code> -- </p></li>
+
                                 <li><p><code>boolean 	isOpaque()</code> -- </p></li>
-                                <li><p><code>boolean 	isPaddingRelative()</code> -- </p></li>
+
                                 <li><p><code>boolean 	isPressed()</code> -- </p></li>
                                 <li><p><code>boolean 	isSaveEnabled()</code> -- </p></li>
                                 <li><p><code>boolean 	isSaveFromParentEnabled()</code> -- </p></li>
-                                <li><p><code>boolean 	isScrollContainer()</code> -- </p></li>
-                                <li><p><code>boolean 	isScrollbarFadingEnabled()</code> -- </p></li>
+
                                 <li><p><code>boolean 	isSelected()</code> -- </p></li>
                                 <li><p><code>boolean 	isShown()</code> -- </p></li>
                                 <li><p><code>boolean 	isSoundEffectsEnabled()</code> -- </p></li>
@@ -1565,12 +1752,11 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>boolean 	isTextAlignmentResolved()</code> -- </p></li>
                                 <li><p><code>boolean 	isTextDirectionResolved()</code> -- </p></li>
                                 <li><p><code>boolean 	isVerticalFadingEdgeEnabled()</code> -- </p></li>
-                                <li><p><code>boolean 	isVerticalScrollBarEnabled()</code> -- </p></li>
+
                                 <li><p><code>void 	jumpDrawablesToCurrentState()</code> -- </p></li>
                                 <li><p><code>void 	layout(int l, int t, int r, int b)</code> -- </p></li>
                                 <li><p><code>final void 	measure(int widthMeasureSpec, int heightMeasureSpec)</code> -- </p></li>
-                                <li><p><code>void 	offsetLeftAndRight(int offset)</code> -- </p></li>
-                                <li><p><code>void 	offsetTopAndBottom(int offset)</code> -- </p></li>
+
 
                                 <li><p><code>void 	playSoundEffect(int soundConstant)</code> -- </p></li>
                                 <li><p><code>boolean 	post(Runnable action)</code> -- </p></li>
@@ -1600,8 +1786,7 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	restoreHierarchyState(SparseArray&lt;Parcelable> container)</code> -- </p></li>
                                 <li><p><code>void 	saveHierarchyState(SparseArray&lt;Parcelable> container)</code> -- </p></li>
                                 <li><p><code>void 	scheduleDrawable(Drawable who, Runnable what, long when)</code> -- </p></li>
-                                <li><p><code>void 	scrollBy(int x, int y)</code> -- </p></li>
-                                <li><p><code>void 	scrollTo(int x, int y)</code> -- </p></li>
+
                                 <li><p><code>void 	sendAccessibilityEvent(int eventType)</code> -- </p></li>
                                 <li><p><code>void 	sendAccessibilityEventUnchecked(AccessibilityEvent event)</code> -- </p></li>
                                 <li><p><code>void 	setAccessibilityDelegate(View.AccessibilityDelegate delegate)</code> -- </p></li>
@@ -1609,7 +1794,7 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	setAccessibilityTraversalAfter(int afterId)</code> -- </p></li>
                                 <li><p><code>void 	setAccessibilityTraversalBefore(int beforeId)</code> -- </p></li>
                                 <li><p><code>void 	setActivated(boolean activated)</code> -- </p></li>
-                                <li><p><code>void 	setAlpha(float alpha)</code> -- </p></li>
+
                                 <li><p><code>void 	setAnimation(Animation animation)</code> -- </p></li>
                                 <li><p><code>void 	setBackground(Drawable background)</code> -- </p></li>
                                 <li><p><code>void 	setBackgroundColor(int color)</code> -- </p></li>
@@ -1617,7 +1802,7 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	setBackgroundResource(int resid)</code> -- </p></li>
                                 <li><p><code>void 	setBackgroundTintList(ColorStateList tint)</code> -- </p></li>
                                 <li><p><code>void 	setBackgroundTintMode(PorterDuff.Mode tintMode)</code> -- </p></li>
-                                <li><p><code>final void 	setBottom(int bottom)</code> -- </p></li>
+
                                 <li><p><code>void 	setCameraDistance(float distance)</code> -- </p></li>
                                 <li><p><code>void 	setClickable(boolean clickable)</code> -- </p></li>
                                 <li><p><code>void 	setClipBounds(Rect clipBounds)</code> -- </p></li>
@@ -1642,7 +1827,7 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	setHapticFeedbackEnabled(boolean hapticFeedbackEnabled)</code> -- </p></li>
                                 <li><p><code>void 	setHasTransientState(boolean hasTransientState)</code> -- </p></li>
                                 <li><p><code>void 	setHorizontalFadingEdgeEnabled(boolean horizontalFadingEdgeEnabled)</code> -- </p></li>
-                                <li><p><code>void 	setHorizontalScrollBarEnabled(boolean horizontalScrollBarEnabled)</code> -- </p></li>
+
                                 <li><p><code>void 	setHovered(boolean hovered)</code> -- </p></li>
                                 <li><p><code>void 	setId(int id)</code> -- </p></li>
                                 <li><p><code>void 	setImportantForAccessibility(int mode)</code> -- </p></li>
@@ -1652,11 +1837,11 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	setLayerType(int layerType, Paint paint)</code> -- </p></li>
                                 <li><p><code>void 	setLayoutDirection(int layoutDirection)</code> -- </p></li>
                                 <li><p><code>void 	setLayoutParams(ViewGroup.LayoutParams params)</code> -- </p></li>
-                                <li><p><code>final void 	setLeft(int left)</code> -- </p></li>
+
                                 <li><p><code>void 	setLongClickable(boolean longClickable)</code> -- </p></li>
-                                <li><p><code>void 	setMinimumHeight(int minHeight)</code> -- </p></li>
-                                <li><p><code>void 	setMinimumWidth(int minWidth)</code> -- </p></li>
-                                <li><p><code>void 	setNestedScrollingEnabled(boolean enabled)</code> -- </p></li>
+
+
+
                                 <li><p><code>void 	setNextFocusDownId(int nextFocusDownId)</code> -- </p></li>
                                 <li><p><code>void 	setNextFocusForwardId(int nextFocusForwardId)</code> -- </p></li>
                                 <li><p><code>void 	setNextFocusLeftId(int nextFocusLeftId)</code> -- </p></li>
@@ -1664,31 +1849,18 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	setNextFocusUpId(int nextFocusUpId)</code> -- </p></li>
 
                                 <li><p><code>void 	setOutlineProvider(ViewOutlineProvider provider)</code> -- </p></li>
-                                <li><p><code>void 	setOverScrollMode(int overScrollMode)</code> -- </p></li>
-                                <li><p><code>void 	setPadding(int left, int top, int right, int bottom)</code> -- </p></li>
-                                <li><p><code>void 	setPaddingRelative(int start, int top, int end, int bottom)</code> -- </p></li>
-                                <li><p><code>void 	setPivotX(float pivotX)</code> -- </p></li>
-                                <li><p><code>void 	setPivotY(float pivotY)</code> -- </p></li>
+
+
+
                                 <li><p><code>void 	setPointerIcon(PointerIcon pointerIcon)</code> -- </p></li>
                                 <li><p><code>void 	setPressed(boolean pressed)</code> -- </p></li>
-                                <li><p><code>final void 	setRight(int right)</code> -- </p></li>
-                                <li><p><code>void 	setRotation(float rotation)</code> -- </p></li>
-                                <li><p><code>void 	setRotationX(float rotationX)</code> -- </p></li>
-                                <li><p><code>void 	setRotationY(float rotationY)</code> -- </p></li>
+
+
+
                                 <li><p><code>void 	setSaveEnabled(boolean enabled)</code> -- </p></li>
                                 <li><p><code>void 	setSaveFromParentEnabled(boolean enabled)</code> -- </p></li>
-                                <li><p><code>void 	setScaleX(float scaleX)</code> -- </p></li>
-                                <li><p><code>void 	setScaleY(float scaleY)</code> -- </p></li>
-                                <li><p><code>void 	setScrollBarDefaultDelayBeforeFade(int scrollBarDefaultDelayBeforeFade)</code> -- </p></li>
-                                <li><p><code>void 	setScrollBarFadeDuration(int scrollBarFadeDuration)</code> -- </p></li>
-                                <li><p><code>void 	setScrollBarSize(int scrollBarSize)</code> -- </p></li>
-                                <li><p><code>void 	setScrollBarStyle(int style)</code> -- </p></li>
-                                <li><p><code>void 	setScrollContainer(boolean isScrollContainer)</code> -- </p></li>
-                                <li><p><code>void 	setScrollIndicators(int indicators, int mask)</code> -- </p></li>
-                                <li><p><code>void 	setScrollIndicators(int indicators)</code> -- </p></li>
-                                <li><p><code>void 	setScrollX(int value)</code> -- </p></li>
-                                <li><p><code>void 	setScrollY(int value)</code> -- </p></li>
-                                <li><p><code>void 	setScrollbarFadingEnabled(boolean fadeScrollbars)</code> -- </p></li>
+
+
                                 <li><p><code>void 	setSelected(boolean selected)</code> -- </p></li>
                                 <li><p><code>void 	setSoundEffectsEnabled(boolean soundEffectsEnabled)</code> -- </p></li>
                                 <li><p><code>void 	setStateListAnimator(StateListAnimator stateListAnimator)</code> -- </p></li>
@@ -1697,30 +1869,24 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	setTag(Object tag)</code> -- </p></li>
                                 <li><p><code>void 	setTextAlignment(int textAlignment)</code> -- </p></li>
                                 <li><p><code>void 	setTextDirection(int textDirection)</code> -- </p></li>
-                                <li><p><code>final void 	setTop(int top)</code> -- </p></li>
+
                                 <li><p><code>void 	setTouchDelegate(TouchDelegate delegate)</code> -- </p></li>
                                 <li><p><code>final void 	setTransitionName(String transitionName)</code> -- </p></li>
-                                <li><p><code>void 	setTranslationX(float translationX)</code> -- </p></li>
-                                <li><p><code>void 	setTranslationY(float translationY)</code> -- </p></li>
-                                <li><p><code>void 	setTranslationZ(float translationZ)</code> -- </p></li>
+
                                 <li><p><code>void 	setVerticalFadingEdgeEnabled(boolean verticalFadingEdgeEnabled)</code> -- </p></li>
-                                <li><p><code>void 	setVerticalScrollBarEnabled(boolean verticalScrollBarEnabled)</code> -- </p></li>
-                                <li><p><code>void 	setVerticalScrollbarPosition(int position)</code> -- </p></li>
+
                                 <li><p><code>void 	setVisibility(int visibility)</code> -- </p></li>
                                 <li><p><code>void 	setWillNotCacheDrawing(boolean willNotCacheDrawing)</code> -- </p></li>
                                 <li><p><code>oid 	setWillNotDraw(boolean willNotDraw)</code> -- </p></li>
-                                <li><p><code>oid 	setX(float x)</code> -- </p></li>
-                                <li><p><code>void 	setY(float y)</code> -- </p></li>
-                                <li><p><code>void 	setZ(float z)</code> -- </p></li>
+
                                 <li><p><code>boolean 	showContextMenu()</code> -- </p></li>
                                 <li><p><code>boolean 	showContextMenu(float x, float y)</code> -- </p></li>
                                 <li><p><code>ActionMode 	startActionMode(ActionMode.Callback callback, int type)</code> -- </p></li>
                                 <li><p><code>ActionMode 	startActionMode(ActionMode.Callback callback)</code> -- </p></li>
-                                <li><p><code>void 	startAnimation(Animation animation)</code> -- </p></li>
+
                                 <li><p><code>final boolean 	startDrag(ClipData data, View.DragShadowBuilder shadowBuilder, Object myLocalState, int flags)</code> -- </p></li>
                                 <li><p><code>final boolean 	startDragAndDrop(ClipData data, View.DragShadowBuilder shadowBuilder, Object myLocalState, int flags)</code> -- </p></li>
-                                <li><p><code>boolean 	startNestedScroll(int axes)</code> -- </p></li>
-                                <li><p><code>void 	stopNestedScroll()</code> -- </p></li>
+
                                 <li><p><code>String 	toString()</code> -- </p></li>
                                 <li><p><code>void 	unscheduleDrawable(Drawable who, Runnable what)</code> -- </p></li>
                                 <li><p><code>void 	unscheduleDrawable(Drawable who)</code> -- </p></li>
@@ -2032,16 +2198,28 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
 </pre>
                             <p><a href="" target="_blank">ViewGroup</a> </p>
                             <ol>
+                                <li><p><code>ViewGroup.LayoutParams 	generateLayoutParams(AttributeSet attrs)</code> -- 属性集生成布局参数，从 xml 加载会调用此方法</p></li>
+                                <li><p><code>protected ViewGroup.LayoutParams 	generateDefaultLayoutParams()</code> -- 返回默认的布局参数（只有包裹大小的宽高）</p></li>
+                                <li><p><code>protected ViewGroup.LayoutParams 	generateLayoutParams(ViewGroup.LayoutParams p)</code> -- 默认返回 p, 应该重写</p>
+                                    <pre class="brush: java;">
+/** 从 xml 加载会调用此方法，每个子 View 的加载都会调用一次，child.getLayoutParams() 会返回此对象 */
+@Override
+public LayoutParams generateLayoutParams(AttributeSet attrs) {
+    return new MarginLayoutParams(getContext(), attrs); // 用于支持 margin 属性
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>void 	addView(View child, ViewGroup.LayoutParams params)</code> -- </p></li>
+                                <li><p><code>void 	addView(View child, int index)</code> -- </p></li>
+                                <li><p><code>void 	addView(View child, int index, ViewGroup.LayoutParams params)</code> -- </p></li>
+                                <li><p><code>void 	addView(View child)</code> -- </p></li>
+                                <li><p><code>void 	addView(View child, int width, int height)</code> -- </p></li>
 
                                 <li><p><code>void 	addChildrenForAccessibility(ArrayList&lt;View> outChildren)</code> -- </p></li>
                                 <li><p><code>void 	addFocusables(ArrayList&lt;View> views, int direction, int focusableMode)</code> -- </p></li>
                                 <li><p><code>boolean 	addStatesFromChildren()</code> -- </p></li>
                                 <li><p><code>void 	addTouchables(ArrayList&lt;View> views)</code> -- </p></li>
-                                <li><p><code>void 	addView(View child, ViewGroup.LayoutParams params)</code> -- </p></li>
-                                <li><p><code>void 	addView(View child, int index)</code> -- </p></li>
-                                <li><p><code>void 	addView(View child, int index, ViewGroup.LayoutParams params)</code> -- </p></li>
-                                <li><p><code>void 	addView(View child)</code> -- </p></li>
-                                <li><p><code>void 	addView(View child, int width, int height)</code> -- </p></li>
                                 <li><p><code>void 	bringChildToFront(View child)</code> -- </p></li>
                                 <li><p><code>void 	childDrawableStateChanged(View child)</code> -- </p></li>
                                 <li><p><code>void 	childHasTransientStateChanged(View child, boolean childHasTransientState)</code> -- </p></li>
@@ -2072,7 +2250,9 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
                                 <li><p><code>View 	focusSearch(View focused, int direction)</code> -- </p></li>
                                 <li><p><code>void 	focusableViewAvailable(View v)</code> -- </p></li>
                                 <li><p><code>boolean 	gatherTransparentRegion(Region region)</code> -- </p></li>
-                                <li><p><code>ViewGroup.LayoutParams 	generateLayoutParams(AttributeSet attrs)</code> -- </p></li>
+
+
+
                                 <li><p><code>CharSequence 	getAccessibilityClassName()</code> -- </p></li>
                                 <li><p><code>View 	getChildAt(int index)</code> -- </p></li>
                                 <li><p><code>int 	getChildCount()</code> -- </p></li>
@@ -2182,8 +2362,9 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
                                 <li><p><code>protected void 	dispatchVisibilityChanged(View changedView, int visibility)</code> -- </p></li>
                                 <li><p><code>protected boolean 	drawChild(Canvas canvas, View child, long drawingTime)</code> -- </p></li>
                                 <li><p><code>protected void 	drawableStateChanged()</code> -- </p></li>
-                                <li><p><code>protected ViewGroup.LayoutParams 	generateDefaultLayoutParams()</code> -- </p></li>
-                                <li><p><code>protected ViewGroup.LayoutParams 	generateLayoutParams(ViewGroup.LayoutParams p)</code> -- </p></li>
+
+
+
                                 <li><p><code>protected int 	getChildDrawingOrder(int childCount, int i)</code> -- </p></li>
                                 <li><p><code>protected boolean 	getChildStaticTransformation(View child, Transformation t)</code> -- </p></li>
                                 <li><p><code>protected boolean 	isChildrenDrawingOrderEnabled()</code> -- </p></li>
@@ -3434,6 +3615,7 @@ public class NormalAdapter extends RecyclerView.Adapter&lt;NormalAdapter.VH> {
                                 <li><p><code>int 	getChildLayoutPosition(View child)</code> -- </p></li>
                                 <li><p><code>RecyclerView.ViewHolder 	getChildViewHolder(View child)</code> -- </p></li>
                                 <li><p><code>boolean 	getClipToPadding()</code> -- </p></li>
+                                <li><p><code>void 	setClipToPadding(boolean clipToPadding)</code> -- </p></li>
                                 <li><p><code>RecyclerViewAccessibilityDelegate 	getCompatAccessibilityDelegate()</code> -- </p></li>
                                 <li><p><code>void 	getDecoratedBoundsWithMargins(View view, Rect outBounds)</code> -- </p></li>
                                 <li><p><code>RecyclerView.EdgeEffectFactory 	getEdgeEffectFactory()</code> -- </p></li>
@@ -3471,7 +3653,7 @@ public class NormalAdapter extends RecyclerView.Adapter&lt;NormalAdapter.VH> {
                                 <li><p><code>void 	setAccessibilityDelegateCompat(RecyclerViewAccessibilityDelegate accessibilityDelegate)</code> -- </p></li>
 
                                 <li><p><code>void 	setChildDrawingOrderCallback(RecyclerView.ChildDrawingOrderCallback childDrawingOrderCallback)</code> -- </p></li>
-                                <li><p><code>void 	setClipToPadding(boolean clipToPadding)</code> -- </p></li>
+
                                 <li><p><code>void 	setEdgeEffectFactory(RecyclerView.EdgeEffectFactory edgeEffectFactory)</code> -- </p></li>
                                 <li><p><code>void 	setHasFixedSize(boolean hasFixedSize)</code> -- </p></li>
 
