@@ -2075,8 +2075,12 @@ class AuthorPlugin implements Plugin&lt;Project> {
 								<li>
 									<p>
 										<code> compile</code>
-										-- 编译范围依赖在所有的classpath中可用，同时它们也会被打包.
+										-- 编译范围依赖在所有的classpath中可用，同时它们也会被打包，<b>注意，新版本已经不再使用 compile, 被 <code>implementation</code> 和 <code>api</code> 取代</b>
 									</p>
+									<ul>
+										<li><p><code>implementation</code> -- 当其他模块依赖此模块时，此模块使用 implementation 声明的依赖包只限于模块内部使用，不允许其他模块使用</p></li>
+										<li><p><code>api</code> -- 当其他模块依赖于此模块时，此模块使用 api 声明的依赖包是可以被其他模块使用</p></li>
+									</ul>
 								</li>
 
 								<li>
@@ -3719,8 +3723,16 @@ tasks.whenTaskAdded { theTask ->
 			<span class="caret"></span>
 		</a>
 		<a href="#" type="button"
-			class="btn btn-default dropdown-toggle btn-primary"
-			data-toggle="dropup"> TOP </a>
+			class="btn btn-default dropdown-toggle btn-primary"> TOP </a>
+
+        <a href="https://docs.gradle.org/current/userguide/userguide.html" type="button" target="_blank"
+           class="btn btn-default dropdown-toggle btn-primary"> GUIDE </a>
+
+        <a href="https://docs.gradle.org/current/dsl/" type="button" target="_blank"
+           class="btn btn-default dropdown-toggle btn-primary"> DSL </a>
+
+        <a href="https://docs.gradle.org/current/javadoc/" type="button" target="_blank"
+           class="btn btn-default dropdown-toggle btn-primary"> JAVA-DOC </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

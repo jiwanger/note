@@ -7915,7 +7915,7 @@ public interface Consumer&lt;T> {
     }
 }
 
-/** 先执行 consumer 对象的 accept 方法，再执行 andThen 中的 lambda 方式表示的 Consumer
+/** 先执行 consumer 对象的 accept 方法，再执行 andThen 中的 lambda 方式表示的 Consumer */
 BookConsumer&lt;Book> consumer = new BookConsumer<>();
 Consumer&lt;Book> then = consumer.andThen(book -> log("then", book.id));
 then.accept(new Book(10));
