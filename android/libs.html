@@ -2267,12 +2267,48 @@ Glide.with(this).resumeRequests();		// 恢复加载
                         <p>一般来说 Observable 生成发射数据流，以及 Operators 加工数据流都是在后台线程中进行，而 Observer
                             在前台线程中接受并相应数据。</p>
                         <pre class="brush: java;">
-compile "io.reactivex.rxjava2:rxjava:2.1.10"
-compile 'io.reactivex.rxjava2:rxandroid:2.0.2'</pre>
+implementation "io.reactivex.rxjava2:rxjava:2.2.3"
+implementation 'io.reactivex.rxjava2:rxandroid:2.2.3'
+</pre>
                         <p>我们一般写的程序统称为命令式程序，是以流程为核心的，每一行代码实际上都是机器实际上要执行的指令。而 Rxjava
                             这样的编程风格，称为函数响应式编程。函数响应式编程是以数据流为核心，处理数据的输入，处理以及输出的。</p>
-                        <p>
-                            响应式编程是一种基于异步数据流概念的编程模式。数据流就像一条河：它可以被观测，被过滤，被操作，或者为新的消费者与另外一条流合并为一条新的流。</p>
+                        <p>响应式编程是一种基于异步数据流概念的编程模式。数据流就像一条河：它可以被观测，被过滤，被操作，或者为新的消费者与另外一条流合并为一条新的流。</p>
+                        <p>RxJava 的观察者模式的基本使用：</p>
+                        <pre class="brush: java;">
+/** 涉及到的几个类：
+ * Observable -- 被观察者，有非常多的静态方法用于创建不同的被观察者
+ * ObservableOnSubscribe -- 回调接口，传回来一个 ObservableEmitter 对象
+ * ObservableEmitter -- 发射器，发射数据，引用了 Observer 对象，会调用 Observer 的方法
+ * Observer -- 观察者，订阅关系建立的时候回调 onSubscribe(Disposable) 方法
+ * Disposable -- 可以把它理解成被观察者和观察者之间的一个机关, 当调用它的 dispose() 方法时, 观察者收不到事件。
+ */
+
+// 1.建立被观察者，这里创建的是 ObservableCreate 对象，传入一个用于回调的 ObservableOnSubscribe
+Observable&lt;String> observable = Observable.create(emitter -> {
+    // 4.发送消息给观察者
+    emitter.onNext("abc");
+    emitter.onComplete();
+});
+
+// 2.创建观察着，ObservableEmitter 对象会调用以下回调方法
+Observer&lt;String> observer = new Observer&lt;String>() {
+    @Override
+    public void onSubscribe(Disposable d) {...}
+
+    @Override
+    public void onNext(String o) {...}
+
+    @Override
+    public void onError(Throwable e) {...}
+
+    @Override
+    public void onComplete() {...}
+};
+
+/* 3.建立订阅关系，Observable 的 subscribe(Observer) 会调用抽象方法 subscribeActual(Observer),
+ * 此方法由不同的 Observable 子类实现，此处的实现是 ObservableCreate */
+observable.subscribe(observer);
+</pre>
                     </div>
 
                     <div class="sub-item">
@@ -2283,6 +2319,25 @@ compile 'io.reactivex.rxjava2:rxandroid:2.0.2'</pre>
 java.lang.Object
     io.reactivex.Observable&lt;T>
 
+/** Observable 的内部子类，这些子类应该使用 Observable 的静态方法创建
+ *   ├─ ObservableCreate -- Observable.create(ObservableOnSubscribe&lt;T>)
+ *   ├─ ObservableFromUnsafeSource -- Observable.unsafeCreate(ObservableSource&lt;T>)
+ *   ├─ ObservableEmpty -- Observable.empty()
+ *   ├─ ObservableNever -- Observable.never()
+ *   ├─ ObservableError -- Observable.error(Callable&lt;? extends Throwable>) / Observable.error(Throwable)
+ *   ├─ ObservableFromUnsafeSource -- Observable.wrap(ObservableSource&lt;T>)
+ *   ├─ ObservableAmb -- Observable.amb(...) / Observable.ambArray(...)
+ *   ├─ ObservableDefer -- Observable.defer(Callable&lt;? extends ObservableSource&lt;? extends T>>)
+ *   ├─ ObservableCombineLatest -- Observable.combineLatest(...) / Observable.combineLatestDelayError(...)
+ *   ├─ ObservableConcatMap -- Observable.concat(...)
+ *   ├─
+ *   ├─
+ *   ├─
+ *   ├─
+ *   ├─
+ *   ├─
+ *   └─
+ */
 public abstract class Observable&lt;T> implements ObservableSource&lt;T> {
     /** 有一个抽象方法 */
     protected abstract void subscribeActual(Observer&lt;? super T> observer);
@@ -2293,57 +2348,202 @@ public interface ObservableSource&lt;T> {
 }
 </pre>
                             <p><a href="docs/rxjava-2.2.x/io/reactivex/Observable.html" target="_blank">Observable</a> -- 被观察者，是可被观察的对象。</p>
+                            <p>Observable 的静态方法多数是创建了不同的子类，重点关注子类的 <code>subscribeActual(Observer&lt;? super T>)</code> 方法。</p>
                             <ol>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	create(ObservableOnSubscribe&lt;T> source)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	unsafeCreate(ObservableSource&lt;T> onSubscribe)</code> -- </p></li>
+                                <li><p><code>static int 	bufferSize()</code> -- 获取缓冲值大小（在使用 Flowable 的时候需要）</p>
+                                    <pre class="brush: java;">
+// 默认值为 128, 可通过以下方法更改，但最小值为 1
+System.setProperty("rx2.buffer-size", "10");
+</pre>
+                                </li>
 
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	empty()</code> -- </p></li>
-                                <li><p><code>static int 	bufferSize()</code> -- </p></li>
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	create(ObservableOnSubscribe&lt;T> source)</code> -- 返回 ObservableCreate 对象，在订阅关系建立(<code>observable.subscribe(observer);</code>)的时候执行此对象的 <code>subscribeActual(Observer)</code> 方法</p>
+                                    <pre class="brush: java;">
+public interface ObservableOnSubscribe&lt;T> {
+    void subscribe(@NonNull ObservableEmitter&lt;T> emitter) throws Exception;
+}
 
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	error(Callable&lt;? extends Throwable> errorSupplier)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	error(Throwable exception)</code> -- </p></li>
+public final class ObservableCreate&lt;T> extends Observable&lt;T> {
+    final ObservableOnSubscribe&lt;T> source;
 
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	wrap(ObservableSource&lt;T> source)</code> -- </p></li>
+    public ObservableCreate(ObservableOnSubscribe&lt;T> source) {
+        this.source = source;
+    }
 
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	amb(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	ambArray(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
+    @Override
+    protected void subscribeActual(Observer&lt;? super T> observer) {
+        CreateEmitter&lt;T> parent = new CreateEmitter&lt;T>(observer); // 1.创建 Emitter
+        observer.onSubscribe(parent); // 2.执行 Observer 的 onSubscribe(Disposable)
 
+        try {
+            source.subscribe(parent); // 3.执行 ObservableOnSubscribe 的 subscribe(ObservableEmitter)
+        } catch (Throwable ex) {
+            Exceptions.throwIfFatal(ex);
+            parent.onError(ex);
+        }
+    }
 
-                                <li class="group"><p><code>static &lt;T,R> Observable&lt;R> 	combineLatest(Function&lt;? super Object[],? extends R> combiner, int bufferSize, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatest(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatest(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> combiner, int bufferSize)</code> -- </p></li>
-                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T>[] sources, Function&lt;? super Object[],? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T>[] sources, Function&lt;? super Object[],? extends R> combiner, int bufferSize)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, BiFunction&lt;? super T1,? super T2,? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, Function3&lt;? super T1,? super T2,? super T3,? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,T4,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, ObservableSource&lt;? extends T4> source4, Function4&lt;? super T1,? super T2,? super T3,? super T4,? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,T4,T5,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, ObservableSource&lt;? extends T4> source4, ObservableSource&lt;? extends T5> source5, Function5&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, ObservableSource&lt;? extends T4> source4, ObservableSource&lt;? extends T5> source5, ObservableSource&lt;? extends T6> source6, Function6&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, ObservableSource&lt;? extends T4> source4, ObservableSource&lt;? extends T5> source5, ObservableSource&lt;? extends T6> source6, ObservableSource&lt;? extends T7> source7, Function7&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,T8,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, ObservableSource&lt;? extends T4> source4, ObservableSource&lt;? extends T5> source5, ObservableSource&lt;? extends T6> source6, ObservableSource&lt;? extends T7> source7, ObservableSource&lt;? extends T8> source8, Function8&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8,? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,T8,T9,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, ObservableSource&lt;? extends T4> source4, ObservableSource&lt;? extends T5> source5, ObservableSource&lt;? extends T6> source6, ObservableSource&lt;? extends T7> source7, ObservableSource&lt;? extends T8> source8, ObservableSource&lt;? extends T9> source9, Function9&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8,? super T9,? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatestDelayError(Function&lt;? super Object[],? extends R> combiner, int bufferSize, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatestDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatestDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> combiner, int bufferSize)</code> -- </p></li>
-                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatestDelayError(ObservableSource&lt;? extends T>[] sources, Function&lt;? super Object[],? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatestDelayError(ObservableSource&lt;? extends T>[] sources, Function&lt;? super Object[],? extends R> combiner, int bufferSize)</code> -- </p></li>
+    static final class CreateEmitter&lt;T> extends AtomicReference&lt;Disposable>
+            implements ObservableEmitter&lt;T>, Disposable {...}
 
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concat(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concat(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concat(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int prefetch)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concat(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concat(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2, ObservableSource&lt;? extends T> source3)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concat(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2, ObservableSource&lt;? extends T> source3, ObservableSource&lt;? extends T> source4)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatArray(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatArrayDelayError(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatArrayEager(int maxConcurrency, int prefetch, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
+    static final class SerializedEmitter&lt;T> extends AtomicInteger
+            implements ObservableEmitter&lt;T> {...}
+}
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	unsafeCreate(ObservableSource&lt;T> onSubscribe)</code> -- 返回 ObservableFromUnsafeSource 对象，不会调用 Observer 的 <code>onSubscribe(Disposable)</code>, 其源码：</p>
+                                    <pre class="brush: java;">
+@Override
+protected void subscribeActual(Observer&lt;? super T> observer) {
+    source.subscribe(observer);
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	empty()</code> -- 返回 ObservableEmpty 对象，调用 Observer 的订阅和完成方法</p>
+                                    <pre class="brush: java;">
+observer.onSubscribe(INSTANCE); // ObservableEmpty
+observer.onComplete();
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	never()</code> -- 返回 ObservableNever 对象，调用 Observer 的订阅方法</p>
+                                    <pre class="brush: java;">
+observer.onSubscribe(EmptyDisposable.NEVER); // ObservableNever
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	error(Callable&lt;? extends Throwable> errorSupplier)</code> -- 返回 ObservableError 对象，调用 Observer 的订阅和错误方法</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	error(Throwable exception)</code> -- 返回 ObservableError 对象，调用 Observer 的订阅和错误方法</p>
+                                    <pre class="brush: java;">
+observer.onSubscribe(INSTANCE); // ObservableError
+observer.onError(e);
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	wrap(ObservableSource&lt;T> source)</code> -- 返回 ObservableFromUnsafeSource 对象，将已有的 ObservableSource 包装，不会调用 Observer 的 <code>onSubscribe(Disposable)</code> 方法</p></li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	amb(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- 返回 ObservableAmb 对象，镜像 Iterable 中的第一个 ObservableSource</p>
+                                    <pre class="brush: java;">
+Observable&lt;String> sBooks = Observable.just("Think In Java", "Linux Kernel");
+Observable&lt;String> sPrices = Observable.just("#108.00", "#88.00");
+
+List&lt;Observable&lt;String>> sources = Arrays.asList(sBooks, sPrices);
+
+Observable&lt;String> observable = Observable.amb(sources);
+
+// 以下两种订阅同样的效果: onSubscribe() -> onNext(sBooks 的所有元素) -> onComplete()
+observable.subscribe(observer);
+sBooks.subscribe(observer);
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	ambArray(ObservableSource&lt;? extends T>... sources)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	defer(Callable&lt;? extends ObservableSource&lt;? extends T>> supplier)</code> -- 返回 ObservableDefer 对象，最终返回值在 Callable 的 call 方法的返回值</p></li>
+
+                                <li class="group"><p><code>static Observable&lt;Integer> 	range(int start, int count)</code> -- 返回 ObservableRange 对象，自动调用 onNext(Integer) 和 onComplete()</p></li>
+                                <li><p><code>static Observable&lt;Long> 	rangeLong(long start, long count)</code> -- 返回 ObservableRangeLong 对象，自动调用 onNext(Long) 和 onComplete()</p></li>
+
+                                <li class="group"><p><code>static &lt;T,R> Observable&lt;R> 	combineLatest(Function&lt;? super Object[],? extends R> combiner, int bufferSize, ObservableSource&lt;? extends T>... sources)</code> -- </p>
+                                    <pre class="brush: java;">
+String[] colors = {"ALPHA", "RED", "GREEN", "BLUE"};
+String[] values = {"255", "200", "100"};
+String[] lasts = {"0.5f", "0.8f"};
+
+/** 联合，调用 onNext() 的次数总是和最后一个 ObservableSource 的元素数一致
+ * objects.length == sources.length, 此数组的长度为 sources 的长度
+ * objects[i] == values[values.length - 1], 只要不是最后一个 ObservableSource, 此值始终不变
+ * ...
+ * objects[index] = lasts[index], 最后一个 ObservableSource 需要遍历
+ *
+ * 此实例输出为：BLUE:100:0.5f -> BLUE:100:0.8f
+ */
+Observable&lt;String> observable = Observable.combineLatest(
+    objects -> String.format("%s:%s:%s", objects[0], objects[1], objects[2]),
+    Observable.bufferSize(),
+    Observable.fromArray(colors),
+    Observable.fromArray(values),
+    Observable.fromArray(others)
+);
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T>[] sources, Function&lt;? super Object[],? extends R> combiner)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T>[] sources, Function&lt;? super Object[],? extends R> combiner, int bufferSize)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatest(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> combiner)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatest(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> combiner, int bufferSize)</code> -- 同上</p>
+                                    <pre class="brush: java;">
+Observable&lt;String> colors = Observable.fromArray("ALPHA", "RED", "GREEN", "BLUE");
+Observable&lt;String> values = Observable.fromArray("255", "200", "100", "150");
+List&lt;ObservableSource&lt;String>> sources = Arrays.asList(colors, values);
+
+Observable&lt;String> observable = Observable.combineLatest(
+    sources,
+    objects -> String.format("%s:%s", objects[0], objects[1])
+);
+ </pre>
+                                </li>
+
+                                <li><p><code>static &lt;T1,T2,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, BiFunction&lt;? super T1,? super T2,? extends R> combiner)</code> -- 支持 X 种类型联合，2 个 ObservableSource</p>
+                                    <pre class="brush: java;">
+Observable&lt;String> colors = Observable.fromArray("ALPHA", "RED", "GREEN", "BLUE");
+Observable&lt;String> values = Observable.fromArray("255", "200", "100", "150");
+// BLUE:255 -> BLUE:200 -> ...
+Observable&lt;String> observable = Observable.combineLatest(colors, values, (c, v) -> c + v);
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T1,T2,T3,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, Function3&lt;? super T1,? super T2,? super T3,? extends R> combiner)</code> -- 同上，3 个 ObservableSource</p></li>
+                                <li><p><code>static &lt;T1,T2,T3,T4,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, Function4&lt;? super T1,? super T2,? super T3,? super T4,? extends R> combiner)</code> -- 同上，4 个 ObservableSource</p></li>
+                                <li><p><code>static &lt;T1,T2,T3,T4,T5,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, ObservableSource&lt;? extends T5> s5, Function5&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? extends R> combiner)</code> -- 同上，5 个 ObservableSource</p></li>
+                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, ObservableSource&lt;? extends T5> s5, ObservableSource&lt;? extends T6> s6, Function6&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? extends R> combiner)</code> -- 同上，s6 个 ObservableSource</p></li>
+                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, ObservableSource&lt;? extends T5> s5, ObservableSource&lt;? extends T6> s6, ObservableSource&lt;? extends T7> s7, Function7&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? extends R> combiner)</code> -- 同上，7 个 ObservableSource</p></li>
+                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,T8,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, ObservableSource&lt;? extends T5> s5, ObservableSource&lt;? extends T6> s6, ObservableSource&lt;? extends T7> s7, ObservableSource&lt;? extends T8> s8, Function8&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8,? extends R> combiner)</code> -- 同上，8 个 ObservableSource</p></li>
+                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,T8,T9,R> Observable&lt;R> 	combineLatest(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, ObservableSource&lt;? extends T5> s5, ObservableSource&lt;? extends T6> s6, ObservableSource&lt;? extends T7> s7, ObservableSource&lt;? extends T8> s8, ObservableSource&lt;? extends T9> s9, Function9&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8,? super T9,? extends R> combiner)</code> -- 同上，9 个 ObservableSource</p></li>
+
+                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatestDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> combiner)</code> -- 错误输出延迟，其他同 combineLatest(...)</p>
+                                    <pre class="brush: java;">
+/* 此处有一个 null 元素， combineLatestDelayError 方法会将错误数据延迟，如果使用 combineLatest 则直接 onError
+ * 输出为：onSubscribe() -> RED:255 -> RED:200 -> RED:100 -> RED:150 -> onError */
+Observable&lt;String> colors = Observable.fromArray("ALPHA", "RED", null,  "GREEN", "BLUE");
+Observable&lt;String> values = Observable.fromArray("255", "200", "100", "150");
+List&lt;ObservableSource&lt;String>> sources = Arrays.asList(colors, values);
+
+Observable&lt;String> observable = Observable.combineLatestDelayError(sources,  o -> o[0] + ":" + o[1]);
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatestDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> combiner, int bufferSize)</code> -- 同上</p></li>
+                                <li class="group"><p><code>static &lt;T,R> Observable&lt;R> 	combineLatestDelayError(Function&lt;? super Object[],? extends R> combiner, int bufferSize, ObservableSource&lt;? extends T>... sources)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatestDelayError(ObservableSource&lt;? extends T>[] sources, Function&lt;? super Object[],? extends R> combiner)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T,R> Observable&lt;R> 	combineLatestDelayError(ObservableSource&lt;? extends T>[] sources, Function&lt;? super Object[],? extends R> combiner, int bufferSize)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concat(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- 合并，顺序加入所有的 ObservableSource</p>
+                                    <pre class="brush: java;">
+Observable&lt;String> colors = Observable.fromArray("ALPHA", "RED", "GREEN", "BLUE");
+Observable&lt;String> values = Observable.fromArray("255", "200", "100", "150");
+List&lt;ObservableSource&lt;String>> sources = Arrays.asList(colors, values);
+
+// ALPHA -> ... -> 255 -> ...
+Observable&lt;String> observable = Observable.concat(sources);
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	concat(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- 同上，多层嵌套</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	concat(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int prefetch)</code> -- 同上，多层嵌套</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	concat(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	concat(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	concat(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3, ObservableSource&lt;? extends T> s4)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatArray(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatArrayDelayError(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatArrayEager(int maxConcurrency, int prefetch, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	concatArrayEager(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatArrayEagerDelayError(int maxConcurrency, int prefetch, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatArrayEagerDelayError(int maxConcurrency, int prefetch, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	concatArrayEagerDelayError(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	concatDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	concatDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int prefetch, boolean tillTheEnd)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatEager(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatEager(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	concatEager(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency, int prefetch)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	concatEager(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	concatEager(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency, int prefetch)</code> -- </p></li>
@@ -2360,15 +2560,15 @@ public interface ObservableSource&lt;T> {
                                 <li class="group"><p><code>static &lt;T,D> Observable&lt;T> 	using(Callable&lt;? extends D> resourceSupplier, Function&lt;? super D,? extends ObservableSource&lt;? extends T>> sourceSupplier, Consumer&lt;? super D> disposer)</code> -- </p></li>
                                 <li><p><code>static &lt;T,D> Observable&lt;T> 	using(Callable&lt;? extends D> resourceSupplier, Function&lt;? super D,? extends ObservableSource&lt;? extends T>> sourceSupplier, Consumer&lt;? super D> disposer, boolean eager)</code> -- </p></li>
 
-
-                                <li class="group"><p><code>static Observable&lt;Long> 	timer(long delay, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>static Observable&lt;Long> 	timer(long delay, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
-
                                 <li class="group"><p><code>static &lt;T,S> Observable&lt;T> 	generate(Callable&lt;S> initialState, BiConsumer&lt;S,Emitter&lt;T>> generator)</code> -- </p></li>
                                 <li><p><code>static &lt;T,S> Observable&lt;T> 	generate(Callable&lt;S> initialState, BiConsumer&lt;S,Emitter&lt;T>> generator, Consumer&lt;? super S> disposeState)</code> -- </p></li>
                                 <li><p><code>static &lt;T,S> Observable&lt;T> 	generate(Callable&lt;S> initialState, BiFunction&lt;S,Emitter&lt;T>,S> generator)</code> -- </p></li>
                                 <li><p><code>static &lt;T,S> Observable&lt;T> 	generate(Callable&lt;S> initialState, BiFunction&lt;S,Emitter&lt;T>,S> generator, Consumer&lt;? super S> disposeState)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	generate(Consumer&lt;Emitter&lt;T>> generator)</code> -- </p></li>
+
+                                <li class="group"><p><code>static Observable&lt;Long> 	timer(long delay, TimeUnit unit)</code> -- </p></li>
+                                <li><p><code>static Observable&lt;Long> 	timer(long delay, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
+
 
                                 <li class="group"><p><code>static Observable&lt;Long> 	interval(long initialDelay, long period, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>static Observable&lt;Long> 	interval(long initialDelay, long period, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
@@ -2393,9 +2593,9 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>static &lt;T> Observable&lt;T> 	merge(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency, int bufferSize)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	merge(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	merge(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	merge(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	merge(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2, ObservableSource&lt;? extends T> source3)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	merge(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2, ObservableSource&lt;? extends T> source3, ObservableSource&lt;? extends T> source4)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	merge(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	merge(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	merge(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3, ObservableSource&lt;? extends T> s4)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeArray(int maxConcurrency, int bufferSize, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeArray(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeArrayDelayError(int maxConcurrency, int bufferSize, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
@@ -2405,43 +2605,91 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency, int bufferSize)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2, ObservableSource&lt;? extends T> source3)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2, ObservableSource&lt;? extends T> source3, ObservableSource&lt;? extends T> source4)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3, ObservableSource&lt;? extends T> s4)</code> -- </p></li>
 
-                                <li class="group"><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2, BiPredicate&lt;? super T,? super T> isEqual)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2, BiPredicate&lt;? super T,? super T> isEqual, int bufferSize)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> source1, ObservableSource&lt;? extends T> source2, int bufferSize)</code> -- </p></li>
+                                <li class="group"><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, BiPredicate&lt;? super T,? super T> isEqual)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, BiPredicate&lt;? super T,? super T> isEqual, int bufferSize)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, int bufferSize)</code> -- </p></li>
 
                                 <li class="group"><p><code>static &lt;T> Observable&lt;T> 	switchOnNext(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	switchOnNext(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int bufferSize)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	switchOnNextDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	switchOnNextDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int prefetch)</code> -- </p></li>
 
-
-
                                 <li class="group"><p><code>static &lt;T,R> Observable&lt;R> 	zip(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> zipper)</code> -- </p></li>
                                 <li><p><code>static &lt;T,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> zipper)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, BiFunction&lt;? super T1,? super T2,? extends R> zipper)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, BiFunction&lt;? super T1,? super T2,? extends R> zipper, boolean delayError)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, BiFunction&lt;? super T1,? super T2,? extends R> zipper, boolean delayError, int bufferSize)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, Function3&lt;? super T1,? super T2,? super T3,? extends R> zipper)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,T4,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, ObservableSource&lt;? extends T4> source4, Function4&lt;? super T1,? super T2,? super T3,? super T4,? extends R> zipper)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,T4,T5,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, ObservableSource&lt;? extends T4> source4, ObservableSource&lt;? extends T5> source5, Function5&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? extends R> zipper)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, ObservableSource&lt;? extends T4> source4, ObservableSource&lt;? extends T5> source5, ObservableSource&lt;? extends T6> source6, Function6&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? extends R> zipper)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, ObservableSource&lt;? extends T4> source4, ObservableSource&lt;? extends T5> source5, ObservableSource&lt;? extends T6> source6, ObservableSource&lt;? extends T7> source7, Function7&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? extends R> zipper)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,T8,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, ObservableSource&lt;? extends T4> source4, ObservableSource&lt;? extends T5> source5, ObservableSource&lt;? extends T6> source6, ObservableSource&lt;? extends T7> source7, ObservableSource&lt;? extends T8> source8, Function8&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8,? extends R> zipper)</code> -- </p></li>
-                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,T8,T9,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> source1, ObservableSource&lt;? extends T2> source2, ObservableSource&lt;? extends T3> source3, ObservableSource&lt;? extends T4> source4, ObservableSource&lt;? extends T5> source5, ObservableSource&lt;? extends T6> source6, ObservableSource&lt;? extends T7> source7, ObservableSource&lt;? extends T8> source8, ObservableSource&lt;? extends T9> source9, Function9&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8,? super T9,? extends R> zipper)</code> -- </p></li>
+                                <li><p><code>static &lt;T1,T2,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, BiFunction&lt;? super T1,? super T2,? extends R> zipper)</code> -- </p></li>
+                                <li><p><code>static &lt;T1,T2,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, BiFunction&lt;? super T1,? super T2,? extends R> zipper, boolean delayError)</code> -- </p></li>
+                                <li><p><code>static &lt;T1,T2,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, BiFunction&lt;? super T1,? super T2,? extends R> zipper, boolean delayError, int bufferSize)</code> -- </p></li>
+                                <li><p><code>static &lt;T1,T2,T3,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, Function3&lt;? super T1,? super T2,? super T3,? extends R> zipper)</code> -- </p></li>
+                                <li><p><code>static &lt;T1,T2,T3,T4,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, Function4&lt;? super T1,? super T2,? super T3,? super T4,? extends R> zipper)</code> -- </p></li>
+                                <li><p><code>static &lt;T1,T2,T3,T4,T5,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, ObservableSource&lt;? extends T5> s5, Function5&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? extends R> zipper)</code> -- </p></li>
+                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, ObservableSource&lt;? extends T5> s5, ObservableSource&lt;? extends T6> s6, Function6&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? extends R> zipper)</code> -- </p></li>
+                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, ObservableSource&lt;? extends T5> s5, ObservableSource&lt;? extends T6> s6, ObservableSource&lt;? extends T7> s7, Function7&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? extends R> zipper)</code> -- </p></li>
+                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,T8,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, ObservableSource&lt;? extends T5> s5, ObservableSource&lt;? extends T6> s6, ObservableSource&lt;? extends T7> s7, ObservableSource&lt;? extends T8> s8, Function8&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8,? extends R> zipper)</code> -- </p></li>
+                                <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,T8,T9,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, ObservableSource&lt;? extends T5> s5, ObservableSource&lt;? extends T6> s6, ObservableSource&lt;? extends T7> s7, ObservableSource&lt;? extends T8> s8, ObservableSource&lt;? extends T9> s9, Function9&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8,? super T9,? extends R> zipper)</code> -- </p></li>
                                 <li><p><code>static &lt;T,R> Observable&lt;R> 	zipArray(Function&lt;? super Object[],? extends R> zipper, boolean delayError, int bufferSize, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T,R> Observable&lt;R> 	zipIterable(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> zipper, boolean delayError, int bufferSize)</code> -- </p></li>
 
-                                <li><p><code>Single&lt;Boolean> 	all(Predicate&lt;? super T> predicate)</code> -- </p></li>
+                                <li class="group"><p><code>void 	safeSubscribe(Observer&lt;? super T> observer)</code> -- </p></li>
+                                <li><p><code>void 	subscribe(Observer&lt;? super T> observer)</code> -- </p></li>
 
-                                <li><p><code>Observable&lt;T> 	ambWith(ObservableSource&lt;? extends T> other)</code> -- </p></li>
+                                <li class="group"><p><code>Disposable 	subscribe()</code> -- </p></li>
+                                <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext)</code> -- </p></li>
+                                <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError)</code> -- </p></li>
+                                <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError, Action onComplete)</code> -- </p></li>
+                                <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError, Action onComplete, Consumer&lt;? super Disposable> onSubscribe)</code> -- </p></li>
+
+                                <li class="group"><p><code>protected abstract void 	subscribeActual(Observer&lt;? super T> observer)</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	subscribeOn(Scheduler scheduler)</code> -- </p></li>
+                                <li><p><code>&lt;E extends Observer&lt;? super T>> E 	subscribeWith(E observer)</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	unsubscribeOn(Scheduler scheduler)</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	observeOn(Scheduler scheduler)</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	observeOn(Scheduler scheduler, boolean delayError)</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	observeOn(Scheduler scheduler, boolean delayError, int bufferSize)</code> -- </p></li>
+
+                                <li class="group"><p><code>Single&lt;Boolean> 	all(Predicate&lt;? super T> predicate)</code> -- </p></li>
                                 <li><p><code>Single&lt;Boolean> 	any(Predicate&lt;? super T> predicate)</code> -- </p></li>
-                                <li><p><code>&lt;R> R 	as(ObservableConverter&lt;T,? extends R> converter)</code> -- </p></li>
-                                <li><p><code>T 	blockingFirst()</code> -- </p></li>
+                                <li><p><code>Single&lt;Boolean> 	isEmpty()</code> -- </p></li>
+                                <li><p><code>Single&lt;Boolean> 	contains(Object element)</code> -- </p></li>
+                                <li><p><code>Single&lt;Long> 	count()</code> -- </p></li>
+                                <li><p><code>&lt;U> Single&lt;U> 	collect(Callable&lt;? extends U> initialValueSupplier, BiConsumer&lt;? super U,? super T> collector)</code> -- </p></li>
+                                <li><p><code>&lt;U> Single&lt;U> 	collectInto(U initialValue, BiConsumer&lt;? super U,? super T> collector)</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	ambWith(ObservableSource&lt;? extends T> other)</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	filter(Predicate&lt;? super T> predicate)</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	hide()</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	defaultIfEmpty(T defaultItem)</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	serialize()</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	share()</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	cache()</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	cacheWithInitialCapacity(int initialCapacity)</code> -- </p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	dematerialize(Function&lt;? super T,Notification&lt;R>> selector)</code> -- </p></li>
+                                <li><p><code>&lt;U> Observable&lt;U> 	cast(Class&lt;U> clazz)</code> -- </p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	compose(ObservableTransformer&lt;? super T,? extends R> composer)</code> -- </p></li>
+                                <li><p><code>&lt;U> Observable&lt;U> 	ofType(Class&lt;U> clazz)</code> -- </p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	lift(ObservableOperator&lt;? extends R,? super T> lifter)</code> -- </p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	map(Function&lt;? super T,? extends R> mapper)</code> -- </p></li>
+                                <li><p><code>Observable&lt;Notification&lt;T>> 	materialize()</code> -- </p></li>
+
+                                <li class="group"><p><code>ConnectableObservable&lt;T> 	publish()</code> -- </p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	publish(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector)</code> -- </p></li>
+
+                                <li class="group"><p><code>&lt;R> R 	as(ObservableConverter&lt;T,? extends R> converter)</code> -- </p></li>
+                                <li><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	join(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super TRight,? extends R> resultSelector)</code> -- </p></li>
+
+                                <li class="group"><p><code>Completable 	ignoreElements()</code> -- </p></li>
+
+                                <li class="group"><p><code>TestObserver&lt;T> 	test()</code> -- </p></li>
+                                <li><p><code>TestObserver&lt;T> 	test(boolean dispose)</code> -- </p></li>
+
+
+                                <li class="group"><p><code>T 	blockingFirst()</code> -- </p></li>
                                 <li><p><code>T 	blockingFirst(T defaultItem)</code> -- </p></li>
                                 <li><p><code>void 	blockingForEach(Consumer&lt;? super T> onNext)</code> -- </p></li>
                                 <li><p><code>Iterable&lt;T> 	blockingIterable()</code> -- </p></li>
@@ -2458,7 +2706,8 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>void 	blockingSubscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError)</code> -- </p></li>
                                 <li><p><code>void 	blockingSubscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError, Action onComplete)</code> -- </p></li>
                                 <li><p><code>void 	blockingSubscribe(Observer&lt;? super T> observer)</code> -- </p></li>
-                                <li><p><code>&lt;B> Observable&lt;List&lt;T>> 	buffer(Callable&lt;? extends ObservableSource&lt;B>> boundarySupplier)</code> -- </p></li>
+
+                                <li class="group"><p><code>&lt;B> Observable&lt;List&lt;T>> 	buffer(Callable&lt;? extends ObservableSource&lt;B>> boundarySupplier)</code> -- </p></li>
                                 <li><p><code>&lt;B,U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(Callable&lt;? extends ObservableSource&lt;B>> boundarySupplier, Callable&lt;U> bufferSupplier)</code> -- </p></li>
                                 <li><p><code>Observable&lt;List&lt;T>> 	buffer(int count)</code> -- </p></li>
                                 <li><p><code>&lt;U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(int count, Callable&lt;U> bufferSupplier)</code> -- </p></li>
@@ -2477,15 +2726,8 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>&lt;B> Observable&lt;List&lt;T>> 	buffer(ObservableSource&lt;B> boundary)</code> -- </p></li>
                                 <li><p><code>&lt;B,U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(ObservableSource&lt;B> boundary, Callable&lt;U> bufferSupplier)</code> -- </p></li>
                                 <li><p><code>&lt;B> Observable&lt;List&lt;T>> 	buffer(ObservableSource&lt;B> boundary, int initialCapacity)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	cache()</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	cacheWithInitialCapacity(int initialCapacity)</code> -- </p></li>
-                                <li><p><code>&lt;U> Observable&lt;U> 	cast(Class&lt;U> clazz)</code> -- </p></li>
-                                <li><p><code>&lt;U> Single&lt;U> 	collect(Callable&lt;? extends U> initialValueSupplier, BiConsumer&lt;? super U,? super T> collector)</code> -- </p></li>
-                                <li><p><code>&lt;U> Single&lt;U> 	collectInto(U initialValue, BiConsumer&lt;? super U,? super T> collector)</code> -- </p></li>
 
-                                <li><p><code>&lt;R> Observable&lt;R> 	compose(ObservableTransformer&lt;? super T,? extends R> composer)</code> -- </p></li>
-
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- </p></li>
+                                <li class="group"><p><code>&lt;R> Observable&lt;R> 	concatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	concatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int prefetch)</code> -- </p></li>
                                 <li><p><code>Completable 	concatMapCompletable(Function&lt;? super T,? extends CompletableSource> mapper)</code> -- </p></li>
                                 <li><p><code>Completable 	concatMapCompletable(Function&lt;? super T,? extends CompletableSource> mapper, int capacityHint)</code> -- </p></li>
@@ -2510,19 +2752,18 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingleDelayError(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingleDelayError(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper, boolean tillTheEnd)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingleDelayError(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper, boolean tillTheEnd, int prefetch)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	concatWith(CompletableSource other)</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	concatWith(CompletableSource other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	concatWith(MaybeSource&lt;? extends T> other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	concatWith(ObservableSource&lt;? extends T> other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	concatWith(SingleSource&lt;? extends T> other)</code> -- </p></li>
-                                <li><p><code>Single&lt;Boolean> 	contains(Object element)</code> -- </p></li>
-                                <li><p><code>Single&lt;Long> 	count()</code> -- </p></li>
 
-                                <li><p><code>&lt;U> Observable&lt;T> 	debounce(Function&lt;? super T,? extends ObservableSource&lt;U>> debounceSelector)</code> -- </p></li>
+
+                                <li class="group"><p><code>&lt;U> Observable&lt;T> 	debounce(Function&lt;? super T,? extends ObservableSource&lt;U>> debounceSelector)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	debounce(long timeout, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	debounce(long timeout, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	defaultIfEmpty(T defaultItem)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	defer(Callable&lt;? extends ObservableSource&lt;? extends T>> supplier)</code> -- </p></li>
-                                <li><p><code>&lt;U> Observable&lt;T> 	delay(Function&lt;? super T,? extends ObservableSource&lt;U>> itemDelay)</code> -- </p></li>
+
+                                <li class="group"><p><code>&lt;U> Observable&lt;T> 	delay(Function&lt;? super T,? extends ObservableSource&lt;U>> itemDelay)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	delay(long delay, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	delay(long delay, TimeUnit unit, boolean delayError)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	delay(long delay, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
@@ -2531,14 +2772,15 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>Observable&lt;T> 	delaySubscription(long delay, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	delaySubscription(long delay, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
                                 <li><p><code>&lt;U> Observable&lt;T> 	delaySubscription(ObservableSource&lt;U> other)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	dematerialize(Function&lt;? super T,Notification&lt;R>> selector)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	distinct()</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	distinct()</code> -- </p></li>
                                 <li><p><code>&lt;K> Observable&lt;T> 	distinct(Function&lt;? super T,K> keySelector)</code> -- </p></li>
                                 <li><p><code>&lt;K> Observable&lt;T> 	distinct(Function&lt;? super T,K> keySelector, Callable&lt;? extends Collection&lt;? super K>> collectionSupplier)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	distinctUntilChanged()</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	distinctUntilChanged(BiPredicate&lt;? super T,? super T> comparer)</code> -- </p></li>
                                 <li><p><code>&lt;K> Observable&lt;T> 	distinctUntilChanged(Function&lt;? super T,K> keySelector)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	doAfterNext(Consumer&lt;? super T> onAfterNext)</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	doAfterNext(Consumer&lt;? super T> onAfterNext)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	doAfterTerminate(Action onFinally)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	doFinally(Action onFinally)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	doOnComplete(Action onComplete)</code> -- </p></li>
@@ -2550,15 +2792,17 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>Observable&lt;T> 	doOnNext(Consumer&lt;? super T> onNext)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	doOnSubscribe(Consumer&lt;? super Disposable> onSubscribe)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	doOnTerminate(Action onTerminate)</code> -- </p></li>
-                                <li><p><code>Maybe&lt;T> 	elementAt(long index)</code> -- </p></li>
+
+                                <li class="group"><p><code>Maybe&lt;T> 	elementAt(long index)</code> -- </p></li>
                                 <li><p><code>Single&lt;T> 	elementAt(long index, T defaultItem)</code> -- </p></li>
                                 <li><p><code>Single&lt;T> 	elementAtOrError(long index)</code> -- </p></li>
 
-                                <li><p><code>Observable&lt;T> 	filter(Predicate&lt;? super T> predicate)</code> -- </p></li>
-                                <li><p><code>Single&lt;T> 	first(T defaultItem)</code> -- </p></li>
+
+                                <li class="group"><p><code>Single&lt;T> 	first(T defaultItem)</code> -- </p></li>
                                 <li><p><code>Maybe&lt;T> 	firstElement()</code> -- </p></li>
                                 <li><p><code>Single&lt;T> 	firstOrError()</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	flatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- </p></li>
+
+                                <li class="group"><p><code>&lt;R> Observable&lt;R> 	flatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	flatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, boolean delayErrors)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	flatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, boolean delayErrors, int maxConcurrency)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	flatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, boolean delayErrors, int maxConcurrency, int bufferSize)</code> -- </p></li>
@@ -2578,57 +2822,48 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>&lt;R> Observable&lt;R> 	flatMapMaybe(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper, boolean delayErrors)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	flatMapSingle(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	flatMapSingle(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper, boolean delayErrors)</code> -- </p></li>
-                                <li><p><code>Disposable 	forEach(Consumer&lt;? super T> onNext)</code> -- </p></li>
+
+                                <li class="group"><p><code>Disposable 	forEach(Consumer&lt;? super T> onNext)</code> -- </p></li>
                                 <li><p><code>Disposable 	forEachWhile(Predicate&lt;? super T> onNext)</code> -- </p></li>
                                 <li><p><code>Disposable 	forEachWhile(Predicate&lt;? super T> onNext, Consumer&lt;? super Throwable> onError)</code> -- </p></li>
                                 <li><p><code>Disposable 	forEachWhile(Predicate&lt;? super T> onNext, Consumer&lt;? super Throwable> onError, Action onComplete)</code> -- </p></li>
 
-                                <li><p><code>Single&lt;Boolean> 	isEmpty()</code> -- </p></li>
-                                <li><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	join(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super TRight,? extends R> resultSelector)</code> -- </p></li>
-
-                                <li><p><code>&lt;K> Observable&lt;GroupedObservable&lt;K,T>> 	groupBy(Function&lt;? super T,? extends K> keySelector)</code> -- </p></li>
+                                <li class="group"><p><code>&lt;K> Observable&lt;GroupedObservable&lt;K,T>> 	groupBy(Function&lt;? super T,? extends K> keySelector)</code> -- </p></li>
                                 <li><p><code>&lt;K> Observable&lt;GroupedObservable&lt;K,T>> 	groupBy(Function&lt;? super T,? extends K> keySelector, boolean delayError)</code> -- </p></li>
                                 <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector)</code> -- </p></li>
                                 <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, boolean delayError)</code> -- </p></li>
                                 <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, boolean delayError, int bufferSize)</code> -- </p></li>
                                 <li><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	groupJoin(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super Observable&lt;TRight>,? extends R> resultSelector)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	hide()</code> -- </p></li>
-                                <li><p><code>Completable 	ignoreElements()</code> -- </p></li>
 
-                                <li><p><code>Single&lt;T> 	last(T defaultItem)</code> -- </p></li>
+                                <li class="group"><p><code>Single&lt;T> 	last(T defaultItem)</code> -- </p></li>
                                 <li><p><code>Maybe&lt;T> 	lastElement()</code> -- </p></li>
                                 <li><p><code>Single&lt;T> 	lastOrError()</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	lift(ObservableOperator&lt;? extends R,? super T> lifter)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	map(Function&lt;? super T,? extends R> mapper)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Notification&lt;T>> 	materialize()</code> -- </p></li>
 
-                                <li><p><code>Observable&lt;T> 	mergeWith(CompletableSource other)</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	mergeWith(CompletableSource other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	mergeWith(MaybeSource&lt;? extends T> other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	mergeWith(ObservableSource&lt;? extends T> other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	mergeWith(SingleSource&lt;? extends T> other)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	never()</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	observeOn(Scheduler scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	observeOn(Scheduler scheduler, boolean delayError)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	observeOn(Scheduler scheduler, boolean delayError, int bufferSize)</code> -- </p></li>
-                                <li><p><code>&lt;U> Observable&lt;U> 	ofType(Class&lt;U> clazz)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	onErrorResumeNext(Function&lt;? super Throwable,? extends ObservableSource&lt;? extends T>> resumeFunction)</code> -- </p></li>
+
+
+                                <li class="group"><p><code>Observable&lt;T> 	onErrorResumeNext(Function&lt;? super Throwable,? extends ObservableSource&lt;? extends T>> resumeFunction)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	onErrorResumeNext(ObservableSource&lt;? extends T> next)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	onErrorReturn(Function&lt;? super Throwable,? extends T> valueSupplier)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	onErrorReturnItem(T item)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	onExceptionResumeNext(ObservableSource&lt;? extends T> next)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	onTerminateDetach()</code> -- </p></li>
-                                <li><p><code>ConnectableObservable&lt;T> 	publish()</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	publish(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector)</code> -- </p></li>
-                                <li><p><code>static Observable&lt;Integer> 	range(int start, int count)</code> -- </p></li>
-                                <li><p><code>static Observable&lt;Long> 	rangeLong(long start, long count)</code> -- </p></li>
-                                <li><p><code>Maybe&lt;T> 	reduce(BiFunction&lt;T,T,T> reducer)</code> -- </p></li>
+
+
+                                <li class="group"><p><code>Maybe&lt;T> 	reduce(BiFunction&lt;T,T,T> reducer)</code> -- </p></li>
                                 <li><p><code>&lt;R> Single&lt;R> 	reduce(R seed, BiFunction&lt;R,? super T,R> reducer)</code> -- </p></li>
                                 <li><p><code>&lt;R> Single&lt;R> 	reduceWith(Callable&lt;R> seedSupplier, BiFunction&lt;R,? super T,R> reducer)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	repeat()</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	repeat()</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	repeat(long times)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	repeatUntil(BooleanSupplier stop)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	repeatWhen(Function&lt;? super Observable&lt;Object>,? extends ObservableSource&lt;?>> handler)</code> -- </p></li>
-                                <li><p><code>ConnectableObservable&lt;T> 	replay()</code> -- </p></li>
+
+                                <li class="group"><p><code>ConnectableObservable&lt;T> 	replay()</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	replay(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	replay(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector, int bufferSize)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	replay(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector, int bufferSize, long time, TimeUnit unit)</code> -- </p></li>
@@ -2644,31 +2879,34 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>ConnectableObservable&lt;T> 	replay(long time, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>ConnectableObservable&lt;T> 	replay(long time, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
                                 <li><p><code>ConnectableObservable&lt;T> 	replay(Scheduler scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	retry()</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	retry()</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	retry(BiPredicate&lt;? super Integer,? super Throwable> predicate)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	retry(long times)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	retry(long times, Predicate&lt;? super Throwable> predicate)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	retry(Predicate&lt;? super Throwable> predicate)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	retryUntil(BooleanSupplier stop)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	retryWhen(Function&lt;? super Observable&lt;Throwable>,? extends ObservableSource&lt;?>> handler)</code> -- </p></li>
-                                <li><p><code>void 	safeSubscribe(Observer&lt;? super T> observer)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit)</code> -- </p></li>
+
+
+
+                                <li class="group"><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit, boolean emitLast)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit, Scheduler scheduler, boolean emitLast)</code> -- </p></li>
                                 <li><p><code>&lt;U> Observable&lt;T> 	sample(ObservableSource&lt;U> sampler)</code> -- </p></li>
                                 <li><p><code>&lt;U> Observable&lt;T> 	sample(ObservableSource&lt;U> sampler, boolean emitLast)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	scan(BiFunction&lt;T,T,T> accumulator)</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	scan(BiFunction&lt;T,T,T> accumulator)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	scan(R initialValue, BiFunction&lt;R,? super T,R> accumulator)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	scanWith(Callable&lt;R> seedSupplier, BiFunction&lt;R,? super T,R> accumulator)</code> -- </p></li>
 
 
-                                <li><p><code>Observable&lt;T> 	serialize()</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	share()</code> -- </p></li>
-                                <li><p><code>Single&lt;T> 	single(T defaultItem)</code> -- </p></li>
+                                <li class="group"><p><code>Single&lt;T> 	single(T defaultItem)</code> -- </p></li>
                                 <li><p><code>Maybe&lt;T> 	singleElement()</code> -- </p></li>
                                 <li><p><code>Single&lt;T> 	singleOrError()</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	skip(long count)</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	skip(long count)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	skip(long time, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	skip(long time, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	skipLast(int count)</code> -- </p></li>
@@ -2679,22 +2917,17 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>Observable&lt;T> 	skipLast(long time, TimeUnit unit, Scheduler scheduler, boolean delayError, int bufferSize)</code> -- </p></li>
                                 <li><p><code>&lt;U> Observable&lt;T> 	skipUntil(ObservableSource&lt;U> other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	skipWhile(Predicate&lt;? super T> predicate)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	sorted()</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	sorted()</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	sorted(Comparator&lt;? super T> sortFunction)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	startWith(Iterable&lt;? extends T> items)</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	startWith(Iterable&lt;? extends T> items)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	startWith(ObservableSource&lt;? extends T> other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	startWith(T item)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	startWithArray(T... items)</code> -- </p></li>
-                                <li><p><code>Disposable 	subscribe()</code> -- </p></li>
-                                <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext)</code> -- </p></li>
-                                <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError)</code> -- </p></li>
-                                <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError, Action onComplete)</code> -- </p></li>
-                                <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError, Action onComplete, Consumer&lt;? super Disposable> onSubscribe)</code> -- </p></li>
-                                <li><p><code>void 	subscribe(Observer&lt;? super T> observer)</code> -- </p></li>
-                                <li><p><code>protected abstract void 	subscribeActual(Observer&lt;? super T> observer)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	subscribeOn(Scheduler scheduler)</code> -- </p></li>
-                                <li><p><code>&lt;E extends Observer&lt;? super T>> E 	subscribeWith(E observer)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	switchIfEmpty(ObservableSource&lt;? extends T> other)</code> -- </p></li>
+
+
+                                <li class="group"><p><code>Observable&lt;T> 	switchIfEmpty(ObservableSource&lt;? extends T> other)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	switchMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	switchMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int bufferSize)</code> -- </p></li>
                                 <li><p><code>Completable 	switchMapCompletable(Function&lt;? super T,? extends CompletableSource> mapper)</code> -- </p></li>
@@ -2706,11 +2939,12 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>&lt;R> Observable&lt;R> 	switchMapSingle(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	switchMapSingleDelayError(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- </p></li>
 
-                                <li><p><code>Observable&lt;Timed&lt;T>> 	timestamp()</code> -- </p></li>
+                                <li class="group"><p><code>Observable&lt;Timed&lt;T>> 	timestamp()</code> -- </p></li>
                                 <li><p><code>Observable&lt;Timed&lt;T>> 	timestamp(Scheduler scheduler)</code> -- </p></li>
                                 <li><p><code>Observable&lt;Timed&lt;T>> 	timestamp(TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;Timed&lt;T>> 	timestamp(TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
-                                <li><p><code>&lt;R> R 	to(Function&lt;? super Observable&lt;T>,R> converter)</code> -- </p></li>
+
+                                <li class="group"><p><code>&lt;R> R 	to(Function&lt;? super Observable&lt;T>,R> converter)</code> -- </p></li>
                                 <li><p><code>Flowable&lt;T> 	toFlowable(BackpressureStrategy strategy)</code> -- </p></li>
                                 <li><p><code>Future&lt;T> 	toFuture()</code> -- </p></li>
                                 <li><p><code>Single&lt;List&lt;T>> 	toList()</code> -- </p></li>
@@ -2728,7 +2962,7 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>Single&lt;List&lt;T>> 	toSortedList(Comparator&lt;? super T> comparator, int capacityHint)</code> -- </p></li>
                                 <li><p><code>Single&lt;List&lt;T>> 	toSortedList(int capacityHint)</code> -- </p></li>
 
-                                <li><p><code>Observable&lt;T> 	take(long count)</code> -- </p></li>
+                                <li class="group"><p><code>Observable&lt;T> 	take(long count)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	take(long time, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	take(long time, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	takeLast(int count)</code> -- </p></li>
@@ -2743,9 +2977,9 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>&lt;U> Observable&lt;T> 	takeUntil(ObservableSource&lt;U> other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	takeUntil(Predicate&lt;? super T> stopPredicate)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	takeWhile(Predicate&lt;? super T> predicate)</code> -- </p></li>
-                                <li><p><code>TestObserver&lt;T> 	test()</code> -- </p></li>
-                                <li><p><code>TestObserver&lt;T> 	test(boolean dispose)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	throttleFirst(long windowDuration, TimeUnit unit)</code> -- </p></li>
+
+
+                                <li class="group"><p><code>Observable&lt;T> 	throttleFirst(long windowDuration, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	throttleFirst(long skipDuration, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	throttleLast(long intervalDuration, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	throttleLast(long intervalDuration, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
@@ -2755,7 +2989,8 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>Observable&lt;T> 	throttleLatest(long timeout, TimeUnit unit, Scheduler scheduler, boolean emitLast)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	throttleWithTimeout(long timeout, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	throttleWithTimeout(long timeout, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Timed&lt;T>> 	timeInterval()</code> -- </p></li>
+
+                                <li class="group"><p><code>Observable&lt;Timed&lt;T>> 	timeInterval()</code> -- </p></li>
                                 <li><p><code>Observable&lt;Timed&lt;T>> 	timeInterval(Scheduler scheduler)</code> -- </p></li>
                                 <li><p><code>Observable&lt;Timed&lt;T>> 	timeInterval(TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;Timed&lt;T>> 	timeInterval(TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
@@ -2767,8 +3002,10 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>Observable&lt;T> 	timeout(long timeout, TimeUnit timeUnit, Scheduler scheduler, ObservableSource&lt;? extends T> other)</code> -- </p></li>
                                 <li><p><code>&lt;U,V> Observable&lt;T> 	timeout(ObservableSource&lt;U> firstTimeoutIndicator, Function&lt;? super T,? extends ObservableSource&lt;V>> itemTimeoutIndicator)</code> -- </p></li>
                                 <li><p><code>&lt;U,V> Observable&lt;T> 	timeout(ObservableSource&lt;U> firstTimeoutIndicator, Function&lt;? super T,? extends ObservableSource&lt;V>> itemTimeoutIndicator, ObservableSource&lt;? extends T> other)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	unsubscribeOn(Scheduler scheduler)</code> -- </p></li>
-                                <li><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(Callable&lt;? extends ObservableSource&lt;B>> boundary)</code> -- </p></li>
+
+
+
+                                <li class="group"><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(Callable&lt;? extends ObservableSource&lt;B>> boundary)</code> -- </p></li>
                                 <li><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(Callable&lt;? extends ObservableSource&lt;B>> boundary, int bufferSize)</code> -- </p></li>
                                 <li><p><code>Observable&lt;Observable&lt;T>> 	window(long count)</code> -- </p></li>
                                 <li><p><code>Observable&lt;Observable&lt;T>> 	window(long count, long skip)</code> -- </p></li>
@@ -2787,13 +3024,15 @@ public interface ObservableSource&lt;T> {
                                 <li><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(ObservableSource&lt;B> boundary, int bufferSize)</code> -- </p></li>
                                 <li><p><code>&lt;U,V> Observable&lt;Observable&lt;T>> 	window(ObservableSource&lt;U> openingIndicator, Function&lt;? super U,? extends ObservableSource&lt;V>> closingIndicator)</code> -- </p></li>
                                 <li><p><code>&lt;U,V> Observable&lt;Observable&lt;T>> 	window(ObservableSource&lt;U> openingIndicator, Function&lt;? super U,? extends ObservableSource&lt;V>> closingIndicator, int bufferSize)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	withLatestFrom(Iterable&lt;? extends ObservableSource&lt;?>> others, Function&lt;? super Object[],R> combiner)</code> -- </p></li>
+
+                                <li class="group"><p><code>&lt;R> Observable&lt;R> 	withLatestFrom(Iterable&lt;? extends ObservableSource&lt;?>> others, Function&lt;? super Object[],R> combiner)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;?>[] others, Function&lt;? super Object[],R> combiner)</code> -- </p></li>
                                 <li><p><code>&lt;U,R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;? extends U> other, BiFunction&lt;? super T,? super U,? extends R> combiner)</code> -- </p></li>
                                 <li><p><code>&lt;T1,T2,R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;T1> o1, ObservableSource&lt;T2> o2, Function3&lt;? super T,? super T1,? super T2,R> combiner)</code> -- </p></li>
                                 <li><p><code>&lt;T1,T2,T3,R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;T1> o1, ObservableSource&lt;T2> o2, ObservableSource&lt;T3> o3, Function4&lt;? super T,? super T1,? super T2,? super T3,R> combiner)</code> -- </p></li>
                                 <li><p><code>&lt;T1,T2,T3,T4,R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;T1> o1, ObservableSource&lt;T2> o2, ObservableSource&lt;T3> o3, ObservableSource&lt;T4> o4, Function5&lt;? super T,? super T1,? super T2,? super T3,? super T4,R> combiner)</code> -- </p></li>
-                                <li><p><code>&lt;U,R> Observable&lt;R> 	zipWith(Iterable&lt;U> other, BiFunction&lt;? super T,? super U,? extends R> zipper)</code> -- </p></li>
+
+                                <li class="group"><p><code>&lt;U,R> Observable&lt;R> 	zipWith(Iterable&lt;U> other, BiFunction&lt;? super T,? super U,? extends R> zipper)</code> -- </p></li>
                                 <li><p><code>&lt;U,R> Observable&lt;R> 	zipWith(ObservableSource&lt;? extends U> other, BiFunction&lt;? super T,? super U,? extends R> zipper)</code> -- </p></li>
                                 <li><p><code>&lt;U,R> Observable&lt;R> 	zipWith(ObservableSource&lt;? extends U> other, BiFunction&lt;? super T,? super U,? extends R> zipper, boolean delayError)</code> -- </p></li>
                                 <li><p><code>&lt;U,R> Observable&lt;R> 	zipWith(ObservableSource&lt;? extends U> other, BiFunction&lt;? super T,? super U,? extends R> zipper, boolean delayError, int bufferSize)</code> -- </p></li>
@@ -4356,26 +4595,6 @@ public class FancyFragment extends Fragment {
 }
 </pre>
                 </div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="libs-"></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">...</h3>
-                </div>
-                <div class="panel-body"></div>
-            </div>
-            <!-- item over -->
-
-            <!-- item start -->
-            <a class="offset" id="libs-"></a>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">...</h3>
-                </div>
-                <div class="panel-body"></div>
             </div>
             <!-- item over -->
 
