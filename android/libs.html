@@ -2329,7 +2329,17 @@ java.lang.Object
  *   ├─ ObservableAmb -- Observable.amb(...) / Observable.ambArray(...)
  *   ├─ ObservableDefer -- Observable.defer(Callable&lt;? extends ObservableSource&lt;? extends T>>)
  *   ├─ ObservableCombineLatest -- Observable.combineLatest(...) / Observable.combineLatestDelayError(...)
- *   ├─ ObservableConcatMap -- Observable.concat(...)
+ *   ├─ ObservableConcatMap -- Observable.concat...(...)
+ *   ├─ ObservableFlatMap -- Observable.merge(...)
+ *   ├─ ObservableFromArray -- Observable.fromArray(T...) /  Observable.just(T, T...)
+ *   ├─ ObservableFromIterable -- Obserable.fromIterable(Iterable&lt;? extends T>
+ *   ├─ ObservableFromPublisher -- Obserable.FromPublisher(Publisher&lt;? extends T>)
+ *   ├─ ObservableFromCallable -- Obserable.fromCallable(Callable&lt;? extends T)
+ *   ├─ ObservableFromFuture -- Observable.fromFuture(...)
+ *   ├─ ObservableTimer -- Observable.timer(...)
+ *   ├─ ObservableInterval -- Observable.interval(...)
+ *   ├─ ObservableIntervalRange -- Observable.intervalRange(...)
+ *   ├─ ObservableJust -- Observable.just(T)
  *   ├─
  *   ├─
  *   ├─
@@ -2442,6 +2452,110 @@ sBooks.subscribe(observer);
                                 <li class="group"><p><code>static Observable&lt;Integer> 	range(int start, int count)</code> -- 返回 ObservableRange 对象，自动调用 onNext(Integer) 和 onComplete()</p></li>
                                 <li><p><code>static Observable&lt;Long> 	rangeLong(long start, long count)</code> -- 返回 ObservableRangeLong 对象，自动调用 onNext(Long) 和 onComplete()</p></li>
 
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	just(T item)</code> -- 发送简单数据，把任意类型的数据转变为 Observable，用于观察</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T t1, T t2)</code> -- 调用 <code>fromArray(T...)</code> 方法</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T t1, T t2, T t3)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T t1, T t2, T t3, T t4)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T t1, T t2, T t3, T t4, T t5)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T t1, T t2, T t3, T t4, T t5, T t6)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T t1, T t2, T t3, T t4, T t5, T t6, T t7)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T t1, T t2, T t3, T t4, T t5, T t6, T t7, T t8)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T t1, T t2, T t3, T t4, T t5, T t6, T t7, T t8, T t9)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T t1, T t2, T t3, T t4, T t5, T t6, T t7, T t8, T t9, T t10)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>static Observable&lt;Long> 	timer(long delay, TimeUnit unit)</code> -- 延迟指定的时间发送一个 onNext(0L), 再发送 onComplete()，<b>注意：</b>如果在 Java 命令行程序中，因为是非阻塞式的，而 timer 所在的线程是守护线程(<code>thread.setDaemon(true)</code>)，可能还没收到消息，程序就退出了，参加下面的实例：</p></li>
+                                <li><p><code>static Observable&lt;Long> 	timer(long delay, TimeUnit unit, Scheduler scheduler)</code> -- 指定调度器，上面的方法使用了 <code>Schedulers.computation()</code></p>
+                                    <pre class="brush: java;">
+/** 在 Java 命令行程序中，以下代码不会有输出，因为 thread 作为守护线程运行，线程输出时，程序已经退出 */
+public static void main(String[] args) {
+    Thread thread = new Thread(() -> {
+        try {
+            Thread.sleep(1000);
+            Log.d("==========");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    });
+    thread.setDaemon(true); // 设置为守护线程
+    thread.start();
+}
+
+// 如果要看到 timer 运行结果，可以延迟程序的退出时间
+Observable&lt;Long> observable = Observable.timer(100, TimeUnit.MILLISECONDS);
+Observer observer = ...
+observable.subscribe(observer);
+
+// 程序先不退出
+try {
+    Thread.sleep(1000);
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static Observable&lt;Long> 	interval(long period, TimeUnit unit)</code> -- 指定时间间隔发送数据(0, 1, 2, ...)</p></li>
+                                <li><p><code>static Observable&lt;Long> 	interval(long initialDelay, long period, TimeUnit unit)</code> -- 指定初始延迟和时间间隔</p></li>
+                                <li><p><code>static Observable&lt;Long> 	interval(long period, TimeUnit unit, Scheduler scheduler)</code> -- 可以指定调度器</p></li>
+                                <li><p><code>static Observable&lt;Long> 	interval(long initialDelay, long period, TimeUnit unit, Scheduler scheduler)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>static Observable&lt;Long> 	intervalRange(long start, long count, long initialDelay, long period, TimeUnit unit)</code> -- 可以指定初始值和数量，完成后会发送一个 onComlete</p>
+                                    <pre class="brush: java;">
+// 从 100 开始，一共发送 10 个，完成后会调用 onComplete()
+Observable&lt;Long> observable = Observable.intervalRange(100, 10, 0, 100, TimeUnit.MILLISECONDS);
+</pre>
+                                </li>
+                                <li><p><code>static Observable&lt;Long> 	intervalRange(long start, long count, long initialDelay, long period, TimeUnit unit, Scheduler scheduler)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	fromArray(T... items)</code> -- 从数组生成 Observable</p>
+                                    <pre class="brush: java;">Observable&lt;String> observable = Observable.fromArray("RED", "GREEN", "BLUE");</pre>
+                                </li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	fromIterable(Iterable&lt;? extends T> source)</code> -- 从集合生成 Observable</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	fromPublisher(Publisher&lt;? extends T> publisher)</code> -- 从集合生成 Observable</p>
+                                    <pre class="brush: java;">
+Observable&lt;String> observable = Observable.fromPublisher(s -> {
+    s.onNext("Hello");
+    s.onComplete();
+});
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	fromCallable(Callable&lt;? extends T> supplier)</code> -- 从 Callable 生成，只有一个元素</p>
+                                    <pre class="brush: java;">Observable&lt;String> observable = Observable.fromCallable(() -> "Hello");</pre>
+                                </li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	fromFuture(Future&lt;? extends T> future)</code> -- 从 Future 生成 Observable</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	fromFuture(Future&lt;? extends T> future, long timeout, TimeUnit unit)</code> -- 同上</p>
+                                    <pre class="brush: java;">
+Observable&lt;String> observable = Observable.fromFuture(new Future&lt;String>() {
+    @Override public boolean cancel(boolean mayInterruptIfRunning) { return false; }
+    @Override public boolean isCancelled() { return false; }
+    @Override public boolean isDone() { return false; }
+
+    /** 如果 TimeUnit 为 null, 从此方法获取数据 */
+    @Override
+    public String get() {
+        return "Hello";
+    }
+
+    /** 如果 TimeUnit 不为 null, 从此方法获取数据，此方法应该处理 timeout */
+    @Override
+    public String get(long timeout, TimeUnit unit) {
+        return "Hello";
+    }
+});
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	fromFuture(Future&lt;? extends T> future, Scheduler scheduler)</code> -- 同上，加了线程调度</p>
+                                    <pre class="brush: java;">
+public static &lt;T> Observable&lt;T> fromFuture(Future&lt;? extends T> future, Scheduler scheduler) {
+    ObjectHelper.requireNonNull(scheduler, "scheduler is null");
+    Observable&lt;T> o = fromFuture(future);
+    return o.subscribeOn(scheduler); // 在 fromFuture(Future&lt;? extends T>) 基础上加了线程调度
+}
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	fromFuture(Future&lt;? extends T> future, long timeout, TimeUnit unit, Scheduler scheduler)</code> -- 同上</p></li>
+
+
                                 <li class="group"><p><code>static &lt;T,R> Observable&lt;R> 	combineLatest(Function&lt;? super Object[],? extends R> combiner, int bufferSize, ObservableSource&lt;? extends T>... sources)</code> -- </p>
                                     <pre class="brush: java;">
 String[] colors = {"ALPHA", "RED", "GREEN", "BLUE"};
@@ -2529,66 +2643,35 @@ Observable&lt;String> observable = Observable.concat(sources);
                                 <li><p><code>static &lt;T> Observable&lt;T> 	concat(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3)</code> -- 同上</p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	concat(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3, ObservableSource&lt;? extends T> s4)</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatArray(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatArray(ObservableSource&lt;? extends T>... sources)</code> -- 合并数组</p></li>
 
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatArrayDelayError(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- 合并集合，延迟错误</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	concatDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- 合并多层，延迟错误</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	concatDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int prefetch, boolean tillTheEnd)</code> -- 合并多层，延迟错误</p></li>
 
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatArrayEager(int maxConcurrency, int prefetch, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatArrayEager(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatEager(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- 和 concat 的区别是多个 Observable 可以同时开始发射数据，如果后一个 Observable 发射完成后，前一个 Observable 还有发射完数据，那么它会将后一个 Observable 的数据先缓存起来，等到前一个 Observable 发射完毕后，才将缓存的数据发射出去。</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	concatEager(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency, int prefetch)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	concatEager(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	concatEager(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency, int prefetch)</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatArrayEagerDelayError(int maxConcurrency, int prefetch, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatArrayEagerDelayError(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatArrayEager(ObservableSource&lt;? extends T>... sources)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	concatArrayEager(int maxConcurrency, int prefetch, ObservableSource&lt;? extends T>... sources)</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int prefetch, boolean tillTheEnd)</code> -- </p></li>
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatArrayDelayError(ObservableSource&lt;? extends T>... sources)</code> -- 合并数组，延迟错误</p>
+                                    <pre class="brush: java;">
+/* 此处有一个 null 元素， concatArrayDelayError 方法会将错误数据延迟，如果使用 concatArray 则运行到 RED 终止
+ * 输出：onSubscribe() -> ALPHA -> RED -> 255 -> ... -> onError */
+Observable&lt;String> colors = Observable.fromArray("ALPHA", "RED", null, "GREEN", "BLUE");
+Observable&lt;String> values = Observable.fromArray("255", "200", "100", "150");
 
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatEager(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatEager(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency, int prefetch)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatEager(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	concatEager(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency, int prefetch)</code> -- </p></li>
+Observable&lt;String> observable = Observable.concatArrayDelayError(colors, values);
+</pre>
+                                </li>
 
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	fromArray(T... items)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	fromCallable(Callable&lt;? extends T> supplier)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	fromFuture(Future&lt;? extends T> future)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	fromFuture(Future&lt;? extends T> future, long timeout, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	fromFuture(Future&lt;? extends T> future, long timeout, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	fromFuture(Future&lt;? extends T> future, Scheduler scheduler)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	fromIterable(Iterable&lt;? extends T> source)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	fromPublisher(Publisher&lt;? extends T> publisher)</code> -- </p></li>
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	concatArrayEagerDelayError(ObservableSource&lt;? extends T>... sources)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	concatArrayEagerDelayError(int maxConcurrency, int prefetch, ObservableSource&lt;? extends T>... sources)</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>static &lt;T,D> Observable&lt;T> 	using(Callable&lt;? extends D> resourceSupplier, Function&lt;? super D,? extends ObservableSource&lt;? extends T>> sourceSupplier, Consumer&lt;? super D> disposer)</code> -- </p></li>
-                                <li><p><code>static &lt;T,D> Observable&lt;T> 	using(Callable&lt;? extends D> resourceSupplier, Function&lt;? super D,? extends ObservableSource&lt;? extends T>> sourceSupplier, Consumer&lt;? super D> disposer, boolean eager)</code> -- </p></li>
-
-                                <li class="group"><p><code>static &lt;T,S> Observable&lt;T> 	generate(Callable&lt;S> initialState, BiConsumer&lt;S,Emitter&lt;T>> generator)</code> -- </p></li>
-                                <li><p><code>static &lt;T,S> Observable&lt;T> 	generate(Callable&lt;S> initialState, BiConsumer&lt;S,Emitter&lt;T>> generator, Consumer&lt;? super S> disposeState)</code> -- </p></li>
-                                <li><p><code>static &lt;T,S> Observable&lt;T> 	generate(Callable&lt;S> initialState, BiFunction&lt;S,Emitter&lt;T>,S> generator)</code> -- </p></li>
-                                <li><p><code>static &lt;T,S> Observable&lt;T> 	generate(Callable&lt;S> initialState, BiFunction&lt;S,Emitter&lt;T>,S> generator, Consumer&lt;? super S> disposeState)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	generate(Consumer&lt;Emitter&lt;T>> generator)</code> -- </p></li>
-
-                                <li class="group"><p><code>static Observable&lt;Long> 	timer(long delay, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>static Observable&lt;Long> 	timer(long delay, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
-
-
-                                <li class="group"><p><code>static Observable&lt;Long> 	interval(long initialDelay, long period, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>static Observable&lt;Long> 	interval(long initialDelay, long period, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
-                                <li><p><code>static Observable&lt;Long> 	interval(long period, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>static Observable&lt;Long> 	interval(long period, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
-                                <li><p><code>static Observable&lt;Long> 	intervalRange(long start, long count, long initialDelay, long period, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>static Observable&lt;Long> 	intervalRange(long start, long count, long initialDelay, long period, TimeUnit unit, Scheduler scheduler)</code> -- </p></li>
-
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	just(T item)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T item1, T item2)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T item1, T item2, T item3)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T item1, T item2, T item3, T item4)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T item1, T item2, T item3, T item4, T item5)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T item1, T item2, T item3, T item4, T item5, T item6)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T item1, T item2, T item3, T item4, T item5, T item6, T item7)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T item1, T item2, T item3, T item4, T item5, T item6, T item7, T item8)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T item1, T item2, T item3, T item4, T item5, T item6, T item7, T item8, T item9)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	just(T item1, T item2, T item3, T item4, T item5, T item6, T item7, T item8, T item9, T item10)</code> -- </p></li>
-
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	merge(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	merge(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- 合并，和 <code>concat()</code> 类似，但是顺序可能会交错</p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	merge(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	merge(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency, int bufferSize)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	merge(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
@@ -2598,9 +2681,11 @@ Observable&lt;String> observable = Observable.concat(sources);
                                 <li><p><code>static &lt;T> Observable&lt;T> 	merge(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3, ObservableSource&lt;? extends T> s4)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeArray(int maxConcurrency, int bufferSize, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeArray(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	mergeArrayDelayError(int maxConcurrency, int bufferSize, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	mergeArrayDelayError(int maxConcurrency, int bufferSize, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeArrayDelayError(ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
+                                
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, int maxConcurrency, int bufferSize)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
@@ -2608,16 +2693,6 @@ Observable&lt;String> observable = Observable.concat(sources);
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3)</code> -- </p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3, ObservableSource&lt;? extends T> s4)</code> -- </p></li>
-
-                                <li class="group"><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, BiPredicate&lt;? super T,? super T> isEqual)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, BiPredicate&lt;? super T,? super T> isEqual, int bufferSize)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, int bufferSize)</code> -- </p></li>
-
-                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	switchOnNext(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	switchOnNext(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int bufferSize)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	switchOnNextDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	switchOnNextDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int prefetch)</code> -- </p></li>
 
                                 <li class="group"><p><code>static &lt;T,R> Observable&lt;R> 	zip(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> zipper)</code> -- </p></li>
                                 <li><p><code>static &lt;T,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> zipper)</code> -- </p></li>
@@ -2633,6 +2708,28 @@ Observable&lt;String> observable = Observable.concat(sources);
                                 <li><p><code>static &lt;T1,T2,T3,T4,T5,T6,T7,T8,T9,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, ObservableSource&lt;? extends T4> s4, ObservableSource&lt;? extends T5> s5, ObservableSource&lt;? extends T6> s6, ObservableSource&lt;? extends T7> s7, ObservableSource&lt;? extends T8> s8, ObservableSource&lt;? extends T9> s9, Function9&lt;? super T1,? super T2,? super T3,? super T4,? super T5,? super T6,? super T7,? super T8,? super T9,? extends R> zipper)</code> -- </p></li>
                                 <li><p><code>static &lt;T,R> Observable&lt;R> 	zipArray(Function&lt;? super Object[],? extends R> zipper, boolean delayError, int bufferSize, ObservableSource&lt;? extends T>... sources)</code> -- </p></li>
                                 <li><p><code>static &lt;T,R> Observable&lt;R> 	zipIterable(Iterable&lt;? extends ObservableSource&lt;? extends T>> sources, Function&lt;? super Object[],? extends R> zipper, boolean delayError, int bufferSize)</code> -- </p></li>
+
+
+                                <li class="group"><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, BiPredicate&lt;? super T,? super T> isEqual)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, BiPredicate&lt;? super T,? super T> isEqual, int bufferSize)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Single&lt;Boolean> 	sequenceEqual(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, int bufferSize)</code> -- </p></li>
+
+                                <li class="group"><p><code>static &lt;T> Observable&lt;T> 	switchOnNext(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	switchOnNext(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int bufferSize)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	switchOnNextDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	switchOnNextDelayError(ObservableSource&lt;? extends ObservableSource&lt;? extends T>> sources, int prefetch)</code> -- </p></li>
+
+
+                                <li class="group"><p><code>static &lt;T,D> Observable&lt;T> 	using(Callable&lt;? extends D> resourceSupplier, Function&lt;? super D,? extends ObservableSource&lt;? extends T>> sourceSupplier, Consumer&lt;? super D> disposer)</code> -- </p></li>
+                                <li><p><code>static &lt;T,D> Observable&lt;T> 	using(Callable&lt;? extends D> resourceSupplier, Function&lt;? super D,? extends ObservableSource&lt;? extends T>> sourceSupplier, Consumer&lt;? super D> disposer, boolean eager)</code> -- </p></li>
+
+                                <li class="group"><p><code>static &lt;T,S> Observable&lt;T> 	generate(Callable&lt;S> initialState, BiConsumer&lt;S,Emitter&lt;T>> generator)</code> -- </p></li>
+                                <li><p><code>static &lt;T,S> Observable&lt;T> 	generate(Callable&lt;S> initialState, BiConsumer&lt;S,Emitter&lt;T>> generator, Consumer&lt;? super S> disposeState)</code> -- </p></li>
+                                <li><p><code>static &lt;T,S> Observable&lt;T> 	generate(Callable&lt;S> initialState, BiFunction&lt;S,Emitter&lt;T>,S> generator)</code> -- </p></li>
+                                <li><p><code>static &lt;T,S> Observable&lt;T> 	generate(Callable&lt;S> initialState, BiFunction&lt;S,Emitter&lt;T>,S> generator, Consumer&lt;? super S> disposeState)</code> -- </p></li>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	generate(Consumer&lt;Emitter&lt;T>> generator)</code> -- </p></li>
+
 
                                 <li class="group"><p><code>void 	safeSubscribe(Observer&lt;? super T> observer)</code> -- </p></li>
                                 <li><p><code>void 	subscribe(Observer&lt;? super T> observer)</code> -- </p></li>
