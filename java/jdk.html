@@ -5292,7 +5292,7 @@ public class MyList&lt;E> implements Iterable&lt;E> {
                                 <p><b>实现此接口的对象列表（和数组）可以通过 Collections.sort（和 Arrays.sort）进行自动排序。实现此接口的对象可以用作有序映射中的键或有序集合中的元素，无需指定比较器。</b></p>
                                 <p>对于类 C 的每一个 e1 和 e2 来说，当且仅当 e1.compareTo(e2) == 0 与 e1.equals(e2) 具有相同的 boolean 值时，类 C 的自然排序才叫做与 equals 一致。注意，null 不是任何类的实例，即使 e.equals(null) 返回 false，e.compareTo(null) 也将抛出 NullPointerException。</p>
                                 <pre class="brush: java;">
-public Interface Comparable&lt;T> {
+public interface Comparable&lt;T> {
     int compareTo(T o); // 如果该对象小于、等于或大于指定对象，则分别返回负整数、零或正整数
 }
 </pre>
@@ -8437,7 +8437,7 @@ class SerialExecutor implements Executor {
 									<p>可以关闭 ExecutorService，这将导致其拒绝新任务。提供两个方法来关闭 ExecutorService。<code>shutdown()</code> 方法在终止前允许执行以前提交的任务，而 <code>shutdownNow()</code> 方法阻止等待任务启动并试图停止当前正在执行的任务。在终止时，执行程序没有任务在执行，也没有任务在等待执行，并且无法提交新任务。应该关闭未使用的 ExecutorService 以允许回收其资源。 </p>
 									<p>通过创建并返回一个可用于取消执行和/或等待完成的 Future，方法 submit 扩展了基本方法 Executor.execute(java.lang.Runnable)。方法 invokeAny 和 invokeAll 是批量执行的最常用形式，它们执行任务 collection，然后等待至少一个，或全部任务完成</p>
 									<pre class="brush: java;">
-public Interface ExecutorService  extends Executor {
+public interface ExecutorService extends Executor {
 	boolean isShutdown(); // 此执行程序是否已关闭
 	void shutdown(); // 启动一次顺序关闭，执行以前提交的任务，但不接受新任务
 	List&lt;Runnable> shutdownNow(); // 试图停止所有正在执行的任务，暂停处理正在等待的任务，并返回等待执行的任务列表
