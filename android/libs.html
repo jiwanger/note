@@ -2373,7 +2373,7 @@ public interface ObservableSource&lt;T> {
                             <p><a href="docs/rxjava-2.2.x/io/reactivex/Observable.html" target="_blank">Observable</a> -- 被观察者，是可被观察的对象。</p>
                             <p>Observable 的静态方法多数是创建了不同的子类，重点关注子类的 <code>subscribeActual(Observer&lt;? super T>)</code> 方法。</p>
                             <ol>
-                                <li><p><code>static int 	bufferSize()</code> -- 获取缓冲值大小（在使用 Flowable 的时候需要）</p>
+                                 <li><p><code>static int 	bufferSize()</code> -- 获取缓冲值大小（在使用 Flowable 的时候需要）</p>
                                     <pre class="brush: java;">
 // 默认值为 128, 可通过以下方法更改，但最小值为 1
 System.setProperty("rx2.buffer-size", "10");
@@ -2414,12 +2414,18 @@ public final class ObservableCreate&lt;T> extends Observable&lt;T> {
 }
 </pre>
                                 </li>
-                                <li><p><code>static &lt;T> Observable&lt;T> 	unsafeCreate(ObservableSource&lt;T> onSubscribe)</code> -- 返回 ObservableFromUnsafeSource 对象，不会调用 Observer 的 <code>onSubscribe(Disposable)</code>, 其源码：</p>
+                                <li><p><code>static &lt;T> Observable&lt;T> 	unsafeCreate(ObservableSource&lt;T> onSubscribe)</code> -- 返回 ObservableFromUnsafeSource 对象，不会调用 Observer 的 <code>onSubscribe(Disposable)</code>, 因此在 onComplete() / onError() 后还会接受数据，其源码：</p>
                                     <pre class="brush: java;">
 @Override
 protected void subscribeActual(Observer&lt;? super T> observer) {
     source.subscribe(observer);
 }
+
+Observable.unsafeCreate(obsv -> {
+    obsv.onNext("A");
+    obsv.onComplete();
+    obsv.onNext("B");  // 在 onComplete() 后发送的数据 Observer 还可以接受到
+}).subscribe(observer);
 </pre>
                                 </li>
 
@@ -2707,7 +2713,6 @@ Observable&lt;String> observable = Observable.concatArrayDelayError(colors, valu
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3)</code> -- 同上</p></li>
                                 <li><p><code>static &lt;T> Observable&lt;T> 	mergeDelayError(ObservableSource&lt;? extends T> s1, ObservableSource&lt;? extends T> s2, ObservableSource&lt;? extends T> s3, ObservableSource&lt;? extends T> s4)</code> -- 同上</p></li>
 
-
                                 <li class="group"><p><code>static &lt;T1,T2,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, BiFunction&lt;? super T1,? super T2,? extends R> zipper)</code> -- 合并，自定义合并函数，输出项总是和少的那个相同</p>
                                     <pre class="brush: java;">
 String[] colors = {"ALPHA", "RED", "GREEN", "BLUE"};
@@ -2919,25 +2924,187 @@ Observable.just(28, 30, 32, 33).all(i -> i > 20 && i < 35).subscribe(b -> Log.d(
                                 <li><p><code>Observable&lt;T> 	filter(Predicate&lt;? super T> predicate)</code> -- 只发送符合条件的数据</p>
                                     <pre class="brush: java;">Observable.just("RED", "GREEN", "BLUE").filter(s -> s.length() > 3).subscribe(observer);</pre>
                                 </li>
-                                <li><p><code>Observable&lt;T> 	hide()</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	defaultIfEmpty(T defaultItem)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	serialize()</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	share()</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	cache()</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	cacheWithInitialCapacity(int initialCapacity)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	dematerialize(Function&lt;? super T,Notification&lt;R>> selector)</code> -- </p></li>
-                                <li><p><code>&lt;U> Observable&lt;U> 	cast(Class&lt;U> clazz)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	compose(ObservableTransformer&lt;? super T,? extends R> composer)</code> -- </p></li>
-                                <li><p><code>&lt;U> Observable&lt;U> 	ofType(Class&lt;U> clazz)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	lift(ObservableOperator&lt;? extends R,? super T> lifter)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	map(Function&lt;? super T,? extends R> mapper)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Notification&lt;T>> 	materialize()</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	hide()</code> -- 隐藏 Observable 的细节，看下面实例</p>
+                                    <pre class="brush: java;">
+// HideTest 被设置为只能使用 send() 方法发送数据，那么使用 hide() 方法隐藏细节
+HideTest test = new HideTest();
+test.getObservable().subscribe(observer);
+// 只应该调用此方法发送数据
+test.send();
 
-                                <li class="group"><p><code>ConnectableObservable&lt;T> 	publish()</code> -- </p></li>
+// 但是此处没调用 hide() 方法，那么可以强制转型为 Subject, 然后从外部发送数据，这可能是不想要的
+((Subject)test.getObservable()).onNext("Hello");
+// 如果使用了 hide() 方法，返回的 Observable 不再是 Subject，此处运行报错
+((Subject)test.getHideObservable()).onNext("Hello");
+
+ public class HideTest {
+    private Subject&lt;String> s = BehaviorSubject.create();
+
+    public Observable&lt;String> getObservable() {
+        return s;
+    }
+
+    public Observable&lt;String> getHideObservable() {
+        return s.hide();
+    }
+
+    public void send() {
+        s.onNext("ABC");
+    }
+}
+</pre>
+                                </li>
+                                <li><p><code>Observable&lt;T> 	defaultIfEmpty(T defaultItem)</code> -- 如果源数据为空，则发送此默认项</p>
+                                    <pre class="brush: java;">
+String[] values = {};
+Observable.fromArray(values).defaultIfEmpty("aa").subscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>Observable&lt;T> 	serialize()</code> -- 强行要求 Observable 遵循 RX 规范，在 onComplete() / onError() 后 Observer 不在接收消息，通常用于多线程中，只有其中一个 Observable 完成了，Observer 将停止接收消息</p>
+                                    <pre class="brush: java;">
+Observable.unsafeCreate(obsv -> { // 此方法不会在 onComplete() 后自动关闭订阅
+    obsv.onNext("A");
+    obsv.onComplete();
+    obsv.onNext("B");
+}).serialize().subscribe(observer); // 此处如果不用 serialize() 方法， Observer 还能接收到 'B'
+</pre>
+                                </li>
+                                <li><p><code>Observable&lt;T> 	share()</code> -- 是 <code>publish().refCount()</code> 的包装，如果数据没有发送完成(onComplete())，那么后加入的有其他订阅者订阅，将只能接受后面的数据</p>
+                                    <pre class="brush: java;">
+public final Observable&lt;T> share() {
+    return publish().refCount();
+}
+
+/**
+ * publish() -- 订阅后不会发射数据，直到手动调用 connect 方法，才会开始发射数据
+ * refCount() -- 可以看做是 publish 的逆向，它能将一个 ConnectableObservable 对象再重新转化为
+ *    一个普通的 Observable 对象，记录了订阅者的数量，当每个订阅关系解除了，它会采取正确的行动
+ * share() -- 如果没有调用 onComplete()，后加入的其他订阅者订阅，将只能接受后面的数据(不会从第一个再开始发)
+ */
+ Observable&lt;String> observable = Observable.create(e -> {
+    e.onNext("A");
+    Thread.sleep(300);
+    e.onNext("B");
+    Thread.sleep(300);
+    e.onNext("C");
+    e.onComplete();
+}).subscribeOn(Schedulers.computation()).share();
+
+observable.subscribe(observer);
+
+try {
+    Thread.sleep(400); // 在此过程中， ‘A’， ‘B’ 已经发送了，'C' 还没有发送
+} catch (InterruptedException e) {
+    e.printStackTrace();
+}
+
+// 在 observable 没有调用 onComplete() 的情况下，这个新的 Observer 只能接收到剩下的数据
+observable.subscribe(new Observer() {...}); // 此 Observer 只能接收到 ‘C’
+</pre>
+                                </li>
+                                <li><p><code>Observable&lt;T> 	cache()</code> -- 将发送过的数据缓存，其他订阅者订阅时将缓存的数据发射出去</p>
+                                    <pre class="brush: java;">
+List&lt;String> list = new ArrayList<>();
+list.add("1");
+list.add("2");
+
+Observable ob = Observable.fromIterable(list).cache();
+ob.subscribe(observer); // 1， 2
+list.add("3"); // 对 cache() 来说，此句也无效的；如果没有 cache()，后面的订阅者会收到 1,2,3
+ob.subscribe(observer); // 1， 2， 收不到 3，因为只是发送前面发送国的数据
+</pre>
+                                </li>
+                                <li><p><code>Observable&lt;T> 	cacheWithInitialCapacity(int initialCapacity)</code> -- 同上，提供一个初始容量大小</p></li>
+
+                                <li class="group"><p><code>&lt;U> Observable&lt;U> 	cast(Class&lt;U> clazz)</code> -- 将发射的数据转换为指定的类型</p></li>
+                                <li><p><code>&lt;U> Observable&lt;U> 	ofType(Class&lt;U> clazz)</code> -- 只发送指定类型的数据</p>
+                                    <pre class="brush: java;">Observable.fromArray("3", 4).ofType(String.class).subscribe(observer);</pre>
+                                </li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	map(Function&lt;? super T,? extends R> mapper)</code> -- 转换，可以对每一项数据精确控制</p>
+                                    <pre class="brush: java;">
+// Observer 只接收 String 类型的数据
+Observer&lt;String> observer = new Observer&lt;String>() {...}
+
+Observable.just(1, 2, 3).map(integer -> "" + integer).subscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	compose(ObservableTransformer&lt;? super T,? extends R> composer)</code> -- 类型转换，针对整体的转换</p>
+                                    <pre class="brush: java;">
+// Observer 只接收 String 类型的数据
+Observer&lt;String> observer = new Observer&lt;String>() {...}
+// 数据源为 Integer
+Observable.just(1, 2, 3).compose(source -> {
+    // 此处将数据源 Integer 转换为 String 类型, 参见前面的 combineLatest(...)
+    return Observable.combineLatest(Observable.just(""), source, (s, i) -> s + i);
+}).subscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	lift(ObservableOperator&lt;? extends R,? super T> lifter)</code> -- 类似 <code>compose</code>, 但转换的是 Observer</p>
+                                    <pre class="brush: java;">
+// Observer 只接收 String 类型的数据
+Observer&lt;String> observer = new Observer&lt;String>() {...}
+
+Observable.just(1, 2, 3).lift((ObservableOperator&lt;String, Integer>) observer1 ->
+    new Observer&lt;Integer>() {
+        @Override
+        public void onSubscribe(Disposable d) { observer1.onSubscribe(d); }
+
+        @Override
+        public void onNext(Integer integer) { observer1.onNext("" + integer); }
+
+        @Override
+        public void onError(Throwable e) { observer1.onError(e); }
+
+        @Override
+        public void onComplete() { observer1.onComplete(); }
+    }).subscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;R> R 	as(ObservableConverter&lt;T,? extends R> converter)</code> -- 把 Observable 转化为任意类型(转化的结果可以不是 Observable)</p>
+                                    <pre class="brush: java;">
+// Observer 只接收 String 类型的数据
+Observer&lt;String> observer = new Observer&lt;String>() {...}
+
+// 此处的效果和 compose 一样
+Observable.just(1, 2, 3).as(
+    upstream -> Observable.combineLatest(Observable.just(""), upstream, (s, i) -> s + i)
+).subscribe(observer);
+                                    </pre>
+                                </li>
+
+                                <li class="group"><p><code>Observable&lt;Notification&lt;T>> 	materialize()</code> -- 将所有的元素包裹一层 Notification，它的 onComplete() 和 onError() 消息还会发送到 onNext() 方法中，就算数据源为空，也会调用一次 onNext() 方法</p>
+                                    <pre class="brush: java;">
+String[] arr = {}; // 就算数据为空，也会调用一次 onNext() 方法
+Observable.fromArray(arr).materialize().subscribe(new Observer(){...});
+
+// 在 onNext() 方法中会多收到一条 完成/错误 的消息： onNext()
+Observable.just("A", "B").materialize().subscribe(new Observer&lt;Notification&lt;String>>() {
+    @Override public void onSubscribe(Disposable d) { Log.d("onSubscribe", d); }
+
+    @Override
+    public void onNext(Notification&lt;String> notification) {
+        // 此处会多收到一条 完成/错误 的消息
+        if(notification.isOnComplete()) {
+            Log.d("onNext", "isOncomplete");
+        } else if(notification.isOnError()) {
+            Log.d("onNext", "isOnError");
+        } else {
+            Log.d("onNext", notification);
+        }
+    }
+
+    @Override public void onError(Throwable e) { Log.d("onError", e.getMessage()); }
+
+    @Override public void onComplete() { Log.d("onComplete"); }
+});
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;R> Observable&lt;R> dematerialize(Function&lt;? super T,Notification&lt;R>> selector)</code> -- 是 <code>materialize()</code> 的逆操作</p></li>
+
+                                <li class="group"><p><code>ConnectableObservable&lt;T> 	publish()</code> -- 订阅后不会发射数据，直到手动调用 connect 方法，才会开始发射数据</p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	publish(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector)</code> -- </p></li>
 
-                                <li class="group"><p><code>&lt;R> R 	as(ObservableConverter&lt;T,? extends R> converter)</code> -- </p></li>
-                                <li><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	join(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super TRight,? extends R> resultSelector)</code> -- </p></li>
+                                <li class="group"><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	join(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super TRight,? extends R> resultSelector)</code> -- </p></li>
 
                                 <li class="group"><p><code>Completable 	ignoreElements()</code> -- </p></li>
 
@@ -3143,8 +3310,6 @@ Observable.just(28, 30, 32, 33).all(i -> i > 20 && i < 35).subscribe(b -> Log.d(
                                 <li><p><code>Observable&lt;T> 	retry(Predicate&lt;? super Throwable> predicate)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	retryUntil(BooleanSupplier stop)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	retryWhen(Function&lt;? super Observable&lt;Throwable>,? extends ObservableSource&lt;?>> handler)</code> -- </p></li>
-
-
 
                                 <li class="group"><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit, boolean emitLast)</code> -- </p></li>

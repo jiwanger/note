@@ -1,5 +1,5 @@
-if ('undefined' != typeof SyntaxHighlighter) {
-	SyntaxHighlighter.all();
+if ('undefined' !== typeof SyntaxHighlighter) {
+    SyntaxHighlighter.all();
 }
 
 function init_menu(arr) {
