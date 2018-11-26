@@ -3101,12 +3101,18 @@ Observable.just("A", "B").materialize().subscribe(new Observer&lt;Notification&l
                                 </li>
                                 <li><p><code>&lt;R> Observable&lt;R> dematerialize(Function&lt;? super T,Notification&lt;R>> selector)</code> -- 是 <code>materialize()</code> 的逆操作</p></li>
 
-                                <li class="group"><p><code>ConnectableObservable&lt;T> 	publish()</code> -- 订阅后不会发射数据，直到手动调用 connect 方法，才会开始发射数据</p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	publish(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector)</code> -- </p></li>
+                                <li class="group"><p><code><a href="docs/rxjava-2.2.x/io/reactivex/observables/ConnectableObservable.html" target="_blank">ConnectableObservable</a>&lt;T> 	publish()</code> -- 订阅后不会发射数据，直到手动调用 connect 方法，才会开始发射数据</p>
+                                    <pre class="brush: java;">
+ConnectableObservable&lt;String> connectableObservable = Observable.fromArray(colors).publish();
+connectableObservable.subscribe(observer); // 此处只会执行 Observer 的 onSubscribe()
 
-                                <li class="group"><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	join(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super TRight,? extends R> resultSelector)</code> -- </p></li>
+Log.d("before connect");
+connectableObservable.connect(); // 调用 connect() 才会发送数据
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	publish(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector)</code> -- 同上，转换</p></li>
 
-                                <li class="group"><p><code>Completable 	ignoreElements()</code> -- </p></li>
+                                <li class="group"><p><code>Completable 	ignoreElements()</code> -- 丢弃元（ subscribe() 方法还是会调用，但是 onNext() 为空方法），接收完成/错误消息</p></li>
 
                                 <li class="group"><p><code>TestObserver&lt;T> 	test()</code> -- </p></li>
                                 <li><p><code>TestObserver&lt;T> 	test(boolean dispose)</code> -- </p></li>
@@ -3256,6 +3262,8 @@ Observable.just("A", "B").materialize().subscribe(new Observer&lt;Notification&l
                                 <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector)</code> -- </p></li>
                                 <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, boolean delayError)</code> -- </p></li>
                                 <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, boolean delayError, int bufferSize)</code> -- </p></li>
+
+                                <li class="group"><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	join(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super TRight,? extends R> resultSelector)</code> -- </p></li>
                                 <li><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	groupJoin(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super Observable&lt;TRight>,? extends R> resultSelector)</code> -- </p></li>
 
                                 <li class="group"><p><code>Single&lt;T> 	last(T defaultItem)</code> -- </p></li>
