@@ -2319,48 +2319,8 @@ observable.subscribe(observer);
 java.lang.Object
     io.reactivex.Observable&lt;T>
 
-/** Observable 的内部子类，这些子类应该使用 Observable 的静态方法创建
- *   ├─ ObservableCreate -- Observable.create(ObservableOnSubscribe&lt;T>)
- *   ├─ ObservableFromUnsafeSource -- Observable.unsafeCreate(ObservableSource&lt;T>)
- *   ├─ ObservableEmpty -- Observable.empty()
- *   ├─ ObservableNever -- Observable.never()
- *   ├─ ObservableError -- Observable.error(Callable&lt;? extends Throwable>) / Observable.error(Throwable)
- *   ├─ ObservableFromUnsafeSource -- Observable.wrap(ObservableSource&lt;T>)
- *   ├─ ObservableJust -- Observable.just(...)
- *   ├─ ObservableAmb -- Observable.amb(...) / Observable.ambArray(...)
- *   ├─ ObservableDefer -- Observable.defer(Callable&lt;? extends ObservableSource&lt;? extends T>>)
- *   ├─ ObservableCombineLatest -- Observable.combineLatest(...) / Observable.combineLatestDelayError(...)
- *   ├─ ObservableConcatMap -- Observable.concat...(...)
- *   ├─ ObservableFlatMap -- Observable.merge(...) / mergeArray(...) / mergeDelayError(...)
- *   ├─ ObservableZip -- Observable.zip(...) / zipArray(...) / zipIterable(...)
- *   ├─ ObservableFromArray -- Observable.fromArray(T...) /  Observable.just(T, T...)
- *   ├─ ObservableFromIterable -- Obserable.fromIterable(Iterable&lt;? extends T>
- *   ├─ ObservableFromPublisher -- Obserable.FromPublisher(Publisher&lt;? extends T>)
- *   ├─ ObservableFromCallable -- Obserable.fromCallable(Callable&lt;? extends T)
- *   ├─ ObservableFromFuture -- Observable.fromFuture(...)
- *   ├─ ObservableTimer -- Observable.timer(...)
- *   ├─ ObservableInterval -- Observable.interval(...)
- *   ├─ ObservableIntervalRange -- Observable.intervalRange(...)
- *   ├─ ObservableSwitchMap -- Observable.switchOnNext(...) / Observable.switchOnNextDelayError(...)
- *   ├─ ObservableUsing -- Observable.using(...)
- *   ├─ ObservableGenerate -- Observable.generate(...)
- *   | ====== 实例操作符 =========================================
- *   ├─ ObservableSubscribeOn -- subscribeOn(Scheduler)
- *   ├─
- *   ├─
- *   ├─
- *   ├─
- *   ├─
- *   ├─
- *   ├─
- *   ├─
- *   ├─
- *   ├─
- *   ├─
- *   ├─
- *   ├─
- *   └─
- */
+/** Observable 的操作符生成了不同的内部子类，这些子类包装了原始数据 */
+
 public abstract class Observable&lt;T> implements ObservableSource&lt;T> {
     /** 有一个抽象方法 */
     protected abstract void subscribeActual(Observer&lt;? super T> observer);
@@ -2372,6 +2332,7 @@ public interface ObservableSource&lt;T> {
 </pre>
                             <p><a href="docs/rxjava-2.2.x/io/reactivex/Observable.html" target="_blank">Observable</a> -- 被观察者，是可被观察的对象。</p>
                             <p>Observable 的静态方法多数是创建了不同的子类，重点关注子类的 <code>subscribeActual(Observer&lt;? super T>)</code> 方法。</p>
+                            <p>Observable 的操作符生成了不同的内部子类，这些子类包装了原始数据，改变了原始数据的运行方式。</p>
                             <ol>
                                  <li><p><code>static int 	bufferSize()</code> -- 获取缓冲值大小（在使用 Flowable 的时候需要）</p>
                                     <pre class="brush: java;">
@@ -2499,17 +2460,13 @@ public static void main(String[] args) {
     thread.start();
 }
 
-// 如果要看到 timer 运行结果，可以延迟程序的退出时间
+// 如果要看到 timer 运行结果，可以延迟程序的退出时间；或者使用阻塞订阅： observable.blockSubscribe(observer)
 Observable&lt;Long> observable = Observable.timer(100, TimeUnit.MILLISECONDS);
 Observer observer = ...
 observable.subscribe(observer);
 
-// 程序先不退出
-try {
-    Thread.sleep(1000);
-} catch (InterruptedException e) {
-    e.printStackTrace();
-}
+// 程序不退出
+while(true);
 </pre>
                                 </li>
 
@@ -3112,85 +3069,164 @@ connectableObservable.connect(); // 调用 connect() 才会发送数据
                                 </li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	publish(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector)</code> -- 同上，转换</p></li>
 
-                                <li class="group"><p><code>Completable 	ignoreElements()</code> -- 丢弃元（ subscribe() 方法还是会调用，但是 onNext() 为空方法），接收完成/错误消息</p></li>
+                                <li class="group"><p><code>Completable 	ignoreElements()</code> -- 丢弃元素（ subscribe() 方法还是会调用，但是 onNext() 为空方法），接收完成/错误消息</p></li>
 
-                                <li class="group"><p><code>TestObserver&lt;T> 	test()</code> -- </p></li>
-                                <li><p><code>TestObserver&lt;T> 	test(boolean dispose)</code> -- </p></li>
+                                <li class="group"><p><code>Single&lt;T> 	first(T defaultItem)</code> -- 获取第一个元素的 Observable，如果为空返回默认值</p></li>
+                                <li><p><code>Maybe&lt;T> 	firstElement()</code> -- 获取第一个元素的 Observable</p></li>
+                                <li><p><code>Single&lt;T> 	firstOrError()</code> -- 获取第一个元素的 Observable</p></li>
 
+                                <li class="group"><p><code>Maybe&lt;T> 	elementAt(long index)</code> -- 获取指定索引的元素的 Observable</p></li>
+                                <li><p><code>Single&lt;T> 	elementAt(long index, T defaultItem)</code> -- 获取指定索引的元素的 Observable</p></li>
+                                <li><p><code>Single&lt;T> 	elementAtOrError(long index)</code> -- 获取指定索引的元素的 Observable</p></li>
 
-                                <li class="group"><p><code>T 	blockingFirst()</code> -- </p></li>
-                                <li><p><code>T 	blockingFirst(T defaultItem)</code> -- </p></li>
-                                <li><p><code>void 	blockingForEach(Consumer&lt;? super T> onNext)</code> -- </p></li>
-                                <li><p><code>Iterable&lt;T> 	blockingIterable()</code> -- </p></li>
-                                <li><p><code>Iterable&lt;T> 	blockingIterable(int bufferSize)</code> -- </p></li>
-                                <li><p><code>T 	blockingLast()</code> -- </p></li>
-                                <li><p><code>T 	blockingLast(T defaultItem)</code> -- </p></li>
+                                <li class="group"><p><code>Single&lt;T> 	last(T defaultItem)</code> -- 获取最后一个元素的 Observable</p></li>
+                                <li><p><code>Maybe&lt;T> 	lastElement()</code> -- 获取最后一个元素的 Observable</p></li>
+                                <li><p><code>Single&lt;T> 	lastOrError()</code> -- 获取最后一个元素的 Observable</p></li>
+
+                                <li class="group"><p><code>Disposable 	forEach(Consumer&lt;? super T> onNext)</code> -- 迭代所有元素</p></li>
+                                <li><p><code>Disposable 	forEachWhile(Predicate&lt;? super T> onNext)</code> -- 迭代到返回 false 为止</p></li>
+                                <li><p><code>Disposable 	forEachWhile(Predicate&lt;? super T> onNext, Consumer&lt;? super Throwable> onError)</code> -- 同上，处理错误</p></li>
+                                <li><p><code>Disposable 	forEachWhile(Predicate&lt;? super T> n, Consumer&lt;? super Throwable> e, Action c)</code> -- 同上，错误和完成</p></li>
+
+                                <li class="group"><p><code>void 	blockingForEach(Consumer&lt;? super T> onNext)</code> -- 阻塞直到 Observable 完成</p></li>
+                                <li><p><code>T 	blockingFirst()</code> -- 阻塞直到 Observable 发射了一个数据，然后返回第一项数据</p></li>
+                                <li><p><code>T 	blockingFirst(T defaultItem)</code> -- 同上，如果在未获取到就发送了完成消息，那么会接收到默认值</p></li>
+                                <li><p><code>T 	blockingLast()</code> -- 阻塞直到 Observable 终止，然后返回最后一项数据</p></li>
+                                <li><p><code>T 	blockingLast(T defaultItem)</code> -- 同上，如果在未获取到就发送了完成消息，那么会接收到默认值</p></li>
+                                <li><p><code>T 	blockingSingle()</code> -- 阻塞直到 Observable 发射了一个数据，只能发送一个数据</p></li>
+                                <li><p><code>T 	blockingSingle(T defaultItem)</code> -- 同上，如果在未获取到就发送了完成消息，那么会接收到默认值</p></li>
+                                <li><p><code>Iterable&lt;T> 	blockingIterable()</code> -- 返回包含所有数据的迭代器，<code>onComplete()</code> 前阻塞</p></li>
+                                <li><p><code>Iterable&lt;T> 	blockingIterable(int bufferSize)</code> -- 返回包含所有数据的迭代器</p></li>
+                                <li><p><code>Iterable&lt;T> 	blockingNext()</code> -- </p></li>
                                 <li><p><code>Iterable&lt;T> 	blockingLatest()</code> -- </p></li>
                                 <li><p><code>Iterable&lt;T> 	blockingMostRecent(T initialValue)</code> -- </p></li>
-                                <li><p><code>Iterable&lt;T> 	blockingNext()</code> -- </p></li>
-                                <li><p><code>T 	blockingSingle()</code> -- </p></li>
-                                <li><p><code>T 	blockingSingle(T defaultItem)</code> -- </p></li>
-                                <li><p><code>void 	blockingSubscribe()</code> -- </p></li>
-                                <li><p><code>void 	blockingSubscribe(Consumer&lt;? super T> onNext)</code> -- </p></li>
-                                <li><p><code>void 	blockingSubscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError)</code> -- </p></li>
-                                <li><p><code>void 	blockingSubscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError, Action onComplete)</code> -- </p></li>
-                                <li><p><code>void 	blockingSubscribe(Observer&lt;? super T> observer)</code> -- </p></li>
-
-                                <li class="group"><p><code>&lt;B> Observable&lt;List&lt;T>> 	buffer(Callable&lt;? extends ObservableSource&lt;B>> boundarySupplier)</code> -- </p></li>
-                                <li><p><code>&lt;B,U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(Callable&lt;? extends ObservableSource&lt;B>> boundarySupplier, Callable&lt;U> bufferSupplier)</code> -- </p></li>
-                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(int count)</code> -- </p></li>
-                                <li><p><code>&lt;U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(int count, Callable&lt;U> bufferSupplier)</code> -- </p></li>
-                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(int count, int skip)</code> -- </p></li>
-                                <li><p><code>&lt;U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(int count, int skip, Callable&lt;U> bufferSupplier)</code> -- </p></li>
-                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(long timespan, long timeskip, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(long timespan, long timeskip, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>&lt;U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(long timespan, long timeskip, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, Callable&lt;U> bufferSupplier)</code> -- </p></li>
-                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(long timespan, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(long timespan, TimeUnit unit, int count)</code> -- </p></li>
-                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, int count)</code> -- </p></li>
-                                <li><p><code>&lt;U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, int count, Callable&lt;U> bufferSupplier, boolean restartTimerOnMaxSize)</code> -- </p></li>
-                                <li><p><code>&lt;TOpening,TClosing> Observable&lt;List&lt;T>> 	buffer(ObservableSource&lt;? extends TOpening> openingIndicator, Function&lt;? super TOpening,? extends ObservableSource&lt;? extends TClosing>> closingIndicator)</code> -- </p></li>
-                                <li><p><code>&lt;TOpening,TClosing,U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(ObservableSource&lt;? extends TOpening> openingIndicator, Function&lt;? super TOpening,? extends ObservableSource&lt;? extends TClosing>> closingIndicator, Callable&lt;U> bufferSupplier)</code> -- </p></li>
-                                <li><p><code>&lt;B> Observable&lt;List&lt;T>> 	buffer(ObservableSource&lt;B> boundary)</code> -- </p></li>
-                                <li><p><code>&lt;B,U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(ObservableSource&lt;B> boundary, Callable&lt;U> bufferSupplier)</code> -- </p></li>
-                                <li><p><code>&lt;B> Observable&lt;List&lt;T>> 	buffer(ObservableSource&lt;B> boundary, int initialCapacity)</code> -- </p></li>
-
-                                <li class="group"><p><code>&lt;R> Observable&lt;R> 	concatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int prefetch)</code> -- </p></li>
-                                <li><p><code>Completable 	concatMapCompletable(Function&lt;? super T,? extends CompletableSource> mapper)</code> -- </p></li>
-                                <li><p><code>Completable 	concatMapCompletable(Function&lt;? super T,? extends CompletableSource> mapper, int capacityHint)</code> -- </p></li>
-                                <li><p><code>Completable 	concatMapCompletableDelayError(Function&lt;? super T,? extends CompletableSource> mapper)</code> -- </p></li>
-                                <li><p><code>Completable 	concatMapCompletableDelayError(Function&lt;? super T,? extends CompletableSource> mapper, boolean tillTheEnd)</code> -- </p></li>
-                                <li><p><code>Completable 	concatMapCompletableDelayError(Function&lt;? super T,? extends CompletableSource> mapper, boolean tillTheEnd, int prefetch)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapDelayError(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapDelayError(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int prefetch, boolean tillTheEnd)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapEager(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapEager(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int maxConcurrency, int prefetch)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapEagerDelayError(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, boolean tillTheEnd)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapEagerDelayError(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int maxConcurrency, int prefetch, boolean tillTheEnd)</code> -- </p></li>
-                                <li><p><code>&lt;U> Observable&lt;U> 	concatMapIterable(Function&lt;? super T,? extends Iterable&lt;? extends U>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;U> Observable&lt;U> 	concatMapIterable(Function&lt;? super T,? extends Iterable&lt;? extends U>> mapper, int prefetch)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapMaybe(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapMaybe(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper, int prefetch)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapMaybeDelayError(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapMaybeDelayError(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper, boolean tillTheEnd)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapMaybeDelayError(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper, boolean tillTheEnd, int prefetch)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingle(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingle(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper, int prefetch)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingleDelayError(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingleDelayError(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper, boolean tillTheEnd)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingleDelayError(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper, boolean tillTheEnd, int prefetch)</code> -- </p></li>
-
-                                <li class="group"><p><code>Observable&lt;T> 	concatWith(CompletableSource other)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	concatWith(MaybeSource&lt;? extends T> other)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	concatWith(ObservableSource&lt;? extends T> other)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	concatWith(SingleSource&lt;? extends T> other)</code> -- </p></li>
 
 
-                                <li class="group"><p><code>&lt;U> Observable&lt;T> 	debounce(Function&lt;? super T,? extends ObservableSource&lt;U>> debounceSelector)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	debounce(long timeout, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	debounce(long timeout, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
+                                <li class="group"><p><code>void 	blockingSubscribe()</code> -- 阻塞订阅(比如在 Java 命令行程序中，会等待守护线程)，直到完成</p>
+                                    <pre class="brush: java;">
+// 在 Java 命令行程序中，Observer 可能不能收到所有的数据，因为守护线程发送数据时，程序可能已经退出
+Observable.create(e -> {
+    e.onNext("A");
+    e.onNext("B");
+    e.onComplete();
+}).subscribeOn(Schedulers.computation()).subscribe(observer);
+
+// 如果使用阻塞订阅，那么会一直等到 Observable 调用了 onComplete()，哪怕 Observable 运行在守护线程
+Observable.create(e -> {
+    e.onNext("A");
+    e.onNext("B");
+    e.onComplete();
+}).subscribeOn(Schedulers.computation()).blockingSubscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>void 	blockingSubscribe(Observer&lt;? super T> observer)</code> -- 指定 Observer 阻塞订阅</p></li>
+                                <li><p><code>void 	blockingSubscribe(Consumer&lt;? super T> onNext)</code> -- 阻塞订阅，只订阅 onNext</p></li>
+                                <li><p><code>void 	blockingSubscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError)</code> -- 阻塞订阅，订阅 onNext / onError</p></li>
+                                <li><p><code>void 	blockingSubscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError, Action onComplete)</code> -- 阻塞订阅，订阅 onNext / onError / onCompelte</p></li>
+
+                                <li class="group"><p><code>Observable&lt;List&lt;T>> 	buffer(int count)</code> -- 将数据缓存到多个指定大小的 List 中</p>
+                                    <pre class="brush: java;">
+Observable.just("A", "B", "C", "D", "E").buffer(2).subscribe(list -> {
+    Log.d(list); // [A, B], [C, D], [E] 数据源被组成了三个 List 依次接收
+});
+                                    </pre>
+                                </li>
+                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(int count, int skip)</code> -- 参加实例</p>
+                                    <pre class="brush: java;">
+Observable.just("A", "B", "C", "D", "E").buffer(3,2).subscribe(list -> {
+    Log.d(list); // [A, B, C], [C, D, E], [E]
+});
+
+Observable.just("A", "B", "C", "D", "E").buffer(2,3).subscribe(list -> {
+    Log.d(list); // [A, B], [D, E]
+});
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(int c, Callable&lt;U> s)</code> -- 返回一个新的 Observable</p></li>
+                                <li><p><code>&lt;U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(int count, int skip, Callable&lt;U> supplier)</code> -- 同上</p></li>
+                                <li><p><code>&lt;B> Observable&lt;List&lt;T>> 	buffer(Callable&lt;? extends ObservableSource&lt;B>> boundarySupplier)</code> -- 同上</p></li>
+                                <li><p><code>&lt;B,U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(Callable&lt;? extends ObservableSource&lt;B>> boundarySupplier, Callable&lt;U> bufferSupplier)</code> -- 同上</p></li>
+                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(long timespan, TimeUnit unit)</code> -- 指定的时间间隔为单位缓存数据，除了最后一组数据，其他默认发生在子线程</p>
+                                    <pre class="brush: java;">
+Observable.create(e -> {
+    e.onNext("A");
+    Thread.sleep(40);
+    e.onNext("B");
+    Thread.sleep(60);
+    e.onNext("C");
+    Thread.sleep(20);
+    e.onNext("D");
+    Thread.sleep(20);
+    e.onComplete();
+}).buffer(50, TimeUnit.MILLISECONDS).subscribe(list -> {
+    Log.d(list); // [A, B], [], [C, D]
+});
+                                    </pre>
+                                </li>
+                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(long timespan, TimeUnit unit, int count)</code> -- 同上，最多 count 个元素为一组</p></li>
+                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上，指定调度线程</p></li>
+                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, int count)</code> -- 同上</p></li>
+                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(long timespan, long timeskip, TimeUnit unit)</code> -- 指定分组事件间隔</p></li>
+                                <li><p><code>Observable&lt;List&lt;T>> 	buffer(long timespan, long timeskip, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 指定调度器</p></li>
+                                <li><p><code>&lt;U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(long timespan, long timeskip, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, Callable&lt;U> bufferSupplier)</code> -- 同上，返回新的类型</p></li>
+                                <li><p><code>&lt;U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, int count, Callable&lt;U> bufferSupplier, boolean restartTimerOnMaxSize)</code> -- 到达指定的数目重新计时</p></li>
+                                <li><p><code>&lt;TOpening,TClosing> Observable&lt;List&lt;T>> 	buffer(ObservableSource&lt;? extends TOpening> openingIndicator, Function&lt;? super TOpening,? extends ObservableSource&lt;? extends TClosing>> closingIndicator)</code> -- 当 open 发送一条数据时，新建一个 List 收集源数据，当 close 发送一条数据时，将收集到的源数据发送出去（就是说何时开始收集数据，由 open 这个 Observable 说了算；何时开始停止收集数据，由 close 这个 Observable 说了算）</p></li>
+                                <li><p><code>&lt;TOpening,TClosing,U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(ObservableSource&lt;? extends TOpening> openingIndicator, Function&lt;? super TOpening,? extends ObservableSource&lt;? extends TClosing>> closingIndicator, Callable&lt;U> bufferSupplier)</code> -- 参考前面</p></li>
+                                <li><p><code>&lt;B> Observable&lt;List&lt;T>> 	buffer(ObservableSource&lt;B> boundary)</code> -- 由 boundary 创建</p></li>
+                                <li><p><code>&lt;B,U extends Collection&lt;? super T>> Observable&lt;U> 	buffer(ObservableSource&lt;B> b, Callable&lt;U> s)</code> -- 同上</p></li>
+                                <li><p><code>&lt;B> Observable&lt;List&lt;T>> 	buffer(ObservableSource&lt;B> boundary, int initialCapacity)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>&lt;R> Observable&lt;R> 	concatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- 转换，但是也可以内部连接</p>
+                                    <pre class="brush: java;">
+// 原来 3 个元素的 String 数据，变成 6 个数据的 Object 数据
+Observable.just("RED", "GREEN", "BLUE").concatMap(s -> {
+    return Observable.just(s, s.length());
+}).subscribe(o -> {
+    Log.d(o);
+});
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int prefetch)</code> -- 同上，指定缓存</p></li>
+                                <li><p><code>&lt;U> Observable&lt;U> 	concatMapIterable(Function&lt;? super T,? extends Iterable&lt;? extends U>> mapper)</code> -- 每次将 Iterable 的数据全部单条发送</p>
+                                    <pre class="brush: java;">
+Observable.just("RED", "GREEN", "BLUE").concatMapIterable(s -> {
+    List list = new ArrayList<>();
+    list.add(s);
+    list.add(s.length());
+    return list;
+}).subscribe(o -> {
+    Log.d(o);
+});
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;U> Observable&lt;U> 	concatMapIterable(Function&lt;? super T,? extends Iterable&lt;? extends U>> mapper, int prefetch)</code> -- 同上，指定缓存</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapMaybe(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper)</code> -- 同上</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapMaybe(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper, int prefetch)</code> -- 同上</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapEager(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- 同上</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapEager(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int maxConcurrency, int prefetch)</code> -- 同上</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingle(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- 同上</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingle(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper, int prefetch)</code> -- 同上</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapDelayError(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- 错误延迟</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapDelayError(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int prefetch, boolean tillTheEnd)</code> -- 同上，前面的方法 tillTheEnd 为 true</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapEagerDelayError(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, boolean tillTheEnd)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapEagerDelayError(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int maxConcurrency, int prefetch, boolean tillTheEnd)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapMaybeDelayError(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapMaybeDelayError(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper, boolean tillTheEnd)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapMaybeDelayError(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper, boolean tillTheEnd, int prefetch)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingleDelayError(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingleDelayError(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper, boolean tillTheEnd)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	concatMapSingleDelayError(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper, boolean tillTheEnd, int prefetch)</code> -- 参照前面</p></li>
+                                <li><p><code>Completable 	concatMapCompletable(Function&lt;? super T,? extends CompletableSource> mapper)</code> -- 同上，类型不同</p></li>
+                                <li><p><code>Completable 	concatMapCompletable(Function&lt;? super T,? extends CompletableSource> mapper, int capacityHint)</code> -- 同上，指定缓存</p></li>
+                                <li><p><code>Completable 	concatMapCompletableDelayError(Function&lt;? super T,? extends CompletableSource> mapper)</code> -- 延迟错误</p></li>
+                                <li><p><code>Completable 	concatMapCompletableDelayError(Function&lt;? super T,? extends CompletableSource> mapper, boolean tillTheEnd)</code> -- 参照前面</p></li>
+                                <li><p><code>Completable 	concatMapCompletableDelayError(Function&lt;? super T,? extends CompletableSource> mapper, boolean tillTheEnd, int prefetch)</code> -- 参照前面</p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	concatWith(ObservableSource&lt;? extends T> other)</code> -- 相当于 <code>Observable.concat(this, other)</code></p></li>
+                                <li><p><code>Observable&lt;T> 	concatWith(CompletableSource other)</code> -- 同上，类型不同</p></li>
+                                <li><p><code>Observable&lt;T> 	concatWith(MaybeSource&lt;? extends T> other)</code> -- 同上，类型不同</p></li>
+                                <li><p><code>Observable&lt;T> 	concatWith(SingleSource&lt;? extends T> other)</code> -- 同上，类型不同</p></li>
+
 
                                 <li class="group"><p><code>&lt;U> Observable&lt;T> 	delay(Function&lt;? super T,? extends ObservableSource&lt;U>> itemDelay)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	delay(long delay, TimeUnit unit)</code> -- </p></li>
@@ -3202,14 +3238,91 @@ connectableObservable.connect(); // 调用 connect() 才会发送数据
                                 <li><p><code>Observable&lt;T> 	delaySubscription(long delay, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
                                 <li><p><code>&lt;U> Observable&lt;T> 	delaySubscription(ObservableSource&lt;U> other)</code> -- </p></li>
 
-                                <li class="group"><p><code>Observable&lt;T> 	distinct()</code> -- </p></li>
-                                <li><p><code>&lt;K> Observable&lt;T> 	distinct(Function&lt;? super T,K> keySelector)</code> -- </p></li>
-                                <li><p><code>&lt;K> Observable&lt;T> 	distinct(Function&lt;? super T,K> keySelector, Callable&lt;? extends Collection&lt;? super K>> collectionSupplier)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	distinctUntilChanged()</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	distinctUntilChanged(BiPredicate&lt;? super T,? super T> comparer)</code> -- </p></li>
-                                <li><p><code>&lt;K> Observable&lt;T> 	distinctUntilChanged(Function&lt;? super T,K> keySelector)</code> -- </p></li>
+                                <li class="group"><p><code>Observable&lt;T> 	debounce(long timeout, TimeUnit unit)</code> -- 在指定时间间隔后发送。如果在指定的间隔内有新的元素，那么丢弃旧元素，并重新计时</p>
+                                    <pre class="brush: java;">
+Observable.create(e -> {
+    e.onNext("A");   // A 被丢弃，因为还没发送 B 就来了
+    e.onNext("B");
+    Thread.sleep(15);
+    e.onNext("C");   // C 被丢弃，因为还没发送 D 就来了
+    Thread.sleep(5);
+    e.onNext("D");
+    e.onComplete();
+}).debounce(10, TimeUnit.MILLISECONDS).subscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>Observable&lt;T> 	debounce(long timeout, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上，指定调度线程</p></li>
+                                <li><p><code>&lt;U> Observable&lt;T> 	debounce(Function&lt;? super T,? extends ObservableSource&lt;U>> debounceSelector)</code> -- 如果原始 Observable 在这个新生成的 Observable 完成之前发射了另一个数据，debounce 会抑制这个数据项</p></li>
 
-                                <li class="group"><p><code>Observable&lt;T> 	doAfterNext(Consumer&lt;? super T> onAfterNext)</code> -- </p></li>
+                                <li class="group"><p><code>Observable&lt;T> 	distinct()</code> -- 过滤重复项(用的 HashSet, hashCode() 和 euqals())</p>
+                                    <pre class="brush: java;">
+Observable.create(e -> {
+    e.onNext(new D("A"));
+    e.onNext(new D("B"));
+    e.onNext(new D("a")); // 重复项
+    e.onComplete();
+}).distinct().blockingSubscribe(observer);
+
+class D {
+    private String str;
+
+    public D(String str) {
+        this.str = str;
+    }
+
+    @Override
+    public int hashCode() {
+        return str.toUpperCase().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
+        }
+        if(obj instanceof D) {
+            D other = (D) obj;
+            return str.equalsIgnoreCase(other.str);
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return str;
+    }
+}
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;K> Observable&lt;T> 	distinct(Function&lt;? super T,K> keySelector)</code> -- 过滤处理后的重复项</p></li>
+                                <li><p><code>&lt;K> Observable&lt;T> 	distinct(Function&lt;? super T,K> keySelector, Callable&lt;? extends Collection&lt;? super K>> collectionSupplier)</code> -- 使用 Callable 返回 Collection 的 add(E) 方法返回值作为唯一性的判断</p>
+                                    <pre class="brush: java;">
+class MyList extends ArrayList {
+
+    @Override
+    public boolean add(Object o) {
+        return false;
+    }
+}
+
+// 现在所有数据都被过滤了，因为 MyList 的 add(E) 方法总是返回 false
+Observable.just("A", "B", "C").distinct(s -> s, () -> new MyList()).subscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>Observable&lt;T> 	distinctUntilChanged()</code> -- 过滤连续的重复项</p></li>
+                                <li><p><code>Observable&lt;T> 	distinctUntilChanged(BiPredicate&lt;? super T,? super T> comparer)</code> -- 自定义比较函数过滤连续的重复项</p>
+                                    <pre class="brush: java;">
+Observable.just("A", "a", "B", "A").distinctUntilChanged((s, s2) -> s.equalsIgnoreCase(s2))
+    .subscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;K> Observable&lt;T> 	distinctUntilChanged(Function&lt;? super T,K> keySelector)</code> -- 过滤处理后的连续重复项</p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	doOnSubscribe(Consumer&lt;? super Disposable> onSubscribe)</code> -- 在 onSubscribe() 前回调，当前线程</p></li>
+                                <li><p><code>Observable&lt;T> 	doOnLifecycle(Consumer&lt;? super Disposable> onSubscribe, Action onDispose)</code> -- 在 onSubscribe() 前回调，和 di</p></li>
+                                <li><p><code>Observable&lt;T> 	doOnNext(Consumer&lt;? super T> onNext)</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	doAfterNext(Consumer&lt;? super T> onAfterNext)</code> -- </p></li>
+                                <li><p><code>Observable&lt;T> 	doOnTerminate(Action onTerminate)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	doAfterTerminate(Action onFinally)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	doFinally(Action onFinally)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	doOnComplete(Action onComplete)</code> -- </p></li>
@@ -3217,19 +3330,6 @@ connectableObservable.connect(); // 调用 connect() 才会发送数据
                                 <li><p><code>Observable&lt;T> 	doOnEach(Consumer&lt;? super Notification&lt;T>> onNotification)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	doOnEach(Observer&lt;? super T> observer)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	doOnError(Consumer&lt;? super Throwable> onError)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	doOnLifecycle(Consumer&lt;? super Disposable> onSubscribe, Action onDispose)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	doOnNext(Consumer&lt;? super T> onNext)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	doOnSubscribe(Consumer&lt;? super Disposable> onSubscribe)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	doOnTerminate(Action onTerminate)</code> -- </p></li>
-
-                                <li class="group"><p><code>Maybe&lt;T> 	elementAt(long index)</code> -- </p></li>
-                                <li><p><code>Single&lt;T> 	elementAt(long index, T defaultItem)</code> -- </p></li>
-                                <li><p><code>Single&lt;T> 	elementAtOrError(long index)</code> -- </p></li>
-
-
-                                <li class="group"><p><code>Single&lt;T> 	first(T defaultItem)</code> -- </p></li>
-                                <li><p><code>Maybe&lt;T> 	firstElement()</code> -- </p></li>
-                                <li><p><code>Single&lt;T> 	firstOrError()</code> -- </p></li>
 
                                 <li class="group"><p><code>&lt;R> Observable&lt;R> 	flatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	flatMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, boolean delayErrors)</code> -- </p></li>
@@ -3252,11 +3352,6 @@ connectableObservable.connect(); // 调用 connect() 才会发送数据
                                 <li><p><code>&lt;R> Observable&lt;R> 	flatMapSingle(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	flatMapSingle(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper, boolean delayErrors)</code> -- </p></li>
 
-                                <li class="group"><p><code>Disposable 	forEach(Consumer&lt;? super T> onNext)</code> -- </p></li>
-                                <li><p><code>Disposable 	forEachWhile(Predicate&lt;? super T> onNext)</code> -- </p></li>
-                                <li><p><code>Disposable 	forEachWhile(Predicate&lt;? super T> onNext, Consumer&lt;? super Throwable> onError)</code> -- </p></li>
-                                <li><p><code>Disposable 	forEachWhile(Predicate&lt;? super T> onNext, Consumer&lt;? super Throwable> onError, Action onComplete)</code> -- </p></li>
-
                                 <li class="group"><p><code>&lt;K> Observable&lt;GroupedObservable&lt;K,T>> 	groupBy(Function&lt;? super T,? extends K> keySelector)</code> -- </p></li>
                                 <li><p><code>&lt;K> Observable&lt;GroupedObservable&lt;K,T>> 	groupBy(Function&lt;? super T,? extends K> keySelector, boolean delayError)</code> -- </p></li>
                                 <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector)</code> -- </p></li>
@@ -3265,11 +3360,6 @@ connectableObservable.connect(); // 调用 connect() 才会发送数据
 
                                 <li class="group"><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	join(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super TRight,? extends R> resultSelector)</code> -- </p></li>
                                 <li><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	groupJoin(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super Observable&lt;TRight>,? extends R> resultSelector)</code> -- </p></li>
-
-                                <li class="group"><p><code>Single&lt;T> 	last(T defaultItem)</code> -- </p></li>
-                                <li><p><code>Maybe&lt;T> 	lastElement()</code> -- </p></li>
-                                <li><p><code>Single&lt;T> 	lastOrError()</code> -- </p></li>
-
 
                                 <li class="group"><p><code>Observable&lt;T> 	mergeWith(CompletableSource other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	mergeWith(MaybeSource&lt;? extends T> other)</code> -- </p></li>
@@ -3330,7 +3420,6 @@ connectableObservable.connect(); // 调用 connect() 才会发送数据
                                 <li><p><code>&lt;R> Observable&lt;R> 	scan(R initialValue, BiFunction&lt;R,? super T,R> accumulator)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	scanWith(Callable&lt;R> seedSupplier, BiFunction&lt;R,? super T,R> accumulator)</code> -- </p></li>
 
-
                                 <li class="group"><p><code>Single&lt;T> 	single(T defaultItem)</code> -- </p></li>
                                 <li><p><code>Maybe&lt;T> 	singleElement()</code> -- </p></li>
                                 <li><p><code>Single&lt;T> 	singleOrError()</code> -- </p></li>
@@ -3354,7 +3443,6 @@ connectableObservable.connect(); // 调用 connect() 才会发送数据
                                 <li><p><code>Observable&lt;T> 	startWith(ObservableSource&lt;? extends T> other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	startWith(T item)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	startWithArray(T... items)</code> -- </p></li>
-
 
                                 <li class="group"><p><code>Observable&lt;T> 	switchIfEmpty(ObservableSource&lt;? extends T> other)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	switchMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- </p></li>
@@ -3432,8 +3520,6 @@ connectableObservable.connect(); // 调用 connect() 才会发送数据
                                 <li><p><code>&lt;U,V> Observable&lt;T> 	timeout(ObservableSource&lt;U> firstTimeoutIndicator, Function&lt;? super T,? extends ObservableSource&lt;V>> itemTimeoutIndicator)</code> -- </p></li>
                                 <li><p><code>&lt;U,V> Observable&lt;T> 	timeout(ObservableSource&lt;U> firstTimeoutIndicator, Function&lt;? super T,? extends ObservableSource&lt;V>> itemTimeoutIndicator, ObservableSource&lt;? extends T> other)</code> -- </p></li>
 
-
-
                                 <li class="group"><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(Callable&lt;? extends ObservableSource&lt;B>> boundary)</code> -- </p></li>
                                 <li><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(Callable&lt;? extends ObservableSource&lt;B>> boundary, int bufferSize)</code> -- </p></li>
                                 <li><p><code>Observable&lt;Observable&lt;T>> 	window(long count)</code> -- </p></li>
@@ -3465,6 +3551,9 @@ connectableObservable.connect(); // 调用 connect() 才会发送数据
                                 <li><p><code>&lt;U,R> Observable&lt;R> 	zipWith(ObservableSource&lt;? extends U> other, BiFunction&lt;? super T,? super U,? extends R> zipper)</code> -- </p></li>
                                 <li><p><code>&lt;U,R> Observable&lt;R> 	zipWith(ObservableSource&lt;? extends U> other, BiFunction&lt;? super T,? super U,? extends R> zipper, boolean delayError)</code> -- </p></li>
                                 <li><p><code>&lt;U,R> Observable&lt;R> 	zipWith(ObservableSource&lt;? extends U> other, BiFunction&lt;? super T,? super U,? extends R> zipper, boolean delayError, int bufferSize)</code> -- </p></li>
+
+                                <li class="group"><p><code>TestObserver&lt;T> 	test()</code> -- </p></li>
+                                <li><p><code>TestObserver&lt;T> 	test(boolean dispose)</code> -- </p></li>
                             </ol>
                         </div>
                         <div class="split-item">
