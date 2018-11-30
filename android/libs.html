@@ -2891,6 +2891,14 @@ Observable.just(28, 30, 32, 33).all(i -> i > 20 && i < 35).subscribe(b -> Log.d(
                                 </li>
                                 <li><p><code>&lt;U> Single&lt;U> 	collectInto(U initialValue, BiConsumer&lt;? super U,? super T> collector)</code> -- 同上</p></li>
 
+                                <li class="group"><p><code>Observable&lt;T> 	sorted()</code> -- 排序元素</p></li>
+                                <li><p><code>Observable&lt;T> 	sorted(Comparator&lt;? super T> sortFunction)</code> -- 排序，指定比较器</p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	startWith(T item)</code> -- 将 item 添加到源数据前</p></li>
+                                <li><p><code>Observable&lt;T> 	startWith(ObservableSource&lt;? extends T> other)</code> -- 将 other 的所有元素添加到源数据前</p></li>
+                                <li><p><code>Observable&lt;T> 	startWith(Iterable&lt;? extends T> items)</code> -- 将 items 的所有元素添加到源数据前</p></li>
+                                <li><p><code>Observable&lt;T> 	startWithArray(T... items)</code> -- 将 items 的所有元素添加到源数据前</p></li>
+
                                 <li class="group"><p><code>Observable&lt;T> 	ambWith(ObservableSource&lt;? extends T> other)</code> -- 当前数据源和 other 谁先到达发射谁的元素，参照 <code>amb</code></p></li>
                                 <li><p><code>Observable&lt;T> 	filter(Predicate&lt;? super T> predicate)</code> -- 只发送符合条件的数据</p>
                                     <pre class="brush: java;">Observable.just("RED", "GREEN", "BLUE").filter(s -> s.length() > 3).subscribe(observer);</pre>
@@ -3101,6 +3109,57 @@ connectableObservable.connect(); // 调用 connect() 才会发送数据
                                 <li><p><code>Disposable 	forEachWhile(Predicate&lt;? super T> onNext)</code> -- 迭代到返回 false 为止</p></li>
                                 <li><p><code>Disposable 	forEachWhile(Predicate&lt;? super T> onNext, Consumer&lt;? super Throwable> onError)</code> -- 同上，处理错误</p></li>
                                 <li><p><code>Disposable 	forEachWhile(Predicate&lt;? super T> n, Consumer&lt;? super Throwable> e, Action c)</code> -- 同上，错误和完成</p></li>
+
+
+                                <li class="group"><p><code>Observable&lt;T> 	switchIfEmpty(ObservableSource&lt;? extends T> other)</code> -- 如果源数据为空，则替换</p>
+                                    <pre class="brush: java;">
+Observable.just("A", "B").switchMap(s -> {
+        Log.d(s);
+        return Observable.just(0, 1); // 每个元素被替换为两个元素
+    }).subscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	switchMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- 转换，替换</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	switchMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int bufferSize)</code> -- 同上，指定缓存大小</p></li>
+                                <li><p><code>Completable 	switchMapCompletable(Function&lt;? super T,? extends CompletableSource> mapper)</code> -- 同上，类型不同</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	switchMapMaybe(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper)</code> -- 同上</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	switchMapSingle(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- 同上</p></li>
+                                <li><p><code>Completable 	switchMapCompletableDelayError(Function&lt;? super T,? extends CompletableSource> mapper)</code> -- 同上，延迟错误</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	switchMapDelayError(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- 同上，延迟错误</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	switchMapDelayError(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int bufferSize)</code> -- 同上，延迟错误</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	switchMapSingleDelayError(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- 同上，延迟错误</p></li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	switchMapMaybeDelayError(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper)</code> -- 同上，延迟错误</p></li>
+
+
+                                <li class="group"><p><code>Observable&lt;T> 	take(long count)</code> -- 获取最多指定数量的数据</p>
+                                    <pre class="brush: java;">Observable.just("A", "B").take(1).subscribe(observer);</pre>
+                                </li>
+                                <li><p><code>Observable&lt;T> 	take(long time, TimeUnit unit)</code> -- 获取在指定时间内的数据</p></li>
+                                <li><p><code>Observable&lt;T> 	take(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同山，指定调度器</p></li>
+                                <li><p><code>Observable&lt;T> 	takeLast(int count)</code> -- 获取最后的指定数目的数据</p></li>
+                                <li><p><code>Observable&lt;T> 	takeLast(long count, long time, TimeUnit unit)</code> -- 指定最多的数目，并且在结束的指定时间内</p></li>
+                                <li><p><code>Observable&lt;T> 	takeLast(long count, long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上，指定调度器</p></li>
+                                <li><p><code>Observable&lt;T> 	takeLast(long count, long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean delayError, int bufferSize)</code> -- 同上，是否延迟错误</p></li>
+                                <li><p><code>Observable&lt;T> 	takeLast(long time, TimeUnit unit)</code> -- 逆向计时</p></li>
+                                <li><p><code>Observable&lt;T> 	takeLast(long time, TimeUnit unit, boolean delayError)</code> -- 同上，延迟错误</p></li>
+                                <li><p><code>Observable&lt;T> 	takeLast(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上</p></li>
+                                <li><p><code>Observable&lt;T> 	takeLast(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean delayError)</code> -- 同上</p></li>
+                                <li><p><code>Observable&lt;T> 	takeLast(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean delayError, int buffSize)</code> -- 同上</p></li>
+                                <li><p><code>&lt;U> Observable&lt;T> 	takeUntil(ObservableSource&lt;U> other)</code> -- 直到 other 完成</p></li>
+                                <li><p><code>Observable&lt;T> 	takeUntil(Predicate&lt;? super T> stopPredicate)</code> -- 直到符合指定条件</p></li>
+                                <li><p><code>Observable&lt;T> 	takeWhile(Predicate&lt;? super T> predicate)</code> -- 直到符合指定条件</p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	skip(long count)</code> -- 跳过指定数目的数据</p></li>
+                                <li><p><code>Observable&lt;T> 	skip(long time, TimeUnit unit)</code> -- 跳过指定时间发送的数据</p></li>
+                                <li><p><code>Observable&lt;T> 	skip(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上，指定调度器</p></li>
+                                <li><p><code>Observable&lt;T> 	skipLast(int count)</code> -- 跳过尾部的指定数量数据</p></li>
+                                <li><p><code>Observable&lt;T> 	skipLast(long time, TimeUnit unit)</code> -- 跳过结束时间的数据</p></li>
+                                <li><p><code>Observable&lt;T> 	skipLast(long time, TimeUnit unit, boolean delayError)</code> -- 同上，延迟错误</p></li>
+                                <li><p><code>Observable&lt;T> 	skipLast(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上</p></li>
+                                <li><p><code>Observable&lt;T> 	skipLast(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean delayError)</code> -- 同上</p></li>
+                                <li><p><code>Observable&lt;T> 	skipLast(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean delayError, int bufferSize)</code> -- 同上</p></li>
+                                <li><p><code>&lt;U> Observable&lt;T> 	skipUntil(ObservableSource&lt;U> other)</code> -- 一直跳过，直到 other 完成</p></li>
+                                <li><p><code>Observable&lt;T> 	skipWhile(Predicate&lt;? super T> predicate)</code> -- 一直跳过，直到 preicate 返回 false</p></li>
 
                                 <li class="group"><p><code>void 	blockingForEach(Consumer&lt;? super T> onNext)</code> -- 阻塞直到 Observable 完成</p></li>
                                 <li><p><code>T 	blockingFirst()</code> -- 阻塞直到 Observable 发射了一个数据，然后返回第一项数据</p></li>
@@ -3458,7 +3517,32 @@ Observable.just("RED", "GREEN", "BLUE").reduce(10000, (i, s) -> {
                                 <li><p><code>Observable&lt;T> 	retryUntil(BooleanSupplier stop)</code> -- 碰到错误时重复直到返回 true</p></li>
                                 <li><p><code>Observable&lt;T> 	retryWhen(Function&lt;? super Observable&lt;Throwable>,? extends ObservableSource&lt;?>> handler)</code> -- </p></li>
 
-                                <li class="group"><p><code>&lt;R> Observable&lt;R> 	replay(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector)</code> -- </p></li>
+                                <li class="group"><p><code>ConnectableObservable&lt;T> 	replay()</code> -- 返回的 ConnectableObservable 会缓存之前已经发射的数据，这样即使有订阅者在其发射数据开始之后进行订阅也能收到之前发射过的数据</p>
+                                    <pre class="brush: java;">
+// ConnectableObservable 调用 connect 操作符开始发射数据，后面的订阅者会丢失之前发射过的数据
+ConnectableObservable c = Observable.interval(1000, TimeUnit.MILLISECONDS).take(5).publish();
+// 如果使用了 replay() 操作符，那么后面的订阅者不会丢失数据
+// ConnectableObservable c = Observable.interval(1000, TimeUnit.MILLISECONDS).take(5).replay();
+c.subscribe(observer);
+c.connect();
+
+// 延迟加入另外一个订阅
+c.delaySubscription(2500, TimeUnit.MILLISECONDS).subscribe(s -> {
+    Log.d("relay", s);
+});
+
+while(true); // Java 命令行程序要保证程序不退出才能看到结果
+                                    </pre>
+                                </li>
+                                <li><p><code>ConnectableObservable&lt;T> 	replay(int bufferSize)</code> -- 同上，指定缓存的数量</p></li>
+                                <li><p><code>ConnectableObservable&lt;T> 	replay(int bufferSize, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上，指定调度程序</p></li>
+                                <li><p><code>ConnectableObservable&lt;T> 	replay(int bufferSize, long time, TimeUnit unit)</code> -- 数量和时间，以先到为准</p></li>
+                                <li><p><code>ConnectableObservable&lt;T> 	replay(int bufferSize, long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上</p></li>
+                                <li><p><code>ConnectableObservable&lt;T> 	replay(long time, TimeUnit unit)</code> -- 指定缓存的时间</p></li>
+                                <li><p><code>ConnectableObservable&lt;T> 	replay(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 指定缓存的时间和调度程序</p></li>
+                                <li><p><code>ConnectableObservable&lt;T> 	replay(<a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 指定调度程序</p></li>
+
+                                <li><p><code>&lt;R> Observable&lt;R> 	replay(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	replay(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector, int bufferSize)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	replay(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector, int bufferSize, long time, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	replay(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector, int bufferSize, long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
@@ -3467,14 +3551,6 @@ Observable.just("RED", "GREEN", "BLUE").reduce(10000, (i, s) -> {
                                 <li><p><code>&lt;R> Observable&lt;R> 	replay(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector, long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
                                 <li><p><code>&lt;R> Observable&lt;R> 	replay(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
 
-                                <li><p><code>ConnectableObservable&lt;T> 	replay()</code> -- </p></li>
-                                <li><p><code>ConnectableObservable&lt;T> 	replay(int bufferSize)</code> -- </p></li>
-                                <li><p><code>ConnectableObservable&lt;T> 	replay(int bufferSize, long time, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>ConnectableObservable&lt;T> 	replay(int bufferSize, long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>ConnectableObservable&lt;T> 	replay(int bufferSize, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>ConnectableObservable&lt;T> 	replay(long time, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>ConnectableObservable&lt;T> 	replay(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>ConnectableObservable&lt;T> 	replay(<a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
 
                                 <li class="group"><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit, boolean emitLast)</code> -- </p></li>
@@ -3490,27 +3566,6 @@ Observable.just("RED", "GREEN", "BLUE").reduce(10000, (i, s) -> {
                                 <li class="group"><p><code>Single&lt;T> 	single(T defaultItem)</code> -- </p></li>
                                 <li><p><code>Maybe&lt;T> 	singleElement()</code> -- </p></li>
                                 <li><p><code>Single&lt;T> 	singleOrError()</code> -- </p></li>
-
-
-                                <li class="group"><p><code>Observable&lt;T> 	sorted()</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	sorted(Comparator&lt;? super T> sortFunction)</code> -- </p></li>
-
-                                <li class="group"><p><code>Observable&lt;T> 	startWith(Iterable&lt;? extends T> items)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	startWith(ObservableSource&lt;? extends T> other)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	startWith(T item)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	startWithArray(T... items)</code> -- </p></li>
-
-                                <li class="group"><p><code>Observable&lt;T> 	switchIfEmpty(ObservableSource&lt;? extends T> other)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	switchMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	switchMap(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int bufferSize)</code> -- </p></li>
-                                <li><p><code>Completable 	switchMapCompletable(Function&lt;? super T,? extends CompletableSource> mapper)</code> -- </p></li>
-                                <li><p><code>Completable 	switchMapCompletableDelayError(Function&lt;? super T,? extends CompletableSource> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	switchMapDelayError(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	switchMapDelayError(Function&lt;? super T,? extends ObservableSource&lt;? extends R>> mapper, int bufferSize)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	switchMapMaybe(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	switchMapMaybeDelayError(Function&lt;? super T,? extends MaybeSource&lt;? extends R>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	switchMapSingle(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	switchMapSingleDelayError(Function&lt;? super T,? extends SingleSource&lt;? extends R>> mapper)</code> -- </p></li>
 
                                 <li class="group"><p><code>Observable&lt;Timed&lt;T>> 	timestamp()</code> -- </p></li>
                                 <li><p><code>Observable&lt;Timed&lt;T>> 	timestamp(<a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
@@ -3534,36 +3589,6 @@ Observable.just("RED", "GREEN", "BLUE").reduce(10000, (i, s) -> {
                                 <li><p><code>Single&lt;List&lt;T>> 	toSortedList(Comparator&lt;? super T> comparator)</code> -- </p></li>
                                 <li><p><code>Single&lt;List&lt;T>> 	toSortedList(Comparator&lt;? super T> comparator, int capacityHint)</code> -- </p></li>
                                 <li><p><code>Single&lt;List&lt;T>> 	toSortedList(int capacityHint)</code> -- </p></li>
-
-                                <li class="group"><p><code>Observable&lt;T> 	take(long count)</code> -- 获取最多指定数量的数据</p>
-                                    <pre class="brush: java;">Observable.just("A", "B").take(1).subscribe(observer);</pre>
-                                </li>
-                                <li><p><code>Observable&lt;T> 	take(long time, TimeUnit unit)</code> -- 获取在指定时间内的数据</p></li>
-                                <li><p><code>Observable&lt;T> 	take(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同山，指定调度器</p></li>
-                                <li><p><code>Observable&lt;T> 	takeLast(int count)</code> -- 获取最后的指定数目的数据</p></li>
-                                <li><p><code>Observable&lt;T> 	takeLast(long count, long time, TimeUnit unit)</code> -- 指定最多的数目，并且在结束的指定时间内</p></li>
-                                <li><p><code>Observable&lt;T> 	takeLast(long count, long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上，指定调度器</p></li>
-                                <li><p><code>Observable&lt;T> 	takeLast(long count, long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean delayError, int bufferSize)</code> -- 同上，是否延迟错误</p></li>
-                                <li><p><code>Observable&lt;T> 	takeLast(long time, TimeUnit unit)</code> -- 逆向计时</p></li>
-                                <li><p><code>Observable&lt;T> 	takeLast(long time, TimeUnit unit, boolean delayError)</code> -- 同上，延迟错误</p></li>
-                                <li><p><code>Observable&lt;T> 	takeLast(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上</p></li>
-                                <li><p><code>Observable&lt;T> 	takeLast(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean delayError)</code> -- 同上</p></li>
-                                <li><p><code>Observable&lt;T> 	takeLast(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean delayError, int buffSize)</code> -- 同上</p></li>
-                                <li><p><code>&lt;U> Observable&lt;T> 	takeUntil(ObservableSource&lt;U> other)</code> -- 直到 other 完成</p></li>
-                                <li><p><code>Observable&lt;T> 	takeUntil(Predicate&lt;? super T> stopPredicate)</code> -- 直到符合指定条件</p></li>
-                                <li><p><code>Observable&lt;T> 	takeWhile(Predicate&lt;? super T> predicate)</code> -- 直到符合指定条件</p></li>
-
-                                <li class="group"><p><code>Observable&lt;T> 	skip(long count)</code> -- 跳过指定数目的数据</p></li>
-                                <li><p><code>Observable&lt;T> 	skip(long time, TimeUnit unit)</code> -- 跳过指定时间发送的数据</p></li>
-                                <li><p><code>Observable&lt;T> 	skip(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上，指定调度器</p></li>
-                                <li><p><code>Observable&lt;T> 	skipLast(int count)</code> -- 跳过尾部的指定数量数据</p></li>
-                                <li><p><code>Observable&lt;T> 	skipLast(long time, TimeUnit unit)</code> -- 跳过结束时间的数据</p></li>
-                                <li><p><code>Observable&lt;T> 	skipLast(long time, TimeUnit unit, boolean delayError)</code> -- 同上，延迟错误</p></li>
-                                <li><p><code>Observable&lt;T> 	skipLast(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上</p></li>
-                                <li><p><code>Observable&lt;T> 	skipLast(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean delayError)</code> -- 同上</p></li>
-                                <li><p><code>Observable&lt;T> 	skipLast(long time, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean delayError, int bufferSize)</code> -- 同上</p></li>
-                                <li><p><code>&lt;U> Observable&lt;T> 	skipUntil(ObservableSource&lt;U> other)</code> -- 一直跳过，直到 other 完成</p></li>
-                                <li><p><code>Observable&lt;T> 	skipWhile(Predicate&lt;? super T> predicate)</code> -- 一直跳过，直到 preicate 返回 false</p></li>
 
 
                                 <li class="group"><p><code>Observable&lt;T> 	throttleFirst(long windowDuration, TimeUnit unit)</code> -- </p></li>
