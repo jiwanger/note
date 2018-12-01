@@ -2679,7 +2679,8 @@ Integer[] values = {255, 33, 66, 99};
 Observable&lt;String> observable = Observable.zip(
     Observable.fromArray(colors),
     Observable.fromArray(values),
-    (s, i) -> s + ":" + i);
+    (s, i) -> s + ":" + i
+);
 </pre>
                                 </li>
                                 <li><p><code>static &lt;T1,T2,T3,R> Observable&lt;R> 	zip(ObservableSource&lt;? extends T1> s1, ObservableSource&lt;? extends T2> s2, ObservableSource&lt;? extends T3> s3, Function3&lt;? super T1,? super T2,? super T3,? extends R> zipper)</code> -- 同上</p></li>
@@ -3347,7 +3348,6 @@ class D {
                                 <li><p><code>&lt;K> Observable&lt;T> 	distinct(Function&lt;? super T,K> keySelector, Callable&lt;? extends Collection&lt;? super K>> collectionSupplier)</code> -- 使用 Callable 返回 Collection 的 add(E) 方法返回值作为唯一性的判断</p>
                                     <pre class="brush: java;">
 class MyList extends ArrayList {
-
     @Override
     public boolean add(Object o) {
         return false;
