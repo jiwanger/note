@@ -3765,18 +3765,69 @@ Observable.fromArray("A", "B", null, "C").onErrorResumeNext(throwable -> {
                                 <li><p><code>TestObserver&lt;T> 	test(boolean dispose)</code> -- 同上</p></li>
                             </ol>
                         </div>
-                        <div class="split-item">
-                            <pre class="brush: java;">
-
-</pre>
-                            <p><a href="docs/rxjava-2.2.x/io/reactivex/Observer.html" target="_blank">Observer</a> -- 观察者，被观察的对象变化时通知该对象。</p>
-                        </div>
 
                         <div class="split-item">
                             <pre class="brush: java;">
+java.lang.Object
+    io.reactivex.Scheduler
 
+public abstract class Scheduler {
+    public abstract static class Worker implements Disposable {}
+        // 执行任务
+        public Disposable schedule(@NonNull Runnable run) {}
+        // 延迟后执行任务
+        public abstract Disposable schedule(@NonNull Runnable run, long delay, @NonNull TimeUnit unit);
+        // 周期性执行任务
+        public Disposable schedulePeriodically(@NonNull Runnable run, final long initialDelay,
+                                final long period, @NonNull final TimeUnit unit) {}
+        public long now(@NonNull TimeUnit unit) {}
+    }
+}
+
+java.lang.Object
+    io.reactivex.schedulers.Schedulers
+
+public final class Schedulers {
+    private Schedulers() {}
+
+    static {
+        SINGLE = RxJavaPlugins.initSingleScheduler(new SingleTask());
+        COMPUTATION = RxJavaPlugins.initComputationScheduler(new ComputationTask());
+        IO = RxJavaPlugins.initIoScheduler(new IOTask());
+        TRAMPOLINE = TrampolineScheduler.instance();
+        NEW_THREAD = RxJavaPlugins.initNewThreadScheduler(new NewThreadTask());
+    }
+
+    // 用于计算任务，如事件循环或和回调处理，不要用于 IO 操作；默认线程数等于处理器的数量
+    public static Scheduler computation() { return RxJavaPlugins.onComputationScheduler(COMPUTATION); }
+    // 用于 IO 密集型任务，如异步阻塞 IO 操作，这个调度器的线程池会根据需要增长
+    public static Scheduler io() { return RxJavaPlugins.onIoScheduler(IO); }
+    // 在当前线程立即执行任务，如果当前线程有任务在执行，则会将其暂停，等插入进来的任务执行完之后，再将未完成的任务接着执行
+    public static Scheduler trampoline() { return TRAMPOLINE; }
+    // 为每个任务创建一个新线程，不具有线程缓存机制
+    public static Scheduler newThread() { return RxJavaPlugins.onNewThreadScheduler(NEW_THREAD); }
+    // 拥有一个线程单例，所有的任务都在这一个线程中执行，当此线程中有任务执行时，其他任务将会按照先进先出的顺序依次执行
+    public static Scheduler single() { return RxJavaPlugins.onSingleScheduler(SINGLE); }
+    // 使用指定的 Executor 作为调度器，由此调度器来控制任务的执行策略
+    public static Scheduler from(Executor executor) { return new ExecutorScheduler(executor); }
+
+    public static void shutdown() {...}
+    public static void start() {...}
+
+}
 </pre>
-                            <p><a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> -- </p>
+                            <p><a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> / <a href="docs/rxjava-2.2.x/io/reactivex/schedulers/Schedulers.html" target="_blank">Schedulers</a> -- Scheduler 是负责执行任务的单元,而 Schedulers 是创建各种 Scheduler 的工厂。</p>
+                            <ol>
+                                <li class="group"><p><code>static long 	clockDriftTolerance()</code> -- </p></li>
+                                <li class="group"><p><code>abstract Scheduler.Worker 	createWorker()</code> -- </p></li>
+                                <li class="group"><p><code>long 	now(TimeUnit unit)</code> -- </p></li>
+                                <li class="group"><p><code>Disposable 	scheduleDirect(Runnable run)</code> -- </p></li>
+                                <li><p><code>Disposable 	scheduleDirect(Runnable run, long delay, TimeUnit unit)</code> -- </p></li>
+                                <li><p><code>Disposable 	schedulePeriodicallyDirect(Runnable run, long initialDelay, long period, TimeUnit unit)</code> -- </p></li>
+                                <li class="group"><p><code>void 	shutdown()</code> -- </p></li>
+                                <li><p><code>void 	start()</code> -- </p></li>
+                                <li class="group"><p><code>&lt;S extends Scheduler & Disposable> S 	when(Function&lt;Flowable&lt;Flowable&lt;Completable>>,Completable> combine)</code> -- </p></li>
+                            </ol>
                         </div>
 
                         <div class="split-item">
