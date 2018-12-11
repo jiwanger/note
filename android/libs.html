@@ -2861,6 +2861,7 @@ observable.subscribeOn(Schedulers.io())
                                 <li><p><code>Observable&lt;T> 	doOnNext(Consumer&lt;? super T> onNext)</code> -- 在 onNext 前回调(blockingSubscribe 不一样)</p></li>
                                 <li><p><code>Observable&lt;T> 	doAfterNext(Consumer&lt;? super T> onAfterNext)</code> -- 在 onNext 后回调(blockingSubscribe 不一样)</p></li>
                                 <li><p><code>Observable&lt;T> 	doOnTerminate(Action onTerminate)</code> -- 在 onComplete 前</p></li>
+                                <li><p><code>Observable&lt;T> 	onTerminateDetach()</code> -- 序列终止或下游调用 dispose() 则取消对上游生产者和下游观察者的引用</p></li>
                                 <li><p><code>Observable&lt;T> 	doAfterTerminate(Action onFinally)</code> -- 在 onComplete 后</p></li>
                                 <li><p><code>Observable&lt;T> 	doOnComplete(Action onComplete)</code> -- 在 onComplete 前</p></li>
                                 <li><p><code>Observable&lt;T> 	doOnError(Consumer&lt;? super Throwable> onError)</code> -- 在 onError 前</p></li>
@@ -3552,114 +3553,216 @@ while(true); // Java 命令行程序要保证程序不退出才能看到结果
                                 <li><p><code>&lt;R> Observable&lt;R> 	replay(Function&lt;? super Observable&lt;T>,? extends ObservableSource&lt;R>> selector, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
 
 
-                                <li class="group"><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit, boolean emitLast)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean emitLast)</code> -- </p></li>
-                                <li><p><code>&lt;U> Observable&lt;T> 	sample(ObservableSource&lt;U> sampler)</code> -- </p></li>
-                                <li><p><code>&lt;U> Observable&lt;T> 	sample(ObservableSource&lt;U> sampler, boolean emitLast)</code> -- </p></li>
 
-                                <li class="group"><p><code>Observable&lt;T> 	scan(BiFunction&lt;T,T,T> accumulator)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	scan(R initialValue, BiFunction&lt;R,? super T,R> accumulator)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	scanWith(Callable&lt;R> seedSupplier, BiFunction&lt;R,? super T,R> accumulator)</code> -- </p></li>
+                                <li class="group"><p><code>Observable&lt;T> 	scan(BiFunction&lt;T,T,T> accumulator)</code> -- 递归发送，看实例：</p>
+                                    <pre class="brush: java;">
+// 首次传入的 s,s2 分别为第 0,1 个元素，后面的 s 为返回值，s2 为下一个元素， 发送的数据为: A, AB, ABC
+Observable.just("A", "B", "C").scan((s, s2) -> {
+            Log.d(s, s2); // A, B | AB, C
+            return s + s2;
+        }).subscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	scan(R initialValue, BiFunction&lt;R,? super T,R> accumulator)</code> -- 等同于以下结果，看实例：</p>
+                                    <pre class="brush: java;">
+Observable.just("A", "B", "C").scan("1", (s, s2) -> {
+            Log.d(s, s2);
+            return s + s2;
+        }).subscribe(observer);
+/*** 等同于 ==>  */
+Observable.just("1", "A", "B", "C").scan((s, s2) -> {
+            Log.d(s, s2);
+            return s + s2;
+        }).subscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	scanWith(Callable&lt;R> seedSupplier, BiFunction&lt;R,? super T,R> accumulator)</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>Single&lt;T> 	single(T defaultItem)</code> -- </p></li>
-                                <li><p><code>Maybe&lt;T> 	singleElement()</code> -- </p></li>
-                                <li><p><code>Single&lt;T> 	singleOrError()</code> -- </p></li>
+                                <li class="group"><p><code>Single&lt;T> 	single(T defaultItem)</code> -- 如果源 ObservableSource 只有一条数据，那么发送它；如果没有数据，那么发送默认数据；如果有多条数据，那么发送一个错误</p></li>
+                                <li><p><code>Single&lt;T> 	singleOrError()</code> -- 同上，没有数据发送一条错误消息</p></li>
+                                <li><p><code>Maybe&lt;T> 	singleElement()</code> -- 同上，没有数据发送一条完成消息</p></li>
 
-                                <li class="group"><p><code>Observable&lt;Timed&lt;T>> 	timestamp()</code> -- </p></li>
-                                <li><p><code>Observable&lt;Timed&lt;T>> 	timestamp(<a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Timed&lt;T>> 	timestamp(TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Timed&lt;T>> 	timestamp(TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
+                                <li class="group"><p><code>Observable&lt;Timed&lt;T>> 	timestamp()</code> -- 使用 Timed 包裹源数据，每个数据都有一个发送时间</p></li>
+                                <li><p><code>Observable&lt;Timed&lt;T>> 	timestamp(<a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上，指定调度器</p></li>
+                                <li><p><code>Observable&lt;Timed&lt;T>> 	timestamp(TimeUnit unit)</code> -- 同上，指定时间单位</p></li>
+                                <li><p><code>Observable&lt;Timed&lt;T>> 	timestamp(TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上，指定时间单位和调度器</p></li>
 
-                                <li class="group"><p><code>&lt;R> R 	to(Function&lt;? super Observable&lt;T>,R> converter)</code> -- </p></li>
-                                <li><p><code>Flowable&lt;T> 	toFlowable(BackpressureStrategy strategy)</code> -- </p></li>
-                                <li><p><code>Future&lt;T> 	toFuture()</code> -- </p></li>
-                                <li><p><code>Single&lt;List&lt;T>> 	toList()</code> -- </p></li>
-                                <li><p><code>&lt;U extends Collection&lt;? super T>> Single&lt;U> 	toList(Callable&lt;U> collectionSupplier)</code> -- </p></li>
-                                <li><p><code>Single&lt;List&lt;T>> 	toList(int capacityHint)</code> -- </p></li>
-                                <li><p><code>&lt;K> Single&lt;Map&lt;K,T>> 	toMap(Function&lt;? super T,? extends K> keySelector)</code> -- </p></li>
-                                <li><p><code>&lt;K,V> Single&lt;Map&lt;K,V>> 	toMap(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector)</code> -- </p></li>
-                                <li><p><code>&lt;K,V> Single&lt;Map&lt;K,V>> 	toMap(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, Callable&lt;? extends Map&lt;K,V>> mapSupplier)</code> -- </p></li>
-                                <li><p><code>&lt;K> Single&lt;Map&lt;K,Collection&lt;T>>> 	toMultimap(Function&lt;? super T,? extends K> keySelector)</code> -- </p></li>
-                                <li><p><code>&lt;K,V> Single&lt;Map&lt;K,Collection&lt;V>>> 	toMultimap(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector)</code> -- </p></li>
-                                <li><p><code>&lt;K,V> Single&lt;Map&lt;K,Collection&lt;V>>> 	toMultimap(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, Callable&lt;? extends Map&lt;K,Collection&lt;V>>> mapSupplier, Function&lt;? super K,? extends Collection&lt;? super V>> collectionFactory)</code> -- </p></li>
-                                <li><p><code>&lt;K,V> Single&lt;Map&lt;K,Collection&lt;V>>> 	toMultimap(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, Callable&lt;Map&lt;K,Collection&lt;V>>> mapSupplier)</code> -- </p></li>
-                                <li><p><code>Single&lt;List&lt;T>> 	toSortedList()</code> -- </p></li>
-                                <li><p><code>Single&lt;List&lt;T>> 	toSortedList(Comparator&lt;? super T> comparator)</code> -- </p></li>
-                                <li><p><code>Single&lt;List&lt;T>> 	toSortedList(Comparator&lt;? super T> comparator, int capacityHint)</code> -- </p></li>
-                                <li><p><code>Single&lt;List&lt;T>> 	toSortedList(int capacityHint)</code> -- </p></li>
+                                <li class="group"><p><code>&lt;R> R 	to(Function&lt;? super Observable&lt;T>,R> converter)</code> -- 转换</p></li>
+                                <li><p><code>Single&lt;List&lt;T>> 	toList()</code> -- 转换</p></li>
+                                <li><p><code>&lt;U extends Collection&lt;? super T>> Single&lt;U> 	toList(Callable&lt;U> collectionSupplier)</code> -- 转换</p></li>
+                                <li><p><code>Single&lt;List&lt;T>> 	toList(int capacityHint)</code> -- 转换</p></li>
+                                <li><p><code>Single&lt;List&lt;T>> 	toSortedList()</code> -- 转换</p></li>
+                                <li><p><code>Single&lt;List&lt;T>> 	toSortedList(Comparator&lt;? super T> comparator)</code> -- 转换</p></li>
+                                <li><p><code>Single&lt;List&lt;T>> 	toSortedList(Comparator&lt;? super T> comparator, int capacityHint)</code> -- 转换</p></li>
+                                <li><p><code>Single&lt;List&lt;T>> 	toSortedList(int capacityHint)</code> -- 转换</p></li>
+                                <li><p><code>&lt;K> Single&lt;Map&lt;K,T>> 	toMap(Function&lt;? super T,? extends K> keySelector)</code> -- 转换</p></li>
+                                <li><p><code>&lt;K,V> Single&lt;Map&lt;K,V>> 	toMap(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector)</code> -- 转换</p></li>
+                                <li><p><code>&lt;K,V> Single&lt;Map&lt;K,V>> 	toMap(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, Callable&lt;? extends Map&lt;K,V>> mapSupplier)</code> -- 转换</p></li>
+                                <li><p><code>&lt;K> Single&lt;Map&lt;K,Collection&lt;T>>> 	toMultimap(Function&lt;? super T,? extends K> keySelector)</code> -- 转换</p></li>
+                                <li><p><code>&lt;K,V> Single&lt;Map&lt;K,Collection&lt;V>>> 	toMultimap(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector)</code> -- 转换</p></li>
+                                <li><p><code>&lt;K,V> Single&lt;Map&lt;K,Collection&lt;V>>> 	toMultimap(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, Callable&lt;? extends Map&lt;K,Collection&lt;V>>> mapSupplier, Function&lt;? super K,? extends Collection&lt;? super V>> collectionFactory)</code> -- 转换</p></li>
+                                <li><p><code>&lt;K,V> Single&lt;Map&lt;K,Collection&lt;V>>> 	toMultimap(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, Callable&lt;Map&lt;K,Collection&lt;V>>> mapSupplier)</code> -- 转换</p></li>
+                                <li><p><code>Flowable&lt;T> 	toFlowable(BackpressureStrategy strategy)</code> -- 转换，支持背压</p></li>
+                                <li><p><code>Future&lt;T> 	toFuture()</code> -- 转换，用 Future 包裹</p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit)</code> -- 该 Observable 发出源 ObservableSource 在周期时间间隔内(完成前)发出的最近发出的项</p>
+                                    <pre class="brush: java;">
+// 在 400 毫秒周期内如果发送了多个数据，只会发出周期内的最后一个数据
+Observable.interval(300, TimeUnit.MILLISECONDS).take(10)
+    .sample(400, TimeUnit.MILLISECONDS).blockingSubscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit, boolean emitLast)</code> -- 同上，是否强制将最后一个数据发送出去</p></li>
+                                <li><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上，指定调度器</p></li>
+                                <li><p><code>Observable&lt;T> 	sample(long period, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean emitLast)</code> -- 同上，是否强制将最后一个数据发送出去</p></li>
+                                <li><p><code>&lt;U> Observable&lt;T> 	sample(ObservableSource&lt;U> sampler)</code> -- 以 sampler 的每个元素为间隔</p></li>
+                                <li><p><code>&lt;U> Observable&lt;T> 	sample(ObservableSource&lt;U> sampler, boolean emitLast)</code> -- 同上，是否强制将最后一个数据发送出去</p></li>
 
 
-                                <li class="group"><p><code>Observable&lt;T> 	throttleFirst(long windowDuration, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	throttleFirst(long skipDuration, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	throttleLast(long intervalDuration, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	throttleLast(long intervalDuration, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	throttleLatest(long timeout, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	throttleLatest(long timeout, TimeUnit unit, boolean emitLast)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	throttleLatest(long timeout, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	throttleLatest(long timeout, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean emitLast)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	throttleWithTimeout(long timeout, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	throttleWithTimeout(long timeout, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
+                                <li class="group"><p><code>Observable&lt;T> 	throttleFirst(long windowDuration, TimeUnit unit)</code> -- 该 Observable 发出源 ObservableSource 在周期时间间隔内(完成前)发出的第一项</p></li>
+                                <li><p><code>Observable&lt;T> 	throttleFirst(long skipDuration, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> s)</code> -- 同上，指定跳过的时长和调度器</p></li>
+                                <li><p><code>Observable&lt;T> 	throttleLast(long intervalDuration, TimeUnit unit)</code> -- 调用 sample(long, TimeUnit), 最后一项</p></li>
+                                <li><p><code>Observable&lt;T> 	throttleLast(long intervalDuration, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上</p></li>
+                                <li><p><code>Observable&lt;T> 	throttleLatest(long timeout, TimeUnit unit)</code> -- 发出距离此周期时间点最近的项</p></li>
+                                <li><p><code>Observable&lt;T> 	throttleLatest(long timeout, TimeUnit unit, boolean emitLast)</code> -- 同上，是否强制将最后一个数据发送</p></li>
+                                <li><p><code>Observable&lt;T> 	throttleLatest(long timeout, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上</p></li>
+                                <li><p><code>Observable&lt;T> 	throttleLatest(long timeout, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, boolean emitLast)</code> -- 同上</p></li>
+                                <li><p><code>Observable&lt;T> 	throttleWithTimeout(long timeout, TimeUnit unit)</code> -- 同上</p></li>
+                                <li><p><code>Observable&lt;T> 	throttleWithTimeout(long timeout, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>Observable&lt;Timed&lt;T>> 	timeInterval()</code> -- </p></li>
-                                <li><p><code>Observable&lt;Timed&lt;T>> 	timeInterval(<a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Timed&lt;T>> 	timeInterval(TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Timed&lt;T>> 	timeInterval(TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>&lt;V> Observable&lt;T> 	timeout(Function&lt;? super T,? extends ObservableSource&lt;V>> itemTimeoutIndicator)</code> -- </p></li>
-                                <li><p><code>&lt;V> Observable&lt;T> 	timeout(Function&lt;? super T,? extends ObservableSource&lt;V>> itemTimeoutIndicator, ObservableSource&lt;? extends T> other)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	timeout(long timeout, TimeUnit timeUnit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	timeout(long timeout, TimeUnit timeUnit, ObservableSource&lt;? extends T> other)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	timeout(long timeout, TimeUnit timeUnit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	timeout(long timeout, TimeUnit timeUnit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, ObservableSource&lt;? extends T> other)</code> -- </p></li>
-                                <li><p><code>&lt;U,V> Observable&lt;T> 	timeout(ObservableSource&lt;U> firstTimeoutIndicator, Function&lt;? super T,? extends ObservableSource&lt;V>> itemTimeoutIndicator)</code> -- </p></li>
-                                <li><p><code>&lt;U,V> Observable&lt;T> 	timeout(ObservableSource&lt;U> firstTimeoutIndicator, Function&lt;? super T,? extends ObservableSource&lt;V>> itemTimeoutIndicator, ObservableSource&lt;? extends T> other)</code> -- </p></li>
+                                <li class="group"><p><code>Observable&lt;Timed&lt;T>> 	timeInterval()</code> -- 用 Timed 包括源数据，包含了每项数据发出的时间间隔</p></li>
+                                <li><p><code>Observable&lt;Timed&lt;T>> 	timeInterval(<a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上</p></li>
+                                <li><p><code>Observable&lt;Timed&lt;T>> 	timeInterval(TimeUnit unit)</code> -- 同上</p></li>
+                                <li><p><code>Observable&lt;Timed&lt;T>> 	timeInterval(TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 同上</p></li>
 
-                                <li class="group"><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(Callable&lt;? extends ObservableSource&lt;B>> boundary)</code> -- </p></li>
-                                <li><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(Callable&lt;? extends ObservableSource&lt;B>> boundary, int bufferSize)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long count)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long count, long skip)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long count, long skip, int bufferSize)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, long timeskip, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, long timeskip, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, long timeskip, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, int bufferSize)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit, long count)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit, long count, boolean restart)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, long count)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, long count, boolean restart)</code> -- </p></li>
-                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, long count, boolean restart, int bufferSize)</code> -- </p></li>
-                                <li><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(ObservableSource&lt;B> boundary)</code> -- </p></li>
-                                <li><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(ObservableSource&lt;B> boundary, int bufferSize)</code> -- </p></li>
-                                <li><p><code>&lt;U,V> Observable&lt;Observable&lt;T>> 	window(ObservableSource&lt;U> openingIndicator, Function&lt;? super U,? extends ObservableSource&lt;V>> closingIndicator)</code> -- </p></li>
-                                <li><p><code>&lt;U,V> Observable&lt;Observable&lt;T>> 	window(ObservableSource&lt;U> openingIndicator, Function&lt;? super U,? extends ObservableSource&lt;V>> closingIndicator, int bufferSize)</code> -- </p></li>
+                                <li class="group"><p><code>Observable&lt;T> 	timeout(long timeout, TimeUnit timeUnit)</code> -- 数据发送的间隔超过指定时间，将会发送一条错误消息</p>
+                                    <pre class="brush: java;">
+// C 将不会发送，发送一个错误消息
+Observable.create((ObservableOnSubscribe&lt;String>) e -> {
+        e.onNext("A");
+        Thread.sleep(500);
+        e.onNext("B");
+        Thread.sleep(1500);
+        e.onNext("C");
+        e.onComplete();
+    }).timeout(1000, TimeUnit.MILLISECONDS).blockingSubscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>Observable&lt;T> 	timeout(long timeout, TimeUnit timeUnit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 参照前面</p></li>
+                                <li><p><code>Observable&lt;T> 	timeout(long timeout, TimeUnit timeUnit, ObservableSource&lt;? extends T> other)</code> -- 参照前面</p></li>
+                                <li><p><code>Observable&lt;T> 	timeout(long timeout, TimeUnit timeUnit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, ObservableSource&lt;? extends T> other)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;U,V> Observable&lt;T> 	timeout(ObservableSource&lt;U> firstTimeoutIndicator, Function&lt;? super T,? extends ObservableSource&lt;V>> itemTimeoutIndicator)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;U,V> Observable&lt;T> 	timeout(ObservableSource&lt;U> firstTimeoutIndicator, Function&lt;? super T,? extends ObservableSource&lt;V>> itemTimeoutIndicator, ObservableSource&lt;? extends T> other)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;V> Observable&lt;T> 	timeout(Function&lt;? super T,? extends ObservableSource&lt;V>> itemTimeoutIndicator)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;V> Observable&lt;T> 	timeout(Function&lt;? super T,? extends ObservableSource&lt;V>> itemTimeoutIndicator, ObservableSource&lt;? extends T> other)</code> -- 参照前面</p></li>
 
-                                <li class="group"><p><code>&lt;R> Observable&lt;R> 	withLatestFrom(Iterable&lt;? extends ObservableSource&lt;?>> others, Function&lt;? super Object[],R> combiner)</code> -- </p></li>
-                                <li><p><code>&lt;R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;?>[] others, Function&lt;? super Object[],R> combiner)</code> -- </p></li>
-                                <li><p><code>&lt;U,R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;? extends U> other, BiFunction&lt;? super T,? super U,? extends R> combiner)</code> -- </p></li>
-                                <li><p><code>&lt;T1,T2,R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;T1> o1, ObservableSource&lt;T2> o2, Function3&lt;? super T,? super T1,? super T2,R> combiner)</code> -- </p></li>
-                                <li><p><code>&lt;T1,T2,T3,R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;T1> o1, ObservableSource&lt;T2> o2, ObservableSource&lt;T3> o3, Function4&lt;? super T,? super T1,? super T2,? super T3,R> combiner)</code> -- </p></li>
-                                <li><p><code>&lt;T1,T2,T3,T4,R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;T1> o1, ObservableSource&lt;T2> o2, ObservableSource&lt;T3> o3, ObservableSource&lt;T4> o4, Function5&lt;? super T,? super T1,? super T2,? super T3,? super T4,R> combiner)</code> -- </p></li>
+                                <li class="group"><p><code>Observable&lt;Observable&lt;T>> 	window(long count)</code> -- 将源数据按数量再封装一层</p>
+                                    <pre class="brush: java;">
+// A,B | C,D | E 各自在一个 Observable 中
+Observable.just("A", "B", "C", "D", "E").window(2).subscribe(stringObservable -> {
+    stringObservable.subscribe(observer);
+});
+                                    </pre>
+                                </li>
+                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long count, long skip)</code> -- 同上，指定步长</p></li>
+                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long count, long skip, int bufferSize)</code> -- 同上，指定缓存大小</p></li>
+                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit)</code> -- 以时间为单位分组</p></li>
+                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit, long count)</code> -- 时间或数量先到为准</p></li>
+                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit, long count, boolean restart)</code> -- 参照前面</p></li>
+                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 参照前面</p></li>
+                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, long count)</code> -- 参照前面</p></li>
+                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, long count, boolean restart)</code> -- 参照前面</p></li>
+                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, long count, boolean restart, int bufferSize)</code> -- 参照前面</p></li>
+                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, long timeskip, TimeUnit unit)</code> -- 参照前面</p></li>
+                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, long timeskip, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler)</code> -- 参照前面</p></li>
+                                <li><p><code>Observable&lt;Observable&lt;T>> 	window(long timespan, long timeskip, TimeUnit unit, <a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> scheduler, int bufferSize)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(Callable&lt;? extends ObservableSource&lt;B>> boundary)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(Callable&lt;? extends ObservableSource&lt;B>> boundary, int bufferSize)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(ObservableSource&lt;B> boundary)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;B> Observable&lt;Observable&lt;T>> 	window(ObservableSource&lt;B> boundary, int bufferSize)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;U,V> Observable&lt;Observable&lt;T>> 	window(ObservableSource&lt;U> openingIndicator, Function&lt;? super U,? extends ObservableSource&lt;V>> closingIndicator)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;U,V> Observable&lt;Observable&lt;T>> 	window(ObservableSource&lt;U> openingIndicator, Function&lt;? super U,? extends ObservableSource&lt;V>> closingIndicator, int bufferSize)</code> -- 参照前面</p></li>
 
-                                <li class="group"><p><code>&lt;K> Observable&lt;GroupedObservable&lt;K,T>> 	groupBy(Function&lt;? super T,? extends K> keySelector)</code> -- </p></li>
-                                <li><p><code>&lt;K> Observable&lt;GroupedObservable&lt;K,T>> 	groupBy(Function&lt;? super T,? extends K> keySelector, boolean delayError)</code> -- </p></li>
-                                <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector)</code> -- </p></li>
-                                <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, boolean delayError)</code> -- </p></li>
-                                <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, boolean delayError, int bufferSize)</code> -- </p></li>
 
-                                <li class="group"><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	join(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super TRight,? extends R> resultSelector)</code> -- </p></li>
-                                <li><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	groupJoin(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super Observable&lt;TRight>,? extends R> resultSelector)</code> -- </p></li>
+                                <li class="group"><p><code>&lt;K> Observable&lt;GroupedObservable&lt;K,T>> 	groupBy(Function&lt;? super T,? extends K> keySelector)</code> -- 分组，以 keySelector 返回值是否相同作为分组依据</p>
+                                    <pre class="brush: java;">
+// A,B,E 为一个组，C,D 为一个组
+Observable.just("A", "B", "C", "D", "E").groupBy((Function&lt;String, Object>) s -> {
+        if("C".equals(s), "D".equals(s)) {
+            return "0";
+        }
+        return "1";
+    }).subscribe(group -> group.map(s -> group + ":" + s).subscribe(observer));
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;K> Observable&lt;GroupedObservable&lt;K,T>> 	groupBy(Function&lt;? super T,? extends K> keySelector, boolean delayError)</code> -- 同上，是否延迟错误</p></li>
+                                <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector)</code> -- 需要两个函数的返回值都相同才为一个分组</p></li>
+                                <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, boolean delayError)</code> -- 同上，是否延迟错误</p></li>
+                                <li><p><code>&lt;K,V> Observable&lt;GroupedObservable&lt;K,V>> 	groupBy(Function&lt;? super T,? extends K> keySelector, Function&lt;? super T,? extends V> valueSelector, boolean delayError, int bufferSize)</code> -- 同上，指定缓存大小</p></li>
 
-                                <li class="group"><p><code>Observable&lt;T> 	onErrorResumeNext(Function&lt;? super Throwable,? extends ObservableSource&lt;? extends T>> resumeFunction)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	onErrorResumeNext(ObservableSource&lt;? extends T> next)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	onErrorReturn(Function&lt;? super Throwable,? extends T> valueSupplier)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	onErrorReturnItem(T item)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	onExceptionResumeNext(ObservableSource&lt;? extends T> next)</code> -- </p></li>
-                                <li><p><code>Observable&lt;T> 	onTerminateDetach()</code> -- </p></li>
+                                <li class="group"><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	join(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super TRight,? extends R> resultSelector)</code> -- 不太明白</p>
+                                    <pre class="brush: java;">
+// 发送的结果不确定，可能 A100, 可能为 B200, 可能为 C300
+Observable.&lt;String>create(e -> {
+        e.onNext("A");
+        Thread.sleep(200);
+        e.onNext("B");
+        Thread.sleep(200);
+        e.onNext("C");
+        e.onComplete();
+    }).subscribeOn(Schedulers.computation()).join(
+            Observable.&lt;Long>create(e -> {
+                e.onNext(100L);
+                Thread.sleep(200);
+                e.onNext(200L);
+                Thread.sleep(200);
+                e.onNext(300L);
+                e.onComplete();
+            }),
+            s -> Observable.just(s.length()),
+            l -> Observable.just(l.floatValue()),
+            (s, l) -> s + l
+    ).blockingSubscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;TRight,TLeftEnd,TRightEnd,R> Observable&lt;R> 	groupJoin(ObservableSource&lt;? extends TRight> other, Function&lt;? super T,? extends ObservableSource&lt;TLeftEnd>> leftEnd, Function&lt;? super TRight,? extends ObservableSource&lt;TRightEnd>> rightEnd, BiFunction&lt;? super T,? super Observable&lt;TRight>,? extends R> resultSelector)</code> -- 参照前面</p></li>
 
-                                <li class="group"><p><code>TestObserver&lt;T> 	test()</code> -- </p></li>
-                                <li><p><code>TestObserver&lt;T> 	test(boolean dispose)</code> -- </p></li>
+                                <li class="group"><p><code>&lt;R> Observable&lt;R> 	withLatestFrom(Iterable&lt;? extends ObservableSource&lt;?>> others, Function&lt;? super Object[],R> combiner)</code> -- 将源数据的每一项和 others 的每个 ObservableSource 的最后一项传入 combiner 计算返回值作为发送项</p>
+                                    <pre class="brush: java;">
+// 发送结果：A:2:300, B:2:300, C:2:300
+List&lt;Observable&lt;Integer>> list = new ArrayList<>();
+list.add(Observable.just(1, 2));
+list.add(Observable.just(100, 200, 300));
+Observable.just("A", "B", "C").withLatestFrom(list, objs -> {
+    Log.d(objs); // objs.length = list.size() + 1, objs[0] = src[i], objs[1] = list.get(0).last ...
+    return String.format("%s:%s:%s", objs[0], objs[1], objs[2]); // 返回值为最终发送的数据
+}).subscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>&lt;R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;?>[] others, Function&lt;? super Object[],R> combiner)</code> -- 同上</p></li>
+                                <li><p><code>&lt;U,R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;? extends U> other, BiFunction&lt;? super T,? super U,? extends R> combiner)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;T1,T2,R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;T1> o1, ObservableSource&lt;T2> o2, Function3&lt;? super T,? super T1,? super T2,R> combiner)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;T1,T2,T3,R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;T1> o1, ObservableSource&lt;T2> o2, ObservableSource&lt;T3> o3, Function4&lt;? super T,? super T1,? super T2,? super T3,R> combiner)</code> -- 参照前面</p></li>
+                                <li><p><code>&lt;T1,T2,T3,T4,R> Observable&lt;R> 	withLatestFrom(ObservableSource&lt;T1> o1, ObservableSource&lt;T2> o2, ObservableSource&lt;T3> o3, ObservableSource&lt;T4> o4, Function5&lt;? super T,? super T1,? super T2,? super T3,? super T4,R> combiner)</code> -- 参照前面</p></li>
+
+                                <li class="group"><p><code>Observable&lt;T> 	onErrorReturnItem(T item)</code> -- 发生错误使用默认值作为发送项</p>
+                                    <pre class="brush: java;">Observable.fromArray("A", "B", null, "C").onErrorReturnItem("X").subscribe(observer); // A,B,X</pre>
+                                </li>
+                                <li><p><code>Observable&lt;T> 	onErrorReturn(Function&lt;? super Throwable,? extends T> valueSupplier)</code> -- 使用错误情况返回指定值</p></li>
+                                <li><p><code>Observable&lt;T> 	onErrorResumeNext(ObservableSource&lt;? extends T> next)</code> -- 用指定数据替代错误项及以后的数据</p></li>
+                                <li><p><code>Observable&lt;T> 	onErrorResumeNext(Function&lt;? super Throwable,? extends ObservableSource&lt;? extends T>> resumeFunction)</code> -- 同上，可以根据错误情况返回</p>
+                                    <pre class="brush: java;">
+// 发送结果：A, B, 1, 2
+Observable.fromArray("A", "B", null, "C").onErrorResumeNext(throwable -> {
+    return Observable.just("1", "2");
+}).subscribe(observer);
+                                    </pre>
+                                </li>
+                                <li><p><code>Observable&lt;T> 	onExceptionResumeNext(ObservableSource&lt;? extends T> next)</code> -- 用指定数据替代异常项及以后的数据</p></li>
+
+
+                                <li class="group"><p><code>TestObserver&lt;T> 	test()</code> -- 创建一个 TestObserver 并订阅它</p></li>
+                                <li><p><code>TestObserver&lt;T> 	test(boolean dispose)</code> -- 同上</p></li>
                             </ol>
                         </div>
                         <div class="split-item">
