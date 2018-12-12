@@ -54,7 +54,6 @@
 </nav>
 <!-- nav end -->
 
-
 <div class="container">
     <div class="row">
         <!-- left-menu start -->
@@ -2268,11 +2267,28 @@ Glide.with(this).resumeRequests();		// 恢复加载
                             在前台线程中接受并相应数据。</p>
                         <pre class="brush: java;">
 implementation "io.reactivex.rxjava2:rxjava:2.2.3"
-implementation 'io.reactivex.rxjava2:rxandroid:2.2.3'
+implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
 </pre>
                         <p>我们一般写的程序统称为命令式程序，是以流程为核心的，每一行代码实际上都是机器实际上要执行的指令。而 Rxjava
                             这样的编程风格，称为函数响应式编程。函数响应式编程是以数据流为核心，处理数据的输入，处理以及输出的。</p>
                         <p>响应式编程是一种基于异步数据流概念的编程模式。数据流就像一条河：它可以被观测，被过滤，被操作，或者为新的消费者与另外一条流合并为一条新的流。</p>
+                        <p>RxJava 以观察者模式为骨架，RxJava2 中出现了两种观察者模式：</p>
+                        <ul>
+                            <li><p>Observable ( 被观察者 ) / Observer ( 观察者 ) -- Observable 用于订阅
+                                Observer，不再支持背压；</p></li>
+                            <li>
+                                <p>Flowable （被观察者）/ Subscriber （观察者） -- Flowable 用于订阅 Subscriber ，
+                                    是支持背压。</p>
+                            </li>
+                        </ul>
+                        <p class="alert alert-success">
+                            背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。</p>
+                        <p>观察者模式使用步骤：</p>
+                        <ul>
+                            <li><p>构建一个被观察者；</p></li>
+                            <li><p>构建一个观察者；</p></li>
+                            <li><p>建立观察者和被观察者的订阅关系。</p></li>
+                        </ul>
                         <p>RxJava 的观察者模式的基本使用：</p>
                         <pre class="brush: java;">
 /** 涉及到的几个类：
@@ -2330,7 +2346,7 @@ public interface ObservableSource&lt;T> {
     void subscribe(@NonNull Observer&lt;? super T> observer);
 }
 </pre>
-                            <p><a href="docs/rxjava-2.2.x/io/reactivex/Observable.html" target="_blank">Observable</a> -- 被观察者，是可被观察的对象。</p>
+                            <p><a href="docs/rxjava-2.2.x/io/reactivex/Observable.html" target="_blank">Observable</a> / <a href="docs/rxjava-2.2.x/io/reactivex/Observer.html" target="_blank">Observer</a> -- 被观察者 / 观察者，是可被观察的对象。</p>
                             <p>Observable 的静态方法多数是创建了不同的子类，重点关注子类的 <code>subscribeActual(Observer&lt;? super T>)</code> 方法。</p>
                             <p>Observable 的操作符生成了不同的内部子类，这些子类包装了原始数据，改变了原始数据的运行方式。</p>
                             <ol>
@@ -3817,6 +3833,23 @@ public final class Schedulers {
 }
 </pre>
                             <p><a href="docs/rxjava-2.2.x/io/reactivex/Scheduler.html" target="_blank">Scheduler</a> / <a href="docs/rxjava-2.2.x/io/reactivex/schedulers/Schedulers.html" target="_blank">Schedulers</a> -- Scheduler 是负责执行任务的单元,而 Schedulers 是创建各种 Scheduler 的工厂。</p>
+                            <p><b>线程切换(异步操作)</b></p>
+                            <p>线程切换由下面两个方法指定：</p>
+                            <ul>
+                                <li><p><code>subscribeOn</code> -- 用于指定 subscribe()
+                                    时所发生的线程，从源码角度可以看出，内部线程调度是通过 ObservableSubscribeOn 来实现的；</p></li>
+                                <li><p><code>observeOn</code> -- 用于指定下游 Observer 回调发生的线程。</p></li>
+                            </ul>
+                            <p>线程切换需要注意的:</p>
+                            <ul>
+                                <li><p>简单地说，subscribeOn() 指定的就是发射事件的线程，observerOn() 指定的就是订阅者接收事件的线程；</p>
+                                </li>
+                                <li><p>多次指定发射事件的线程只有第一次指定的有效，也就是说多次调用 subscribeOn()
+                                    只有第一次的有效，其余的会被忽略；</p></li>
+                                <li><p>多次指定订阅者接收线程是可以的，也就是说每调用一次 observerOn()，下游的线程就会切换一次；</p></li>
+                                <li><p>subscribeOn() 和 subscribeOn()
+                                    写的位置不一样，加工方法运行的线程也不一样，一些方法默认执行的线程可能在子线程，具体看说明。</p></li>
+                            </ul>
                             <ol>
                                 <li class="group"><p><code>static long 	clockDriftTolerance()</code> -- </p></li>
                                 <li class="group"><p><code>abstract Scheduler.Worker 	createWorker()</code> -- </p></li>
@@ -3832,636 +3865,25 @@ public final class Schedulers {
 
                         <div class="split-item">
                             <pre class="brush: java;">
+java.lang.Object
+    io.reactivex.Flowable&lt;T>
 
+public abstract class Flowable&lt;T> implements Publisher&lt;T> {}
 </pre>
-                            <p><a href="docs/rxjava-2.2.x/io/reactivex/" target="_blank">...</a> -- </p>
-                        </div>
-
-                    </div>
-
-                    <div class="sub-item">
-                        <p><b>观察者模式</b></p>
-                        <p>RxJava 以观察者模式为骨架，RxJava2 中出现了两种观察者模式：</p>
-                        <ul>
-                            <li><p>Observable ( 被观察者 ) / Observer ( 观察者 ) -- Observable 用于订阅
-                                Observer，不再支持背压；</p></li>
-                            <li>
-                                <p>Flowable （被观察者）/ Subscriber （观察者） -- Flowable 用于订阅 Subscriber ，
-                                    是支持背压。</p>
-                            </li>
-                        </ul>
-                        <p class="alert alert-success">
-                            背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。</p>
-                        <p>观察者模式使用步骤：</p>
-                        <ul>
-                            <li><p>构建一个被观察者；</p></li>
-                            <li><p>构建一个观察者；</p></li>
-                            <li><p>建立观察者和被观察者的订阅关系。</p></li>
-                        </ul>
-                        <p><b>ObservableEmitter</b> -- Emitter 是发射器的意思，是用来发出事件的，可以发出三种类型的事件，通过调用
-                            emitter 的 onNext(T value)、onComplete() 和 onError(Throwable error)
-                            就可以分别发出 next 事件、complete 事件和 error 事件。</p>
-                        <p><b>Disposable</b> -- 字面意思是一次性用品，用完即可丢弃的。RxJava 中可以把它理解成被观察者和观察者之间的一个机关,
-                            当调用它的 dispose() 方法时, 观察者收不到事件。</p>
-
-                        <pre class="brush: java;">
-/** 先来看代码输出:
- * subscribe -> onNext:1 -> onNext:2 -> onNext:3 -> onComplete;
- * 在 subscribe 中发送 onComplete 或 onError 后，被观察者继续发送事件，但观察者不会再接收事件；
- * 在 subscribe 中不能同时调用 onComplete 和 onError，这两个时间必须互斥;
- * 在 Observer 中调用 mDisposable.dispose() 方法，观察者也不会再接收事件，主要用于线程调度。
- */
-// 1. 初始化 Observerable
-Observable&lt;Integer> observable = Observable.create(new ObservableOnSubscribe&lt;Integer>() {
-    @Override
-    public void subscribe(ObservableEmitter&lt;Integer> emitter) throws Exception {
-        System.out.println("subscribe");
-        emitter.onNext(1);
-        emitter.onNext(2);
-        emitter.onNext(3);
-
-        emitter.onComplete();// Observer 不会调用 onNext(4)
-
-        emitter.onNext(4);
-    }
-});
-
-// 2. 初始化 Observer
-Observer&lt;Integer> observer = new Observer&lt;Integer>() {
-    private Disposable mDisposable;
-
-    @Override
-    public void onSubscribe(Disposable d) {
-        mDisposable = d;
-    }
-
-    @Override
-    public void onNext(Integer integer) {
-        System.out.println("onNext:" + integer);
-        if (2 == integer) {
-            // mDisposable.dispose(); // 可以打断，不会调用 onNext(3)
-        }
-    }
-
-    @Override
-    public void onError(Throwable e) {
-
-    }
-
-    @Override
-    public void onComplete() {
-        System.out.println("onComplete");
-    }
-};
-
-// 3. 建立订阅关系
-observable.subscribe(observer);
-</pre>
-                    </div>
-
-                    <div class="sub-item">
-                        <p><b>操作符</b></p>
-                        <p>操作符按照其作用具体可分为以下几类：</p>
-                        <ul>
-                            <li><p>创建：创建一个可观察对象Observable并发射数据</p>
-                                <pre class="brush: java;">
-create：基础创建操作符
-just：创建一个 Observable，可接受一个或多个参数，将每个参数逐一发送
-fromArray：创建一个 Observable，接受一个数组，并将数组中的数据逐一发送
-fromIterable：创建一个 Observable，接受一个可迭代对象，并将可迭代对象中的数据逐一发送
-range：创建一个 Observable，发送一个范围内的整数，Observable.range(1,10) 从 1 开始以步长 1 递增发送 10 个数据
-                                </pre>
-                            </li>
-                            <li><p>过滤：从Observable发射的数据中取出特定的值</p>
-                                <pre class="brush: java;">
-filter：filter使用Predicate 函数接口传入条件值，来判断Observable发射的每一个值是否满足这个条件，
-        如果满足，则继续向下传递，如果不满足，则过滤掉。
-distinct：过滤掉重复的数据项，过滤规则为：只允许还没有发射过的数据项通过。
-skip：接受一个 long 型参数 count ，代表跳过 count 个数目开始接收。
-                                </pre>
-                            </li>
-                            <li><p>变换：对Observable发射的数据执行变换操作</p>
-                                <pre class="brush: java;">
-map：对 Observable 发射的每一项数据应用一个函数，执行变换操作
-flatMap：将一个发射数据的 Observable 变换为多个 Observable，然后将多个 Observable 发射的数据合
-        并到一个 Observable 中进行发射
-concatMap：同 flatMap, 它保证顺序
-                                </pre>
-                            </li>
-                            <li><p>组合：组合多个 Observable,例如：{1,2,3}+{4,5,6}-->{1,2,3,4,5,6}</p>
-                                <pre class="brush: java;">
-merge / mergeWith：合并多个 Observable 发射的数据，可能会让 Observable 发射的数据交错。
-concat / concatWith：同 mergeWith 一样，用以合并多个 Observable 发射的数据，但是 concatWith 不会让
-                                    Observable 发射的数据交错。
-                                </pre>
-                            </li>
-                            <li><p>聚合：聚合多个 Observable，例如：{1,2,3}+{4,5,6}-->{[1,4],[2,5],[3,6]}</p>
-                                <pre class="brush: java;">
-zip / zipWith：将多个 Obversable 发射的数据，通过一个函数 BiFunction对对应位置的数据处理后放到一个新的
-        Observable 中发射，所发射的数据个数与最少的 Observabel 中的一样多。
-buffer：接受两个参数，buffer(count,skip)，作用是将 Observable 中的数据按 skip (步长) 分成最大不超过
-        count 的 buffer，然后生成一个 Observable。
-                                </pre>
-                            </li>
-                        </ul>
-                        <p>先来看一段代码，应用了很多操作符：</p>
-                        <pre class="brush: java;">
-Integer nums1[] = new Integer[]{5, 6, 7, 8, 9};
-Integer nums2[] = new Integer[]{3, 4, 5, 6};
-String names[] = new String[]{"红娃", "橙娃", "黄娃", "绿娃", "青娃", "蓝娃", "紫娃"};
-Observable.just(nums1)
-    .flatMap(new Function&lt;Integer[], Observable&lt;Integer>>() {
-        @Override
-        public Observable&lt;Integer> apply(@NonNull Integer[] integers) throws Exception {
-            return Observable.fromArray(integers);
-        }
-    })
-    .mergeWith(Observable.fromArray(nums2))
-    .concatWith(Observable.just(1, 2))
-    .distinct()
-    .filter(new Predicate&lt;Integer>() {
-        @Override
-        public boolean test(@NonNull Integer integer) throws Exception {
-            return integer < 5;
-        }
-    })
-    .map(new Function&lt;Integer, String>() {
-        @Override
-        public String apply(@NonNull Integer integer) throws Exception {
-            return integer + ":";
-        }
-    })
-    .zipWith(Observable.fromArray(names), new BiFunction&lt;String, String, String>() {
-        @Override
-        public String apply(@NonNull String s, @NonNull String s2) throws Exception {
-            return s + s2;
-        }
-    })
-    .subscribe(new Consumer&lt;String>() {
-        @Override
-        public void accept(@NonNull String s) throws Exception {
-            System.out.println(s);
-        }
-    });
-</pre>
-                        <ol>
-                            <li>
-                                <p><code>create</code> -- 用于产生一个 Obserable 被观察者对象。</p></li>
-                            <li><p><code>map</code> -- 对发射时间发送的每一个事件应用一个函数。</p>
-                                <pre class="brush: java;">
-/** Observer 接收到的值是 map 的 apply 方法处理后的返回值 */
-Observable.create(new ObservableOnSubscribe&lt;Integer>() {
-        @Override
-        public void subscribe(ObservableEmitter&lt;Integer> emitter) throws Exception {
-            emitter.onNext(1);
-            emitter.onNext(2);
-        }
-    }).map(new Function&lt;Integer, String>() { // 处理 onNext 参数，再传给 Observer
-        @Override
-        public String apply(Integer integer) throws Exception {
-            return "Value is " + integer;
-        }
-    }).subscribe(new Consumer&lt;String>() {    // Consumer 只关心 onNext 方法
-        @Override
-        public void accept(String s) throws Exception {
-            log(s);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>zip</code> -- 合并事件， 最终配对出的 Observable 发射事件数目只和少的那个相同。</p>
-                                <pre class="brush: java;">
-/** 只会输出 A1 和 B2 */
-Observable.zip(Observable.create(new ObservableOnSubscribe&lt;String>() {
-        @Override
-        public void subscribe(ObservableEmitter&lt;String> emitter) throws Exception {
-            emitter.onNext("A");
-            emitter.onNext("B");
-        }
-    }), Observable.create(new ObservableOnSubscribe&lt;Integer>() {
-        @Override
-        public void subscribe(ObservableEmitter&lt;Integer> emitter) throws Exception {
-            emitter.onNext(1);
-            emitter.onNext(2);
-            emitter.onNext(3);
-        }
-    }), new BiFunction&lt;String, Integer, String>() {
-        @Override
-        public String apply(String s, Integer i) throws Exception {
-            return s + i;
-        }
-    }).subscribe(new Consumer&lt;String>() {
-        @Override
-        public void accept(String s) throws Exception {
-            log(s);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>concat</code> -- 对于单一的把两个发射器连接成一个发射器。</p>
-                                <pre class="brush: java;">
-/** 输出为 A B 1 2 3 */
-Observable.concat(Observable.just("A", "B"), Observable.just("1", "2", "3"))
-    .subscribe(new Consumer&lt;String>() {
-        @Override
-        public void accept(String s) throws Exception {
-            log(s);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>flatMap</code> -- 把一个发射器 Observable 通过某种方法转换为多个
-                                Observables，然后再把这些分散的 Observables 装进一个单一的发射器
-                                Observable。但有个需要注意的是，flatMap 并不能保证事件的顺序，如果要保证顺序，使用 concatMap。</p>
-                                <pre class="brush: java;">
-/** 输出为: (A1) (A2) (B1) (B2) */
-Observable.create(new ObservableOnSubscribe&lt;String>() {
-        @Override
-        public void subscribe(ObservableEmitter&lt;String> e) throws Exception {
-            e.onNext("A");
-            e.onNext("B");
-        }
-    }).flatMap(new Function&lt;String, ObservableSource&lt;String>>() {
-        @Override
-        public ObservableSource&lt;String> apply(String integer) throws Exception {
-            List&lt;String> list = new ArrayList<>();
-            for (int i = 1; i < 3; i++) {
-                list.add("(" + integer + i + ")");
-            }
-            return Observable.fromIterable(list);
-        }
-    }).subscribe(new Consumer&lt;String>() {
-        @Override
-        public void accept(String s) throws Exception {
-            log(s);
-        }
-    });
-</pre>
-                            </li>
-                            <li>
-                                <p><code>concatMap</code> -- concatMap 与 flatMap 的唯一区别就是 concatMap
-                                    保证了顺序。</p></li>
-                            <li><p><code>distinct</code> -- 就是简单的去重。</p>
-                                <pre class="brush: java;">
-/** 输出为: 1 2 3 */
-Observable.just(1, 2, 1, 3, 2)
-    .distinct()
-    .subscribe(new Consumer&lt;Integer>() {
-        @Override
-        public void accept(Integer s) throws Exception {
-            log(s);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>filter</code> -- 可以接受一个参数，让其过滤掉不符合我们条件的值</p>
-                                <pre class="brush: java;">
-/** 输出为: 2 4 */
-Observable.just(1, 2, 3, 4, 5)
-    .filter(new Predicate&lt;Integer>() {
-        @Override
-        public boolean test(Integer integer) throws Exception {
-            return integer % 2 == 0;
-        }
-    })
-    .subscribe(new Consumer&lt;Integer>() {
-        @Override
-        public void accept(Integer s) throws Exception {
-            log(s);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>buffer</code> -- 操作符接受两个参数，buffer(count,skip)，作用是将
-                                Observable 中的数据按 skip (步长) 分成最大不超过 count 的 buffer ，然后生成一个
-                                Observable。</p>
-                                <pre class="brush: java;">
-/** count 为 4, skip 一直取到 skip >= items.size
- * 第一次：skip = 0 -- [1, 2, 3, 4]
- * 第二次：skip = 2 -- [3, 4, 5, 6]
- * 第三次：skip = 4 -- [5, 6]
- */
-Observable.just(1, 2, 3, 4, 5, 6)
-    .buffer(4, 2)
-    .subscribe(new Consumer&lt;List&lt;Integer>>() {
-        @Override
-        public void accept(List&lt;Integer> s) throws Exception {
-            log(s);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>timer</code> -- 相当于一个定时任务。发送一个 0，timer 和 interval 均默认在新线程。</p>
-                                <pre class="brush: java;">
-Observable.timer(1, TimeUnit.SECONDS)
-    .observeOn(AndroidSchedulers.mainThread())      // 切换到主线程
-    .subscribe(new Consumer&lt;Long>() {
-        @Override
-        public void accept(Long aLong) throws Exception {
-            AppUtil.logDebug("=========" + Thread.currentThread().getName());
-        }
-    });
-
-/** 延时 1s 执行一个网络逻辑 */
-Observable.timer(1, TimeUnit.SECONDS)
-    .map(new Function&lt;Long, String>() {
-        @Override
-        public String apply(Long aLong) throws Exception {
-            return OkHttpUtil.getInstance().syncGettring("url");
-        }
-    }).observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Consumer&lt;String>() {
-        @Override
-        public void accept(String s) throws Exception {
-            AppUtil.logDebug(s);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>interval</code> --
-                                用于间隔时间执行某个操作，其接受三个参数，分别是第一次发送延迟，间隔时间，时间单位。</p>
-                                <pre class="brush: java;">
-/** 第一次延时 0s, 每隔 3s 执行一个网络逻辑 */
-Observable.interval(0, 3, TimeUnit.SECONDS)
-    .map(new Functiom&lt;Long, String>() {
-        @Override
-        public String apply(Long aLong) throws Exception {
-             return OkHttpUtil.getInstance().syncGettring(url);
-        }
-    }).observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Consumer&lt;String>() {
-        @Override
-        public void accept(String s) throws Exception {
-            AppUtil.logDebug("===" + s);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>doOnNext</code> -- 让订阅者在接收到数据之前执行一些操作。</p>
-                                <pre class="brush: java;">
-Observable.just(1, 2, 3).doOnNext(new Consumer&lt;Integer>() {
-        @Override
-        public void accept(Integer integer) throws Exception {
-            log("doOnNext:" + integer);
-        }
-    }).subscribe(new Consumer&lt;Integer>() {
-        @Override
-        public void accept(Integer integer) throws Exception {
-            log(integer);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>skip</code> -- 接受一个 long 型参数 count ，代表跳过 count 个数目开始接收。</p>
-                                <pre class="brush: java;">
-/** 输出为: 2 3 */
-Observable.just(1, 2, 3)
-    .skip(1)
-    .subscribe(new Consumer&lt;Integer>() {
-        @Override
-        public void accept(Integer integer) throws Exception {
-            log(integer);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>take</code> -- 接受一个 long 型参数 count ，代表至多接收 count 个数据。</p>
-                                <pre class="brush: java;">
-/** 输出为: 1 2 */
-Observable.just(1, 2, 3)
-    .take(2)
-    .subscribe(new Consumer&lt;Integer>() {
-        @Override
-        public void accept(Integer integer) throws Exception {
-            log(integer);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>just</code> -- 一个简单的发射器依次调用 onNext() 方法。</p></li>
-                            <li><p><code>debounce</code> -- 去除发送频率过快的项。比如在 Android
-                                中应用手势事件时可能不需要这么多的时间时候可用。</p>
-                                <pre class="brush: java;">
-/** 去除发送间隔时间小于 500 毫秒的发射事件，所以 1 和 3 被去掉了 */
-Observable.create(new ObservableOnSubscribe&lt;Integer>() {
-        @Override
-        public void subscribe(@NonNull ObservableEmitter&lt;Integer> emitter) throws Exception {
-            emitter.onNext(1); // skip
-            Thread.sleep(400);
-            emitter.onNext(2); // deliver
-            Thread.sleep(505);
-            emitter.onNext(3); // skip
-            Thread.sleep(100);
-            emitter.onNext(4); // deliver
-            Thread.sleep(605);
-            emitter.onNext(5); // deliver
-            Thread.sleep(510);
-            emitter.onComplete();
-        }
-    }).debounce(500, TimeUnit.MILLISECONDS)
-    .subscribeOn(Schedulers.io())
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Consumer&lt;Integer>() {
-        @Override
-        public void accept(@NonNull Integer integer) throws Exception {
-            Log.e(TAG, "debounce :" + integer + "\n");
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>defer</code> -- 每次订阅都会创建一个新的 Observable，并且如果没有被订阅，就不会产生新的
-                                Observable。</p>
-                                <pre class="brush: java;">
-Observable&lt;Integer> observable = Observable.defer(new Callable&lt;ObservableSource&lt;Integer>>() {
-        @Override
-        public ObservableSource&lt;Integer> call() throws Exception {
-            return Observable.just(1, 2, 3);
-        }
-    });
-    observable.subscribe(new Consumer&lt;Integer>() {
-        @Override
-        public void accept(Integer integer) throws Exception {
-            log(integer);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>last</code> -- 取出可观察到的最后一个值，或者是满足某些条件的最后一项。</p>
-                                <pre class="brush: java;">
-/** 输出为: 3 */
-Observable.just(1, 2, 3)
-    .last(-1) // 如果失败，使用默认 -1
-    .subscribe(new Consumer&lt;Integer>() {
-        @Override
-        public void accept(Integer integer) throws Exception {
-            log(integer);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>merge</code> -- 把多个 Observable 结合起来，接受可变参数，也支持迭代器集合。注意它和
-                                concat 的区别在于，不用等到 发射器 A 发送完所有的事件再进行发射器 B 的发送。</p>
-                                <pre class="brush: java;">
-Observable.merge(Observable.just(1, 2), Observable.just(3, 4, 5))
-    .subscribe(new Consumer&lt;Integer>() {
-        @Override
-        public void accept(Integer integer) throws Exception {
-
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>reduce</code> -- 每次用一个方法处理一个值，可以有一个 seed 作为初始值。</p>
-                                <pre class="brush: java;">
-Observable.just(1, 2, 3, 4, 5)
-    .reduce(new BiFunction&lt;Integer, Integer, Integer>() {
-        @Override
-        public Integer apply(Integer integer, Integer integer2) throws Exception {
-            return integer * integer2;
-        }
-    }).subscribe(new Consumer&lt;Integer>() {       // 这个参数不能是 new Observer&lt;Integer>() {...}
-        @Override
-        public void accept(Integer integer) throws Exception {
-            log(integer);
-        }
-    });
-</pre>
-                            </li>
-                            <li><p><code>scan</code> -- 作用和上面的 reduce 一致，唯一区别是 reduce 是个只追求结果的坏人，而
-                                scan 会始终如一地把每一个步骤都输出。</p>
-                                <pre class="brush: java;">
-Observable.just(1, 2, 3, 4, 5)
-    .scan(new BiFunction&lt;Integer, Integer, Integer>() {
-        @Override
-        public Integer apply(Integer integer, Integer integer2) throws Exception {
-            return integer * integer2;
-        }
-    }).subscribe(new Observer&lt;Integer>() {...}      // 这个参数可以关注步骤
-</pre>
-                            </li>
-                            <li><p><code>window</code> -- 按照实际划分窗口，将数据发送给不同的 Observable。</p>
-                                <pre class="brush: java;">
-Observable longObservable = Observable.create(new ObservableOnSubscribe&lt;Long>() {
-    @Override
-    public void subscribe(ObservableEmitter&lt;Long> emitter) throws Exception {
-
-    }
-});
-
-Observable.interval(1, TimeUnit.SECONDS) // 间隔一秒发一次
-    .take(15) // 最多接收 15 个
-    .window(3, TimeUnit.SECONDS)
-    .subscribeOn(Schedulers.io())
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(new Consumer&lt;Observable&lt;Long>>() {
-        @Override
-        public void accept(@NonNull Observable&lt;Long> longObservable) {
-            longObservable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Consumer&lt;Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        log(aLong);
-                    }
-                });
-        }
-    });
-</pre>
-                            </li>
-
-                        </ol>
-                    </div>
-
-                    <div class="sub-item">
-                        <p><b>线程切换(异步操作)</b></p>
-                        <p>线程切换由下面两个方法指定：</p>
-                        <ul>
-                            <li><p><code>subscribeOn</code> -- 用于指定 subscribe()
-                                时所发生的线程，从源码角度可以看出，内部线程调度是通过 ObservableSubscribeOn 来实现的；</p></li>
-                            <li><p><code>observeOn</code> -- 用于指定下游 Observer 回调发生的线程。</p></li>
-                        </ul>
-                        <p>线程切换需要注意的:</p>
-                        <ul>
-                            <li><p>简单地说，subscribeOn() 指定的就是发射事件的线程，observerOn() 指定的就是订阅者接收事件的线程；</p>
-                            </li>
-                            <li><p>多次指定发射事件的线程只有第一次指定的有效，也就是说多次调用 subscribeOn()
-                                只有第一次的有效，其余的会被忽略；</p></li>
-                            <li><p>多次指定订阅者接收线程是可以的，也就是说每调用一次 observerOn()，下游的线程就会切换一次；</p></li>
-                            <li><p>subscribeOn() 和 subscribeOn()
-                                写的位置不一样，加工方法运行的线程也不一样，一些方法默认执行的线程可能在子线程，具体看说明。</p></li>
-                        </ul>
-                        <p>RxJava 中，已经内置了很多线程选项供我们选择，而 RxJava 内部使用的是线程池来维护这些线程，所以效率也比较高。例如有：</p>
-                        <ul>
-                            <li>
-                                <code>Schedulers.io()</code> 代表 io 操作的线程, 通常用于网络,读写文件等 io 密集型的操作；
-                            </li>
-                            <li>
-                                <code>Schedulers.computation()</code> 代表 CPU 计算密集型的操作, 例如需要大量计算的操作；
-                            </li>
-                            <li>
-                                <code>Schedulers.newThread()</code> 代表一个常规的新线程，不是用线程池，因此效率不高；
-                            </li>
-                            <li>
-                                <code>AndroidSchedulers.mainThread()</code> 代表 Android 的主线程(这个的
-                                RxAndroid 中才有)。
-                            </li>
-                        </ul>
-                        <pre class="brush: java;">
-/** RxJava 默认运行在当前线程中。
- * 如果当前线程是子线程，则 RxJava 运行在子线程；同样，当前线程是主线程，则 RxJava 运行在主线程
- */
-Observable.create(...).map(...).subscribe(...);
-new Thread(new Runnable() {
-    @Override public void run() {
-        Observable.create(...).map(...).subscribe(...);
-    }
-}).start();
-
-/** 运行的线程分为三个方面：事件产生，事件加工，事件消费
- * 1.事件产生的线程由 subscribeOn 指定，如果只指定了 subscribeOn，那么 事件加工和事件消费 都和事件产生同一个线程;
- * 2.事件消费的线程由 observeOn 指定，如果只指定了 observeOn，那么事件产生在当前线程线程，事件加工的线程要看是在
- *      observeOn 前调用还是后调用，observeOn 影响的是后面的方法;
- * 3.多次调用 observeOn 方法，事件加工和时间消费的方法所在线程会多次切换；
- * 4.注意 Observer 的 onSubscribe 方法总是在当前线程运行的。
- */
-Observable.create(...)                  // io 线程
-    .subscribeOn(Schedulers.io())
-    .observeOn(AndroidSchedulers.mainThread())
-    .map(...)                           // 主线程
-    .subscribe(...);                    // 主线程
-
-Observable.create(...)                  // io 线程
-    .map(...)                           // io 线程
-    .subscribeOn(Schedulers.io())
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(...);                    // 主线程
-
-Observable.create(...)                  // io 线程
-    .map(...)                           // io 线程
-    .subscribeOn(Schedulers.io())
-    .observeOn(AndroidSchedulers.mainThread())
-    .doOnNext(...)                      // 主线程
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(...);                    // 主线程
-                            </pre>
-                    </div>
-
-                    <div class="sub-item">
-                        <p><b>Flowable 背压支持</b></p>
-                        <p class="alert alert-success">
-                            背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。</p>
-                        <p>Flowable 是为了解决背压问题，而在 Observable 的基础上优化后的产物，与 Observable
-                            不是同一组观察者模式下的成员，Flowable 是 Publisher 与 Subscriber 这一组观察者模式中 Publisher
-                            的典型实现，Observable 是 ObservableSource / Observer 这一组观察者模式中
-                            ObservableSource 的典型实现；
-                            所以在使用 Flowable 的时候，可观察对象不再是 Observable，而是 Flowable；观察者不再是 Observer，而是
-                            Subscriber。Flowable 与 Subscriber 之间依然通过 subscribe() 进行关联。
-                        </p>
-                        <p>由于基于 Flowable 发射的数据流，以及对数据加工处理的各操作符都添加了背压支持，附加了额外的逻辑，其运行效率要比 Observable
-                            低得多。
-                            因为只有上下游运行在各自的线程中，且上游发射数据速度大于下游接收处理数据的速度时，才会产生背压问题。</p>
-                        <pre class="brush: java;">
+                            <p><a href="docs/rxjava-2.2.x/io/reactivex/Flowable.html" target="_blank">Flowable</a> / <b>Subscriber</b> -- 背压支持，<b>Subscriber</b> 来自于 <a href="https://github.com/reactive-streams/reactive-streams-jvm" target="_blank">reactive-streams</a> 这个包。</p>
+                            <p class="alert alert-success">
+                                背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。</p>
+                            <p>Flowable 是为了解决背压问题，而在 Observable 的基础上优化后的产物，与 Observable
+                                不是同一组观察者模式下的成员，Flowable 是 Publisher 与 Subscriber 这一组观察者模式中 Publisher
+                                的典型实现，Observable 是 ObservableSource / Observer 这一组观察者模式中
+                                ObservableSource 的典型实现；
+                                所以在使用 Flowable 的时候，可观察对象不再是 Observable，而是 Flowable；观察者不再是 Observer，而是
+                                Subscriber。Flowable 与 Subscriber 之间依然通过 subscribe() 进行关联。
+                            </p>
+                            <p>由于基于 Flowable 发射的数据流，以及对数据加工处理的各操作符都添加了背压支持，附加了额外的逻辑，其运行效率要比 Observable
+                                低得多。
+                                因为只有上下游运行在各自的线程中，且上游发射数据速度大于下游接收处理数据的速度时，才会产生背压问题。</p>
+                            <pre class="brush: java;">
 /** 使用 Observable 产生的背压问题：
  * 上游发送数据速度远大于下游接收数据的速度，造成上下游流速不均，导致数据累计，最后引起内存溢出。 */
 Observable.create(new ObservableOnSubscribe&lt;Integer>() {
@@ -4482,17 +3904,17 @@ Observable.create(new ObservableOnSubscribe&lt;Integer>() {
         }
     });
 </pre>
-                        <p>Flowable 的使用：</p>
-                        <ol>
-                            <li><p>create 方法中多了一个 BackpressureStrategy 类型的参数；</p></li>
-                            <li><p>onSubscribe 回调的参数不是 Disposable 而是Subscription；</p></li>
-                            <li><p>Flowable 发射数据时，使用的发射器是 FlowableEmitter 而不是 ObservableEmitter。</p>
-                            </li>
-                        </ol>
-                        <p>Flowable 的异步缓存池不同于 Observable，Observable 的异步缓存池没有大小限制，可以无限制向里添加数据，直至
-                            OOM,而 Flowable 的异步缓存池有个固定容量，其大小为 128。</p>
-                        <p>BackpressureStrategy 的作用便是用来设置 Flowable 通过异步缓存池存储数据的策略。</p>
-                        <pre class="brush: java;">
+                            <p>Flowable 的使用：</p>
+                            <ol>
+                                <li><p>create 方法中多了一个 BackpressureStrategy 类型的参数；</p></li>
+                                <li><p>onSubscribe 回调的参数不是 Disposable 而是Subscription；</p></li>
+                                <li><p>Flowable 发射数据时，使用的发射器是 FlowableEmitter 而不是 ObservableEmitter。</p>
+                                </li>
+                            </ol>
+                            <p>Flowable 的异步缓存池不同于 Observable，Observable 的异步缓存池没有大小限制，可以无限制向里添加数据，直至
+                                OOM,而 Flowable 的异步缓存池有个固定容量，其大小为 128。</p>
+                            <p>BackpressureStrategy 的作用便是用来设置 Flowable 通过异步缓存池存储数据的策略。</p>
+                            <pre class="brush: java;">
 /** BackpressureStrategy 枚举类型:
  * ERROR -- 如果放入Flowable的异步缓存池中的数据超限了，则会抛出MissingBackpressureException异常。
  * DROP -- 如果Flowable的异步缓存池满了，会丢掉将要放入缓存池中的数据。
@@ -4528,14 +3950,14 @@ Flowable.create(new FlowableOnSubscribe&lt;Integer>() {
         public void onComplete() {}
     });
                             </pre>
-                    </div>
+                        </div>
 
-                    <div class="sub-item">
-                        <p><b>Single, Completable, Maybe -- 简化版的 Observable</b></p>
-                        <ul>
-                            <li><p><code>Single</code> --
-                                只发射一条单一的数据，或者一条异常通知，不能发射完成通知，其中数据与通知只能发射一个。</p>
-                                <pre class="brush: java;">
+                        <div class="split-item">
+                            <p><b><a href="docs/rxjava-2.2.x/io/reactivex/Single.html" target="_blank">Single</a>, <a href="docs/rxjava-2.2.x/io/reactivex/Completable.html" target="_blank">Completable</a>, <a href="docs/rxjava-2.2.x/io/reactivex/Maybe.html" target="_blank">Maybe</a> -- 简化版的 Observable</b></p>
+                            <ul>
+                                <li><p><code>Single</code> --
+                                    只发射一条单一的数据，或者一条异常通知，不能发射完成通知，其中数据与通知只能发射一个。</p>
+                                    <pre class="brush: java;">
  Single.create(new SingleOnSubscribe&lt;String>() {
         @Override
         public void subscribe(SingleEmitter&lt;String> emitter) throws Exception {
@@ -4554,10 +3976,10 @@ Flowable.create(new FlowableOnSubscribe&lt;Integer>() {
         public void onError(Throwable e) {}
     });
 </pre>
-                            </li>
-                            <li><p><code>Completable</code> --
-                                只发射一条完成通知，或者一条异常通知，不能发射数据，其中完成通知与异常通知只能发射一个。</p>
-                                <pre class="brush: java;">
+                                </li>
+                                <li><p><code>Completable</code> --
+                                    只发射一条完成通知，或者一条异常通知，不能发射数据，其中完成通知与异常通知只能发射一个。</p>
+                                    <pre class="brush: java;">
 Completable.create(new CompletableOnSubscribe() {
         @Override
         public void subscribe(CompletableEmitter emitter) throws Exception {
@@ -4576,11 +3998,11 @@ Completable.create(new CompletableOnSubscribe() {
         public void onError(Throwable e) {}
     });
 </pre>
-                            </li>
-                            <li><p><code>Maybe</code> --
-                                可发射一条单一的数据，以及发射一条完成通知，或者一条异常通知，其中完成通知和异常通知只能发射一个，发射数据只能在发射完成通知或者异常通知之前，否则发射数据无效。
-                            </p>
-                                <pre class="brush: java;">
+                                </li>
+                                <li><p><code>Maybe</code> --
+                                    可发射一条单一的数据，以及发射一条完成通知，或者一条异常通知，其中完成通知和异常通知只能发射一个，发射数据只能在发射完成通知或者异常通知之前，否则发射数据无效。
+                                </p>
+                                    <pre class="brush: java;">
 Maybe.create(new MaybeOnSubscribe&lt;String>() {
         @Override
         public void subscribe(MaybeEmitter&lt;String> emitter) throws Exception {
@@ -4601,15 +4023,16 @@ Maybe.create(new MaybeOnSubscribe&lt;String>() {
         public void onComplete() {}
     });
 </pre>
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                     <div class="sub-item">
                         <p><a href="https://github.com/ReactiveX/RxAndroid" target="_blank">RxAndroid</a>
                             -- 是 RxJava 在 Android 上的一个扩展。</p>
                         <pre class="brush: java;">
-compile 'io.reactivex.rxjava2:rxandroid:2.0.2'
+compile 'io.reactivex.rxjava2:rxandroid:2.1.0'
 
 /** 1.主线程中调度 */
 Observable.just("one", "two", "three", "four", "five")
@@ -4810,6 +4233,74 @@ Observable.zip(observable1, observable2, new BiFunction&lt;MobileAddress, Catego
 
                     <div class="sub-item">
                         <p><b>使用 Rxjava 实现 EventBus 功能</b></p>
+                        <pre class="brush: java;">
+/* Relay 既是 Observable 也是 Consumer 的 RxJava 类型, 能够很容易在 non-Rx api 和 Rx api 之间搭起桥梁,
+ * 而不必要担心下游的触发的终止状态(onComplete 或 onError)。 */
+implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0'
+                        </pre>
+                        <pre class="brush: java;">
+public class RxBus {
+    private Relay&lt;Object> mBus = null;
+    private static volatile RxBus mDefaultInstance;
+
+    public RxBus() { mBus = PublishRelay.create().toSerialized(); }
+
+    public static RxBus getDefault() {
+        if (mDefaultInstance == null) {
+            synchronized (RxBus.class) {
+                if (mDefaultInstance == null) {
+                    mDefaultInstance = new RxBus();
+                }
+            }
+        }
+        return mDefaultInstance;
+    }
+
+    public void post(Object event) { mBus.accept(event); }
+
+    public &lt;T> Observable&lt;T> toObservable(Class&lt;T> eventType) { return mBus.ofType(eventType); }
+
+    public boolean hasObservers() { return mBus.hasObservers(); }
+
+    public void unregister(Disposable disposable) {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+        }
+    }
+
+    public &lt;T> Disposable register(Class&lt;T> eventType, Scheduler scheduler, Consumer&lt;T> onNext) {
+        return toObservable(eventType).observeOn(scheduler).subscribe(onNext);
+    }
+
+    public &lt;T> Disposable register(Class&lt;T> eventType, Scheduler scheduler, Consumer&lt;T> onNext, Consumer&lt;Throwable> onError, Action onComplete, Consumer&lt;? super Disposable> onSubscribe) {
+        return toObservable(eventType).observeOn(scheduler).subscribe(onNext, onError, onComplete, onSubscribe);
+    }
+
+    public &lt;T> Disposable register(Class&lt;T> eventType, Scheduler scheduler, Consumer&lt;T> onNext, Consumer&lt;Throwable> onError, Action onComplete) {
+        return toObservable(eventType).observeOn(scheduler).subscribe(onNext, onError, onComplete);
+    }
+
+    public &lt;T> Disposable register(Class&lt;T> eventType, Scheduler scheduler, Consumer&lt;T> onNext, Consumer&lt;Throwable> onError) {
+        return toObservable(eventType).observeOn(scheduler).subscribe(onNext, onError);
+    }
+
+    public &lt;T> Disposable register(Class&lt;T> eventType, Consumer&lt;T> onNext) {
+        return toObservable(eventType).observeOn(AndroidSchedulers.mainThread()).subscribe(onNext);
+    }
+
+    public &lt;T> Disposable register(Class&lt;T> eventType, Consumer&lt;T> onNext, Consumer&lt;Throwable> onError, Action onComplete, Consumer&lt;? super Disposable> onSubscribe) {
+        return toObservable(eventType).observeOn(AndroidSchedulers.mainThread()).subscribe(onNext, onError, onComplete, onSubscribe);
+    }
+
+    public &lt;T> Disposable register(Class&lt;T> eventType, Consumer&lt;T> onNext, Consumer&lt;Throwable> onError, Action onComplete) {
+        return toObservable(eventType).observeOn(AndroidSchedulers.mainThread()).subscribe(onNext, onError, onComplete);
+    }
+
+    public &lt;T> Disposable register(Class&lt;T> eventType, Consumer&lt;T> onNext, Consumer&lt;Throwable> onError) {
+        return toObservable(eventType).observeOn(AndroidSchedulers.mainThread()).subscribe(onNext, onError);
+    }
+}
+                        </pre>
                     </div>
                 </div>
             </div>
@@ -5029,6 +4520,7 @@ RXSQLite.rx(SQLite.select().from(Book.class))
                             &nbsp;&nbsp;JAR 包 --
                             <a href="lib/eventbus-3.0.0.jar">EventBus-3.0.0.jar</a>
                         </p>
+                        <pre class="brush: java;">implementation 'org.greenrobot:eventbus:3.1.1'</pre>
                         <p>EventBus 是一款针对 Android 优化的发布/订阅事件总线。主要功能是替代 Intent,
                             Handler, BroadCast 在 Fragment，
                             Activity，Service，线程之间传递消息。优点是开销小，代码更优雅。以及将发送者和接收者解耦。</p>
