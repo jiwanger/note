@@ -95,6 +95,7 @@
                     <div id="libs-other" class="panel-collapse collapse in"
                          role="tabpanel">
                         <a href="#other-RxJava" class="list-group-item">RxJava / RxAndroid</a>
+                        <a href="#other-LeakCanary" class="list-group-item">LeakCanary</a>
                         <a href="#other-DBFlow" class="list-group-item">DBFlow</a>
                         <a href="#other-EventBus" class="list-group-item">EventBus</a>
                         <a href="#other-ButterKnife" class="list-group-item">ButterKnife</a>
@@ -4232,20 +4233,19 @@ Observable.zip(observable1, observable2, new BiFunction&lt;MobileAddress, Catego
                     </div>
 
                     <div class="sub-item">
-                        <p><b>使用 Rxjava 实现 EventBus 功能</b></p>
+                        <p><b>使用 RxJava 实现 EventBus 功能</b></p>
                         <pre class="brush: java;">
 /* Relay 既是 Observable 也是 Consumer 的 RxJava 类型, 能够很容易在 non-Rx api 和 Rx api 之间搭起桥梁,
  * 而不必要担心下游的触发的终止状态(onComplete 或 onError)。 */
 implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.0'
-                        </pre>
-                        <pre class="brush: java;">
+
 public class RxBus {
     private Relay&lt;Object> mBus = null;
     private static volatile RxBus mDefaultInstance;
 
     public RxBus() { mBus = PublishRelay.create().toSerialized(); }
 
-    public static RxBus getDefault() {
+    public static RxBus get() {
         if (mDefaultInstance == null) {
             synchronized (RxBus.class) {
                 if (mDefaultInstance == null) {
@@ -4302,6 +4302,240 @@ public class RxBus {
 }
                         </pre>
                     </div>
+
+                    <div class="brush: java;">
+                        <p><a href="https://github.com/trello/RxLifecycle" target="_blank">RxLifecycle</a> 和 <a href="https://github.com/uber/AutoDispose" target="_blank">AutoDispose</a></p>
+                        <p>RxJava 的使用不当极有可能会导致内存泄漏。比如，使用 RxJava 发布一个订阅后，当 Activity 被 finish，此时订阅逻辑还未完成，如果没有及时取消订阅，就会导致 Activity 无法被回收，从而引发内存泄漏。</p>
+                        <p>RxLifecycle 通过监听 Activity、Fragment 的生命周期，来自动断开 subscription 以防止内存泄漏。</p>
+                        <p>AutoDispose 更加健壮，并且拥有更优秀的拓展性，通过 Android 官方架构组件: Lifecycle 的思想解决了 RxLifecycle 需要继承父类（RxActivity / RxFragment等）的问题。</p>
+                        <pre class="brush: java;">
+// RxLifecycle 常用的依赖，其他依赖查看 GitHub
+implementation 'com.trello.rxlifecycle3:rxlifecycle:3.0.0'
+implementation 'com.trello.rxlifecycle3:rxlifecycle-android:3.0.0'
+implementation 'com.trello.rxlifecycle3:rxlifecycle-components:3.0.0'
+
+// AutoDispose 常用的依赖, 注意：如果使用 1.0.0 的版本，需要是要 androidX
+implementation 'com.uber.autodispose:autodispose:1.0.0'
+implementation 'com.uber.autodispose:autodispose-android-archcomponents:1.0.0'
+                        </pre>
+
+                        <div class="split-item">
+                            <p><a href="https://github.com/trello/RxLifecycle" target="_blank">RxLifecycle</a> 并不难以理解，相反，它的设计思路很简单：</p>
+                            <ol>
+                                <li><p>在 Activity(RxAppCompatActivity) 中，定义一个 Observable（Subject），在不同的生命周期发射不同的事件；</p></li>
+                                <li><p>通过 compose 操作符（内部实际上还是依赖 takeUntil 操作符），定义了上游数据，当其接收到 Subject 的特定事件时，取消订阅；</p></li>
+                                <li><p>Subject 的特定事件并非是 ActivityEvent，而是简单的 boolean，它已经内部通过 combineLast 操作符进行了对应的转化。</p></li>
+                            </ol>
+                            <pre class="brush: java;">
+public class SendActivity extends RxAppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_send);
+
+        Observable.create(e -> {
+            network();
+        }).subscribeOn(Schedulers.io())
+        /* 此处在 onCreate() 中订阅，那么自动在 onDestroy() 中 dispose，还有一个
+         * bindUntilEvent(ActivityEvent) 方法，可以指定在生命周期的某个阶段取消订阅：
+         * public enum ActivityEvent { CREATE, START, RESUME, PAUSE, STOP, DESTROY } */
+        .compose(bindToLifecycle())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(s -> {
+            // ...
+        });
+    }
+
+    // 模拟费时操作
+    private void network() {
+        int i = 0;
+        try {
+            while (i < 50) {
+                Thread.sleep(1000);
+                i++;
+            }
+        } catch (InterruptedException t) {
+            t.printStackTrace();
+        }
+        e.onNext("text:" + i);
+        e.onComplete();
+    }
+}
+                            </pre>
+                        </div>
+
+                        <div class="split-item">
+                            <p><a href="https://github.com/uber/AutoDispose" target="_blank">AutoDispose</a> 通过 Android 官方架构组件: Lifecycle 的思想解决了 RxLifecycle 需要继承父类（RxActivity / RxFragment 等）的问题。</p>
+                            <pre class="brush: java;">
+// AppCompatActivity 的父类已经实现了 LifecycleOwner 接口
+public class SendActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_send);
+
+        Observable.create(e -> {
+            network();
+        }).subscribeOn(Schedulers.io())
+        /* 此处在 onCreate() 中订阅，那么自动在 onDestroy() 中 dispose，还有一个
+         * AndroidLifecycleScopeProvider.from(LifecycleOwner, Lifecycle.Event) 方法，可以指定在生命周期的某个阶段取消订阅：
+         * public enum Event { ON_CREATE, ON_START, ON_RESUME, ON_PAUSE, ON_STOP, ON_DESTROY, ON_ANY } */
+        .as(AutoDispose.autoDisposable(AndroidLifecycleScopeProvider.from(this)))
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(s -> {
+            // ...
+        });
+    }
+
+    // 模拟费时操作
+    private void network() {
+        int i = 0;
+        try {
+            while (i < 50) {
+                Thread.sleep(1000);
+                i++;
+            }
+        } catch (InterruptedException t) {
+            t.printStackTrace();
+        }
+        e.onNext("text:" + i);
+        e.onComplete();
+    }
+}
+                            </pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="other-LeakCanary"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">LeakCanary</h3>
+                </div>
+                <div class="panel-body">
+                    <p><a href="https://github.com/square/leakcanary" target="_blank">LeakCanary</a> 是 Square 公司出的开源框架，是一个 Android 和 Java 的内存泄露傻瓜化并且可视化的内存泄露分析工具，当检测到某个 Activity 有内存泄露，LeakCanary 会弹出通知，定位到内存泄露的位置。使用它大大减少 OOM 的问题，提高 App 的质量。</p>
+                    <pre class="brush: java;">
+debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
+releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+
+// Optional, if you use support library fragments:
+debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.2'
+                    </pre>
+                    <p><b>内存泄漏</b> 是指程序中己动态分配的堆内存由于某种原因程序未释放或无法释放，造成系统内存的浪费，导致程序运行速度减慢甚至系统崩溃等严重后果。</p>
+                    <p><b>内存溢出</b> 是内存占用达到最大值，当需要分配内存时，已经没有内存可以分配了。</p>
+                    <p>内存的溢出是内存分配达到了最大值，而内存泄漏是无用内存充斥了内存堆；因此内存泄漏是导致内存溢出的元凶之一，而且是很大的元凶；因为内存分配完后，哪怕占用再大，也会回收，而泄漏的内存则不然；当清理掉无用内存后，内存溢出的阀值也会相应降低。</p>
+                    <p>内存泄露的根本原因：长生命周期的对象持有短生命周期的对象。短周期对象就无法及时释放。</p>
+                    <p>内存泄漏的一些情况：</p>
+                    <ul>
+                        <li><p>错误使用单例造成的内存泄漏；</p>
+                            <pre class="brush: java;">
+public class SingletonManager {
+    private Context mContext;
+    private static SingletonManager instance;
+
+    private SingletonManager(Context context){
+        mContext = context;
+    }
+
+    // 当传入 Activity 的 this，当前 Activity 退出时它的内存并不会被回收
+    public static synchronized SingletonManager getInstance(Context context){
+        if(instance == null){
+            instance = new SingletonManager(context);
+        }
+        return instance;
+    }
+}
+                            </pre>
+                        </li>
+                        <li><p>Handler 造成的内存泄漏；</p>
+                            <pre class="brush: java;">
+/** Handler 的生命周期和 Activity 可能不一致：当 Activity 销毁时，消息队列中还有未处理的消息或者正在处理消息，
+ * 而消息队列中的 Message 持有 mHandler 实例的引用，mHandler 是内部类，持有 Activity 的引用，
+ * 所以导致该 Activity 的内存资源无法及时回收，引发内存泄漏。 */
+public class TestActivity extends AppCompatActivity {
+    private Handler handler = new Handler();
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_test);
+
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }, 10000);
+        finish();
+    }
+}
+
+// 修改如下：
+public class TestActivity extends AppCompatActivity {
+    private Handler handler = new MyHandler(this);
+    ...
+
+    public static class MyHandler extends Handler {
+        private WeakReference&lt;TestActivity> mActivity;
+
+        public MyHandler(TestActivity activity){
+            mActivity = new WeakReference(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (mActivity.get() == null) {
+                return;
+            }
+            //接受到消息的处理
+        }
+    }
+                            </pre>
+                        </li>
+                        <li><p>线程造成的内存泄漏；</p>
+                            <pre class="brush: java;">
+/** 如果在 Activity 中使用匿名内部类的线程，那么它对当前 Activity 都有一个隐式引用。如果 Activity 在销毁之前，
+ * 任务还未完成，那么将导致 Activity 的内存资源无法回收，造成内存泄漏。该情况同样是要改成使用静态内部类方法。 */
+                            </pre>
+                        </li>
+                        <li><p>非静态内部类创建静态实例造成的内存泄漏；</p></li>
+                        <li><p>资源未关闭造成的内存泄漏。</p></li>
+                    </ul>
+                    <p>在性能优化中，内存是一个不得不聊的话题；然而内存泄漏，显示已经成为内存优化的一个重量级的方向。当前流行的内存泄漏分析工具中，不得不提的就是 LeakCanary 框架；这是一个集成方便， 使用便捷，配置超级简单的框架，实现的功能却是极为强大的。</p>
+                    <p><b>LeakCanary 工作机制</b></p>
+                    <ol>
+                        <li><p>RefWatcher.watch() 创建一个 KeyedWeakReference 到要被监控的对象。</p></li>
+                        <li><p>然后在后台线程检查引用是否被清除，如果没有，调用GC。</p></li>
+                        <li><p>如果引用还是未被清除，把 heap 内存 dump 到 APP 对应的文件系统中的一个 .hprof 文件中。</p></li>
+                        <li><p>在另外一个进程中的 HeapAnalyzerService 有一个 HeapAnalyzer 使用HAHA 解析这个文件。</p></li>
+                        <li><p>得益于唯一的 reference key, HeapAnalyzer 找到 KeyedWeakReference，定位内存泄露。</p></li>
+                        <li><p>HeapAnalyzer 计算 到 GC roots 的最短强引用路径，并确定是否是泄露。如果是的话，建立导致泄露的引用链。</p></li>
+                        <li><p>引用链传递到 APP 进程中的 DisplayLeakService， 并以通知的形式展示出来。</p></li>
+                    </ol>
+                    <p>LeakCanary 的使用</p>
+                    <pre class="brush: java;">
+public class ExampleApplication extends Application {
+    private RefWatcher refWatcher;
+
+    public static RefWatcher getRefWatcher(Context context) {
+        ExampleApplication application = (ExampleApplication) context.getApplicationContext();
+        return application.refWatcher;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        refWatcher = LeakCanary.install(this);
+    }
+}
+
+                    </pre>
+
                 </div>
             </div>
             <!-- item over -->
@@ -4877,7 +5111,7 @@ public class FancyFragment extends Fragment {
             <!-- item over -->
 
             <!-- item start -->
-            <a class="offset" id="libs-"></a>
+            <a class="offset" id="other-"></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">...</h3>
