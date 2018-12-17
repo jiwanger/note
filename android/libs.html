@@ -1192,10 +1192,462 @@ service.getContent(3, 1)
                     <h3 class="panel-title">Volley</h3>
                 </div>
                 <div class="panel-body">
-                    <p>Volley 项目主页：<a href="https://github.com/google/volley" target="_blank">Volley</a></p>
-                    <pre class="brush: java;">implementation 'com.android.volley:volley:1.1.1'</pre>
-                    <p>Volley 1.x JavaDoc: <a href="docs/volley-1.x/javadoc/index.html" target="_blank">Javadoc</a></p>
-                    <p>Volley 的特点：特别适合数据量小，通信频繁的网络操作。</p>
+                    <div class="split-item">
+                        <p>Volley 项目主页：<a href="https://github.com/google/volley" target="_blank">Volley</a></p>
+                        <pre class="brush: java;">implementation 'com.android.volley:volley:1.1.1'</pre>
+                        <p>Volley 1.x JavaDoc: <a href="docs/volley-1.x/javadoc/index.html" target="_blank">Javadoc</a></p>
+                        <p>Volley 的特点：特别适合数据量小，通信频繁的网络操作。</p>
+                        <p><b>Volley 不适合于大型下载或流操作，因为 Volley 在解析期间将所有响应保存在内存中。</b></p>
+                        <p>Volley 基本使用：</p>
+                        <pre class="brush: java;">
+private RequestQueue queue;
+
+public void request(String url) {
+    queue = Volley.newRequestQueue(this); // 构建一个请求队列
+    // 构建一个类型为 String 的请求对象，还有 JsonRequest, ImageRequest..., 都是 Request 的子类
+    StringRequest stringRequest = new StringRequest(Request.Method.GET, url, response -> {
+        text.setText(response);
+    }, error -> {
+        LogUtil.log(error.getMessage());
+    });
+    stringRequest.setTag(TAG); // 设置一个标志，以便可以取消请求
+
+    queue.add(stringRequest); // 将请求加入请求队列，执行 Http 请求
+}
+
+@Override
+protected void onDestroy() {
+    super.onDestroy();
+    if(queue != null) {
+        queue.cancelAll(TAG); // 取消请求
+    }
+}
+                        </pre>
+                    </div>
+
+                    <div class="split-item">
+                        <p><b>Volley 的重要类：</b></p>
+                        <ul>
+                            <li>
+                                <p><a href="docs/volley-1.x/javadoc/com/android/volley/toolbox/Volley.html" target="_blank">Volley</a> -- 主要有两个静态方法，都是返回 RequestQueue 的请求队列</p>
+                                <pre class="brush: java;">
+/* 构建请求队列(阻塞队列，一直等待数据，一个缓存队列和 n 个网络请求队列， n 默认为 4)，并在构建后启动这些队列 */
+public class Volley {
+    // 构建请求队列, 在 API 9 以前使用 HttpClient 做网络请求，在 API 9 及以后使用 HttpUrlConnection 做网络请求
+    public static RequestQueue newRequestQueue(Context context) {...}
+    // 使用自定义的 BaseHttpStack 做网络请求，比如使用 OkHttp 来做网络请求
+    public static RequestQueue newRequestQueue(Context context, BaseHttpStack stack) {...}
+}
+                                </pre>
+                            </li>
+                            <li>
+                                <p><a href="docs/volley-1.x/javadoc/com/android/volley/Cache.html" target="_blank">Network</a> / <a href="docs/volley-1.x/javadoc/com/android/volley/toolbox/BasicNetwork.html" target="_blank">BasicNetwork</a>-- Volley 使用的是实现类 BasicNetwork， 它调用 BasicHttpStack 处理请求，并将结果转换为可被 ResponseDelivery 处理的 NetworkResponse</p>
+                                <pre class="brush: java;">
+public interface Network {
+    NetworkResponse performRequest(Request&lt;?> request) throws VolleyError;
+}
+
+public class BasicNetwork implements Network {
+    public BasicNetwork(BaseHttpStack httpStack) {}
+    public BasicNetwork(BaseHttpStack httpStack, ByteArrayPool pool) {}
+
+    // 调用 BasicHttpStack 处理请求，并将结果转换为 NetworkResponse
+    public NetworkResponse performRequest(Request&lt;?> request) {...}
+}
+
+// HttpStack 已不推荐使用，使用 BaseHttpStack 来处理网络请求
+public abstract class BaseHttpStack implements HttpStack {
+    // 实现此方法来做网络请求，返回的结果是 HttpResponse
+    public abstract HttpResponse executeRequest(Request&lt;?> request, Map&lt;String, String> request)
+            throws IOException, AuthFailureError;
+}
+                                </pre>
+                            </li>
+                            <li>
+                                <p><a href="docs/volley-1.x/javadoc/com/android/volley/toolbox/RequestQueue.html" target="_blank">RequestQueue</a> -- 是请求队列，维护了两个基于优先级的 Request 队列，缓存请求队列和网络请求队列。</p>
+                                <p>放在缓存请求队列中的 Request，将通过缓存获取数据；放在网络请求队列中的 Request，将通过网络获取数据。</p>
+                                <pre class="brush: java;">
+public class RequestQueue {
+    /** 请求事件 */
+    public @interface RequestEvent {
+        public static final int REQUEST_QUEUED = 0;   // 入队
+        public static final int REQUEST_CACHE_LOOKUP_STARTED = 1;      // 开始从 Cache 取数据
+        public static final int REQUEST_CACHE_LOOKUP_FINISHED = 2;     // 完成从 Cache 取数据
+        public static final int REQUEST_NETWORK_DISPATCH_STARTED = 3;  // 开始从 Network 取数据
+        public static final int REQUEST_NETWORK_DISPATCH_FINISHED = 4; // 完成从 Network 取数据
+        public static final int REQUEST_FINISHED = 5; // 请求完成
+    }
+
+    /** 请求事件监听器 */
+    public interface RequestEventListener {
+        void onRequestEvent(Request&lt;?> request, int event);
+    }
+
+    /** 用于过于需要取消的请求，在 cancelAll(RequestFilter) 方法，将会取消返回 true 的请求 */
+    public interface RequestFilter {
+        boolean apply(Request&lt;?> request);
+    }
+
+    public RequestQueue(Cache cache, Network network) {...}
+    public RequestQueue(Cache cache, Network network, int threadPoolSize) {...}
+    public RequestQueue(Cache cache, Network network, int threadPoolSize, ResponseDelivery d) {...}
+}
+                                </pre>
+                                <ol>
+
+                                    <li><p><code>&lt;T> Request&lt;T> 	add(Request&lt;T> request)</code> -- 将请求加入队列，此时便开始执行网络请求；会调用 request.shouldCache() 判断是否使用缓存，如果使用加入缓存队列；如果不使用，加入网络队列</p></li>
+
+                                    <li class="group"><p><code>void 	cancelAll(Object tag)</code> -- 取消指定 tag 的请求</p></li>
+                                    <li><p><code>void 	cancelAll(RequestQueue.RequestFilter filter)</code> -- 取消返回为 true 的请求</p></li>
+
+                                    <li class="group"><p><code>void 	addRequestEventListener(RequestQueue.RequestEventListener listener)</code> -- 添加请求事件监听器</p></li>
+                                    <li><p><code>void 	removeRequestEventListener(RequestQueue.RequestEventListener listener)</code> -- 移除指定的请求事件监听器</p></li>
+
+                                    <li class="group"><p><code>void 	start()</code> -- 启动此队列中的调度程序，先调用了 stop() 方法，退出原来的队列</p></li>
+                                    <li><p><code>void 	stop()</code> -- 停止此队列中的调度程序</p></li>
+
+                                    <li class="group"><p><code>Cache 	getCache()</code> -- 获取正在使用的缓存实例</p></li>
+                                    <li><p><code>int 	getSequenceNumber()</code> -- 获取序列号</p></li>
+                                </ol>
+                            </li>
+                            <li>
+                                <p><a href="docs/volley-1.x/javadoc/com/android/volley/toolbox/Request.html" target="_blank">Request</a> 及子类 -- Http 请求基类，保存了请求方式，响应结果等请求信息</p>
+                                <pre class="brush: java;">
+Request
+ ├─ StringRequest -- 返回响应结果为 String 类型的数据
+ ├─ JsonRequest -- 返回为 Json 的抽象类
+ │    ├─ JsonObjectRequest -- 返回响应结果为 JsonObject 类型的数据, 使用 JSONObject 转化 String
+ │    └─ JsonArrayRequest -- 同上，返回响应结果为 JsonArray 类型的数据
+ ├─ ImageRequest -- 返回响应结果为 Bitmap 类型的数据
+ └─ ClearCacheRequest -- 用于清除缓存的合成请求
+
+public abstract class Request&lt;T> implements Comparable&lt;Request&lt;T>> {
+    public interface Method {
+        int DEPRECATED_GET_OR_POST = -1;
+        int GET = 0;
+        int POST = 1;
+        int PUT = 2;
+        int DELETE = 3;
+        int HEAD = 4;
+        int OPTIONS = 5;
+        int TRACE = 6;
+        int PATCH = 7;
+    }
+
+    public enum Priority {
+        LOW,
+        NORMAL,
+        HIGH,
+        IMMEDIATE
+    }
+
+    public Request(int method, String url, Response.ErrorListener listener) {...}
+}
+                                </pre>
+                                <ol>
+                                    <li><p><code>int 	getMethod()</code> -- 获取请求方法, Request.Method</p></li>
+                                    <li><p><code>String 	getUrl()</code> -- 获取请求 URL</p></li>
+                                    <li><p><code>Response.ErrorListener 	getErrorListener()</code> -- 获取错误监听器</p></li>
+
+                                    <li class="group"><p><code>Map&lt;String, String> 	getHeaders()</code> -- 获取请求头信息</p></li>
+                                    <li><p><code>protected Map&lt;String, String> 	getParams()</code> -- 获取请求参数</p></li>
+                                    <li><p><code>protected String 	getParamsEncoding()</code> -- 获取请求编码</p></li>
+                                    <li><p><code>byte[] 	getBody()</code> -- 获取请求体</p></li>
+                                    <li><p><code>String 	getBodyContentType()</code> -- 获取请求体类型</p></li>
+
+                                    <li class="group"><p><code>Request&lt;?> 	setShouldCache(boolean shouldCache)</code> -- 设置是否应缓存对此请求的响应，默认为 true</p></li>
+                                    <li><p><code>boolean 	shouldCache()</code> -- 获取是否缓存了对此请求的响应</p></li>
+
+                                    <li class="group"><p><code>String 	getCacheKey()</code> -- 获取用于缓存的 key, GET 使用 url, 其它使用 ${method}-url</p></li>
+                                    <li><p><code>Cache.Entry 	getCacheEntry()</code> -- 获取缓存的内容，如果 shouldCache() 返回 false，这里始终为 NULL</p></li>
+                                    <li><p><code>Request&lt;?> 	setCacheEntry(Cache.Entry entry)</code> -- 设置缓存的内容</p>
+                                        <pre class="brush: java;">
+private StringRequest stringRequest;
+private String result;
+
+public void request(View v) {
+    queue = Volley.newRequestQueue(this);
+    stringRequest = new StringRequest(Request.Method.GET, url, response -> {
+        text.setText(response);
+
+        Cache.Entry entry = stringRequest.getCacheEntry();
+        if(null != entry) {
+            result = new String(entry.data);
+        }
+    }, error -> {
+        LogUtil.log(error.getMessage());
+    });
+    stringRequest.setTag(TAG);
+
+    if(null != result) { // 如果缓存不为空，直接使用缓存
+        text.setText("from cache -> " + result);
+    } else {
+        queue.add(stringRequest);
+    }
+}
+                                        </pre>
+                                    </li>
+
+                                    <li class="group"><p><code>Request&lt;?> 	setTag(Object tag)</code> -- 为此请求设置一个标签</p></li>
+                                    <li><p><code>Object 	getTag()</code> -- 获取此请求的标签</p></li>
+
+                                    <li class="group"><p><code>boolean 	isCanceled()</code> -- 请求是否已被取消，显式调用 <code>cancel</code> 方法</p></li>
+                                    <li><p><code>void 	cancel()</code> -- 取消请求</p></li>
+
+                                    <li class="group"><p><code>int 	getTimeoutMs()</code> -- 获取请求超时时间，默认设置为 2500 毫秒</p></li>
+
+                                    <li class="group"><p><code>Request.Priority 	getPriority()</code> -- 获取请求优先级</p></li>
+
+                                    <li class="group"><p><code>Request&lt;?> 	setSequence(int sequence)</code> -- 设置此请求的序列号，如果同时有很多请求加入队列，因为在优先级相同的情况下 <code>compareTo</code> 方法使用了此值来比较，因此此值可能会决定加入队列的优先级</p></li>
+                                    <li><p><code>int 	getSequence()</code> -- 获取此请求的序列号</p></li>
+
+                                    <li class="group"><p><code>void 	deliverError(VolleyError error)</code> -- 向 ErrorListener 发送错误消息，这是主动的，不管是否有错误发生</p>
+                                        <pre class="brush: java;">
+public void deliverError(VolleyError error) {
+    Response.ErrorListener listener;
+    synchronized (mLock) {
+        listener = mErrorListener;
+    }
+    if (listener != null) {
+        listener.onErrorResponse(error); // 直接回调了构造方法传入的 ErrorListener
+    }
+}
+                                        </pre>
+                                    </li>
+
+                                    <li class="group"><p><code>void 	markDelivered()</code> -- 将此请求标记为已传递了响应</p></li>
+                                    <li><p><code>boolean 	hasHadResponseDelivered()</code> -- 此请求是否已传递了响应</p></li>
+
+                                    <li class="group"><p><code>protected abstract void 	deliverResponse(T response)</code> -- 传递响应</p></li>
+                                    <li><p><code>protected abstract Response&lt;T> 	parseNetworkResponse(NetworkResponse response)</code> -- 将 NetworkResponse 转化为 Response&lt;T></p></li>
+                                    <li><p><code>protected VolleyError 	parseNetworkError(VolleyError volleyError)</code> -- 解析“networkError”并返回更具体的错误</p></li>
+
+                                    <li class="group"><p><code><a href="docs/volley-1.x/javadoc/com/android/volley/RetryPolicy.html">RetryPolicy</a> 	getRetryPolicy()</code> -- 获取重试策略</p></li>
+                                    <li><p><code>Request&lt;?> 	setRetryPolicy(RetryPolicy retryPolicy)</code> -- 设置重试策略</p>
+                                        <pre class="brush: java;">
+// Volley 默认使用了 DefaultRetryPolicy, 重试次数为 1, 超时为 2500 毫秒
+public interface RetryPolicy {
+    int 	getCurrentRetryCount();   // 返回当前重试计数
+    int 	getCurrentTimeout();      // 返回当前超时
+    void 	retry(VolleyError error); // 通过向超时应用回退来准备下一次重试
+}
+                                        </pre>
+                                    </li>
+
+                                    <li class="group"><p><code>Request&lt;?> 	setShouldRetryServerErrors(boolean shouldRetryServerErrors)</code> -- 设置如果出现 HTTP 5xx（服务器）错误，是否应重试请求</p></li>
+                                    <li><p><code>boolean 	shouldRetryServerErrors()</code> -- 获取 50X 时是否重试，默认 false</p></li>
+
+                                    <li class="group"><p><code>int 	getTrafficStatsTag()</code> -- 默认返回 url 的 host 的 hashCode()</p></li>
+                                    <li><p><code>Request&lt;?> 	setRequestQueue(RequestQueue requestQueue)</code> -- 设置此请求所在的 RequestQueue</p></li>
+
+                                    <li class="group"><p><code>void 	addMarker(String tag)</code> -- 将事件添加到此请求的事件日志；用于调试</p></li>
+
+                                    <li class="group"><p><code>int 	compareTo(Request&lt;T> other)</code> -- 先比较优先级，如果相同比较 Sequence；<b>如果同时执行的线程数比较多，将会根据此值来确定先将那个请求加入队列</b></p></li>
+                                    <li><p><code>String 	toString()</code> -- 请求的 String 表示</p></li>
+                                </ol>
+                            </li>
+                            <li>
+                                <p><a href="docs/volley-1.x/javadoc/com/android/volley/Cache.html" target="_blank">Cache</a> / <a href="docs/volley-1.x/javadoc/com/android/volley/toolbox/DiskBasedCache.html" target="_blank">DiskBasedCache</a> -- 缓存请求结果，Volley 默认使用的是基于 SDCard 的 DiskBasedCache(存储位置为: <code>rootDirectory = new File(context.getCacheDir(), "volley"))</code>。NetworkDispatcher 得到请求结果后判断是否需要存储在 Cache，CacheDispatcher 会从 Cache 中取缓存结果。</p>
+                                <pre class="brush: java;">
+/** Cache 的两个实现类
+ * DiskBasedCache -- 缓存到 SDCard 指定目录的缓存实现，默认磁盘使用大小为 5MB，但可配置
+ * NoCache -- 不使用缓存(Cache 接口的空实现)
+ */
+
+public interface Cache {
+    void initialize(); // 初始化
+    void invalidate(String key, boolean fullExpire); // 使缓存无效
+    void put(String key, Entry entry); // 用 key 缓存数据
+    Entry get(String key);             // 获取指定 key 的缓存
+    void remove(String key); // 移除指定的缓存
+    void clear();            // 清除所有缓存
+
+    class Entry {
+        public byte[] data; // 保存数据
+        public String etag; // 用于缓存一致性
+        public long serverDate;   // 服务器报告的此响应的日期
+        public long lastModified; // 请求对象的最后修改日期
+        public long ttl;     // TTL
+        public long softTtl; // 用于此记录的软 TTL
+        public Map&lt;String, String> responseHeaders = Collections.emptyMap(); // 保存从服务器接收的响应头
+        public List&lt;Header> allResponseHeaders; // 保存所有的响应头
+
+        public boolean isExpired() { // 是否已过期
+            return this.ttl < System.currentTimeMillis();
+        }
+        public boolean refreshNeeded() { // 是否需要从原始数据源进行刷新
+            return this.softTtl < System.currentTimeMillis();
+        }
+    }
+}
+                                </pre>
+                            </li>
+                            <li>
+                                <p><a href="docs/volley-1.x/javadoc/com/android/volley/CacheDispatcher.html" target="_blank">CacheDispatcher</a> / <a href="docs/volley-1.x/javadoc/com/android/volley/NetworkDispatcher.html" target="_blank">NetworkDispatcher</a> -- 都是 Thread 的子类，在 Volley 创建队列的启动时，启动了 1 个 CacheDispatcher 和 4 个 NetworkDispatcher。</p>
+                                <p>Volley 默认启用缓存，先将 Request 加入 CacheDispatcher 队列，如果没有缓存或者缓存的数据已经过期，那么加入 NetworkDispatcher 队列。</p>
+                            </li>
+                            <li>
+                                <p><a href="docs/volley-1.x/javadoc/com/android/volley/ResponseDelivery.html" target="_blank">ResponseDelivery</a> / <a href="docs/volley-1.x/javadoc/com/android/volley/ExecutorDelivery.html" target="_blank">ExecutorDelivery</a> -- 用于传送响应，Volley 使用 ExecutorDelivery 来传送响应，在 RequestQueue 构造函数中传入了此参数，并且绑定到了主线程的 Looper 对象。</p>
+                                <pre class="brush: java;">
+public interface ResponseDelivery {
+    // 提交响应
+    void postResponse(Request&lt;?> request, Response&lt;?> response);
+    // 提交响应
+    void postResponse(Request&lt;?> request, Response&lt;?> response, Runnable runnable);
+    // 提交错误响应
+    void postError(Request&lt;?> request, VolleyError error);
+}
+
+public class ExecutorDelivery implements ResponseDelivery {
+    // 默认使用 Handler 提交响应，此 Handler 是主线程的：new Handler(Looper.getMainLooper())
+    public ExecutorDelivery(final Handler handler) {...}
+    public ExecutorDelivery(Executor executor) {...}
+}
+                                </pre>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="split-item">
+                        <p>单例模式使用 Volley</p>
+                        <pre class="brush: java;">
+public class MySingleton {
+    private static MySingleton mInstance;
+    private RequestQueue mRequestQueue;
+    private ImageLoader mImageLoader;
+    private static Context mCtx;
+
+    private MySingleton(Context context) {
+        mCtx = context;
+        mRequestQueue = getRequestQueue();
+
+        mImageLoader = new ImageLoader(mRequestQueue,
+                new ImageLoader.ImageCache() {
+            private final LruCache&lt;String, Bitmap>
+                    cache = new LruCache&lt;String, Bitmap>(20);
+
+            @Override
+            public Bitmap getBitmap(String url) {
+                return cache.get(url);
+            }
+
+            @Override
+            public void putBitmap(String url, Bitmap bitmap) {
+                cache.put(url, bitmap);
+            }
+        });
+    }
+
+    public static synchronized MySingleton getInstance(Context context) {
+        if (mInstance == null) {
+            synchronized(MySingleton.class) {
+                mInstance = new MySingleton(context);
+            }
+        }
+        return mInstance;
+    }
+
+    public RequestQueue getRequestQueue() {
+        if (mRequestQueue == null) {
+            mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
+        }
+        return mRequestQueue;
+    }
+
+    public &lt;T> void addToRequestQueue(Request&lt;T> req) {
+        getRequestQueue().add(req);
+    }
+
+    public ImageLoader getImageLoader() {
+        return mImageLoader;
+    }
+}
+                        </pre>
+                    </div>
+
+                    <div class="split-item">
+                        <p>使用 Gson 使请求返回指定类型的数据</p>
+                        <pre class="brush: java;">
+public class GsonRequest&lt;T> extends Request&lt;T> {
+    private final Gson gson = new Gson();
+    private final Class&lt;T> clazz;
+    private final Map&lt;String, String> headers;
+    private final Listener&lt;T> listener;
+
+    public GsonRequest(String url, Class&lt;T> clazz, Map&lt;String, String> headers,
+            Listener&lt;T> listener, ErrorListener errorListener) {
+        super(Method.GET, url, errorListener);
+        this.clazz = clazz;
+        this.headers = headers;
+        this.listener = listener;
+    }
+
+    @Override
+    public Map&lt;String, String> getHeaders() throws AuthFailureError {
+        return headers != null ? headers : super.getHeaders();
+    }
+
+    @Override
+    protected void deliverResponse(T response) {
+        listener.onResponse(response);
+    }
+
+    @Override
+    protected Response&lt;T> parseNetworkResponse(NetworkResponse r) {
+        try {
+            String json = new String(r.data, HttpHeaderParser.parseCharset(response.headers));
+            return Response.success(gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(r));
+        } catch (UnsupportedEncodingException e) {
+            return Response.error(new ParseError(e));
+        } catch (JsonSyntaxException e) {
+            return Response.error(new ParseError(e));
+        }
+    }
+}
+                        </pre>
+                    </div>
+
+                    <div class="split-item">
+                        <p>使 Volley 支持 Https 链接</p>
+                        <pre class="brush: java;">
+/* 在请求前要调用： HTTPSTrustManager.allowAllSSL(); */
+public class HTTPSTrustManager implements X509TrustManager {
+    private static TrustManager[] trustManagers;
+    private static final X509Certificate[] _AcceptedIssuers = new X509Certificate[]{};
+
+    @Override
+    public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
+
+    @Override
+    public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
+
+    @Override
+    public X509Certificate[] getAcceptedIssuers() {
+        return _AcceptedIssuers;
+    }
+
+    public static void allowAllSSL() {
+        HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> {
+            // 可以在此处做处理，比如只信任指定的 hostname
+            return true;
+        });
+        SSLContext context = null;
+        if (trustManagers == null) {
+            trustManagers = new TrustManager[]{
+                new HTTPSTrustManager()
+            };
+        }
+        try {
+            context = SSLContext.getInstance("TLS");
+            context.init(null, trustManagers, new SecureRandom());
+        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+            e.printStackTrace();
+        }
+        HttpsURLConnection.setDefaultSSLSocketFactory(Objects.requireNonNull(context).getSocketFactory());
+    }
+}
+                        </pre>
+                    </div>
                 </div>
             </div>
             <!-- item over -->
@@ -4763,7 +5215,7 @@ RXSQLite.rx(SQLite.select().from(Book.class))
                         <p>EventBus
                             是一个消息总线，以观察者模式实现，用于简化程序的组件、线程通信，可以轻易切换线程、开辟线程。EventBus3.0
                             跟先前版本的区别在于加入了 annotation @Subscribe，取代了以前约定命名的方式。</p>
-                        <p width="100%">
+                        <p>
                             <img style="height: 180px;"
                                  src="images/EventBus-Publish-Subscribe.png"
                                  class="img-responsive center-block">
