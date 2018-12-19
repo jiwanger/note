@@ -1505,6 +1505,98 @@ public class ExecutorDelivery implements ResponseDelivery {
 }
                                 </pre>
                             </li>
+                            <li>
+                                <p><a href="docs/volley-1.x/javadoc/com/android/volley/toolbox/ImageLoader.html" target="_blank">ImageLoader</a> / <a href="docs/volley-1.x/javadoc/com/android/volley/toolbox/NetworkImageView.html" target="_blank">NetworkImageView</a> -- 用于加载网络图片。</p>
+                                <p>ImageLoader 需要使用一个请求队列和缓存机制来作为构造函数，可以参照后面的单列模式来使用。</p>
+                                <p>ImageLoader 在做图片缓存的时候，设置了宽高和缩放类型，换句话说，缓存的图片是经过处理的，不在是网络上的原图片。</p>
+                                <pre class="brush: java;">
+public class ImageLoader {
+    /** 设置自定义的 ImageCache，可以是内存缓存，也可以是 Disk 缓存 */
+    public interface ImageCache {
+        Bitmap getBitmap(String url); // 实现应该为：从缓存获取图片
+        void putBitmap(String url, Bitmap bitmap); // 实现应该为：将图片存入缓存
+    }
+
+    /** 图像加载监听器接口 */
+    public interface ImageListener extends ErrorListener {
+        /** 这里注意，如果缓存没有，那么此方法加载两次，第一次的 isImmediate 为 true, response 的 getBitmap() 为 null;
+         * 第二次的 isImmediate 为 false, response 的 getBitmap() 才有图片 */
+        void onResponse(ImageContainer response, boolean isImmediate);
+
+        // 来自 ErrorListener 接口的方法
+        // void onErrorResponse(VolleyError error);
+    }
+
+    /** 容器对象，用于包裹图像请求的所有数据 */
+    public class ImageContainer {
+        public ImageContainer(Bitmap b, String url, String cacheKey, ImageListener listener) {...}
+
+        public void cancelRequest() {...}
+        public Bitmap getBitmap() {...}
+        public String getRequestUrl() {...}
+    }
+
+    // 可以参照下面的单列模式来来用缓存
+    public ImageLoader(RequestQueue queue, ImageLoader.ImageCache imageCache) {...}
+}
+                                </pre>
+                                <ol>
+                                    <li><p><code>static ImageLoader.ImageListener 	getImageListener(ImageView view, int defaultImageResId, int errorImageResId)</code> -- 构建一个新的 ImageListener 对象</p></li>
+
+                                    <li class="group"><p><code>ImageLoader.ImageContainer 	get(String requestUrl, ImageLoader.ImageListener listener)</code> -- 获取图像，使用 ImageRequest 从网络加载图像，加载的图像是经过处理的(宽高和缩放类型)，用于缓存的 cacheKey 也包括了这些信息。</p>
+                                        <pre class="brush: java;">
+ImageLoader imageLoader = ...;
+// 如果是 ImageView, 使用以下的 ImageListener 可以自动设置默认图片和错误图片
+ImageListener imageListener = ImageLoader.getImageListener(imageView, def, error);
+imageLoader.get(imageUrl, imageListener);
+// 如果不是 Bitmap，可以获取到 Bitmap 再处理
+imageLoader.get(imageUrl, new ImageLoader.ImageListener() {
+    @Override
+    public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+        // response 中包含了返回的 Bitmap
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {}
+});
+
+
+                                        </pre>
+                                    </li>
+                                    <li><p><code>ImageLoader.ImageContainer 	get(String requestUrl, ImageLoader.ImageListener imageListener, int maxWidth, int maxHeight)</code> -- 同上，指定最大宽高</p></li>
+                                    <li><p><code>ImageLoader.ImageContainer 	get(String requestUrl, ImageLoader.ImageListener imageListener, int maxWidth, int maxHeight, ImageView.ScaleType scaleType)</code> -- 同上，指定缩放类型</p></li>
+
+                                    <li class="group"><p><code>boolean 	isCached(String requestUrl, int maxWidth, int maxHeight)</code> -- 是否缓存了指定宽高的图像</p></li>
+                                    <li><p><code>boolean 	isCached(String requestUrl, int maxWidth, int maxHeight, ImageView.ScaleType scaleType)</code> -- 是否缓存了指定宽高和缩放类型的图像</p></li>
+
+                                    <li class="group"><p><code>void 	setBatchedResponseDelay(int newBatchedResponseDelayMs)</code> -- 如果多个请求同时加载到多张图片，每张图片的提交会延迟指定时间</p></li>
+
+                                    <li class="group"><p><code>protected Request&lt;Bitmap> 	makeImageRequest(String requestUrl, int maxWidth, int maxHeight, ImageView.ScaleType scaleType, String cacheKey)</code> -- 构建一个 ImageRequest 请求</p></li>
+                                    <li><p><code>protected void 	onGetImageSuccess(String cacheKey, Bitmap response)</code> -- 获取成功</p></li>
+                                    <li><p><code>protected void 	onGetImageError(String cacheKey, VolleyError error)</code> -- 获取失败</p></li>
+
+                                </ol>
+                                <p>NetworkImageView 是 ImageView 的子类，用于方便的从网络加载图片。</p>
+                                <pre class="brush: java;">
+public class NetworkImageView extends ImageView {
+    public NetworkImageView(Context context) {...}
+    public NetworkImageView(Context context, AttributeSet attrs) {...}
+    public NetworkImageView(Context context, AttributeSet attrs, int defStyle) {...}
+}
+                                </pre>
+                                <ol>
+                                    <li><p><code>void 	setImageUrl(String url, ImageLoader imageLoader)</code> -- 网络图片的 Url 和 ImageLoader，将利用这个 ImageLoader 去获取网络图片</p></li>
+
+                                    <li class="group"><p><code>void 	setDefaultImageBitmap(Bitmap defaultImage)</code> -- 默认图片，加载图片过程中显示</p></li>
+                                    <li><p><code>void 	setDefaultImageResId(int defaultImage)</code> -- 同上</p></li>
+                                    <li><p><code>void 	setErrorImageBitmap(android.graphics.Bitmap errorImage)</code> -- 错误图片，加载图片失败后显示</p></li>
+                                    <li><p><code>void 	setErrorImageResId(int errorImage)</code> -- 同上</p></li>
+
+                                    <li class="group"><p><code>protected void 	drawableStateChanged()</code> -- 视图的状态发生变化回调</p></li>
+                                    <li><p><code>protected void 	onDetachedFromWindow()</code> -- 从窗口移除回调，会取消请求</p></li>
+                                    <li><p><code>protected void 	onLayout(boolean changed, int left, int top, int right, int bottom)</code> -- 布局方法，如果尚未加载视图，则加载该视图的图像</p></li>
+                                </ol>
+                            </li>
                         </ul>
                     </div>
 
@@ -1523,18 +1615,14 @@ public class MySingleton {
 
         mImageLoader = new ImageLoader(mRequestQueue,
                 new ImageLoader.ImageCache() {
-            private final LruCache&lt;String, Bitmap>
-                    cache = new LruCache&lt;String, Bitmap>(20);
+            // 使用 LruCache 来做图片的缓存，这里使用图片数量来做缓存，和图片大小没关系
+            private final LruCache&lt;String, Bitmap> cache = new LruCache&lt;String, Bitmap>(20);
 
             @Override
-            public Bitmap getBitmap(String url) {
-                return cache.get(url);
-            }
+            public Bitmap getBitmap(String url) { return cache.get(url); }
 
             @Override
-            public void putBitmap(String url, Bitmap bitmap) {
-                cache.put(url, bitmap);
-            }
+            public void putBitmap(String url, Bitmap bitmap) { cache.put(url, bitmap); }
         });
     }
 
@@ -1554,13 +1642,9 @@ public class MySingleton {
         return mRequestQueue;
     }
 
-    public &lt;T> void addToRequestQueue(Request&lt;T> req) {
-        getRequestQueue().add(req);
-    }
+    public &lt;T> void addToRequestQueue(Request&lt;T> req) { getRequestQueue().add(req); }
 
-    public ImageLoader getImageLoader() {
-        return mImageLoader;
-    }
+    public ImageLoader getImageLoader() { return mImageLoader; }
 }
                         </pre>
                     </div>
