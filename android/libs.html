@@ -1519,7 +1519,8 @@ public class ImageLoader {
 
     /** 图像加载监听器接口 */
     public interface ImageListener extends ErrorListener {
-        /** 这里注意，如果缓存没有，那么此方法加载两次，第一次的 isImmediate 为 true, response 的 getBitmap() 为 null;
+        /** 这里注意，如果缓存没有，那么此方法加载两次，
+         * 第一次的 isImmediate 为 true, response 的 getBitmap() 为 null;
          * 第二次的 isImmediate 为 false, response 的 getBitmap() 才有图片 */
         void onResponse(ImageContainer response, boolean isImmediate);
 
@@ -1615,8 +1616,23 @@ public class MySingleton {
 
         mImageLoader = new ImageLoader(mRequestQueue,
                 new ImageLoader.ImageCache() {
-            // 使用 LruCache 来做图片的缓存，这里使用图片数量来做缓存，和图片大小没关系
-            private final LruCache&lt;String, Bitmap> cache = new LruCache&lt;String, Bitmap>(20);
+            // 1.使用 LruCache 来做图片的缓存，这里使用图片数量来做缓存，和图片大小没关系
+            // private final LruCache&lt;String, Bitmap> cache = new LruCache&lt;String, Bitmap>(20);
+
+            // 2.使用 LruCache 来做图片的缓存，使用固定大小的物理内存做缓存，重写了 sizeOf 方法
+            int cacheSize = calculateMaxMemorySize(mCtx) / 7;
+            private final LruCache&lt;String, Bitmap> cache = new LruCache&lt;String, Bitmap>(cacheSize) {
+                @Override
+                protected int sizeOf(String key, Bitmap value) {
+                    int result;
+                    if (SDK_INT >= HONEYCOMB_MR1) {
+                        result = bitmap.getByteCount();
+                    } else {
+                        result = bitmap.getRowBytes() * bitmap.getHeight();
+                    }
+                    return result;
+                }
+            };
 
             @Override
             public Bitmap getBitmap(String url) { return cache.get(url); }
@@ -1624,6 +1640,16 @@ public class MySingleton {
             @Override
             public void putBitmap(String url, Bitmap bitmap) { cache.put(url, bitmap); }
         });
+    }
+
+    public static int calculateMaxMemorySize(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+        boolean largeHeap = (context.getApplicationInfo().flags & FLAG_LARGE_HEAP) != 0;
+        int memoryClass = am.getMemoryClass();
+        if (largeHeap && SDK_INT >= HONEYCOMB) {
+            memoryClass = am.getLargeMemoryClass();
+        }
+        return 1024 * 1024 * memoryClass;
     }
 
     public static synchronized MySingleton getInstance(Context context) {

@@ -1118,7 +1118,97 @@ a.recycle();
                     <h3 class="panel-title">LruCache</h3>
                 </div>
                 <div class="panel-body">
+                    <div class="sub-item">
+                        <pre class="brush: java;">
+public class LruCache&lt;K, V> {
+    private final LinkedHashMap&lt;K, V> map;
 
+    public LruCache(int maxSize) {
+        ...
+        // 第三个参数设置为 true 表示按访问顺序排列；如果为 false 则为插入顺序
+        this.map = new LinkedHashMap&lt;K, V>(0, 0.75f, true);
+    }
+}
+                        </pre>
+                        <p>LRU(Least Recently Used) 是"近期最少使用"的算法，它的核心思想是当缓存满时，会优先淘汰那些近期最少使用的缓存对象。采用 LRU 算法的缓存有两种：LruCache 和 DisLruCache，分别用于实现内存缓存和硬盘缓存，其核心思想都是 LRU 缓存算法。</p>
+                        <p><a href="docs/reference/android/util/LruCache.html" target="_blank">LruCache</a> 主要算法原理是把最近使用的对象存储在 LinkedHashMap 中。当缓存满时，把最近最少使用的对象从内存中移除，并提供了 get 和 put 方法来完成缓存的获取和添加操作。</p>
+                        <p>LinkedHashMap 由 数组 + 双向链表 的数据结构来实现的。其中双向链表的结构可以实现访问顺序和插入顺序，使得 LinkedHashMap 中的 &lt;key,value> 对按照一定顺序排列起来。</p>
+                        <p>LruCache 一般有两种方式做缓存(判断什么时候缓存的数据满了)，一种是根据 LinkedHashMap 中的数量，另一种是根据 LinkedHashMap 中对象的大小。</p>
+                        <pre class="brush: java;">
+// 当缓存的数量达到 20 时候，认为缓存达到上限，这里如果有新的数据需要缓存，那么就删除就旧的数据
+LruCache cache = new LruCache(20);
+
+// 使用应用可以使用的物理内存大小的 1 / 7 作为最大缓存大小，重写 sizeOf 方法，每次添加数据计算添加的数据的大小
+int cacheSize = calculateMaxMemorySize(context) / 7;
+LruCache cache = new LruCache&lt;String, Bitmap>(cacheSize) {
+    @Override
+    protected int sizeOf(String key, Bitmap value) {
+        int result;
+        if (SDK_INT >= HONEYCOMB_MR1) {
+            result = bitmap.getByteCount();
+        } else {
+            result = bitmap.getRowBytes() * bitmap.getHeight();
+        }
+        return result;
+    }
+}
+
+/** 计算应用可以使用的最大内存大小， 支持 android:largeHeap="true" 配置 */
+public static int calculateMaxMemorySize(Context context) {
+    ActivityManager am = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+    boolean largeHeap = (context.getApplicationInfo().flags & FLAG_LARGE_HEAP) != 0;
+    int memoryClass = am.getMemoryClass();
+    if (largeHeap && SDK_INT >= HONEYCOMB) {
+        memoryClass = am.getLargeMemoryClass();
+    }
+    return 1024 * 1024 * memoryClass;
+}
+                        </pre>
+
+                        <ol>
+                            <li><p><code>final V 	put(K key, V value)</code> -- 添加到缓存，会调用 sizeOf() 计算添加的数据大小，调整缓存大小，缓存满了删除旧数据；如果当前已经有了，那么不添加容量大小</p></li>
+                            <li><p><code>final V 	get(K key)</code> -- 获取缓存的数据，会调整顺序</p></li>
+                            <li><p><code>final V 	remove(K key)</code> -- 移除指定的缓存内容</p></li>
+                            <li><p><code>final int 	maxSize()</code> -- 返回最大容量</p></li>
+                            <li><p><code>final int 	size()</code> -- 返回当前已缓存的容量</p></li>
+                            <li><p><code>void 	resize(int maxSize)</code> -- 重置最大容量</p></li>
+
+                            <li class="group"><p><code>final int 	putCount()</code> -- 有效调用 put(K, V) 的次数</p></li>
+                            <li><p><code>final int 	hitCount()</code> -- 有效调用 get(K) 的次数</p></li>
+                            <li><p><code>final int 	missCount()</code> -- 调用 get(K)，但是未获取到数据的次数</p></li>
+                            <li><p><code>final int 	createCount()</code> -- 调用 get(K)，未获取到数据，但是有效重写了 create(K) 方法，此时 creatCount 会自加 1</p></li>
+                            <li><p><code>final int 	evictionCount()</code> -- 已被删除的值的数量</p></li>
+
+                            <li class="group"><p><code>final void 	evictAll()</code> -- 清除所有的缓存数据，调用 entryRemoved 方法</p></li>
+                            <li><p><code>final Map&lt;K, V> 	snapshot()</code> -- 返回当前缓存的快照</p></li>
+                            <li><p><code>final String 	toString()</code> -- 缓存的部分信息的 String 表现</p></li>
+
+                            <li class="group"><p><code>V 	create(K key)</code> -- 可以重写此方法，在 get(K) 返回 null 的时候创建默认的数据，并自动加入缓存</p></li>
+                            <li><p><code>void 	entryRemoved(boolean evicted, K key, V oldValue, V newValue)</code> -- 可以重写此方法，在清除的时候做处理</p></li>
+                            <li><p><code>int 	sizeOf(K key, V value)</code> -- 默认返回 1, 用于计算每次添加到缓存的数据大小</p></li>
+                        </ol>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><b>DiskLruCache</b> 及基于 LruCache 思想的磁盘缓存实现，可以将网络下载的图片永久的缓存到手机外部存储中去，并可以将缓存数据取出来使用。此类并不在 Android SDK 中，但是得到了官方推荐，可以在 github 下载到 <a href="https://github.com/JakeWharton/DiskLruCache" target="_blank">DiskLruCache</a>。</p>
+                        <p>有一个主要类：<a href="lib/DiskLruCache/DiskLruCache.java" target="_blank">DiskLruCache.java</a> 和两个辅助类：<a href="lib/DiskLruCache/StrictLineReader.java" target="_blank">StrictLineReader.java</a>, <a href="lib/DiskLruCache/Util.java" target="_blank">Util.java</a></p>
+                        <pre class="brush: java;">
+public final class DiskLruCache implements Closeable {
+    public final class Editor {}
+    public final class Snapshot implements Closeable {}
+
+    private DiskLruCache(File directory, int appVersion, int valueCount, long maxSize) {...}
+
+    /** 参数值：
+     * directory -- 缓存目录
+     * appVersion -- 软件版本，也可以认为是缓存版本，当此版本变高时，原来的缓存的数据失效
+     * valueCount -- 一般是 1, 同一个 key 可以对应多少文件
+     * maxSize -- 缓存最大可以使用的空间大小，当达到此值时，删除旧的数据
+     */
+    public static DiskLruCache open(File directory, int appVersion, int valueCount, long maxSize) {...}
+}
+                        </pre>
+                    </div>
                 </div>
             </div>
             <!-- item over -->
