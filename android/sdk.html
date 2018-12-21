@@ -1191,21 +1191,125 @@ public static int calculateMaxMemorySize(Context context) {
 
                     <div class="sub-item">
                         <p><b>DiskLruCache</b> 及基于 LruCache 思想的磁盘缓存实现，可以将网络下载的图片永久的缓存到手机外部存储中去，并可以将缓存数据取出来使用。此类并不在 Android SDK 中，但是得到了官方推荐，可以在 github 下载到 <a href="https://github.com/JakeWharton/DiskLruCache" target="_blank">DiskLruCache</a>。</p>
+                        <p><b>DiskLruCache</b> 注意事项：</p>
+                        <ol>
+                            <li><p>每一条缓存都有一个 String 类型的 key 与之对应，每一个 key 中的值都必须满足 <code>[a-z0-9_-]{1,120}</code> 的规则，所以推荐将字符串譬如图片的 url 等进行 MD5 加密后作为 key。</p>
+                                <pre class="brush: java;">
+// 获取 MD5 的方法
+public static String getMD5Result(String value) {
+    try {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(value.getBytes("UTF-8"));
+        byte[] result = md.digest();
+        return getString(result);
+    } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
+private static String getString(byte[] result) {
+    StringBuilder sb = new StringBuilder();
+    for (byte b : result) {
+        int i = b & 0xff;
+        if (i <= 0xf) {
+            sb.append(0);
+        }
+        sb.append(Integer.toHexString(i));
+    }
+    return sb.toString().toLowerCase();
+}
+                                </pre>
+                            </li>
+                            <li><p>可以使用同一个 key 缓存多个文件，由 valueCount 指定，然后在读写数据的时候使用 index 来做对应。</p></li>
+                            <li><p>数据是缓存在文件系统的某一目录中的，这个目录必须是唯一对应某一条缓存的，缓存可能会重写和删除目录中的文件。多个进程同一时间使用同一个缓存目录会出错。</p></li>
+                            <li><p>遵从 LRU 算法，当缓存数据达到设定的极限值时将会后台自动按照 LRU 算法移除缓存直到满足存下新的缓存不超过极限值。</p></li>
+                            <li><p>如果文件从文件系统中丢失，相应的条目将从缓存中删除。如果写入缓存值时出错，编辑将失败。</p></li>
+                        </ol>
+                        <p>DiskLruCache 在缓存目录不仅存储了内容，还有一个日志文件，用于记录缓存的状态：</p>
+                        <pre class="brush: java;">
+libcore.io.DiskLruCache  // 固定写死
+1                        // DiskLruCache 版本号
+2                        // APP 版本号，由 open() 方法传入，在版本升级时，缓存会删除
+1                        // 一般为 1，同一个 key 可以对应多少文件，也可以有多个，那么读写时使用 index 对应
+
+DIRTY 28eb0e6425269fb98c8171fa3c45de96 // 准本缓存此文件,参数为 key，要根据此 key 读取文件，edit() 方法生成此记录
+CLEAN 28eb0e6425269fb98c8171fa3c45de96 59376 // 缓存成功，最后的参数为文件的大小，editor.commit() 方法生成此记录
+REMOVE 28eb0e6425269fb98c8171fa3c45de96       // 缓存失败，editor.abort() 方法生成此记录
+READ 28eb0e6425269fb98c8171fa3c45de96  // 从缓存读取了此文件，Lru 算法需要记录最近读取的文件
+......
+                        </pre>
                         <p>有一个主要类：<a href="lib/DiskLruCache/DiskLruCache.java" target="_blank">DiskLruCache.java</a> 和两个辅助类：<a href="lib/DiskLruCache/StrictLineReader.java" target="_blank">StrictLineReader.java</a>, <a href="lib/DiskLruCache/Util.java" target="_blank">Util.java</a></p>
                         <pre class="brush: java;">
 public final class DiskLruCache implements Closeable {
-    public final class Editor {}
-    public final class Snapshot implements Closeable {}
+
+     /** 包含了指向缓存数据的 OutputStream */
+    public final class Editor {
+        private Editor(Entry entry) {...}
+
+        // 返回一个输出流，此输出流指向缓存文件，如果 valueCount 传入了 1, 那么这里就传入 0
+        public OutputStream newOutputStream(int index) throws IOException {...}
+        // 如果是缓存 String, 那么直接使用此方法
+        public void set(int index, String value) throws IOException {...}
+
+        // 获取输出留，可以获取数据
+        public InputStream newInputStream(int index) throws IOException {...}
+        // 如果是缓存 String, 那么直接使用此方法
+        public String getString(int index) throws IOException {...} // 如果是缓存 String, 那么直接使用此方法
+
+        // 写入数据，并且更新日志
+        public void commit() throws IOException {...}
+        // 取消写入数据，还会删除已提交的数据，并且更新日志
+        public void abort() throws IOException {...}
+        // 如果还未提交，那么取消
+        public void abortUnlessCommitted() {...}
+    }
+
+    /** 包含了 InputStream 形式的数据，以及数据的长度 */
+    public final class Snapshot implements Closeable {
+        public Editor edit() throws IOException {...} // 获取此数据的 Editor 实例
+
+        public InputStream getInputStream(int index) {...} // 如果 valueCount 传入了 1, 那么这里就传入 0
+        public String getString(int index) throws IOException {...} // 如果缓存 String, 那么可以直接使用此方法
+
+        public long getLength(int index) {...} // 获取数据长度
+        public void close() {...} // 关闭输入留
+    }
 
     private DiskLruCache(File directory, int appVersion, int valueCount, long maxSize) {...}
 
-    /** 参数值：
+    /** 打开缓存，参数值：
      * directory -- 缓存目录
      * appVersion -- 软件版本，也可以认为是缓存版本，当此版本变高时，原来的缓存的数据失效
-     * valueCount -- 一般是 1, 同一个 key 可以对应多少文件
+     * valueCount -- 一般是 1, 同一个 key 可以对应多少文件；如果有多个，那么读写时使用 index 对应
      * maxSize -- 缓存最大可以使用的空间大小，当达到此值时，删除旧的数据
      */
     public static DiskLruCache open(File directory, int appVersion, int valueCount, long maxSize) {...}
+
+    // 从缓存获取数据， Snapshot 包含了数据的输入流，可以使用它读取缓存数据
+    public synchronized Snapshot get(String key) throws IOException {...}
+    // 返回 Editor 对象，此对象包含了指向缓存数据的输出流，可以使用它写入缓存数据
+    public Editor edit(String key) throws IOException {...}
+    // 删除指定数据的缓存
+    public synchronized boolean remove(String key) throws IOException {...}
+    // 清空整个缓存目录
+    public void delete() throws IOException {...}
+    // 将缓冲数据写入日志文件，比如 READ 和 REMOVE
+    public synchronized void flush() throws IOException {...}
+
+    // 获取缓存目录
+    public File getDirectory() {...}
+    // 获取最大缓存大小
+    public synchronized long getMaxSize() {...}
+    // 重置最大缓存大小
+    public synchronized void setMaxSize(long maxSize) {...}
+    // 获取已缓存的大小
+    public synchronized long size() {...}
+
+    // 缓存是否已关闭
+    public synchronized boolean isClosed() {...}
+    // 关闭缓存
+    public synchronized void close() throws IOException {...}
 }
                         </pre>
                     </div>
