@@ -126,6 +126,8 @@
                             <a href="#java-util-Timer" class="list-group-item">Timer 和 TimerTask</a>
                             <a href="#java-util-List" class="list-group-item">List, Map, Set, Queue...</a>
                             <a href="#java-util-function" class="list-group-item"><code>.function</code> 包</a>
+							<a href="#java-util-concurrent-atomic" class="list-group-item"><code>.concurrent.atomic</code> 包</a>
+							<a href="#java-util-concurrent-locks" class="list-group-item"><code>.concurrent.locks</code> 包</a>
                             <a href="#java-util-Formatter" class="list-group-item">Formatter, Formattable</a>
                             <a href="#java-util-Observable" class="list-group-item">Observer, Observable</a>
                             <a href="#java-util-UUID" class="list-group-item">UUID</a>
@@ -3377,7 +3379,7 @@ public enum RetentionPolicy {
                         <div class="split-item">
                             <p><b>Java 常用的内置注解类型(都是 java.lang 包下)：</b></p>
                             <ul>
-                                <li><p><a href="docs/docs-java/api/java/lang/annotation/Override.html" target="_blank">@Override</a> -- 指示一个方法声明要覆盖一个父类型中的方法声明。</p>
+                                <li><p><a href="docs/docs-java/api/java/lang/Override.html" target="_blank">@Override</a> -- 指示一个方法声明要覆盖一个父类型中的方法声明。</p>
                                     <pre class="brush: java;">
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.SOURCE)
@@ -3396,7 +3398,7 @@ class Child extends Parent implements IParent {
 }
 </pre>
                                 </li>
-                                <li><p><a href="docs/docs-java/api/java/lang/annotation/Deprecated.html" target="_blank">@Deprecated</a> -- 指示元素(方法或字段)是程序员使用的不鼓励使用，通常是因为危险，或者因为存在更好的选择。</p>
+                                <li><p><a href="docs/docs-java/api/java/lang/Deprecated.html" target="_blank">@Deprecated</a> -- 指示元素(方法或字段)是程序员使用的不鼓励使用，通常是因为危险，或者因为存在更好的选择。</p>
                                     <pre class="brush: java;">
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -3419,7 +3421,7 @@ public class NumberUtil {
 </pre>
                                 </li>
 
-                                <li><p><a href="docs/docs-java/api/java/lang/annotation/SafeVarargs.html" target="_blank">@SafeVarargs</a> -- 该注释应用于方法或构造函数时，断言代码不会对其可变参数执行潜在的不安全操作。</p>
+                                <li><p><a href="docs/docs-java/api/java/lang/SafeVarargs.html" target="_blank">@SafeVarargs</a> -- 该注释应用于方法或构造函数时，断言代码不会对其可变参数执行潜在的不安全操作。</p>
                                     <pre class="brush: java;">
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -3435,7 +3437,7 @@ public class VarargsWaring {
 }
 </pre>
                                 </li>
-                                <li><p><a href="docs/docs-java/api/java/lang/annotation/FunctionalInterface.html" target="_blank">@FunctionalInterface</a> -- 表明接口只有一个未实现的方法（对于 Lambda 表达式很重要，参见 <a href="#java-util-function">java.util.function</a> 包）。</p>
+                                <li><p><a href="docs/docs-java/api/java/lang/FunctionalInterface.html" target="_blank">@FunctionalInterface</a> -- 表明接口只有一个未实现的方法（对于 Lambda 表达式很重要，参见 <a href="#java-util-function">java.util.function</a> 包）。</p>
                                     <pre class="brush: java;">
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
@@ -3451,7 +3453,7 @@ public interface ITest {
 }
 </pre>
                                 </li>
-                                <li><p><a href="docs/docs-java/api/java/lang/annotation/SuppressWarnings.html" target="_blank">@SuppressWarnings</a> -- 用于抑制编译器的警告。</p>
+                                <li><p><a href="docs/docs-java/api/java/lang/SuppressWarnings.html" target="_blank">@SuppressWarnings</a> -- 用于抑制编译器的警告。</p>
                                     <p>注意，在给定元素中取消显示的警告集是所有包含元素中取消显示的警告的超集。</p>
                                     <p>根据风格不同，程序员应该始终在最里层的嵌套元素上使用此注释，在那里使用才有效。如果要在特定的方法中取消显示某个警告，则应该注释该方法而不是注释它的类。 </p>
                                     <pre class="brush: java;">
@@ -4796,10 +4798,114 @@ public abstract class TimerTask implements Runnable {
                             <p><b>Java Collections Framework 结构</b></p>
                             <p>主要包括三大顶级接口：<code>Iterator</code>, <code>Collection</code> 和 <code>Map</code>。基本所有的实现类都继承抽象类 <code>AbstractCollection</code>，数据结构主要分为以下四种: </p>
                             <ul>
-                                <li><p><b>List</b> -- 有序的 Collection（也称为序列）；</p></li>
-								<li><p><b>Map</b> -- 将键映射到值的对象；</p></li>
-								<li><p><b>Set</b> -- 不包含重复元素的 Collection；</p></li>
-								<li><p><b>Queue</b> -- 队列，先进先出，子接口为 Deque， 后进先出。</p></li>
+                                <li><p><b>List</b> -- 有序的 Collection（也称为序列）；</p>
+									<pre class="brush: java;">
+List
+ ├─ AbstractList implements List /** 抽象类，提供 List 接口的骨干实现，一般不直接使用此类 */
+ │	 ├─ ArrayList /** 大小可变数组的实现，内部使用数组实现，当内部数组容量不够时，自动增长内部数组的容量 */
+ │	 ├─ AbstractSequentialList /** 链接列表骨干实现(非数组) */
+ │	 │   └─ LinkedList implements List, Deque /** List 接口的链表实现，并实现 Deque，支持在两端插入和移除元素 */
+ │	 └─ Vector /** 实现可增长的对象数组，和 ArrayList 相同，但此类是线程安全的 */
+ │	        └─ Stack /** 后进先出（LIFO）的对象堆栈 */
+ └─	CopyOnWriteArrayList /** ArrayList 的一个线程安全的变体，修改操作是复制副本修改，修改完成再更改引用 */
+
+ArrayList -- 大小可变数组的实现，插入和查询比较快，移除/修改慢
+LinkedList -- List 接口的链表实现，支持(FIFO/LIFO)，大量数据插入/查询操作要慢于 ArrayList，但是删除/修改操作要快
+Vector -- 同样是数组实现，多数方法加了 synchronized 关键字，扩容方式和 ArrayList 有区别
+Stack -- 支持 LIFO(push(E)/pop())
+CopyOnWriteArrayList -- 同 ArrayList, 添加/修改/删除都是复制副本操作，修改完成再更改引用
+</pre>
+								</li>
+								<li><p><b>Map</b> -- 将键映射到值的对象；</p>
+									<pre class="brush: java;">
+Map /** 将键映射到值的对象。一个映射不能包含重复的键；每个键最多只能映射到一个值 */
+ ├─ SortedMap /** 进一步提供关于键的总体排序的 Map */
+ │   └─ NavigableMap /** 扩展的 SortedMap，具有了针对给定搜索目标返回最接近匹配项的导航方法 */
+ └─ ConcurrentMap /** 提供其他原子 putIfAbsent、remove、replace 方法的 Map */
+	  └─ ConcurrentNavigableMap extends ConcurrentMap, NavigableMap/**递归方式支持子映射的 ConcurrentMap */
+Map
+ ├─	AbstractMap implements Map /** 提供 Map 接口的骨干实现 */
+ │	 ├─	HashMap /**  Map 接口的哈希表和单向链表实现，数组是主体，链表则是主要为了解决哈希冲突而存在的 */
+ │	 │	 └─	LinkedHashMap /** 额外维护了一个双向链表用于保持迭代顺序，该迭代顺序可以是插入顺序，也可以是访问顺序 */
+ │	 ├─	TreeMap implements NavigableMap /** 基于红黑树（Red-Black tree）的 NavigableMap 实现 */
+ │	 ├─	EnumMap /** 与枚举类型键一起使用的专用 Map 实现 */
+ │	 ├─	WeakHashMap /** 以弱引用实现的基于哈希表的 Map */
+ │	 ├─	IdentityHashMap /** 利用哈希表实现 Map 接口，比较键（和值）时使用引用相等性代替对象相等性 */
+ │	 ├─	ConcurrentHashMap implements ConcurrentMap /** 支持获取的完全并发和更新的所期望可调整并发的哈希表 */
+ │	 └─	ConcurrentSkipListMap implements ConcurrentNavigableMap /** 可缩放的 ConcurrentNavigableMap 实现 */
+ └─ Hashtable implements Map /** 类似 HashMap，但它是同步的，并不允许空的键和值 */
+     └─ Properties /** 线程安全的，支持从属性文件，xml 文件等读写键值的方便类 */
+
+HashMap -- 基于哈希表的 Map 接口的实现，使用数组+单向链表的方式，数组是主体，链表则是主要为了解决哈希冲突而存在的
+LinkedHashMap -- 额外维护了一个双向链表用于保持迭代顺序，可以是插入顺序，也可以是访问顺序，非常适合实现 LRU 算法
+TreeMap -- 有序的，基于红黑树（Red-Black tree）的 NavigableMap 实现，可以指定比较器来排序；如不指定，使用自然排序
+WeakHashMap -- 其存储的 Entry 是 WeakReference 的子类，在 GC 后会变成 null
+EnumMap -- 自动枚举值排序，K 值一定是枚举类型，基于枚举优化的 Map 实现
+IdentityHashMap -- 只认为 k1 == k2 时才认为相等，和 equals 无关
+ConcurrentHashMap -- 线程安全的 HashMap 实现，根据散列值锁住了散列值锁对应的那段，因此提高了并发性能
+ConcurrentSkipListMap -- 线程安全的并发访问的排序映射表，内部是 SkipList（跳表）结构实现
+Hashtable -- 同 HashMap，键值都不能为空，多数操作使用 synchronized 同步，建议使用 ConcurrentHashMap 替代此类
+Properties -- 线程安全的，支持从属性文件，xml 文件等读写键值的方便类
+</pre>
+								</li>
+								<li><p><b>Set</b> -- 不包含重复元素的 Collection；</p>
+									<pre class="brush: java;">
+Set /** 有两个子接口 */
+ └─ SortedSet /** 进一步提供关于元素的总体排序的 Set */
+     └─ NavigableSet /** 扩展的 SortedSet，具有了为给定搜索目标报告最接近匹配项的导航方法 */
+Set
+ └─ AbstractSet implements Set /** 提供 Set 接口的骨干实现 */
+    ├─ HashSet /** 实现 Set 接口，由哈希表（实际上是一个 HashMap 实例）支持 */
+    │   └─ LinkedHashSet /** LinkedHashSet 支持 */
+    ├─ TreeSet implements NavigableSet /** 基于 TreeMap 的 NavigableSet 实现 */
+    ├─ EnumSet /** 与枚举类型一起使用的专用 Set 实现，抽象类，提供了若干静态工厂方法创建 */
+    ├─ ConcurrentSkipListSet implements NavigableSet /** 可缩放并发 NavigableSet 实现 */
+    └─ CopyOnWriteArraySet /** 对其所有操作使用内部 CopyOnWriteArrayList 的 Set，修改操作是复制副本修改 */
+
+HashSet -- 等同于 HashMap 只存储 K 值
+LinkedHashSet -- 等同于 LinkedHashMap 只存储 K 值
+TreeSet -- 等同于 TreeMap 只存储 K 值
+ConcurrentSkipListSet -- 等同于 ConcurrentSkipListMap 只存储 K 值
+CopyOnWriteArraySet -- 等同于 CopyOnWriteArrayList 只存储 K 值
+EnumSet -- 和 EnumMap 无关，抽象类，提供了若干静态工厂方法创建，只用于保存指定类型的枚举值
+</pre>
+								</li>
+								<li><p><b>Queue</b> -- 队列，先进先出，子接口为 Deque， 后进先出。</p>
+									<pre class="brush: java;">
+Queue /** 队列，FIFO， 入队：add(E)/offer(E)，获取队头：element()/peek()，出队：remove()/pool() */
+ ├─	Deque /** 双向队列，FIFO/LIFO，入栈：push(E)，出栈：pop(), xxXFirst/xxxLast... */
+ └─ BlockingQueue /** 阻塞队列，阻塞出队：take()，延迟入队/出队：offer(E, long, TimeUnit)pool(long, TimeUnit) */
+	 ├─	TransferQueue /** 生产者可以等待消费者接收元素 */
+	 └─ BlockingDeque extends BlockingQueue, Deque /** 双向阻塞队列 */
+
+Queue
+ ├─	ArrayDeque implements Deque /** 双向队列，Deque 接口的大小可变数组的实现 */
+ └─ AbstractQueue implements Queue /** 提供某些 Queue 操作的骨干实现 */
+ 	 ├─	PriorityQueue /** 基于优先级的队列，默认自然排序 */
+ 	 ├─	PriorityBlockingQueue implements BlockingQueue /** 同 PriorityQueue，但是无数据时支持阻塞等待数据 */
+ 	 ├─	ArrayBlockingQueue implements BlockingQueue /** 由数组支持的阻塞队列，维护插入顺序 */
+ 	 ├─	LinkedBlockingQueue implements BlockingQueue /** 由链表支持的阻塞队列，维护插入顺序 */
+ 	 ├─	LinkedBlockingDeque implements BlockingDeque /** 由链表支持的双向阻塞队列，维护插入顺序 */
+ 	 ├─	ConcurrentLinkedQueue implements Queue /** 链表支持的，线程安全的队列 */
+ 	 ├─	ConcurrentLinkedDeque implements Deque /** 链表支持的，线程安全的双向队列 */
+ 	 ├─	DelayQueue implements BlockingQueue /** Delayed 元素的一个阻塞队列，只有在延迟期满时才能从中提取元素 */
+ 	 ├─	SynchronousQueue implements BlockingQueue /** 同步阻塞队列，不具有数据或链表缓存数据 */
+     └─	LinkedTransferQueue implements TransferQueue /** 基于链表实现的队列，通过 CAS 的方式避免整个队列的加锁操作 */
+
+LinkedList -- 实现 List 和 Deque 接口
+ArrayDeque -- 大小可变的数组实现的双向队列
+PriorityQueue -- 基于优先级的队列，默认自动维护自然排序
+PriorityBlockingQueue -- 支持阻塞的优先级队列，默认自动维护自然排序
+ArrayBlockingQueue -- 由数组支持的阻塞队列，维护插入顺序
+LinkedBlockingQueue -- 由链表支持的阻塞队列，维护插入顺序
+LinkedBlockingDeque -- 由链表支持的双向阻塞队列，维护插入顺序
+ConcurrentLinkedQueue -- 链表支持的，线程安全的队列
+ConcurrentLinkedDeque -- 链表支持的，线程安全的双向队列
+DelayQueue -- 延时执行任务的队列，重写 compareTo 方法，按时间排序
+SynchronousQueue -- 无缓存，取数据的线程先等待，才能发送数据；取数据的线程再次等待，才能发送另外一个数据
+LinkedTransferQueue -- 基于链表实现的队列，通过 CAS 的方式避免整个队列的加锁操作
+</pre>
+								</li>
                             </ul>
                             <p>还有一些用于操作的工具类： <a href="#Arrays">Arrays</a>, <a href="#Collections">Collections</a></p>
                             <p><b>Java Collections Framework</b> 类和接口导航:</p>
@@ -4815,7 +4921,7 @@ public abstract class TimerTask implements Runnable {
                                 <li><p><b>Set 接口实现类</b>: <a href="#HashSet">HashSet</a>, <a href="#LinkedHashSet">LinkedHashSet</a>, <a href="#TreeSet">TreeSet</a>, <a href="#EnumSet">EnumSet</a>, <a href="#ConcurrentSkipListSet">ConcurrentSkipListSet</a>, <a href="#CopyOnWriteArraySet">CopyOnWriteArraySet</a></p></li>
                                 <li><p><b>Queue 接口实现类</b>: <a href="#PriorityQueue">PriorityQueue</a>, <a href="#ArrayBlockingQueue">ArrayBlockingQueue</a>, <a href="#LinkedBlockingQueue">LinkedBlockingQueue</a>, <a href="#LinkedBlockingDeque">LinkedBlockingDeque</a>, <a href="#PriorityBlockingQueue">PriorityBlockingQueue</a>, <a href="#SynchronousQueue">SynchronousQueue</a>, <a href="#DelayQueue">DelayQueue</a>, <a href="#ConcurrentLinkedQueue">ConcurrentLinkedQueue</a>, <a href="#ConcurrentLinkedDeque">ConcurrentLinkedDeque</a>, <a href="#LinkedTransferQueue">LinkedTransferQueue</a>, <a href="#ArrayDeque">ArrayDeque</a></p></li>
                             </ul>
-							<p><b>Java Collections Framework</b> 类和接口应用实例: <a href="#java-util-collections-example">应用场景实例</a></p>
+
 							<pre class="brush: java; gutter: false;">
 Iterator /** 迭代器，Collections 的实现类都有内部类实现此接口，并提供了返回 Iterator 的方法(实现 Iterable 接口) */
  └─ ListIterator /** 列表迭代器，允许程序员按任一方向遍历列表、迭代期间修改列表，并获得迭代器在列表中的当前位置 */
@@ -4859,7 +4965,7 @@ AbstractCollection implements Collection /** 提供 Collection 接口的骨干�
  ├─	AbstractMap implements Map /** 提供 Map 接口的骨干实现 */
  │	 ├─	HashMap /** 基于 HashTable 的 Map 接口的实现 */
  │	 │	 └─	LinkedHashMap /** Map 接口的哈希表和链接列表实现，具有可预知的迭代顺序 */
- │	 ├─	WeakHashMap /** 以弱键 实现的基于哈希表的 Map */
+ │	 ├─	WeakHashMap /** 以弱引用 Entry 实现的基于哈希表的 Map，GC 后，Map 的值会变为不可用 */
  │	 ├─	TreeMap implements NavigableMap /** 基于红黑树（Red-Black tree）的 NavigableMap 实现 */
  │	 ├─	EnumMap /** 与枚举类型键一起使用的专用 Map 实现 */
  │	 ├─	IdentityHashMap /** 利用哈希表实现 Map 接口，比较键（和值）时使用引用相等性代替对象相等性 */
@@ -5288,7 +5394,7 @@ public class MyList&lt;E> implements Iterable&lt;E> {
                         <div class="sub-item">
                             <a id="Comparable" class="offset"></a>
                             <div class="split-item">
-                                <p><code>java.lang.</code><a href="docs/docs-java/api/java/util/Comparable.html" target="_blank">Comparable</a> 接口强行对实现它的每个类的对象进行整体排序。这种排序被称为类的自然排序，类的 compareTo 方法被称为它的自然比较方法。</p>
+                                <p><code>java.lang.</code><a href="docs/docs-java/api/java/lang/Comparable.html" target="_blank">Comparable</a> 接口强行对实现它的每个类的对象进行整体排序。这种排序被称为类的自然排序，类的 compareTo 方法被称为它的自然比较方法。</p>
                                 <p><b>实现此接口的对象列表（和数组）可以通过 Collections.sort（和 Arrays.sort）进行自动排序。实现此接口的对象可以用作有序映射中的键或有序集合中的元素，无需指定比较器。</b></p>
                                 <p>对于类 C 的每一个 e1 和 e2 来说，当且仅当 e1.compareTo(e2) == 0 与 e1.equals(e2) 具有相同的 boolean 值时，类 C 的自然排序才叫做与 equals 一致。注意，null 不是任何类的实例，即使 e.equals(null) 返回 false，e.compareTo(null) 也将抛出 NullPointerException。</p>
                                 <pre class="brush: java;">
@@ -5389,7 +5495,7 @@ list.sort(comparator); //  ccc, bb, a
 
                             <a id="Collator" class="offset"></a>
                             <div class="split-item">
-                                <p><a href="docs/docs-java/api/java/util/Collator.html" target="_blank">Collator</a> 类执行区分语言环境的 String 比较。使用此类可为自然语言文本构建搜索和排序例程。</p>
+                                <p><a href="docs/docs-java/api/java/text/Collator.html" target="_blank">Collator</a> 类执行区分语言环境的 String 比较。使用此类可为自然语言文本构建搜索和排序例程。</p>
                                 <p>Collator 是一个抽象基类。其子类实现具体的整理策略。Java 平台目前提供了 RuleBasedCollator 子类，它适用于很多种语言。还可以创建其他子类，以处理更多的专门需要。 </p>
                                 <p>与其他区分语言环境的类一样，可以使用静态工厂方法 getInstance 来为给定的语言环境获得适当的 Collator 对象。如果需要理解特定整理策略的细节或者需要修改策略，只需查看 Collator 的子类即可。 </p>
                                 <pre class="brush: java;">
@@ -5431,7 +5537,7 @@ public abstract class Collator implements Comparator&lt;Object>, Cloneable {
 
                             <a id="RuleBasedCollator" class="offset"></a>
                             <div class="split-item">
-                                <p><a href="docs/docs-java/api/java/util/RuleBasedCollator.html" target="_blank">RuleBasedCollator</a> 是 Collator 的具体子类，它提供了一个简单的、数据驱动的表 collator。可以通过此类来创建基于表的自定义 Collator。 </p>
+                                <p><a href="docs/docs-java/api/java/text/RuleBasedCollator.html" target="_blank">RuleBasedCollator</a> 是 Collator 的具体子类，它提供了一个简单的、数据驱动的表 collator。可以通过此类来创建基于表的自定义 Collator。 </p>
                                 <p>RuleBasedCollator 将字符映射到排序键。为了提高效率，对 RuleBasedCollator 做了如下限制（其他子类可以用于更复杂的语言）： </p>
                                 <ul>
                                     <li><p>如果指定了由 "modif" 控制的特殊整理规则，则它将用于整个 Collator 对象；</p></li>
@@ -6476,7 +6582,16 @@ public class WeakHashMap&lt;K,V> extends AbstractMap&lt;K,V> implements Map&lt;K
     public WeakHashMap(int initialCapacity) {}
     public WeakHashMap(int initialCapacity, float loadFactor) {}
     public WeakHashMap(&lt;? extends K,? extends V> m) {}
+
+	// 它的 Entry 是 WeakReference 的子类
+	private static class Entry&lt;K,V> extends WeakReference&lt;Object> implements Map.Entry&lt;K,V> {...}
 }
+
+WeakHashMap&lt;String, Integer> map = new WeakHashMap&lt;>();
+map.put(new String("a"), 65);
+Log.d(map.get("a")); // 65
+System.gc();
+Log.d(map.get("a")); // null
 </pre>
 								<ol>
 									<li><p><code>V 	put(K key, V value)</code> -- 添加一个键值对，如果 key 已存在，则替换对应的 value, 并返回被替换的 value</p></li>
@@ -7379,6 +7494,69 @@ public class DelayQueue&lt;E extends Delayed> extends AbstractQueue&lt;E> implem
 	public DelayQueue() {}
 	public DelayQueue(Collection&lt;? extends E> c)	{}
 }
+
+DelayQueue&lt;MyDelayed> queue = new DelayQueue<>();
+new MyDelayedService(queue).start();
+queue.offer(new MyDelayed(1, TimeUnit.SECONDS, () -> {
+	Log.d("task 1 removed!");
+}));
+queue.offer(new MyDelayed(5, TimeUnit.SECONDS, () -> {
+	Log.d("task 2 removed!");
+}));
+queue.offer(new MyDelayed(2, TimeUnit.SECONDS, () -> {
+	Log.d("task 3 removed!");
+}));
+
+class MyDelayedService extends Thread {
+	DelayQueue&lt;MyDelayed> queue;
+
+	public MyDelayedService(DelayQueue&lt;MyDelayed> queue) {
+		this.queue = queue;
+	}
+
+	@Override
+	public void run() {
+		super.run();
+		while (true) {
+			try {
+				MyDelayed data = queue.take();
+				data.getTask().run();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}
+
+public class MyDelayed implements Delayed {
+	private long endTime;
+	private Runnable task;
+
+	public MyDelayed(long delay, TimeUnit unit, Runnable task) {
+		this.endTime = unit.toMillis(delay) + System.currentTimeMillis();
+		this.task = task;
+	}
+
+	public Runnable getTask() {
+		return task;
+	}
+
+	@Override
+	public long getDelay(TimeUnit unit) {
+		return unit.convert(endTime, TimeUnit.NANOSECONDS) -
+									unit.convert(System.currentTimeMillis(), TimeUnit.NANOSECONDS);
+	}
+
+	@Override
+	public int compareTo(Delayed o) {
+		if (this == o)
+			return 1;
+		if (o == null)
+			return -1;
+		long diff = this.getDelay(TimeUnit.NANOSECONDS) - o.getDelay(TimeUnit.NANOSECONDS);
+		return diff < 0 ? -1 : (diff == 0 ? 0 : 1);
+	}
+}
 </pre>
 								<ol>
 									<li><p><code>boolean 	offer(E e)</code> -- 将指定元素插入此延迟队列</p></li>
@@ -7758,97 +7936,6 @@ prop.stringPropertyNames().forEach(s -> log(s, prop.getProperty(s)));
 							</div>
 						</div>
 
-						<div class="sub-item">
-							<a id="java-util-collections-example" class="offset"></a>
-							<p><b>Java Collections Framework 类和接口应用实例: </b></p>
-							<div class="split-item">
-								<p><b>List 接口的常用类：</b></p>
-								<p><b>List 是有序的序列,可以对列表中每个元素的插入位置进行精确地控制,根据元素的整数索引访问元素，并搜索列表中的元素。</b></p>
-								<pre class="brush: java;">
-List
- ├─ AbstractList implements List /** 抽象类，提供 List 接口的骨干实现，一般不直接使用此类 */
- │	 ├─ ArrayList /** 大小可变数组的实现，内部使用数组实现，当内部数组容量不够时，自动增长内部数组的容量 */
- │	 ├─ AbstractSequentialList /** 链接列表骨干实现(非数组) */
- │	 │   └─ LinkedList implements List, Deque /** List 接口的链表实现，并实现 Deque，支持在两端插入和移除元素 */
- │	 └─ Vector /** 实现可增长的对象数组，和 ArrayList 相同，但此类是线程安全的 */
- │	        └─ Stack /** 后进先出（LIFO）的对象堆栈 */
- └─	CopyOnWriteArrayList /** ArrayList 的一个线程安全的变体，修改操作是复制副本修改，修改完成再更改引用 */
-
-ArrayList -- 大小可变数组的实现，插入和查询比较快，移除/修改慢
-LinkedList -- List 接口的链表实现，支持(FIFO/LIFO)，大量数据插入/查询操作要慢于 ArrayList，但是删除/修改操作要快
-Vector -- 同样是数组实现，多数方法加了 synchronized 关键字，扩容方式和 ArrayList 有区别
-Stack -- 支持 LIFO(push(E)/pop())
-CopyOnWriteArrayList -- 同 ArrayList, 添加/修改/删除都是复制副本操作，修改完成再更改引用
-								</pre>
-							</div>
-
-							<div class="split-item">
-								<p><b>Map 接口的常用类：</b></p>
-								<pre class="brush: java;">
-Map /** 将键映射到值的对象。一个映射不能包含重复的键；每个键最多只能映射到一个值 */
- ├─ SortedMap /** 进一步提供关于键的总体排序的 Map */
- │   └─ NavigableMap /** 扩展的 SortedMap，具有了针对给定搜索目标返回最接近匹配项的导航方法 */
- └─ ConcurrentMap /** 提供其他原子 putIfAbsent、remove、replace 方法的 Map */
-	  └─ ConcurrentNavigableMap extends ConcurrentMap, NavigableMap/**递归方式支持子映射的 ConcurrentMap */
-Map
- ├─	AbstractMap implements Map /** 提供 Map 接口的骨干实现 */
- │	 ├─	HashMap /** 基于 HashTable 的 Map 接口的实现 */
- │	 │	 └─	LinkedHashMap /** Map 接口的哈希表和链接列表实现，具有可预知的迭代顺序 */
- │	 ├─	WeakHashMap /** 以弱键 实现的基于哈希表的 Map */
- │	 ├─	TreeMap implements NavigableMap /** 基于红黑树（Red-Black tree）的 NavigableMap 实现 */
- │	 ├─	EnumMap /** 与枚举类型键一起使用的专用 Map 实现 */
- │	 ├─	IdentityHashMap /** 利用哈希表实现 Map 接口，比较键（和值）时使用引用相等性代替对象相等性 */
- │	 ├─	ConcurrentHashMap implements ConcurrentMap /** 支持获取的完全并发和更新的所期望可调整并发的哈希表 */
- │	 └─	ConcurrentSkipListMap implements ConcurrentNavigableMap /** 可缩放的并发 ConcurrentNavigableMap 实现 */
- └─ Hashtable implements Map /** 实现一个哈希表，该哈希表将键映射到相应的值 */
-     └─ Properties /** 表示了一个持久的属性集 */
-
-HashMap
-LinkedHashMap
-WeakHashMap
-TreeMap
-EnumMap
-IdentityHashMap
-ConcurrentHashMap
-ConcurrentSkipListMap
-Hashtable
-Properties
-								</pre>
-							</div>
-
-							<div class="split-item">
-								<p><b>Set 接口的常用类：</b></p>
-								<pre class="brush: java;">
-Set /** 有两个子接口 */
- └─ SortedSet /** 进一步提供关于元素的总体排序的 Set */
-     └─ NavigableSet /** 扩展的 SortedSet，具有了为给定搜索目标报告最接近匹配项的导航方法 */
-Set
- └─ AbstractSet implements Set /** 提供 Set 接口的骨干实现 */
-    ├─ HashSet /** 实现 Set 接口，由哈希表（实际上是一个 HashMap 实例）支持 */
-    │   └─ LinkedHashSet /** 具有可预知迭代顺序的 Set 接口的哈希表和链接列表实现 */
-    ├─ TreeSet implements NavigableSet /** 基于 TreeMap 的 NavigableSet 实现 */
-    ├─ EnumSet /** 与枚举类型一起使用的专用 Set 实现 */
-    ├─ ConcurrentSkipListSet implements NavigableSet /** 可缩放并发 NavigableSet 实现 */
-    └─ CopyOnWriteArraySet /** 对其所有操作使用内部 CopyOnWriteArrayList 的 Set，修改操作是复制副本修改 */
-
-HashSet -- 此类内部使用了一个 HashMap 来存储数据，添加的值使用 HashMap 的 K 保存
-LinkedHashSet -- 是 HashSet 的子类，使用 LinkedHashMap 存储数据
-TreeSet --
-EnumSet --
-ConcurrentSkipListSet --
-CopyOnWriteArraySet --
-								</pre>
-							</div>
-
-							<div class="split-item">
-								<p><b>Queue 接口的常用类：</b></p>
-								<pre class="brush: java;">
-
-								</pre>
-							</div>
-
-						</div>
-
                     </div>
                 </div>
                 <!-- item over -->
@@ -8091,7 +8178,7 @@ public interface BiFunction&lt;T, U, R> {
 						</div>
 
 						<div class="sub-item">
-							<p><a href="docs/docs-java/api/java/util/function/BinaryOprator.html" target="_blank">BinaryOprator&lt;T></a> 继承自 BiFunction&lt;T,T,T> 传入两个 T 对象，返回经过比较的 T 对象。</p>
+							<p><a href="docs/docs-java/api/java/util/function/BinaryOperator.html" target="_blank">BinaryOprator&lt;T></a> 继承自 BiFunction&lt;T,T,T> 传入两个 T 对象，返回经过比较的 T 对象。</p>
 							<pre class="brush: java;">
 public interface BinaryOperator&lt;T> extends BiFunction&lt;T,T,T> {
 	public static &lt;T> BinaryOperator&lt;T> minBy(Comparator&lt;? super T> comparator) {
@@ -8172,6 +8259,49 @@ public interface BooleanSupplier {
                     </div>
                 </div>
                 <!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-util-concurrent-atomic"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"><code>java.util.concurrent.atomic</code> 包</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p><a href="docs/docs-java/api/java/util/concurrent/atomic/package-summary.html" target="_blank">java.util.concurrent.atomic</a> </p>
+						</div>
+
+						<div class="sub-item">
+							<pre class="brush: java;">
+
+</pre>
+							<p><a href="docs/docs-java/api/" target="_blank"></a></p>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-util-concurrent-locks"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"><code>java.util.concurrent.locks</code> 包</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+
+							<p><a href="docs/docs-java/api/java/util/concurrent/locks/package-summary.html" target="_blank">java.util.concurrent.locks</a></p>
+						</div>
+
+						<div class="sub-item">
+							<pre class="brush: java;">
+
+</pre>
+							<p><a href="docs/docs-java/api/" target="_blank"></a></p>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
 
                 <!-- item start -->
                 <a class="offset" id="java-util-Formatter"></a>
