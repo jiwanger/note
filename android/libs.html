@@ -99,6 +99,7 @@
                         <a href="#other-DBFlow" class="list-group-item">DBFlow</a>
                         <a href="#other-EventBus" class="list-group-item">EventBus</a>
                         <a href="#other-ButterKnife" class="list-group-item">ButterKnife</a>
+                        <a href="#other-MPAndroidChart" class="list-group-item">MPAndroidChart</a>
 
                         <a href="#other-" class="list-group-item"></a>
                     </div>
@@ -1603,28 +1604,28 @@ public class NetworkImageView extends ImageView {
                     <div class="split-item">
                         <p>单例模式使用 Volley</p>
                         <pre class="brush: java;">
-public class MySingleton {
-    private static MySingleton mInstance;
+public class VolleySingleton {
+    private static VolleySingleton mInstance;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
     private static Context mCtx;
-
-    private MySingleton(Context context) {
+ 
+    private VolleySingleton(Context context) {
         mCtx = context;
         mRequestQueue = getRequestQueue();
-
+ 
         mImageLoader = new ImageLoader(mRequestQueue,
                 new ImageLoader.ImageCache() {
             // 1.使用 LruCache 来做图片的缓存，这里使用图片数量来做缓存，和图片大小没关系
             // private final LruCache&lt;String, Bitmap> cache = new LruCache&lt;String, Bitmap>(20);
-
+ 
             // 2.使用 LruCache 来做图片的缓存，使用固定大小的物理内存做缓存，重写了 sizeOf 方法
             int cacheSize = calculateMaxMemorySize(mCtx) / 7;
             private final LruCache&lt;String, Bitmap> cache = new LruCache&lt;String, Bitmap>(cacheSize) {
                 @Override
-                protected int sizeOf(String key, Bitmap value) {
+                protected int sizeOf(String key, Bitmap bitmap) {
                     int result;
-                    if (SDK_INT >= HONEYCOMB_MR1) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
                         result = bitmap.getByteCount();
                     } else {
                         result = bitmap.getRowBytes() * bitmap.getHeight();
@@ -1632,43 +1633,43 @@ public class MySingleton {
                     return result;
                 }
             };
-
+ 
             @Override
             public Bitmap getBitmap(String url) { return cache.get(url); }
-
+ 
             @Override
             public void putBitmap(String url, Bitmap bitmap) { cache.put(url, bitmap); }
         });
     }
-
+ 
     public static int calculateMaxMemorySize(Context context) {
-        ActivityManager am = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
-        boolean largeHeap = (context.getApplicationInfo().flags & FLAG_LARGE_HEAP) != 0;
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        boolean largeHeap = (context.getApplicationInfo().flags & ApplicationInfo.FLAG_LARGE_HEAP) != 0;
         int memoryClass = am.getMemoryClass();
-        if (largeHeap && SDK_INT >= HONEYCOMB) {
+        if (largeHeap && Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             memoryClass = am.getLargeMemoryClass();
         }
         return 1024 * 1024 * memoryClass;
     }
-
-    public static synchronized MySingleton getInstance(Context context) {
+ 
+    public static synchronized VolleySingleton getInstance(Context context) {
         if (mInstance == null) {
-            synchronized(MySingleton.class) {
-                mInstance = new MySingleton(context);
+            synchronized(VolleySingleton.class) {
+                mInstance = new VolleySingleton(context);
             }
         }
         return mInstance;
     }
-
+ 
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
         }
         return mRequestQueue;
     }
-
+ 
     public &lt;T> void addToRequestQueue(Request&lt;T> req) { getRequestQueue().add(req); }
-
+ 
     public ImageLoader getImageLoader() { return mImageLoader; }
 }
                         </pre>
@@ -5669,6 +5670,169 @@ public class FancyFragment extends Fragment {
     }
 }
 </pre>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="other-MPAndroidChart"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">MPAndroidChart</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="sub-item">
+                        <p><a href="https://github.com/PhilJay/MPAndroidChart" target="_blank">MPAndroidChart</a> 是一款基于 Android 的开源图表库，不仅可以绘制各种统计图表，而且可以对图表进行拖动和缩放操作，应用起来非常灵活。拥有常用的图表类型：线型图(LineChart)、柱状图(BarChart)、饼图(PieChart)、网状图(RadarChart)、散点图(ScatterChart)、气泡图(BubbleChart)、蜡烛图(CandleStickChart)、组合图(CombinedChart)。</p>
+                        <p>v3.0.3 版本 Javadoc: <a href="docs/MPAndroidChart-javadoc-v3.0.3/index.html" target="_blank">Javadoc v3.0.3</a></p>
+                        <pre class="brush: java;">
+maven { url 'https://jitpack.io' }
+implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+                        </pre>
+
+                        <p>MPAnroidChart 使用流程：</p>
+                        <ol>
+                            <li><p>从后台接口中成功获取到图表中绘制所需的数据集；</p></li>
+                            <li><p>将数据包装成 MPAndroidChart 能够识别的数据类型；</p></li>
+                            <li><p>将数据传给 Chart,并通知其刷新绘制。</p></li>
+                        </ol>
+                        <pre class="brush: java;">
+LineChart chart = findViewById(R.id.chart);
+
+// 包装数据
+List&lt;Entry> entries = new ArrayList<>();
+for (int i = 1; i < 6; i++) {
+    entries.add(new Entry(i, i % 2 == 0 ? 2 * i : i));
+}
+
+// 设置样式
+LineDataSet dataSet = new LineDataSet(entries, "Label");
+dataSet.setColor(Color.BLUE);
+dataSet.setValueTextColor(Color.RED);
+
+// 将数据传给 Chart
+chart.setData(new LineData(dataSet));
+chart.invalidate();
+                        </pre>
+                    </div>
+
+                    <div class="sub-item">
+                        <div class="split-item">
+                            <pre class="brush: java;">
+java.lang.Object
+    android.view.View
+        android.view.ViewGroup
+            com.github.mikephil.charting.charts.Chart&lt;T>
+                com.github.mikephil.charting.charts.BarLineChartBase&lt;LineData>
+                    com.github.mikephil.charting.charts.LineChart
+
+public class LineChart extends BarLineChartBase&lt;LineData> implements LineDataProvider {...}
+                            </pre>
+                            <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/LineChart.html" target="_blank">LineChart</a> -- 线性图</p>
+                        </div>
+
+                        <div class="split-item">
+                            <pre class="brush: java;">
+public abstract class BarLineChartBase&lt;T extends BarLineScatterCandleBubbleData&lt;? extends
+                IBarLineScatterCandleBubbleDataSet&lt;? extends Entry>>>
+        extends Chart&lt;T> implements BarLineScatterCandleBubbleDataProvider {...}
+                            </pre>
+                            <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/BarLineChartBase.html" target="_blank">BarLineChartBase</a> </p>
+                        </div>
+
+                        <div class="split-item">
+                                <pre class="brush: java;">
+public abstract class Chart&lt;T extends ChartData&lt;? extends IDataSet&lt;? extends Entry>>> extends ViewGroup
+        implements ChartInterface {...}
+
+public interface ChartInterface {
+    float getXChartMin();
+    float getXChartMax();
+    float getXRange();
+    float getYChartMin();
+    float getYChartMax();
+
+    float getMaxHighlightDistance();
+
+    int getWidth();
+    int getHeight();
+
+    MPPointF getCenterOfView();
+    MPPointF getCenterOffsets();
+
+    RectF getContentRect();
+    IValueFormatter getDefaultValueFormatter();
+    ChartData getData();
+    int getMaxVisibleCount();
+}
+                                </pre>
+                            <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/Chart.html" target="_blank">Chart</a> -- 图表类的基类，</p>
+                        </div>
+                    </div>
+
+                    <div class="sub-item">
+                         <pre class="brush: java;">
+...
+    com.github.mikephil.charting.charts.BarLineChartBase&lt;BarData>
+        com.github.mikephil.charting.charts.BarChart
+            com.github.mikephil.charting.charts.HorizontalBarChart
+
+public class BarChart extends BarLineChartBase&lt;BarData> implements BarDataProvider {...}
+public class HorizontalBarChart extends BarChart {...}
+                         </pre>
+                        <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/BarChart.html" target="_blank">BarChart</a> -- 条形图</p>
+                        <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/HorizontalBarChart.html" target="_blank">HorizontalBarChart</a> -- 横向条形图</p>
+                    </div>
+
+                    <div class="sub-item">
+                        <pre class="brush: java;">
+public class ScatterChart extends BarLineChartBase&lt;ScatterData> implements ScatterDataProvider {...}
+                        </pre>
+                        <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/ScatterChart.html" target="_blank">ScatterChart</a> -- 散点图</p>
+                    </div>
+
+                    <div class="sub-item">
+                        <pre class="brush: java;">
+public class BubbleChart extends BarLineChartBase&lt;BubbleData> implements BubbleDataProvider {...}
+                        </pre>
+                        <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/BubbleChart.html" target="_blank">BubbleChart</a> -- 气泡图</p>
+                    </div>
+
+                    <div class="sub-item">
+                        <pre class="brush: java;">
+public class CandleStickChart extends BarLineChartBase&lt;CandleData> implements CandleDataProvider {...}
+                        </pre>
+                        <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/CandleStickChart.html" target="_blank">CandleStickChart</a> -- 蜡烛图(K 线图)</p>
+                    </div>
+
+                    <div class="sub-item">
+                        <pre class="brush: java;">
+public class CombinedChart extends BarLineChartBase&lt;CombinedData> implements CombinedDataProvider {...}
+                        </pre>
+                        <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/CombinedChart.html" target="_blank">CombinedChart</a> -- 以上图的组合</p>
+                    </div>
+
+                    <div class="sub-item">
+                        <pre class="brush: java;">
+...
+    com.github.mikephil.charting.charts.Chart&lt;T>
+        com.github.mikephil.charting.charts.PieRadarChartBase&lt;PieData>
+            com.github.mikephil.charting.charts.PieChart
+
+public class PieChart extends PieRadarChartBase&lt;PieData> {...}
+                         </pre>
+                        <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/PieChart.html" target="_blank">PieChart</a> -- 饼状图</p>
+                    </div>
+
+                    <div class="sub-item">
+                        <pre class="brush: java;">
+...
+    com.github.mikephil.charting.charts.PieRadarChartBase&lt;RadarData>
+        com.github.mikephil.charting.charts.RadarChart
+
+public class RadarChart extends PieRadarChartBase&lt;RadarData> {...}
+                         </pre>
+                        <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/RadarChart.html" target="_blank">RadarChart</a> -- 网状图</p>
+                    </div>
                 </div>
             </div>
             <!-- item over -->
