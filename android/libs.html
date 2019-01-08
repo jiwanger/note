@@ -3417,7 +3417,7 @@ observable.subscribe(new Observer&lt;String>() {
                                 <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext)</code> -- 只接收 <code>onNext(T)</code> 消息</p></li>
                                 <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError)</code> -- 接收 <code>onNext(T) / onError(Throwable)</code> 消息</p></li>
                                 <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError, Action onComplete)</code> --  接收 <code>onNext(T) / onError(Throwable) / onComplete()</code> 消息</p></li>
-                                <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError, Action onComplete, Consumer&lt;? super Disposable> onSubscribe)</code> -- 同 <code>subscribe(Observer)</code></p></li>
+                                <li><p><code>Disposable 	subscribe(Consumer&lt;? super T> onNext, Consumer&lt;? super Throwable> onError, Action onComplete, Consumer&lt;? super Disposable> onSubscribe)</code> -- 同 <code>subscribe(Observer)</code> -- </p></li>
 
                                 <li class="group"><p><code>protected abstract void 	subscribeActual(Observer&lt;? super T> observer)</code> -- Observable 子类的具体逻辑实现</p></li>
 
@@ -3482,7 +3482,7 @@ Observable.just(28, 30, 32, 33).all(i -> i > 20 && i < 35).subscribe(b -> Log.d(
                                 <li><p><code>Observable&lt;T> 	startWith(Iterable&lt;? extends T> items)</code> -- 将 items 的所有元素添加到源数据前</p></li>
                                 <li><p><code>Observable&lt;T> 	startWithArray(T... items)</code> -- 将 items 的所有元素添加到源数据前</p></li>
 
-                                <li class="group"><p><code>Observable&lt;T> 	ambWith(ObservableSource&lt;? extends T> other)</code> -- 当前数据源和 other 谁先到达发射谁的元素，参照 <code>amb</code></p></li>
+                                <li class="group"><p><code>Observable&lt;T> 	ambWith(ObservableSource&lt;? extends T> other)</code> -- 当前数据源和 other 谁先到达发射谁的元素，参照 <code>amb</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	filter(Predicate&lt;? super T> predicate)</code> -- 只发送符合条件的数据</p>
                                     <pre class="brush: java;">Observable.just("RED", "GREEN", "BLUE").filter(s -> s.length() > 3).subscribe(observer);</pre>
                                 </li>
@@ -3996,12 +3996,12 @@ Observable.just("RED", "GREEN", "BLUE").concatMapIterable(s -> {
                                 <li><p><code>Completable 	concatMapCompletableDelayError(Function&lt;? super T,? extends CompletableSource> mapper, boolean tillTheEnd)</code> -- 参照前面</p></li>
                                 <li><p><code>Completable 	concatMapCompletableDelayError(Function&lt;? super T,? extends CompletableSource> mapper, boolean tillTheEnd, int prefetch)</code> -- 参照前面</p></li>
 
-                                <li class="group"><p><code>Observable&lt;T> 	concatWith(ObservableSource&lt;? extends T> other)</code> -- 相当于 <code>Observable.concat(this, other)</code></p></li>
+                                <li class="group"><p><code>Observable&lt;T> 	concatWith(ObservableSource&lt;? extends T> other)</code> -- 相当于 <code>Observable.concat(this, other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	concatWith(CompletableSource other)</code> -- 同上，类型不同</p></li>
                                 <li><p><code>Observable&lt;T> 	concatWith(MaybeSource&lt;? extends T> other)</code> -- 同上，类型不同</p></li>
                                 <li><p><code>Observable&lt;T> 	concatWith(SingleSource&lt;? extends T> other)</code> -- 同上，类型不同</p></li>
 
-                                <li class="group"><p><code>Observable&lt;T> 	mergeWith(CompletableSource other)</code> -- 相当于 <code>Observable.merge(this, other)</code></p></li>
+                                <li class="group"><p><code>Observable&lt;T> 	mergeWith(CompletableSource other)</code> -- 相当于 <code>Observable.merge(this, other)</code> -- </p></li>
                                 <li><p><code>Observable&lt;T> 	mergeWith(MaybeSource&lt;? extends T> other)</code> -- 同上，类型不同</p></li>
                                 <li><p><code>Observable&lt;T> 	mergeWith(ObservableSource&lt;? extends T> other)</code> -- 同上，类型不同</p></li>
                                 <li><p><code>Observable&lt;T> 	mergeWith(SingleSource&lt;? extends T> other)</code> -- 同上，类型不同</p></li>
@@ -5687,9 +5687,76 @@ public class FancyFragment extends Fragment {
                         <pre class="brush: java;">
 maven { url 'https://jitpack.io' }
 implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+
+/** 图表类 */
+Chart implements ChartInterface
+ ├─ BarLineChartBase implements BarLineScatterCandleBubbleDataProvider
+ │   ├─ LineChart extends BarLineChartBase&lt;LineData> implements LineDataProvider
+ │   ├─ BarChart extends BarLineChartBase&lt;BarData> implements BarDataProvider
+ │   ├─ ScatterChart extends BarLineChartBase&lt;ScatterData> implements ScatterDataProvider
+ │   ├─ BubbleChart extends BarLineChartBase&lt;BubbleData> implements BubbleDataProvider
+ │   ├─ CandleStickChart extends BarLineChartBase&lt;CandleData> implements CandleDataProvider
+ │   └─ CombinedChart extends BarLineChartBase&lt;CombinedData> implements CombinedDataProvider
+ └─ PieRadarChartBase
+     ├─ PieChart
+     └─ RadarChart
+
+/** 图标类实现的接口关系 */
+ChartInterface
+ └─ BarLineScatterCandleBubbleDataProvider
+     ├─ LineDataProvider
+     ├─ BarDataProvider
+     ├─ ScatterDataProvider
+     ├─ BubbleDataProvider
+     ├─ CandleDataProvider
+     └─ CombinedDataProvider
+
+/** 图表类对应的数据包装类 */
+ChartData&lt;T extends IDataSet&lt;? extends Entry>>
+ ├─ BarLineScatterCandleBubbleData&lt;T extends IBarLineScatterCandleBubbleDataSet&lt;? extends Entry>>
+ │   ├─ LineData -- 对应 ILineDataSet
+ │   ├─ BarData -- 对应 IBarDataSet
+ │   ├─ ScatterData -- 对应 IScatterDataSet
+ │   ├─ BubbleData -- 对应 IBubbleDataSet
+ │   ├─ CandleData -- 对应 ICandleDataSet
+ │   └─ CombinedData -- 对应 IBarLineScatterCandleBubbleDataSet
+ ├─ PieData -- 对应 IPieDataSet
+ └─ RadarData -- 对应 IRadarDataSet
+
+/** 图标数据包装类包装的数据集 */
+IDataSet&lt;T extends Entry>
+ ├─ IBarLineScatterCandleBubbleDataSet&lt;T extends Entry>
+ │   ├─ ILineScatterCandleRadarDataSet&lt;T extends Entry>
+ │   │   ├─ ILineRadarDataSet&lt;T extends Entry>
+ │   │   │   ├─ ILineDataSet
+ │   │   │   └─ IRadarDataSet
+ │   │   ├─ IScatterDataSet
+ │   │   └─ ICandleDataSet
+ │   ├─ IBubbleDataSet
+ │   └─ IBarDataSet
+ └─ IPieDataSet
+
+/** 一些相关的组件 */
+ComponentBase
+ ├─ AxisBase
+ │   ├─ XAxis // X 轴
+ │   └─ YAxis // Y 轴
+ ├─ Description // 图表描述
+ ├─ Legend    //
+ └─ LimitLine // 限制线
+
+/** 不同的图表对应的高亮区域，里面包装的都是 HighLight 类型的数据，此类包含高亮显示值所需的信息 */
+IHighlighter
+ ├─ ChartHighlighter&lt;T extends BarLineScatterCandleBubbleDataProvider>
+ │   ├─ BarHighlighter
+ │   │   └─ HorizontalBarHighlighter
+ │   └─ CombinedHighlighter
+ └─ PieRadarHighlighter&lt;T extends PieRadarChartBase>
+     ├─ PieHighlighter
+     └─ RadarHighlighter
                         </pre>
 
-                        <p>MPAnroidChart 使用流程：</p>
+                        <p>MPAndroidChart 使用流程：</p>
                         <ol>
                             <li><p>从后台接口中成功获取到图表中绘制所需的数据集；</p></li>
                             <li><p>将数据包装成 MPAndroidChart 能够识别的数据类型；</p></li>
@@ -5703,8 +5770,6 @@ List&lt;Entry> entries = new ArrayList<>();
 for (int i = 1; i < 6; i++) {
     entries.add(new Entry(i, i % 2 == 0 ? 2 * i : i));
 }
-
-// 设置样式
 LineDataSet dataSet = new LineDataSet(entries, "Label");
 dataSet.setColor(Color.BLUE);
 dataSet.setValueTextColor(Color.RED);
@@ -5726,6 +5791,49 @@ java.lang.Object
                     com.github.mikephil.charting.charts.LineChart
 
 public class LineChart extends BarLineChartBase&lt;LineData> implements LineDataProvider {...}
+
+public interface LineDataProvider extends BarLineScatterCandleBubbleDataProvider {
+    LineData getLineData();
+    YAxis getAxis(YAxis.AxisDependency dependency);
+}
+
+public class LineData extends BarLineScatterCandleBubbleData&lt;ILineDataSet> {
+    public LineData() { super(); }
+    public LineData(ILineDataSet... dataSets) { super(dataSets); }
+    public LineData(List&lt;ILineDataSet> dataSets) { super(dataSets); }
+}
+
+public interface ILineDataSet extends ILineRadarDataSet&lt;Entry> {
+    LineDataSet.Mode getMode();
+    float getCubicIntensity();
+    float getCircleRadius();
+    float getCircleHoleRadius();
+    int getCircleColor(int index);
+    int getCircleColorCount();
+    boolean isDrawCirclesEnabled();
+    int getCircleHoleColor();
+    boolean isDrawCircleHoleEnabled();
+    DashPathEffect getDashPathEffect();
+    boolean isDashedLineEnabled();
+    IFillFormatter getFillFormatter();
+}
+
+public interface ILineRadarDataSet&lt;T extends Entry> extends ILineScatterCandleRadarDataSet&lt;T> {
+    int getFillColor();
+    Drawable getFillDrawable();
+    int getFillAlpha();
+    float getLineWidth();
+    boolean isDrawFilledEnabled();
+    void setDrawFilled(boolean enabled);
+}
+
+public interface ILineScatterCandleRadarDataSet&lt;T extends Entry>
+                                extends IBarLineScatterCandleBubbleDataSet&lt;T> {
+    boolean isVerticalHighlightIndicatorEnabled();
+    boolean isHorizontalHighlightIndicatorEnabled();
+    float getHighlightLineWidth();
+    DashPathEffect getDashPathEffectHighlight();
+}
                             </pre>
                             <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/LineChart.html" target="_blank">LineChart</a> -- 线性图</p>
                         </div>
@@ -5735,15 +5843,49 @@ public class LineChart extends BarLineChartBase&lt;LineData> implements LineData
 public abstract class BarLineChartBase&lt;T extends BarLineScatterCandleBubbleData&lt;? extends
                 IBarLineScatterCandleBubbleDataSet&lt;? extends Entry>>>
         extends Chart&lt;T> implements BarLineScatterCandleBubbleDataProvider {...}
+
+public interface BarLineScatterCandleBubbleDataProvider extends ChartInterface {
+    Transformer getTransformer(AxisDependency axis);
+    boolean isInverted(AxisDependency axis);
+
+    float getLowestVisibleX();
+    float getHighestVisibleX();
+
+    BarLineScatterCandleBubbleData getData();
+}
+
+public abstract class BarLineScatterCandleBubbleData&lt;T extends IBarLineScatterCandleBubbleDataSet &lt;? extends
+                                Entry>> extends ChartData&lt;T> {
+    public BarLineScatterCandleBubbleData() { super(); }
+    public BarLineScatterCandleBubbleData(T... sets) { super(sets); }
+    public BarLineScatterCandleBubbleData(List&lt;T> sets) { super(sets); }
+}
+
+public interface IBarLineScatterCandleBubbleDataSet&lt;T extends Entry> extends IDataSet&lt;T> {
+    int getHighLightColor();
+}
                             </pre>
                             <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/BarLineChartBase.html" target="_blank">BarLineChartBase</a> </p>
                         </div>
 
                         <div class="split-item">
-                                <pre class="brush: java;">
+                            <pre class="brush: java;">
 public abstract class Chart&lt;T extends ChartData&lt;? extends IDataSet&lt;? extends Entry>>> extends ViewGroup
-        implements ChartInterface {...}
+        implements ChartInterface {
+    public static final int PAINT_GRID_BACKGROUND = 4;
+    public static final int PAINT_INFO = 7;
+    public static final int PAINT_DESCRIPTION = 11;
+    public static final int PAINT_HOLE = 13;
+    public static final int PAINT_CENTER_TEXT = 14;
+    public static final int PAINT_LEGEND_LABEL = 18;
 
+    /** 在构造函数中调用了 init() 方法 */
+    public Chart(Context context) {...}
+    public Chart(Context context, AttributeSet attrs) {...}
+    public Chart(Context context, AttributeSet attrs, int defStyle) {...}
+}
+
+/** 图表类基础接口 */
 public interface ChartInterface {
     float getXChartMin();
     float getXChartMax();
@@ -5764,8 +5906,287 @@ public interface ChartInterface {
     ChartData getData();
     int getMaxVisibleCount();
 }
-                                </pre>
-                            <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/Chart.html" target="_blank">Chart</a> -- 图表类的基类，</p>
+
+/** 图表类的基础数据包装类 */
+public abstract class ChartData&lt;T extends IDataSet&lt;? extends Entry>> {
+    protected float mYMax = -Float.MAX_VALUE;
+    protected float mYMin = Float.MAX_VALUE;
+    protected float mXMax = -Float.MAX_VALUE;
+    protected float mXMin = Float.MAX_VALUE;
+    protected float mLeftAxisMax = -Float.MAX_VALUE;
+    protected float mLeftAxisMin = Float.MAX_VALUE;
+    protected float mRightAxisMax = -Float.MAX_VALUE;
+    protected float mRightAxisMin = Float.MAX_VALUE;
+    protected List&lt;T> mDataSets;
+
+    public ChartData() {...}
+    public ChartData(T... dataSets) {...}
+    public ChartData(List&lt;T> sets) {...}
+
+    private List&lt;T> arrayToList(T[] array) {...}
+    public void notifyDataChanged() {...}
+    public void calcMinMaxY(float fromX, float toX) {...}
+    protected void calcMinMax() {...}
+    public int getDataSetCount() {...}
+    public float getYMin() {...}
+    public float getYMin(AxisDependency axis) {...}
+    public float getYMax() {...}
+    public float getYMax(AxisDependency axis) {...}
+    public float getXMin() {...}
+    public float getXMax() {...}
+    public List&lt;T> getDataSets() {...}
+    protected int getDataSetIndexByLabel(List&lt;T> dataSets, String label, boolean ignorecase) {...}
+    public String[] getDataSetLabels() {...}
+    public Entry getEntryForHighlight(Highlight highlight) {...}
+    public T getDataSetByLabel(String label, boolean ignorecase) {...}
+    public T getDataSetByIndex(int index) {...}
+    public void addDataSet(T d) {...}
+    public boolean removeDataSet(T d) {...}
+    public boolean removeDataSet(int index) {...}
+    public void addEntry(Entry e, int dataSetIndex) {...}
+    protected void calcMinMax(Entry e, AxisDependency axis) {...}
+    protected void calcMinMax(T d) {...}
+    public boolean removeEntry(Entry e, int dataSetIndex) {...}
+    public boolean removeEntry(float xValue, int dataSetIndex) {...}
+    public T getDataSetForEntry(Entry e) {...}
+    public int[] getColors() {...}
+    public int getIndexOfDataSet(T dataSet) {...}
+    protected T getFirstLeft(List&lt;T> sets) {...}
+    public T getFirstRight(List&lt;T> sets) {...}
+    public void setValueFormatter(IValueFormatter f) {...}
+    public void setValueTextColor(int color) {...}
+    public void setValueTextColors(List&lt;Integer> colors) {...}
+    public void setValueTypeface(Typeface tf) {...}
+    public void setValueTextSize(float size) {...}
+    public void setDrawValues(boolean enabled) {...}
+    public void setHighlightEnabled(boolean enabled) {...}
+    public boolean isHighlightEnabled() {...}
+    public void clearValues() {...}
+    public boolean contains(T dataSet) {...}
+    public int getEntryCount() {...}
+    public T getMaxEntryCountSet() {...}
+}
+
+/** 图表类的数据集基础接口 */
+public interface IDataSet&lt;T extends Entry> {
+    float getYMin();
+    float getYMax();
+    float getXMin();
+    float getXMax();
+    int getEntryCount();
+    void calcMinMax();
+    void calcMinMaxY(float fromX, float toX);
+    T getEntryForXValue(float xValue, float closestToY, DataSet.Rounding rounding);
+    T getEntryForXValue(float xValue, float closestToY);
+    List&lt;T> getEntriesForXValue(float xValue);
+    T getEntryForIndex(int index);
+    int getEntryIndex(float xValue, float closestToY, DataSet.Rounding rounding);
+    int getEntryIndex(T e);
+    int getIndexInEntries(int xIndex);
+    boolean addEntry(T e);
+    void addEntryOrdered(T e);
+    boolean removeFirst();
+    boolean removeLast();
+    boolean removeEntry(T e);
+    boolean removeEntryByXValue(float xValue);
+    boolean removeEntry(int index);
+    boolean contains(T entry);
+    void clear();
+
+    String getLabel();
+    void setLabel(String label);
+
+    YAxis.AxisDependency getAxisDependency();
+    void setAxisDependency(YAxis.AxisDependency dependency);
+
+    boolean isHighlightEnabled();
+    void setHighlightEnabled(boolean enabled);
+
+    void setValueFormatter(IValueFormatter f);
+    IValueFormatter getValueFormatter();
+    boolean needsFormatter();
+
+    int getColor();
+    int getColor(int index);
+    List&lt;Integer> getColors();
+
+    int getValueTextColor();
+    void setValueTextColor(int color);
+    void setValueTextColors(List&lt;Integer> colors);
+    int getValueTextColor(int index);
+    void setValueTextSize(float size);
+    float getValueTextSize();
+    void setValueTypeface(Typeface tf);
+    Typeface getValueTypeface();
+
+    Legend.LegendForm getForm();
+    float getFormSize();
+    float getFormLineWidth();
+    DashPathEffect getFormLineDashEffect();
+
+    void setDrawValues(boolean enabled);
+    boolean isDrawValuesEnabled();
+    void setDrawIcons(boolean enabled);
+    boolean isDrawIconsEnabled();
+
+    void setIconsOffset(MPPointF offset);
+    MPPointF getIconsOffset();
+
+    void setVisible(boolean visible);
+    boolean isVisible();
+}
+
+/** 在 BaseEntry 上附加了一个 X 坐标 */
+public class Entry extends BaseEntry implements Parcelable {
+    float x...
+}
+
+/** 此类包涵以下三个变量的构造函数及 Get/Set 方法 */
+public abstract class BaseEntry {
+    float y...         // Y 坐标
+    Object mData...    // 附加数据实体
+    Drawable mIcon...  // 可选图标图像
+}
+</pre>
+                            <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/Chart.html" target="_blank">Chart</a> -- 图表类的基类</p>
+                            <ol>
+                                <li class="group"><p><code>abstract void 	notifyDataSetChanged()</code> -- 数据改变时，重新计算坐标等</p></li>
+
+                                <li class="group"><p><code>protected abstract void 	calcMinMax()</code> -- 计算 X 和 Y 轴的最大最小值</p></li>
+                                <li><p><code>protected abstract void 	calculateOffsets()</code> -- 计算偏移值</p></li>
+
+                                <li class="group"><p><code>protected void 	init()</code> -- 此方法在构造方法中调用，用于初始化</p></li>
+
+                                <li class="group"><p><code>protected void 	onMeasure(int widthMeasureSpec, int heightMeasureSpec)</code> -- 测量回调</p></li>
+                                <li><p><code>protected void 	onLayout(boolean changed, int left, int top, int right, int bottom)</code> -- 布局回调</p></li>
+                                <li><p><code>protected void 	onSizeChanged(int w, int h, int oldw, int oldh)</code> -- 尺寸改变回调</p></li>
+                                <li><p><code>protected void 	onDraw(Canvas canvas)</code> -- 绘制回调</p></li>
+                                <li><p><code>protected void 	onDetachedFromWindow()</code> -- 移除回调</p></li>
+
+                                <li class="group"><p><code>void 	setData(T data)</code> -- 设置数据，LineData</p></li>
+                                <li><p><code>T 	getData()</code> -- 获取数据</p></li>
+                                <li><p><code>void 	clear()</code> -- 清除数据，并刷新 UI</p></li>
+                                <li><p><code>void 	clearValues()</code> -- 只清除数据，不刷新 UI</p></li>
+                                <li><p><code>boolean 	isEmpty()</code> -- 数据是否为空</p></li>
+
+                                <li class="group"><p><code>void 	setNoDataText(String text)</code> -- 设置无数据时显示的文本</p></li>
+                                <li><p><code>void 	setNoDataTextColor(int color)</code> -- 设置无数据时显示的文本颜色</p></li>
+                                <li><p><code>void 	setNoDataTextTypeface(Typeface tf)</code> -- 设置无数据时显示的文本字体</p></li>
+
+                                <li class="group"><p><code>void 	setDescription(<a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/components/Description.html" target="_blank">Description</a> desc)</code> -- 设置图表描述(文字，位置等等)</p></li>
+                                <li><p><code><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/components/Description.html" target="_blank">Description</a> 	getDescription()</code> -- 获取图表描述</p></li>
+                                <li><p><code>protected void 	drawDescription(Canvas c)</code> -- 可自定义绘制</p></li>
+
+                                <li class="group"><p><code>protected void 	setupDefaultFormatter(float min, float max)</code> -- 设置用于格式化的格式(小数位)</p></li>
+                                <li><p><code>IValueFormatter 	getDefaultValueFormatter()</code> -- 获取默认格式器</p></li>
+
+                                <li class="group"><p><code>void 	setUnbindEnabled(boolean enabled)</code> -- 将 layer-type 设置为 HARDWARE / SOFTWARE</p></li>
+
+                                <li class="group"><p><code><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/components/Legend.html" target="_blank">Legend</a> 	getLegend()</code> -- 返回图表的 Legend 对象。此方法可用于获取图例的实例，以便自定义自动生成的图例</p></li>
+                                <li><p><code><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/renderer/LegendRenderer.html" target="_blank">LegendRenderer</a> 	getLegendRenderer()</code> -- 获取渲染器对象</p></li>
+
+                                <li class="group"><p><code>MPPointF 	getCenter()</code> -- 获取中点</p></li>
+                                <li><p><code>MPPointF 	getCenterOfView()</code> -- 调用了上面的方法</p></li>
+                                <li><p><code>MPPointF 	getCenterOffsets()</code> -- 中点偏移，和 ViewPort 相关</p></li>
+                                <li><p><code>RectF 	getContentRect()</code> -- 获取内容矩形</p></li>
+
+                                <li class="group"><p><code>XAxis 	getXAxis()</code> -- 获取 X 轴</p></li>
+                                <li><p><code>float 	getXChartMax()</code> -- 获取 X 轴上的最大值</p></li>
+                                <li><p><code>float 	getXChartMin()</code> -- 获取 X 轴上的最小值</p></li>
+                                <li><p><code>float 	getXRange()</code> -- 获取 X 范围</p></li>
+                                <li><p><code>float 	getYMax()</code> -- 获取 Y 最大值</p></li>
+                                <li><p><code>float 	getYMin()</code> -- 获取 Y 最小值</p></li>
+
+                                <li class="group"><p><code>void 	setExtraOffsets(float left, float top, float right, float bottom)</code> -- 设置额外的偏移</p></li>
+                                <li><p><code>void 	setExtraTopOffset(float offset)</code> -- 设置额外顶部偏移</p></li>
+                                <li><p><code>float 	getExtraTopOffset()</code> -- 获取额外顶部偏</p></li>
+                                <li><p><code>void 	setExtraRightOffset(float offset)</code> -- 设置额外右侧偏移</p></li>
+                                <li><p><code>float 	getExtraRightOffset()</code> -- 获取额外右侧偏移</p></li>
+                                <li><p><code>void 	setExtraBottomOffset(float offset)</code> -- 设置额外底部偏移</p></li>
+                                <li><p><code>float 	getExtraBottomOffset()</code> -- 获取额外底部偏移</p></li>
+                                <li><p><code>void 	setExtraLeftOffset(float offset)</code> -- 设置额外左侧偏移</p></li>
+                                <li><p><code>float 	getExtraLeftOffset()</code> -- 获取额外左侧偏移</p></li>
+
+                                <li class="group"><p><code>void 	setDrawMarkers(boolean enabled)</code> -- 是否启动标注(点击的时候展示)，默认启用</p></li>
+                                <li><p><code>boolean 	isDrawMarkersEnabled()</code> -- 标注是否已启用</p></li>
+                                <li><p><code>void 	setMarker(<a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/components/IMarker.html" target="_blank">IMarker</a> marker)</code> -- 设置标注，有 <a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/components/MarkerView.html" target="_blank">MarkerView</a> 和 <a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/components/MarkerImage.html" target="_blank">MarkerImage</a> 两个实现类</p></li>
+                                <li><p><code>IMarker 	getMarker()</code> -- 获取标注</p></li>
+                                <li><p><code>protected float[] 	getMarkerPosition(Highlight high)</code> -- 根据高亮区域获取标注的位置</p></li>
+                                <li class="group"><p><code>protected void 	drawMarkers(Canvas canvas)</code> -- 绘制标注</p></li>
+
+                                <li class="group"><p><code>void 	setOnChartValueSelectedListener(OnChartValueSelectedListener l)</code> -- 图表的某一部分选中回调</p>
+                                    <pre class="brush: java;">
+public interface OnChartValueSelectedListener {
+    void onValueSelected(Entry e, Highlight h);
+    void onNothingSelected();
+}
+                                    </pre>
+                                </li>
+
+                                <li class="group"><p><code>Bitmap 	getChartBitmap()</code> -- 获取绘制图表的 Bitmap 对象</p></li>
+
+                                <li class="group"><p><code>boolean 	saveToGallery(String fileName, int quality)</code> -- 存储为图片</p></li>
+                                <li><p><code>boolean 	saveToGallery(String fileName, String subFolderPath, String fileDescription, Bitmap.CompressFormat format, int quality)</code> -- 存储为图片</p></li>
+                                <li><p><code>boolean 	saveToPath(String title, String pathOnSD)</code> -- 存储为图片</p></li>
+
+                                <li class="group"><p><code>void 	setHighlighter(ChartHighlighter highlighter)</code> -- 设置高亮类型</p></li>
+                                <li><p><code>IHighlighter 	getHighlighter()</code> -- 获取高亮类型</p></li>
+                                <li><p><code>void 	setHighlightPerTapEnabled(boolean enabled)</code> -- 设置拖动时高亮区域是否跟着变，默认为 true</p></li>
+                                <li><p><code>boolean 	isHighlightPerTapEnabled()</code> -- 获取拖动时高亮区域是否跟着变</p></li>
+                                <li><p><code>void 	setMaxHighlightDistance(float distDp)</code> -- 设置高亮区域的热点区域距离(在此区域内点击显示会显示高亮)</p></li>
+                                <li><p><code>float 	getMaxHighlightDistance()</code> -- 获取高亮区域的热点区域距离</p></li>
+                                <li><p><code>Highlight[] 	getHighlighted()</code> -- 获取高亮区域数组</p></li>
+                                <li><p><code>protected void 	setLastHighlighted(Highlight[] highs)</code> -- 设置最后的高亮区域</p></li>
+
+                                <li class="group"><p><code>boolean 	valuesToHighlight()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	highlightValue(float x, float y, int dataSetIndex)</code> -- </p></li>
+                                <li><p><code>void 	highlightValue(float x, float y, int dataSetIndex, boolean callListener)</code> -- </p></li>
+                                <li><p><code>void 	highlightValue(float x, int dataSetIndex)</code> -- </p></li>
+                                <li><p><code>void 	highlightValue(float x, int dataSetIndex, boolean callListener)</code> -- </p></li>
+                                <li><p><code>void 	highlightValue(Highlight highlight)</code> -- </p></li>
+                                <li><p><code>void 	highlightValue(Highlight high, boolean callListener)</code> -- </p></li>
+                                <li><p><code>void 	highlightValues(Highlight[] highs)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	addViewportJob(Runnable job)</code> -- </p></li>
+                                <li><p><code>void 	removeViewportJob(Runnable job)</code> -- </p></li>
+                                <li><p><code>void 	clearAllViewportJobs()</code> -- </p></li>
+                                <li><p><code>ArrayList&lt;Runnable> 	getJobs()</code> -- </p></li>
+                                <li><p><code>ViewPortHandler 	getViewPortHandler()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setLogEnabled(boolean enabled)</code> -- 是否打开日志</p></li>
+                                <li><p><code>boolean 	isLogEnabled()</code> -- 是否打开日志</p></li>
+
+                                <li class="group"><p><code>ChartAnimator 	getAnimator()</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	animateX(int durationMillis)</code> -- </p></li>
+                                <li><p><code>void 	animateX(int durationMillis, Easing.EasingOption easing)</code> -- </p></li>
+                                <li><p><code>void 	animateX(int durationMillis, EasingFunction easing)</code> -- </p></li>
+                                <li><p><code>void 	animateXY(int durationMillisX, int durationMillisY)</code> -- </p></li>
+                                <li><p><code>void 	animateXY(int durationMillisX, int durationMillisY, Easing.EasingOption easingX, Easing.EasingOption easingY)</code> -- </p></li>
+                                <li><p><code>void 	animateXY(int durationMillisX, int durationMillisY, EasingFunction easingX, EasingFunction easingY)</code> -- </p></li>
+                                <li><p><code>void 	animateY(int durationMillis)</code> -- </p></li>
+                                <li><p><code>void 	animateY(int durationMillis, Easing.EasingOption easing)</code> -- </p></li>
+                                <li><p><code>void 	animateY(int durationMillis, EasingFunction easing)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setPaint(Paint p, int which)</code> -- </p></li>
+                                <li><p><code>Paint 	getPaint(int which)</code> -- </p></li>
+                                <li><p><code>void 	setRenderer(DataRenderer renderer)</code> -- </p></li>
+                                <li><p><code>DataRenderer 	getRenderer()</code> -- </p></li>
+                                <li><p><code>void 	setHardwareAccelerationEnabled(boolean enabled)</code> -- </p></li>
+
+                                <li class="group"><p><code>void 	setTouchEnabled(boolean enabled)</code> -- </p></li>
+                                <li><p><code>void 	setOnTouchListener(ChartTouchListener l)</code> -- </p></li>
+                                <li><p><code>ChartTouchListener 	getOnTouchListener()</code> -- </p></li>
+                                <li><p><code>void 	setOnChartGestureListener(OnChartGestureListener l)</code> -- </p></li>
+                                <li><p><code>OnChartGestureListener 	getOnChartGestureListener()</code> -- </p></li>
+                                <li><p><code>void 	setDragDecelerationEnabled(boolean enabled)</code> -- </p></li>
+                                <li><p><code>boolean 	isDragDecelerationEnabled()</code> -- </p></li>
+                                <li><p><code>void 	setDragDecelerationFrictionCoef(float newValue)</code> -- </p></li>
+                                <li><p><code>float 	getDragDecelerationFrictionCoef()</code> -- </p></li>
+                                <li><p><code>void 	enableScroll()</code> -- </p></li>
+                                <li><p><code>void 	disableScroll()</code> -- </p></li>
+                            </ol>
                         </div>
                     </div>
 
@@ -5779,7 +6200,7 @@ public interface ChartInterface {
 public class BarChart extends BarLineChartBase&lt;BarData> implements BarDataProvider {...}
 public class HorizontalBarChart extends BarChart {...}
                          </pre>
-                        <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/BarChart.html" target="_blank">BarChart</a> -- 条形图</p>
+                        <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/BarChart.html" target="_blank">BarChart</a> -- 柱状图</p>
                         <p><a href="docs/MPAndroidChart-javadoc-v3.0.3/com/github/mikephil/charting/charts/HorizontalBarChart.html" target="_blank">HorizontalBarChart</a> -- 横向条形图</p>
                     </div>
 
