@@ -66,13 +66,14 @@
 					</div>
 					<div class="list-group">
 						<a href="#" class="list-group-item">简介</a>
+						<a href="#kotlin-cmd" class="list-group-item"><code>kotlinc</code> && <code>kotlin</code></a>
 						<a class="list-group-item active dropup" data-toggle="collapse"
 							data-parent="#accordion" href="#kotlin-base" aria-expanded="true">
 							基础语法<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
 						<div id="kotlin-base" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item">...</a>
+							<a href="#kotlin-base-constructor" class="list-group-item">基本语法</a>
 							<a href="#" class="list-group-item">...</a>
 							<a href="#" class="list-group-item">...</a>
 						</div>
@@ -89,6 +90,7 @@
 		<div class="row">
 			<div class="col-md-3"></div>
 			<div class="col-md-9" style="float: left;">
+
 				<!-- item start -->
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -99,8 +101,14 @@
 							<p><b>Kotlin 官网：</b> <a href="http://kotlinlang.org/" target="_blank">Kotlin</a></p>
 							<p><b>Kotlin 源码：</b> <a href="https://github.com/JetBrains/kotlin" target="_blank">Kotlin</a></p>
 							<p><b>Kotlin 中文站及中文教程：</b> <a href="https://www.kotlincn.net/" target="_blank">kotlincn.net</a>， <a href="https://www.kotlincn.net/docs/reference/" target="_blank">Kotlin Rreference</a></p>
+							<p><b>Kotlin</b> 安装及更新：</p>
+							<pre class="brush: bash;">
+$ curl -s https://get.sdkman.io | bash
+$ sdk install kotlin
+</pre>
 							<p><b>Kotlin</b> 是一个基于 JVM 的新的编程语言，由 JetBrains 开发。</p>
 							<p><b>Kotlin</b> 可以编译成 Java 字节码，也可以编译成 JavaScript，方便在没有 JVM 的设备上运行。</p>
+							<p><b>Kotlin</b> 一般使用两种后缀: <code>kt</code> && <code>kts</code>, 表示将编译成 Kotlin 应用程序和 KotlinScript。</p>
 							<p><b>JetBrains</b>，作为目前广受欢迎的 Java IDE IntelliJ 的提供商，在 Apache 许可下已经开源其 Kotlin 编程语言。</p>
 							<p><b>Kotlin</b> 已正式成为 Android 官方支持开发语言。</p>
 							<p><b>Kotlin</b> 在设计时就考虑了 Java 互操作性。可以从 Kotlin 中自然地调用现存的 Java 代码，并且在 Java 代码中也可以很顺利地调用 Kotlin 代码。</p>
@@ -143,7 +151,6 @@
 							<p><b>根据目标平台还会导入额外的包：</b></p>
 							<p><b>JVM:</b> -- <a href="" target="_blank">java.lang.*</a>, <a href="" target="_blank">kotlin.jvm.*</a></p>
 							<p><b>JS:</b> -- <a href="" target="_blank">kotlin.js.*</a></p>
-
 						</div>
 
 					</div>
@@ -151,17 +158,92 @@
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="kotlin-spec"></a>
+				<a class="offset" id="kotlin-cmd"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title"></h3>
+						<h3 class="panel-title"><code>kotlinc</code> && <code>kotlin</code></h3>
 					</div>
 					<div class="panel-body">
+							<div class="sub-item">
+								<pre class="brush: bash;">
+$ kotlinc app.kt -include-runtime -d app.jar  # 生成可以运行的 jar 文件（包含 kotlin 运行库）
+$ java -jar app.jar
 
+$ kotlinc -help(kotlinc-java -help)           # 查看帮助
+-classpath (-cp) &lt;path>    指定查找用户类的路径
+-d &lt;directory|jar>         指定生成类的路径
+-include-runtime              指定生成的 .jar 文件中包含 kotlin 的类
+-java-parameters              为 Java1.8 生成方法注解
+-jdk-home &lt;path>           指定 JDK 路径
+-kotlin-home &lt;path>        指定 kotlin 路径
+-jvm-target &lt;version>      指定 JVM 的版本
+-module-name &lt;name>        指定 .kotlin_module 模块名
+
+-no-jdk                       不将 JDK 包含到类路径
+-no-reflect                   不将 kotlin-stdlib.jarkotlin-reflect.jar 包含到类路径
+-no-stdlib                    不将 kotlin-stdlib.jar 或 kotlin-reflect.jar 包含到类路径
+
+-script                       指定为脚本文件
+-script-templates &lt;fully qualified class name[,]>  指定脚本定义模板类
+-api-version &lt;version>     指定编译版本
+-language-version &lt;version> 提供与指定语言版本的源兼容性
+-P plugin:&lt;pluginId>:&lt;optionName>=&lt;value> 使用插件 
+
+-nowarn                       忽略警告
+-Werror                    	  有警告则报告一个错误
+-verbose                      打开 verbose 级别日志输出
+
+-version                      显示版本
+-help (-h)                    打印标准选项摘要
+-X                            打印高级选项摘要
+</pre>
+							</div>
+
+							<div class="sub-item">
+									<pre class="brush: bash;">
+$ kotlin -cp app/build/libs/app.jar AppKt
+$ kotlin -cp app/build/libs/app.jar:library/build/libs/library.jar AppKt
+</pre>
+							</div>
 					</div>
 				</div>
 				<!-- item over -->
 
+				<!-- item start -->
+				<a class="offset" id="kotlin-base-constructor"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">基本语法</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+								<p><b>目录结构</b></p>
+								<p>在混合语言项目中，Kotlin 源文件应当与 Java 源文件位于同一源文件根目录下， 并遵循相同的目录结构（每个文件应存储在与其 package 语句对应的目录中 ）。</p>
+								<p>在纯 Kotlin 项目中，推荐的目录结构遵循省略了公共根包的包结构 （例如，如果项目中的所有代码都位于 <code>io.kotlin</code> 包及其子包中，那么 <code>io.kotlin</code> 包的文件应该直接放在源代码根目录下，而 <code>io.kotlin.foo</code> 中的文件应该放在源代码根目录下的 <code>foo</code> 子目录中）。</p>
+	
+								<p><b>源文件名称</b></p>
+								<p>如果 Kotlin 文件包含单个类（以及可能相关的顶层声明），那么文件名应该与该类的名称相同，并追加 .kt 扩展名。如果文件包含多个类或只包含顶层声明， 那么选择一个描述该文件所包含内容的名称，并以此命名该文件。</p>
+	
+								<p><b>源文件组织</b></p>
+								<p>鼓励多个声明（类、顶级函数或者属性）放在同一个 Kotlin 源文件中， 只要这些声明在语义上彼此紧密关联并且文件保持合理大小 （不超过几百行）。</p>
+								<p>特别是在为类定义与类的所有客户都相关的扩展函数时， 请将它们放在与类自身定义相同的地方。而在定义仅对指定客户有意义的扩展函数时，请将它们放在紧挨该客户代码之后。</p>
+						</div>
+
+						<div class="sub-item">
+							<pre class="brush: java;">
+package util
+
+import java.util.*
+
+fun sum(a: Int, b: Int): Int {
+	return a + b
+}
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+				
 				<!-- item start -->
 				<a class="offset" id="kotlin-"></a>
 				<div class="panel panel-default">
@@ -192,7 +274,8 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
