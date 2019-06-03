@@ -75,6 +75,7 @@
                          role="tabpanel">
                         <a href="#graphics-Canvas" class="list-group-item">Canvas 及相关类</a>
                         <a href="#graphics-Paint" class="list-group-item">Paint 及相关类</a>
+                        <a href="#graphics-PorterDuff" class="list-group-item">PorterDuff 图形混合</a>
                         <a href="#graphics-Bitmap" class="list-group-item">Bitmap 及相关类</a>
                         <a href="#graphics-Drawable" class="list-group-item">Drawable 及相关类</a>
                         <a href="#graphics-Matrix" class="list-group-item">Matrix 类</a>
@@ -1534,17 +1535,22 @@ static int parseColor(String colorString)
                             <li>
                                 <p><a id="graphics-PorterDuff" class="offset"></a><a
                                         href="docs/reference/android/graphics/PorterDuff.Mode.html">PorterDuff.Mode</a>
-                                    -- PorterDuff 是两个人的名字的组合：Tomas Proter 和 Tom Duff.，他们是最早在
-                                    SIGGRAPH
-                                    上提出图形混合概念的大神级人物。PorterDuff 是处理图形的混合的，是一种渲染效果。
+                                    -- PorterDuff 是两个人的名字的组合：Tomas Porter 和 Tom Duff.，他们是最早在 SIGGRAPH 上提出图形混合概念的大神级人物。PorterDuff 是处理图形的混合的，是一种渲染效果。
                                 </p>
+                                <p><b>使用 PorterDuff 注意以下事项(效果才会如期)：</b></p>
+                                <ul>
+                                    <li><p><b>关闭硬件加速，硬件加速对 PorterDuffXfermode 有影响；</b></p></li>
+                                    <li><p><b>只有两个 Bitmap 的时候，才会生效。</b></p></li>
+                                    <li><p><b>两个 Bitmap 大小尽量一样，否侧生成的效果可能不是需要的；</b></p></li><b
+                                    <li><p><b>背景色为透明色。</b></p></li>
+                                </ul>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <img src="res/graphics-PorterDuff-Mode.jpeg"
                                              class="img-responsive">
                                     </div>
                                     <div class="col-md-6">
-                                        <img width=300px" src="res/graphics-PorterDuff-Mode2.png"
+                                        <img width=300px" src="res/porter-duff-test.png"
                                              class="img-responsive">
 
                                     </div>
@@ -1569,6 +1575,13 @@ static int parseColor(String colorString)
     Sc：全称为 Source color，表示源图的颜色；
     Da：全称为 Destination alpha，表示目标图的 Alpha 通道；
     Dc：全称为 Destination color，表示目标图的颜色.
+
+当 alpha 通道的值为 1 时，图像完全可见；当 alpha 通道值为 0 时，图像完全不可见；
+当 alpha 通道的值介于 0 和 1 之间时，图像只有一部分可见。 alpha 通道描述的是图像的形状，而不是透明度。
+以 SCREEN 的计算方式为例：[Sa + Da - Sa * Da, Sc + Dc - Sc * Dc]，分为两部分，其中 Sa + Da - Sa * Da
+    计算的值代表 SCREEN 模式的 alpha 通道，而后部分 Sc + Dc - Sc * Dc 计算 SCREEN 模式的颜色值，
+    图形混合后的图片依靠这个矢量来计算 ARGB 的值。
+
 **/
 public enum Mode {
     /** [0, 0]
@@ -1673,6 +1686,79 @@ public enum Mode {
      * 但底层颜色的高光与阴影部分的亮度细节会被保留
      */
     OVERLAY     (15);
+}
+
+/** 自定义 PorterDuffView 测试其 Mode, 运行效果如上图右 */
+public class PorterDuffView extends View {
+    private Xfermode mode;
+    private Paint paint;
+    private Matrix matrix;
+
+    private Bitmap dstBitmap, srcBitmap;
+
+    public PorterDuffView(Context context) {
+        super(context);
+        init();
+    }
+
+    public PorterDuffView(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public PorterDuffView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init() {
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG|Paint.FILTER_BITMAP_FLAG);
+        matrix = new Matrix();
+        setLayerType(LAYER_TYPE_SOFTWARE, null); // 关闭硬件加速
+    }
+
+    public void setMode(PorterDuff.Mode mode) {
+        this.mode = new PorterDuffXfermode(mode);
+
+        invalidate();
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        // 绘制纵向矩形，其中右半部分为半透明
+        dstBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(dstBitmap);
+        Paint p = new Paint();
+        p.setColor(Color.BLUE);
+
+        canvas.drawRect(w * .25f, 0, w * .5f, h, p);
+        p.setAlpha(80);
+        canvas.drawRect(w * .5f, 0, w * .75f, h, p);
+
+        // 绘制横向矩形，其中下半部分为半透明
+        p.setAlpha(255);
+        srcBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(srcBitmap);
+        p.setColor(Color.RED);
+
+        canvas.drawRect(0, h * .25f, w, h * .5f, p);
+        p.setAlpha(80);
+        canvas.drawRect(0, h * .5f, w, h * .75f, p);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+
+        canvas.drawBitmap(dstBitmap, matrix, paint);
+
+        paint.setXfermode(mode);
+
+        canvas.drawBitmap(srcBitmap, matrix, paint);
+
+    }
 }
 </pre>
                                     </div>
@@ -2061,11 +2147,19 @@ EMBEDDED_BITMAP_TEXT_FLAG   // 可以在绘制文本时使用位图字体的绘�
                                         为 Stroke 或 StrokeAndFill 时设置连接处的倾斜度，这个值必须大于0</p>
                                     </li>
                                     <li><p><code>float getStrokeMiter()</code> -- 获取连接处的倾斜度</p></li>
-                                    <li><p><code>Xfermode setXfermode(Xfermode xfermode)</code> --
+
+                                    <li class="group"><p><code>Xfermode setXfermode(Xfermode xfermode)</code> --
                                         设置图形重叠时的显示方式
-                                        ，有一个子类:<code>PorterDuffXfermode</code>, 也只有一个构造方法，参数为:<code>PorterDuff.Mode</code>参见: <a href="#graphics-PorterDuff">PorterDuff.Mode</a></p></li>
+                                        ，有一个子类:<code>PorterDuffXfermode</code>, 也只有一个构造方法，参数为:<code>PorterDuff.Mode</code>参见: <a href="#graphics-PorterDuff">PorterDuff.Mode</a></p>
+                                        <pre class="brush: java;">
+                                            // 其实还是应用了 PorterDuff 的颜色混合模式
+                                            Xfermode mode = new PorterDuffXfermode(PorterDuff.Mode.DARKEN);
+                                            mPaint.setXfermode(mode);
+                                        </pre>
+                                    </li>
                                     <li><p><code>Xfermode getXfermode()</code> -- 获取图形重叠时的显示方式</p>
                                     </li>
+
                                     <li><p><code>void setFilterBitmap(boolean filter)</code> --
                                         对位图进行滤波处理，如果该项设置为 true，则图像在动画进行中会滤掉对 Bitmap 图像的优化操作, 加快显示
                                     </p>
@@ -2133,7 +2227,7 @@ mPaint.setMaskFilter(mf);
                                 </ul>
                             </li>
                             <li>
-                                <p><a class="offset" id="graphics-ColorFilter"><a href="docs/reference/android/graphics/ColorFilter.html">ColorFilter</a>
+                                <p><a class="offset" id="graphics-ColorFilter"></a><a href="docs/reference/android/graphics/ColorFilter.html">ColorFilter</a>
                                     -- 抽象类，修改每一个用该颜料绘制的像素的颜色, 主要使用以下 3 个子类：</p>
                                 <ul>
                                     <li>
@@ -2175,8 +2269,7 @@ mPaint.setColorFilter(new LightingColorFilter(mul, add));
                                     <li>
                                         <p>
                                             <a href="docs/reference/android/graphics/PorterDuffColorFilter.html">PorterDuffColorFilter</a>
-                                            -- PorterDuff 颜色过滤器, 指定的颜色通过 PorterDuff.Mode 混合, 参见: <a
-                                                href="#graphics-PorterDuff">PorterDuff.Mode</a></p>
+                                            -- PorterDuff 颜色过滤器, 指定的颜色通过 PorterDuff.Mode 混合, 参见: <a href="#graphics-PorterDuff">PorterDuff.Mode</a></p>
                                         <pre class="brush: java;">
 /** 构造方法
  * color -- 源颜色
