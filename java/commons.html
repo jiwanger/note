@@ -81,13 +81,8 @@
 							<a href="#commons-compress" class="list-group-item">commons-io-2.5</a>
 							<a href="#apache-lucene" class="list-group-item">apache-lucene-6.4.2</a>
 						</div>
-
+						<a href="#libs-guava" class="list-group-item">Guava</a>
                         <a href="#libs-JavaPoet" class="list-group-item">JavaPoet -- 源文件生成工具</a>
-
-
-
-
-
 					</div>
 				</div>
 			</div>
@@ -1403,7 +1398,7 @@ public void testAdd() {
 										注解将使被注解的类或方法不会被当做测试执行，相当于放弃对类或 @Test 标示方法的测试。
 									</p>
 								</li>
-								</li>
+							</ul>
 						</div>
 
 					</div>
@@ -2554,6 +2549,613 @@ public void queryAll() {
 </pre>
 								</li>
 							</ul>
+						</div>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="libs-guava"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Guava</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p><b>Guava 网站和 JavaDoc</b>:<a href="https://github.com/google/guava" target="_blank">Github 地址</a>, <a href="https://guava.dev/" target="_blank">网站</a> 和 <a href="https://guava.dev/releases/snapshot-jre/api/docs/" target="_blank">JavaDoc</a></p>
+							<p><b>Guava 的 Gradle 引用：</b></p>
+							<pre class="brush: bash;">
+## 1. Use Guava in your implementation only:
+implementation("com.google.guava:guava:28.2-jre")
+
+## 2. Use Guava types in your public API:
+api("com.google.guava:guava:28.2-jre")
+
+## 3. Android - Use Guava in your implementation only:
+implementation("com.google.guava:guava:28.2-android")
+
+## 4. Android - Use Guava types in your public API:
+api("com.google.guava:guava:28.2-android")
+</pre>
+							<p><b>Guava</b> 工程包含了若干被 Google 的 Java 项目广泛依赖 的核心库，例如：集合 [collections] 、缓存 [caching] 、原生类型支持 [primitives support] 、并发库 [concurrency libraries] 、通用注解 [common annotations] 、字符串处理 [string processing] 、I/O 等等。 所有这些工具每天都在被 Google 的工程师应用在产品服务中。</p>
+							<h4>官方教程：</h4>
+							<p><b>1. 基本工具 [Basic utilities]</b> -- 让使用 Java 语言变得更舒适</p>
+							<ul>
+								<li><p><a href="#guava-base-null">1.1 使用和避免 null</a> -- null 是模棱两可的，会引起令人困惑的错误，有些时候它让人很不舒服。很多 Guava 工具类用快速失败拒绝 null 值，而不是盲目地接受</p></li>
+								<li><p><a href="#guava-base-before">1.2 前置条件</a> -- 让方法中的条件检查更简单</p></li>
+								<li><p><a href="#guava-base-object">1.3 常见 Object 方法</a> -- 简化 Object 方法实现，如 hashCode() 和 toString()</p></li>
+								<li><p><a href="#guava-base-sort">1.4 排序</a> -- Guava 强大的”流畅风格比较器”</p></li>
+								<li><p><a href="#guava-base-throwables">1.5 Throwables</a> -- 简化了异常和错误的传播与检查</p></li>
+							</ul>
+							<p><b>2. <a href="#guava-collection">集合[Collections]</a></b> -- Guava 对 JDK 集合的扩展，这是 Guava 最成熟和为人所知的部分</p>
+							<p><b>3. <a href="#guava-cache">缓存[Caches]</a></b> -- Guava Cache：本地缓存实现，支持多种缓存过期策略</p>
+							<p><b>4. <a href="#guava-function">函数式风格[Functional idioms]</a></b> -- Guava的函数式支持可以显著简化代码，但请谨慎使用它</p>
+							<p><b>5. <a href="#guava-thread">并发[Concurrency]</a></b> -- 强大而简单的抽象，让编写正确的并发代码更简单</p>
+							<p><b>6. <a href="#guava-string">字符串处理[Strings]</a></b> -- 非常有用的字符串工具，包括分割、连接、填充等操作</p>
+							<p><b>7. <a href="#guava-primitive">原生类型[Primitives]</a></b> -- 扩展 JDK 未提供的原生类型（如 int、char）操作， 包括某些类型的无符号形式</p>
+							<p><b>8. <a href="#guava-range">区间[Ranges]</a></b> -- 可比较类型的区间 API，包括连续和离散类型</p>
+							<p><b>9. <a href="#guava-io">I/O</a></b> -- 简化 I/O 尤其是 I/O流 和文件的操作，针对 Java 5 和 6 版本</p>
+							<p><b>10. <a href="#guava-hash">散列[Hash]</a></b> -- 提供比 Object.hashCode() 更复杂的散列实现，并提供布鲁姆过滤器的实现</p>
+							<p><b>11. <a href="#guava-event">事件总线[EventBus]</a></b> -- 发布-订阅模式的组件通信，但组件不需要显式地注册到其他组件中</p>
+							<p><b>12. <a href="#guava-math">数学运算[Math]</a></b> -- 优化的、充分测试的数学工具类</p>
+							<p><b>13. <a href="#guava-reflection">反射[Reflection]</a></b> -- Guava 的 Java 反射机制工具类</p>
+						</div>
+
+						<div class="sub-item">
+							<a id="guava-base-null" class="offset"></a>
+							<div class="split-item">
+								<p><b>1.1 使用和避免 null</b></p>
+								<p>Guava 用 <code>Optional&lt;T></code> 表示可能为 null 的 T 类型引用。一个 Optional 实例可能包含非 null 的引用（我们称之为引用存在），也可能什么也不包括（称之为引用缺失）。</p>
+								<ol>
+									<li><p><code>static &lt;T> Optional&lt;T> of(T reference)</code> -- 创建指定引用的 Optional 实例，若引用为 null 则快速失败(直接抛出异常)</p></li>
+									<li><p><code>static &lt;T> Optional&lt;T> absent()</code> -- 创建引用缺失的 Optional 实例</p></li>
+									<li><p><code>static &lt;T> Optional&lt;T> fromNullable(T nullableReference)</code> -- 创建引用可为 null 的 Optional 实例</p></li>
+
+									<li class="group"><p><code>static &lt;T> Iterable&lt;T> presentInstances(Iterable&lt;? extends Optional&lt;? extends T>> optionals)</code> -- 顺序跳过 <code>optionals</code> 中为 <code>absent()</code> 的项目</p></li>
+
+									<li class="group"><p><code>static &lt;T> @Nullable Optional&lt;T> fromJavaUtil(Optional&lt;T> javaUtilOptional)</code> -- 从 <code>java.util.Optional</code> 转换</p></li>
+									<li><p><code>static &lt;T> Optional&lt;T> toJavaUtil(@Nullable Optional&lt;T> googleOptional)</code> -- 转换为 <code>java.util.Optional</code></p></li>
+
+									<li class="group"><p><code>abstract T get()</code> -- 返回 Optional 所包含的引用，若引用缺失，则抛出 java.lang.IllegalStateException</p></li>
+									<li><p><code>abstract boolean 	isPresent()</code> -- 如果 Optional 包含非 null 的引用（引用存在），返回 true</p></li>
+
+									<li class="group"><p><code>abstract T 	or(T defaultValue)</code> -- 返回 Optional 所包含的引用，若引用缺失，返回指定的值</p></li>
+									<li><p><code>abstract T 	or(Supplier&lt;? extends T> supplier)</code> -- 若引用缺失，从 Supplier 返回指定的值</p></li>
+									<li><p><code>abstract T 	orNull()</code> -- 返回 Optional 所包含的引用，若引用缺失，返回 null</p></li>
+									<li><p><code>abstract Optional&lt;T> 	or(Optional&lt;? extends T> secondChoice)</code> -- 若引用缺失，返回指定的 Optional</p></li>
+
+									<li class="group"><p><code>Optional&lt;T> 	toJavaUtil()</code> -- 转换为 <code>java.util.Optional</code></p></li>
+
+									<li class="group"><p><code>abstract &lt;V> Optional&lt;V> 	transform(Function&lt;? super T,V> function)</code> -- 如果实例存在，则使用给定函数对其进行转换；否则，将返回 <code>Optional.absent()</code></p></li>
+
+									<li class="group"><p><code>abstract Set&lt;T> 	asSet()</code> -- 返回 Optional 所包含引用的单例不可变集，如果引用存在，返回一个只有单一元素的集合，如果引用缺失，返回一个空集合</p></li>
+								</ol>
+							</div>
+
+							<a id="guava-base-before" class="offset"></a>
+							<div class="split-item">
+								<p><b>1.2 前置条件</b></p>
+								<p>Guava 在 <code>Preconditions</code> 类中提供了若干前置条件判断的实用方法，强烈建议静态导入这些方法。每个方法都有三个变种：</p>
+								<pre class="brush: bash;">import static com.google.common.base.Preconditions.*;</pre>
+								<ul>
+									<li><p>没有额外参数：抛出的异常中没有错误消息；</p></li>
+									<li><p>有一个 Object 对象作为额外参数：抛出的异常使用 Object.toString() 作为错误消息；</p></li>
+									<li><p>有一个 String 对象作为额外参数，并且有一组任意数量的附加 Object 对象：这个变种处理异常消息的方式有点类似 printf，但考虑 GWT 的兼容性和效率，只支持 %s 指示符。</p></li>
+								</ul>
+								<ol>
+									<li><p><code>checkNotNull(T)</code> -- 检查 obj 是否为 null，不为 null 直接返回；当 obj 为 null 的时候抛出 <code>NullPointerException</code></p>
+										<pre class="brush: java;">
+static &lt;T> T checkNotNull(T obj)
+static &lt;T> T checkNotNull(T obj, Object errorMessage)
+static &lt;T> T checkNotNull(T obj, String eTemplate, char p1)
+static &lt;T> T checkNotNull(T obj, String eTemplate, char p1, char p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, char p1, int p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, char p1, long p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, char p1, Object p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, int p1)
+static &lt;T> T checkNotNull(T obj, String eTemplate, int p1, char p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, int p1, int p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, int p1, long p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, int p1, Object p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, long p1)
+static &lt;T> T checkNotNull(T obj, String eTemplate, long p1, char p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, long p1, int p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, long p1, long p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, long p1, Object p2)
+static &lt;T> T checkNotNull(T reference, String eTemplate, Object... errorMessageArgs)
+static &lt;T> T checkNotNull(T obj, String eTemplate, Object p1)
+static &lt;T> T checkNotNull(T obj, String eTemplate, Object p1, char p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, Object p1, int p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, Object p1, long p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, Object p1, Object p2)
+static &lt;T> T checkNotNull(T obj, String eTemplate, Object p1, Object p2, Object p3)
+static &lt;T> T checkNotNull(T obj, String eTemplate, Object p1, Object p2, Object p3, Object p4)
+</pre>
+									</li>
+									<li><p><code>checkArgument(boolean)</code> -- 用来检查传递给方法的参数，当 b 为 false 的时候抛出 <code>IllegalArgumentException</code></p>
+										<pre class="brush: java;">
+static void checkArgument(boolean b)
+static void checkArgument(boolean b, Object errorMessage)
+static void checkArgument(boolean b, String eTemplate, char p1)
+static void checkArgument(boolean b, String eTemplate, char p1, char p2)
+static void checkArgument(boolean b, String eTemplate, char p1, int p2)
+static void checkArgument(boolean b, String eTemplate, char p1, long p2)
+static void checkArgument(boolean b, String eTemplate, char p1, Object p2)
+static void checkArgument(boolean b, String eTemplate, int p1)
+static void checkArgument(boolean b, String eTemplate, int p1, char p2)
+static void checkArgument(boolean b, String eTemplate, int p1, int p2)
+static void checkArgument(boolean b, String eTemplate, int p1, long p2)
+static void checkArgument(boolean b, String eTemplate, int p1, Object p2)
+static void checkArgument(boolean b, String eTemplate, long p1)
+static void checkArgument(boolean b, String eTemplate, long p1, char p2)
+static void checkArgument(boolean b, String eTemplate, long p1, int p2)
+static void checkArgument(boolean b, String eTemplate, long p1, long p2)
+static void checkArgument(boolean b, String eTemplate, long p1, Object p2)
+static void checkArgument(boolean b, String eTemplate, Object... errorMessageArgs)
+static void checkArgument(boolean b, String eTemplate, Object p1)
+static void checkArgument(boolean b, String eTemplate, Object p1, char p2)
+static void checkArgument(boolean b, String eTemplate, Object p1, int p2)
+static void checkArgument(boolean b, String eTemplate, Object p1, long p2)
+static void checkArgument(boolean b, String eTemplate, Object p1, Object p2)
+static void checkArgument(boolean b, String eTemplate, Object p1, Object p2, Object p3)
+static void checkArgument(boolean b, String eTemplate, Object p1, Object p2, Object p3, Object p4)
+</pre>
+									</li>
+
+									<li><p><code>checkState(boolean)</code> -- 用来检查传递给方法的参数，当 b 为 false 的时候抛出 <code>IllegalStateException</code></p>
+										<pre class="brush: java;">
+static void checkState(boolean b)
+static void checkState(boolean b, Object errorMessage)
+static void checkState(boolean b, String eTemplate, char p1)
+static void checkState(boolean b, String eTemplate, char p1, char p2)
+static void checkState(boolean b, String eTemplate, char p1, int p2)
+static void checkState(boolean b, String eTemplate, char p1, long p2)
+static void checkState(boolean b, String eTemplate, char p1, Object p2)
+static void checkState(boolean b, String eTemplate, int p1)
+static void checkState(boolean b, String eTemplate, int p1, char p2)
+static void checkState(boolean b, String eTemplate, int p1, int p2)
+static void checkState(boolean b, String eTemplate, int p1, long p2)
+static void checkState(boolean b, String eTemplate, int p1, Object p2)
+static void checkState(boolean b, String eTemplate, long p1)
+static void checkState(boolean b, String eTemplate, long p1, char p2)
+static void checkState(boolean b, String eTemplate, long p1, int p2)
+static void checkState(boolean b, String eTemplate, long p1, long p2)
+static void checkState(boolean b, String eTemplate, long p1, Object p2)
+static void checkState(boolean b, String eTemplate, Object... errorMessageArgs)
+static void checkState(boolean b, String eTemplate, Object p1)
+static void checkState(boolean b, String eTemplate, Object p1, char p2)
+static void checkState(boolean b, String eTemplate, Object p1, int p2)
+static void checkState(boolean b, String eTemplate, Object p1, long p2)
+static void checkState(boolean b, String eTemplate, Object p1, Object p2)
+static void checkState(boolean b, String eTemplate, Object p1, Object p2, Object p3)
+static void checkState(boolean b, String eTemplate, Object p1, Object p2, Object p3, Object p4)
+</pre>
+									</li>
+									<li><p><code>checkElementIndex(int index, int size)</code> -- 当 <code>index &lt; 0 || index >= size</code> 时抛出 <code>IndexOutOfBoundsException</code></p>
+										<pre class="brush: java;">
+static int checkElementIndex(int index, int size)
+static int checkElementIndex(int index, int size, String desc)
+</pre>
+									</li>
+									<li><p><code>checkPositionIndex(int index, int size)</code> -- 当 <code>index &lt; 0 || index > size</code> 时抛出 <code>IndexOutOfBoundsException</code></p>
+										<pre class="brush: java;">
+static int checkPositionIndex(int index, int size)
+static int checkPositionIndex(int index, int size, String desc)
+</pre>
+									</li>
+									<li><p><code>checkPositionIndexes(int start, int end, int size)</code> -- 当 <code>start < 0 || end < start || end > size</code> 时抛出 <code>IndexOutOfBoundsException</code></p>
+										<pre class="brush: java;">
+static void checkPositionIndexes(int start, int end, int size)
+</pre>
+									</li>
+								</ol>
+							</div>
+
+							<a id="guava-base-object" class="offset"></a>
+							<div class="split-item">
+								<p><b>1.3 常见 Object 方法</b></p>
+								<p><code>Objects</code> 类提供了 <code>equal</code> 和 <code>hashCode</code> 方法</p>
+								<ol>
+									<li><p><code>equals</code> -- 当一个对象中的字段可以为 null 时，实现 Object.equals 方法会很痛苦，因为不得不分别对它们进行 null 检查</p>
+										<pre class="brush: java;">
+public static boolean equal(@Nullable Object a, @Nullable Object b) {
+	return a == b || (a != null && a.equals(b));
+}
+</pre>
+									</li>
+									<li><p><code>hashCode</code> -- 用对象的所有字段作散列 [hash] 运算应当更简单</p>
+										<pre class="brush: java;">
+public static int hashCode(@Nullable Object @Nullable ... objects) {
+	return Arrays.hashCode(objects);
+}
+</pre>
+									</li>
+								</ol>
+							</div>
+
+							<a id="guava-base-sort" class="offset"></a>
+							<div class="split-item">
+								<p><b>1.4 排序</b></p>
+								<p><code>Ordering</code> 是 Guava 流畅风格比较器 <code>Comparator</code> 的实现，它可以用来为构建复杂的比较器，以完成集合排序的功能。</p>
+								<p>从实现上说，<code>Ordering</code> 实例就是一个特殊的 <code>Comparator</code> 实例。<code>Ordering</code> 把很多基于 <code>Comparator</code> 的静态方法（如 <code>Collections.max</code>）包装为自己的实例方法（非静态方法），并且提供了链式调用方法，来定制和增强现有的比较器。</p>
+								<pre class="brush: java;">
+public abstract class Ordering&lt;T> implements Comparator&lt;T> {
+	protected Ordering() {}
+
+	public abstract int compare(@Nullable T left, @Nullable T right);
+	...
+}
+</pre>
+								<ol>
+									<li><p><code>static &lt;C extends Comparable> Ordering&lt;C> natural()</code> -- 对可排序类型做自然排序，如数字按大小，日期按先后排序</p></li>
+									<li><p><code>static Ordering&lt;Object> usingToString()</code> -- 按对象的字符串形式做字典排序</p></li>
+									<li><p><code>static &lt;T> Ordering&lt;T> from(Comparator&lt;T> comparator)</code> -- 把给定的 Comparator 转化为排序器</p></li>
+									<li><p><code>static Ordering&lt;Object> allEqual()</code> -- 返回一个将所有值视为相等的顺序</p></li>
+									<li><p><code>static Ordering&lt;Object> arbitrary()</code> -- 任意排序，但是相等(<code>compare(a, b) == 0</code>)的元素一定是挨着的</p></li>
+									<li><p><code>static &lt;T> Ordering&lt;T> compound(Iterable&lt;? extends Comparator&lt;? super T>> comparators)</code> -- 合成另一个比较器，以处理当前排序器中的相等情况</p></li>
+									<li><p><code>static &lt;T> Ordering&lt;T> explicit(List&lt;T> valuesInOrder)</code> -- 指定排序(排序的元素会按 List 中的顺序进行排序)</p>
+										<pre class="brush: java;">
+List&lt;String> orderTemplate = Arrays.asList("陈茂", "简婷", "陈筱钰", "陈俊宏");
+Ordering explicitOrdering = Ordering.explicit(orderTemplate);
+
+List after = explicitOrdering.sortedCopy(Arrays.asList("简婷", "陈筱钰", "陈俊宏", "陈筱钰", "陈茂"));
+System.out.println(after); // 排序后：[陈茂, 简婷, 陈筱钰, 陈筱钰, 陈俊宏]
+</pre>
+									</li>
+									<li><p><code>static &lt;T> Ordering&lt;T> explicit(T leastValue, T... remainingValuesInOrder)</code> -- 同上</p></li>
+
+									<li class="group"><p><code>&lt;S extends T>Ordering&lt;S> reverse()</code> -- 获取语义相反的排序器</p></li>
+									<li><p><code>&lt;S extends T>Ordering&lt;S> nullsFirst()</code> -- 使用当前排序器，但额外把 null 值排到最前面</p></li>
+									<li><p><code>&lt;S extends T>Ordering&lt;S> nullsLast()</code> -- 使用当前排序器，但额外把 null 值排到最后面</p></li>
+									<li><p><code>&lt;U extends T> Ordering&lt;U> compound(Comparator&lt;? super U> secondaryComparator)</code> -- 合成另一个比较器，以处理当前排序器中的相等情况</p></li>
+									<li><p><code>&lt;S extends T> Ordering&lt;Iterable&lt;S>> lexicographical()</code> -- 基于处理类型 T 的排序器，返回该类型的可迭代对象 Iterable&lt;T> 的排序器</p></li>
+									<li><p><code>&lt;F> Ordering&lt;F> onResultOf(Function&lt;F,? extends T> function)</code> -- 对集合中元素调用 Function，再按返回值用当前排序器排序</p></li>
+
+									<li class="group"><p><code>&lt;E extends T> List&lt;E> greatestOf(Iterable&lt;E> iterable, int k)</code> -- 获取可迭代对象中最大的 k 个元素</p></li>
+									<li><p><code>&lt;E extends T> List&lt;E> greatestOf(Iterator&lt;E> iterator, int k)</code> -- 同上</p></li>
+									<li><p><code>&lt;E extends T> List&lt;E> leastOf(Iterable&lt;E> iterable, int k)</code> -- 获取可迭代对象中最小的 k 个元素</p></li>
+									<li><p><code>&lt;E extends T> List&lt;E> leastOf(Iterator&lt;E> iterator, int k)</code> -- 同上</p></li>
+
+									<li class="group"><p><code>boolean isOrdered(Iterable&lt;? extends T> iterable)</code> -- 判断可迭代对象是否已按排序器排序：允许有排序值相等的元素</p></li>
+									<li><p><code>boolean isStrictlyOrdered(Iterable&lt;? extends T> iterable)</code> -- 同上：但不允许有排序值相等的元素</p></li>
+
+									<li class="group"><p><code>&lt;E extends T> List&lt;E> sortedCopy(Iterable&lt;E> elements)</code> -- 取可迭代对象排序后的列表</p></li>
+									<li><p><code>&lt;E extends T> ImmutableList&lt;E> immutableSortedCopy(Iterable&lt;E> elements)</code> -- 同上</p></li>
+
+
+									<li class="group"><p><code>&lt;E extends T> E max(E a, E b)</code> -- 返回两个参数中最大的那个。如果相等，则返回第一个参数</p></li>
+									<li><p><code>&lt;E extends T> E min(E a, E b)</code> -- 返回两个参数中最小的那个。如果相等，则返回第一个参数</p></li>
+									<li><p><code>&lt;E extends T> E max(E a, E b, E c, E... rest)</code> -- 返回多个参数中最大的那个。如果有超过一个最大返回第一个最大</p></li>
+									<li><p><code>&lt;E extends T> E min(E a, E b, E c, E... rest)</code> -- 返回多个参数中最小的那个。如果有超过一个参数返回第一个最小</p></li>
+									<li><p><code>&lt;E extends T> E max(Iterable&lt;E> iterable)</code> -- 返回最大的元素。如果没有元素，则抛出 <code>NoSuchElementException</code></p></li>
+									<li><p><code>&lt;E extends T> E max(Iterator&lt;E> iterator)</code> -- 同上</p></li>
+									<li><p><code>&lt;E extends T> E min(Iterable&lt;E> iterable)</code> -- 返回最小的元素。如果没有元素，则抛出 <code>NoSuchElementException</code></p></li>
+									<li><p><code>&lt;E extends T> E min(Iterator&lt;E> iterator)</code> -- 同上</p></li>
+								</ol>
+							</div>
+
+							<a id="guava-base-throwables" class="offset"></a>
+							<div class="split-item">
+								<p><b>1.5 Throwables</b></p>
+								<p>有时候，你会想把捕获到的异常再次抛出。这种情况通常发生在 Error 或 RuntimeException 被捕获的时候，你没想捕获它们，但是声明捕获 Throwable 和 Exception 的时候，也包括了了 Error 或 RuntimeException。Guava 提供了若干方法，来判断异常类型并且重新传播异常。</p>
+								<ol>
+									<li><p><code>static void throwIfUnchecked(Throwable throwable)</code> -- 如果是运行时异常或错误才抛出</p></li>
+									<li><p><code>static &lt;X extends Throwable> void throwIfInstanceOf(Throwable throwable, Class&lt;X> declaredType)</code> -- 如果是 X 的实例才抛出</p></li>
+									<li><p><code>static &lt;X extends Throwable> void propagateIfPossible(@Nullable Throwable throwable, Class&lt;X> declaredType)</code> -- Throwable 类型为 X, Error 或 RuntimeException 才抛出</p></li>
+									<li><p><code>static &lt;X1 extends Throwable,X2 extends Throwable> void propagateIfPossible(@Nullable Throwable throwable, Class&lt;X1> declaredType1, Class&lt;X2> declaredType2)</code> -- Throwable 类型为 X1, X2, Error 或 RuntimeException 才抛出</p></li>
+
+									<li class="group"><p><code>static List&lt;Throwable> getCausalChain(Throwable throwable)</code> -- 获取异常链</p></li>
+									<li><p><code>static Throwable getRootCause(Throwable throwable)</code> -- 获取异常最里面的原因</p></li>
+									<li><p><code>static String getStackTraceAsString(Throwable throwable)</code> -- 返回包含 toString() 的结果字符串，随后完整抛出，递归的堆栈跟踪</p></li>
+
+
+
+									<li class="group"><p><code>static &lt;X extends Throwable> X getCauseAs(Throwable throwable, Class&lt;X> expectedCauseType)</code> -- 返回抛出的原因，强制转换为 X 的类型</p></li>
+									<li><p><code>static List&lt;StackTraceElement> lazyStackTrace(Throwable throwable)</code> -- 返回抛出的堆栈跟踪，可能在整个跟踪上提供较慢的迭代，但在部分跟踪上提供较快的迭代</p></li>
+									<li><p><code>static boolean lazyStackTraceIsLazy()</code> -- 返回 <code>lazyStackTrace(Throwable)</code> 是否将使用其文档中描述的特殊实现</p></li>
+								</ol>
+
+							</div>
+						</div>
+
+						<a id="guava-collection" class="offset"></a>
+						<div class="sub-item">
+							<div class="split-item">
+								<p><b>Guava 集合的顶级接口，继承关系和工具类</b></p>
+								<pre class="brush: java;">
+/** 顶级接口 */
+Collection
+ └─ Multiset // 没有元素顺序限制的 ArrayList 和 Map&lt;E, Integer>，键为元素，值为计数
+	├─ SortedMultiset //
+	└─ SortedMultisetBridge
+
+Multimap
+ ├─ ListMultimap
+ └─ SetMultimap
+    └─ SortedSetMultimap
+Map
+ ├─ BiMap
+ ├─ ClassToInstanceMap
+ └─ TypeToInstanceMap
+
+RangeMap
+RangeSet
+
+Table
+ └─ RowSortedTable
+
+/** Guava 集合类 */
+AbstractCollection implements Collection
+ ├─ EnumMultiset implements Multiset // 非直接子类
+ ├─ TreeMultiset implements SortedMultiset // 非直接子类
+ ├─ AbstractQueue implements Queue
+ │	 ├─ MinMaxPriorityQueue
+ │	 ├─ ConcurrentLinkedQueue
+ │	 ├─ ArrayBlockingQueue implements BlockingQueue
+ │	 ├─ DelayQueue implements BlockingQueue
+ │	 ├─ LinkedBlockingQueue implements BlockingQueue
+ │	 ├─ PriorityBlockingQueue implements BlockingQueue
+ │	 ├─ SynchronousQueue implements BlockingQueue
+ │	 ├─ LinkedBlockingDeque implements BlockingDeque
+ │	 ├─ LinkedTransferQueue implements TransferQueue
+ │	 └─ PriorityQueue
+ └─ ImmutableCollection
+	 ├─ ImmutableList implements List
+	 ├─ ImmutableMultiset implements Multiset
+	 │ 	 └─ ImmutableSortedMultiset implements SortedMultiset
+	 ├─ ImmutableSet implements Set
+	 │ 	 └─ ImmutableSortedSet implements NavigableSet
+	 │ 		 └─ ContiguousSet
+	 ├─ HashMultiset implements Multiset // 非直接子类
+	 ├─ TreeMultiset implements SortedMultiset // 非直接子类
+	 ├─ LinkedHashMultiset implements Multiset // 非直接子类
+	 └─ ConcurrentHashMultiset implements Multiset // 非直接子类
+
+ImmutableMap implements Map
+ ├─ ImmutableBiMap implements BiMap
+ └─ ImmutableSortedMap implements NavigableMap
+ImmutableMultimap
+ ├─ ImmutableListMultimap implements ListMultimap
+ └─ ImmutableSetMultimap implements SetMultimap
+ArrayListMultimap implements ListMultimap
+LinkedListMultimap implements ListMultimap
+TreeMultimap implements SortedSetMultimap
+HashMultimap implements SetMultimap
+LinkedHashMultimap implements SetMultimap
+AbstractMap implements Map
+ └─ HashBiMap implements BiMap
+ImmutableRangeMap implements RangeMap
+TreeRangeMap implements RangeMap
+
+EnumMultiset implements Multiset
+TreeRangeSet implements RangeSet
+ImmutableRangeSet implements RangeSet
+
+AbstractTable implements Table
+HashBasedTable implements Table
+ImmutableTable implements Table
+TreeBasedTable implements RowSortedTable
+
+UnmodifiableIterator implements Iterator
+ ├─ AbstractIterator
+ ├─ AbstractSequentialIterator
+ └─ UnmodifiableListIterator implements ListIterator
+
+ForwardingObject
+ ├─ ForwardingMap implements Map
+ │	 ├─ EnumBiMap implements BiMap
+ │	 ├─ EnumHashBiMap implements BiMap
+ │	 ├─ ForwardingConcurrentMap implements ConcurrentMap
+ │	 ├─ ForwardingSortedMap implements SortedMap
+ │	 │	 └─ ForwardingNavigableMap implements NavigableMap
+ │	 ├─ ForwardingNavigableMap.StandardDescendingMap
+ │	 ├─ ImmutableClassToInstanceMap implements ClassToInstanceMap
+ │	 ├─ ImmutableTypeToInstanceMap implements TypeToInstanceMap
+ │	 ├─ MutableClassToInstanceMap implements ClassToInstanceMap
+ │	 └─ MutableTypeToInstanceMap implements TypeToInstanceMap
+ ├─ ForwardingCollection implements Iterable, Collection
+ │	 ├─ ForwardingList implements List
+ │	 ├─ ForwardingSet implements Set
+ │	 │	 └─ ForwardingSortedSet implements SortedSet
+ │	 │	 	└─ ForwardingNavigableSet implements NavigableSet
+ │	 │	 		└─ ForwardingNavigableSet.StandardDescendingSet
+ │	 ├─ ForwardingQueue implements Queue
+ │	 │	 ├─ ForwardingDeque implements Deque
+ │	 │	 │	└─ ForwardingBlockingDeque implements BlockingDeque
+ │	 │	 └─ EvictingQueue
+ │	 └─ ForwardingMultiset implements Multiset
+ │		 └─ ForwardingSortedMultiset implements SortedMultiset
+ ├─ ForwardingIterator implements Iterator
+ │	 └─ ForwardingListIterator implements ListIterator
+ ├─ ForwardingMap implements Map
+ ├─ ForwardingMapEntry implements Map.Entry
+ ├─ ForwardingMultimap implements Multimap
+ │	 ├─ ForwardingListMultimap implements ListMultimap
+ │	 └─ ForwardingSetMultimap implements SetMultimap
+ │		 └─ ForwardingSortedSetMultimap implements SortedSetMultimap
+ └─ ForwardingTable implements Table
+
+/** 集合工具类 */
+Collections2
+Comparators
+Iterables
+Iterators
+Lists
+Sets
+Queues
+Maps
+Multimaps
+Multisets
+ObjectArrays
+Range
+Streams
+Tables
+
+/** 构建器 */
+ImmutableCollection.Builder
+ ├─ ImmutableList.Builder
+ ├─ ImmutableMultiset.Builder
+ │	 └─	ImmutableSortedMultiset.Builder
+ └─ ImmutableSet.Builder
+     └─ ImmutableSortedSet.Builder
+ImmutableMap.Builder
+ ├─ ImmutableBiMap.Builder
+ └─ ImmutableSortedMap.Builder
+MultimapBuilder
+ ├─ MultimapBuilder.ListMultimapBuilder
+ └─ MultimapBuilder.SetMultimapBuilder
+	 └─ MultimapBuilder.SortedSetMultimapBuilder
+ImmutableMultimap.Builder
+ ├─ ImmutableListMultimap.Builder
+ └─ ImmutableSetMultimap.Builder
+ImmutableRangeMap.Builder
+ImmutableRangeSet.Builder
+ImmutableTable.Builder
+MinMaxPriorityQueue.Builder
+ImmutableClassToInstanceMap.Builder
+</pre>
+								<h5>细节：关联可变集合和不可变集合</h5>
+								<table class="table table-bordered table-responsive table-striped">
+									<tbody>
+									<tr>
+										<td><b>可变集合接口</b><b></b></td>
+										<td><b>属于</b><b>JDK</b><b>还是</b><b>Guava</b><b></b></td>
+										<td><b>不可变版本</b><b></b></td>
+									</tr>
+									<tr>
+										<td>Collection</td>
+										<td>JDK</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableCollection.html" target="_blank">ImmutableCollection</a></td>
+									</tr>
+									<tr>
+										<td>List</td>
+										<td>JDK</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableList.html" target="_blank">ImmutableList</a></td>
+									</tr>
+									<tr>
+										<td>Set</td>
+										<td>JDK</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableSet.html" target="_blank">ImmutableSet</a></td>
+									</tr>
+									<tr>
+										<td>SortedSet/NavigableSet</td>
+										<td>JDK</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableSortedSet.html" target="_blank">ImmutableSortedSet</a></td>
+									</tr>
+									<tr>
+										<td>Map</td>
+										<td>JDK</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableMap.html" target="_blank">ImmutableMap</a></td>
+									</tr>
+									<tr>
+										<td>SortedMap</td>
+										<td>JDK</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableSortedMap.html" target="_blank">ImmutableSortedMap</a></td>
+									</tr>
+									<tr>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/Multiset.html" target="_blank">Multiset</a></td>
+										<td>Guava</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableMultiset.html" target="_blank">ImmutableMultiset</a></td>
+									</tr>
+									<tr>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/SortedMultiset.html" target="_blank">SortedMultiset</a></td>
+										<td>Guava</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableSortedMultiset.html" target="_blank">ImmutableSortedMultiset</a></td>
+									</tr>
+									<tr>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/Multimap.html" target="_blank">Multimap</a></td>
+										<td>Guava</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableMultimap.html" target="_blank">ImmutableMultimap</a></td>
+									</tr>
+									<tr>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ListMultimap.html" target="_blank">ListMultimap</a></td>
+										<td>Guava</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableListMultimap.html" target="_blank">ImmutableListMultimap</a></td>
+									</tr>
+									<tr>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/SetMultimap.html" target="_blank">SetMultimap</a></td>
+										<td>Guava</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableSetMultimap.html" target="_blank">ImmutableSetMultimap</a></td>
+									</tr>
+									<tr>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/BiMap.html" target="_blank">BiMap</a></td>
+										<td>Guava</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableBiMap.html" target="_blank">ImmutableBiMap</a></td>
+									</tr>
+									<tr>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ClassToInstanceMap.html" target="_blank">ClassToInstanceMap</a></td>
+										<td>Guava</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableClassToInstanceMap.html" target="_blank">ImmutableClassToInstanceMap</a></td>
+									</tr>
+									<tr>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/Table.html" target="_blank">Table</a></td>
+										<td>Guava</td>
+										<td><a href="https://guava.dev/releases/snapshot-jre/api/docs/com/google/common/collect/ImmutableTable.html" target="_blank">ImmutableTable</a></td>
+									</tr>
+									</tbody>
+								</table>
+
+							</div>
+
+							<div class="split-item">
+								<p><b>常用的 Guava 集合类的使用</b></p>
+
+							</div>
+						</div>
+
+						<a id="guava-cache" class="offset"></a>
+						<div class="sub-item">
+
+						</div>
+
+						<a id="guava-function" class="offset"></a>
+						<div class="sub-item">
+
+						</div>
+
+						<a id="guava-thread" class="offset"></a>
+						<div class="sub-item">
+
+						</div>
+						<a id="guava-string" class="offset"></a>
+						<div class="sub-item">
+
+						</div>
+
+						<a id="guava-primitive" class="offset"></a>
+						<div class="sub-item">
+
+						</div>
+
+						<a id="guava-range" class="offset"></a>
+						<div class="sub-item">
+
+						</div>
+
+						<a id="guava-io" class="offset"></a>
+						<div class="sub-item">
+
+						</div>
+
+						<a id="guava-hash" class="offset"></a>
+						<div class="sub-item">
+
+						</div>
+
+						<a id="guava-event" class="offset"></a>
+						<div class="sub-item">
+
+						</div>
+
+						<a id="guava-math" class="offset"></a>
+						<div class="sub-item">
+
+						</div>
+
+						<a id="guava-reflection" class="offset"></a>
+						<div class="sub-item">
+
 						</div>
 
 					</div>

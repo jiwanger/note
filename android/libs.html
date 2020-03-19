@@ -75,6 +75,7 @@
                         <a href="#data-OkHttp" class="list-group-item">OkHttp + Okio</a>
                         <a href="#data-Retrofit" class="list-group-item">Retrofit</a>
                         <a href="#data-Volley" class="list-group-item">Volley</a>
+                        <a href="#data-gson" class="list-group-item">GSON</a>
                     </div>
                     <a class="list-group-item active dropup" data-toggle="collapse"
                        data-parent="#accordion" href="#libs-image" aria-expanded="true"
@@ -1757,6 +1758,70 @@ public class HTTPSTrustManager implements X509TrustManager {
     }
 }
                         </pre>
+                    </div>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="data-gson"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">GSON</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="sub-item">
+                        <pre class="brush: java;">implementation 'com.google.code.gson:gson:2.8.5'</pre>
+                        <p><b>JSON</b>(JavaScript Object Notation, JS 对象简谱) 是一种文本形式的数据交换格式，它比 XML 更轻量、比二进制容易阅读和编写，调式也更加方便。其重要性不言而喻。</p>
+                        <p><b>JSON</b> 解析和生成的方式很多，常用的类库有：(<a href="http://json.org" target="_blank">json.org</a> 提供了各种语言使用的各种操作库)</p>
+                        <ul>
+                            <li>
+                                <p><a href="https://github.com/stleary/JSON-java" target="_blank">JSON-Java</a> -- 是 <a href="http://json.org" target="_blank">json.org</a> 官方提供的代码代，码非常少，也很简洁易懂。但没有提供方便的 json->java bean 对象的反序列化能力。</p>
+                                <pre class="brush: java;">
+implementation 'org.json:json:20180813'
+
+JSONObject root = new JSONObject("{...}");  // json 字符串转为 JSONObject
+root.toString();                            // JSONObject 转为 json 字符串
+</pre>
+                            </li>
+                            <li>
+                                <p><a href="https://github.com/google/gson" target="_blank">GSON</a> -- 是 Google 出品的东西，拥有非常快的序列化反序列化速度，使用起来也非常方便灵活。</p>
+                                <pre class="brush: java;">
+implementation 'com.google.code.gson:gson:2.8.5'
+
+Gson gson = new Gson();
+String json = gson.toJson(object);              // 序列化
+Data data = gson.fromJson("{...}", Data.class); // 反序列化
+</pre>
+                            </li>
+                            <li>
+                                <p><a href="https://github.com/alibaba/fastjson" target="_blank">FastJson</a> -- 阿里巴巴的开源 JSON 解析库，支持将 Java Bean 序列化为 JSON 字符串，也可以从 JSON 字符串反序列化到 JavaBean。</p>
+                                <pre class="brush: java;">
+implementation 'com.alibaba:fastjson:1.2.58'
+implementation 'com.alibaba:fastjson:1.1.71.android'  // 针对 android 的优化版
+
+String text = JSON.toJSONString(obj);                 // 序列化
+VO vo = JSON.parseObject("{...}", VO.class);          // 反序列化
+</pre>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><b>从 Java Bean 生成 Json 字符串</b></p>
+                        <pre class="brush: java;">
+// 1.简单的 Java Bean
+Gson gson = new Gson();
+ErrorCode code = new ErrorCode(0, "请求成功！");
+Log.log(gson.toJson(code)); // {"code":0,"message":"请求成功！"}
+</pre>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><b>从 Json 字符串转换为 Java Bean：</b></p>
+                        <pre class="brush: java;">
+
+</pre>
                     </div>
                 </div>
             </div>
@@ -6280,6 +6345,9 @@ public class RadarChart extends PieRadarChartBase&lt;RadarData> {...}
     <a href="#" type="button"
        class="btn btn-default dropdown-toggle btn-primary"
        data-toggle="dropup"> TOP </a>
+    <a href="/reference/" type="button"
+       class="btn btn-default dropdown-toggle btn-primary" target="_blank"
+       data-toggle="dropup"> REF </a>
     <a href="docs/reference/index.html" type="button"
        class="btn btn-default dropdown-toggle btn-primary" target="_blank"
        data-toggle="dropup"> DOCS </a>

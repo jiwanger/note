@@ -1,1 +1,1 @@
-var arr = [ "index.html", "KOTLIN"];
+var arr = [ "index.html", "KOTLIN", "lib.html", "STDLIB"];

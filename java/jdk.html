@@ -122,6 +122,7 @@
 						</a>
 						<div id="java-util" class="panel-collapse collapse"
 							 role="tabpanel">
+							<a href="#java-util-Base64" class="list-group-item">Base64</a>
 							<a href="#java-util-Date" class="list-group-item">Date, TimeZone, Calendar</a>
                             <a href="#java-util-Timer" class="list-group-item">Timer 和 TimerTask</a>
                             <a href="#java-util-List" class="list-group-item">List, Map, Set, Queue...</a>
@@ -4477,6 +4478,69 @@ public final class ReflectPermission extends BasicPermission {
                     </div>
                 </div>
                 <!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-util-Base64"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Base64</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+	java.util.Base64
+
+public class Base64 {
+	public static class Encoder {
+		byte[] encode(byte[] src)
+		int encode(byte[] src, byte[] dst)
+		ByteBuffer encode(ByteBuffer buffer)
+		String encodeToString(byte[] src)
+		Base64.Encoder withoutPadding()
+		OutputStream wrap(OutputStream os)
+	}
+
+	public static class Decoder {
+		byte[] decode(String src) {...}
+		byte[] decode(byte[] src) {...}
+		int decode(byte[] src, byte[] dst) {...}
+		ByteBuffer decode(ByteBuffer buffer) {...}
+		InputStream wrap(InputStream is) {...}
+	}
+}
+</pre>
+						<p><a href="docs/docs-java/api/java/util/Base64.html" target="_blank">Base64</a> 将每三个 8 bits 二进制转换为四个 6 bits 的二进制(3 * 8 = 4 * 6)，然后将转换后的6 bits 往高位添加 2 个 0,组成四个 8 bits 的二进制，然后按字节在 Base64 码表中查找对应的字符；如果源字符的长度不能被拆分为 3 个字节，结果需要补 '='。</p>
+						<pre class="brush: java;">
+// 标准 Base64 码表：Base64.getEncoder() 按此码表转换
+{
+	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+	'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+	'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '/'
+};
+
+// 如果需要转为 URL: Base64.getUrlEncoder(), 则 '+', '/' 替换为: '-', '_'
+{
+	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+	'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+	'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+	'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '-', '_'
+};
+</pre>
+						<ol>
+							<li><p><code>static Base64.Encoder 	getEncoder()</code> -- 标准转码</p></li>
+							<li><p><code>static Base64.Decoder 	getDecoder()</code> -- 标准解码</p></li>
+							<li><p><code>static Base64.Encoder 	getUrlEncoder()</code> -- Url 转码</p></li>
+							<li><p><code>static Base64.Decoder 	getUrlDecoder()</code> -- Url 解码</p></li>
+							<li><p><code>static Base64.Encoder 	getMimeEncoder()</code> -- Mime 转码(每 76 个字符加一个换行输出)</p></li>
+							<li><p><code>static Base64.Decoder 	getMimeDecoder()</code> -- Mime 解码</p></li>
+							<li><p><code>static Base64.Encoder 	getMimeEncoder(int lineLength, byte[] lineSeparator)</code> -- Mime 转码(指定行长度和换行字符)</p></li>
+						</ol>
+					</div>
+				</div>
+				<!-- item over -->
 
                 <!-- item start -->
                 <a class="offset" id="java-util-Date"></a>
@@ -8952,7 +9016,6 @@ public class FutureTask&lt;V> implements RunnableFuture&lt;V> {
                 </div>
                 <!-- item over -->
 
-
                 <!-- item start -->
                 <a class="offset" id="java-sql-DriverManager"></a>
                 <div class="panel panel-default">
@@ -11579,6 +11642,9 @@ while (iterator.current() != CharacterIterator.DONE) {
 		<a target="_blank" href="./docs/docs-java/api/index.html"
 		   type="button" class="btn btn-default dropdown-toggle btn-primary"
 		   data-toggle="dropup"> DOCS-8 </a>
+		<a target="_blank" href="./docs/jdk-8-zh-google/index.html"
+		   type="button" class="btn btn-default dropdown-toggle btn-primary"
+		   data-toggle="dropup"> DOCS-8-ZH </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

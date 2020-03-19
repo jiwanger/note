@@ -77,16 +77,19 @@
 								style="border-top: 1px solid #DDDDDD;">javac 工具</a>
 							<a href="#java-java" class="list-group-item">java 工具</a>
 							<a href="#java-jar" class="list-group-item">jar 工具</a>
+							<a href="#java-keytool" class="list-group-item">keytool 工具</a>
 							<a href="#java-examples" class="list-group-item">examples</a>
 						</div>
 						<a href="#java-syntax" class="list-group-item">Java 中的几个关键字</a>
-						<a href="#java-class-loader" class="list-group-item">ClassLoader
-							原理</a>
+						<a href="#java-class-loader" class="list-group-item">ClassLoader 原理</a>
+						<a href="#java-generics" class="list-group-item">Java 泛型</a>
 						<a href="#java-reflect" class="list-group-item">Java 反射</a>
 						<a href="#java-annotation" class="list-group-item">Java 注解</a>
 						<a href="#java-thread" class="list-group-item">多线程</a>
 						<a href="#java-thread-pool" class="list-group-item">线程池</a>
 						<a href="#java-memory" class="list-group-item">内存管理</a>
+						<a href="#java-encrypt" class="list-group-item">加密与解密</a>
+						<a href="#java-openssl" class="list-group-item">OpenSSL</a>
 						<a href="#java-jni" class="list-group-item">Java 本地编程 -- JNI</a>
 						<a href="#java-" class="list-group-item"></a>
 					</div>
@@ -570,6 +573,135 @@ $ jar tvf build/libs/demo.jar
 				<!-- item over -->
 
 				<!-- item start -->
+				<a class="offset" id="java-keytool"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">keytool 工具</h3>
+					</div>
+					<div class="panel-body">
+						<p><b>keytool</b> 是一个 Java 的密钥和证书管理，使用户能够管理自己的公钥/私钥对和相关证书以供自己使用或使用数字签名的数据完整性和身份验证服务。将密钥和证书存在一个称为 keystore 的文件中。</p>
+                        <p><b>keytool</b> 命令：</p>
+                        <pre class="brush: bash;">
+## 1.创建/添加数据到 keystore
+    -genseckey            ## 生成密钥
+    -genkeypair/-genkey   ## 生成公钥/私钥对
+    -gencert              ## 生成证书
+    -importcert/import    ## 导入证书
+    -importpassword       ## 导入密码
+
+## 2.从另一个 keystore 导入内容
+    -importkeystore       ## 导入内容
+
+## 3.生成证书请求
+    -certreq              ## 生成证书请求
+
+## 4.导出数据
+    -exportcert           ## 导出数据
+
+## 5.显示数据
+    -list                 ## 查看 keystore 信息
+    -printcert            ## 查看证书信息
+    -printcertreq         ##
+    -printcrl             ##
+
+## 6.管理 keystore
+    -storepasswd          ## 更改 storepass
+    -keypasswd            ## 更改 keypass
+    -delete               ## 删除
+    -changealias          ## 更改别名
+</pre>
+						<p><b>keytool</b> 默认参数：</p>
+						<pre class="brush: bash;">
+-alias    ## 别名，如不指定，默认为： mykey
+-keyalg   ## 加密算法
+   ## "DSA" 如不指定算法，在创建公钥/私钥对的时候(-genkeypair)
+   ## "DES" 如不指定算法，在创建密钥的时候(-genseckey)默认为: DES
+-keysize  ## 密码长度
+   ## 2048 如不指定大小，在创建公钥/私钥对，并且加密算法为 RSA 的时候(-genkeypair and -keyalg "RSA")
+   ## 1024 如不指定大小，在创建公钥/私钥对，并且加密算法为 RSA 的时候(-genkeypair and -keyalg "DSA")
+   ## 256 如不指定大小，在创建公钥/私钥对，并且加密算法为 EC 的时候(-genkeypair and -keyalg "EC")
+   ## 56 如不指定大小，在创建密钥，并且加密算法为 DES 的时候(-genseckey and -keyalg "DES")
+   ## 168 如不指定大小，在创建密钥，并且加密算法为 DESede 的时候(-genseckey and -keyalg "DESede")
+-validity  ## 如不指定，默认为： 90 天
+-keystore  ## 如不指定，默认为：～/.keystore
+-storetype ## 默认为: KeyStore.getDefaultType();可选：jceks(-genseckey 只能用这个), jks, dks, pkcs11, pkcs12
+-file
+   stdin 读为标准输入
+   stdout 写为标准输出
+-protected false
+</pre>
+
+						<p><b>keytool</b> 实例：</p>
+						<pre class="brush: bash;">
+## 1.创建 DES 加密的密钥(默认为 DES 加密)
+$ keytool -genseckey -alias des -storepass ilesson -keypass ilessonKey -storetype jceks -keystore des.jce
+
+## 2.创建 DESede 加密的密钥(未指定 keypass, 需要在控制台输入)
+$ keytool -genseckey -alias DESede -storepass ilesson -keyalg DESede -storetype jceks -keystore des.jce
+
+## 3.查看 keystore 中的密钥信息
+$ keytool -list -v -keystore des.jce -storepass ilesson -storetype jceks
+$ keytool -list -rfc -keystore des.jce -storepass ilesson -storetype jceks
+
+## 4.生成 RSA 加密，SHA256withRSA 签名，有效期 365 天的 2048 位私钥
+$ keytool -genkeypair -alias rsa -storepass ilesson -storetype jceks -keystore private.jce -keyalg RSA -validity 365 -dname "CN=lesson1234.com, OU=ilesson, O=ilesson, L=ShenZhen, ST=GuangDong, C=CN"
+$ keytool -list -v -keystore private.jce -storepass ilesson -storetype jceks    ## 查看有效期，加密算法...
+$ keytool -list -rfc -keystore private.jce -storepass ilesson -storetype jceks  ## 查看 Base64 格式的密码
+
+## 5.导出为单个条目为 CRT 文件
+$ keytool -exportcert -alias rsa -keystore private.jce -file private.crt -storepass ilesson
+$ keytool -printcert -file private.crt -rfc  ## 查看证书信息
+
+## 6.导入一个证书到 keystore
+$ keytool -importcert -keystore des.jce -storepass ilesson -storetype jceks -file private.crt
+
+## 7.删除指定别名的条目
+$ keytool -delete -alias rsa -keystore private.jce -storepass ilesson
+
+## 8.修改 storepass
+$ keytool -storepasswd -keystore private.jce -storepass ilesson -new ilesson_modify
+
+## 9.修改 keypass
+$ keytool -keypasswd -alias rsa -keypass ilessonKey -new ilessonKey_modify  -keystore private.jce -storepass ilesson
+</pre>
+
+						<p><b>keytool</b> 命令详情：</p>
+						<pre class="brush: bash;">
+-genseckey
+	-alias &lt;alias>                  ## 别名
+	-storepass &lt;arg>                ## keystore 密码
+	-storetype &lt;storetype>          ## keystore 类型
+	-keystore &lt;keystore>            ## keystore 路径
+	-keyalg &lt;keyalg>                ## 加密算法
+	-keysize &lt;keysize>              ## 密钥大小
+	-keypass &lt;arg>                  ## key 密码
+    -v                              ## verbose 输出
+	-protected                      ## 通过受保护的身份验证路径
+
+-genseckeypair
+	-alias &lt;alias>                  ## 别名
+	-destalias &lt;destalias>          ## 目标别名
+	-storepass &lt;arg>                ## keystore 密码
+	-storetype &lt;storetype>          ## keystore 类型
+	-keystore &lt;keystore>            ## keystore 路径
+	-keyalg &lt;keyalg>                ## 加密算法
+	-keysize &lt;keysize>              ## 密钥大小
+	-keypass &lt;arg>                  ## key 密码
+	-sigalg &lt;sigalg>                ## 签名算法
+	-startdate &lt;startdate>          ## 证书有效期开始日期，一般从现在开始，不用写，格式为： yyyy/mm/dd HH:MM:SS
+	-validity &lt;valDays>             ## 有效期
+	-ext &lt;value>                    ##
+	-dname &lt;dname>  ## CN=(名字), OU=(组织单位名称), O=(组织名称), L=(城市), ST=(省份), C=(两位国家代码)
+	-v                              ## verbose 输出
+	-protected                      ## 通过受保护的身份验证路径
+
+
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
 				<a class="offset" id="java-examples"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -965,6 +1097,184 @@ public final class FinalDemo {
 				<!-- item over -->
 
 				<!-- item start -->
+				<a class="offset" id="java-generics"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Java 泛型</h3>
+					</div>
+					<div class="panel-body">
+                        <div class="sub-item">
+                            <p><b>泛型的本质是为了参数化类型</b>（在不创建新的类型的情况下，通过泛型指定的不同类型来控制形参具体限制的类型）。也就是说在泛型使用过程中，操作的数据类型被指定为一个参数，这种参数类型可以用在类、接口和方法中，分别被称为泛型类、泛型接口、泛型方法。</p>
+                            <p><b>Java 中的泛型，只在编译阶段有效</b> -- 在编译过程中，正确检验泛型结果后，会将泛型的相关信息擦除，并且在对象进入和离开方法的边界处添加类型检查和类型转换的方法。也就是说，泛型信息不会进入到运行时阶段。</p>
+                            <p><b>泛型类</b></p>
+                            <pre class="brush: java;">
+public class Generic&lt;T>{
+    // key 这个成员变量的类型为 T,T 的类型由外部指定
+    private T key;
+
+	// 泛型构造方法形参 key 的类型也为 T，T 的类型由外部指定
+    public Generic(T key) { this.key = key; }
+
+	// 泛型方法 getKey 的返回值类型为 T，T 的类型由外部指定
+    public T getKey() { return key; }
+}
+</pre>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><b>数组的协变</b></p>
+                            <p>首先了解下什么是数组的协变，看下面的例子：</p>
+                            <pre class="brush: java;">Number[] nums = new Integer[10]; // OK</pre>
+                            <p>因为 Integer 是 Number 的子类，一个 Integer 对象也是一个 Number 对象，所以一个 Integer 的数组也是一个 Number 的数组，这就是数组的协变。</p>
+                            <p>Java 把数组设计成协变的，在一定程度上是有缺陷的。因为尽管把 Integer[] 赋值给 Number[]，Integer[] 可以向上转型为 Number[]，但是数据元素的实际类型是 Integer，只能向数组中放入 Integer 或者 Integer 的子类。如果向数组中放入 Number 对象或者 Number 其他子类的对象，对于编译器来说也是可以通过编译的。但是运行时 JVM 能够知道数组元素的实际类型是 Integer，当其它对象加入数组是就会抛出异常。</p>
+                            <pre class="brush: java;">
+Number[] numbers = new Integer[10];
+numbers[0] = 1;
+numbers[1] = 0.5f; // 此数据的加入可以通过编译，但是以下运行时会有 ArrayStoreException 异常
+for (Number number : numbers) {
+	System.out.println(number);
+}
+</pre>
+                            <p><b>泛型的设计目的之一就是保证了类型安全，让这种运行时期的错误在编译期就能发现，所以泛型是不支持协变的。</b></p>
+                            <pre class="brush: java;">List&lt;Number> nums = new ArrayList&lt;Integer>(); // 编译不能通过</pre>
+                            <p>当确实需要建立这种向上转型的类型关系的时候，就需要用到泛型的通配符特性了。例如：</p>
+                            <pre class="brush: java;">List&lt;? extends Number> nums = new ArrayList&lt;Integer>(); // OK</pre>
+                        </div>
+
+                        <div class="sub-item">
+                            <div class="sub-item">
+                                <p><b>泛型通配符</b> -- 无边界通配符, 上边界限定的通配符 和 下边界限定的通配符</p>
+                                <p>PECS 原则（Producer Extends Consumer Super）</p>
+                                <ul>
+                                    <li><p>对于上边界限定的通配符，无法向其中加入任何对象，但是可以从中正常取出对象。</p></li>
+                                    <li><p>对于下边界限定的通配符，可以存入 subclass 对象或者 subclass 的子类对象，但是取出时只能用 Object 类型变量指向取出的对象。</p></li>
+                                </ul>
+                                <p><b>简而言之，上边界限定（extends）的通配符适合于内容的获取，而下边界限定（super）的通配符更适合于内容的存入。所以就有了一个 PECS 原则来很好的解释这两种通配符的使用原则。</b></p>
+                                <ul>
+                                    <li><p>当一个数据结构作为 producer 对外提供数据的时候，应该只能取数据而不能存数据，所以适合使用上边界限定（extends）的通配符。</p></li>
+                                    <li><p>当一个数据结构作为 consumer 获取并存入数据的时候，应该只能存数据而不能取数据，所以适合使用下边界限定（super）的通配符。</p></li>
+                                    <li><p>如果既需要取数据也需要存数据，就不适合使用泛型的通配符。</p></li>
+                                </ul>
+                                <pre class="brush: java;">
+// dest 只能存数据而不能取数据， src 只能取数据而不能存数据
+public static &lt;T> void copy(List&lt;? super T> dest, List&lt;? extends T> src) {
+    for (int i = 0; i < src.size(); i++) {
+        dest.set(i, src.get(i));
+    }
+}
+</pre>
+                            </div>
+
+                            <div class="split-item">
+                                <p><b>无边界通配符</b></p>
+                                <p><code>List</code>, <code>List&lt;Object></code> 和 <code>List&lt;?></code> 的区别：</p>
+                                <p><b>结论：<code>List</code> = <code>List&lt;Object></code></b></p>
+                                <ul>
+                                    <li><p><code>List&lt;?></code> 是表示持有某种特定类型对象的 List，但是不知道是哪种类型；<code>List / List&lt;Object></code> 是表示持有 Object 类型对象的 List。</p></li>
+                                    <li><p><code>List&lt;?></code> 因为不知道持有的实际类型，所以不能 add 任何类型的对象；<code>List / List&lt;Object></code> 因为持有的是 Object 类型对象，所以可以 add 任何类型的对象。</p></li>
+                                    <li><p><code>List&lt;?></code> 可以 <code>add(null)</code>，因为 null 是任何引用数据类型都具有的元素。</p></li>
+                                </ul>
+                                <pre class="brush: java;">
+public static void main(String[] args) {
+	List list = new ArrayList();
+	List&lt;Object> listObject = new ArrayList<>();
+	List&lt;?> listUnbounded = new ArrayList<>();
+
+	list.add(1);
+	list.add(0.5f);
+	list.add(null);
+
+	listObject.add(1);
+	listObject.add(0.5f);
+	listObject.add(null);
+
+//  listUnbounded.add(1);      // 编译错误，不知道持有的实际类型，所以不能 add 任何类型的对象
+//  listUnbounded.add(0.5f);   // 编译错误，不知道持有的实际类型，所以不能 add 任何类型的对象
+	listUnbounded.add(null);   // 可以，List&lt;?> 只可以 add(null)，因为 null 是任何引用数据类型都具有的元素
+
+	list(list);
+	list(listObject);
+	list(listUnbounded);
+
+	listObject(list);
+	listObject(listObject);
+//  listObject(listUnbounded); // 编译错误，指定参数为 List&lt;Object>， 而 List&lt;?> 不是 List&lt;Object>
+
+	listUnbounded(list);
+	listUnbounded(listObject);
+	listUnbounded(listUnbounded);
+}
+
+static void list(List list) {
+	for (Object o : list) {
+		System.out.println("List -> " + o);
+	}
+}
+
+static void listObject(List&lt;Object> list) {
+	for (Object o : list) {
+		System.out.println("List&lt;Object> -> " + o);
+	}
+}
+
+static void listUnbounded(List&lt;?> list) {
+	for (Object o : list) {
+		System.out.println("List&lt;?> -> " + o);
+	}
+}
+</pre>
+                            </div>
+
+                            <div class="split-item">
+                                <p><b>上边界限定的通配符</b></p>
+                                <p>上边界限定的通配符使用 <code>&lt;? extends T></code> 限定，比如： <code>List&lt;? extends Number></code>，有如下特性：</p>
+                                <ul>
+                                    <li><p>List&lt;? extends Number> 表示某种特定类型（Number 或者 Number 的子类）对象的 List。跟无边界通配符一样，因为无法确定持有的实际类型，所以这个 List 也不能 add 除 null 外的任何类型的对象。</p>
+                                        <pre class="brush: java;">
+list.add(new Integer(1)); // ERROR
+list.add(null);           // OK
+</pre>
+                                    </li>
+                                    <li><p>从 list 中获取对象是是可以的（比如 get(0)），因为在这个 List 中，不管实际类型是什么，但肯定都能转型为 Number。</p>
+                                        <pre class="brush: java;">
+Number n = list.get(0);  // OK
+Integer i = list.get(0); // error
+</pre>
+                                    </li>
+                                    <li><p>事实上，只要是形式参数有使用类型参数的方法，在使用无边界或者上边界限定的通配符的情况下，都不能调用。比如以 ArrayList 为例：</p>
+                                        <pre class="brush: java;">
+public E get(int index)         // 可以调用
+public int indexOf(Object o)    // 可以调用
+public boolean add(E e)         // 不能调用
+</pre>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="split-item">
+                                <p><b>下边界限定的通配符</b></p>
+                                <p>下边界限定的通配符使用 <code>&lt;? super T></code> 限定，比如： <code>List&lt;? super Number></code>，有如下特性：</p>
+                                <ul>
+                                    <li><p>List&lt;? super Integer> 表示某种特定类型（Integer 或者 Integer的父类）对象的 List。可以确定这个 List 持有的对象类型肯定是 Integer 或者其父类，所以往 list 里面 add 一个 Integer 或者其子类的对象是安全的，因为 Integer 或者其子类的对象都可以向上转型为 Integer 的父类对象。但是因为无法确定实际类型，所以往 list 里面 add 一个 Integer 的父类对象是不安全的。</p>
+                                        <pre class="brush: java;">
+list.add(new Integer(1));   // OK
+list.add(new Object());     // ERROR
+</pre>
+                                    </li>
+                                    <li><p>List&lt;? super Integer> 当从List<? super Integer> 获取具体的数据的时候，JVM 在编译的时候知道实际类型可以是任何 Integer 的父类，所以为了安全起见，要用一个最顶层的父类对象来指向取出的数据，这样就可以避免发生强制类型转换异常了。</p>
+                                        <pre class="brush: java;">
+Object obj = list.get(0);   // OK
+Integer i = list.get(0);    // ERROR
+</pre>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
 				<a class="offset" id="java-reflect"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -1334,7 +1644,7 @@ public class FruitInfoUtil {
 					</div>
 					<div class="panel-body">
 						<div class="sub-item">
-							<p width="100%">
+							<p>
 								<img src="images/java-thread.png" class="center-block">
 							</p>
 							<h5 class="text-primary">线程的状态</h5>
@@ -1350,7 +1660,7 @@ public class FruitInfoUtil {
 									<b>运行状态(Running)</b> -- 就绪状态的线程获取了CPU，执行程序代码。
 								</li>
 								<li>
-									<b>阻塞状态(Bolcked)</b> --
+									<b>阻塞状态(Blocked)</b> --
 									阻塞状态是线程因为某种原因放弃CPU使用权，暂时停止运行。直到线程进入就绪状态，才有机会转到运行状态。阻塞的情况分三种：
 									<ol>
 										<li>
@@ -1871,7 +2181,7 @@ class Consumer extends Thread {
 								</li>
 								<li>
 									<b>AbstractExecutorService</b> 实现了 ExecutorService 接口，基本实现了
-									ExecutorService</b> 中声明的所有方法
+									<b>ExecutorService</b> 中声明的所有方法
 								</li>
 								<li>
 									<b>ThreadPoolExecutor</b> 继承了类 AbstractExecutorService
@@ -2362,7 +2672,7 @@ public class DirectMemoryOOM {
 							</p>
 							<p>在内存分析上，Java VisualVM的最大好处是可通过安装Visual GC插件来分析GC（Gabage
 								Collection）趋势、内存消耗详细状况。</p>
-							<p width="100%">
+							<p>
 								<img src="images/java-memory-gc.png"
 									class="center-block img-responsive">
 							</p>
@@ -2435,6 +2745,2021 @@ public class HeapOOM {
 					</div>
 				</div>
 				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-encrypt"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">加密与解密</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p><b>加密</b> 是以某种特殊的算法改变原有的信息数据，使得未授权的用户即使获得了已加密的信息，但因不知解密的方法，仍然无法了解信息的内容。</p>
+							<p>大体上分为 <b>双向加密</b> 和 <b>单向加密</b>，而双向加密又分为 <b>对称加密</b> 和 <b>非对称加密</b>。</p>
+							<p><b>对称加密</b> 是采用单钥密码系统的加密方法，同一个密钥可以同时用作信息的加密和解密，也称为单密钥加密。 </p>
+							<p><b>非对称加密</b> 需要两个密钥：公开密钥（公钥）和私有密钥 （私钥）。公钥与私钥是一对，如果用公钥对数据进行加密，只有用对应的私钥才能解密；如果用私钥对数据进行加密，那么只有用对应的公钥才能解密。</p>
+							<p><b>单向加密</b> 又称为不可逆加密算法，在加密过程中不使用密钥，明文由系统加密处理成密文，密文无法解密。</p>
+							<p><b>JAVA 密码架构标准算法名称文档</b>: <a href="docs/docs-java/technotes/guides/security/StandardNames.html" target="_blank">JDK 8 标准算法名称文档</a></p>
+                            <p><b>小节导航：</b></p>
+                            <ul>
+                                <li><p><a href="#encrypt">加密的一般步骤</a></p></li>
+                                <li><p><a href="#encrypt_example">常用的加密和解密</a></p></li>
+                                <li><p><a href="#encrypt_sign">数字签名</a></p></li>
+                                <li><p><a href="#encrypt_pki">PKI 体系的一些概念</a></p></li>
+                                <li><p><a href="#encrypt_cert">主流的数字证书和相互转换</a></p></li>
+                                <li><p><a href="#encrypt_util">EncryptUtil 工具类</a></p></li>
+                            </ul>
+
+							<p><b>JAVA 机密/解密/签名常用的类其关系：</b></p>
+							<pre class="brush: java;">
+Key extends Serializable                                     // 所有密钥的顶层接口
+ ├─	SecretKey extends Key, Destroyable                       // 对称密钥，实现类必须改写 equals 和 hashCode 方法
+ │	 ├─ SecretKeySpec implements KeySpec, SecretKey          // 指定密钥，此类既是 Key 又是 KeySpec
+ │	 ├─ KerberosKey implements SecretKey, Destroyable        // 封装一个长期秘钥
+ │	 └─ PBEKey                                               // PBE 密钥
+ ├─	PrivateKey extends Key, Destroyable                      // 非对称加密的私钥，接口不包含任何方法或常量
+ │	 ├─	RSAPrivateKey extends RSAKey, PrivateKey             // RSA 加密私钥
+ │	 │	 ├─ RSAPrivateCrtKey extends RSAPrivateKey           // RSA CRT 加密私钥，CRT 是中国余数定理
+ │	 │	 └─ RSAMultiPrimePrivateCrtKey extends RSAPrivateKey // 多素数专用私钥
+ │	 ├─	DSAPrivateKey extends DSAKey, PrivateKey             // DSA 加密私钥
+ │	 ├─	DHPrivateKey extends DHKey, PrivateKey               // DH 算法私钥，密钥交换算法
+ │	 └─	ECPrivateKey extends ECKey, PrivateKey               // EC 算法私钥
+ └─	PublicKey extends Key                                    // 非对称加密的公钥
+	 ├─	RSAPublicKey extends PublicKey                       // RSA 加密公钥
+	 ├─	DSAPublicKey extends DSAKey, PublicKey               // DSA 加密公钥
+	 ├─	DHPublicKey extends DHKey, PublicKey                 // DH 算法公钥，密钥交换算法
+	 └─	ECPublicKey extends ECKey, PublicKey                 // EC 算法公钥
+
+RSAKey // RSA 加密的 Key
+DSAKey // DSA 加密的 Key
+DHKey  // DH 算法的 Key，DH 为密钥交换算法
+ECKey  // EC 算法的 Key
+
+KeySpec 										// 密钥规范，使用指定的密码生成符合规范的密钥
+ ├─	SecretKeySpec implements KeySpec, SecretKey // 用于生成对称加密和不可逆加密的密钥，此类既是 Key 又是 KeySpec
+ ├─	DESKeySpec                                  // DES 密钥生成
+ ├─	DESedeKeySpec                               // DESede 密钥生成
+ ├─	RSAPrivateKeySpec                           // RSA 私钥生成
+ │	 ├─	RSAPrivateCrtKeySpec
+ │	 └─	RSAMultiPrimePrivateCrtKeySpec
+ ├─	RSAPublicKeySpec                            // RSA 公钥生成
+ ├─	EncodedKeySpec                              // 编码过的公钥或私钥
+ │	 ├─	PKCS8EncodedKeySpec                     // PKCS8 编码的私钥定义
+ │	 └─	X509EncodedKeySpec                      // X509 编码的公钥定义
+ ├─	DSAPrivateKeySpec                           // DSA 私钥生成
+ ├─	DSAPublicKeySpec                            // DSA 公钥生成
+ ├─	DHPrivateKeySpec                            // DH 私钥生成
+ ├─	DHPublicKeySpec                             // DH 公钥生成
+ ├─	ECPrivateKeySpec                            // EC 私钥生成
+ ├─	ECPublicKeySpec                             // EC 公钥生成
+ └─ PBEKeySpec                                  // PBE 密钥生成
+
+Key // 密钥的顶级接口
+KeyPair // 公钥/私钥对，PublicKey 和 PrivateKey 包装
+
+KeyGenerator // 用于创建密钥，支持：AES, DES, DESede, RC4(ARCFOUR), Blowfish, HmacSHA256, HmacSHA512...
+SecretKeyFactory // 用于创建密钥(支持 KeySpec)，支持：AES, DES, DESede, RC4(ARCFOUR)...
+
+KeyPairGenerator // 用于创建公钥/私钥对，支持：RSA, DSA, EC, DH(DiffieHellman)
+KeyFactory // 用于创建公钥/私钥对(支持 KeySpec)，支持：RSA, DSA, EC, DH(DiffieHellman)
+
+KeyStore // 密钥库，根据不同的类型可以从中提取密钥，公钥，私钥，证书
+Certificate // 证书
+
+Cipher // 加密和解密，包括对称加密和非对称加密，包括：DES, DESede, RC4(ARCFOUR), Blowfish, AES, RSA...
+Mac // 单向加密，哈希加密，包括： HmacSHA1, HmacSHA224, HmacSHA256, HmacSHA384, HmacSHA512, HmacSHAMD5
+
+MessageDigest // 消息摘要，用于生成： MD5, SHA, SHA-256, SHA-512...
+Signature // 数字签名，包括：MD5withRSA, SHA256withRSA, SHA512withRSA, SHA256withDSA, SHA256withECDSA...
+</pre>
+						</div>
+
+                        <a id="encrypt" class="offset"></a>
+						<div class="sub-item">
+							<p><b>加密的一般步骤：</b></p>
+							<ol type="I">
+								<li>
+									<p><b>生成密钥</b> -- JDK 内部有很多类生成密钥，有些密钥要根据加密算法来生成。</p>
+									<pre class="brush: java;">
+/** 随机生成 Key(每次运行都不一样，使用时需要保存生成的 Key) */
+KeyGenerator generator = KeyGenerator.getInstance("AES");
+generator.init(128); // 指定生成的密钥长度为 128, 可以不指定，根据算法生成默认长度
+SecretKey secretKey = generator.generateKey();
+
+/** 生成固定的 Key */
+String key = "01234567"; // 如果使用 DES 算法，那么 length >= 8; 如果大于 8 位，也只使用前 8 位
+SecretKeySpec keySpec = new SecretKeySpec(key.getBytes(), "DES");
+SecretKey secretKey = SecretKeyFactory.getInstance("DES").generateSecret(keySpec);
+</pre>
+								</li>
+								<li>
+									<p><b>指定加密算法进行加密</b></p>
+									<pre class="brush: java;">
+/** 算法的指定有以下两种格式：
+ *   "algorithm/mode/padding" -- 指定算法/模式/填充
+ *   "algorithm" -- 使用的模式和填充方案特定于提供者的默认值
+ * 使用 CFB 和 OFB 之类的模式，可以指定一次处理的位数，如 "DES/CFB8/NoPadding" 和 "DES/OFB32/PKCS5Padding"
+ * Java 平台的每一个实现都需要支持以下标准密码转换：(括号数值为所需秘钥的长度)
+ *	  AES/CBC/NoPadding (128)
+ *	  AES/CBC/PKCS5Padding (128)
+ *	  AES/ECB/NoPadding (128)
+ *	  AES/ECB/PKCS5Padding (128)
+ *	  DES/CBC/NoPadding (56)
+ *	  DES/CBC/PKCS5Padding (56)
+ *	  DES/ECB/NoPadding (56)
+ *	  DES/ECB/PKCS5Padding (56)
+ *	  DESede/CBC/NoPadding (168)
+ *	  DESede/CBC/PKCS5Padding (168)
+ *	  DESede/ECB/NoPadding (168)
+ *	  DESede/ECB/PKCS5Padding (168)
+ *	  RSA/ECB/PKCS1Padding (1024, 2048)
+ *	  RSA/ECB/OAEPWithSHA-1AndMGF1Padding (1024, 2048)
+ *	  RSA/ECB/OAEPWithSHA-256AndMGF1Padding (1024, 2048)
+ */
+Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+cipher.init(Cipher.ENCRYPT_MODE, secretKey); // 指定为加密模式，使用前面生成的 Key
+
+byte[] encrypted = cipher.doFinal(URL.getBytes());
+Log.log("DES 加密：", EncryptUtil.byteArrayToHexString(encrypted));
+</pre>
+								</li>
+								<li>
+									<p><b>使用密钥解密</b></p>
+									<pre class="brush: java;">
+Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+
+/** 由于 AES 加密在 CBC 模式下是需要有一个初始向量数组 byte[] initializeVector ,
+ * 而解密的时候也需要同样的初始向量，因此需要使用加密时的参数初始化解密的 cipher，否则会出错
+ */
+byte[] initializeVector = cipher.getIV();
+IvParameterSpec ivParameterSpec = new IvParameterSpec(initializeVector);
+
+cipher.init(Cipher.DECRYPT_MODE, secretKey, ivParameterSpec); // 指定为解密模式
+byte[] decrypted = cipher.doFinal(encrypted);
+Log.log("DES 解密：", new String(decrypted));
+</pre>
+								</li>
+							</ol>
+							<p><a href="" target="_blank">KeyGenerator</a> 类提供密钥生成器的功能，可以查询 JDK 内部支持的加密服务：</p>
+							<pre class="brush: java;">
+/** 查询所有的 Service */
+Provider[] providers = Security.getProviders();
+for (int i = 0; i < providers.length; i++) {
+	Log.log(i, "Provider ->", providers[i].getName()); // Provide
+	Set&lt;Provider.Service> services = providers[i].getServices();
+	Iterator&lt;Provider.Service> iterator = services.iterator();
+	int index = 0;
+	while(iterator.hasNext()) {
+		// Provider.Service 提供服务、类型、算法名称和实现该服务的类的名称
+		Provider.Service service = iterator.next(); // Service
+		Log.log(i + "-" + index++, service.getType(), service.getAlgorithm(), service.getClassName());
+		/** Service 包含了算法名称和实现服务的类，比如：
+		 *    MessageDigest    MD5    sun.security.provider.MD5
+		 *    KeyGenerator    AES    com.sun.crypto.provider.AESKeyGenerator
+		 *    AlgorithmParameters    AES    com.sun.crypto.provider.AESParameters
+		 *    Cipher    AES    com.sun.crypto.provider.AESCipher$General
+		 *    KeyGenerator    DES    com.sun.crypto.provider.DESKeyGenerator
+		 *    SecretKeyFactory    DES    com.sun.crypto.provider.DESKeyFactory
+		 *    AlgorithmParameters    DES    com.sun.crypto.provider.DESParameters
+		 *    Cipher    DES    com.sun.crypto.provider.DESCipher
+		 * 使用 MD5 加密：
+		 * MessageDigest messageDigest = MessageDigest.getInstance("MD5");
+         * byte[] outputs = messageDigest.digest("需要生成摘要的内容".getBytes(StandardCharsets.UTF_8));
+         * Log.log(EncryptUtil.byteArrayToHexString(outputs)); // 转为 16 进制大写
+		 */
+	}
+	Log.newLine('=');
+}
+</pre>
+						</div>
+
+                        <a id="encrypt_example" class="offset"></a>
+						<div class="sub-item">
+							<p><b>常用的加密和解密</b></p>
+							<ul>
+								<li>
+									<p><b>DES</b> -- 是数据机密标准（Data Encryption Standard）简称，属于对称加密。</p>
+									<p><b>DESede</b> -- DESede 是三重 DES 加密，是 DES 向 AES 过渡的加密算法，它使用 3 条 56 位的密钥对数据进行三次加密。</p>
+									<pre class="brush: java">
+/**
+ * DES CBC 模式加密
+ *
+ * @param content 要加密的内容
+ * @param password 生成密钥的密码
+ * @return 加密后内容，转为 16 进制或 Base64 编码方便保存
+ */
+public static String encryptWithDES(String content, String password) throws Exception {
+	byte[] md5 = MessageDigest.getInstance("MD5").digest(password.getBytes());
+
+	DESKeySpec keySpec = new DESKeySpec(md5); // DES 加密其实只使用了前 8 个字节
+	Key secretKey = SecretKeyFactory.getInstance("DES").generateSecret(keySpec);
+
+	Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+	byte[] iv = new byte[8];
+	System.arraycopy(md5, 0, iv, 0, 8);
+	cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(iv));
+
+	byte[] encrypted = cipher.doFinal(content.getBytes());
+	return byteArrayToHexString(encrypted);
+//  return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+}
+
+/**
+ * DES CBC 模式解密
+ *
+ * @param encrypted 要解密的内容，对应加密方法，要先转为 byte 数组
+ * @param password 生成密钥的密码
+ * @return 解密后内容
+ */
+public static String decryptWithDES(String encrypted, String password) throws Exception {
+	byte[] md5 = MessageDigest.getInstance("MD5").digest(password.getBytes());
+
+	DESKeySpec keySpec = new DESKeySpec(md5); // DES 加密其实只使用了前 8 个字节
+	Key secretKey = SecretKeyFactory.getInstance("DES").generateSecret(keySpec);
+
+	Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+	byte[] iv = new byte[8];
+	System.arraycopy(md5, 0, iv, 0, 8);
+	cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(iv));
+
+	byte[] decrypted = cipher.doFinal(hexStringToByteArray(encrypted));
+//  byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encrypted)); // Base64，这里还原
+	return new String(decrypted);
+}
+
+/**
+ * DESede CBC 模式加密
+ *
+ * @param content 要加密的内容
+ * @param password 生成密钥的密码
+ * @return 加密后内容，转为 16 进制或 Base64 编码方便保存
+ */
+public static String encryptWithDESede(String content, String password) throws Exception {
+	byte[] md5 = MessageDigest.getInstance("MD5").digest(password.getBytes());
+
+	byte[] key = new byte[24]; // DESede 需要使用 24 字节
+	System.arraycopy(md5, 0, key, 0, 16);
+	DESedeKeySpec keySpec = new DESedeKeySpec(key);
+	Key secretKey = SecretKeyFactory.getInstance("DESede").generateSecret(keySpec);
+
+	Cipher cipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
+	byte[] iv = new byte[8];
+	System.arraycopy(md5, 0, iv, 0, 8);
+	cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(iv));
+
+	byte[] encrypted = cipher.doFinal(content.getBytes());
+	return byteArrayToHexString(encrypted);
+//  return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+}
+
+/**
+ * DES CBC 模式解密
+ *
+ * @param encrypted 要解密的内容，对应加密方法，要先转为 byte 数组
+ * @param password 生成密钥的密码
+ * @return 解密后内容
+ */
+public static String decryptWithDESede(String encrypted, String password) throws Exception {
+	byte[] md5 = MessageDigest.getInstance("MD5").digest(password.getBytes());
+
+	byte[] key = new byte[24];
+	System.arraycopy(md5, 0, key, 0, 16);
+	DESedeKeySpec keySpec = new DESedeKeySpec(key); // DESede 需要使用 24 字节
+	Key secretKey = SecretKeyFactory.getInstance("DESede").generateSecret(keySpec);
+
+	Cipher cipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
+	byte[] iv = new byte[8];
+	System.arraycopy(md5, 0, iv, 0, 8);
+	cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(iv));
+
+	byte[] decrypted = cipher.doFinal(hexStringToByteArray(encrypted));
+//  byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encrypted)); // Base64，这里还原
+	return new String(decrypted);
+}
+
+/** byte[] 数组转换为 16 进制的字符串 */
+public static String byteArrayToHexString(byte[] data) {
+	StringBuilder sb = new StringBuilder(data.length * 2);
+	for (byte b : data) {
+		int v = b & 0xff;
+		if (v < 16) {
+			sb.append('0');
+		}
+		sb.append(Integer.toHexString(v));
+	}
+	return sb.toString().toUpperCase(Locale.getDefault());
+}
+
+/** 16 进制表示的字符串转换为字节数组 */
+public static byte[] hexStringToByteArray(String s) {
+	int len = s.length();
+	byte[] d = new byte[len / 2];
+	for (int i = 0; i < len; i += 2) {
+		// 两位一组，表示一个字节,把这样表示的 16 进制字符串，还原成一个进制字节
+		d[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+				 + Character.digit(s.charAt(i + 1), 16));
+	}
+	return d;
+}
+</pre>
+								</li>
+								<li>
+									<p><b>AES</b> -- 是高级加密标准（Advanced Encryption Standard）简称，属于对称加密，是美国联邦政府采用的一种区块加密标准。这个标准用来替代原先的 DES 加密。</p>
+									<p><b>AES</b> 比三重 DES 快、至少与三重 DES 一样安全、数据分组长度为 128 比特、密钥长度为 128/192/256 比特。</p>
+									<pre class="brush: java">
+/**
+ * AES CBC 模式加密
+ *
+ * @param content 要加密的内容
+ * @param password 生成密钥的密码
+ * @return 加密后内容，转为 16 进制或 Base64 编码方便保存
+ */
+public static String encryptWithAES(String content, String password) throws Exception {
+	byte[] md5 = MessageDigest.getInstance("MD5").digest(password.getBytes());
+	Key secretKey = new SecretKeySpec(md5, "AES"); // byte 数组的长度为 16 字节，这里使用密码的 md5 值
+
+	Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+	// AES 加密在 CBC 模式下是需要有一个初始向量数组 byte[] initializeVector
+	byte[] initializeVector = md5; // 长度为 16 字节，刚好可以使用 md5 值
+    IvParameterSpec ivParameterSpec = new IvParameterSpec(initializeVector);
+	cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec);
+
+	byte[] encrypted = cipher.doFinal(content.getBytes());
+    return byteArrayToHexString(encrypted);
+	// return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+}
+
+/**
+ * AES CBC 模式解密
+ *
+ * @param encrypted 要解密的内容，对应加密方法，要先转为 byte 数组
+ * @param password 生成密钥的密码
+ * @return 解密后内容
+ */
+public static String decryptWithAES(String encrypted, String password) throws Exception {
+	byte[] md5 = MessageDigest.getInstance("MD5").digest(password.getBytes());
+	Key secretKey = new SecretKeySpec(md5, "AES");
+
+	Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+	cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(md5));
+
+	byte[] decrypted = cipher.doFinal(hexStringToByteArray(encrypted));
+	// byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encrypted)); // Base64，这里还原
+	return new String(decrypted);
+}
+</pre>
+								</li>
+								<li>
+									<p><b>RSA</b> -- 是一种非对称加密算法。对极大整数做因数分解的难度决定了 RSA 算法的可靠性。</p>
+									<p><b>RSA 公钥加密结果每次都是不一样的，但是都能使用私钥进行解密。</b></p>
+									<p>可以使用 KeyPairGenerator 生成密钥对，也可以使用 <code>openssl</code> 来生成密钥对文件。</p>
+									<pre class="brush: bash;">
+###### 使用 openssl 生成密钥对(pkcs8_rsa_private_key.pem 和 rsa_public_key.pem) ######
+## 1.生成 2048 位的私钥
+$ openssl genrsa -out rsa_private_key.pem 2048
+## 2.从私钥生成公钥
+$ openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem
+## 3.将私钥进行 pkcs8 编码(加密/解密要使用这个经过 pkcs8 编码后的文件)
+$ openssl pkcs8 -topk8 -in rsa_private_key.pem -out rsa_private_key.key -nocrypt
+</pre>
+									<pre class="brush: java">
+/**
+ * 生成 2048 位的 RSA 密钥对
+ *
+ * @return KeyPair
+ * @throws Exception 异常
+ */
+public static KeyPair generateRSAKeyPair() throws Exception {
+	KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+	generator.initialize(2048);
+	return generator.generateKeyPair();
+}
+
+/**
+ * 保存 KeyPair
+ *
+ * @param keyPair     需要保存的 KeyPair
+ * @param publicPath  公钥保存路径
+ * @param privatePath 私钥保存路径
+ */
+public static void saveKeyPair(KeyPair keyPair, String publicPath, String privatePath) throws IOException {
+	String pblc = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
+	writeText(publicPath, pblc);
+
+	String prvt = Base64.getEncoder().encodeToString(keyPair.getPrivate().getEncoded());
+	writeText(privatePath, prvt);
+}
+
+/**
+ * RSA 加密
+ *
+ * @param content            要加密的内容
+ * @param base64             经过 Base64 编码的公钥/密钥
+ * @param pub_true_pri_false 使用公钥还是密钥进行加密
+ * @return 经过 Base64 加密后的内容
+ * @throws Exception 加密异常
+ */
+public static String encryptWithRSA(String content, String base64, boolean pub_true_pri_false) throws Exception {
+//        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(key));
+	Key key;
+	KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+	if (pub_true_pri_false) {
+		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(base64));
+		key = keyFactory.generatePublic(keySpec);
+	} else {
+		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(base64));
+		key = keyFactory.generatePrivate(keySpec);
+	}
+
+	Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+	cipher.init(Cipher.ENCRYPT_MODE, key);
+
+	byte[] encrypted = cipher.doFinal(content.getBytes());
+//        return byteArrayToHexString(encrypted);
+	return Base64.getEncoder().encodeToString(encrypted);
+}
+
+/**
+ * RSA 解密，如果用公钥加密，那么必须用私钥解密；如果用私钥加密，那么必须用公钥解密
+ *
+ * @param encrypted          要解密的内容
+ * @param base64             经过 Base64 编码的公钥/密钥
+ * @param pub_true_pri_false 使用公钥还是密钥进行解密
+ * @return 原始内容
+ * @throws Exception 解密异常
+ */
+public static String decryptWithRSA(String encrypted, String base64, boolean pub_true_pri_false) throws Exception {
+	Key key;
+	KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+	if (pub_true_pri_false) {
+		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(base64));
+		key = keyFactory.generatePublic(keySpec);
+	} else {
+		PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(base64));
+		key = keyFactory.generatePrivate(keySpec);
+	}
+
+	Cipher cipher = Cipher.getInstance(keyFactory.getAlgorithm());
+	cipher.init(Cipher.DECRYPT_MODE, key);
+
+//        byte[] decrypted = cipher.doFinal(hexStringToByteArray(encrypted));
+	byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encrypted));
+	return new String(decrypted);
+}
+
+/**
+ * RSA 加密，使用 openssl 创建的 .pem 密钥对
+ *
+ * openssl 生成密钥对:
+ *   1.生成 2048 位的私钥
+ *     $ openssl genrsa -out rsa_private_key.pem 2048
+ *   2.从私钥生成公钥
+ *     $ openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem
+ *   3.将私钥进行 pkcs8 编码(加密/解密要使用这个经过 pkcs8 编码后的文件)
+ *     $ openssl pkcs8 -topk8 -in rsa_private_key.pem -out pkcs8_rsa_private_key.pem -nocrypt
+ *
+ * @param content            要加密的内容
+ * @param pemPath            pem 文件路径
+ * @param pub_true_pri_false 使用公钥还是密钥进行加密
+ * @return 经过 Base64 加密后的内容
+ * @throws Exception 加密异常
+ */
+public static String encryptWithRSAPem(String content, String pemPath, boolean pub_true_pri_false) throws Exception {
+	return encryptWithRSA(content, readPem(pemPath), pub_true_pri_false);
+}
+
+/**
+ * RSA 解密，使用 openssl 创建的 .pem 密钥对
+ *
+ * @param encrypted          要解密的内容
+ * @param pemPath            pem 文件路径
+ * @param pub_true_pri_false 使用公钥还是密钥进行解密
+ * @return 经过 Base64 解密后的内容
+ * @throws Exception 解密异常
+ */
+public static String decryptWithRSAPem(String encrypted, String pemPath, boolean pub_true_pri_false) throws Exception {
+	return decryptWithRSA(encrypted, readPem(pemPath), pub_true_pri_false);
+}
+
+/**
+ * 读取 openssl 生成的 .pem 文件
+ *
+ * @param path 路径
+ * @return 去掉首尾行的内容
+ * @throws IOException 路径异常
+ */
+public static String readPem(String path) throws IOException {
+	BufferedReader br = new BufferedReader(new FileReader(path));
+	br.readLine();
+	StringBuilder str = new StringBuilder();
+	String s = br.readLine();
+	while (s.charAt(0) != '-') {
+		str.append(s);
+		s = br.readLine();
+	}
+	return str.toString();
+}
+
+/**
+ * 读取文本文件
+ *
+ * @param path 路径
+ * @return 内容
+ * @throws IOException 异常
+ */
+public static String readText(String path) throws IOException {
+	StringBuilder builder = new StringBuilder();
+
+	BufferedReader reader = new BufferedReader(new FileReader(path));
+	String tmp;
+	while ((tmp = reader.readLine()) != null) {
+		builder.append(tmp);
+	}
+	reader.close();
+
+	return builder.toString();
+}
+
+/**
+ * 写文本文件
+ *
+ * @param path    路径
+ * @param content 内容
+ * @throws IOException 异常
+ */
+public static void writeText(String path, String content) throws IOException {
+	BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+	writer.write(content);
+	writer.flush();
+	writer.close();
+}
+</pre>
+								</li>
+								<li>
+									<p><b>Mac</b> -- 是消息验证码（Message Authentication Code）的简称，为单向加密(加密后不可解密)。基于加密哈希函数的 MAC 机制也叫作 HMAC， 主要有以下几种： <code>HmacSHA1</code>, <code>HmacSHA224</code>, <code>HmacSHA256</code>, <code>HmacSHA384</code>, <code>HmacSHA512</code>, <code>HmacSHAMD5</code>。</p>
+									<pre class="brush: java">
+/**
+ * 哈希加密， 消息验证码MAC(Message Authentication Code)
+ *
+ * @param content   要加密的内容
+ * @param password  密码
+ * @param algorithm 常用的有： HmacSHA1, HmacSHA224, HmacSHA256, HmacSHA384, HmacSHA512, HmacSHAMD5
+ * @return 经过加密的数据
+ * @throws Exception 异常
+ */
+public static String encryptWithMac(String content, String password, String algorithm) throws Exception {
+	SecretKeySpec keySpec = new SecretKeySpec(password.getBytes(), algorithm);
+
+	Mac mac = Mac.getInstance(algorithm);
+	mac.init(keySpec);
+
+	byte[] encrypted = mac.doFinal(content.getBytes(StandardCharsets.UTF_8));
+	return EncryptUtil.byteArrayToHexString(encrypted);
+//        return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+}
+</pre>
+								</li>
+								<li>
+									<p><b>SHA</b> -- 是安全散列算法（Secure Hash Algorithm）的简称，原则上不能算是加密算法。常用的有：<code>SHA</code>, <code>SHA-224</code>, <code>SHA-256</code>, <code>SHA-384</code>, <code>SHA-512</code>。</p>
+									<pre class="brush: java">
+/** 同下， 如果将 content = String.format("%s%s", content, password); 也可用于加密 */
+public static String encryptWithSHA(String content) throws Exception {
+	return encryptWithSHA(content, "SHA-256");
+}
+
+/**
+ * 生成 SHA(转为 16 进制大写的值)
+ *
+ * @param content 需要生成 SHA 的内容
+ * @param algorithm 常用的有： SHA, SHA-224, SHA-256, SHA-384, SHA-512
+ * @return 转为 16 进制大写的值
+ * @throws Exception 异常
+ */
+public static String encryptWithSHA(String content, String algorithm) throws Exception {
+	MessageDigest digest = MessageDigest.getInstance(algorithm);
+	byte[] encrypted = digest.digest(content.getBytes(StandardCharsets.UTF_8));
+	return EncryptUtil.byteArrayToHexString(encrypted);
+//        return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+}
+
+/**
+ * 为文件生成 SHA-256
+ *
+ * @param file 文件
+ * @return 大写 16 进制 md5 值
+ */
+public static String generateFileSHA(File file) {
+	return generateFileDigest(file, "SHA-256");
+}
+
+/**
+ * 为文件生成摘要(支持大文件)
+ *
+ * @param file 文件
+ * @param algorithm 算法，支持： MD5, SHA, SHA-224, SHA-256, SHA-384, SHA-512
+ * @return 大写 16 进制 md5 值
+ */
+public static String generateFileDigest(File file, String algorithm) {
+	FileInputStream fileInputStream = null;
+	try {
+		MessageDigest digest = MessageDigest.getInstance(algorithm);
+		fileInputStream = new FileInputStream(file);
+		byte[] buffer = new byte[8192];
+		int length;
+		while ((length = fileInputStream.read(buffer)) != -1) {
+			digest.update(buffer, 0, length);
+		}
+		return byteArrayToHexString(digest.digest());
+	} catch (Exception e) {
+		e.printStackTrace();
+		return null;
+	} finally {
+		try {
+			if (fileInputStream != null) {
+				fileInputStream.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
+</pre>
+								</li>
+								<li>
+									<p><b>MD5</b> -- 是消息摘要算法（Message Digest Algorithm）的简称。原则上不能算是加密算法。</p>
+									<pre class="brush: java">
+/**
+ * 生成 MD5(转为 16 进制大写的值)
+ *
+ * @param content 需要生成 md5 的内容
+ * @return 转为 16 进制大写的值
+ * @throws Exception 异常
+ */
+public static String encryptWithMD5(String content) throws Exception {
+	MessageDigest digest = MessageDigest.getInstance("MD5");
+	byte[] encrypted = digest.digest(content.getBytes(StandardCharsets.UTF_8));
+	return EncryptUtil.byteArrayToHexString(encrypted);
+//        return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+}
+
+/**
+ * 校验 MD5
+ *
+ * @param content 需要校验的内容
+ * @param md5     md5 值
+ * @return 是否符合
+ */
+public static boolean verifyMD5(String content, String md5) throws Exception {
+	return encryptWithMD5(content).equals(md5);
+}
+
+/**
+ * 校验文件的 MD5 值(支持大文件)
+ *
+ * @param path 路径
+ * @param md5 md5 值
+ * @return 是否符合
+ */
+public static boolean verifyFileWithMD5(String path, String md5) {
+	return verifyFile(path, "MD5", md5);
+}
+
+/**
+ * 校验文件
+ *
+ * @param path 文件路径
+ * @param algorithm 算法，支持：MD5, SHA, SHA-224, SHA-256, SHA-384, SHA-512
+ * @param value 比对值
+ * @return 是否符合
+ */
+public static boolean verifyFile(String path, String algorithm, String value) {
+	String degist = generateFileDigest(new File(path), algorithm);
+	if(null == degist) {
+		return false;
+	}
+	return degist.equals(value);
+}
+
+/**
+ * 为文件生成 MD5
+ *
+ * @param file 文件
+ * @return 大写 16 进制 md5 值
+ */
+public static String generateFileMD5(File file) {
+	return generateFileDigest(file, "MD5");
+}
+</pre>
+								</li>
+							</ul>
+						</div>
+
+                        <a id="encrypt_sign" class="offset"></a>
+						<div class="sub-item">
+							<p><b>数字签名</b></p>
+							<p><b>RSA / DSA 进行数字签名</b></p>
+							<ol type="I">
+								<li><p>生成唯一的非对称加密公钥和私钥对，一般是 RSA / DSA 算法；</p></li>
+								<li><p>对要发送的文件计算摘要，一般是 MD5 和 SHA 家族；</p></li>
+								<li><p>使用私钥对摘要进行加密，得到签名。</p></li>
+							</ol>
+							<pre class="brush: java;">
+/**
+ * 生成数字签名
+ *
+ * 生成和保存 RSA/DSA KeyPair:
+ *      KeyPair dsaKeyPair = EncryptUtil.generateDSAKeyPair(1024);
+ *      EncryptUtil.saveKeyPair(dsaKeyPair, dsa_public, dsa_private);
+ * 读取 KeyPair
+ *      String prvt = EncryptUtil.readText(dsa_private);
+ *      String pblc = EncryptUtil.readText(dsa_public);
+ *
+ * @param content        原文
+ * @param private_base64 经过 base64 编码的私钥
+ * @param algorithm      算法，常用的有：
+ *                       MD2withRSA,MD5withRSA,
+ *                       NONEwithRSA,
+ *                       SHA1withRSA,SHA224withRSA,SHA256withRSA,SHA384withRSA,SHA512withRSA
+ *                       SHA1withDSA(此处生成的 KeyPair 要为 1024 位，否则报错),SHA224withDSA,SHA256withDSA
+ * @return base64 编码签名值
+ * @throws Exception 异常
+ */
+public static String generateSignature(String content, String private_base64, String algorithm) throws Exception {
+	Signature signature = Signature.getInstance(algorithm);
+	signature.initSign(generatePrivateKey(private_base64, algorithm));
+	signature.update(content.getBytes(StandardCharsets.UTF_8));
+	byte[] md5WithRSA = signature.sign();
+	return Base64.getEncoder().encodeToString(md5WithRSA);
+}
+
+/**
+ * 生成数字签名
+ *
+ * @param file           需要签名的文件
+ * @param private_base64 经过 base64 编码的私钥
+ * @param algorithm      算法，常用的有：
+ *                       MD2withRSA,MD5withRSA,
+ *                       NONEwithRSA,
+ *                       SHA1withRSA,SHA224withRSA,SHA256withRSA,SHA384withRSA,SHA512withRSA
+ *                       SHA1withDSA(此处生成的 KeyPair 要为 1024 位，否则报错),SHA224withDSA,SHA256withDSA
+ * @return base64 编码签名值
+ * @throws Exception 异常
+ */
+public static String generateSignature(File file, String private_base64, String algorithm) throws Exception {
+	byte[] bytes = new byte[(int) file.length()];
+
+	FileInputStream fix = new FileInputStream(file);
+	fix.read(bytes);
+	fix.close();
+
+	return generateSignature(Base64.getEncoder().encodeToString(bytes), private_base64, algorithm);
+}
+
+/**
+ * 校验数字签名
+ *
+ * @param content       原文
+ * @param sign          签名值
+ * @param public_base64 经过 base64 编码的密钥
+ * @param algorithm      算法，常用的有：
+ *                       MD2withRSA,MD5withRSA,
+ *                       NONEwithRSA,
+ *                       SHA1withRSA,SHA224withRSA,SHA256withRSA,SHA384withRSA,SHA512withRSA
+ *                       SHA1withDSA(此处生成的 KeyPair 要为 1024 位，否则报错),SHA224withDSA,SHA256withDSA
+ * @return 是否符合
+ * @throws Exception 异常
+ */
+public static boolean verifySignature(String content, String sign, String public_base64, String algorithm) throws Exception {
+	Signature signature = Signature.getInstance(algorithm);
+
+	signature.initVerify(generatePublicKey(public_base64, algorithm));
+	signature.update(content.getBytes(StandardCharsets.UTF_8));
+	return signature.verify(Base64.getDecoder().decode(sign));
+}
+</pre>
+						</div>
+
+                        <a id="encrypt_pki" class="offset"></a>
+						<div class="sub-item">
+							<p><b>PKI 体系的一些概念</b></p>
+							<ul>
+								<li>
+									<p><b>CA(Certificate Authority)</b> 证书颁发机构是负责发放和管理数字证书的权威机构，并作为电子商务交易中受信任的第三方，承担公钥体系中公钥的合法性检验的责任。</p>
+									<p>CA 中心为每个使用公开密钥的用户发放一个数字证书，数字证书的作用是证明证书中列出的用户合法拥有证书中列出的公开密钥。CA 机构的数字签名使得攻击者不能伪造和篡改证书。</p>
+								</li>
+								<li>
+									<p><b>PKI(Public Key Infrastructure)</b> 公钥基础设施是一种遵循标准的利用公钥加密技术为电子商务的开展提供一套安全基础平台的技术和规范。能够为互联网的应用提供加密服务以及数字签名服务。</p>
+								</li>
+								<li>
+									<p><b>PKCS(The Public-Key Cryptography Standards)</b> 是由美国 RSA 数据安全公司及其合作伙伴制定的一组公钥密码学标准，其中包括证书申请、证书更新、证书作废表发布、扩展证书内容以及数字签名、数字信封的格式等方面的一系列相关协议。</p>
+								</li>
+								<li>
+									<p><b>数字证书</b> 是指 CA 机构发行的一种电子文档，是一串能够表明网络用户身份信息的数字，提供了一种在计算机网络上验证网络用户身份的方式，因此数字证书又称为数字标识。数字证书对网络用户在计算机网络交流中的信息和数据等以加密或解密的形式保证了信息和数据的完整性和安全性。</p>
+									<p>数字证书的常见格式：</p>
+									<table class="table table-bordered table-response">
+										<tr>
+											<td><b>格式</b></td>
+											<td><b>扩展名</b></td>
+											<td><b>特点</b></td>
+										</tr>
+										<tr>
+											<td>PEM</td>
+											<td><code>.pem</code></td>
+											<td>1、该编码格式在 RFC1421 中定义，广泛运用于密钥管理<br>2、ASCII 文件<br>3、一般基于 Base64 编码</td>
+										</tr>
+										<tr>
+											<td>DER</td>
+											<td><code>.cer</code> / <code>.crt</code> / <code>.rsa</code></td>
+											<td>用于存放证书，不含私钥、二进制</td>
+										</tr>
+										<tr>
+											<td>PKCS7</td>
+											<td><code>.p7b</code> / <code>.p7r</code></td>
+											<td>1、p7b 以树状展示证书链，不含私钥<br>2、p7r 为 CA 对证书请求签名的回复，只能用于导入</td>
+										</tr>
+										<tr>
+											<td>PKCS10</td>
+											<td><code>.p10</code> / <code>.csr</code></td>
+											<td>1、证书签名请求文件<br>2、ASCII 文件<br>3、CA 签名后以 p7r 文件回复</td>
+										</tr>
+										<tr>
+											<td>CMS</td>
+											<td><code>.p7c</code> / <code>.p7m</code> / <code>.p7s</code></td>
+											<td>1、p7c 只保存证书<br>2、p7m：带信封数据的签名<br>3、p7s：时间戳签名文件</td>
+										</tr>
+										<tr>
+											<td>SPC</td>
+											<td><code>.pvk</code> / <code>.spc</code></td>
+											<td>微软特有的双证书文件格式，经常用于代码签名，其中 pvk 用于保存私钥， spc 用于保存公钥</td>
+										</tr>
+									</table>
+								</li>
+								<li>
+									<p><b>密钥库</b> 是存放数字证书的数据库文件，所有的公钥或私钥并证书都会被存储在密钥库中。常见的密钥库有以下格式：</p>
+									<table class="table table-bordered table-response">
+										<tr>
+											<td><b>格式</b></td>
+											<td><b>扩展名</b></td>
+											<td><b>描述</b></td>
+											<td><b>特点</b></td>
+										</tr>
+										<tr>
+											<td>JKS</td>
+											<td><code>.jks</code>/<code>.ks</code></td>
+											<td>密钥库的 Java 实现版本，provider 为 SUN</td>
+											<td>密钥库和私钥用不同的密码进行保护</td>
+										</tr>
+										<tr>
+											<td>JCEKS</td>
+											<td><code>.jce</code></td>
+											<td>密钥库的 JCE 实现版本，provider 为 SUN JCE</td>
+											<td>相对于 JKS 安全级别更高，保护 Keystore 私钥时采用 TripleDES</td>
+										</tr>
+										<tr>
+											<td>PKCS12</td>
+											<td><code>.p12</code>/<code>.pfx</code></td>
+											<td>【PKCS #12】个人信息交换语法标准</td>
+											<td>1、包含私钥、公钥及其证书<br>2、密钥库和私钥用相同密码进行保护</td>
+										</tr>
+										<tr>
+											<td>BKS</td>
+											<td><code>.bks</code></td>
+											<td>密钥库的 BC 实现版本，provider 为 BC</td>
+											<td>基于 JCE 实现</td>
+										</tr>
+										<tr>
+											<td>UBER</td>
+											<td><code>.ubr</code></td>
+											<td>密钥库的 BC 更安全实现版本，provider 为 BC</td>
+											<td>&nbsp;</td>
+										</tr>
+									</table>
+								</li>
+								<li>
+									<p><b>X.509</b> 是由国际电信联盟制定的数字证书标准。所有的证书都符合为 PKI 制定的 ITU-T X509 国际标准。</p>
+								</li>
+								<li>
+									<p><b>SSL(Secure Sockets Layer)</b> -- 安全套接层协议可以在 Internet 上提供秘密性传输。其目标是保证两个应用间通信的保密性和可靠性,可在服务器端和用户端同时实现支持。已经成为 Internet 上保密通讯的工业标准。</p>
+								</li>
+								<li>
+									<p><b>TLS(Transport Layer Security)</b> -- 传输层安全性协议是 IETF 将 SSL 进行标准化，1999 年公布第一版 TLS 标准文件。</p>
+								</li>
+							</ul>
+
+							<p><b>PKCS 标准：</b></p>
+							<table class="table table-response">
+								<tr>
+									<th width="58"></th>
+									<th width="69">版本</th>
+									<th width="178">名称</th>
+									<th width="306">简介</th>
+								</tr>
+								<tr>
+									<th>PKCS #1</th>
+									<td align="center">2.1</td>
+									<td width="178" valign="top" align="left">RSA 密码编译标准（RSA Cryptography Standard）</td>
+									<td width="306" valign="top" align="left">定义了 RSA 的数理基础、公/私钥格式，以及加/解密、签/验章的流程。</td>
+								</tr>
+								<tr>
+									<th>PKCS #3</th>
+									<td align="center">1.4</td>
+									<td width="178" valign="top" align="left">DH 密钥交换协议标准（Diffie-Hellman key agreement Standard）</td>
+									<td width="306" valign="top" align="left">规范以 DH 密钥交换协议为基础的密钥协议标准。其功能，可以让两方通过金议协议，拟定会议密钥。</td>
+								</tr>
+								<tr>
+									<th>PKCS #5</th>
+									<td align="center">2.0</td>
+									<td width="178" valign="top" align="left">密码基植加密标准（Password-based Encryption Standard）</td>
+									<td width="306" valign="top" align="left">描述一种利用从口令派生出来的安全密钥加密字符串的方法。</td>
+								</tr>
+								<tr>
+									<th>PKCS #6</th>
+									<td align="center">1.5</td>
+									<td width="178" valign="top" align="left">证书扩展语法标准（Extended-Certificate Syntax Standard）</td>
+									<td width="306" valign="top" align="left">将原本 X.509 的证书格式标准加以扩充。</td>
+								</tr>
+								<tr>
+									<th>PKCS #7</th>
+									<td align="center">1.5</td>
+									<td width="178" valign="top" align="left">密码消息语法标准（Cryptographic Message Syntax Standard）</td>
+									<td width="306" valign="top" align="left">公开密钥基础设施（PKI）所产生之签名/密文之格式。其目的一样是为了拓展数字证书的应用。</td>
+								</tr>
+								<tr>
+									<th>PKCS #8</th>
+									<td align="center">1.2</td>
+									<td width="178" valign="top" align="left">私钥消息表示标准（Private-Key Information Syntax Standard）.</td>
+									<td width="306" valign="top" align="left">描述私有密钥信息格式，该信息包括公开密钥算法的私有密钥以及可选的属性集等。</td>
+								</tr>
+								<tr>
+									<th>PKCS #9</th>
+									<td align="center">2.0</td>
+									<td width="178" valign="top" align="left">选择属性格式（Selected Attribute Types）</td>
+									<td width="306" valign="top" align="left">定义可选属性类型。已定义的证书属性包括 E-mail 地址、无格式姓名、内容类型、消息摘要、签名时间、签名副本（counter signature）、质询口令字和扩展证书属性。</td>
+								</tr>
+								<tr>
+									<th width="58">PKCS #10</th>
+									<td align="center">1.7</td>
+									<td width="178" valign="top" align="left">证书请求语法标准（Certification Request Standard）</td>
+									<td width="306" valign="top" align="left">定义了证书请求的语法。证书请求包含了一个唯一识别名、公钥和可选的一组属性，它们一起被请求证书的实体签名。</td>
+								</tr>
+								<tr>
+									<th>PKCS #11</th>
+									<td align="center">2.20</td>
+									<td width="178" valign="top" align="left">密码设备标准接口（Cryptographic Token Interface (Cryptoki)）</td>
+									<td width="306" valign="top" align="left">定义了密码设备的应用程序接口（API）之规格。</td>
+								</tr>
+								<tr>
+									<th>PKCS #12</th>
+									<td align="center">1.0</td>
+									<td width="178" valign="top" align="left">个人消息交换标准（Personal Information Exchange Syntax Standard）</td>
+									<td width="306" valign="top" align="left">定义了包含私钥与公钥证书（public key certificate）的文件格式。私钥采密码保护。常见的 PFX 就履行了 PKCS#12。</td>
+								</tr>
+								<tr>
+									<th>PKCS #13</th>
+									<td align="center">–</td>
+									<td width="178" valign="top" align="left">椭圆曲线密码学标准（Elliptic curve cryptography Standard）</td>
+									<td width="306" valign="top" align="left">制定中。规范以椭圆曲线密码学为基础所发展之密码技术应用。椭圆曲线密码学是新的密码学技术，其强度与效率皆比现行以指数运算为基础之密码学算法来的优秀。</td>
+								</tr>
+								<tr>
+									<th>PKCS #14</th>
+									<td align="center">–</td>
+									<td width="178" valign="top" align="left">伪随机数产生器标准（Pseudo-random Number Generation）</td>
+									<td width="306" valign="top" align="left">制定中。规范伪随机数产生器的使用与设计。</td>
+								</tr>
+								<tr>
+									<th>PKCS #15</th>
+									<td align="center">1.1</td>
+									<td width="178" valign="top" align="left">密码设备消息格式标准（Cryptographic Token Information Format Standard）</td>
+									<td width="306" valign="top" align="left">定义了密码设备内部数据的组织结构。</td>
+								</tr>
+							</table>
+						</div>
+
+                        <a id="encrypt_cert" class="offset"></a>
+						<div class="sub-item">
+							<p><b>主流的数字证书和相互转换</b></p>
+							<p>主流的 Web 服务软件，通常都基于 OpenSSL 和 Java 两种基础密码库。</p>
+							<ul>
+								<li>
+									<p>Tomcat, Weblogic, JBoss 等 Web 服务软件，一般使用 Java 提供的密码库。通过 JDK 工具包中的 <code>keytool</code> 工具，生成 Java Keystore（JKS）格式的证书文件。</p>
+								</li>
+								<li>
+									<p>Apache, Nginx 等 Web 服务软件，一般使用 OpenSSL 工具提供的密码库，生成 PEM, KEY, CRT 等格式的证书文件。</p>
+								</li>
+								<li>
+									<p>IBM 的 Web 服务产品，如 Websphere, IBM Http Server（IHS）等，一般使用 IBM 产品自带的 <code>iKeyman</code> 工具，生成 KDB 格式的证书文件。</p>
+								</li>
+								<li>
+									<p>微软 Windows Server 中的 Internet Information Services（IIS）服务，使用 Windows 自带的证书库生成 PFX 格式的证书文件。</p>
+								</li>
+							</ul>
+							<p><b>数字证书格式相互转换</b></p>
+							<p>1.将 JKS(.jks/.ks/.jce) 格式证书转换成 PFX 格式</p>
+							<pre class="brush: bash">
+## JKS 包括 JKS/JCEKS, 要看生成时候的 -storetype 指定的是什么格式
+## 1.生成一个 storetype 为 JKS 的 keystore
+$ keytool -genkeypair -alias rsa -storepass ilesson -keystore test.jks -keyalg RSA -validity 365 \
+				-dname "CN=lesson1234.com, OU=ilesson, O=ilesson, L=ShenZhen, ST=GuangDong, C=CN"
+## 2.转化为 PFX 格式
+$ keytool -importkeystore -srckeystore test.jks -srcstorepass ilesson -destkeystore test.pfx \
+				-deststoretype pkcs12 -deststorepass ilesson -destkeypass IlessonModify
+
+</pre>
+							<p>2.将 PFX 格式证书转换为 JKS(.jks/.ks/.jce) 格式</p>
+							<pre class="brush: bash">
+## JKS 包括 JKS/JCEKS
+$ keytool -importkeystore -srckeystore test.pfx -srcstorepass ilesson -destkeystore test.jks \
+				-srcstoretype PKCS12 -deststoretype JKS -deststorepass ilesson
+</pre>
+							<p>3.将 PFX 转换为 PEM/KEY/CRT 格式</p>
+							<pre class="brush: bash">
+$ openssl pkcs12 -in server.pfx -nodes -out server.pem
+$ openssl rsa -in server.pem -out server.key
+$ openssl x509 -in server.pem -out server.crt
+</pre>
+							<p>4.将 PKCS8的私钥和私钥证书 转换为 PFX 格式</p>
+							<pre class="brush: bash">
+$ openssl genrsa -out rsa_private_key.pem                                         ## 生成私钥
+$ openssl req -new -x509 -days 365 -key rsa_private_key.pem -out cert.crt         ## 生成私钥证书
+$ openssl pkcs8 -topk8 -in rsa_private_key.pem -out rsa_private_key.key -nocrypt  ## 私钥转为 PKCS8
+
+$ openssl pkcs12 -export -out server.pfx -inkey rsa_private_key.key -in cert.crt
+</pre>
+						</div>
+
+                        <a id="encrypt_" class="offset"></a>
+                        <div class="sub-item">
+                            <p><code>EncryptUtil</code> 是自己写的一个工具类，提供了：AES 加解密, DES 加解密, DESede 加解密, RC4 加解密, Blowfish 加解密, RSA 加解密, Mac 加密， MD5 摘要， SHA 摘要， 各种 Signature， 从 KeyStore 加载公钥，私钥等。</p>
+                            <pre class="brush: java;">
+/**
+ * author:  nate
+ * email:   jiwanger@126.com
+ * os:      Linux Mint 64 Bit
+ * date:    3/12/19.
+ */
+public class EncryptUtil {
+    /**
+     * AES CBC 模式加密
+     *
+     * @param content  要加密的内容
+     * @param password 生成密钥的密码
+     * @return 加密后内容，转为 16 进制或 Base64 编码方便保存
+     */
+    public static String encryptWithAES(String content, String password) throws Exception {
+        byte[] md5 = MessageDigest.getInstance("MD5").digest(password.getBytes());
+        Key secretKey = new SecretKeySpec(md5, "AES"); // byte 数组的长度为 16 字节，这里使用密码的 md5 值
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        // AES 加密在 CBC 模式下是需要有一个初始向量数组 byte[] initializeVector
+        IvParameterSpec ivParameterSpec = new IvParameterSpec(md5);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, ivParameterSpec);
+
+        byte[] encrypted = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
+//        return byteArrayToHexString(encrypted);
+        return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+    }
+
+    /**
+     * AES CBC 模式解密
+     *
+     * @param encrypted 要解密的内容，对应加密方法，要先转为 byte 数组
+     * @param password  生成密钥的密码
+     * @return 解密后内容
+     */
+    public static String decryptWithAES(String encrypted, String password) throws Exception {
+        byte[] md5 = MessageDigest.getInstance("MD5").digest(password.getBytes());
+        Key secretKey = new SecretKeySpec(md5, "AES");
+
+        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(md5));
+
+//        byte[] decrypted = cipher.doFinal(hexStringToByteArray(encrypted));
+        byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encrypted)); // Base64，这里还原
+        return new String(decrypted, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * DES CBC 模式加密
+     *
+     * @param content  要加密的内容
+     * @param password 生成密钥的密码
+     * @return 加密后内容，转为 16 进制或 Base64 编码方便保存
+     */
+    public static String encryptWithDES(String content, String password) throws Exception {
+        byte[] md5 = MessageDigest.getInstance("MD5").digest(password.getBytes());
+
+        DESKeySpec keySpec = new DESKeySpec(md5); // DES 加密其实只使用了前 8 个字节
+        Key secretKey = SecretKeyFactory.getInstance("DES").generateSecret(keySpec);
+
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+        byte[] iv = new byte[8];
+        System.arraycopy(md5, 0, iv, 0, 8);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(iv));
+
+        byte[] encrypted = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
+//        return byteArrayToHexString(encrypted);
+        return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+    }
+
+    /**
+     * DESede CBC 模式解密
+     *
+     * @param encrypted 要解密的内容，对应加密方法，要先转为 byte 数组
+     * @param password  生成密钥的密码
+     * @return 解密后内容
+     */
+    public static String decryptWithDES(String encrypted, String password) throws Exception {
+        byte[] md5 = MessageDigest.getInstance("MD5").digest(password.getBytes());
+
+        DESKeySpec keySpec = new DESKeySpec(md5);  // DESede 需要使用 24 字节
+        Key secretKey = SecretKeyFactory.getInstance("DES").generateSecret(keySpec);
+
+        Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
+        byte[] iv = new byte[8];
+        System.arraycopy(md5, 0, iv, 0, 8);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(iv));
+
+//        byte[] decrypted = cipher.doFinal(hexStringToByteArray(encrypted));
+        byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encrypted)); // Base64，这里还原
+        return new String(decrypted, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * DESede CBC 模式加密
+     *
+     * @param content  要加密的内容
+     * @param password 生成密钥的密码
+     * @return 加密后内容，转为 16 进制或 Base64 编码方便保存
+     */
+    public static String encryptWithDESede(String content, String password) throws Exception {
+        byte[] md5 = MessageDigest.getInstance("MD5").digest(password.getBytes());
+
+        byte[] key = new byte[24]; // DESede 需要使用 24 字节
+        System.arraycopy(md5, 0, key, 0, 16);
+        DESedeKeySpec keySpec = new DESedeKeySpec(key);
+        Key secretKey = SecretKeyFactory.getInstance("DESede").generateSecret(keySpec);
+
+        Cipher cipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
+        byte[] iv = new byte[8];
+        System.arraycopy(md5, 0, iv, 0, 8);
+        cipher.init(Cipher.ENCRYPT_MODE, secretKey, new IvParameterSpec(iv));
+
+        byte[] encrypted = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
+//        return byteArrayToHexString(encrypted);
+        return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+    }
+
+    /**
+     * DES CBC 模式解密
+     *
+     * @param encrypted 要解密的内容，对应加密方法，要先转为 byte 数组
+     * @param password  生成密钥的密码
+     * @return 解密后内容
+     */
+    public static String decryptWithDESede(String encrypted, String password) throws Exception {
+        byte[] md5 = MessageDigest.getInstance("MD5").digest(password.getBytes());
+
+        byte[] key = new byte[24];
+        System.arraycopy(md5, 0, key, 0, 16);
+        DESedeKeySpec keySpec = new DESedeKeySpec(key); // DESede 需要使用 24 字节
+        Key secretKey = SecretKeyFactory.getInstance("DESede").generateSecret(keySpec);
+
+        Cipher cipher = Cipher.getInstance("DESede/CBC/PKCS5Padding");
+        byte[] iv = new byte[8];
+        System.arraycopy(md5, 0, iv, 0, 8);
+        cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(iv));
+
+//        byte[] decrypted = cipher.doFinal(hexStringToByteArray(encrypted));
+        byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encrypted)); // Base64，这里还原
+        return new String(decrypted, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * RC4 / ARCFOUR 加密
+     *
+     * @param content  要机密的内容
+     * @param password 密码
+     * @return 加密后内容，转为 16 进制或 Base64 编码方便保存
+     * @throws Exception 异常
+     */
+    public static String encryptWithRC4(String content, String password) throws Exception {
+        SecretKeySpec keySpec = new SecretKeySpec(password.getBytes(StandardCharsets.UTF_8), "RC4");
+
+        Cipher cipher = Cipher.getInstance(keySpec.getAlgorithm());
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+
+        byte[] encrypted = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
+//        return byteArrayToHexString(encrypted);
+        return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+    }
+
+    /**
+     * RC4 / ARCFOUR 解密
+     *
+     * @param encrypted 加密后的 16 进制或 Base64 编码
+     * @param password  密码
+     * @return 原串
+     * @throws Exception 异常
+     */
+    public static String decryptWithRC4(String encrypted, String password) throws Exception {
+        SecretKeySpec keySpec = new SecretKeySpec(password.getBytes(StandardCharsets.UTF_8), "RC4");
+
+        Cipher cipher = Cipher.getInstance(keySpec.getAlgorithm());
+        cipher.init(Cipher.DECRYPT_MODE, keySpec);
+
+//        byte[] decrypted = cipher.doFinal(hexStringToByteArray(encrypted));
+        byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encrypted)); // Base64，这里还原
+        return new String(decrypted, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Blowfish 加密
+     *
+     * @param content  要机密的内容
+     * @param password 密码
+     * @return 加密后内容，转为 16 进制或 Base64 编码方便保存
+     * @throws Exception 异常
+     */
+    public static String encryptWithBlowfish(String content, String password) throws Exception {
+        SecretKeySpec keySpec = new SecretKeySpec(password.getBytes(StandardCharsets.UTF_8), "Blowfish");
+
+        Cipher cipher = Cipher.getInstance(keySpec.getAlgorithm());
+        cipher.init(Cipher.ENCRYPT_MODE, keySpec);
+
+        byte[] encrypted = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
+//        return byteArrayToHexString(encrypted);
+        return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+    }
+
+    /**
+     * Blowfish 解密
+     *
+     * @param encrypted 加密后的 16 进制或 Base64 编码
+     * @param password  密码
+     * @return 原串
+     * @throws Exception 异常
+     */
+    public static String decryptWithBlowfish(String encrypted, String password) throws Exception {
+        SecretKeySpec keySpec = new SecretKeySpec(password.getBytes(StandardCharsets.UTF_8), "Blowfish");
+
+        Cipher cipher = Cipher.getInstance(keySpec.getAlgorithm());
+        cipher.init(Cipher.DECRYPT_MODE, keySpec);
+
+//        byte[] decrypted = cipher.doFinal(hexStringToByteArray(encrypted));
+        byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encrypted)); // Base64，这里还原
+        return new String(decrypted, StandardCharsets.UTF_8);
+    }
+
+
+    /**
+     * RSA 加密
+     *
+     * @param content            要加密的内容
+     * @param base64             经过 Base64 编码的公钥/密钥
+     * @param pub_true_pri_false 是公钥还是密钥
+     * @return 经过 Base64 加密后的内容
+     * @throws Exception 加密异常
+     */
+    public static String encryptWithRSA(String content, String base64, boolean pub_true_pri_false) throws Exception {
+        Key key = generateKey(base64, "RSA", pub_true_pri_false);
+
+        Cipher cipher = Cipher.getInstance(key.getAlgorithm());
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+
+        byte[] encrypted = cipher.doFinal(content.getBytes(StandardCharsets.UTF_8));
+//        return byteArrayToHexString(encrypted);
+        return Base64.getEncoder().encodeToString(encrypted);
+    }
+
+    /**
+     * RSA 解密，如果用公钥加密，那么必须用私钥解密；如果用私钥加密，那么必须用公钥解密
+     *
+     * @param encrypted          要解密的内容
+     * @param base64             经过 Base64 编码的公钥/密钥
+     * @param pub_true_pri_false 是公钥还是密钥
+     * @return 原始内容
+     * @throws Exception 解密异常
+     */
+    public static String decryptWithRSA(String encrypted, String base64, boolean pub_true_pri_false) throws Exception {
+        Key key = generateKey(base64, "RSA", pub_true_pri_false);
+
+        Cipher cipher = Cipher.getInstance(key.getAlgorithm());
+        cipher.init(Cipher.DECRYPT_MODE, key);
+
+//        byte[] decrypted = cipher.doFinal(hexStringToByteArray(encrypted));
+        byte[] decrypted = cipher.doFinal(Base64.getDecoder().decode(encrypted));
+        return new String(decrypted, StandardCharsets.UTF_8);
+    }
+
+
+    /**
+     * 从 base64 编码的公钥/私钥文件生成 KEY
+     *
+     * @param base64             经过 base64 编码的密钥文件
+     * @param algorithm          支持：RSA / DSA / EC / DH(DiffieHellman)
+     * @param pub_true_pri_false 公钥/私钥
+     * @return Key
+     * @throws Exception 异常
+     */
+    public static Key generateKey(String base64, String algorithm, boolean pub_true_pri_false) throws Exception {
+        KeyFactory keyFactory = KeyFactory.getInstance(algorithm);
+        if (pub_true_pri_false) {
+            X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(base64));
+            return keyFactory.generatePublic(keySpec);
+        } else {
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(Base64.getDecoder().decode(base64));
+            return keyFactory.generatePrivate(keySpec);
+        }
+    }
+
+    /**
+     * 从 base64 编码的公钥文件生成 PrivateKey
+     *
+     * @param base64    经过 base64 编码的私钥文件
+     * @param algorithm 支持：RSA / DSA / EC / DH(DiffieHellman)
+     * @return PrivateKey
+     * @throws Exception 异常
+     */
+    public static PrivateKey generatePrivateKey(String base64, String algorithm) throws Exception {
+        return (PrivateKey) generateKey(base64, algorithm, false);
+    }
+
+    /**
+     * 从 base64 编码的公钥文件生成 PublicKey
+     *
+     * @param base64    经过 base64 编码的公钥文件
+     * @param algorithm 支持：RSA / DSA / EC / DH(DiffieHellman)
+     * @return PublicKey
+     * @throws Exception 异常
+     */
+    public static PublicKey generatePublicKey(String base64, String algorithm) throws Exception {
+        return (PublicKey) generateKey(base64, algorithm, true);
+    }
+
+    /**
+     * RSA 加密，使用 openssl 创建的 .pem 密钥对
+     *
+     * openssl 生成密钥对:
+     * 1.生成 2048 位的私钥
+     * $ openssl genrsa -out rsa_private_key.pem 2048
+     * 2.从私钥生成公钥
+     * $ openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem
+     * 3.将私钥进行 pkcs8 编码(加密/解密要使用这个经过 pkcs8 编码后的文件)
+     * $ openssl pkcs8 -topk8 -in rsa_private_key.pem -out rsa_private_key.key -nocrypt
+     *
+     * @param content            要加密的内容
+     * @param pemPath            pem 文件路径
+     * @param pub_true_pri_false 是公钥还是密钥
+     * @return 经过 Base64 加密后的内容
+     * @throws Exception 加密异常
+     */
+    public static String encryptWithRSAPem(String content, String pemPath, boolean pub_true_pri_false) throws Exception {
+        return encryptWithRSA(content, readPem(pemPath), pub_true_pri_false);
+    }
+
+    /**
+     * RSA 解密，使用 openssl 创建的 .pem 密钥对
+     *
+     * @param encrypted          要解密的内容
+     * @param pemPath            pem 文件路径
+     * @param pub_true_pri_false 是公钥还是密钥
+     * @return 经过 Base64 解密后的内容
+     * @throws Exception 解密异常
+     */
+    public static String decryptWithRSAPem(String encrypted, String pemPath, boolean pub_true_pri_false) throws Exception {
+        return decryptWithRSA(encrypted, readPem(pemPath), pub_true_pri_false);
+    }
+
+    /**
+     * 同下
+     */
+    public static String encryptWithMac(String content, String password) throws Exception {
+        return encryptWithMac(content, password, "HmacSHA256");
+    }
+
+    /**
+     * 哈希加密， 消息验证码MAC(Message Authentication Code)
+     *
+     * @param content   要加密的内容
+     * @param password  密码
+     * @param algorithm 常用的有： HmacSHA1, HmacSHA224, HmacSHA256, HmacSHA384, HmacSHA512, HmacSHAMD5
+     * @return 经过加密的数据
+     * @throws Exception 异常
+     */
+    public static String encryptWithMac(String content, String password, String algorithm) throws Exception {
+        SecretKeySpec keySpec = new SecretKeySpec(password.getBytes(StandardCharsets.UTF_8), algorithm);
+
+        Mac mac = Mac.getInstance(algorithm);
+        mac.init(keySpec);
+
+        byte[] encrypted = mac.doFinal(content.getBytes(StandardCharsets.UTF_8));
+        return byteArrayToHexString(encrypted);
+//        return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+    }
+
+    /**
+     * 生成 MD5(转为 16 进制大写的值)
+     *
+     * @param content 需要生成 md5 的内容
+     * @return 转为 16 进制大写的值
+     * @throws Exception 异常
+     */
+    public static String encryptWithMD5(String content) throws Exception {
+        MessageDigest digest = MessageDigest.getInstance("MD5");
+        byte[] encrypted = digest.digest(content.getBytes(StandardCharsets.UTF_8));
+        return byteArrayToHexString(encrypted);
+//        return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+    }
+
+    /**
+     * 校验 MD5
+     *
+     * @param content 需要校验的内容
+     * @param md5     md5 值
+     * @return 是否符合
+     */
+    public static boolean verifyMD5(String content, String md5) throws Exception {
+        return encryptWithMD5(content).equals(md5);
+    }
+
+    /**
+     * 校验文件的 MD5 值(支持大文件)
+     *
+     * @param path 路径
+     * @param md5  md5 值
+     * @return 是否符合
+     */
+    public static boolean verifyFileWithMD5(String path, String md5) {
+        return verifyFile(path, "MD5", md5);
+    }
+
+    /**
+     * 校验文件的 SHA-256 值(支持大文件)
+     *
+     * @param path   路径
+     * @param sha256 SHA-256 值
+     * @return 是否符合
+     */
+    public static boolean verifyFileWithSHA(String path, String sha256) {
+        return verifyFile(path, "SHA-256", sha256);
+    }
+
+    /**
+     * 校验文件
+     *
+     * @param path      文件路径
+     * @param algorithm 算法，支持：MD5, SHA, SHA-224, SHA-256, SHA-384, SHA-512
+     * @param value     比对值
+     * @return 是否符合
+     */
+    public static boolean verifyFile(String path, String algorithm, String value) {
+        String degist = generateFileDigest(new File(path), algorithm);
+        if (null == degist) {
+            return false;
+        }
+        return degist.equals(value);
+    }
+
+    /**
+     * 为文件生成 MD5
+     *
+     * @param file 文件
+     * @return 大写 16 进制 md5 值
+     */
+    public static String generateFileMD5(File file) {
+        return generateFileDigest(file, "MD5");
+    }
+
+    /**
+     * 同下
+     */
+    public static String encryptWithSHA(String content) throws Exception {
+        return encryptWithSHA(content, "SHA-256");
+    }
+
+    /**
+     * 生成 SHA(转为 16 进制大写的值)
+     *
+     * @param content   需要生成 SHA 的内容
+     * @param algorithm 常用的有： SHA, SHA-224, SHA-256, SHA-384, SHA-512
+     * @return 转为 16 进制大写的值
+     * @throws Exception 异常
+     */
+    public static String encryptWithSHA(String content, String algorithm) throws Exception {
+        MessageDigest digest = MessageDigest.getInstance(algorithm);
+        byte[] encrypted = digest.digest(content.getBytes(StandardCharsets.UTF_8));
+        return EncryptUtil.byteArrayToHexString(encrypted);
+//        return Base64.getEncoder().encodeToString(encrypted); // 也可以使用 Base64
+    }
+
+    /**
+     * 为文件生成 SHA-256
+     *
+     * @param file 文件
+     * @return 大写 16 进制 md5 值
+     */
+    public static String generateFileSHA(File file) {
+        return generateFileDigest(file, "SHA-256");
+    }
+
+    /**
+     * 为文件生成摘要(支持大文件)
+     *
+     * @param file      文件
+     * @param algorithm 算法，支持： MD5, SHA, SHA-224, SHA-256, SHA-384, SHA-512
+     * @return 大写 16 进制 md5 值
+     */
+    public static String generateFileDigest(File file, String algorithm) {
+        FileInputStream fileInputStream = null;
+        try {
+            MessageDigest digest = MessageDigest.getInstance(algorithm);
+            fileInputStream = new FileInputStream(file);
+            byte[] buffer = new byte[8192];
+            int length;
+            while ((length = fileInputStream.read(buffer)) != -1) {
+                digest.update(buffer, 0, length);
+            }
+            return byteArrayToHexString(digest.digest());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if (fileInputStream != null) {
+                    fileInputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 生成数字签名
+     *
+     * 生成和保存 RSA/DSA KeyPair:
+     * KeyPair dsaKeyPair = EncryptUtil.generateDSAKeyPair(1024);
+     * EncryptUtil.saveKeyPair(dsaKeyPair, dsa_public, dsa_private);
+     * 读取 KeyPair
+     * String prvt = EncryptUtil.readText(dsa_private);
+     * String pblc = EncryptUtil.readText(dsa_public);
+     *
+     * @param content        原文
+     * @param private_base64 经过 base64 编码的私钥
+     * @param algorithm      算法，常用的有：
+     *                       MD2withRSA,MD5withRSA,
+     *                       NONEwithRSA,
+     *                       SHA1withRSA,SHA224withRSA,SHA256withRSA,SHA384withRSA,SHA512withRSA
+     *                       SHA1withDSA(此处生成的 KeyPair 要为 1024 位，否则报错),SHA224withDSA,SHA256withDSA
+     *                       NONEwithECDSA
+     *                       SHA1withECDSA,SHA224withECDSA,SHA256withECDSA,SHA384withECDSA,SHA512withECDSA
+     * @return base64 编码签名值
+     * @throws Exception 异常
+     */
+    public static String generateSignature(String content, String private_base64, String algorithm) throws Exception {
+        Signature signature = Signature.getInstance(algorithm);
+        signature.initSign(generatePrivateKey(private_base64, algorithm.endsWith("ECDSA") ? "EC" : algorithm.endsWith("DSA") ? "DSA" : " RSA"));
+        signature.update(content.getBytes(StandardCharsets.UTF_8));
+        byte[] md5WithRSA = signature.sign();
+        return Base64.getEncoder().encodeToString(md5WithRSA);
+    }
+
+    /**
+     * 为文件生成数字签名(文件太大可能有问题)
+     *
+     * @param file           需要签名的文件
+     * @param private_base64 经过 base64 编码的私钥
+     * @param algorithm      算法，常用的有：
+     *                       MD2withRSA,MD5withRSA,
+     *                       NONEwithRSA,
+     *                       SHA1withRSA,SHA224withRSA,SHA256withRSA,SHA384withRSA,SHA512withRSA
+     *                       SHA1withDSA(此处生成的 KeyPair 要为 1024 位，否则报错),SHA224withDSA,SHA256withDSA
+     * @return base64 编码签名值
+     * @throws Exception 异常
+     */
+    public static String generateSignature(File file, String private_base64, String algorithm) throws Exception {
+        byte[] bytes = new byte[(int) file.length()];
+
+        FileInputStream fix = new FileInputStream(file);
+        fix.read(bytes);
+        fix.close();
+
+        return generateSignature(Base64.getEncoder().encodeToString(bytes), private_base64, algorithm);
+    }
+
+    /**
+     * 校验数字签名
+     *
+     * @param content       原文
+     * @param sign          签名值
+     * @param public_base64 经过 base64 编码的密钥
+     * @param algorithm     算法，常用的有：
+     *                      MD2withRSA,MD5withRSA,
+     *                      NONEwithRSA,
+     *                      SHA1withRSA,SHA224withRSA,SHA256withRSA,SHA384withRSA,SHA512withRSA
+     *                      SHA1withDSA(此处生成的 KeyPair 要为 1024 位，否则报错),SHA224withDSA,SHA256withDSA
+     *                      NONEwithECDSA
+     *                      SHA1withECDSA,SHA224withECDSA,SHA256withECDSA,SHA384withECDSA,SHA512withECDSA
+     * @return 是否符合
+     * @throws Exception 异常
+     */
+    public static boolean verifySignature(String content, String sign, String public_base64, String algorithm) throws Exception {
+        Signature signature = Signature.getInstance(algorithm);
+
+        signature.initVerify(generatePublicKey(public_base64, algorithm.endsWith("ECDSA") ? "EC" : algorithm.endsWith("DSA") ? "DSA" : " RSA"));
+        signature.update(content.getBytes(StandardCharsets.UTF_8));
+        return signature.verify(Base64.getDecoder().decode(sign));
+    }
+
+    /**
+     * 生成 2048 位的 RSA 密钥对
+     *
+     * @return KeyPair
+     * @throws Exception 异常
+     */
+    public static KeyPair generateRSAKeyPair() throws Exception {
+        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
+        generator.initialize(2048);
+        return generator.generateKeyPair();
+    }
+
+    /**
+     * 生成 DSA 密钥对
+     *
+     * @param bit 1024/2048， 如果是 SHA1withDSA 使用，那么应该生成 1024 位
+     * @return KeyPair
+     * @throws Exception 异常
+     */
+    public static KeyPair generateDSAKeyPair(int bit) throws Exception {
+        if (bit != 2048) {
+            bit = 1024;
+        }
+        KeyPairGenerator generator = KeyPairGenerator.getInstance("DSA");
+        generator.initialize(bit);
+        return generator.generateKeyPair();
+    }
+
+    /**
+     * 生成 DSA 密钥对
+     *
+     * @return KeyPair
+     * @throws Exception 异常
+     */
+    public static KeyPair generateECKeyPair() throws Exception {
+        ECKeyPairGenerator generator = new ECKeyPairGenerator();
+        return generator.generateKeyPair();
+    }
+
+    /**
+     * 加载一个 KeyStore
+     *
+     * @param path      路径, 用 keytool 生成的一般保存为: .keystore, .jce, .jks, .ks, .pfx, .p12
+     * @param storeType 类型：JKS, JCEKS, DKS, PKCS11, PKCS12
+     * @param storePass keystore 密码
+     * @return KeyStore
+     * @throws Exception 异常
+     */
+    public static KeyStore loadKeyStore(String path, String storeType, String storePass) throws Exception {
+        KeyStore keyStore = KeyStore.getInstance(storeType);
+        FileInputStream fis = new FileInputStream(path);
+        keyStore.load(fis, storePass.toCharArray());
+        fis.close();
+
+        return keyStore;
+    }
+
+    /**
+     * 从 KeyStore 加载指定别名项的私钥
+     *
+     * @param keyStore KeyStore
+     * @param alias    别名
+     * @param keyPass  密码
+     * @return 私钥
+     * @throws Exception 异常
+     */
+    public static PrivateKey getPrivateKeyByAlias(KeyStore keyStore, String alias, String keyPass) throws Exception {
+        if (!keyStore.containsAlias(alias)) {
+            return null;
+        }
+        return keyStore.isKeyEntry(alias) ? (PrivateKey) keyStore.getKey(alias, keyPass.toCharArray()) : null;
+    }
+
+    /**
+     * 从 KeyStore 获取指定别名项的证书
+     *
+     * @param keyStore KeyStore
+     * @param alias    别名
+     * @return 证书
+     * @throws Exception 异常
+     */
+    public static Certificate getCertificateByAlias(KeyStore keyStore, String alias) throws Exception {
+        if (!keyStore.containsAlias(alias)) {
+            return null;
+        }
+        return keyStore.isKeyEntry(alias) ? keyStore.getCertificate(alias) : null;
+    }
+
+    /**
+     * 从 KeyStore 获取指定别名项的公钥
+     *
+     * @param keyStore KeyStore
+     * @param alias    别名
+     * @return 公钥
+     * @throws Exception 异常
+     */
+    public static PublicKey getPublicKeyByAlias(KeyStore keyStore, String alias) throws Exception {
+        return keyStore.isKeyEntry(alias) ? keyStore.getCertificate(alias).getPublicKey() : null;
+    }
+
+	/**
+     * 从文件读取证书
+     *
+     * @param path 证书文件路径， openssl 的 crt 文件
+     * @return Certificate
+     * @throws Exception 异常
+     */
+    public static Certificate getCertificate(String path) throws Exception {
+        BufferedInputStream bis = new BufferedInputStream(new FileInputStream(path));
+
+        CertificateFactory cf = CertificateFactory.getInstance("X.509");
+
+        Certificate cert = null;
+        while (bis.available() > 0) {
+            cert = cf.generateCertificate(bis);
+        }
+        bis.close();
+        return cert;
+    }
+
+    /**
+     * 保存 KeyPair
+     *
+     * @param keyPair     需要保存的 KeyPair
+     * @param publicPath  公钥保存路径
+     * @param privatePath 私钥保存路径
+     */
+    public static void saveKeyPair(KeyPair keyPair, String publicPath, String privatePath) throws IOException {
+        String pblc = Base64.getEncoder().encodeToString(keyPair.getPublic().getEncoded());
+        writeText(publicPath, pblc);
+
+        String prvt = Base64.getEncoder().encodeToString(keyPair.getPrivate().getEncoded());
+        writeText(privatePath, prvt);
+    }
+
+    /**
+     * 读取 openssl 生成的 .pem 文件
+     *
+     * @param path 路径
+     * @return 去掉首尾行的内容
+     * @throws IOException 路径异常
+     */
+    public static String readPem(String path) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(path));
+        br.readLine();
+        StringBuilder str = new StringBuilder();
+        String s = br.readLine();
+        while (s.charAt(0) != '-') {
+            str.append(s);
+            s = br.readLine();
+        }
+        return str.toString();
+    }
+
+    /**
+     * 读取二进制文件
+     *
+     * @param path 路径
+     * @return 转为 base64 的 String
+     * @throws IOException 路径异常
+     */
+    public static String readByte(String path) throws IOException {
+        File file = new File(path);
+
+        byte[] bytes = new byte[(int) file.length()];
+        FileInputStream fis = new FileInputStream(file);
+        fis.read(bytes);
+
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
+    /**
+     * byte[]数组转换为16进制的字符串
+     *
+     * @param data 要转换的字节数组
+     * @return 转换后的结果
+     */
+    public static String byteArrayToHexString(byte[] data) {
+        StringBuilder sb = new StringBuilder(data.length * 2);
+        for (byte b : data) {
+            int v = b & 0xff;
+            if (v < 16) {
+                sb.append('0');
+            }
+            sb.append(Integer.toHexString(v));
+        }
+        return sb.toString().toUpperCase(Locale.getDefault());
+    }
+
+    /**
+     * 16进制表示的字符串转换为字节数组
+     *
+     * @param s 16进制表示的字符串
+     * @return byte[] 字节数组
+     */
+    public static byte[] hexStringToByteArray(String s) {
+        int len = s.length();
+        byte[] d = new byte[len / 2];
+        for (int i = 0; i < len; i += 2) {
+            // 两位一组，表示一个字节,把这样表示的16进制字符串，还原成一个进制字节
+            d[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character
+                    .digit(s.charAt(i + 1), 16));
+        }
+        return d;
+    }
+
+    /**
+     * 读取文本文件
+     *
+     * @param path 路径
+     * @return 内容
+     * @throws IOException 异常
+     */
+    public static String readText(String path) throws IOException {
+        StringBuilder builder = new StringBuilder();
+
+        BufferedReader reader = new BufferedReader(new FileReader(path));
+        String tmp;
+        while ((tmp = reader.readLine()) != null) {
+            builder.append(tmp);
+        }
+        reader.close();
+
+        return builder.toString();
+    }
+
+    /**
+     * 写文本文件
+     *
+     * @param path    路径
+     * @param content 内容
+     * @throws IOException 异常
+     */
+    public static void writeText(String path, String content) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(path));
+        writer.write(content);
+        writer.flush();
+        writer.close();
+    }
+}
+</pre>
+                        </div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-openssl"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">OpenSSL</h3>
+					</div>
+					<div class="panel-body">
+						<p><b>OpenSSL</b>是一个开放源代码的软件库包(<a href="https://github.com/openssl/openssl.git" target="_blank">源码</a>)，应用程序可以使用这个包来进行安全通信，避免窃听，同时确认另一端连接者的身份。</p>
+						<p><b>OpenSSL</b> 是一个开源程序的套件、由三个部分组成：</p>
+						<ol type="I">
+							<li><p><code>libcrypto</code> -- 提供 SSL/TLS 所需的常规加密和 X.509 支持；</p></li>
+							<li><p><code>libssl</code> -- 为 SSLv3 和 TLS 提供客户端和服务器端实现；</p></li>
+							<li><p><code>openssl</code> -- 是个多功能命令行工具，可以:</p>
+								<ul>
+									<li><p>创建 Key 参数；</p></li>
+									<li><p>创建 X.509 证书、CSR 和 CRL；</p></li>
+									<li><p>消息摘要的计算；</p></li>
+									<li><p>加密和解密；</p></li>
+									<li><p>SSL/TLS 客户端和服务器测试；</p></li>
+									<li><p>处理 S/MIME 签名或加密邮件。</p></li>
+								</ul>
+							</li>
+						</ol>
+						<p><b>OpenSSL 命令</b> 分为三大类：<b>标准命令</b>， <b>消息摘要命令</b> 和 <b>编码和加密命令</b></p>
+						<pre class="brush: bash;">
+## 1.标准命令
+	asn1parse Parse an ASN.1 sequence.
+	ca        Certificate Authority (CA) Management.
+	ciphers   Cipher Suite Description Determination.
+	cms       CMS (Cryptographic Message Syntax) utility
+	crl       Certificate Revocation List (CRL) Management.
+	crl2pkcs7 CRL to PKCS#7 Conversion.
+	dgst      Message Digest Calculation.
+	dh        Diffie-Hellman Parameter Management.  Obsoleted by dhparam.
+	dhparam   Generation and Management of Diffie-Hellman Parameters. Superseded by genpkey and pkeyparam
+	dsa       DSA Data Management.
+	dsaparam  DSA Parameter Generation and Management. Superseded by genpkey and pkeyparam
+	ec        EC (Elliptic curve) key processing
+	ecparam   EC parameter manipulation and generation
+	enc       Encoding with Ciphers.
+	engine    Engine (loadble module) information and manipulation.
+	errstr    Error Number to Error String Conversion.
+	gendh     Generation of Diffie-Hellman Parameters.  Obsoleted by dhparam.
+	gendsa    Generation of DSA Private Key from Parameters. Superseded by genpkey and pkey
+	genpkey   Generation of Private Key or Parameters.
+	genrsa    Generation of RSA Private Key. Superceded by genpkey.
+	nseq      Create or examine a netscape certificate sequence
+	ocsp      Online Certificate Status Protocol utility.
+	passwd    Generation of hashed passwords.
+	pkcs12    PKCS#12 Data Management.
+	pkcs7     PKCS#7 Data Management.
+	pkey      Public and private key management.
+	pkeyparam Public key algorithm parameter management.
+	pkeyutl   Public key algorithm cryptographic operation utility.
+	rand      Generate pseudo-random bytes.
+	req       PKCS#10 X.509 Certificate Signing Request (CSR) Management.
+	rsa       RSA key management.
+	rsautl    RSA utility for signing, verification, encryption, and decryption. Superseded by pkeyutl
+	s_client  This implements a generic SSL/TLS client which can establish a transparent
+			 connection to a remote server speaking SSL/TLS. It's intended for testing
+			 purposes only and provides only rudimentary interface functionality but
+			 internally uses mostly all functionality of the OpenSSL ssl library.
+	s_server  This implements a generic SSL/TLS server which accepts connections from remote
+			 clients speaking SSL/TLS. It's intended for testing purposes only and provides
+			 only rudimentary interface functionality but internally uses mostly all
+			 functionality of the OpenSSL ssl library.  It provides both an own command line
+			 oriented protocol for testing SSL functions and a simple HTTP response facility
+			 to emulate an SSL/TLS-aware webserver.
+	s_time    SSL Connection Timer.
+	sess_id   SSL Session Data Management.
+	smime     S/MIME mail processing.
+	speed     Algorithm Speed Measurement.
+	spkac     SPKAC printing and generating utility
+	ts        Time Stamping Authority tool (client/server)
+	verify    X.509 Certificate Verification.
+	version   OpenSSL Version Information.
+	x509      X.509 Certificate Data Management.
+
+## 2.消息摘要命令
+       md2       MD2 Digest
+       md5       MD5 Digest
+       mdc2      MDC2 Digest
+       rmd160    RMD-160 Digest
+       sha       SHA Digest
+       sha1      SHA-1 Digest
+       sha224    SHA-224 Digest
+       sha256    SHA-256 Digest
+       sha384    SHA-384 Digest
+       sha512    SHA-512 Digest
+
+## 3.编码和加密命令
+       base64    Base64 Encoding
+       bf bf-cbc bf-cfb bf-ecb bf-ofb
+                 Blowfish Cipher
+       cast cast-cbc
+                 CAST Cipher
+       cast5-cbc cast5-cfb cast5-ecb cast5-ofb
+                 CAST5 Cipher
+       des des-cbc des-cfb des-ecb des-ede des-ede-cbc des-ede-cfb des-ede-ofb des-ofb
+                 DES Cipher
+       des3 desx des-ede3 des-ede3-cbc des-ede3-cfb des-ede3-ofb
+                 Triple-DES Cipher
+       idea idea-cbc idea-cfb idea-ecb idea-ofb
+                 IDEA Cipher
+       rc2 rc2-cbc rc2-cfb rc2-ecb rc2-ofb
+                 RC2 Cipher
+       rc4       RC4 Cipher
+       rc5 rc5-cbc rc5-cfb rc5-ecb rc5-ofb
+                 RC5 Cipher
+</pre>
+
+						<p><b>OpenSSL 实例</b></p>
+						<pre class="brush: bash;">
+## 1.生成 RSA 私钥
+$ openssl genrsa -out rsa_private_key.pem        ## 默认为 2048 位
+## 2.通过私钥生成公钥
+$ openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key.pem
+## 3.对私钥进行 PKCS8 编码
+$ openssl pkcs8 -topk8 -in rsa_private_key.pem -out rsa_private_key.key -nocrypt
+## 4.将私钥转为 DER 格式
+$ openssl rsa -in rsa_private_key.pem -outform der -out rsa_private_key.der
+
+## 5.生成加密的私钥
+$ openssl genrsa -aes256 -passout pass:123456 -out aes_rsa_private_key.pem
+## 6.通过加密私钥生成公钥
+$ openssl rsa -in aes_rsa_private_key.pem -passin pass:123456 -pubout  -out aes_rsa_public_key.pem
+
+## 7.通过私钥生成签名证书
+$ openssl req -new -x509 -days 365 -key rsa_private_key.pem -out cert.crt
+$ openssl x509 -in cert.crt -noout -text    ## 查看证书信息
+## 8.同时生成私钥和签名证书
+$ openssl req -newkey rsa:2048 -nodes -keyout rsa_private_key.pem -x509 -days 365 -out cert.crt
+
+## 9.通过私钥生成 CA 签名
+$ openssl req -new -key rsa_private_key.pem -passin pass:123456 -out server.csr
+$ openssl req -noout -text -in server.csr   ## 查看 CSR 信息
+
+## 10.通过 pem 证书和私钥生成 PKCS#12 证书
+$ openssl pkcs12 -export -password pass:123456 -in cert.crt -inkey rsa_private_key.pem -out server.p12
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
 				
 				<!-- item start -->
 				<a class="offset" id="java-jni"></a>
@@ -2476,6 +4801,10 @@ public class HeapOOM {
 		<a target="_blank" href="./docs/docs-java/api/index.html"
 		   type="button" class="btn btn-default dropdown-toggle btn-primary"
 		   data-toggle="dropup"> DOCS-8 </a>
+		<a target="_blank" href="./docs/jdk-8-zh-google/index.html"
+                   type="button" class="btn btn-default dropdown-toggle btn-primary"
+                   data-toggle="dropup"> DOCS-8-ZH </a>
+
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

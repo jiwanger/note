@@ -103,8 +103,7 @@
                     <a class="list-group-item active dropdown" data-toggle="collapse"
                        data-parent="#accordion" href="#android-app" aria-expanded="true"
                        style="border-top: 1px solid #DDDDDD;">
-                        <code>android.app</code><span class="caret pull-right"
-                                                      style="margin-top: 5px;"></span>
+                        <code>android.app</code><span class="caret pull-right" style="margin-top: 5px;"></span>
                     </a>
                     <div id="android-app" class="panel-collapse collapse"
                          role="tabpanel">
@@ -112,12 +111,13 @@
                         <a href="#android-app-Activity" class="list-group-item">Activity</a>
                         <a href="#" class="list-group-item">...</a>
                         <a href="#" class="list-group-item">...</a>
+                        <a href="#android-app-Notification" class="list-group-item">Notification</a>
+                        <a href="#android-app-NotificationManager" class="list-group-item">NotificationManager</a>
                     </div>
                     <a class="list-group-item active dropdown" data-toggle="collapse"
                        data-parent="#accordion" href="#android-view" aria-expanded="true"
                        style="border-top: 1px solid #DDDDDD;">
-                        <code>android.view</code><span class="caret pull-right"
-                                                       style="margin-top: 5px;"></span>
+                        <code>android.view</code><span class="caret pull-right" style="margin-top: 5px;"></span>
                     </a>
                     <div id="android-view" class="panel-collapse collapse"
                          role="tabpanel">
@@ -131,23 +131,23 @@
                         <a href="#android-view-ActionMode" class="list-group-item">ActionMode</a>
                         <a href="#android-view-Menu" class="list-group-item">Menu 及相关类</a>
                     </div>
-                    <a class="list-group-item active dropdown" data-toggle="collapse"
+                    <a class="list-group-item active dropup" data-toggle="collapse"
                        data-parent="#accordion" href="#android-os" aria-expanded="true"
                        style="border-top: 1px solid #DDDDDD;">
-                        <code>android.os</code><span class="caret pull-right"
-                                                     style="margin-top: 5px;"></span>
+                        <code>android.os</code><span class="caret pull-right" style="margin-top: 5px;"></span>
                     </a>
-                    <div id="android-os" class="panel-collapse collapse"
+                    <div id="android-os" class="panel-collapse collapse in"
                          role="tabpanel">
                         <a href="#android-os-AsyncTask" class="list-group-item">AsyncTask</a>
                         <a href="#android-os-Handler" class="list-group-item">Handler 及相关类</a>
+                        <a href="#android-os-Parcel" class="list-group-item">Parcel & Parcelable</a>
+                        <a href="#" class="list-group-item">...</a>
                         <a href="#" class="list-group-item">...</a>
                     </div>
                     <a class="list-group-item active dropdown" data-toggle="collapse"
                        data-parent="#accordion" href="#android-media" aria-expanded="true"
                        style="border-top: 1px solid #DDDDDD;">
-                        <code>android.media</code><span class="caret pull-right"
-                                                             style="margin-top: 5px;"></span>
+                        <code>android.media</code><span class="caret pull-right" style="margin-top: 5px;"></span>
                     </a>
                     <div id="android-media" class="panel-collapse collapse"
                          role="tabpanel">
@@ -160,8 +160,7 @@
                     <a class="list-group-item active dropdown" data-toggle="collapse"
                        data-parent="#accordion" href="#android-net" aria-expanded="true"
                        style="border-top: 1px solid #DDDDDD;">
-                        <code>android.net</code><span class="caret pull-right"
-                                                      style="margin-top: 5px;"></span>
+                        <code>android.net</code><span class="caret pull-right" style="margin-top: 5px;"></span>
                     </a>
                     <div id="android-net" class="panel-collapse collapse"
                          role="tabpanel">
@@ -176,13 +175,12 @@
                     </div>
 
 
-                    <a class="list-group-item active dropup" data-toggle="collapse"
+                    <a class="list-group-item active dropdown" data-toggle="collapse"
                        data-parent="#accordion" href="#androidx-base" aria-expanded="true"
                        style="border-top: 1px solid #DDDDDD;">
-                        <code>androidx && support</code><span class="caret pull-right"
-                                                             style="margin-top: 5px;"></span>
+                        <code>androidx && support</code><span class="caret pull-right" style="margin-top: 5px;"></span>
                     </a>
-                    <div id="androidx-base" class="panel-collapse collapse in"
+                    <div id="androidx-base" class="panel-collapse collapse"
                          role="tabpanel">
                         <a href="#android-support" class="list-group-item"><code>Android Support Library</code></a>
                         <a href="#androidx" class="list-group-item"><code>androidx</code> 简介</a>
@@ -491,7 +489,7 @@
                                 <code>RequiresApi</code>, <code>RequiresPermission</code>, <code>Size</code>,
                                 <code>Px</code> ...</p></li>
                             <li><p><a
-                                    href="docs/reference/android/support/percent/package-summary.html">android.support.percent</a>
+                                    href="docs/reference/android/support/percent/package-summary.html">android.support.percent(过时，使用 ConstraintLayout 替代)</a>
                                 -- 提供了百分比布局支持。包括的类和接口： <code>PercentFrameLayout.LayoutParams</code>,
                                 <code>PercentFrameLayout</code>, <code>PercentRelativeLayout</code>,
                                 <code>PercentLayoutHelper</code>, <code>PercentFrameLayout.LayoutParams</code>,
@@ -3814,6 +3812,180 @@ protected void attachBaseContext(Context newBase) {
             <!-- item over -->
 
             <!-- item start -->
+            <a class="offset" id="android-app-Notification"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Notification</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="sub-item">
+                        <pre class="brush: java;">
+public class Notification/NotificationCompat implements Parcelable {
+    /** 构建器，一般使用 NotificationCompat.Builder 类构建 */
+    public static class Builder {...}
+    /**  */
+    public static class Action implements Parcelable {...}
+
+    /** Notification 支持的样式 */
+    public static abstract class Style {...}
+    public static class BigPictureStyle extends Style {...}
+    public static class BigTextStyle extends Style {...}
+    public static class MessagingStyle extends Style {...}
+    public static class InboxStyle extends Style {...}
+    public static class MediaStyle extends Style {...}
+    public static class DecoratedCustomViewStyle extends Style {...}
+    public static class DecoratedMediaCustomViewStyle extends MediaStyle {...}
+
+    public interface Extender {...}
+    public static final class CarExtender implements Extender {...}
+    public static final class WearableExtender implements Extender {...}
+
+    /** 公有构造方法，一般使用 NotificationCompat.Builder 类构建 */
+    public Notification() {...}
+    public Notification(Parcel parcel) {...}
+    public Notification(int icon, CharSequence tickerText, long when) {...}
+}
+</pre>
+                        <p>Notifications 的官方指南：<a href="docs/guide/topics/ui/notifiers/notifications.html" target="_blank">Notifications</a></p>
+                        <p>通知是可以在应用程序的正常用户界面之外向用户显示的消息。当您告诉系统发出通知时，它首先显示为通知区域中的图标。要查看通知的详细信息，用户将打开通知抽屉。通知区域和通知抽屉都是用户可以随时查看的系统控制区域。</p>
+                        <p>一个常规的 <a href="docs/reference/android/app/Notification.html" target="_blank">Notification</a> 包含： 小图标，应用名称，时间，标题，内容，大图标。其中小图标必须设置。</p>
+                        <p><img src="images/android-Notification-01.png" class="img-responsive center-block"></p>
+                        <pre class="brush: java;">
+/** API 26 以后必须设置渠道 id, 可以根据此 id 删除通知, notificationManager.deleteNotificationChannel(id) */
+Notification notification = new NotificationCompat.Builder(this, channelId)
+    .setSmallIcon(R.drawable.ic_android_black_24dp) // 小图标，必须设置，否则报错
+    .setContentTitle("Title")                       // 标题
+    .setContentText("This is my Notification!")     // 内容
+    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.icon_256x256)) // 大图标
+    .build();
+
+NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // android 8.0 以后要使用 NotificationChannel
+    // 第三个参数表示通知的重要程度，默认则只在通知栏闪烁一下
+    NotificationChannel channel = new NotificationChannel(channelId, // 同前面的 channelId
+                            "jiwanger",
+                            NotificationManager.IMPORTANCE_DEFAULT);
+    // 注册通道，注册后除非卸载再安装否则不改变
+    manager.createNotificationChannel(channel);
+}
+
+manager.notify(1, notification); // 设置通知 ID 以便移除
+</pre>
+                        <p><a href="docs/reference/android/support/v4/app/NotificationCompat.html" target="_blank">NotificationCompat</a> / <a href="docs/reference/android/app/Notification.html" target="_blank">Notification</a> 内部类</p>
+                        <ul>
+                            <li><p><a href="docs/reference/android/support/v4/app/NotificationCompat.Builder.html" target="_blank">NotificationCompat.Builder/Notification.Builder</a> -- 构建 Notification 实例</p>
+                                <pre class="brush: java;">
+public class NotificationCompat/Notification implements Parcelable {
+    public static class Builder {
+        // Notification.Builder 在 26 以下不支持 channelId 参数，因此要使用 NotificationCompat.Builder
+        public Builder(Context context, String channelId) {}
+    }
+}
+                                </pre>
+                                <ol>
+                                    <li><p><code>NotificationCompat.Builder 	setSmallIcon(int icon)</code> -- 设置小图标</p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setSmallIcon(int icon, int level)</code> -- 设置小图标和小图标等级</p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setLargeIcon(Bitmap icon)</code> -- 设置大图标</p></li>
+
+                                    <li class="group"><p><code>NotificationCompat.Builder 	setContentTitle(CharSequence title)</code> -- 标题</p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setContentText(CharSequence text)</code> -- 内容</p></li>
+
+                                    <li class="group"><p><code>NotificationCompat.Builder 	setContentIntent(PendingIntent intent)</code> -- 点击交互时的 Intent</p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setDeleteIntent(PendingIntent intent)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setFullScreenIntent(PendingIntent intent, boolean highPriority)</code> -- </p></li>
+
+                                    <li class="group"><p><code>NotificationCompat.Builder 	setShowWhen(boolean show)</code> -- 是否显示时间，默认为 true</p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setWhen(long when)</code> -- 设置时间戳(默认当前毫秒数)</p></li>
+
+                                    <li class="group"><p><code>NotificationCompat.Builder 	setChannelId(String channelId)</code> -- 设置 ChannelId</p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setColor(int argb)</code> -- 设置小图标和应用名称的颜色</p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setAutoCancel(boolean autoCancel)</code> -- 触摸时自动取消(设置了 PendingIntent 才行)</p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setColorized(boolean colorize)</code> -- 设置此通知是否应着色(只应用于高优先级的正在进行的任务)</p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setOngoing(boolean ongoing)</code> -- 是否为正在进行的通知(用户无法取消)</p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setOnlyAlertOnce(boolean onlyAlertOnce)</code> -- </p></li>
+
+                                    <li><p><code>NotificationCompat.Builder 	addAction(NotificationCompat.Action action)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	addAction(int icon, CharSequence title, PendingIntent intent)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	addInvisibleAction(NotificationCompat.Action action)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	addInvisibleAction(int icon, CharSequence title, PendingIntent intent)</code> -- </p></li>
+
+                                    <li class="group"><p><code>NotificationCompat.Builder 	setExtras(Bundle extras)</code> -- 设置附加参数</p></li>
+                                    <li><p><code>NotificationCompat.Builder 	addExtras(Bundle extras)</code> -- 添加附加参数</p></li>
+                                    <li><p><code>Bundle 	getExtras()</code> -- 获取附加参数</p></li>
+
+                                    <li><p><code>NotificationCompat.Builder 	addPerson(String uri)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	extend(NotificationCompat.Extender extender)</code> -- </p></li>
+
+                                    <li><p><code>NotificationCompat.Builder 	setBadgeIconType(int icon)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setCategory(String category)</code> -- </p></li>
+
+                                    <li><p><code>NotificationCompat.Builder 	setContent(RemoteViews views)</code> -- 自定义视图</p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setContentInfo(CharSequence info)</code> -- 自定义视图用到</p></li>
+
+                                    <li><p><code>NotificationCompat.Builder 	setCustomBigContentView(RemoteViews contentView)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setCustomContentView(RemoteViews contentView)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setCustomHeadsUpContentView(RemoteViews contentView)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setDefaults(int defaults)</code> -- </p></li>
+
+                                    <li><p><code>NotificationCompat.Builder 	setGroup(String groupKey)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setGroupAlertBehavior(int groupAlertBehavior)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setGroupSummary(boolean isGroupSummary)</code> -- </p></li>
+
+                                    <li><p><code>NotificationCompat.Builder 	setLights(int argb, int onMs, int offMs)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setLocalOnly(boolean b)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setNumber(int number)</code> -- </p></li>
+
+                                    <li><p><code>NotificationCompat.Builder 	setPriority(int pri)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setProgress(int max, int progress, boolean indeterminate)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setPublicVersion(Notification n)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setRemoteInputHistory(CharSequence[] text)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setShortcutId(String shortcutId)</code> -- </p></li>
+
+                                    <li><p><code>NotificationCompat.Builder 	setSortKey(String sortKey)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setSound(Uri sound)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setSound(Uri sound, int streamType)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setStyle(NotificationCompat.Style style)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setSubText(CharSequence text)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setTicker(CharSequence tickerText, RemoteViews views)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setTicker(CharSequence tickerText)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setTimeoutAfter(long durationMs)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setUsesChronometer(boolean b)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setVibrate(long[] pattern)</code> -- </p></li>
+                                    <li><p><code>NotificationCompat.Builder 	setVisibility(int visibility)</code> -- </p></li>
+
+                                    <li class="group"><p><code>Notification 	build()</code> -- 构建 Notification 实例</p></li>
+
+                                </ol>
+                            </li>
+                        </ul>
+                    </div>
+
+
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="android-app-NotificationManager"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">NotificationManager</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="sub-item">
+                        <pre class="brush: java;">
+
+</pre>
+                    </div>
+
+                    <div class="sub-item">
+
+                    </div>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
             <a class="offset" id="android-view-Window"></a>
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -4304,6 +4476,24 @@ new Thread(new Runnable() {
     }
 }).start();
                         </pre>
+                    </div>
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="android-os-Parcel"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Parcel & Parcelable</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="item">
+                        <p><a href="docs/reference/android/os/Parcel.html" target="_blank">Parcel</a> 提供了一套机制，可以将序列化之后的数据写入一个共享内存中，其他进程通过Parcel可以从这块共享内存读出字节流，并反序列化成对象</p>
+                    </div>
+
+                    <div class="item">
+
                     </div>
                 </div>
             </div>
@@ -6337,7 +6527,7 @@ defaultConfig {
                                 <pre class="brush: java;">com.android.support:customtabs:28.0.0</pre>
                             </div>
                             <div class="split-item">
-                                <h4>百分比支持库</h4>
+                                <h4>百分比支持库(过时，使用 ConstraintLayout 替代)</h4>
                                 <p>提供的 API 支持向应用中添加基于百分比的尺寸并对其进行管理。 </p>
                                 <pre class="brush: java;">com.android.support:percent:28.0.0</pre>
                             </div>
@@ -6660,6 +6850,9 @@ implementation 'androidx.recyclerview:recyclerview:1.0.0'
        data-toggle="dropup">
         TOP
     </a>
+    <a href="/reference/" type="button"
+       class="btn btn-default dropdown-toggle btn-primary" target="_blank"
+       data-toggle="dropup"> REF </a>
     <a href="docs/reference/index.html" type="button"
        class="btn btn-default dropdown-toggle btn-primary" target="_blank"
        data-toggle="dropup"> DOCS </a>

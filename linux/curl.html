@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="keywords" content="key1, key2" />
+<meta name="description" content=””>
+<meta name="author" content="nate">
+<meta name="author" content="nate &lt;jiwanger@126.com&gt;">
+<link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
+<link href="images/favicon.ico" rel="icon" type="image/x-icon" />
+<link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+<title>NATE--笔记--CURL</title>
+<!-- Bootstrap -->
+<link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
+	rel="stylesheet">
+<!-- 
+<link href="../support/bootstrap/css/bootstrap.css" rel="stylesheet">
+-->
+<link type="text/css" rel="stylesheet"
+	href="../support/syntaxhighlighter/styles/shCoreDefault.css" />
+<link href="../commons/css/common.css" rel="stylesheet">
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+      <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+	<!-- nav start -->
+	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle"
+					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="../index.html">
+					<img src="../commons/images/icon.png">
+				</a>
+			</div>
+
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul id="my-nav" class="nav navbar-nav">
+
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- nav end -->
+
+
+	<div class="container">
+		<div class="row">
+			<!-- left-menu start -->
+			<div class="col-md-3">
+				<div class="panel panel-default" id="left_menu_modify">
+					<div class="panel-heading">
+						<h3 class="panel-title">CURL</h3>
+					</div>
+					<div class="list-group">
+						<a href="#" class="list-group-item">简介</a>
+						<a href="#curl-arg" class="list-group-item">参数</a>
+						<a href="#curl-base" class="list-group-item">基础</a>
+					</div>
+				</div>
+			</div>
+			<!-- left-menu over -->
+		</div>
+	</div>
+
+
+	<div class="container" style="margin-top: 70px;">
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-9" style="float: left;">
+				<!-- item start -->
+				<a class="offset" id="curl-intro"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">简介</h3>
+					</div>
+					<div class="panel-body">
+						<p><b>cURL</b> 官方地址: <a href="https://curl.haxx.se/" target="_blank">主页</a>, <a href="https://curl.haxx.se/docs/manual.html" target="_blank">手册</a>,</p>
+						<p><b>cURL</b> 是一个利用 URL 语法在命令行下工作的文件传输工具，1997 年首次发行。它支持文件上传和下载，所以是综合传输工具，但按传统，习惯称 cURL 为下载工具。cURL 还包含了用于程序开发的 <b>libcurl</b>。</p>
+						<p><b>cURL</b> 支持的通信协议有 FTP、FTPS、HTTP、HTTPS、TFTP、SFTP、Gopher、SCP、Telnet、DICT、FILE、LDAP、LDAPS、IMAP、POP3、SMTP 和 RTSP。</p>
+						<p><b>cURL</b> 还支持 SSL 认证、HTTP POST、HTTP PUT、FTP 上传, HTTP form based upload、proxies、HTTP/2、cookies、用户名 + 密码认证(Basic, Plain, Digest, CRAM-MD5, NTLM, Negotiate and Kerberos)、file transfer resume、proxy tunneling。</p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="curl-arg"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">参数</h3>
+					</div>
+					<div class="panel-body">
+						<p><b>cURL</b> 参数:</p>
+						<pre class="brush: bash;">
+$ curl -h
+Usage: curl [options...] &lt;url>
+Options: (H) means HTTP/HTTPS only, (F) means FTP only
+     --anyauth       Pick "any" authentication method (H)
+ -a, --append        Append to target file when uploading (F/SFTP)
+     --basic         Use HTTP Basic Authentication (H)
+     --cacert FILE   CA certificate to verify peer against (SSL)
+     --capath DIR    CA directory to verify peer against (SSL)
+ -E, --cert CERT[:PASSWD]  Client certificate file and password (SSL)
+     --cert-status   Verify the status of the server certificate (SSL)
+     --cert-type TYPE  Certificate file type (DER/PEM/ENG) (SSL)
+     --ciphers LIST  SSL ciphers to use (SSL)
+     --compressed    Request compressed response (using deflate or gzip)
+ -K, --config FILE   Read config from FILE
+     --connect-timeout SECONDS  Maximum time allowed for connection
+ -C, --continue-at OFFSET  Resumed transfer OFFSET
+ -b, --cookie STRING/FILE  Read cookies from STRING/FILE (H)
+ -c, --cookie-jar FILE  Write cookies to FILE after operation (H)
+     --create-dirs   Create necessary local directory hierarchy
+     --crlf          Convert LF to CRLF in upload
+     --crlfile FILE  Get a CRL list in PEM format from the given file
+
+     --delegation STRING  GSS-API delegation permission
+     --digest        Use HTTP Digest Authentication (H)
+     --disable-eprt  Inhibit using EPRT or LPRT (F)
+     --disable-epsv  Inhibit using EPSV (F)
+     --dns-servers   DNS server addrs to use: 1.1.1.1;2.2.2.2
+     --dns-interface  Interface to use for DNS requests
+     --dns-ipv4-addr  IPv4 address to use for DNS requests, dot notation
+     --dns-ipv6-addr  IPv6 address to use for DNS requests, dot notation
+ -D, --dump-header FILE  Write the headers to FILE
+     --egd-file FILE  EGD socket path for random data (SSL)
+     --engine ENGINE  Crypto engine (use "--engine list" for list) (SSL)
+     --expect100-timeout SECONDS How long to wait for 100-continue (H)
+ -f, --fail          Fail silently (no output at all) on HTTP errors (H)
+     --false-start   Enable TLS False Start.
+
+     --form-string STRING  Specify HTTP multipart POST data (H)
+     --ftp-account DATA  Account data string (F)
+     --ftp-alternative-to-user COMMAND  String to replace "USER [name]" (F)
+     --ftp-create-dirs  Create the remote dirs if not present (F)
+     --ftp-method [MULTICWD/NOCWD/SINGLECWD]  Control CWD usage (F)
+     --ftp-pasv      Use PASV/EPSV instead of PORT (F)
+ -P, --ftp-port ADR  Use PORT with given address instead of PASV (F)
+     --ftp-skip-pasv-ip  Skip the IP address for PASV (F)
+     --ftp-pret      Send PRET before PASV (for drftpd) (F)
+     --ftp-ssl-ccc   Send CCC after authenticating (F)
+     --ftp-ssl-ccc-mode ACTIVE/PASSIVE  Set CCC mode (F)
+     --ftp-ssl-control  Require SSL/TLS for FTP login, clear for transfer (F)
+
+ -g, --globoff       Disable URL sequences and ranges using {} and []
+ -H, --header LINE   Pass custom header LINE to server (H)
+
+     --hostpubmd5 MD5  Hex-encoded MD5 string of the host public key. (SSH)
+ -0, --http1.0       Use HTTP 1.0 (H)
+     --http1.1       Use HTTP 1.1 (H)
+     --http2         Use HTTP 2 (H)
+     --ignore-content-length  Ignore the HTTP Content-Length header
+
+ -k, --insecure      Allow connections to SSL sites without certs (H)
+     --interface INTERFACE  Use network INTERFACE (or address)
+ -4, --ipv4          Resolve name to IPv4 address
+ -6, --ipv6          Resolve name to IPv6 address
+ -j, --junk-session-cookies  Ignore session cookies read from file (H)
+     --keepalive-time SECONDS  Wait SECONDS between keepalive probes
+     --key KEY       Private key file name (SSL/SSH)
+     --key-type TYPE  Private key file type (DER/PEM/ENG) (SSL)
+     --krb LEVEL     Enable Kerberos with security LEVEL (F)
+     --libcurl FILE  Dump libcurl equivalent code of this command line
+     --limit-rate RATE  Limit transfer speed to RATE
+ -l, --list-only     List only mode (F/POP3)
+     --local-port RANGE  Force use of RANGE for local port numbers
+ -L, --location      Follow redirects (H)
+     --location-trusted  Like '--location', and send auth to other hosts (H)
+     --login-options OPTIONS  Server login options (IMAP, POP3, SMTP)
+ -M, --manual        Display the full manual
+     --mail-from FROM  Mail from this address (SMTP)
+     --mail-rcpt TO  Mail to this/these addresses (SMTP)
+     --mail-auth AUTH  Originator address of the original email (SMTP)
+     --max-filesize BYTES  Maximum file size to download (H/F)
+     --max-redirs NUM  Maximum number of redirects allowed (H)
+ -m, --max-time SECONDS  Maximum time allowed for the transfer
+     --metalink      Process given URLs as metalink XML file
+     --negotiate     Use HTTP Negotiate (SPNEGO) authentication (H)
+ -n, --netrc         Must read .netrc for user name and password
+     --netrc-optional  Use either .netrc or URL; overrides -n
+     --netrc-file FILE  Specify FILE for netrc
+ -:, --next          Allows the following URL to use a separate set of options
+     --no-alpn       Disable the ALPN TLS extension (H)
+ -N, --no-buffer     Disable buffering of the output stream
+     --no-keepalive  Disable keepalive use on the connection
+     --no-npn        Disable the NPN TLS extension (H)
+     --no-sessionid  Disable SSL session-ID reusing (SSL)
+     --noproxy       List of hosts which do not use proxy
+     --ntlm          Use HTTP NTLM authentication (H)
+     --oauth2-bearer TOKEN  OAuth 2 Bearer Token (IMAP, POP3, SMTP)
+
+ -#, --progress-bar  Display transfer progress as a progress bar
+     --proto PROTOCOLS  Enable/disable PROTOCOLS
+     --proto-default PROTOCOL  Use PROTOCOL for any URL missing a scheme
+     --proto-redir PROTOCOLS   Enable/disable PROTOCOLS on redirect
+ -x, --proxy [PROTOCOL://]HOST[:PORT]  Use proxy on given port
+     --proxy-anyauth  Pick "any" proxy authentication method (H)
+     --proxy-basic   Use Basic authentication on the proxy (H)
+     --proxy-digest  Use Digest authentication on the proxy (H)
+     --proxy-negotiate  Use HTTP Negotiate (SPNEGO) authentication on the proxy (H)
+     --proxy-ntlm    Use NTLM authentication on the proxy (H)
+     --proxy-service-name NAME  SPNEGO proxy service name
+     --service-name NAME  SPNEGO service name
+ -U, --proxy-user USER[:PASSWORD]  Proxy user and password
+     --proxy1.0 HOST[:PORT]  Use HTTP/1.0 proxy on given port
+ -p, --proxytunnel   Operate through a HTTP proxy tunnel (using CONNECT)
+     --pubkey KEY    Public key file name (SSH)
+ -Q, --quote CMD     Send command(s) to server before transfer (F/SFTP)
+     --random-file FILE  File for reading random data from (SSL)
+ -r, --range RANGE   Retrieve only the bytes within RANGE
+     --raw           Do HTTP "raw"; no transfer decoding (H)
+ -e, --referer       Referer URL (H)
+ -J, --remote-header-name  Use the header-provided filename (H)
+
+ -R, --remote-time   Set the remote file's time on the local output
+
+     --resolve HOST:PORT:ADDRESS  Force resolve of HOST:PORT to ADDRESS
+     --retry NUM   Retry request NUM times if transient problems occur
+     --retry-delay SECONDS  Wait SECONDS between retries
+     --retry-max-time SECONDS  Retry only within this period
+     --sasl-ir       Enable initial response in SASL authentication
+
+
+     --socks4 HOST[:PORT]  SOCKS4 proxy on given host + port
+     --socks4a HOST[:PORT]  SOCKS4a proxy on given host + port
+     --socks5 HOST[:PORT]  SOCKS5 proxy on given host + port
+     --socks5-hostname HOST[:PORT]  SOCKS5 proxy, pass host name to proxy
+     --socks5-gssapi-service NAME  SOCKS5 proxy service name for GSS-API
+     --socks5-gssapi-nec  Compatibility with NEC SOCKS5 server
+ -Y, --speed-limit RATE  Stop transfers below RATE for 'speed-time' secs
+ -y, --speed-time SECONDS  Trigger 'speed-limit' abort after SECONDS (default: 30)
+     --ssl           Try SSL/TLS (FTP, IMAP, POP3, SMTP)
+     --ssl-reqd      Require SSL/TLS (FTP, IMAP, POP3, SMTP)
+ -2, --sslv2         Use SSLv2 (SSL)
+ -3, --sslv3         Use SSLv3 (SSL)
+     --ssl-allow-beast  Allow security flaw to improve interop (SSL)
+     --ssl-no-revoke    Disable cert revocation checks (WinSSL)
+     --stderr FILE   Where to redirect stderr (use "-" for stdout)
+     --tcp-nodelay   Use the TCP_NODELAY option
+ -t, --telnet-option OPT=VAL  Set telnet option
+     --tftp-blksize VALUE  Set TFTP BLKSIZE option (must be >512)
+ -z, --time-cond TIME  Transfer based on a time condition
+ -1, --tlsv1         Use >= TLSv1 (SSL)
+     --tlsv1.0       Use TLSv1.0 (SSL)
+     --tlsv1.1       Use TLSv1.1 (SSL)
+     --tlsv1.2       Use TLSv1.2 (SSL)
+
+     --tr-encoding   Request compressed transfer encoding (H)
+ -T, --upload-file FILE  Transfer FILE to destination
+     --url URL       URL to work with
+ -B, --use-ascii     Use ASCII/text transfer
+
+
+ -w, --write-out FORMAT  Use output FORMAT after completion
+     --xattr         Store metadata in extended file attributes
+ -q                  Disable .curlrc (must be first parameter)
+--path-as-is    Do not squash .. sequences in URL path
+--pinnedpubkey FILE/HASHES Public key to verify peer against (SSL)
+--post301       Do not switch to GET after following a 301 redirect (H)
+--post302       Do not switch to GET after following a 302 redirect (H)
+--post303       Do not switch to GET after following a 303 redirect (H)
+--data-raw DATA  HTTP POST data, '@' allowed (H)
+--data-ascii DATA  HTTP POST ASCII data (H)
+--data-binary DATA  HTTP POST binary data (H)
+
+
+-h, --help          # 显示帮助信息
+-V, --version       # 显示版本信息
+
+-u, --user USER[:PASSWORD]  # 指定用户名(一般不指定密码，而后输入)
+--tlsuser USER  		 	# 指定 TLS 用户名
+--tlspassword STRING  	 	# 指定 TLS 用木密码
+--tlsauthtype STRING    	# 指定 TLS 认证类型(默认 SRP)
+--unix-socket FILE      	# 通过这个 Unix 域套接字连接
+--pass PASS                 # 指定密码 (SSL/SSH)
+
+-o, --output FILE    # 把输出写到该文件中
+-O, --remote-name    # 使用远程文件名字存储
+--remote-name-all    # 所有的 url 都使用远程名字存储
+-d, --data DATA      # POST 方式传递数据
+
+-i, --include       	 # 显示响应的 Header 信息，连同 Body 数据
+-I, --head          	 # 只显示响应的的 Header 信息
+-A, --user-agent STRING  # 指定 user-agent
+-G, --get           	 # POST 转化为 GET
+--data-urlencode DATA  	 # URL 编码
+-F, --form CONTENT  	 # 模拟 Form 表单
+-X, --request COMMAND    # 指定为 GET/POST 请求
+
+-v, --verbose       # Verbose 模式
+-s, --silent        # Silent 模式
+-S, --show-error    # 只显示错误
+--trace FILE    	# 将 debug trace 写入文件
+--trace-ascii FILE  # 同上，但是十六进制形式写入
+--trace-time    	# 跟踪/详细输出时，添加时间戳
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="curl-base"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">基础</h3>
+					</div>
+					<div class="panel-body">
+						<p>1.GET 请求(只在 Shell 中展示，二进制可能为乱码)</p>
+						<pre class="brush: bash;">
+$ curl https://www.oschina.net/													# html 数据
+$ curl -I https://www.oschina.net/action/apiv2/banner?catalog=1					# 只请求响应头
+$ curl https://www.oschina.net/action/apiv2/banner?catalog=1					# json 原始数据
+$ curl https://www.oschina.net/action/apiv2/banner?catalog=1 | json_pp          # 格式化 json
+$ curl https://www.oschina.net/action/apiv2/banner?catalog=1 | json_pp | more   # 分页阅读
+
+$ curl https://www.oschina.net/action/apiv2/banner?catalog=1 -o banner.json     		# 原始数据存储到文件
+$ curl https://www.oschina.net/action/apiv2/banner?catalog=1 | json_pp > format.json    # 格式化后存储
+</pre>
+
+						<p>2.HTTP 请求</p>
+						<pre class="brush: bash;">
+$ curl -d key1=value1&key2=value2 http://example.com				# POST 请求
+$ curl -d key1=value1 -d key2=value2 http://example.com				# POST 请求
+$ curl --data-urlencode "name=Alan Walker" http://example.com		# 对参数进行 url-encode 编码
+
+$ curl -d '{I Am A JSON FORM}' -H 'Content-Type: application/json' http://example.com # 指定请求类型
+#### 当使用 POST 方法提交数据时，对于提交的数据主要有如下四种形式：
+#### 	application/x-www-form-urlencoded -- 默认的形式，即 key1=value1&key2=value2 的形式
+#### 	multipart/form-data -- 使用表单上传文件时使用这个形式
+#### 	application/json -- 提交 JSON 格式的数据
+#### 	text/xml -- 提交XML格式的数据
+
+# 当使用 -F 选项时，默认的 Content-Type 就是 multipart/form-data
+$ curl -F person=annonymous -F secret=@filename http://example.com/submit.cgi
+
+$ curl http://api.lesson1234.com:8080/lr/ability?action=list -H "channel:lr" -H "version:1" # 修改请求头
+$ curl --user-agent "[User Agent]" http://example.com			# 修改 user-agent
+$ curl --cookie "CookieName=CookieValue" http://example.com		# 设置 cookie
+$ curl -c cookie.jar.txt http://example.com						# 保存 cookie
+$ curl -b cookies.txt -c cookie.jar.txt http://example.com		# 设置请求的 cookie,保存返回的 cookie
+</pre>
+
+						<p>3.FTP 请求</p>
+						<pre class="brush: bash;">
+$ curl -u jiwanger ftp://d.lesson1234.com/						# FTP 用户目录
+$ curl -u jiwanger ftp://d.lesson1234.com/108.png -o 108.png    # 输出到指定文件
+$ curl -u jiwanger ftp://d.lesson1234.com/108.png -O    		# 使用远程名字保存
+</pre>
+
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="curl-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: bash;">
+
+						</pre>
+					</div>
+				</div>
+				<!-- item over -->
+			</div>
+		</div>
+	</div>
+
+	<div class="btn-group-vertical bottom-button">
+		<a href="#" type="button" class="btn btn-default dropdown-toggle dropup"
+			data-toggle="dropup">
+			<span class="caret"></span>
+		</a>
+		<a href="#" type="button" class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup">
+			TOP
+		</a>
+	</div>
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="../support/jquery/jquery-3.1.1.min.js"></script>
+	<!-- Include all compiled plugins (below), or include individual files as needed -->
+	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
+	<script src="res/menu.js"></script>
+	<script src="../commons/js/common.js"></script>
+</body>
+</html>

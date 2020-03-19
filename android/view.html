@@ -106,8 +106,8 @@
 							<a href="#android-support-constraint-ConstraintLayout" class="list-group-item">ConstraintLayout</a>
 							<a href="#android-support-design-widget-CoordinatorLayout" class="list-group-item">CoordinatorLayout</a>
 							<a href="#android-support-v7-widget-RecyclerView" class="list-group-item">RecyclerView 及子类</a>
-							<a href="#view-LinearLayout" class="list-group-item">LinearLayout</a>
 							<a href="#view-FrameLayout" class="list-group-item">FrameLayout</a>
+							<a href="#view-LinearLayout" class="list-group-item">LinearLayout</a>
 							<a href="#view-RelativeLayout" class="list-group-item">RelativeLayout</a>
 							<a href="#view-TableLayout" class="list-group-item">TableLayout</a>
 						</div>
@@ -160,9 +160,10 @@
 				<a class="offset" id="view-measure"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">View框架的measure机制</h3>
+						<h3 class="panel-title">View 框架的 measure 机制</h3>
 					</div>
 					<div class="panel-body">
+						<p><b>View 框架的 measure 机制是为了让 View 树上的每个 View 得到 <code>mMeasuredWidth / mMeasuredHeight</code> 这两个值。</b></p>
 						<p>开发人员在绘制 UI 的时候，基本都是通过 XML 布局文件的方式来配置 UI，而每个 View 必须要设置的两个属性就是 layout_width 和 layout_height，这两个属性代表着当前 View 的尺寸。</p>
 						<h5 class="text-primary">1、系统为什么要有 measure 过程？</h5>
 						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果 layout_width 和 layout_height 这两个属性只允许设置固定的大小，那么每个 View 的尺寸在绘制的时候就已经确定了，所以可能都不需要 measure 过程。但是由于需要满足自适应尺寸的机制，所以需要一个 measure 过程。</p>
@@ -224,6 +225,7 @@ protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 						<h3 class="panel-title">View 框架的 layout 机制</h3>
 					</div>
 					<div class="panel-body">
+						<p><b>View 框架的 layout 机制是为了确定 View 树上每个 View 的位置，这个位置根据不同的 ViewGroup 的布局规则来确定。</b></p>
 						<h5 class="text-primary">1、系统为什么要有 layout 过程？</h5>
 						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							View 框架在经过第一步的 measure 过程后，成功计算了每一个 View 的尺寸。但是要成功的把 View 绘制到屏幕上，只有 View 的尺寸还不行，还需要准确的知道该 View 应该被绘制到什么位置。除此之外，对一个 ViewGroup 而言，还需要根据自己特定的 layout 规则，来正确的计算出子 View 的绘制位置，已达到正确的 layout 目的。这也就是 layout 过程的职责。</p>
@@ -278,6 +280,7 @@ protected void onLayout(boolean changed, int l, int t, int r, int b) {
 						<h3 class="panel-title">View 框架的 draw 机制</h3>
 					</div>
 					<div class="panel-body">
+						<p><b>View 框架的 draw 机制用于绘制 View 树上的每个 View 的具体内容(背景，内容，前景)。</b></p>
 						<h5 class="text-primary">1、系统为什么要有 draw 过程？</h5>
 						<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							View 框架在经过了 measure 过程和 layout 过程之后，就已经确定了每一个 View 的尺寸和位置。那么接下来，也是一个重要的过程，就是 draw 过程，draw 过程是用来绘制 View 的过程，它的作用就是使用 graphic 框架提供的各种绘制功能，绘制出当前 View 想要的样子。</p>
@@ -593,10 +596,321 @@ public class MyListView exdents ListView {
                         <h3 class="panel-title">ViewModel 的使用</h3>
                     </div>
                     <div class="panel-body">
-						<pre class="brush: java;">
+						<div class="sub-item">
+							<pre class="brush: java;">
 implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0-rc01'
-// implementation 'android.arch.lifecycle:extensions:28.0.0'
+// implementation 'android.arch.lifecycle:extensions:1.1.1'
 </pre>
+							<p><b>ViewModel</b> 是 LifeCycle 组件下的类，和 Activity 和 Fragment 的生命周期相关。</p>
+							<p><b>ViewModel</b> 主要用来管理和存储与 UI 绑定的数据，同时 ViewMode 还与 UI 的生命周期相关联。</p>
+							<p><b>ViewModel</b> 中数据会一直存活即使 Activity Configuration 发生变化，比如横竖屏切换的时候。</p>
+							<p><b>ViewModel</b> 出现之前我们可以用 Activity 的 <code>onSaveInstanceState()</code> 机制保存和恢复数据，但缺点很明显，<code>onSaveInstanceState</code> 只适合保存少量的可以被序列化、反序列化的数据，假如我们需要保存是一个比较大的 Bitmap 列表 ，这种机制明显不合适。</p>
+							<p><b>ViewModel</b> 不仅用来处理数据持久化，还可用于解决以下问题：</p>
+							<ul>
+								<li><p><b>异步回调问题</b></p></li>
+								<li><p><b>分担 UI Controller 负担</b></p></li>
+								<li><p><b>Fragments 间共享数据</b></p></li>
+							</ul>
+							<p><b>ViewModel</b> 的生命周期：(由于 ViewModel 生命周期可能长于 activity 生命周期，为了避免内存泄漏禁止在 ViewModel 中持有 Context 或 Activity 或 View 的引用。)</p>
+							<p><img src="images/viewmodel-lifecycle.png" class="center-block"> </p>
+							<p>先来看两个实例：</p>
+							<ul>
+								<li><p>在 Activity 中使用 ViewModel 加载数据：</p>
+									<pre class="brush: java;">
+public class DataViewModel extends ViewModel {
+    private MutableLiveData&lt;List&lt;Data>> datas;
+
+    public MutableLiveData&lt;List&lt;Data>> getData() {
+        if(null == datas) {
+            datas = new MutableLiveData<>();
+            loadData();
+        }
+        return datas;
+    }
+
+	// 异步加载数据
+    private void loadData() {
+        List&lt;Data> dataList = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            dataList.add(new Data(dataList.size() + i));
+        }
+        datas.setValue(dataList);
+    }
+}
+
+// 在 Activity 的 onCreate 方法中使用 ViewModel
+DataViewModel dataViewModel = ViewModelProviders.of(this).get(DataViewModel.class);
+dataViewModel.getData().observe(this, data -> {
+	// 数据变化会回调此处
+	content.setText("data changed -> " + data.size());
+});
+									</pre>
+								</li>
+								<li><p>在 Fragment 中使用 ViewModel：</p>
+									<pre class="brush:java;">
+public class SharedViewModel extends ViewModel {
+	private final MutableLiveData&lt;Item> selected = new MutableLiveData&lt;Item>();
+
+	public void select(Item item) { selected.setValue(item); }
+	public LiveData&lt;Item> getSelected() { return selected; }
+}
+
+// 在 Fragment A 中修改 item 的值
+public class MasterFragment extends Fragment {
+	private SharedViewModel model;
+
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		model = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+		itemSelector.setOnClickListener(item -> {
+			model.select(item);
+		});
+	}
+}
+
+// 在 Fragment B 中监听到了值的修改
+public class DetailFragment extends Fragment {
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		SharedViewModel model = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+		model.getSelected().observe(this, { item ->
+			// Update the UI
+		});
+	}
+}
+									</pre>
+								</li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+							<p><b>从源码分析 ViewModel 的实现</b></p>
+							<ul>
+								<li><p><span  class="text-primary">ViewModelProviders</span> -- 工具类，用于方便的构造 ViewModelProvider 实例，此类需要导入依赖。</p>
+									<pre class="brush: java;">
+public class ViewModelProviders {
+	/** 检查 Activity / Fragment 是否已经 onCreate() 的方法 */
+	private static Application checkApplication(Activity activity) {...}
+    private static Activity checkActivity(Fragment fragment) {...}
+
+	/** 使用 Activity / Fragment 实例化 ViewModelProvider */
+    public static ViewModelProvider of(@NonNull Fragment f) { return of(f, null); }
+    public static ViewModelProvider of(@NonNull FragmentActivity a) { return of(a, null); }
+
+	public static ViewModelProvider of(@NonNull Fragment fragment, @Nullable Factory factory) {
+        Application application = checkApplication(checkActivity(fragment));
+        if (factory == null) {
+            factory = ViewModelProvider.AndroidViewModelFactory.getInstance(application);
+        }
+		//  Fragment 实现了 ViewModelStoreOwner 接口，并维护同一个 ViewModelStore 实例
+		// (在 support 26.1.0 以前使用 HolderFragment)
+        return new ViewModelProvider(ViewModelStores.of(fragment), factory);
+    }
+
+    public static ViewModelProvider of(@NonNull FragmentActivity activity, @Nullable Factory f) {
+        Application application = checkApplication(activity);
+        if (factory == null) {
+            factory = ViewModelProvider.AndroidViewModelFactory.getInstance(application);
+        }
+		// FragmentActivity 实现了 ViewModelStoreOwner 接口，并维护同一个 ViewModelStore 实例
+		// (在 support 26.1.0 以前使用 HolderFragment)
+        return new ViewModelProvider(ViewModelStores.of(activity), f);
+    }
+</pre>
+								</li>
+								<li><p><span  class="text-primary">ViewModelProvider</span> -- 用于构建和获取 ViewModel 的实例。</p>
+									<pre class="brush: java;">
+public class ViewModelProvider {
+	public interface Factory {
+        &lt;T extends ViewModel> T create(@NonNull Class&lt;T> modelClass);
+    }
+
+	public static class NewInstanceFactory implements Factory {...}
+    public static class AndroidViewModelFactory extends ViewModelProvider.NewInstanceFactory {...}
+
+	private static final String DEFAULT_KEY = "android.arch.lifecycle.ViewModelProvider.DefaultKey";
+
+    private final Factory mFactory;
+    private final ViewModelStore mViewModelStore;
+
+    public ViewModelProvider(@NonNull ViewModelStoreOwner owner, @NonNull Factory factory) {
+        this(owner.getViewModelStore(), factory);
+    }
+
+    public ViewModelProvider(@NonNull ViewModelStore store, @NonNull Factory factory) {
+        mFactory = factory;
+        this.mViewModelStore = store;
+    }
+
+    public &lt;T extends ViewModel> T get(@NonNull Class&lt;T> modelClass) {
+        String canonicalName = modelClass.getCanonicalName();
+        if (canonicalName == null) {
+            throw new IllegalArgumentException("Local and anonymous classes can not be ViewModels");
+        }
+        return get(DEFAULT_KEY + ":" + canonicalName, modelClass);
+    }
+
+    public &lt;T extends ViewModel> T get(@NonNull String key, @NonNull Class&lt;T> modelClass) {
+        ViewModel viewModel = mViewModelStore.get(key);
+
+        if (modelClass.isInstance(viewModel)) {
+            return (T) viewModel;
+        } else {
+            //noinspection StatementWithEmptyBody
+            if (viewModel != null) {
+                // TODO: log a warning.
+            }
+        }
+        viewModel = mFactory.create(modelClass);
+        mViewModelStore.put(key, viewModel);
+        return (T) viewModel;
+    }
+
+}
+</pre>
+								</li>
+								<li><p><span  class="text-primary">ViewModelStores</span> -- 获取 ViewModelStore 的实例，可能来自 FragmentActivity， Fragment 或者 HolderFragment。</p>
+									<pre class="brush: java;">
+public class ViewModelStores {
+
+    private ViewModelStores() {}
+
+    public static ViewModelStore of(@NonNull FragmentActivity activity) {
+        if (activity instanceof ViewModelStoreOwner) {
+            return ((ViewModelStoreOwner) activity).getViewModelStore();
+        }
+        return holderFragmentFor(activity).getViewModelStore();
+    }
+
+    public static ViewModelStore of(@NonNull Fragment fragment) {
+        if (fragment instanceof ViewModelStoreOwner) {
+            return ((ViewModelStoreOwner) fragment).getViewModelStore();
+        }
+        return holderFragmentFor(fragment).getViewModelStore();
+    }
+}
+</pre>
+								</li><li><p><span  class="text-primary">ViewModelStore</span> -- 一个 HashMap, 用于存储 ViewModel</p>
+									<pre class="brush: java;">
+public class ViewModelStore {
+    private final HashMap&lt;String, ViewModel> mMap = new HashMap<>();
+
+    final void put(String key, ViewModel viewModel) {...}
+    final ViewModel get(String key) {...}
+    public final void clear() {...}
+}
+</pre>
+								</li>
+								<li><p><span  class="text-primary">HolderFragment</span> -- 在 support-26.1.0 前使用此类提供 ViewModelStore, 并绑定生命周期。</p>
+									<pre class="brush: java;">
+public class HolderFragment extends Fragment implements ViewModelStoreOwner {...}
+</pre>
+								</li>
+								<li><p><span  class="text-primary">ViewModel</span> -- 只有一个 <code>onCleared()</code> 空方法，用于在 ViewModel 销毁的时候清除数据，子类可以在需要的时候覆盖此方法。</p>
+									<pre class="brush: java;">
+public abstract class ViewModel {
+    protected void onCleared() {}
+}
+</pre>
+								</li>
+								<li><p><span  class="text-primary">LiveData&lt;T></span> -- 是一个数据持有类，将数据和 FragmentActivity / Fragment 生命周期绑定，它具有以下特点：</p>
+									<ul>
+										<li><p>数据可以被观察者订阅；</p></li>
+										<li><p>能够感知组件（Fragment、Activity、Service）的生命周期；</p></li>
+										<li><p>只有在组件出于激活状态（STARTED、RESUMED）才会通知观察者有数据更新；</p></li>
+									</ul>
+									<pre class="brush: java;">
+public abstract class LiveData&lt;T> {
+	// 如果 owner 为 DESTROYED 状态，则不会建立订阅；在 owner 状态为 DESTROYED 时，自动移除 observer
+	public void observe(@NonNull LifecycleOwner owner, @NonNull Observer&lt;T> observer) {...}
+	// 不管 owner 的状态，要手动调用 removeObserver() 方法来停止观察者接收回调通知
+	public void observeForever(@NonNull Observer&lt;T> observer) {...}
+
+	// 移除指定 observer
+	public void removeObserver(@NonNull final Observer&lt;T> observer) {...}
+	// 移除附加在 owner 上的所有 observer
+	public void removeObservers(@NonNull final LifecycleOwner owner) {...}
+
+	// 在主线成调用
+    protected void setValue(T value) {...}
+	// 可以在任何线程调用，回调会在主线程
+	protected void postValue(T value) {...}
+	// 获取数据
+    public T getValue() {...}
+
+	// 空方法，给子类实现，LiveData 处于活跃/非活跃时候告知子类
+	protected void onActive() {}
+    protected void onInactive() {}
+
+	// 是否还存在 Observer
+    public boolean hasObservers() {...}
+	// 是否还存在活跃的 Observer
+    public boolean hasActiveObservers() {...}
+}
+</pre>
+								</li>
+								<li><p><span  class="text-primary">MutableLiveData&lt;T></span> -- 是 LiveData&lt;T> 的子类，只是将抽象类改为非抽象类，并将以下两个方法修改为 <code>public</code>。</p>
+									<pre class="brush: java;">
+public class MutableLiveData&lt;T> extends LiveData&lt;T> {
+    @Override
+    public void postValue(T value) {
+        super.postValue(value);
+    }
+
+    @Override
+    public void setValue(T value) {
+        super.setValue(value);
+    }
+}
+
+</pre>
+								</li>
+								<li><p><span  class="text-primary">MediatorLiveData&lt;T></span> -- 是 MutableLiveData&lt;T> 的子类，可以看成是多个 LiveData 的代理，当将多个 LiveData 添加到 MediatorLiveData，任何一个 LiveData 数据发生变化时，MediatorLiveData 都会收到通知。</p>
+									<pre class="brush: java;">
+public class MediatorLiveData&lt;T> extends MutableLiveData&lt;T> {
+	public &lt;S> void addSource(@NonNull LiveData&lt;S> source, @NonNull Observer&lt;S> onChanged) {...}
+	public &lt;S> void removeSource(@NonNull LiveData&lt;S> toRemote) {...}
+}
+</pre>
+								</li>
+								<li><p><span class="text-primary">LifecycleOwner / Lifecycle</span> -- 生命周期绑定的相关方法。FragmentActivity / Fragment 都实现了 LifecycleOwner 接口。</p>
+									<pre class="brush: java;">
+public interface LifecycleOwner {
+    Lifecycle getLifecycle();
+}
+
+public abstract class Lifecycle {
+    public abstract void addObserver(@NonNull LifecycleObserver observer);
+    public abstract void removeObserver(@NonNull LifecycleObserver observer);
+
+    public abstract State getCurrentState();
+
+    public enum Event {
+        ON_CREATE,
+        ON_START,
+        ON_RESUME,
+        ON_PAUSE,
+        ON_STOP,
+        ON_DESTROY,
+        ON_ANY
+    }
+
+    public enum State {
+        DESTROYED,
+        INITIALIZED,
+        CREATED,
+        STARTED,
+        RESUMED;
+
+        public boolean isAtLeast(@NonNull State state) {
+            return compareTo(state) >= 0;
+        }
+    }
+}
+</pre>
+								</li>
+							</ul>
+						</div>
                     </div>
                 </div>
                 <!-- item over -->
@@ -1133,6 +1447,26 @@ public interface AccessibilityEventSource {
                             <ol start="7">
                                 <li><p><code>protected static int[] 	mergeDrawableStates(int[] baseState, int[] additionalState)</code> -- </p></li>
 
+								<li class="group"><p><code>final void 	measure(int widthMeasureSpec, int heightMeasureSpec)</code> -- 测量方法</p></li>
+								<li><p><code>protected void 	onMeasure(int widthMeasureSpec, int heightMeasureSpec)</code> -- 测量回调，ViewGroup 会调用 View 的 measure() 方法，要求 child 测量其本身，回调到此方法</p>
+									<pre class="brush: java;">
+@Override
+protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    int mode = MeasureSpec.getMode(heightMeasureSpec);
+    if(MeasureSpec.AT_MOST == mode) { // 如果自定义 View 的高度为 wrap_content, 可以强行指定高度
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(ScreenUtil.dip2Px(context,140),
+                                        MeasureSpec.EXACTLY);
+    }
+    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+}
+</pre>
+								</li>
+								<li><p><code>protected final void 	setMeasuredDimension(int measuredWidth, int measuredHeight)</code> -- 在测量完成后要调用此方法，使 chile 得到测量宽度和高度</p></li>
+								<li><p><code>void 	layout(int l, int t, int r, int b)</code> -- ViewGroup 会调用此方法布局 child</p></li>
+								<li><p><code>protected void 	onLayout(boolean changed, int left, int top, int right, int bottom)</code> -- 布局方法，此处为空实现，用于 ViewGroup 布局子元素，可能会调用多次</p></li>
+								<li><p><code>void 	draw(Canvas canvas)</code> -- 此方法为 ViewGroup 调用，调用 child 绘制本身</p></li>
+								<li><p><code>protected void 	onDraw(Canvas canvas)</code> -- 绘制 View， child 如要需要绘制，放在此方法</p></li>
+
                                 <li class="group"><p><code>Resources 	getResources()</code> -- 获取 Resources 对象</p></li>
                                 <li><p><code>final Context 	getContext()</code> -- 获取上下文</p></li>
                                 <li><p><code>final ViewParent 	getParent()</code> -- 获取其父容器</p></li>
@@ -1158,7 +1492,7 @@ public interface AccessibilityEventSource {
                                 <li><p><code>Object 	getTag()</code> -- 获取 tag</p></li>
                                 <li><p><code>void 	setTag(int key, Object tag)</code> -- 以 key 和 tag 数组保存的附加数据</p></li>
                                 <li><p><code>Object 	getTag(int key)</code> -- 获取指定 key 的 tag</p></li>
-                                <li><p><code>final View 	findViewById(int id)</code> -- 用于 ViewGroup 使用 ID 查找子 View</p></li>
+                                <li><p><code>final View 	findViewById(int id)</code> -- View 中只判断是否等于当前的 ID；ViewGroup 使用 ID 查找子 View，并要求子 ViewGroup 也查找</p></li>
                                 <li><p><code>final View 	findViewWithTag(Object tag)</code> --  用于 ViewGroup 使用 TAG 查找第一个符合条件的子 View</p></li>
                                 <li><p><code>void 	setVisibility(int visibility)</code> -- 设置可见性，参见常量</p></li>
                                 <li><p><code>int 	getVisibility()</code> -- 获取可见性</p></li>
@@ -1178,22 +1512,10 @@ public interface AccessibilityEventSource {
 								<li class="group"><p><code>protected void 	onFinishInflate()</code> -- 如果是从 xml 加载的 View, 会调用此方法</p></li>
 								<li><p><code>protected void 	onAttachedToWindow()</code> -- 当 View 添加到 Window 的时候调用（在 Activity 第一次执行完 onResume 方法后被调用）</p></li>
 								<li><p><code>protected void 	onWindowVisibilityChanged(int visibility)</code> -- 窗口可见性变化时候回调(比如：每次窗口进入前台或回到后台，但是电源键不会触发)</p></li>
-								<li><p><code>protected void 	onMeasure(int widthMeasureSpec, int heightMeasureSpec)</code> -- 测量方法，可能会调用多次</p>
-                                    <pre class="brush: java;">
-@Override
-protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    int mode = MeasureSpec.getMode(heightMeasureSpec);
-    if(MeasureSpec.AT_MOST == mode) { // 如果自定义 View 的高度为 wrap_content, 可以在这里指定高度
-        heightMeasureSpec = MeasureSpec.makeMeasureSpec(ScreenUtil.dip2Px(context,140),
-                                        MeasureSpec.EXACTLY);
-    }
-    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-}
-</pre>
-                                </li>
-								<li><p><code>protected void 	onLayout(boolean changed, int left, int top, int right, int bottom)</code> -- 布局方法，用于 ViewGroup 布局子元素，可能会调用多次</p></li>
+
+
+
 								<li><p><code>protected void 	onSizeChanged(int w, int h, int oldw, int oldh)</code> -- 尺寸大小改变回调</p></li>
-								<li><p><code>protected void 	onDraw(Canvas canvas)</code> -- 绘制 View(比如：每次窗口进入前台)</p></li>
 								<li><p><code>protected void 	onVisibilityChanged(View changedView, int visibility)</code> -- 可见性改变回调</p></li>
 
 								<li><p><code>protected void 	onDetachedFromWindow()</code> -- 从 Window 移除时回调(在 Activity 调用 onDestroy 方法时)</p></li>
@@ -1263,7 +1585,8 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>protected float 	getTopFadingEdgeStrength()</code> -- </p></li>
                                 <li><p><code>protected int 	getWindowAttachCount()</code> -- </p></li>
 
-                                <li><p><code>protected final void 	setMeasuredDimension(int measuredWidth, int measuredHeight)</code> -- </p></li>
+								<li><p><code>void 	forceLayout()</code> -- </p></li>
+								<li><p><code>void 	requestLayout()</code> -- </p></li>
                                 <li><p><code>protected boolean 	verifyDrawable(Drawable who)</code> -- </p></li>
 
                                 <li class="group"><p><code>void 	onWindowSystemUiVisibilityChanged(int visible)</code> -- 状态栏可见性改变回调，参数参见常量</p></li>
@@ -1346,10 +1669,7 @@ protected void onRestoreInstanceState(Parcelable state) {
                                 <li><p><code>void 	removeOnAttachStateChangeListener(View.OnAttachStateChangeListener listener)</code> -- </p></li>
                                 <li><p><code>void 	removeOnLayoutChangeListener(View.OnLayoutChangeListener listener)</code> -- </p></li>
 
-                                <li class="group"><p><code>void 	requestLayout()</code> -- </p></li>
-                                <li><p><code>void 	layout(int l, int t, int r, int b)</code> -- </p></li>
-                                <li><p><code>final void 	measure(int widthMeasureSpec, int heightMeasureSpec)</code> -- </p></li>
-                                <li><p><code>void 	forceLayout()</code> -- </p></li>
+
 
                                 <li class="group"><p><code>final int 	getWidth()</code> -- 获取最终显示宽度，使用下面的方法获取</p></li>
                                 <li><p><code>final int 	getHeight()</code> -- 获取最终显示高度，使用下面的方法获取</p>
@@ -1588,7 +1908,7 @@ protected void onLayout(boolean changed, int l, int t, int r, int b) {
 
                                 <li><p><code>void 	createContextMenu(ContextMenu menu)</code> -- </p></li>
 
-                                <li><p><code>void 	draw(Canvas canvas)</code> -- </p></li>
+
                                 <li><p><code>void 	drawableHotspotChanged(float x, float y)</code> -- </p></li>
 
 
@@ -2073,7 +2393,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
         public int height;
 
         public LayoutParams(int width, int height) {}
-        public LayoutParams(Context c, AttributeSet attrs) {}
+        public LayoutParams(Context c, AttributeSet attrs) {} // 从 xml 解析 LayoutParams
         public LayoutParams(ViewGroup.LayoutParams source) {}
     }
 
@@ -2157,8 +2477,89 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
 						<div class="sub-item">
                             <p><b><a href="docs/reference/android/view/ViewGroup.html" target="_blank">ViewGroup</a> API:</b></p>
                             <ol>
-                                <li><p><code>ViewGroup.LayoutParams 	generateLayoutParams(AttributeSet attrs)</code> -- 属性集生成布局参数，从 xml 加载会调用此方法</p></li>
-                                <li><p><code>protected ViewGroup.LayoutParams 	generateDefaultLayoutParams()</code> -- 返回默认的布局参数（只有包裹大小的宽高）</p></li>
+								<li><p><code>static int 	getChildMeasureSpec(int spec, int padding, int childDimension)</code> -- 结合 ViewGroup 的 Mode/Size 和 子 View 的 Mode/Size 的返回一个适合的 MeasureSpec 值，可以看 ViewGroup 的 <code>measureChild(...)</code> / <code>measureChildWithMargins(...)</code> 方法：</p>
+									<pre class="brush: java;">
+/** childWidthMeasureSpec / parentHeightMeasureSpec 为具体的 ViewGroup 本身的 MeasureSpec 值
+ * mPaddingLeft / mPaddingRight / mPaddingTop / mPaddingBottom 为具体的 ViewGroup 本身的 padding 值
+ * lp.leftMargin / lp.rightMargin / lp.topMargin / lp.bottomMargin 为子 View 的 margin 值
+ * lp.width / lp.height 为子 View 的宽度/高度
+ */
+final int childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,
+                mPaddingLeft + mPaddingRight + lp.leftMargin + lp.rightMargin + widthUsed,
+				lp.width);
+final int childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,
+				mPaddingTop + mPaddingBottom + lp.topMargin + lp.bottomMargin + heightUsed,
+				lp.height);
+child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
+
+// spec 是 ViewGroup 的 MeasureSpec(比如 FrameLayout), childDimension 为子 View 的宽库/高度
+public static int getChildMeasureSpec(int spec, int padding, int childDimension) {
+	int specMode = MeasureSpec.getMode(spec);
+	int specSize = MeasureSpec.getSize(spec);
+
+	int size = Math.max(0, specSize - padding);
+
+	int resultSize = 0;
+	int resultMode = 0;
+
+	switch (specMode) {
+	case MeasureSpec.EXACTLY:                         // (比如 FrameLayout 为 MATCH_PARENT 或者精确值)
+		if (childDimension >= 0) {
+			resultSize = childDimension;
+			resultMode = MeasureSpec.EXACTLY;
+		} else if (childDimension == LayoutParams.MATCH_PARENT) {
+			resultSize = size;
+			resultMode = MeasureSpec.EXACTLY;
+		} else if (childDimension == LayoutParams.WRAP_CONTENT) {
+			resultSize = size;
+			resultMode = MeasureSpec.AT_MOST;
+		}
+		break;
+
+	case MeasureSpec.AT_MOST:
+		if (childDimension >= 0) {
+			resultSize = childDimension;
+			resultMode = MeasureSpec.EXACTLY;
+		} else if (childDimension == LayoutParams.MATCH_PARENT) {
+			resultSize = size;
+			resultMode = MeasureSpec.AT_MOST;
+		} else if (childDimension == LayoutParams.WRAP_CONTENT) {
+			// Child wants to determine its own size. It can't be bigger than us.
+			resultSize = size;
+			resultMode = MeasureSpec.AT_MOST;
+		}
+		break;
+
+	case MeasureSpec.UNSPECIFIED:
+		if (childDimension >= 0) {
+			resultSize = childDimension;
+			resultMode = MeasureSpec.EXACTLY;
+		} else if (childDimension == LayoutParams.MATCH_PARENT) {
+			resultSize = View.sUseZeroUnspecifiedMeasureSpec ? 0 : size;
+			resultMode = MeasureSpec.UNSPECIFIED;
+		} else if (childDimension == LayoutParams.WRAP_CONTENT) {
+			resultSize = View.sUseZeroUnspecifiedMeasureSpec ? 0 : size;
+			resultMode = MeasureSpec.UNSPECIFIED;
+		}
+		break;
+	}
+	return MeasureSpec.makeMeasureSpec(resultSize, resultMode);
+}
+</pre>
+								</li>
+
+								<li class="group"><p><code>protected void 	measureChild(View child, int parentWidthMeasureSpec, int parentHeightMeasureSpec)</code> -- 测量指定的 child，不支持 Margin 值</p></li>
+								<li><p><code>protected void 	measureChildWithMargins(View child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed)</code> -- 测量指定的 child，支持 Margin 值</p></li>
+								<li><p><code>protected void 	measureChildren(int widthMeasureSpec, int heightMeasureSpec)</code> -- 测量所有子 View, 循环调用 measureChild(...) 方法</p></li>
+
+								<li class="group"><p><code>int 	getChildCount()</code> -- 获取 Child 的数量</p></li>
+								<li><p><code>View 	getChildAt(int index)</code> -- 获取指定索引的 Child</p></li>
+
+								<li><p><code>protected abstract void 	onLayout(boolean changed, int l, int t, int r, int b)</code> -- 将 View 的空实现变成抽象方法</p></li>
+
+								<li class="group"><p><code>protected boolean 	checkLayoutParams(ViewGroup.LayoutParams p)</code> -- 检测 LayoutParams 类型</p></li>
+								<li><p><code>ViewGroup.LayoutParams 	generateLayoutParams(AttributeSet attrs)</code> -- 属性集生成布局参数，从 xml 加载会调用此方法</p></li>
+								<li><p><code>protected ViewGroup.LayoutParams 	generateDefaultLayoutParams()</code> -- 返回默认的布局参数（只有包裹大小的宽高）</p></li>
                                 <li><p><code>protected ViewGroup.LayoutParams 	generateLayoutParams(ViewGroup.LayoutParams p)</code> -- 默认返回 p, 应该重写</p>
                                     <pre class="brush: java;">
 /** 从 xml 加载会调用此方法，每个子 View 的加载都会调用一次，child.getLayoutParams() 会返回此对象 */
@@ -2174,6 +2575,7 @@ public LayoutParams generateLayoutParams(AttributeSet attrs) {
                                 <li><p><code>void 	addView(View child, int index, ViewGroup.LayoutParams params)</code> -- </p></li>
                                 <li><p><code>void 	addView(View child)</code> -- </p></li>
                                 <li><p><code>void 	addView(View child, int width, int height)</code> -- </p></li>
+
 
                                 <li><p><code>void 	addChildrenForAccessibility(ArrayList&lt;View> outChildren)</code> -- </p></li>
                                 <li><p><code>void 	addFocusables(ArrayList&lt;View> views, int direction, int focusableMode)</code> -- </p></li>
@@ -2209,13 +2611,7 @@ public LayoutParams generateLayoutParams(AttributeSet attrs) {
                                 <li><p><code>View 	focusSearch(View focused, int direction)</code> -- </p></li>
                                 <li><p><code>void 	focusableViewAvailable(View v)</code> -- </p></li>
                                 <li><p><code>boolean 	gatherTransparentRegion(Region region)</code> -- </p></li>
-
-
-
                                 <li><p><code>CharSequence 	getAccessibilityClassName()</code> -- </p></li>
-                                <li><p><code>View 	getChildAt(int index)</code> -- </p></li>
-                                <li><p><code>int 	getChildCount()</code> -- </p></li>
-                                <li><p><code>static int 	getChildMeasureSpec(int spec, int padding, int childDimension)</code> -- </p></li>
                                 <li><p><code>boolean 	getChildVisibleRect(View child, Rect r, Point offset)</code> -- </p></li>
                                 <li><p><code>boolean 	getClipChildren()</code> -- </p></li>
                                 <li><p><code>boolean 	getClipToPadding()</code> -- </p></li>
@@ -2240,7 +2636,7 @@ public LayoutParams generateLayoutParams(AttributeSet attrs) {
                                 <li><p><code>boolean 	isMotionEventSplittingEnabled()</code> -- </p></li>
                                 <li><p><code>boolean 	isTransitionGroup()</code> -- </p></li>
                                 <li><p><code>void 	jumpDrawablesToCurrentState()</code> -- </p></li>
-                                <li><p><code>final void 	layout(int l, int t, int r, int b)</code> -- </p></li>
+
                                 <li><p><code>void 	notifySubtreeAccessibilityStateChanged(View child, View source, int changeType)</code> -- </p></li>
                                 <li><p><code>final void 	offsetDescendantRectToMyCoords(View descendant, Rect rect)</code> -- </p></li>
                                 <li><p><code>final void 	offsetRectIntoDescendantCoords(View descendant, Rect rect)</code> -- </p></li>
@@ -2302,7 +2698,7 @@ public LayoutParams generateLayoutParams(AttributeSet attrs) {
                                 <li><p><code>protected void 	attachLayoutAnimationParameters(View child, ViewGroup.LayoutParams params, int index, int count)</code> -- </p></li>
                                 <li><p><code>protected void 	attachViewToParent(View child, int index, ViewGroup.LayoutParams params)</code> -- </p></li>
                                 <li><p><code>protected boolean 	canAnimate()</code> -- </p></li>
-                                <li><p><code>protected boolean 	checkLayoutParams(ViewGroup.LayoutParams p)</code> -- </p></li>
+
                                 <li><p><code>protected void 	cleanupLayoutState(View child)</code> -- </p></li>
                                 <li><p><code>protected void 	debug(int depth)</code> -- </p></li>
                                 <li><p><code>protected void 	detachAllViewsFromParent()</code> -- </p></li>
@@ -2328,13 +2724,13 @@ public LayoutParams generateLayoutParams(AttributeSet attrs) {
                                 <li><p><code>protected boolean 	getChildStaticTransformation(View child, Transformation t)</code> -- </p></li>
                                 <li><p><code>protected boolean 	isChildrenDrawingOrderEnabled()</code> -- </p></li>
                                 <li><p><code>protected boolean 	isChildrenDrawnWithCacheEnabled()</code> -- </p></li>
-                                <li><p><code>protected void 	measureChild(View child, int parentWidthMeasureSpec, int parentHeightMeasureSpec)</code> -- </p></li>
-                                <li><p><code>protected void 	measureChildWithMargins(View child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed)</code> -- </p></li>
-                                <li><p><code>protected void 	measureChildren(int widthMeasureSpec, int heightMeasureSpec)</code> -- </p></li>
+
+
+
                                 <li><p><code>protected void 	onAttachedToWindow()</code> -- </p></li>
                                 <li><p><code>protected int[] 	onCreateDrawableState(int extraSpace)</code> -- </p></li>
                                 <li><p><code>protected void 	onDetachedFromWindow()</code> -- </p></li>
-                                <li><p><code>protected abstract void 	onLayout(boolean changed, int l, int t, int r, int b)</code> -- </p></li>
+
                                 <li><p><code>protected boolean 	onRequestFocusInDescendants(int direction, Rect previouslyFocusedRect)</code> -- </p></li>
                                 <li><p><code>protected void 	removeDetachedView(View child, boolean animate)</code> -- </p></li>
                                 <li><p><code>protected void 	setChildrenDrawingCacheEnabled(boolean enabled)</code> -- </p></li>
@@ -4518,6 +4914,43 @@ public class DefaultItemAnimator extends SimpleItemAnimator {}
                 <!-- item over -->
 
 				<!-- item start -->
+				<a class="offset" id="view-FrameLayout"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">FrameLayout</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<pre class="brush: java;">
+java.lang.Object
+	android.view.View
+  		android.view.ViewGroup
+  	  		android.widget.FrameLayout
+
+public class FrameLayout extends ViewGroup {
+	// 支持 Gravity
+	public static class LayoutParams extends MarginLayoutParams {
+		public int gravity = UNSPECIFIED_GRAVITY;
+		...
+	}
+
+	public FrameLayout(Context context) {...}
+    public FrameLayout(Context context, AttributeSet attrs) {...}
+    public FrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {...}
+    public FrameLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {...}
+}
+</pre>
+							<p><a href="docs/reference/android/widget/FrameLayout.html" target="_blank">FrameLayout</a> 是层叠布局，后面加入的子控件会覆盖前面的。但支持 Gravity 属性，可以指定子控件的的重力方向。</p>
+						</div>
+
+						<div class="sub-item">
+							<p></p>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
 				<a class="offset" id="view-LinearLayout"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -4556,6 +4989,9 @@ public class DefaultItemAnimator extends SimpleItemAnimator {}
 		<a href="#" type="button"
 			class="btn btn-default dropdown-toggle btn-primary"
 			data-toggle="dropup"> TOP </a>
+		<a href="/reference/" type="button"
+		   class="btn btn-default dropdown-toggle btn-primary" target="_blank"
+		   data-toggle="dropup"> REF </a>
 		<a href="docs/reference/index.html" type="button"
 			class="btn btn-default dropdown-toggle btn-primary" target="_blank"
 			data-toggle="dropup"> DOCS </a>

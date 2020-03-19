@@ -16,7 +16,7 @@
 <!-- Bootstrap -->
 <link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
 	rel="stylesheet">
-<!-- 
+<!--
 <link href="../support/bootstrap/css/bootstrap.css" rel="stylesheet">
 -->
 <link type="text/css" rel="stylesheet"
@@ -73,12 +73,12 @@
 						</a>
 						<div id="python-syntax" class="panel-collapse collapse"
 							role="tabpanel">
-							<a href="#python-syntax-base" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">基础语法</a>
+							<a href="#python-syntax-base" class="list-group-item">基础语法</a>
 							<a href="#python-syntax-variable" class="list-group-item">变量类型</a>
 							<a href="#python-syntax-cal" class="list-group-item">运算符</a>
-							<a href="#python-syntax-flow" class="list-group-item">流程控制</a>
-							<a href="#python-syntax-string" class="list-group-item">字符串</a>
+							<a href="#python-syntax-builtins" class="list-group-item">内置函数和类</a>
+                            <a href="#python-syntax-special" class="list-group-item">特殊方法</a>
+                            <a href="#python-syntax-string" class="list-group-item">字符串</a>
 							<a href="#python-syntax-number" class="list-group-item">数字</a>
 							<a href="#python-syntax-array" class="list-group-item">数组</a>
 							<a href="#python-syntax-datetime" class="list-group-item">日期和时间</a>
@@ -114,19 +114,13 @@
 						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-						<p>Python 是一种面向对象的解释型计算机程序设计语言。</p>
-						<p>Python 是纯粹的自由软件， 源代码和解释器CPython遵循 GPL 协议。</p>
-						<p>Python 语法简洁清晰，特色之一是强制用空白符作为语句缩进。</p>
-						<p>Python
-							具有丰富和强大的库。它常被昵称为胶水语言，能够把用其他语言制作的各种模块（尤其是C/C++）很轻松地联结在一起。常见的一种应用情形是，使用Python快速生成程序的原型（有时甚至是程序的最终界面），然后对其中有特别要求的部分，用更合适的语言改写，比如3D游戏中的图形渲染模块，性能要求特别高，就可以用C/C++重写，而后封装为Python可以调用的扩展类库。需要注意的是在您使用扩展类库时可能需要考虑平台问题，某些可能不提供跨平台的实现。</p>
-						<p>Python 在执行时，首先会将 .py 文件中的源代码编译成 Python 的 byte
-							code（字节码），然后再由 Python Virtual Machine（Python虚拟机）来执行这些编译好的 byte
-							code。这种机制的基本思想跟 Java，.NET 是一致的。然而，Python Virtual
-							Machine 与 Java 或 .NET 的 Virtual Machine 不同的是，Python 的 Virtual
-							Machine 是一种更高级的Virtual Machine。这里的高级并不是通常意义上的高级，不是说Python的Virtual
-							Machine 比 Java 或 .NET 的功能更强大，而是说和 Java 或 .NET 相比，Python 的 Virtual
-							Machine 距离真实机器的距离更远。或者可以这么说，Python 的 Virtual
-							Machine 是一种抽象层次更高的 Virtual Machine。</p>
+						<p><a href="https://www.python.org/" target="_blank">Python</a> 是一种面向对象的解释型计算机程序设计语言。</p>
+						<p><b>Python</b> 是纯粹的自由软件， 源代码和解释器 CPython 遵循 GPL 协议。</p>
+						<p><b>Python</b> 语法简洁清晰，特色之一是强制用空白符作为语句缩进。</p>
+						<p><b>Python 最具特色的就是使用缩进来表示代码块，不需要使用大括号 {} 。</b></p>
+						<p><b>Python</b> 使用缩进对齐组织代码的执行，所有没有缩进的代码（非函数定义和类定义），都会在载入时自动执行，这些代码，都可以可以认为是 Python 的 <code>main</code> 函数。每个文件（模块）都可以任意写一些没有缩进的代码，并且在载入时自动执行，为了区分主执行文件还是被调用的文件，Python 引入了一个变量 <code>__name__</code>，当文件是被调用时，<code>__name__</code> 的值为模块名，当文件被执行时，<code>__name__</code>为 <code>__main__</code>。</p>
+						<p><b>Python</b> 具有丰富和强大的库。它常被昵称为胶水语言，能够把用其他语言制作的各种模块（尤其是 C/C++）很轻松地联结在一起。常见的一种应用情形是，使用 Python 快速生成程序的原型（有时甚至是程序的最终界面），然后对其中有特别要求的部分，用更合适的语言改写，比如 3D 游戏中的图形渲染模块，性能要求特别高，就可以用 C/C++ 重写，而后封装为 Python 可以调用的扩展类库。需要注意的是在您使用扩展类库时可能需要考虑平台问题，某些可能不提供跨平台的实现。</p>
+						<p><b>Python</b> 在执行时，首先会将 <code>.py</code> 文件中的源代码编译成 Python 的字节码，然后再由 PVM 来执行这些编译好的字节码。这种机制的基本思想跟 Java, .NET 是一致的。然而，PVM 与 Java 或 .NET 的 VM 不同的是，Python 的 VM 是一种更高级的 VM。这里的高级并不是通常意义上的高级，不是说 Python 的 VM 比 Java 或 .NET 的功能更强大，而是说和 Java 或 .NET 相比，Python 的 VM 距离真实机器的距离更远。或者可以这么说，Python 的 VM 是一种抽象层次更高的 VM。</p>
 					</div>
 				</div>
 				<!-- item over -->
@@ -140,18 +134,32 @@
 					<div class="panel-body">
 						<div class="sub-item">
 							<h5 class="text-primary">Python 标识符</h5>
-							<p>在python里，标识符有字母、数字、下划线组成。</p>
-							<p>在python中，所有标识符可以包括英文、数字以及下划线（_），但不能以数字开头。</p>
-							<p>python中的标识符是区分大小写的。</p>
-							<p>以下划线开头的标识符是有特殊意义的。以单下划线开头（_foo）的代表不能直接访问的类属性，需通过类提供的接口进行访问，不能用"from
-								xxx import *"而导入；</p>
-							<p>以双下划线开头的（__foo）代表类的私有成员；以双下划线开头和结尾的（__foo__）代表python里特殊方法专用的标识，如__init__（）代表类的构造函数。</p>
+							<p>在 Python 里，标识符有字母、数字、下划线组成。</p>
+							<p>在 Python 中，所有标识符可以包括英文、数字以及下划线（_），但不能以数字开头。</p>
+							<p>Python 中的标识符是区分大小写的。</p>
+							<p><b>以下划线开头的标识符是有特殊意义的:</b></p>
+							<ul>
+								<li>
+									<p>单下划线开头（<code>_foo</code>）代表不能直接访问的类属性，需通过类提供的接口进行访问，不能用 <code>from xxx import *</code> 而导入；</p>
+								</li>
+								<li>
+									<p>双下划线开头的（<code>__foo</code>）代表类的私有成员；</p>
+								</li>
+								<li>
+									<p>双下划线开头和结尾的（<code>__foo__</code>）代表 Python 里特殊方法专用的标识，如 <code>__init__（）</code> 代表类的构造函数。</p>
+								</li>
+							</ul>
 						</div>
 
 						<div class="sub-item">
 							<h5 class="text-primary">Python 保留字符</h5>
 							<table class="table table-bordered table-striped">
 								<tbody>
+									<tr>
+										<td>False</td>
+										<td>True</td>
+										<td>None</td>
+									</tr>
 									<tr>
 										<td>and</td>
 										<td>exec</td>
@@ -204,6 +212,117 @@
 									</tr>
 								</tbody>
 							</table>
+							<pre class="brush: python;">
+#!/usr/bin/python3
+# --*-- encoding: utf-8 --*--
+
+import base64
+from keyword import kwlist
+# import fibo as fib                # 模块重命名
+# from fibo import fib as fibonacci # 方法重命名
+
+
+class Person:
+    name = None
+    age = -1
+    man = False
+    global key  # 标志实际上是为了提示 python 解释器，表明被其修饰的变量是全局变量
+
+    def __init__(self, name=None, age=-1):
+        self.name = name
+        self.age = age
+
+    def __lt__(self, other):
+        return self.age < other.age
+
+    def __eq__(self, other):
+        return self.age == other.age
+
+
+def div(x, y):
+    return x / y
+
+
+age = 30
+name = 'Jiwanger'
+
+base64_name = base64.encodebytes(bytes(name, encoding='UTF-8'))
+print(base64_name)
+print(base64.decodebytes(base64_name))
+print(len(kwlist), kwlist)
+
+if (age == 30 and name == 'Jiwanger') or (not age == 30 and name == 'Jiwanger'):
+    print("Jiwanger")
+elif name == 'Kit':
+    print("Kit")
+else:
+    print("None")
+
+try:
+    assert age == 10
+except AssertionError:
+    print('age != 10')
+finally:
+    print("age == 10")
+
+try:
+    if age == 30:
+        raise ArithmeticError
+except ArithmeticError:
+    print("ArithmeticError")
+
+for i in range(5, 12):
+    if i == 7:
+        pass  # 不做任何事情，用做占位语句
+    if i == 9:
+        continue
+    if i == 10:
+        break
+    print(i, end=' ')
+
+while age > 5:
+    print(age)
+    age -= 1
+
+print(age not in range(1, 0))
+
+p1 = Person("jiwanger", 30)
+p2 = p1
+print(p1 is p2, p1 is not p2)
+
+'''
+紧跟 with 后面的语句被求值后，返回对象的 __enter__() 方法被调用，这个方法的返回值将被赋值给 as 后面的变量;
+当 with 后面的代码块全部被执行完之后，将调用前面返回对象的 __exit__() 方法。
+'''
+with open("./app.py") as file:
+    data = file.read()
+    print(data)
+
+for i in map(lambda i: i + 1, [1, 2, 3]):
+    print(i)
+
+
+def genter():  # 自定义一个生成器
+    a = 4
+    b = 5
+    c = 6
+    for i in range(5):
+        yield a
+        print('hhh' + str(i))
+        yield b
+        print("aaa" + str(i))
+        yield c
+
+
+# 包含了yield 的 genter() 就是一个生成器
+res = genter()
+for i, c in enumerate(res):
+    if i > 1:
+        # 通过 break 来测试执行的结果
+        break
+    print(c)
+
+</pre>
 						</div>
 
 						<div class="sub-item">
@@ -267,9 +386,9 @@ days = ['Monday', 'Tuesday', 'Wednesday',
 						<pre class="brush: python;">
 #!/usr/bin/python
 
-counter = 100 # 赋值整型变量
-miles = 1000.0 # 浮点型
-name = "John" # 字符串
+counter = 100   # 赋值整型变量
+miles = 1000.0  # 浮点型
+name = "John"   # 字符串
 
 # 多个变量赋值
 a = b = c = 1
@@ -282,7 +401,7 @@ a, b, c = 1, 2, "john"
 									<th>函数</th>
 									<th>描述</th>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>int(x [,base])</p>
 									</td>
@@ -290,7 +409,7 @@ a, b, c = 1, 2, "john"
 										<p>将x转换为一个整数</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>long(x [,base] )</p>
 									</td>
@@ -298,7 +417,7 @@ a, b, c = 1, 2, "john"
 										<p>将x转换为一个长整数</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>float(x)</p>
 									</td>
@@ -306,7 +425,7 @@ a, b, c = 1, 2, "john"
 										<p>将x转换到一个浮点数</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr >
 									<td>
 										<p>complex(real [,imag])</p>
 									</td>
@@ -314,7 +433,7 @@ a, b, c = 1, 2, "john"
 										<p>创建一个复数</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>str(x)</p>
 									</td>
@@ -322,7 +441,7 @@ a, b, c = 1, 2, "john"
 										<p>将对象 x 转换为字符串</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>repr(x)</p>
 									</td>
@@ -330,7 +449,7 @@ a, b, c = 1, 2, "john"
 										<p>将对象 x 转换为表达式字符串</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>eval(str)</p>
 									</td>
@@ -338,7 +457,7 @@ a, b, c = 1, 2, "john"
 										<p>用来计算在字符串中的有效Python表达式,并返回一个对象</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>tuple(s)</p>
 									</td>
@@ -346,7 +465,7 @@ a, b, c = 1, 2, "john"
 										<p>将序列 s 转换为一个元组</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>list(s)</p>
 									</td>
@@ -354,7 +473,7 @@ a, b, c = 1, 2, "john"
 										<p>将序列 s 转换为一个列表</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>set(s)</p>
 									</td>
@@ -362,7 +481,7 @@ a, b, c = 1, 2, "john"
 										<p>转换为可变集合</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>dict(d)</p>
 									</td>
@@ -370,7 +489,7 @@ a, b, c = 1, 2, "john"
 										<p>创建一个字典。d 必须是一个序列 (key,value)元组。</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>frozenset(s)</p>
 									</td>
@@ -378,7 +497,7 @@ a, b, c = 1, 2, "john"
 										<p>转换为不可变集合</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>chr(x)</p>
 									</td>
@@ -386,7 +505,7 @@ a, b, c = 1, 2, "john"
 										<p>将一个整数转换为一个字符</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>unichr(x)</p>
 									</td>
@@ -394,7 +513,7 @@ a, b, c = 1, 2, "john"
 										<p>将一个整数转换为Unicode字符</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>ord(x)</p>
 									</td>
@@ -402,7 +521,7 @@ a, b, c = 1, 2, "john"
 										<p>将一个字符转换为它的整数值</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>hex(x)</p>
 									</td>
@@ -410,7 +529,7 @@ a, b, c = 1, 2, "john"
 										<p>将一个整数转换为一个十六进制字符串</p>
 									</td>
 								</tr>
-								<tr valign="top">
+								<tr>
 									<td>
 										<p>oct(x)</p>
 									</td>
@@ -1020,32 +1139,613 @@ print "a + (b * c) / d 运算结果为：",  e
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="python-syntax-flow"></a>
+				<a class="offset" id="python-syntax-builtins"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">流程控制</h3>
+						<h3 class="panel-title">Python 内置函数和类</h3>
 					</div>
 					<div class="panel-body">
-						<div class="sub-item">
-							<h5 class="text-primary">if else 结构</h5>
+						<p><b>Python 内置函数</b> -- 包含了内置函数和异常(不需要 <cdde>import</cdde> 语句就可以在所有 Python 代码中使用的对象。)</p>
+						<p>Python 解释器内置了很多函数和类型，可以在任何时候使用它们。</p>
+
+						<p><b>内置函数</b></p>
+						<ol>
+							<li><p><code>print(*objects, sep=' ', end='\n', file=sys.stdout, flush=False)</code> -- 将 objects 打印到 file 指定的文本流(默认标准输出，不自动刷新)，以 sep 分隔并在末尾加上 end</p>
+								<pre class="brush: python;">
+print('Hello')
+print(3, 'hello')
+print(3, 'hello', sep=', ', end='==\n')
+</pre>
+							</li>
+
+							<li><p><code>bin(x)</code> -- 将一个整数转变为一个前缀为 <code>0b</code> 开头的二进制字符串</p></li>
+							<li><p><code>hex(x)</code> -- 将一个将整数转换为以 <code>0x</code> 为前缀的小写十六进制字符串</p></li>
+							<li><p><code>oct(x)</code> -- 将一个整数转变为一个前缀为 <code>0o</code> 的八进制字符串</p>
+								<pre class="brush: python;">
+a = 1024
+print(bin(a), hex(a), oct(a))    # 0b10000000000 0x400 0o2000
+</pre>
+							</li>
+
+							<li><p><code>chr(i)</code> -- 返回 Unicode 码位为整数 i 的字符的字符串格式</p></li>
+							<li><p><code>ord(c)</code> -- 对表示单个 Unicode 字符的字符串，返回代表它 Unicode 码点的整数</p>
+								<pre class="brush: python;">
+u = 0x9648
+print(chr(u), ord('陈'), hex(ord('陈')))  # 陈 38472 0x9648
+</pre>
+							</li>
+							<li><p><code>repr(object)</code> -- 返回包含一个对象的可打印表示形式的字符串</p></li>
+							<li><p><code>ascii(object)</code> -- 就像函数 <code>repr()</code>，返回一个对象可打印的字符串，但是 <code>repr()</code> 返回的字符串中非 ASCII 编码的字符，会使用 \x、\u 和 \U 来转义。</p>
+								<pre class="brush: python;">
+a = 1024
+b = 0x400
+c = '陈'
+print(repr(a), repr(b), repr(c))      # 1024 1024 '陈'
+print(ascii(a), ascii(b), ascii(c))   # 1024 1024 '\u9648'
+</pre>
+							</li>
+
+
+
+
+							<li><p><code>abs(x)</code> -- 返回一个数的绝对值。实参可以是整数或浮点数。如果实参是一个复数，返回它的模。</p></li>
+							<li><p><code>pow(x, y[, z])</code> -- 返回 x 的 y 次幂；如果 z 存在，则对 z 取余（比直接 pow(x, y) % z 计算更高效）。</p></li>
+							<li><p><code>round(number[, ndigits])</code> -- 返回 number 舍入到小数点后 ndigits 位精度的值</p></li>
+							<li><p><code>divmod(a, b)</code> -- 它将两个（非复数）数字作为实参，并在执行整数除法时返回一对商和余数。</p>
+								<pre class="brush: python;">
+print(abs(1024), abs(-2014))                                              # 1024 1024.0
+print(pow(2, 3), pow(2, 10), pow(2, 10, 100))                             # 8 1024 24
+print(round(3), round(3.14), round(3.14159, 2), round(3.5), round(-3.5))  # 3 3 3.14 4 -4
+print(divmod(7, 3), divmod(8, 3), type(divmod(9, 3)))  # (2, 1) (2, 2) &lt;class 'tuple'>
+s_tuple = divmod(7, 3)
+print(s_tuple[0], s_tuple[1])                          # 2 1
+</pre>
+							</li>
+
+							<li><p><code>sum(iterable[, x])</code> -- 自左向右对 iterable 中的项求和(如果有 x, 还要加上 x)并返回总计值</p></li>
+							<li><p><code>max(iterable, *[, key, default]) / max(arg1, arg2, *args[, key])</code> -- 返回可迭代对象中最大的或多个实参中最大的</p></li>
+							<li><p><code>min(iterable, *[, key, default]) / min(arg1, arg2, *args[, key])</code> -- 返回可迭代对象中最小的或多个实参中最小的</p>
+								<pre class="brush: python;">
+arr = [2, 3, 4]
+print(sum(arr), sum(arr, 10))                  # 9 19
+print(max(arr), max(10, 20), max(10, 20, 30))  # 4 20 30
+print(min(arr), min(10, 20), min(10, 20, 30))  # 2 10 10
+</pre>
+							</li>
+							<li><p><code>iter(object[, sentinel])</code> -- 返回一个 iterator 对象</p></li>
+							<li><p><code>next(iterator[, default])</code> -- 通过调用 iterator 的 __next__() 方法获取下一个元素</p>
+								<pre class="brush: python;">
+arr = [2, 3, 4]
+iterator = iter(arr)
+print(next(iterator), next(iterator), next(iterator, -1), next(iterator, -1))  # 2 3 4 -1
+</pre>
+							</li>
+
+							<li class="group"><p><code>hasattr(object, name)</code> -- 该实参是一个对象和一个字符串。如果字符串是对象的属性之一的名称，则返回 True</p></li>
+							<li><p><code>setattr(object, name, value)</code> -- 设置对象的指定属性值</p></li>
+							<li><p><code>getattr(object, name[, default])</code> -- 返回对象命名属性的值。name 必须是字符串。</p></li>
+							<li><p><code>delattr(object, name)</code> -- <code>setattr()</code> 相关的函数。实参是一个对象和一个字符串。该字符串必须是对象的某个属性。如果对象允许，该函数将删除指定的属性。</p>
+								<pre class="brush: python;">
+class Person(object):
+    age = 0
+    name = ''
+
+
+p1 = Person()
+p1.age = 30
+p1.name = 'jiwanger'
+setattr(p1, 'sex', '男')	# 不存在的属性，自动添加
+print(hasattr(p1, 'age'), hasattr(p1, 'sex'), getattr(p1, 'age'))  # True True 30
+setattr(p1, 'age', 40)   # 存在的属性，修改值
+delattr(p1, 'sex')   # 可以删除
+delattr(p1, 'name')  # 不能删除
+print(hasattr(p1, 'sex'), hasattr(p1, 'name'), getattr(p1, 'age')) # False True 40
+</pre>
+							</li>
+							<li><p><code>all(iterable)</code> -- 如果 <code>iterable</code> 的所有元素为真（或迭代器为空），返回 True 。等价于:</p>
+								<pre class="brush: python;">
+def all(iterable):
+    for element in iterable:
+        if not element:
+            return False
+    return True
+</pre>
+							</li>
+							<li><p><code>any(iterable)</code> -- 如果 <code>iterable</code> 的任一元素为真则返回 True。 如果迭代器为空，返回 False。 等价于:</p>
+							<pre class="brush: python;">
+def any(iterable):
+    for element in iterable:
+        if element:
+            return True
+    return False
+</pre>
+							</li>
+							<li><p><code>id(object)</code> -- 返回对象的标识值，是一个整数，在此对象的生命周期中保证是唯一且恒定（两个生命期不重叠的对象可能具有相同的值）</p></li>
+							<li><p><code>hash(object)</code> -- 返回该对象的哈希值</p>
+								<pre class="brush: python;">
+o1 = 1024
+o2 = object()
+print(id(o1), id(o2))      # 139639691124656 139639691870336
+print(hash(o1), hash(o2))  # 1024 8727480741896
+</pre>
+							</li>
+
+							<li><p><code>isinstance(object, classinfo)</code> -- 如果 object 实参是 classinfo 实参的实例，或者是子类的实例，则返回 true</p></li>
+							<li><p><code>issubclass(class, classinfo)</code> -- 如果 class 是 classinfo 的子类（直接、间接或 虚拟 的），则返回 true</p>
+								<pre class="brush: python;">
+o1 = 1024
+o2 = object()
+print(isinstance(o1, int), isinstance(o1, object))
+print(issubclass(int, int), isinstance(int, object))
+</pre>
+							</li>
+
+							<li><p><code>dir([object])</code> -- 如果没有实参，则返回当前本地作用域中的名称列表。如果有实参，它会尝试返回该对象的有效属性列表</p></li>
+							<li><p><code>vars([object])</code> -- 返回模块、类、实例或任何其它具有 <code>__dict__</code> 属性的对象的 <code>__dict__</code> 属性</p>
+								<pre class="brush: python;">
+o1 = 1024
+o2 = object()
+print(dir(), dir(o1), dir(o2))
+print(vars())					# vars 的实参必须有 __dict__ 属性
+</pre>
+							</li>
+							<li><p><code>callable(object)</code> -- 如果实参 object 是可调用的(定义了 <code>__call__</code> 方法)，返回 True，否则返回 False。</p></li>
+							<li><p><code>globals()</code> -- 返回表示当前全局符号表的字典</p></li>
+							<li><p><code>locals()</code> -- 更新并返回表示当前本地符号表的字典</p></li>
+							<li><p><code>compile(source, filename, mode, flags=0, dont_inherit=False, optimize=-1)</code> -- 将 source 编译成代码或 AST 对象。代码对象可以被 exec() 或 eval() 执行。source 可以是常规的字符串、字节字符串，或者 AST 对象。</p></li>
+							<li><p><code>eval(expression, globals=None, locals=None)</code> -- 实参是一个字符串，以及可选的 globals 和 locals。globals 实参必须是一个字典。locals 可以是任何映射对象。</p></li>
+							<li><p><code>exec(object[, globals[, locals]])</code> -- 支持动态执行 Python 代码。object 必须是字符串或者代码对象。如果是字符串，那么该字符串将被解析为一系列 Python 语句并执行（除非发生语法错误）。如果是代码对象，它将被直接执行。在任何情况下，被执行的代码都需要和文件输入一样是有效的。</p></li>
+
+							<li class="group"><p><code>format(value[, format_spec])</code> -- 调用 <code>value.__format__(format_spec)</code></p></li>
+							<li><p><code>input([prompt])</code> -- 如果存在 prompt 实参，则将其写入标准输出，末尾不带换行符</p></li>
+							<li><p><code>len(s)</code> -- 返回对象的长度</p></li>
+
+							<li class="group"><p><code>open(file, mode='r', buffering=-1, encoding=None, errors=None, newline=None, closefd=True, opener=None)</code> -- 打开 file 并返回对应的 file object。如果该文件不能打开，则触发 OSError</p></li>
+							<li><p><code>sorted(iterable, *, key=None, reverse=False)</code> -- 根据 iterable 中的项返回一个新的已排序列表</p></li>
+
+							<li class="group"><p><code>help([object])</code> -- 启动内置的帮助系统（此函数主要在交互式中使用）。如果没有实参，解释器控制台里会启动交互式帮助系统。如果实参是一个字符串，则在模块、函数、类、方法、关键字或文档主题中搜索该字符串，并在控制台上打印帮助信息。如果实参是其他任意对象，则会生成该对象的帮助页。</p></li>
+
+							<li class="group"><p><code>breakpoint(*args, **kws)</code> -- 此函数会在调用时将你陷入调试器中。具体来说，它调用 <code>sys.breakpointhook()</code> ，直接传递 args 和 kws 。</p></li>
+							<li><p><code>__import__(name, globals=None, locals=None, fromlist=(), level=0)</code> -- 此函数会由 import 语句发起调用</p></li>
+						</ol>
+
+						<p><b>内置注解类</b></p>
+						<ol>
+							<li><p><code>@staticmethod</code> -- 将方法转换为静态方法</p></li>
+							<li><p><code>@classmethod</code> -- 把一个方法封装成类方法</p></li>
+						</ol>
+
+						<p><b>内置类</b></p>
+						<ol>
+							<li><p><b>class</b> <code>object()</code> -- 返回一个没有特征的新对象。object 是所有类的基类。</p>
+								<pre class="brush: python;">
+class object:
+    __doc__ = ...    # 类型帮助信息
+    __class__ = ...  # 类型
+    __dict__ = ...   # 对象字典，存储所有实例成员信息
+    __slots__ = ...  # type: Union[str, Iterable[str]]
+    __module__ = ... # 类型所在模块
+    if sys.version_info >= (3, 6):
+        __annotations__ = ...  # type: Dict[str, Any]
+
+    def __new__(cls)   # 调用以创建一个 cls 类的新实例，其余的参数会被传递给对象构造器表达式
+    def __init__(self) # 构造方法
+    def __eq__(self, o: object) # 等于 ==
+    def __ne__(self, o: object) # 不等于 !=
+    def __str__(self)  # 和 JAVA 的 toString() 方法类似
+    def __repr__(self) # 和 str 差不多，返回结果应更准确
+    def __hash__(self) # 哈希值
+    def __format__(self, format_spec: str)       # 格式化
+
+    def __setattr__(self, name: str, value: Any) # 设置属性
+    def __getattribute__(self, name: str)        # 获取属性
+    def __delattr__(self, name: str)             # 删除属性
+
+    def __sizeof__(self)                   # 返回对象内存大小，对于
+    def __reduce__(self)                   #
+    def __reduce_ex__(self, protocol: int) #
+    def __dir__(self)                      # 返回有效属性列表
+
+    if sys.version_info >= (3, 6):
+        def __init_subclass__(cls) -> None: ...
+</pre>
+							</li>
+							<li><p><b>class</b> <code>int([x]) / int(x, base=10)</code> -- 返回一个使用数字或字符串 x 生成的整数对象，或者没有实参的时候返回 0 </p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+							<li><p><b>class</b> <code>float([x])</code> -- 返回从数字或字符串 x 生成的浮点数。</p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+							<li><p><b>class</b> <code>complex([real[, imag]])</code> -- 返回值为 real + imag*1j 的复数，或将字符串或数字转换为复数。</p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+							<li><p><b>class</b> <code>bool(x)</code> -- 返回一个布尔值，True 或者 False。x 使用标准的 <b>真值测试过程</b> 来转换。</p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+							<li><p><b>class</b> <code>str(object='') / str(object=b'', encoding='utf-8', errors='strict')</code> -- 返回一个 str 版本的 object </p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+							<li><p><b>class</b> <code>type(object) / type(name, bases, dict)</code> -- 传入一个参数时，返回 object 的类型。 返回值是一个 type 对象，通常与 object.__class__ 所返回的对象相同。</p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+							<li><p><b>class</b> <code>tuple([iterable])</code> -- 一个不可变的序列类型</p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+							<li><p><b>class</b> <code>bytes([source[, encoding[, errors]]])</code> -- 返回一个新的 “bytes” 对象， 是一个不可变序列，包含范围为 0 <= x < 256 的整数。</p>
 							<pre class="brush: python;">
 
 </pre>
-						</div>
-
-						<div class="sub-item">
-							<h5 class="text-primary">for 循环</h5>
+							</li>
+							<li><p><b>class</b> <code>bytearray([source[, encoding[, errors]]])</code> -- 返回一个新的 bytes 数组。 bytearray 类是一个可变序列，包含范围为 0 <= x < 256 的整数。</p>
 							<pre class="brush: python;">
 
 </pre>
-						</div>
-
-						<div class="sub-item">
-							<h5 class="text-primary">while 循环</h5>
-							<pre class="brush: python;">
+							</li>
+							<li><p><b>class</b> <code>range(stop) / range(start, stop[, step])</code> -- 返回一个不可变的序列类型</p>
+								<pre class="brush: python;">
 
 </pre>
-						</div>
+							</li>
+							<li><p><b>class</b> <code>list([iterable])</code> -- 除了是函数，list 也是可变序列类型</p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+                            <li><p><b>class</b> <code>map(function, iterable, ...)</code> -- 产生一个将 function 应用于迭代器中所有元素并返回结果的迭代器</p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+							<li><p><b>class</b> <code>zip(*iterables)</code> -- 创建一个聚合了来自每个可迭代对象中的元素的迭代器。</p></li>
+							<li><p><b>class</b> <code>dict(**kwarg) / dict(mapping, **kwarg) / dict(iterable, **kwarg)</code> -- 创建一个新的字典。dict 对象是一个字典类。</p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+							<li><p><b>class</b> <code>enumerate(iterable, start=0)</code> -- 返回一个枚举对象。iterable 必须是一个序列，或 iterator，或其他支持迭代的对象。</p></li>
+							<li><p><b>class</b> <code>frozenset([iterable])</code> -- 返回一个新的 frozenset 对象，它包含可选参数 iterable 中的元素。</p></li>
+							<li><p><b>class</b> <code>filter(function, iterable)</code> -- 用 iterable 中函数 function 返回真的那些元素，构建一个新的迭代器。</p></li>
+							<li><p><b>class</b> <code>memoryview(obj)</code> -- 返回由给定实参创建的“内存视图”对象</p></li>
+							<li><p><b>class</b> <code>property(fget=None, fset=None, fdel=None, doc=None)</code> -- 返回 property 属性</p></li>
+							<li><p><b>class</b> <code>reversed(seq)</code> -- 返回一个反向的 iterator</p></li>
+							<li><p><b>class</b> <code>set([iterable])</code> -- 返回一个新的 set 对象，可以选择带有从 iterable 获取的元素</p></li>
+							<li><p><b>class</b> <code>slice(stop) / slice(start, stop[, step])</code> -- 返回一个表示由 range(start, stop, step) 所指定索引集的 slice 对象</p></li></l>
+							<li><p><b>class</b> <code>super([type[, object-or-type]])</code> -- 返回一个代理对象，它会将方法调用委托给 type 指定的父类或兄弟类</p></li>
+
+
+						</ol>
+
+						<p><b>内置异常</b></p>
+						<p>在 Python 中，所有异常必须为一个派生自 BaseException 的类的实例。</p>
+						<pre class="brush: python;">
+BaseException      # 所有内置异常的基类，不应该被用户自定义类直接继承
+ ├─ SystemExit         # 请求退出解释器, 此异常由 sys.exit() 函数引发
+ ├─	GeneratorExit      # 常规退出以终止迭代, 当一个 generator 或 coroutine 被关闭时将被引发
+ ├─	KeyboardInterrupt  # 当用户按下中断键 (通常为 Control-C 或 Delete) 时将被引发
+ └─	Exception          # 所有内置的非系统退出类异常都派生自此类, 所有用户自定义异常也应当派生自此类
+	 ├─	ImportError        # 当 import 语句尝试加载模块遇到麻烦时将被引发
+	 ├─	TypeError          # 当一个操作或函数被应用于类型不适当的对象时将被引发
+	 ├─	SystemError        # 当解释器发现内部错误，但情况看起来尚未严重到要放弃所有希望时将被引发
+	 ├─	MemoryError        # 当一个操作耗尽内存但情况仍可（通过删除一些对象）进行挽救时将被引发
+	 ├─	StopIteration      # 由内置函数 next() 和 iterator 的 __next__() 方法所引发，用来表示该迭代器不能产生下一项
+	 ├─	StopAsyncIteration # 必须由一个 asynchronous iterator 对象的 __anext__() 方法来引发以停止迭代操作
+	 ├─	ReferenceError     # 在使用 weakref.proxy() 函数所创建的弱引用来访问该引用的某个已被作为垃圾回收的属性时被引发
+	 ├─	AssertionError     # 当 assert 语句失败时将被引发
+	 ├─	AttributeError     # 当属性引用或赋值失败时将被引发
+	 ├─	BufferError        # 当与 缓冲区 相关的操作无法执行时将被引发
+	 ├─	EOFError           # 当 input() 函数未读取任何数据即达到文件结束条件 (EOF) 时将被引发
+	 ├─	NameError          # 当某个局部或全局名称未找到时将被引发
+ 	 │	 └─	UnboundLocalError  # 当在函数或方法中对某个局部变量进行引用，但该变量并未绑定任何值时将被引发
+	 ├─	LookupError        # 此基类用于派生当映射或序列所使用的键或索引无效时引发的异常: IndexError, KeyError
+	 │	 ├─	IndexError         # 当序列抽取超出范围时将被引发
+	 │	 └─	KeyError           # 当在现有键集合中找不到指定的映射（字典）键时将被引发
+	 ├─	RuntimeError           # 当检测到一个不归属于任何其他类别的错误时将被引发
+	 │	 ├─	RecursionError     # 在解释器检测发现超过最大递归深度时被引发
+	 │	 └─NotImplementedError # 基类在其要求所开发的类提示具体实现尚待添加时引发此异常
+	 ├─	ArithmeticError    # 此基类用于派生针对各种算术类错误而引发的内置异常
+	 │	 ├─	ZeroDivisionError  # 当除法或取余运算的第二个参数为零时将被引发
+	 │	 ├─	OverflowError      # 当算术运算的结果大到无法表示时将被引发
+	 │	 └─	FloatingPointError # 目前未被使用
+	 ├─	SyntaxError        # 当解析器遇到语法错误时将被引发
+	 │	 └─	IndentationError   # 与不正确的缩进相关的语法错误的基类
+	 │		 └─	TabError       # 当缩进包含对制表符和空格符不一致的使用时将被引发
+	 ├─	ValueError         # 函数接收到正确类型但值不适合的参数，且不能用更精确的异常例如 IndexError 描述时将被引发
+	 │	 └─	UnicodeError       # 当发生与 Unicode 相关的编码或解码错误时将被引发
+	 │		 ├─	UnicodeDecodeError # 当在解码过程中发生与 Unicode 相关的错误时将被引发
+	 │		 ├─	UnicodeEncodeError # 当在编码过程中发生与 Unicode 相关的错误时将被引发
+	 │		 └─	UnicodeTranslateError # 在转写过程中发生与 Unicode 相关的错误时将被引发
+	 ├─	Warning            # 警告类别的基类
+	 │	 ├─	UserWarning        # 用户代码所产生警告的基类
+	 │	 ├─	UnicodeWarning     # 与 Unicode 相关的警告的基类
+	 │	 ├─	SyntaxWarning      # 与模糊的语法相关的警告的基类
+	 │	 ├─	RuntimeWarning     # 与模糊的运行时行为相关的警告的基类
+	 │	 ├─	ResourceWarning    # 与资源使用相关的警告的基类
+	 │	 ├─	PendingDeprecationWarning # 对于已过时并预计在未来弃用，但目前尚未弃用的特性相关警告的基类
+	 │	 ├─	ImportWarning      # 与在模块导入中可能的错误相关的警告的基类
+	 │	 ├─	FutureWarning      # 如警告是针对以 Python 所编写应用的最终用户，则以此作为与已弃用特性相关警告的基类
+	 │	 ├─	BytesWarning       # 与 bytes 和 bytearray 相关的警告的基类
+	 │	 └─ DeprecationWarning # 如警告是针对其他 Python 开发者的，则以此作为与已弃用特性相关警告的基类
+     └─	OSError            # 此异常在一个系统函数返回系统相关的错误时将被引发
+		 ├─	TimeoutError       # 当一个系统函数发生系统级超时的情况下将被引发
+		 ├─	PermissionError    # 当在没有足够操作权限的情况下试图执行某个操作时将被引发
+		 ├─	ProcessLookupError # 当给定的进程不存在时将被引发
+		 ├─	NotADirectoryError # 当请求对一个非目录对象执行目录操作时将被引发
+		 ├─	IsADirectoryError  # 当请求对一个目录执行文件操作将被引发
+		 ├─	InterruptedError   # 当系统调用被输入信号中断时将被引发
+		 ├─	BlockingIOError    # 当一个操作会被某个设置为非阻塞操作的对象所阻塞时将被引发
+		 ├─	ChildProcessError  # 当一个子进程上的操作失败时将被引发
+		 ├─	FileExistsError    # 当试图创建一个已存在的文件或目录时将被引发
+		 ├─	FileNotFoundError  # 当所请求的文件或目录不存在时将被引发
+		 └─ ConnectionError    # 与连接相关问题的基类
+			 ├─	BrokenPipeError        # 当试图写入另一端已被关闭的管道，或是试图写入已关闭写入的套接字时将被引发
+			 ├─	ConnectionRefusedError # 当连接尝试被对端拒绝时将被引发
+			 ├─	ConnectionResetError   # 当连接被对端重置时将被引发
+			 └─ ConnectionAbortedError # 当连接尝试被对端中止时将被引发
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+                <!-- item start -->
+				<a class="offset" id="python-syntax-special"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Python 特殊方法</h3>
+					</div>
+					<div class="panel-body">
+						<p><b>Python 以下划线开头的标识符是有特殊意义的:</b></p>
+                        <ul>
+                            <li>
+                                <p>单下划线开头（<code>_foo</code>）代表不能直接访问的类属性，需通过类提供的接口进行访问，不能用 <code>from xxx import *</code> 而导入；</p>
+                            </li>
+                            <li>
+                                <p>双下划线开头的（<code>__foo</code>）代表类的私有成员；</p>
+                            </li>
+                            <li>
+                                <p>双下划线开头和结尾的（<code>__foo__</code>）代表 Python 里特殊方法专用的标识，如 <code>__init__（）</code> 代表类的构造函数。</p>
+                            </li>
+                        </ul>
+                        <p><b>特殊属性</b></p>
+                        <ol>
+                            <li><p><code>__name__</code> -- </p>
+                                <pre class="brush: python;">
+
+</pre>
+                            </li>
+                            <li><p><code>__doc__</code> --  就像 JavaDoc, 跟着类/方法/文件定义后面的第一段多行注释为此属性的值</p>
+                                <pre class="brush: python;">
+class Person:
+    """Python 特殊方法一览"""
+print(Person.__doc__)
+</pre>
+                            </li>
+                            <li><p><code>__module__</code> -- 模块名，默认为 '__main__', 在打印对象的时候可以看到</p>
+                                <pre class="brush: python;">
+obj = object()
+p1 = Person("jiwanger", 30)
+coder = util.Coder()
+
+print(obj)     # &lt;object object at 0x7f2af8add1d0>
+print(p1)      # &lt;__main__.Person object at 0x7f2af74c2588>
+print(coder)   # &lt;app.util.Coder object at 0x7f2af74c25c0>
+</pre>
+                            </li>
+                            <li><p><code>__class__</code> -- </p>
+                                <pre class="brush: python;">
+
+</pre>
+                            </li>
+                            <li><p><code>__dict__</code> -- </p>
+                                <pre class="brush: python;">
+
+</pre>
+                            </li>
+                            <li><p><code>__slots__</code> -- </p>
+                                <pre class="brush: python;">
+
+</pre>
+                            </li>
+                        </ol>
+                        <p><b>特殊方法</b></p>
+                        <ol>
+                            <li><p><code>__new__()</code> -- 实例化时候最先调用此方法，应该返回一个类的实例</p>
+                                <pre class="brush: python;">
+ def __new__(cls, *args, **kwargs):
+	""" 实例化时候最先调用此方法，应该返回一个类的实例(参数自动传给 __init__ 方法) """
+	return super(Person, cls).__new__(cls)
+</pre>
+                            </li>
+                            <li><p><code>__init__()</code> -- 构造器</p>
+                                <pre class="brush: python;">
+def __init__(self, name, age):
+    """ 实例方法 """
+    self.name = name
+    self.age = age
+</pre>
+                            </li>
+                            <li><p><code>__setattr__()</code> -- 设置属性值，任何地方的赋值语句 <code>self.xx = xx</code> 都会调用此方法</p>
+                                <pre class="brush: python;">
+def __setattr__(self, key, value):
+    """ 设置属性值，否则任何地方的 self.xx = xx 都无效 """
+    object.__setattr__(self, key, value)
+</pre>
+                            </li>
+                            <li><p><code>__getattribute__()</code> -- 获取属性值，任何地方的取值语句 <code>self.xx</code> 都会调用此方法</p>
+                                <pre class="brush: python;">
+def __getattribute__(self, item):
+    """ 获取属性值，否则任何地方的 self.xx 都无法获取值 """
+    return object.__getattribute__(self, item)
+</pre>
+                            </li>
+                            <li><p><code>__str__()</code> -- 相当于 Java 的 <code>toString()</code> 方法</p>
+                                <pre class="brush: python;">
+def __str__(self): return '{{"name":"{}", "age":{}}}'.format(self.name, self.age)
+</pre>
+                            </li>
+							<li><p><code>__bool__()</code> -- 任何对象都可以进行逻辑值的检测。 如果对象有此方法，那么对象的逻辑值为此方法的返回值；如果没有此方法，那么 <code>__len__()</code> 返回 0 为 False, 其他值为 True</p>
+                                <pre class="brush: python;">
+def __bool__(self): return self.age >= 0
+
+if p1 and p2: pass
+elif p1 or p2: pass
+elif not p2: pass
+else: pass
+</pre>
+                            </li>
+							<li><p><code>__len__()</code> -- 返回对象的长度(一般用于字符、列表、元组等)，内置函数 <code>len()</code> 调用此方法的返回值；如果对象没有 <code>__bool__()</code> 方法， 在逻辑值检测时，<code>__len__()</code> 返回 0 为 False, 其他值为 True</p>
+                                <pre class="brush: python;">
+def __len__(self): return self.age
+</pre>
+                            </li>
+							<li><p><code>__lt__() / __gt__() / __eq__() / __ne__() / __le__() / __ge__()</code> -- 运算符重载(<code>&lt;, >, =, !=, &lt;=, >=</code>), 一般只需要重写对立的一个；但是当冲突的时候，就取决于使用的操作符</p>
+                                <pre class="brush: python;">
+def __lt__(self, other): return self.age < other.age
+
+def __eq__(self, other): return self.age == other.age
+
+def __le__(self, other): return self.age <= other.age
+</pre>
+                            </li>
+							<li><p><code>__and__() / __or__() / __xor__()</code> -- 运算符重载(按位 与/或/异或)</p>
+                                <pre class="brush: python;">
+def __and__(self, other): return self.age & other.age
+
+def __or__(self, other): return self.age | other.age
+
+def __xor__(self, other): return self.age ^ other.age
+</pre>
+                            </li>
+							<li><p><code>__lshift__() / __rshift__()</code> -- 操作符重载(左移和右移)</p>
+								<pre class="brush: python;">
+def __lshift__(self, other): return self.age << other
+
+def __rshift__(self, other): return self.age >> other
+</pre>
+							</li>
+							<li><p><code>__add__() / __sub__() / __mul__() / __truediv__() / __mod__()</code> -- 操作符重载(<code>+, -, *, /, %, //</code>)</p>
+								<pre class="brush: python;">
+def __add__(self, other): return self.age + other.age
+
+def __sub__(self, other): return self.age - other.age
+
+def __mul__(self, other): return self.age * other.age
+
+def __truediv__(self, other): return round(self.age / other.age, 1)
+
+def __mod__(self, other): return self.age % other.age
+
+def __floordiv__(self, other): return self.age // other.age  # 除法，结果取整数，直接丢弃小数部分
+</pre>
+							</li>
+							<li><p><code>__neg__() / __pos__()</code> -- 操作符重载(一元操作符<code>-, +, ~</code>)</p>
+								<pre class="brush: python;">
+def __neg__(self): return -self.age
+
+def __pos__(self): return self.age
+
+def __invert__(self): return ~self.age
+</pre>
+							</li>
+							<li><p><code>__pow__()</code> -- 乘方运算，<code>pow()</code> 函数和 <code>**</code> 操作符调用此方法，<b>注意，这个函数只适用于左边是对象，右边是数字</b></p>
+								<pre class="brush: python;">
+def __pow__(self, power, modulo=None): return self.age ** power
+
+p1 = Person("jiwanger", 32)
+print(p1 ** 2, pow(p1, 2))   # 1024 1024
+# print(2 ** p2)             # 错误，右边必须是数字，否则调用 __rpow__() 方法
+</pre>
+							</li>
+							<li><p><code>__abs__() / __divmod__() / __round__ / __hash__() / __next__()</code> -- 内置函数的<code>abs(), divmod(), round(), hash(), next()</code> 方法分别调用对应的方法</p>
+								<pre class="brush: python;">
+def __abs__(self): return abs(self.age)
+
+def __divmod__(self, other): return divmod(self.age, other.age)
+
+def __round__(self, n=None): return round(self.age, n)
+
+def __hash__(self): return object.__hash__(self)
+
+def __next__(self): return self.age   # 一般用于可迭代对象返回下一项
+</pre>
+							</li>
+							<li><p><code>__index__()</code> -- 必须返回一个整数，此方法和 <code>__int__()</code> 有点类似，内置函数 <code>bin() / hex() / oct()</code> 取对象的 <code>__index__()</code> 返回值作为它们的参数</p>
+								<pre class="brush: python;">
+def __index__(self): return self.age
+</pre>
+							</li>
+							<li><p><code>__int__()</code> -- 必须返回一个整数，在 int 类型转换时调用，另外内置函数 <code>chr()</code> 取对象的 <code>__int__()</code> 返回值作为它的参数</p>
+								<pre class="brush: python;">
+def __int__(self): return self.age
+</pre>
+							</li>
+							<li><p><code>__float__() / __complex__</code> -- 在类型转换时候，分别调用相应的方法</p>
+								<pre class="brush: python;">
+def __int__(self): return self.age                        # 转换为 int 时
+
+def __float__(self): return self.score                    # 转换为 float 时
+
+def __complex__(self): return complex(self.age, self.age) # 转换为 complex 时
+</pre>
+							</li>
+							<li><p><code>__repr__()</code> -- 返回包含一个对象的可打印表示形式的字符串，可以返回 <code>__str__()</code></p>
+								<pre class="brush: python;">
+def __repr__(self): return self.__str__()
+</pre>
+							</li>
+							<li><p><code>__ceil__ / __floor__</code> -- <code>math</code> 模块的 <code>ceil() / floor()</code> 方法取对象的对应方法的返回值为结果</p>
+								<pre class="brush: python;">
+def __ceil__(self): return self.score
+
+def __floor__(self): return self.score
+
+import math
+
+print(math.ceil(p1), math.ceil(p2))
+print(math.floor(p1), math.floor(p2))
+</pre>
+							</li>
+							<li><p><code>__sizeof__()</code> -- 返回对象的内存大小，<code>sys.getsizeof(obj)</code> 将会调用此方法计算对象的内存大小</p>
+								<pre class="brush: python;">
+def __sizeof__(self):
+	""" sys.getsizeof() 方法返回内置对象的内存大小，自定义的对象需要重写 __sizeof__() 自己实现 """
+	return sys.getsizeof(self.name) + sys.getsizeof(self.age) + sys.getsizeof(self.score)
+</pre>
+							</li>
+							<li><p><code></code> -- </p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+							<li><p><code></code> -- </p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+							<li><p><code></code> -- </p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+							<li><p><code></code> -- </p>
+								<pre class="brush: python;">
+
+</pre>
+							</li>
+                        </ol>
 					</div>
 				</div>
 				<!-- item over -->
@@ -1175,7 +1875,7 @@ $ sudo apt-get install python-pip
 					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
-				
+
 				<!-- item start -->
 				<a class="offset" id="python-network"></a>
 				<div class="panel panel-default">
@@ -1234,9 +1934,13 @@ $ sudo apt-get install python-pip
 			class="btn btn-default dropdown-toggle dropup" data-toggle="dropup">
 			<span class="caret"></span>
 		</a>
+
 		<a href="#" type="button"
 			class="btn btn-default dropdown-toggle btn-primary"
 			data-toggle="dropup"> TOP </a>
+		<a href="docs/python-3.7.4rc2/index.html" type="button"
+			class="btn btn-default dropdown-toggle btn-primary"
+			data-toggle="dropup" target="_blank"> DOCS </a>
 	</div>
 
 	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
