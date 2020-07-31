@@ -98,6 +98,7 @@
                         <a href="#other-RxJava" class="list-group-item">RxJava / RxAndroid</a>
                         <a href="#other-LeakCanary" class="list-group-item">LeakCanary</a>
                         <a href="#other-DBFlow" class="list-group-item">DBFlow</a>
+                        <a href="#other-realm" class="list-group-item">Realm</a>
                         <a href="#other-EventBus" class="list-group-item">EventBus</a>
                         <a href="#other-ButterKnife" class="list-group-item">ButterKnife</a>
                         <a href="#other-MPAndroidChart" class="list-group-item">MPAndroidChart</a>
@@ -115,6 +116,7 @@
 <div class="container" style="margin-top: 70px;">
     <div class="row">
         <div class="col-md-9 col-md-push-3" style="float: left;">
+
             <!-- item start -->
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -1449,6 +1451,7 @@ public interface RetryPolicy {
                             </li>
                             <li>
                                 <p><a href="docs/volley-1.x/javadoc/com/android/volley/Cache.html" target="_blank">Cache</a> / <a href="docs/volley-1.x/javadoc/com/android/volley/toolbox/DiskBasedCache.html" target="_blank">DiskBasedCache</a> -- 缓存请求结果，Volley 默认使用的是基于 SDCard 的 DiskBasedCache(存储位置为: <code>rootDirectory = new File(context.getCacheDir(), "volley"))</code>。NetworkDispatcher 得到请求结果后判断是否需要存储在 Cache，CacheDispatcher 会从 Cache 中取缓存结果。</p>
+                                <p>Volley 的 Cache 默认由服务器控制，</p>
                                 <pre class="brush: java;">
 /** Cache 的两个实现类
  * DiskBasedCache -- 缓存到 SDCard 指定目录的缓存实现，默认磁盘使用大小为 5MB，但可配置
@@ -1468,9 +1471,9 @@ public interface Cache {
         public String etag; // 用于缓存一致性
         public long serverDate;   // 服务器报告的此响应的日期
         public long lastModified; // 请求对象的最后修改日期
-        public long ttl;     // TTL
+        public long ttl;     // TTL，此值决定了是否使用缓存数据，查看 HttpHeaderParser 类
         public long softTtl; // 用于此记录的软 TTL
-        public Map&lt;String, String> responseHeaders = Collections.emptyMap(); // 保存从服务器接收的响应头
+        public Map&lt;String, String> responseHeaders = Collections.emptyMap(); // 保存服务器的响应头
         public List&lt;Header> allResponseHeaders; // 保存所有的响应头
 
         public boolean isExpired() { // 是否已过期
@@ -1481,7 +1484,94 @@ public interface Cache {
         }
     }
 }
-                                </pre>
+
+public class HttpHeaderParser {
+    ...
+
+    public static Cache.Entry parseCacheHeaders(NetworkResponse response) {
+        long now = System.currentTimeMillis();
+
+        Map&lt;String, String> headers = response.headers;
+
+        long serverDate = 0;
+        long lastModified = 0;
+        long serverExpires = 0;
+        long softExpire = 0;
+        long finalExpire = 0;
+        long maxAge = 0;
+        long staleWhileRevalidate = 0;
+        boolean hasCacheControl = false;
+        boolean mustRevalidate = false;
+
+        String serverEtag = null;
+        String headerValue;
+
+        headerValue = headers.get("Date");
+        if (headerValue != null) {
+            serverDate = parseDateAsEpoch(headerValue);
+        }
+
+        headerValue = headers.get("Cache-Control");
+        if (headerValue != null) {
+            hasCacheControl = true;
+            String[] tokens = headerValue.split(",", 0);
+            for (int i = 0; i < tokens.length; i++) {
+                String token = tokens[i].trim();
+                if (token.equals("no-cache") || token.equals("no-store")) {
+                    return null;
+                } else if (token.startsWith("max-age=")) {
+                    try {
+                        maxAge = Long.parseLong(token.substring(8));
+                    } catch (Exception e) {
+                    }
+                } else if (token.startsWith("stale-while-revalidate=")) {
+                    try {
+                        staleWhileRevalidate = Long.parseLong(token.substring(23));
+                    } catch (Exception e) {
+                    }
+                } else if (token.equals("must-revalidate") || token.equals("proxy-revalidate")) {
+                    mustRevalidate = true;
+                }
+            }
+        }
+
+        headerValue = headers.get("Expires");
+        if (headerValue != null) {
+            serverExpires = parseDateAsEpoch(headerValue);
+        }
+
+        headerValue = headers.get("Last-Modified");
+        if (headerValue != null) {
+            lastModified = parseDateAsEpoch(headerValue);
+        }
+
+        serverEtag = headers.get("ETag");
+
+        // Cache-Control takes precedence over an Expires header, even if both exist and Expires
+        // is more restrictive.
+        if (hasCacheControl) {
+            softExpire = now + maxAge * 1000;
+            finalExpire = mustRevalidate ? softExpire : softExpire + staleWhileRevalidate * 1000;
+        } else if (serverDate > 0 && serverExpires >= serverDate) {
+            // Default semantic for Expire header in HTTP specification is softExpire.
+            softExpire = now + (serverExpires - serverDate);
+            finalExpire = softExpire;
+        }
+
+        Cache.Entry entry = new Cache.Entry();
+        entry.data = response.data;
+        entry.etag = serverEtag;
+        entry.softTtl = softExpire;
+        entry.ttl = finalExpire;
+        entry.serverDate = serverDate;
+        entry.lastModified = lastModified;
+        entry.responseHeaders = headers;
+        entry.allResponseHeaders = response.allHeaders;
+
+        return entry;
+    }
+}
+</pre>
                             </li>
                             <li>
                                 <p><a href="docs/volley-1.x/javadoc/com/android/volley/CacheDispatcher.html" target="_blank">CacheDispatcher</a> / <a href="docs/volley-1.x/javadoc/com/android/volley/NetworkDispatcher.html" target="_blank">NetworkDispatcher</a> -- 都是 Thread 的子类，在 Volley 创建队列的启动时，启动了 1 个 CacheDispatcher 和 4 个 NetworkDispatcher。</p>
@@ -2890,29 +2980,42 @@ Glide.with(this).resumeRequests();		// 恢复加载
                 </div>
                 <div class="panel-body">
                     <div class="sub-item">
-                        <p><a href="https://github.com/ReactiveX/RxJava">RxJava / RxAndroid</a> 是一个在
-                            Java VM 上使用可观测的序列来组成异步的、基于事件的程序的库，主要是一个实现观察者模式和异步操作的库。</p>
+                        <p><a href="https://github.com/ReactiveX/RxJava">RxJava / RxAndroid</a> 是一个在 Java VM 上使用可观测的序列来组成异步的、基于事件的程序的库，主要是一个实现观察者模式和异步操作的库。</p>
                         <p>RxJava 中最值得称道的地方是线程调度器(Scheduler)，实现了简洁明了的异步操作。</p>
-                        <p>一般来说 Observable 生成发射数据流，以及 Operators 加工数据流都是在后台线程中进行，而 Observer
-                            在前台线程中接受并相应数据。</p>
+                        <p>一般来说 Observable 生成发射数据流，以及 Operators 加工数据流都是在后台线程中进行，而 Observer 在前台线程中接受并相应数据。</p>
                         <pre class="brush: java;">
-implementation "io.reactivex.rxjava2:rxjava:2.2.3"
-implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+implementation "io.reactivex.rxjava2:rxjava:2.2.3"           // 依赖 reactive-streams
+implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'        // 依赖 rxjava
+
+implementation: 'org.reactivestreams:reactive-streams:1.0.3' // 异步流协议, 只定义了以下 4 个接口
+
+/** 用于表示对数据的需求，也用于取消需求 */
+public interface Subscription {
+    public void request(long n);   // 在通过此方法发出请求信号之前，Publisher 不会发送任何事件
+    public void cancel();          // 请求 Publisher 停止发送数据并清理资源
+}
+/** 订阅者 */
+public interface Subscriber&lt;T> {
+    public void onSubscribe(Subscription s); // 由 Publisher 回调
+    public void onNext(T t);                 // Publisher 发布正常数据到此方法
+    public void onError(Throwable t);        // Publisher 发送错误应该调用此方法
+    public void onComplete();                // Publisher 发布数据完成应该调用此方法
+}
+/** 发布者 */
+public interface Publisher&lt;T> {
+    public void subscribe(Subscriber&lt;? super T> s); // 建立订阅光系
+}
+/** 即是订阅者又是发布者 */
+public interface Processor&lt;T, R> extends Subscriber&lt;T>, Publisher&lt;R> {}
 </pre>
-                        <p>我们一般写的程序统称为命令式程序，是以流程为核心的，每一行代码实际上都是机器实际上要执行的指令。而 Rxjava
-                            这样的编程风格，称为函数响应式编程。函数响应式编程是以数据流为核心，处理数据的输入，处理以及输出的。</p>
+                        <p>我们一般写的程序统称为命令式程序，是以流程为核心的，每一行代码实际上都是机器实际上要执行的指令。而 Rxjava 这样的编程风格，称为函数响应式编程。函数响应式编程是以数据流为核心，处理数据的输入，处理以及输出的。</p>
                         <p>响应式编程是一种基于异步数据流概念的编程模式。数据流就像一条河：它可以被观测，被过滤，被操作，或者为新的消费者与另外一条流合并为一条新的流。</p>
                         <p>RxJava 以观察者模式为骨架，RxJava2 中出现了两种观察者模式：</p>
                         <ul>
-                            <li><p>Observable ( 被观察者 ) / Observer ( 观察者 ) -- Observable 用于订阅
-                                Observer，不再支持背压；</p></li>
-                            <li>
-                                <p>Flowable （被观察者）/ Subscriber （观察者） -- Flowable 用于订阅 Subscriber ，
-                                    是支持背压。</p>
-                            </li>
+                            <li><p>Observable ( 被观察者 ) / Observer ( 观察者 ) -- Observable 用于订阅 Observer，不再支持背压；</p></li>
+                            <li><p>Flowable （被观察者）/ Subscriber （观察者） -- Flowable 用于订阅 Subscriber ，是支持背压。</p></li>
                         </ul>
-                        <p class="alert alert-success">
-                            背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。</p>
+                        <p class="alert alert-success">背压是指在异步场景中，被观察者发送事件速度远快于观察者的处理速度的情况下，一种告诉上游的被观察者降低发送速度的策略。</p>
                         <p>观察者模式使用步骤：</p>
                         <ul>
                             <li><p>构建一个被观察者；</p></li>
@@ -2960,6 +3063,159 @@ observable.subscribe(observer);
                     <div class="sub-item">
                         <p><b>RxJava 主要类</b></p>
                         <p>RxJava-2.2.x 文档 -- <a href="docs/rxjava-2.2.x/index.html" target="_blank">Javadoc</a></p>
+                        <p>RxJava-2.2.x 包含了两套观察者(发布-订阅)模式：</p>
+                        <ul>
+                            <li><p><code>Observable/Observer</code> -- 不支持背压，其中 Subject 和其子类即是 Observable 又是 Observer；</p></li>
+                            <li><p><code>Publisher/Subscriber</code> -- 支持背压，Flowable 实现了 Publisher 接口，Processor 即是 Publisher 又是 Subscriber，FlowableProcessor 和其子类实现了这些接口。</p></li>
+                        </ul>
+                        <p>Observable 的静态方法多数是创建了不同的子类，重点关注子类的 <code>subscribeActual(Observer&lt;? super T>)</code> 方法。</p>
+                        <p>Observable 的操作符生成了不同的内部子类，这些子类包装了原始数据，改变了原始数据的运行方式。</p>
+                        <pre class="brush: java;">
+io.reactivex                // 基础包，包含: Observer, Emitter, Observable, Single, Maybe, Flowable...
+io.reactivex.annotations    // RxJava 用到的注解
+io.reactivex.disposables    // Disposable 接口和默认实现
+io.reactivex.exceptions     // 异常
+io.reactivex.flowables      // Flowable 的两种实现: ConnectableFlowable 和 GroupedFlowable
+io.reactivex.functions      // 函数接口以及相关的实用程序类
+io.reactivex.observables    // Observable 的两种实现: ConnectableObservable 和 GroupedObservable
+io.reactivex.observers      // 基于 Observer 的使用者类和接口的默认包装器和实现
+io.reactivex.parallel       // 包含 ParallelFlowable
+io.reactivex.plugins        // 包含中央插件处理程序 RxJavaPlugins
+io.reactivex.processors     // 类扩展, 热 Flowable
+io.reactivex.schedulers     // 调度器 Schedulers
+io.reactivex.subjects       // Subject 和子类
+io.reactivex.subscribers    // Subscriber 一些实现
+
+/** RxJava 主要接口 */
+/** 观察者/订阅者 */
+Observer
+MaybeObserver
+SingleObserver
+CompletableObserver
+FlowableSubscriber extends Subscriber // 这个名字有点不同，继承自 org.reactivestreams.Subscriber 接口
+
+/** 发射器，用于发射数据 */
+Emitter
+    ObservableEmitter
+    FlowableEmitter
+MaybeEmitter
+SingleEmitter
+CompletableEmitter
+
+/** 无背压的可观测源接口，有背压的可观测源为 org.reactivestreams.Publisher 接口，Flowable 实现了 Publisher 接口
+ *  它们都有一个 subscribe(XX-Observer) 的订阅方法，注意和 XX-OnSubscribe 接口的区别
+ */
+ObservableSource
+MaybeSource
+SingleSource
+CompletableSource
+
+/** 具有 subscribe(XX-Emitter) 方法的函数接口， 注意和 XX-Source 接口的区别 */
+ObservableOnSubscribe
+FlowableOnSubscribe
+MaybeOnSubscribe
+SingleOnSubscribe
+CompletableOnSubscribe
+
+/** 转换器，将 Converter 转换为值 */
+ObservableConverter
+FlowableConverter
+MaybeConverter
+SingleConverter
+CompletableConverter
+
+/** 将实现类转换为对应接口，比如： Observable -> ObservableSource */
+ObservableTransformer
+FlowableTransformer
+MaybeTransformer
+SingleTransformer
+CompletableTransformer
+
+/** 将下游 Observer/Subscriber 映射/包装到上游 Observer/Subscriber */
+ObservableOperator
+FlowableOperator
+MaybeOperator
+SingleOperator
+CompletableOperator
+
+Disposable
+
+SchedulerRunnableIntrospection
+
+ParallelFlowableConverter
+ParallelTransformer
+
+
+/** RxJava 主要类 */
+Observable implements ObservableSource
+    ConnectableObservable
+    GroupedObservable
+    Subject implements Observer
+        AsyncSubject
+        BehaviorSubject
+        PublishSubject
+        ReplaySubject
+        UnicastSubject
+
+Maybe implements MaybeSource
+    MaybeSubject implements MaybeObserver
+
+Single implements SingleSource
+    SingleSubject implements SingleObserver
+
+Completable implements CompletableSource
+    CompletableSubject implements CompletableObserver
+
+Flowable implements Publisher
+    ConnectableFlowable
+    GroupedFlowable
+    FlowableProcessor implements Processor, FlowableSubscriber
+        AsyncProcessor
+        BehaviorProcessor
+        MulticastProcessor
+        PublishProcessor
+        ReplayProcessor
+        UnicastProcessor
+
+DefaultObserver implements Observer
+SafeObserver implements Observer, Disposable
+SerializedObserver implements Observer, Disposable
+DisposableObserver implements Observer, Disposable
+ResourceObserver implements Observer, Disposable
+DisposableMaybeObserver implements MaybeObserver, Disposable
+ResourceMaybeObserver implements MaybeObserver, Disposable
+DisposableSingleObserver implements SingleObserver, Disposable
+ResourceSingleObserver implements SingleObserver, Disposable
+DisposableCompletableObserver implements CompletableObserver, Disposable
+ResourceCompletableObserver implements CompletableObserver, Disposable
+
+DefaultSubscriber implements FlowableSubscriber
+DisposableSubscriber implements FlowableSubscriber, Disposable
+ResourceSubscriber implements FlowableSubscriber, Disposable
+SafeSubscriber implements FlowableSubscriber, Subscription
+SerializedSubscriber implements FlowableSubscriber, Subscription
+
+BaseTestConsumer implements Disposable
+    TestObserver implements Observer, MaybeObserver, SingleObserver, CompletableObserver
+    TestSubscriber implements FlowableSubscriber, Subscription, Disposable
+
+Schedulers
+Scheduler
+    TestScheduler
+Scheduler.Worker implements Disposable
+Timed
+
+RxJavaPlugins
+
+Notification
+
+ParallelFlowable
+
+Disposables
+CompositeDisposable implements Disposable
+SerialDisposable implements Disposable
+
+</pre>
                         <div class="split-item">
                             <pre class="brush: java;">
 java.lang.Object
@@ -2977,8 +3233,6 @@ public interface ObservableSource&lt;T> {
 }
 </pre>
                             <p><a href="docs/rxjava-2.2.x/io/reactivex/Observable.html" target="_blank">Observable</a> / <a href="docs/rxjava-2.2.x/io/reactivex/Observer.html" target="_blank">Observer</a> -- 被观察者 / 观察者，是可被观察的对象。</p>
-                            <p>Observable 的静态方法多数是创建了不同的子类，重点关注子类的 <code>subscribeActual(Observer&lt;? super T>)</code> 方法。</p>
-                            <p>Observable 的操作符生成了不同的内部子类，这些子类包装了原始数据，改变了原始数据的运行方式。</p>
                             <ol>
                                  <li><p><code>static int 	bufferSize()</code> -- 获取缓冲值大小（在使用 Flowable 的时候需要）</p>
                                     <pre class="brush: java;">
@@ -4629,8 +4883,7 @@ Completable.create(new CompletableOnSubscribe() {
     });
 </pre>
                                 </li>
-                                <li><p><code>Maybe</code> --
-                                    可发射一条单一的数据，以及发射一条完成通知，或者一条异常通知，其中完成通知和异常通知只能发射一个，发射数据只能在发射完成通知或者异常通知之前，否则发射数据无效。
+                                <li><p><code>Maybe</code> -- 可发射一条单一的数据 或 发射一条完成通知 或 一条异常通知。
                                 </p>
                                     <pre class="brush: java;">
 Maybe.create(new MaybeOnSubscribe&lt;String>() {
@@ -5124,7 +5377,7 @@ public class TestActivity extends AppCompatActivity {
             //接受到消息的处理
         }
     }
-                            </pre>
+}</pre>
                         </li>
                         <li><p>线程造成的内存泄漏；</p>
                             <pre class="brush: java;">
@@ -5148,9 +5401,12 @@ public class TestActivity extends AppCompatActivity {
                     </ol>
                     <p>LeakCanary 的使用</p>
                     <pre class="brush: java;">
-public class ExampleApplication extends Application {
-    private RefWatcher refWatcher;
 
+public class ExampleApplication extends Application {
+    /* 这里的 RefWatcher 是为了监控 Fragment 的内存泄漏， 在 Fragment 的 onDestroy 中:
+     * ExampleApplication.getRefWatcher(context).watch(this);
+     */
+    private RefWatcher refWatcher;
     public static RefWatcher getRefWatcher(Context context) {
         ExampleApplication application = (ExampleApplication) context.getApplicationContext();
         return application.refWatcher;
@@ -5162,8 +5418,7 @@ public class ExampleApplication extends Application {
         refWatcher = LeakCanary.install(this);
     }
 }
-
-                    </pre>
+</pre>
 
                 </div>
             </div>
@@ -5363,6 +5618,165 @@ RXSQLite.rx(SQLite.select().from(Book.class))
                     </div>
 
 
+                </div>
+            </div>
+            <!-- item over -->
+
+            <!-- item start -->
+            <a class="offset" id="other-realm"></a>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Realm</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="sub-item">
+                        <p><b>Realm 简介</b></p>
+                        <p><b>Realm</b> 是一个多版本并发控制数据库，由 Y Combinator 公司在 2014 年 7 月发布一款支持运行在手机、平板和可穿戴设备上的嵌入式数据库，目标是取代 SQLite。</p>
+                        <p><b>Realm</b> 本质上是一个嵌入式数据库，他并不是基于 SQLite 所构建的。它拥有自己的数据库存储引擎，可以高效且快速地完成数据库的构建操作。和 SQLite 不同，它允许你在持久层直接和数据对象工作。在它之上是一个函数式风格的查询 API，众多的努力让它比传统的 SQLite 操作更快 。</p>
+                        <p><b>Realm</b> 支持 iOS & Android。我们可以在这些平台上共享 <b>Realm</b> 数据库文件，并且上层逻辑可以不用任何改动的情况下实现移植。</p>
+                        <p><b>Realm</b> 支持加密，格式化查询，易于移植，支持 JSON，流式 API，数据变更通知等高级特性。</p>
+                        <p><b>Realm</b> 在 android 平台需要 so 库，大小会占用几个 MB 到 10 几个 MB，如果是简单的存储，最好不使用 Realm。</p>
+                        <p>在 <b>Realm</b> 的实体类中只能有以下属性：<p>
+                        <p><code>boolean</code>, <code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code>, <code>float</code>, <code>double</code>, <code>String</code>, <code>java.util.Date</code> 和，<code>byte[]</code>, <code>RealmObject</code>, <code>RealmList&lt;? extends RealmObject></code></p>
+                        <p>基本类型的包装类也是支持的：<code>Boolean</code>, <code>Byte</code>, <code>Short</code>, <code>Integer</code>, <code>Long</code>, <code>Float</code>, <code>Double</code>。</p>
+                        <p>其中 <code>byte</code>, <code>short</code>, <code>int</code>, <code>long</code> 都将映射为<code>long</code> 类型。</p>
+                        <p><b>Realm</b> 的线程保护，</p>
+                        <div class="alert alert-warning">
+                            <p><b>RealmObject 自带线程保护功能，只能在创建它的线程中访问，在子线程中不能访问；</b></p>
+                            <p><b>如果 Realm 关闭，所有查询得到的 RealmObject 都不能使用了；</b></p>
+                            <p><b>如果直接修改或删除 query 得到的数据，必须在 transaction 中完成。</b></p>
+                        </div>
+                        <p><b>RealmObject</b> 的注解</p>
+                        <ul>
+                            <li><p><code>@PrimaryKey</code> -- 注解，字段类型必须是字符串或整数以及它们的包装类型；</p></li>
+                            <li><p><code>@Required</code> -- 强行要求其属性不能为空；</p></li>
+                            <li><p><code>@Ignore</code> -- 存储数据时会忽略该字段；</p></li>
+                            <li><p><code>@Index</code> -- 为字段添加搜索索引，这样会使得插入的速度变慢，数据量也变得更大，但是查询会更快；</p></li>
+                        </ul>
+
+                    </div>
+
+                    <div class="sub-item">
+                        <p><b>Realm 使用</b></p>
+                        <pre class="brush: java;">
+// 1.Project 的 build.gradle 文件
+classpath "io.realm:realm-gradle-plugin:5.1.0"
+
+// 2.Module 的 build.gradle 文件
+apply plugin: 'realm-android'
+
+// 3.在 Application 中初始化
+Realm.init(this);
+
+// 4.编写实体类(继承 RealmObject 或实现 RealmModel; 如果是后者，还必须加 @RealmClass 注解)
+public class Dog extends RealmObject {
+    private String name;
+    private int age;
+
+    // ... Generated getters and setters ...
+}
+
+// 嵌套(Dog 类必须继承 RealmObject 或实现 RealmModel; 如果是后者，还必须加 @RealmClass 注解)
+public class Person extends RealmObject {
+    @PrimaryKey
+    private long id;
+    private String name;
+    private RealmList&lt;Dog> dogs; // Declare one-to-many relationships
+
+    // ... Generated getters and setters ...
+}
+
+// 5.使用默认配置获取 Realm 实例
+Realm realm = Realm.getDefaultInstance();
+// 自定义配置获取 Realm 实例
+RealmConfiguration myConfig = new RealmConfiguration.Builder().name("realm.realm").build();
+Realm realm = Realm.getInstance(myConfig);
+</pre>
+                    </div>
+
+                    <div class="sub-item">
+                        <p><b>插入数据</b></p>
+                        <pre class="brush: java;">
+// 插入数据, 还有异步方法 executeTransactionAsync, 这两个方法都有重载方法监听是否成功
+mRealm.executeTransaction(realm -> {
+    Baby baby = realm.createObject(Baby.class);
+    baby.init("左左", "2020/07/20", "男");
+});
+
+// 插入数据
+mRealm.beginTransaction();
+Baby baby = mRealm.createObject(Baby.class);
+baby.init("右右", "2020/07/21", "男");
+mRealm.commitTransaction();
+
+// 当 Model 中存在主键的时候，推荐使用 copyToRealmOrUpdate 方法插入数据
+Baby baby = new Baby("左左", "2020/07/20", "男");
+mRealm.executeTransactionAsync(realm -> {
+    realm.insertOrUpdate(baby);      // 线程池
+}, () -> {
+    search();                        // 主线程
+}, error -> {
+    LogUtil.log(error.getMessage()); // 主线程
+});
+</pre>
+                        <p><b>查询数据</b></p>
+                        <pre class="brush: java;">
+// RealmResults 是一个功能受限的 List, 没有数据时也不会为 null, size == 0
+RealmResults&lt;Baby> userList = mRealm.where(Baby.class).findAll();
+// 异步查询
+RealmResults&lt;Baby> userList = mRealm.where(Baby.class)
+                .equalTo("name", "Gavin")       // name 为 Gavin 的值
+                .or()                           // '或'
+                .equalTo("name", "Eric")        // name 为 Eric 的值
+                .findAllAsync();
+</pre>
+                        <p><b>更新数据和删除数据直接操作 Model 类即可</b></p>
+                        <pre class="brush: java;">
+realm.executeTransaction(realm -> {
+    Baby baby = realm.where(Baby.class).findFirst();
+    if(null != baby) {
+        baby.setName("右右");
+    }
+});
+
+realm.executeTransaction(realm -> {
+    Baby baby = realm.where(Baby.class).findFirst();
+    if(null != baby) {
+        baby.deleteFromRealm();
+    }
+});
+</pre>
+                        <p><b>数据库升级</b></p>
+                        <pre class="brush: java;">
+// RealmMigration
+class CustomMigration implements RealmMigration {
+    @Override
+    public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
+        RealmSchema schema = realm.getSchema();
+        if (oldVersion == 1 && newVersion == 2) {
+            RealmObjectSchema personSchema = schema.get("User");
+            //新增@Required的id
+            personSchema
+                    .addField("id", String.class, FieldAttribute.REQUIRED)
+                    .transform(new RealmObjectSchema.Function() {
+                        @Override
+                        public void apply(DynamicRealmObject obj) {
+
+                        }
+                    })
+                    .removeField("age");//移除age属性
+            oldVersion++;
+        }
+    }
+}
+
+RealmConfiguration config = new RealmConfiguration.Builder()
+    .name("realm.realm")
+    .schemaVersion(2)
+    .migration(new CustomMigration())   //升级数据库
+    .build();
+</pre>
+                    </div>
                 </div>
             </div>
             <!-- item over -->
@@ -6361,6 +6775,7 @@ public class RadarChart extends PieRadarChartBase&lt;RadarData> {...}
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="../support/bootstrap/js/bootstrap.min.js"></script>
 <script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
+<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 <script src="../support/syntaxhighlighter/scripts/shBrushJava.js"></script>
 <script src="../support/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
 <script src="res/menu.js"></script>

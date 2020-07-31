@@ -2578,6 +2578,24 @@ implementation("com.google.guava:guava:28.2-android")
 ## 4. Android - Use Guava types in your public API:
 api("com.google.guava:guava:28.2-android")
 </pre>
+							<p><b>Guava 包</b></p>
+							<pre class="brush: java;">
+com.google.common.base 		 // 条件检查，NULL 处理，字符串处理
+com.google.common.cache      // 缓存，和 ConcurrentMap 很相似，但是支持基于容量回收、定时回收和基于引用回收
+com.google.common.collect    // 集合，排序，区间，集合工具类
+com.google.common.escape     // 转义器和编码器的简单实现
+com.google.common.eventbus   // 发布-订阅式通信
+com.google.common.graph      // 一种通用的、可扩展性的语言描述实体以及实体之间的关系
+com.google.common.hash       // 哈希函数及相关结构
+com.google.common.html       // HTML 转义器实例
+com.google.common.xml        // XML 转义器实例
+com.google.common.io         // 处理 Java I/O 的实用程序方法和类
+com.google.common.math       // 数学运算，主要是 int、long 和 BigInteger
+com.google.common.net        // 用于处理网络地址的实用程序方法和类
+com.google.common.primitives      // 处理基本类型和 void 的使用程序
+com.google.common.reflect 		  // 反射的实用程序
+com.google.common.util.concurrent // 并发实用程序
+</pre>
 							<p><b>Guava</b> 工程包含了若干被 Google 的 Java 项目广泛依赖 的核心库，例如：集合 [collections] 、缓存 [caching] 、原生类型支持 [primitives support] 、并发库 [concurrency libraries] 、通用注解 [common annotations] 、字符串处理 [string processing] 、I/O 等等。 所有这些工具每天都在被 Google 的工程师应用在产品服务中。</p>
 							<h4>官方教程：</h4>
 							<p><b>1. 基本工具 [Basic utilities]</b> -- 让使用 Java 语言变得更舒适</p>
@@ -3106,7 +3124,125 @@ ImmutableClassToInstanceMap.Builder
 
 						<a id="guava-cache" class="offset"></a>
 						<div class="sub-item">
+							<p>缓存的主要作用是暂时在内存中保存业务系统的数据处理结果，并且等待下次访问使用。</p>
+							<pre class="brush: java;">
+public interface Cache&lt;K, V> {
+	V getIfPresent(Object key);	// 回去现有的缓存数据，如果不存在就返回 NULL
+	V get(K key, Callable&lt;? extends V> loader) throws ExecutionException; // 当缓存不存在的时候回调
+	void put(K key, V value);    // 存入
+	long size();				 // 大小
+	void cleanUp();				 // 缓存所需的任何挂起的维护操作
+	void invalidate(Object key); // 使指定 Key 失效
+	void invalidateAll();        // 清除所有缓存
+	void invalidateAll(Iterable<?> keys); // 清除指定缓存
+	void putAll(Map&lt;? extends K, ? extends V> m);       // 存入多个
+	ImmutableMap&lt;K, V> getAllPresent(Iterable<?> keys); // 获取多个
+	CacheStats stats();             // 获取统计信息(大小，命中率，加载新值的平均时间)
+	ConcurrentMap&lt;K, V> asMap(); // 变成 ConcurrentMap
+}
+</pre>
+							<p>Guava Cache 为了限制内存占用，通常都设定为自动回收元素。在某些场景下，尽管 LoadingCache 不回收元素，它也是很有用的，因为它会自动加载缓存。</p>
+							<pre class="brush: java;">
+LoadingCache&lt;String, Integer> loadingCache = CacheBuilder.newBuilder()
+								.build(new CacheLoader&lt;String, Integer>() {
+	@Override
+	public Integer load(String key) throws Exception {
+		LogUtil.log("execute");
+		return 1;
+	}
+});
 
+try {
+	LogUtil.log(loadingCache.get("one")); // 执行 CacheLoader.load() 方法一次
+	LogUtil.log(loadingCache.get("one")); // 不再执行 CacheLoader.load() 方法
+} catch (ExecutionException e) {
+	e.printStackTrace();
+}
+</pre>
+							<p>下面的这几种情况可以考虑使用 Guava Cache：</p>
+							<ul>
+								<li><p>愿意消耗一些内存空间来提升速度；</p></li>
+								<li><p>预料到某些键会被多次查询；</p></li>
+								<li><p>缓存中存放的数据总量不会超出内存容量。</p></li>
+							</ul>
+							<p>Guava Cache 支持以下几种回收机制：基于容量的回收，基于时间的回收和基于引用的回收。</p>
+							<pre class="brush: java;">
+// 1.最大容量
+Cache&lt;String, Integer> cache = CacheBuilder.newBuilder().maximumSize(2).build();
+cache.put("one", 1);
+cache.put("two", 2);
+cache.put("three", 3);
+
+LogUtil.log("1.最大容量：");
+
+LogUtil.log(cache.getIfPresent("one"));     // null
+LogUtil.log( cache.getIfPresent("two"));    // 2
+LogUtil.log( cache.getIfPresent("three"));  // 3
+
+
+LogUtil.log("2.过期时间：");
+// 2.过期时间
+cache = CacheBuilder.newBuilder().expireAfterWrite(2, TimeUnit.SECONDS).build();
+cache.put("one", 1);
+
+int count = 0;
+while(count < 4) {
+	count++;
+	try {
+		LogUtil.log(cache.getIfPresent("one"));
+		Thread.sleep(1000);
+	} catch (InterruptedException e) {
+		e.printStackTrace();
+	}
+}
+
+LogUtil.log("3.过期时间 -- 访问过期：");
+
+// 3.过期时间(某个元素在指定的时间没有访问就过期)
+cache = CacheBuilder.newBuilder().expireAfterAccess(2, TimeUnit.SECONDS).build();
+cache.put("one", 1);
+cache.put("two", 2);
+
+count = 0;
+while(count < 5) {
+	count++;
+	LogUtil.log(cache.getIfPresent("one"));
+	if(count == 1) {
+		LogUtil.log(cache.getIfPresent("two")); // 第一次访问有数据
+	}
+	if(count == 4) {
+		LogUtil.log(cache.getIfPresent("two")); // 超过 2 秒没有被访问后已经过期
+	}
+	try {
+		Thread.sleep(1000);
+	} catch (InterruptedException e) {
+		e.printStackTrace();
+	}
+}
+
+LogUtil.log("4.基于引用的回收：");
+
+// 4.弱引用
+cache = CacheBuilder.newBuilder().weakValues().build();
+Integer value = new Integer(1);
+cache.put("one", value);
+LogUtil.log(cache.getIfPresent("one"));
+value = new Integer(2); // 原对象不再有强引用
+System.gc();
+LogUtil.log(cache.getIfPresent("one"));
+</pre>
+							<p>Guava Cache 还支持移除监听，当元素被移除时能被感知：</p>
+							<pre class="brush: java;">
+Cache&lt;String, Integer> cache = CacheBuilder.newBuilder().maximumSize(2).removalListener(new RemovalListener&lt;String, Integer>() {
+	@Override
+	public void onRemoval(RemovalNotification&lt;String, Integer> notification) {
+		LogUtil.log("[" + notification.getKey() + ":" + notification.getValue() + "] is removed!");
+	}
+}).build();
+cache.put("one", 1);
+cache.put("two", 2);
+cache.put("three", 3);
+</pre>
 						</div>
 
 						<a id="guava-function" class="offset"></a>

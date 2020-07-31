@@ -132,9 +132,42 @@
                             <a href="#java-util-Formatter" class="list-group-item">Formatter, Formattable</a>
                             <a href="#java-util-Observable" class="list-group-item">Observer, Observable</a>
                             <a href="#java-util-UUID" class="list-group-item">UUID</a>
-                            <a href="#java-util-concurrent-Executor" class="list-group-item">Executor 及实现类</a>
-                            <a href="#java-util-concurrent-Future" class="list-group-item">Future 及实现类</a>
+							<a href="#java-util-Scanner" class="list-group-item">Scanner</a>
+							<a href="#java-util-concurrent-Executor" class="list-group-item">Executor 及实现类</a>
+							<a href="#java-util-concurrent-Future" class="list-group-item">Future 及实现类</a>
 						</div>
+
+						<a class="list-group-item active drop" data-toggle="collapse"
+						   data-parent="#accordion" href="#java-io" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+							<code>java.io</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="java-io" class="panel-collapse collapse"
+							 role="tabpanel">
+							<a href="#java-io-InputStream" class="list-group-item">InputStream & OutputStream</a>
+							<a href="#java-io-Reader" class="list-group-item">Reader & Writer</a>
+							<a href="#java-io-File" class="list-group-item">File</a>
+							<a href="#java-io-Console" class="list-group-item">Console</a>
+						</div>
+						<a class="list-group-item active drop" data-toggle="collapse"
+						   data-parent="#accordion" href="#java-nio" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+							<code>java.nio</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="java-nio" class="panel-collapse collapse"
+							 role="tabpanel">
+							<a href="#java-" class="list-group-item"></a>
+						</div>
+
+						<a class="list-group-item active drop" data-toggle="collapse"
+						   data-parent="#accordion" href="#java-net" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+							<code>java.net</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+						</a>
+						<div id="java-net" class="panel-collapse collapse"
+							 role="tabpanel">
+							<a href="#java-net-URI" class="list-group-item">URI 和 URL</a>
+							<a href="#java-net-URLConnection" class="list-group-item">URLConnection 及子类</a>
+							<a href="#java-net-URLEncoder" class="list-group-item">URLEncoder 和 URLDecoder</a>
+						</div>
+
 
                         <a class="list-group-item active drop" data-toggle="collapse"
                            data-parent="#accordion" href="#java-sql" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
@@ -4492,12 +4525,12 @@ java.lang.Object
 
 public class Base64 {
 	public static class Encoder {
-		byte[] encode(byte[] src)
-		int encode(byte[] src, byte[] dst)
-		ByteBuffer encode(ByteBuffer buffer)
-		String encodeToString(byte[] src)
-		Base64.Encoder withoutPadding()
-		OutputStream wrap(OutputStream os)
+		byte[] encode(byte[] src) {...}
+		int encode(byte[] src, byte[] dst) {...}
+		ByteBuffer encode(ByteBuffer buffer) {...}
+		String encodeToString(byte[] src) {...}
+		Base64.Encoder withoutPadding() {...}
+		OutputStream wrap(OutputStream os) {...}
 	}
 
 	public static class Decoder {
@@ -8646,6 +8679,102 @@ public final class UUID implements java.io.Serializable, Comparable&lt;UUID> {
                 </div>
                 <!-- item over -->
 
+				<!-- item start -->
+				<a class="offset" id="java-util-Scanner"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Scanner</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+public final class Scanner implements Iterator&lt;String>, Closeable {
+	public Scanner(String source) {...}
+	public Scanner(InputStream source) {...}
+	public Scanner(InputStream source, String charsetName) {...}
+	public Scanner(File source) {...}
+	public Scanner(File source, String charsetName) {...}
+	public Scanner(Path source) {...}
+	public Scanner(Path source, String charsetName) {...}
+	public Scanner(Readable source) {...}
+	public Scanner(ReadableByteChannel source) {...}
+	public Scanner(ReadableByteChannel source, String charsetName) {...}
+}
+</pre>
+						<p><a href="docs/docs-java/api/java/uti/Scanner.html" target="_blank">Scanner</a> 是一个可以使用正则表达式来解析基本类型和字符串的简单文本扫描器。</p>
+						<p><a href="docs/docs-java/api/java/uti/Scanner.html" target="_blank">Scanner</a> 使用分隔符模式将其输入分解为标记，默认情况下该分隔符模式与空白匹配。然后可以使用不同的 next 方法将得到的标记转换为不同类型的值。 </p>
+						<ol>
+
+							<li><p><code>Pattern 	delimiter()</code> -- 返回此 Scanner 当前正在用于匹配分隔符的 Pattern</p></li>
+							<li><p><code>Scanner 	useDelimiter(Pattern pattern)</code> -- </p></li>
+							<li><p><code>Scanner 	useDelimiter(String pattern)</code> -- </p></li>
+
+
+							<li><p><code>Scanner 	skip(Pattern pattern)</code> -- </p></li>
+							<li><p><code>Scanner 	skip(String pattern)</code> -- </p></li>
+							<li><p><code>Scanner 	useLocale(Locale locale)</code> -- </p></li>
+							<li><p><code>Scanner 	useRadix(int radix)</code> -- </p></li>
+
+							<li class="group"><p><code>String 	findInLine(Pattern pattern)</code> -- 试图在忽略分隔符的情况下查找下一个指定模式</p></li>
+							<li><p><code>String 	findInLine(String pattern)</code> -- 试图在忽略分隔符的情况下查找下一个从指定字符串构造的模式</p></li>
+							<li><p><code>String 	findWithinHorizon(Pattern pattern, int horizon)</code> -- 试图查找下一个指定模式</p></li>
+							<li><p><code>String 	findWithinHorizon(String pattern, int horizon)</code> -- 试图在忽略分隔符的情况下查找下一个从指定字符串构造的模式</p></li>
+
+
+							<li class="group"><p><code>boolean 	hasNext()</code> -- 如果此扫描器的输入中有另一个标记，则返回 true</p></li>
+							<li><p><code>boolean 	hasNext(Pattern pattern)</code> -- 如果下一个完整标记与指定模式匹配，则返回 true</p></li>
+							<li><p><code>boolean 	hasNext(String pattern)</code> -- 如果下一个标记与从指定字符串构造的模式匹配，则返回 true</p></li>
+							<li><p><code>boolean 	hasNextBigDecimal()</code> -- </p></li>
+							<li><p><code>boolean 	hasNextBigInteger()</code> -- </p></li>
+							<li><p><code>boolean 	hasNextBigInteger(int radix)</code> -- </p></li>
+							<li><p><code>boolean 	hasNextBoolean()</code> -- </p></li>
+							<li><p><code>boolean 	hasNextByte()</code> -- </p></li>
+							<li><p><code>boolean 	hasNextByte(int radix)</code> -- </p></li>
+							<li><p><code>boolean 	hasNextDouble()</code> -- </p></li>
+							<li><p><code>boolean 	hasNextFloat()</code> -- </p></li>
+							<li><p><code>boolean 	hasNextInt()</code> -- </p></li>
+							<li><p><code>boolean 	hasNextInt(int radix)</code> -- </p></li>
+							<li><p><code>boolean 	hasNextLine()</code> -- </p></li>
+							<li><p><code>boolean 	hasNextLong()</code> -- </p></li>
+							<li><p><code>boolean 	hasNextLong(int radix)</code> -- </p></li>
+							<li><p><code>boolean 	hasNextShort()</code> -- </p></li>
+							<li><p><code>boolean 	hasNextShort(int radix)</code> -- </p></li>
+
+							<li class="group"><p><code>String 	next()</code> -- </p></li>
+							<li><p><code>String 	next(Pattern pattern)</code> -- </p></li>
+							<li><p><code>String 	next(String pattern)</code> -- </p></li>
+							<li><p><code>BigDecimal 	nextBigDecimal()</code> -- </p></li>
+							<li><p><code>BigInteger 	nextBigInteger()</code> -- </p></li>
+							<li><p><code>BigInteger 	nextBigInteger(int radix)</code> -- </p></li>
+							<li><p><code>boolean 	nextBoolean()</code> -- </p></li>
+							<li><p><code>byte 	nextByte()</code> -- </p></li>
+							<li><p><code>byte 	nextByte(int radix)</code> -- </p></li>
+							<li><p><code>double 	nextDouble()</code> -- </p></li>
+							<li><p><code>float 	nextFloat()</code> -- </p></li>
+							<li><p><code>int 	nextInt()</code> -- </p></li>
+							<li><p><code>int 	nextInt(int radix)</code> -- </p></li>
+							<li><p><code>String 	nextLine()</code> -- </p></li>
+							<li><p><code>long 	nextLong()</code> -- </p></li>
+							<li><p><code>long 	nextLong(int radix)</code> -- </p></li>
+							<li><p><code>short 	nextShort()</code> -- </p></li>
+							<li><p><code>short 	nextShort(int radix)</code> -- </p></li>
+
+							<li class="group"><p><code>Scanner 	reset()</code> -- </p></li>
+							<li><p><code>int 	radix()</code> -- </p></li>
+							<li><p><code>MatchResult 	match()</code> -- </p></li>
+
+							<li><p><code>IOException 	ioException()</code> -- </p></li>
+							<li><p><code>Locale 	locale()</code> -- </p></li>
+
+							<li><p><code>void 	remove()</code> -- </p></li>
+
+							<li><p><code>void 	close()</code> -- 关闭此扫描器</p></li>
+
+							<li><p><code>String 	toString()</code> -- </p></li>
+						</ol>
+					</div>
+				</div>
+				<!-- item over -->
+
                 <!-- item start -->
                 <a class="offset" id="java-util-concurrent-Executor"></a>
                 <div class="panel panel-default">
@@ -9015,6 +9144,968 @@ public class FutureTask&lt;V> implements RunnableFuture&lt;V> {
                     </div>
                 </div>
                 <!-- item over -->
+
+
+
+				<!-- item start -->
+				<a class="offset" id="java-io-InputStream"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">InputStream & OutputStream</h3>
+					</div>
+					<div class="panel-body">
+						<div class="col-md-6">
+							<pre class="brush: java;">
+InputStream
+├ FileInputStream   // 从文件获得输入字节流
+├ ByteArrayInputStream // 内存字节流
+├ ObjectInputStream    // 反序列化流
+├ PipedInputStream     // 管道输入流
+├ SequenceInputStream  // 输入流的有序集合
+├ AudioInputStream     // 音频输入流
+└ FilterInputStream // InputStream 的装饰者
+  ├ BufferedInputStream // 缓冲支持
+  ├ DataInputStream     // 基本类型支持
+  ├ DigestInputStream   // 摘要支持(MD5, SHA)
+  ├ CheckedInputStream  // 完整性验证
+  ├ CipherInputStream   // 加密支持
+  │ -
+  ├ ProgressMonitorInputStream // 进度支持
+  ├ PushbackInputStream // 回退流
+  ├ DeflaterInputStream // 压缩输入
+  └ InflaterInputStream // 解压输入
+    ├ GZIPInputStream   // GZIP
+	└ ZipInputStream    // Zip
+	  └ JarInputStream  // Jar
+</pre>
+						</div>
+						<div class="col-md-6">
+							<pre class="brush: java;">
+OutputStream
+├ FileOutputStream // 将字节流写入文件
+├ ByteArrayOutputStream // 内存字节流
+├ ObjectOutputStream    // 序列化流
+├ PipedOutputStream     // 管道输出流
+│ -
+│ -
+└ FilterOutputStream // OutputStream 的装饰
+  ├ BufferedOutputStream // 缓冲支持
+  ├ DataOutputStream     // 基本类型支持
+  ├ DigestOutputStream   // 摘要(MD5, SHA)
+  ├ CheckedOutputStream  // 完整性验证
+  ├ CipherOutputStream   // 加密支持
+  ├ PrintStream // 打印流，可以是其他的输出流
+  │	-
+  │	-
+  ├ InflaterOutputStream // 解压输出
+  └ DeflaterOutputStream // 压缩输出
+	├ GZIPOutputStream   // GZip
+	└ ZipOutputStream    // Zip
+	  └ JarOutputStream  // Jar
+</pre>
+						</div>
+
+
+						<pre class="brush: java;">
+public abstract class InputStream implements Closeable {
+	abstract int read();      		// 从输入流中读取数据的下一个字节
+
+	int read(byte[] b) {...} // 从输入流中读取最多 b.length 的字节，并将其存储在缓冲区数组 b 中
+	int read(byte[] b, int off, int len) {...} // 将输入流中指定偏移量 off 最多 len 个数据字节读入 byte 数组
+
+	int available() {...}    // 返回此输入流下一个方法调用可以不受阻塞地从此输入流读取的估计字节数
+	boolean markSupported() {...}	// 测试此输入流是否支持 mark 和 reset 方法
+	void mark(int readlimit) {...}	// 在此输入流中标记当前的位置
+	void reset() {...}				// 将此流重新定位到最后一次对此输入流调用 mark 方法时的位置
+	long skip(long n) {...}         // 跳过和丢弃此输入流中数据的 n 个字节
+
+	void close() {...}				// 关闭此输入流并释放与该流关联的所有系统资源
+}
+
+public abstract class OutputStream implements Closeable, Flushable {
+	abstract void write(int b); // 将指定的字节写入此输出流
+
+	void write(byte[] b) {...}                   // 将 b.length 个字节从指定的 byte 数组写入此输出流
+	void write(byte[] b, int off, int len) {...} // 同上, 从偏移量 off 开始的 len 个字节写入此输出流
+
+	void flush() {...}          // 刷新此输出流并强制写出所有缓冲的输出字节
+	void close() {...}          // 关闭此输出流并释放与此流有关的所有系统资源
+}
+</pre>
+						<p><a href="docs/docs-java/api/java/io/InputStream.html" target="_blank">InputStream</a> 抽象类是表示字节输入流的所有类的超类。需要定义 InputStream 子类的应用程序必须总是提供返回下一个输入字节的方法。  </p>
+						<p><a href="docs/docs-java/api/java/io/OutputStream.html" target="_blank">OutputStream</a> 抽象类是表示输出字节流的所有类的超类。需要定义 OutputStream 子类的应用程序必须始终提供至少一种可写入一个输出字节的方法。  </p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-io-Reader"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Reader & Writer</h3>
+					</div>
+					<div class="panel-body">
+						<div class="col-md-6">
+							<pre class="brush: java;">
+Reader
+├ StringReader
+├ CharArrayReader
+├ PipedReader
+├ BufferedReader
+│ └ LineNumberReader
+├ FilterReader
+│ └ PushbackReader
+│ -
+└ InputStreamReader
+  └ FileReader
+</pre>
+						</div>
+						<div class="col-md-6">
+							<pre class="brush: java;">
+Writer
+├ StringWriter
+├ CharArrayWriter
+├ PipedWriter
+├ BufferedWriter
+│ -
+├ FilterWriter
+│ -
+├ PrintWriter
+└ OutputStreamWriter
+  └ FileWriter
+</pre>
+						</div>
+
+						<pre class="brush: java;">
+public abstract class Reader implements Readable, Closeable {
+	abstract int read(char[] cbuf, int off, int len);
+	abstract void close();
+
+	boolean ready() {...}
+	int read() {...}
+	int read(char[] cbuf) {...}
+	int read(CharBuffer target) {...}
+
+	boolean markSupported() {...}
+	void mark(int readAheadLimit) {...}
+	void reset() {...}
+	long skip(long n) {...}
+}
+
+public abstract class Writer implements Appendable, Closeable, Flushable {
+	abstract void write(char[] cbuf, int off, int len);
+	abstract void flush();
+	abstract void close();
+
+	void write(char[] cbuf) {...}
+	void write(int c) {...}
+	void write(String str) {...}
+	void write(String str, int off, int len) {...}
+
+	Writer append(char c) {...}
+	Writer append(CharSequence csq) {...}
+	Writer append(CharSequence csq, int start, int end) {...}
+}
+</pre>
+
+						<p><a href="docs/docs-java/api/java/io/Reader.html" target="_blank">Reader</a> 读取字符流的抽象类。子类必须实现的方法只有 <code>read(char[], int, int)</code> 和 <code>close()</code>。但是，多数子类将重写此处定义的一些方法，以提供更高的效率和/或其他功能。 </p>
+						<p><a href="docs/docs-java/api/java/io/Writer.html" target="_blank">Writer</a> 写入字符流的抽象类。子类必须实现的方法仅有 <code>write(char[], int, int)</code>、<code>flush()</code> 和 <code>close()</code>。但是，多数子类将重写此处定义的一些方法，以提供更高的效率和/或其他功能。 </p>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-io-File"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">File</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<pre class="brush: java;">
+public class File implements Serializable, Comparable&lt;File> {
+	/* 文件的操作很多方法都是使用这个 FileSystem 来处理，因为不同的文件系统的需要做不同的实现
+	 * 在 Unix 和 Win 平台下分别是： UnixFileSystem 和 WinNTFileSystem 的实例
+     * UnixFileSystem 在 Unix 下的 JDK 中，WinNTFileSystem 在 Win 下的 JDK 中才能找到
+	 */
+	private static final FileSystem fs = DefaultFileSystem.getFileSystem();
+
+	// System.getProperty("file.separator")
+	public static final char separatorChar = fs.getSeparator();			// '/' or '\'
+    public static final String separator = "" + separatorChar;			// 以上属性的字符常形式
+	// System.getProperty("path.separator")
+    public static final char pathSeparatorChar = fs.getPathSeparator();	// ':' or ';'， 环境变量分割用这个
+    public static final String pathSeparator = "" + pathSeparatorChar;	// 以上属性的字符常形式
+
+	public File(URI uri) {...}						// 使用 Uri 构建
+	public File(String pathname) {...}				// 使用路径和名字构建
+	public File(String parent, String child) {...}  // 两个参数一般是目录和文件
+	public File(File parent, String child) {...}    // 同上
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/io/File.html" target="_blank">File</a> 文件和目录路径名的抽象表示形式。</p>
+							<p>夸平台创建目录:</p>
+							<pre class="brush: java;">
+/** 如果创建失败则返回 NULL */
+public static File mkdirs(File base, String... dirs) {
+	StringBuilder builder = new StringBuilder();
+	for (String s : dirs) {
+		builder.append(s).append(File.separator);
+	}
+	File newDir = new File(base, builder.toString());
+	if(newDir.exists()) {
+		return newDir;
+	} else {
+		boolean state = newDir.mkdirs();
+		if(state) {
+			return newDir;
+		}
+	}
+	return null;
+}
+</pre>
+							<ol>
+								<li><p><code>static File[] 	listRoots()</code> -- 列出可用的文件系统根, Unix 为 <code>/</code></p></li>
+								<li><p><code>static File 	createTempFile(String prefix, String suffix)</code> -- 创建临时文件，前缀长度 >= 3</p></li>
+								<li><p><code>static File 	createTempFile(String prefix, String suffix, File directory)</code> -- 同上，指定目录</p>
+									<pre class="brush: java;">
+/* 创建临时文件，如果文件已存在，那么 "随机 Long" 改变，直到创建成功
+ * -- prefix.length >= 3, 不支持目录
+ * -- suffix 若为 null 则默认为 .tmp
+ * -- directory 若为 null 则默认为 System.getProperty("java.io.tmpdir")
+ * 文件名为: prefix + 随机 Long + suffix, 比如: /tmp/xxx2972538647935704570.txt
+ */
+File f = File.createTempFile("xxx", ".txt");
+</pre>
+								</li>
+
+								<li class="group"><p><code>boolean 	exists()</code> -- 文件或目录是否存在</p></li>
+
+								<li class="group"><p><code>boolean 	createNewFile()</code> -- 当且仅当不存在时候创建一个新的空文件；目录必须存在，否则 IO 异常</p></li>
+								<li><p><code>boolean 	mkdir()</code> -- 创建目录；父目录必须存在，否则 IO 异常</p></li>
+								<li><p><code>boolean 	mkdirs()</code> -- 创建目录，包括创建不在在的父目录</p></li>
+
+								<li class="group"><p><code>boolean 	isFile()</code> -- 是否是文件，如果不存在也返回 false</p></li>
+								<li><p><code>boolean 	isDirectory()</code> -- 是否是目录，如果不存在也返回 false</p></li>
+								<li><p><code>boolean 	isAbsolute()</code> -- 是否为绝对路径名， Unix 为 <code>/</code> 开头， Win 为 <code>盘符:\</code> 或 <code>\\</code></p></li>
+								<li><p><code>boolean 	isHidden()</code> -- 是否是一个隐藏文件；在 UNIX 上以句点 <code>.</code> 开头；在 Win 系统上被标记为隐藏</p></li>
+
+								<li class="group"><p><code>boolean 	canRead()</code> -- 是否可以读取</p></li>
+								<li><p><code>boolean 	canWrite()</code> -- 是否可以写</p></li>
+								<li><p><code>boolean 	canExecute()</code> -- 是否可执行</p></li>
+
+								<li class="group"><p><code>long 	getTotalSpace()</code> -- 分区大小</p></li>
+								<li><p><code>long 	getFreeSpace()</code> -- 分区中未分配的字节数</p></li>
+								<li><p><code>long 	getUsableSpace()</code> -- 分区中可用于此虚拟机的字节数</p></li>
+
+								<li class="group"><p><code>long 	lastModified()</code> -- 最后一次被修改的时间</p></li>
+								<li><p><code>boolean 	setLastModified(long time)</code> -- 设置最后一次修改时间</p></li>
+								<li><p><code>long 	length()</code> -- 文件的长度</p></li>
+
+								<li class="group"><p><code>boolean 	renameTo(File dest)</code> -- 重命名</p></li>
+
+								<li class="group"><p><code>boolean 	delete()</code> -- 删除，目录不为空不能删除</p></li>
+								<li><p><code>void 	deleteOnExit()</code> -- 在虚拟机终止时请求删除(先请求删除目录中的文件，再删除目录不成功？)</p></li>
+
+								<li class="group"><p><code>String 	getPath()</code> -- 路径名(可能是相对的)，包括文件</p></li>
+								<li><p><code>String 	getName()</code> -- 目录名或文件名</p></li>
+								<li><p><code>String 	getAbsolutePath()</code> -- 绝对路径名</p></li>
+								<li><p><code>File 	getAbsoluteFile()</code> -- 同上，返回 File</p></li>
+								<li><p><code>String 	getParent()</code> -- 上级目录(可能是相对的)</p></li>
+								<li><p><code>File 	getParentFile()</code> -- 同上，返回 File</p></li>
+								<li><p><code>String 	getCanonicalPath()</code> -- 规范路径名字符串，规范路径名是绝对路径名，并且是惟一的。首先将路径名转换为绝对路径名，通常涉及到从路径名中移除多余的名称（比如 "." 和 ".."）、解析符号连接（对于 UNIX 平台），以及将驱动器号转换为标准大小写形式</p></li>
+								<li><p><code>File 	getCanonicalFile()</code> -- 同上，返回 File</p></li>
+
+
+								<li class="group"><p><code>String[] 	list()</code> -- 获取所有目录名和文件名(包括隐藏的)</p></li>
+								<li><p><code>File[] 	listFiles()</code> -- 同上，返回文件</p></li>
+								<li><p><code>String[] 	list(FilenameFilter filter)</code> -- 获取名字符合条件的目录和文件</p></li>
+								<li><p><code>File[] 	listFiles(FilenameFilter filter)</code> -- 同上，返回文件</p></li>
+								<li><p><code>File[] 	listFiles(FileFilter filter)</code> -- 获取符合条件的目录和文件</p></li>
+
+								<li class="group"><p><code>boolean 	setReadOnly()</code> -- 设为只读</p></li>
+								<li><p><code>boolean 	setReadable(boolean readable, boolean ownerOnly)</code> -- 设置所有者或所有用户的读权限</p></li>
+								<li><p><code>boolean 	setReadable(boolean readable)</code> -- 设置所有者读权限的一个便捷方法</p></li>
+								<li><p><code>boolean 	setWritable(boolean writable, boolean ownerOnly)</code> -- 设置所有者或所有用户的写权限</p></li>
+								<li><p><code>boolean 	setWritable(boolean writable)</code> -- 设置所有者写权限的一个便捷方法</p></li>
+								<li><p><code>boolean 	setExecutable(boolean executable, boolean ownerOnly)</code> -- 设置所有者或所有用户的执行权限</p></li>
+								<li><p><code>boolean 	setExecutable(boolean executable)</code> -- 设置所有者执行权限的一个便捷方法</p></li>
+
+								<li class="group"><p><code>Path 	toPath()</code> -- 将路径转为 <code>java.nio.file.Path</code></p></li>
+								<li><p><code>URI 	toURI()</code> -- 将路径转为 Uri 形式：<code>file:/tmp/files/demo.tmp</code></p></li>
+
+								<li class="group"><p><code>int 	compareTo(File pathname)</code> -- 比较</p></li>
+								<li><p><code>boolean 	equals(Object obj)</code> -- 是否相等</p></li>
+								<li><p><code>int 	hashCode()</code> -- 路径名的哈希码</p></li>
+								<li><p><code>String 	toString()</code> -- 路径名字符串</p></li>
+							</ol>
+						</div>
+
+						<div class="sub-item">
+							<pre class="brush: java;">
+
+</pre>
+							<p><a href="docs/docs-java/api/java/io/File.html" target="_blank">File</a></p>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-io-Console"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Console</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+public final class Console implements Flushable {...}
+
+Console console = System.console();
+if(null == console) { return; }
+
+console.printf("Input your name:\n");
+String line = console.readLine();
+console.printf("hello -> %s\n", line);
+</pre>
+						<p><a href="docs/docs-java/api/java/io/Console.html" target="_blank">Console</a> 包含多个方法，可访问与当前 Java 虚拟机关联的基于字符的控制台设备（如果有）。</p>
+						<p><b><a href="docs/docs-java/api/java/io/Console.html" target="_blank">Console</a> 类的一个好处是输入密码而不会会显。但是它只能在控制台运行，IDE 中将无法运行。这一点和 <a href="docs/docs-java/api/java/util/Scanner.html" target="_blank">Scanner</a> 不同。</b></p>
+						<p>虚拟机是否具有控制台取决于底层平台，还取决于调用虚拟机的方式。如果虚拟机从一个交互式命令行开始启动，且没有重定向标准输入和输出流，那么其控制台将存在，并且通常连接到键盘并从虚拟机启动的地方显示。如果虚拟机是自动启动的（例如，由后台作业调度程序启动），那么它通常没有控制台。 </p>
+						<p>如果此虚拟机具有控制台，那么它将由此类唯一的实例 <code>System.console()</code> 表示。如果没有可用的控制台设备，那么对该方法的调用将返回 null。</p>
+						<ol>
+							<li><p><code>Console 	format(String fmt, Object... args)</code> -- 使用指定格式字符串和参数将格式化字符串写入此控制台的输出流中</p></li>
+							<li><p><code>Console 	printf(String format, Object... args)</code> -- 使用指定格式字符串和参数将格式化字符串写入此控制台输出流的便捷方法</p></li>
+
+							<li class="group"><p><code>void 	flush()</code> -- 刷新控制台，并强制立即写入所有缓冲的输出</p></li>
+
+							<li class="group"><p><code>Reader 	reader()</code> -- 获取与此控制台关联的唯一 Reader 对象</p></li>
+							<li><p><code>PrintWriter 	writer()</code> -- 获取与此控制台关联的唯一 PrintWriter 对象</p></li>
+
+							<li class="group"><p><code>String 	readLine()</code> -- 从控制台读取单行文本</p></li>
+							<li><p><code>String 	readLine(String fmt, Object... args)</code> -- 提供一个格式化提示，然后从控制台读取单行文本</p></li>
+							<li><p><code>char[] 	readPassword()</code> -- 从控制台读取密码，禁用回显</p></li>
+							<li><p><code>char[] 	readPassword(String fmt, Object... args)</code> -- 提供一个格式化提示，然后从控制台读取密码，禁用回显</p></li>
+						</ol>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-net-URI"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">URI 和 URL</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<pre class="brush: java;">
+java.lang.Object
+	java.net.URI
+
+public final class URI implements Comparable&lt;URI>, Serializable {
+	public URI(String str) {...}
+	public URI(String scheme, String ssp, String fragment) {...}
+	public URI(String scheme, String userInfo, String host, int port, String path, String query, String fragment) {...}
+	public URI(String scheme, String host, String path, String fragment) {...}
+	public URI(String scheme, String authority, String path, String query, String fragment){...}
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/net/URI.html" target="_blank">URI</a> 表示一个统一资源标识符。 </p>
+							<p><a href="docs/docs-java/api/java/net/URL.html" target="_blank">URL</a> 是通用资源定位符。URI 是一种宽泛的含义更广的定义，而 URL 则是 URI 的一个子集。</p>
+							<p><a href="docs/docs-java/api/java/net/URI.html" target="_blank">URI</a> 的组成: (Android 的 <code>android.net.Uri</code> 差不多)</p>
+							<pre class="brush: java;">
+&lt;scheme>://&lt;authority>&lt;path>?&lt;query>#&lt;fragment>
+
+content://nate:123456@com.example.project:8080/folder/subfolder/etc?name=bqt&age=28#android
+|------|  |---------||------------------||---||-------------------||--------------|-------|
+ scheme       user           host         port         path              query     fragment
+          |-----------------------------|
+                 authority
+
+/** 完整的 Uri 组成如下： */
+&lt;scheme>://&lt;user>:&lt;password>@&lt;host>:&lt;port>/&lt;path>;&lt;params>?&lt;query>#&lt;fragment>
+/** 一共由 9 个参数组成，
+ * scheme -- 获取资源使用的协议，例如http、ftp等
+ * user -- 用户名与密码，这个是一个特殊的存在，一般访问 ftp 时会用到
+ * host -- 主机，访问那台主机
+ * port -- 端口，访问主机时的端口
+ * path -- 路径
+ * params -- 这个很少见，主要作用就是向服务器提供额外的参数
+ * query -- 查询参数，如通过 get 方式请求的参数
+ * fragment -- 片段，比如 HTML 定义锚点
+ */
+
+String url = "content://nate:123456@lesson.com:8080/folder/subfolder/etc?name=bqt&age=28#android";
+
+/** android.net.Uri 处理，类似的: java.net.URI */
+Uri uri = Uri.parse(url);
+uri.getScheme();        // -> content
+uri.getUserInfo();      // -> nate:123456
+uri.getHost();          // -> lesson.com
+uri.getPort();          // -> 8080
+uri.getPath();          // -> /folder/subfolder/etc
+uri.getQuery();         // -> name=bqt&age=28
+uri.getFragment();      // -> android
+
+uri.getSchemeSpecificPart();    // -> nate:123456@lesson.com:8080/folder/subfolder/etc?name=bqt&age=28
+uri.getAuthority();             // -> nate:123456@lesson.com:8080
+
+/** java.net.URL 处理也差不多，但是支持的 Scheme 只有： http, https, ftp, file, jar */
+</pre>
+							<ol>
+								<li><p><code>static URI create(String str)</code> -- 通过解析给定的字符串创建 URI</p>
+									<pre class="brush: java;">
+// content://nate:123456@lesson.com:8080/folder/etc?name=J&age=28&desc=%E5%B8%BD%E5%AD%90#android
+String builder = "content" +                        // scheme
+		"://" +
+		"nate:123456" +                             // userInfo
+		"@" +
+		"lesson1234.com" +                          // host
+		":" +
+		"8080" +                                    // port
+		"/folder/etc" +                             // path
+		"?" +
+		"name=J&age=28&desc=%E5%B8%BD%E5%AD%90" +   // query
+		"#" +
+		"android";                                  // fragment
+URI uri = URI.create(builder);
+</pre>
+								</li>
+
+								<li class="group"><p><code>String 	getScheme()</code> -- 返回此 URI 的 scheme 部分</p></li>
+								<li><p><code>String 	getSchemeSpecificPart()</code> -- 如果 scheme 部分有 URLEncoder 编码，decode 后返回</p></li>
+								<li><p><code>String 	getRawSchemeSpecificPart()</code> -- 以上值原始值</p></li>
+
+								<li class="group"><p><code>String 	getUserInfo()</code> -- 如果 userInfo 部分有 URLEncoder 编码，decode 后返回</p></li>
+								<li><p><code>String 	getRawUserInfo()</code> -- 以上值原始值</p></li>
+
+								<li class="group"><p><code>String 	getHost()</code> -- 返回 host 部分</p></li>
+								<li><p><code>int 	getPort()</code> -- 返回 port 部分</p></li>
+
+								<li class="group"><p><code>String 	getAuthority()</code> -- 三部分组合 <code>${userInfo}@${host}:${port}</code> 有 URLEncoder 编码，decode 后返回</p></li>
+								<li><p><code>String 	getRawAuthority()</code> -- 以上值原始值</p></li>
+
+								<li class="group"><p><code>String 	getPath()</code> -- 返回 path 部分</p></li>
+								<li><p><code>String 	getRawPath()</code> -- 以上值原始值</p></li>
+
+								<li class="group"><p><code>String 	getQuery()</code> -- 返回 query 部分</p></li>
+								<li><p><code>String 	getRawQuery()</code> -- 以上值原始值</p></li>
+
+								<li class="group"><p><code>String 	getFragment()</code> -- 返回 fragment 部分</p></li>
+								<li><p><code>String 	getRawFragment()</code> -- 以上值原始值</p></li>
+
+								<li class="group"><p><code>boolean 	isAbsolute()</code> -- 判断此 URI 是否为绝对的(<code>scheme != null</code>)</p></li>
+								<li><p><code>boolean 	isOpaque()</code> -- 判断此 URI 是否为不透明的(<code>path == null</code>)</p></li>
+
+								<li class="group"><p><code>URL 	toURL()</code> -- 根据此 URI 构造一个 URL</p></li>
+
+								<li class="group"><p><code>URI 	normalize()</code> -- 规范化此 URI 的路径(主要是对 path 部分的处理)</p></li>
+								<li><p><code>URI 	parseServerAuthority()</code> -- 尝试将此 URI 的授权组成部分（如果已定义）解析为用户信息、主机和端口组成部分</p></li>
+								<li><p><code>URI 	relativize(URI uri)</code> -- 根据此 URI 将给定 URI 相对化</p></li>
+								<li><p><code>URI 	resolve(String str)</code> -- 解析给定的字符串，然后在此 URI 的基础上构造一个新的 URI</p></li>
+								<li><p><code>URI 	resolve(URI uri)</code> -- 根据此 URI 解析给定的 URI</p></li>
+
+								<li class="group"><p><code>String 	toString()</code> -- 以字符串形式返回此 URI 的内容</p></li>
+								<li><p><code>String 	toASCIIString()</code> -- 中文等会被 URLEncode</p></li>
+								<li><p><code>int 	compareTo(URI that)</code> -- 将此 URI 与另一个对象（也必须是 URI）进行比较</p></li>
+								<li><p><code>boolean 	equals(Object ob)</code> -- 测试此 URI 与另一对象的相等性</p></li>
+								<li><p><code>int 	hashCode()</code> -- 返回此 URI 的哈希码值</p></li>
+							</ol>
+						</div>
+
+						<div class="sub-item">
+							<pre class="brush: java;">
+java.lang.Object
+	java.net.URL
+
+public final class URL implements Serializable {
+	public URL(String spec) {...}
+	public URL(String protocol, String host, int port, String file) {...}
+	public URL(String protocol, String host, int port, String file, URLStreamHandler handler) {...}
+	public URL(String protocol, String host, String file) {...}
+	public URL(URL context, String spec) {...}
+	public URL(URL context, String spec, URLStreamHandler handler) {...}
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/net/URL.html" target="_blank">URL</a> 代表一个统一资源定位符，它是指向互联网“资源”的指针。</p>
+							<p><a href="docs/docs-java/api/java/net/URLStreamHandler.html" target="_blank">URLStreamHandler</a> 是所有流协议处理程序的通用超类。流协议处理程序知道如何为特定的协议类型进行连接。 </p>
+							<p>在大多数情况下，URLStreamHandler 子类的实例都不是由应用程序直接创建的。而是在构造 URL 过程中第一次遇到协议名称时，自动加载适当的流协议处理程序。 </p>
+							<p><a href="docs/docs-java/api/java/net/URL.html" target="_blank">URL</a> 支持的 <code>protocol</code> 由 <code>getURLStreamHandler</code> 方法决定(在没有 <code>setURLStreamHandlerFactory</code> 的情况下)</p>
+							<pre class="brush: java;">
+// URL 内部定义了这样的 Hashtable, 其中 Key 为 protocol
+static Hashtable&lt;String,URLStreamHandler> handlers = new Hashtable<>();
+// 第一次将会尝试反射加载 "sun.net.www.protocol." + ${protocol} + ".Handler" 类，如果加载到了就存入 handlers
+
+/* URLStreamHandler 类的子类, 就是说 URL 支持: http, https, ftp, file, jar, mailto, netdoc */
+sun.net.www.protocol.http.Handler a;
+sun.net.www.protocol.https.Handler b;
+sun.net.www.protocol.ftp.Handler c;
+sun.net.www.protocol.file.Handler d;
+sun.net.www.protocol.jar.Handler e;
+sun.net.www.protocol.mailto.Handler f;
+sun.net.www.protocol.netdoc.Handler g;
+</pre>
+							<ol>
+								<li><p><code>static void setURLStreamHandlerFactory(URLStreamHandlerFactory fac)</code> -- 设置 URLStreamHandlerFactory, 相当于自定义 URL 的处理器。</p></li>
+
+								<li class="group"><p><code>String 	getProtocol()</code> -- 获取此 URL 的协议名称</p></li>
+								<li><p><code>String 	getUserInfo()</code> -- 获取此 URL 的 userInfo 部分</p></li>
+								<li><p><code>String 	getHost()</code> -- 获取此 URL 的主机名（如果适用）</p></li>
+								<li><p><code>int 	getPort()</code> -- 获取此 URL 的端口号</p></li>
+								<li><p><code>String 	getAuthority()</code> -- 获取此 URL 的授权部分</p></li>
+								<li><p><code>String 	getPath()</code> -- 获取此 URL 的路径部分</p></li>
+								<li><p><code>String 	getQuery()</code> -- 获取此 URL 的查询部分</p></li>
+								<li><p><code>String 	getFile()</code> -- 为 <code>$path + $file</code></p></li>
+								<li><p><code>String 	getRef()</code> -- 获取此 URL 的锚点（也称为“引用”）</p></li>
+
+								<li class="group"><p><code>int 	getDefaultPort()</code> -- 获取默认端口号，由 <code>protocol</code> 对应的 <code>URLStreamHandler</code> 返回</p></li>
+
+								<li class="group"><p><code>URLConnection 	openConnection()</code> -- 返回一个 URLConnection 对象，它表示到 URL 所引用的远程对象的连接，由 <code>protocol</code> 对应的 <code>URLStreamHandler</code> 及子类实现</p></li>
+								<li><p><code>URLConnection 	openConnection(Proxy proxy)</code> -- 与 openConnection() 类似，所不同是连接通过指定的代理建立；不支持代理方式的协议处理程序将忽略该代理参数并建立正常的连接，由 <code>URLStreamHandler</code> 及子类实现</p></li>
+								<li><p><code>InputStream 	openStream()</code> -- 调用 <code>openConnection().getInputStream()</code></p></li>
+
+								<li class="group"><p><code>Object 	getContent()</code> -- 调用 <code>openConnection().getContent()</code></p></li>
+								<li><p><code>Object 	getContent(Class[] classes)</code> -- 调用 <code>openConnection().getContent(Class[])</code></p></li>
+
+								<li class="group"><p><code>boolean 	sameFile(URL other)</code> -- 比较两个 URL，不包括片段部分</p></li>
+								<li><p><code>String 	toExternalForm()</code> -- 构造此 URL 的字符串表示形式</p></li>
+
+								<li class="group"><p><code>URI 	toURI()</code> -- 返回与此 URL 等效的 URI</p></li>
+
+								<li class="group"><p><code>String 	toString()</code> -- 构造此 URL 的字符串表示形式</p></li>
+								<li><p><code>int 	hashCode()</code> -- 创建一个适合哈希表索引的整数</p></li>
+								<li><p><code>boolean 	equals(Object obj)</code> -- 比较此 URL 是否等于另一个对象</p></li>
+							</ol>
+						</div>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-net-URLConnection"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">URLConnection 及子类</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<pre class="brush: java;">
+java.lang.Object
+	java.net.URLConnection
+		java.net.HttpURLConnection
+			sun.net.www.protocol.http.HttpURLConnection 		  // http 链接 URL 的 openConnection
+			javax.net.ssl.HttpsURLConnection
+				sun.net.www.protocol.https.HttpsURLConnectionImpl // https 链接 URL 的 openConnection
+
+public abstract class URLConnection {}
+
+public abstract class HttpURLConnection extends URLConnection {}
+</pre>
+							<p><a href="docs/docs-java/api/java/net/URLConnection.html" target="_blank">URLConnection</a> 代表应用程序和 URL 之间的通信链接。此类的实例可用于读取和写入此 URL 引用的资源。</p>
+							<p><a href="docs/docs-java/api/java/net/HttpURLConnection.html" target="_blank">HttpURLConnection</a> 支持 HTTP 特定功能的 URLConnection。每个 HttpURLConnection 实例都可用于生成单个请求，但是其他实例可以透明地共享连接到 HTTP 服务器的基础网络。</p>
+							<ol>
+								<li><p><code>static void setDefaultAllowUserInteraction(boolean defaultallowuserinteraction)</code> -- 将未来的所有 URLConnection 对象的 allowUserInteraction 字段的默认值设置为指定的值</p></li>
+								<li><p><code>static boolean getDefaultAllowUserInteraction()</code> -- 返回 allowUserInteraction 字段的默认值</p></li>
+								<li><p><code>static void setFileNameMap(FileNameMap map)</code> -- 设置 FileNameMap</p></li>
+								<li><p><code>static FileNameMap getFileNameMap()</code> -- 从数据文件加载文件名映射</p></li>
+								<li><p><code>static void setContentHandlerFactory(ContentHandlerFactory fac)</code> -- 设置应用程序的 ContentHandlerFactory</p></li>
+								<li><p><code>static String guessContentTypeFromName(String fname)</code> -- 根据 URL 的指定 "file" 部分尝试确定对象的内容类型</p></li>
+								<li><p><code>static String guessContentTypeFromStream(InputStream is)</code> -- 根据输入流的开始字符尝试确定输入流的类型</p></li>
+
+								<li class="group"><p><code>abstract void 	connect()</code> -- 打开到此 URL 引用的资源的通信链接(在 http 里面可以不需要)</p></li>
+
+								<li class="group"><p><code>void 	addRequestProperty(String key, String value)</code> -- 添加由键值对指定的请求头(可有多个同名值)</p></li>
+								<li><p><code>Map&lt;String,List&lt;String>> 	getRequestProperties()</code> -- 返回请求头</p></li>
+								<li><p><code>void 	setRequestProperty(String key, String value)</code> -- 设置请求头属性值(键存在则修改)</p></li>
+								<li><p><code>String 	getRequestProperty(String key)</code> --  返回请求头属性值</p></li>
+
+								<li class="group"><p><code>void 	setConnectTimeout(int timeout)</code> -- 设置连接超时值</p></li>
+								<li><p><code>int 	getConnectTimeout()</code> -- 返回连接超时设置</p></li>
+
+								<li class="group"><p><code>void 	setReadTimeout(int timeout)</code> -- 将读超时设置为指定的超时值，以毫秒为单位</p></li>
+								<li><p><code>int 	getReadTimeout()</code> -- 返回读入超时设置</p></li>
+
+								<li class="group"><p><code>void 	setIfModifiedSince(long ifmodifiedsince)</code> -- 将 ifModifiedSince 字段的值设置为指定的值</p></li>
+								<li><p><code>long 	getIfModifiedSince()</code> -- 返回 ifModifiedSince 字段的值</p></li>
+
+								<li class="group"><p><code>void 	setUseCaches(boolean usecaches)</code> -- 将 useCaches 字段的值设置为指定的值</p></li>
+								<li><p><code>boolean 	getUseCaches()</code> -- 返回 useCaches 字段的值</p></li>
+								<li><p><code>void 	setDefaultUseCaches(boolean defaultusecaches)</code> -- 将 useCaches 字段的默认值设置为指定的值(区别是这个值是 <code>static</code> 成员)</p></li>
+								<li><p><code>boolean 	getDefaultUseCaches()</code> -- 返回 useCaches 标志的默认值</p></li>
+
+								<li class="group"><p><code>void 	setDoInput(boolean doinput)</code> -- 将 doInput 字段的值设置为指定的值, 默认 <code>true</code></p></li>
+								<li><p><code>boolean 	getDoInput()</code> -- 返回 doInput 标志的值</p></li>
+								<li><p><code>void 	setDoOutput(boolean dooutput)</code> -- 将 doOutput 字段的值设置为指定的值, 默认 <code>false</code></p></li>
+								<li><p><code>boolean 	getDoOutput()</code> -- 返回 doOutput 标志的值</p></li>
+
+								<li class="group"><p><code>void 	setAllowUserInteraction(boolean allowuserinteraction)</code> -- 设置 allowUserInteraction 字段的值</p></li>
+								<li><p><code>boolean 	getAllowUserInteraction()</code> -- 返回 allowUserInteraction 字段的值</p></li>
+
+								<li class="group"><p><code>Map&lt;String,List&lt;String>> 	getHeaderFields()</code> -- 返回响应头</p></li>
+								<li><p><code>String 	getHeaderFieldKey(int n)</code> -- 返回第 n 个头字段的键</p></li>
+								<li><p><code>String 	getHeaderField(int n)</code> -- 返回第 n 个头字段的值</p></li>
+								<li><p><code>String 	getHeaderField(String name)</code> -- 返回指定的头字段的值</p></li>
+								<li><p><code>int 	getHeaderFieldInt(String name, int Default)</code> -- 返回解析为数字的指定字段的值</p></li>
+								<li><p><code>long 	getHeaderFieldLong(String name, long Default)</code> -- 返回解析为数字的指定字段的值</p></li>
+								<li><p><code>long 	getHeaderFieldDate(String name, long Default)</code> -- 返回解析为日期的指定字段的值</p></li>
+
+								<li class="group"><p><code>long 	getExpiration()</code> -- 返回 expires 头字段的值，调用 <code>getHeaderFieldDate("expires", 0)</code></p></li>
+								<li><p><code>long 	getLastModified()</code> -- 返回 last-modified 头字段的值，调用 <code>getHeaderFieldDate("last-modified", 0)</code></p></li>
+								<li><p><code>String 	getContentEncoding()</code> -- 返回 content-encoding 头字段的值，调用 <code>getHeaderField("content-encoding")</code></p></li>
+								<li><p><code>long 	getContentLengthLong()</code> -- 返回 content-length 头字段的值，调用 <code>getHeaderFieldLong("content-length", -1)</code></p></li>
+								<li><p><code>int 	getContentLength()</code> -- 调用<code>getContentLengthLong()</code> 如果超出 <code>if (l > Integer.MAX_VALUE) return -1;</code></p></li>
+								<li><p><code>String 	getContentType()</code> -- 返回 content-type 头字段的值，调用 <code>getHeaderField("content-type")</code></p></li>
+								<li><p><code>long 	getDate()</code> -- 返回 date 头字段的值，调用 <code>getHeaderFieldDate("date", 0)</code></p></li>
+
+								<li class="group"><p><code>InputStream 	getInputStream()</code> -- 返回响应体的输入流</p></li>
+								<li><p><code>OutputStream 	getOutputStream()</code> -- 返回写入到此连接的输出流(比如 Post 请求写数据)</p></li>
+
+								<li class="group"><p><code>Object 	getContent()</code> -- 获取此 URL 连接的内容</p></li>
+								<li><p><code>Object 	getContent(Class[] classes)</code> -- 获取此 URL 连接的内容</p></li>
+
+								<li class="group"><p><code>URL 	getURL()</code> -- 返回此 URLConnection 的 URL 字段的值</p></li>
+								<li><p><code>Permission 	getPermission()</code> -- 返回一个权限对象，其代表建立此对象表示的连接所需的权限</p></li>
+								<li><p><code>String 	toString()</code> -- 返回此 URL 连接的 String 表示形式</p></li>
+							</ol>
+						</div>
+
+						<div class="sub-item">
+							<p><b>一个基于 URLConnection 的工具类</b></p>
+							<pre class="brush: java;">
+public class HttpClient {
+	// https 支持(不验证证书)
+    static {
+        try {
+            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
+                public X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+
+                public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                }
+
+                public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                }
+            }};
+
+            // Install the all-trusting trust manager
+            SSLContext sc = SSLContext.getInstance("TLS");
+            sc.init(null, trustAllCerts, new SecureRandom());
+
+            // ip host verify
+            HostnameVerifier hv = new HostnameVerifier() {
+                public boolean verify(String urlHostName, SSLSession session) {
+                    return urlHostName.equals(session.getPeerHost());
+                }
+            };
+
+            // set ip host verify
+            HttpsURLConnection.setDefaultHostnameVerifier(hv);
+            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    int connectTimeout;
+    int readTimeout;
+    Map&lt;String, List&lt;String>> headers;
+    Map&lt;String, List&lt;String>> params;
+    String method;
+    String raw;
+    HttpURLConnection connection = null;
+
+    private HttpClient(Builder builder) {
+        connectTimeout = builder.connectTimeout;
+        readTimeout = builder.readTimeout;
+        headers = builder.headers;
+        method = builder.method;
+        params = builder.params;
+        raw = builder.raw;
+    }
+
+    public void execute(String url, Consumer&lt;Response> response, Consumer&lt;Error> error) {
+        PrintWriter out = null;
+        try {
+            URL mUrl = new URL(url);
+
+            String paramString = null;
+            if (params != null && !params.isEmpty()) {
+                StringBuffer buffer = new StringBuffer();
+                params.forEach((key, values) -> {
+                    values.forEach(value -> {
+                        buffer.append(key).append("=")
+                                .append(URLEncoder.encode(value))
+                                .append("&");
+                    });
+                });
+                paramString = buffer.deleteCharAt(buffer.length() - 1).toString();
+            }
+
+
+            if("GET".equalsIgnoreCase(method) && null != paramString) {
+                if (mUrl.getQuery() != null) {
+                    mUrl = new URL(url + "&" + paramString);
+                } else {
+                    mUrl = new URL(url + "?" + paramString);
+                }
+            }
+
+            connection = (HttpURLConnection) mUrl.openConnection();
+            connection.setConnectTimeout(connectTimeout);
+            connection.setReadTimeout(readTimeout);
+
+            headers.forEach((key, values) -> {
+                values.forEach(value -> {
+                    connection.addRequestProperty(key, value);
+                });
+            });
+
+            if ("POST".equalsIgnoreCase(method)) {
+                connection.setRequestMethod("POST");
+                connection.setDoOutput(true);
+
+                if(null != raw && !raw.isEmpty()) {
+                    paramString = raw;
+                }
+                if(null != paramString) {
+                    out = new PrintWriter(connection.getOutputStream());
+                    out.print(paramString);
+                    out.flush();
+                }
+            }
+
+            if (HttpURLConnection.HTTP_OK == connection.getResponseCode()) {
+                response.accept(new Response(connection, connection.getInputStream()));
+            } else {
+                error.accept(new Error(connection.getResponseCode(), connection.getResponseMessage()));
+            }
+        } catch (SSLException e) {
+            error.accept(new Error(-1, "SSL 异常！"));
+        } catch (UnknownHostException e) {
+            error.accept(new Error(-2, "地址不存在或网络异常！"));
+        } catch (ConnectException e) {
+            error.accept(new Error(-3, "连接异常！"));
+        } catch (SocketTimeoutException e) {
+            error.accept(new Error(-4, "连接超时！"));
+        } catch (IOException e) {
+            error.accept(new Error(-5, e.getMessage()));
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+            if (null != connection) {
+                connection.disconnect();
+                connection = null;
+            }
+        }
+    }
+
+    public void execute(String url, Consumer&lt;Response> response) {
+        execute(url, response, error -> {});
+    }
+
+    public static class Error {
+        int code = -3;
+        String message = "未知错误！";
+
+        public Error() {}
+        public Error(int code, String message) {
+            this.code = code;
+            this.message = message;
+        }
+
+        public int getCode() { return code; }
+        public String getMessage() { return message; }
+    }
+
+    public static class Response {
+        HttpURLConnection connection;
+        InputStream inputStream;
+
+        Response(HttpURLConnection connection, InputStream in) {
+            this.connection = connection;
+            inputStream = in;
+        }
+
+        public HttpURLConnection connection() { return connection; }
+
+		// 读取为字符串
+        public String string() {
+            StringBuilder builder = new StringBuilder();
+            BufferedReader br = null;
+            try {
+                br = new BufferedReader(new InputStreamReader(inputStream));
+                String tmp;
+                while ((tmp = br.readLine()) != null) {
+                    builder.append(tmp).append("\n");
+                }
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (null != br) {
+                        br.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return builder.toString();
+        }
+
+		// 保存文件，可用于下载
+        public boolean toFile(String pathname) {
+            BufferedInputStream bis = null;
+            OutputStream out = null;
+            try {
+                File file = new File(path);
+                bis = new BufferedInputStream(inputStream);
+                out = new FileOutputStream(file);
+                int size = 0;
+                int len = 0;
+                byte[] buf = new byte[1024];
+                long contentLength = connection.getContentLengthLong();
+                while ((size = bis.read(buf)) != -1) {
+                    len += size;
+                    out.write(buf, 0, size);
+                    System.out.println(String.format(Locale.getDefault(),
+								"%.2f %%, %s Of %s", 100f * len / contentLength,  len, contentLength));
+                }
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if(null != bis) {
+                        bis.close();
+                    }
+                    if(null != out) {
+                        out.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            return false;
+        }
+
+        public InputStream stream() { return inputStream; }
+    }
+
+    public static final class Builder {
+        int connectTimeout;
+        int readTimeout;
+        Map&lt;String, List&lt;String>> headers;
+        Map&lt;String, List&lt;String>> params;
+        String method;
+        String raw;
+
+        public Builder() {
+            connectTimeout = 10_000;
+            readTimeout = 10_000;
+            method = "GET";
+            headers = new HashMap<>();
+        }
+
+        public Builder connectTimeout(int millis) {
+            connectTimeout = millis;
+            return this;
+        }
+
+        public Builder readTimeout(int millis) {
+            readTimeout = millis;
+            return this;
+        }
+
+        public Builder headers(Map&lt;String, List&lt;String>> headers) {
+            this.headers = headers;
+            return this;
+        }
+
+        public Builder header(String key, String value) {
+            if(headers == null) {
+                headers = new HashMap<>();
+            }
+            List&lt;String> values = new ArrayList<>();
+            if(headers.containsKey(key)) {
+                values = headers.get(key);
+            }
+            values.add(value);
+            headers.put(key, values);
+            return this;
+        }
+
+        public Builder params(Map&lt;String, List&lt;String>> params) {
+            this.params = params;
+            return this;
+        }
+
+        public Builder param(String key, String value) {
+            if(params == null) {
+                params = new HashMap<>();
+            }
+            List&lt;String> values = new ArrayList<>();
+            if(params.containsKey(key)) {
+                values = params.get(key);
+            }
+            values.add(value);
+            params.put(key, values);
+            return this;
+        }
+
+        public Builder method(String method) {
+            this.method = method;
+            return this;
+        }
+
+        public Builder raw(String raw) {
+            this.method = "POST";
+            this.raw = raw;
+            return this;
+        }
+
+        public HttpClient build() { return new HttpClient(this); }
+    }
+}
+</pre>
+						</div>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-net-URLEncoder"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">URLEncoder 和 URLDecoder</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: java;">
+public class URLEncoder {
+	public static String encode(String s, String enc) throws UnsupportedEncodingException {...}
+}
+
+public class URLDecoder {
+	public static String decode(String s, String enc) throws UnsupportedEncodingException {...}
+}
+</pre>
+						<p><a href="docs/docs-java/api/java/net/URLEncode.html" target="_blank">URLEncode</a> HTML 格式编码的实用工具类。该类包含了将 String 转换为 application/x-www-form-urlencoded MIME 格式的静态方法。</p>
+						<p><a href="docs/docs-java/api/java/net/URLDecode.html" target="_blank">URLDecode</a> 该转换过程正好与 URLEncoder 类使用的过程相反。</p>
+						<p><b>对 String 编码时，使用以下规则： </b></p>
+						<ul>
+							<li><p>字母数字字符 <code>[a-zA-Z0-9]</code> 保持不变；</p></li>
+							<li><p>特殊字符 <code>"."</code>、<code>"-"</code>、<code>"*"</code> 和 <code>"_"</code> 保持不变；</p></li>
+							<li><p>空格字符 <code>" "</code> 转换为一个加号 <code>"+"</code>；</p></li>
+							<li><p>其它字符按指定编码将每个字节用一个包含 3 个字符的字符串 <code>"%xy"</code> 表示，其中 <code>xy</code> 为该字节的两位十六进制表示形式。</p></li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
 
                 <!-- item start -->
                 <a class="offset" id="java-sql-DriverManager"></a>

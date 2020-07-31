@@ -80,6 +80,7 @@
 							<a href="#java-keytool" class="list-group-item">keytool 工具</a>
 							<a href="#java-examples" class="list-group-item">examples</a>
 						</div>
+						<a href="#java-base" class="list-group-item">Java 基本数据类型和 String</a>
 						<a href="#java-syntax" class="list-group-item">Java 中的几个关键字</a>
 						<a href="#java-class-loader" class="list-group-item">ClassLoader 原理</a>
 						<a href="#java-generics" class="list-group-item">Java 泛型</a>
@@ -871,6 +872,248 @@ $ java -jar build/libs/demo.jar
 								</ol>
 							</li>
 						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-base"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Java 基本数据类型和 String</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>基本数据类型包括 boolean（布尔型）、float（单精度浮点型）、char（字符型）、byte（字节型）、short（短整型）、int（整型）、long（长整型）和 double （双精度浮点型）共 8 种基本数据类型包括 boolean（布尔型）、float（单精度浮点型）、char（字符型）、byte（字节型）、short（短整型）、int（整型）、long（长整型）和 double （双精度浮点型）共 8 种: </p>
+							<table class="table table-bordered table-responsive">
+								<tr>
+									<th>类型名称</th>
+									<th>关键字</th>
+									<th>占用内存</th>
+									<th>取值范围</th>
+								</tr>
+								<tr>
+									<td>字节型</td>
+									<td>byte</td>
+									<td>1 字节</td>
+									<td>-128~127, <code>-0x80~0x7F</code></td>
+								</tr>
+								<tr>
+									<td>短整型</td>
+									<td>short</td>
+									<td>2 字节</td>
+									<td>-32768~32767, <code>-0x8000~0x7FFF</code></td>
+								</tr>
+								<tr>
+									<td>整型</td>
+									<td>int</td>
+									<td>4 字节</td>
+									<td>-2147483648~2147483647, <code>-0x80000000~0x7FFFFFFF</code></td>
+								</tr>
+								<tr>
+									<td>长整型</td>
+									<td>long</td>
+									<td>8 字节</td>
+									<td>-9223372036854775808L~9223372036854775807L, <code>-0x8000000000000000L~0x7FFFFFFFFFFFFFFFL</code></td>
+								</tr>
+								<tr>
+									<td>单精度浮点型</td>
+									<td>float</td>
+									<td>4 字节</td>
+									<td>+/-3.4E+38F（6~7 个有效位）</td>
+								</tr>
+								<tr>
+									<td>双精度浮点型</td>
+									<td>double</td>
+									<td>8 字节</td>
+									<td>+/-1.8E+308 (15 个有效位）</td>
+								</tr>
+								<tr>
+									<td>字符型</td>
+									<td>char</td>
+									<td>2 字节</td>
+									<td>ISO 单一字符集, <code>\u0000~\uFFFF</code></td>
+								</tr>
+								<tr>
+									<td>布尔型</td>
+									<td>boolean</td>
+									<td>1 字节</td>
+									<td>true 或 false</td>
+								</tr>
+							</table>
+							<p><b>基本类型的存取</b></p>
+							<pre class="brush: java;">
+try {
+	// 创建临时文件，并在退出时删除
+	File f = File.createTempFile("base", ".tmp");
+	f.deleteOnExit();
+
+	// 写入基本类型，在写 UTF 时，其实在前面加了两个字节标识其长度，因此允许最大长度为 65535
+	DataOutputStream dos = new DataOutputStream(new FileOutputStream(f));
+	dos.writeBoolean(true);
+	dos.writeBoolean(false);
+	dos.writeChar('1');
+	dos.writeByte(1);
+	dos.writeInt(1);
+	dos.writeShort(1);
+	dos.writeLong(1L);
+	dos.writeFloat(3.14f);
+	dos.writeDouble(3.14);
+	dos.writeUTF("Hello");
+	dos.writeInt(1024);
+	dos.flush();
+	dos.close();
+
+	DataInputStream dis = new DataInputStream(new FileInputStream(f));
+	/** 先来看写入文件的二进制，这里用十六进制展示：
+	 * 01 00 0031 01 00000001 0001 0000000000000001 4048F5C3 40091EB851EB851F 000548656C6C6F 00000400
+	 * 01 -- boolean 的 true 在这里存储的是 int 值 1 的低 8 位， 在读取的时候 非 0 则为 true
+	 * 00 -- boolean 的 true 在这里存储的是 int 值 0 的低 8 位， 在读取的时候 0 则为 false
+	 * 0031 -- 是 ‘1’ 的 utf-16 编码的 unicode 值
+	 * 01 -- 是 int 值 1 的低 8 位
+	 * 00000001 -- 是 int 1 的 int 值
+	 * ... short, long, float, double 分别以 2字节，8字节，4字节，8字节存储
+	 * 000548656C6C6F -- 这个是 utf-8 方式存储的 "Hello", 用两个字节: 0005 标识长度， 后面是 String 的 utf-8 编码值
+	 * 00000400 -- 是 1024
+	 */
+	byte[] bytes = new byte[(int) f.length()];
+	dis.read(bytes); // 全部读出来，就是上面的二进制
+	log(bytesToHex(bytes));
+
+	dis.skip(-f.length()); // 回到原始位置
+
+	log(dis.readBoolean());
+	log(dis.readBoolean());
+	log(dis.readChar());
+	log(dis.readByte());
+	log(dis.readInt());
+	log(dis.readShort());
+	log(dis.readLong());
+	log(dis.readFloat());
+	log(dis.readDouble());
+	log(dis.readUTF());
+	log(dis.readInt());
+	dis.close();
+} catch (IOException e) {
+	e.printStackTrace();
+}
+</pre>
+							<p><b>基本类型的使用</b></p>
+							<pre class="brush: java;">
+byte b1 = 1;
+byte b2 = 0x1;
+byte b3 = 0b1;
+byte b4 = -0b1;
+byte b5 = (byte) 0b11111111111111111111111111111111;
+byte b6 = (byte) 0b11111111111111111111111111111110;
+byte b7 = (byte) 0b11111111111111111111111111111101;
+log(b1, b2, b3, b4, b5, b6, b7); // 1  1  1  -1  -1  -2  -3
+
+// char 使用 unicode 字符集， 但其长度为 2 个字节， 因此只能表示 BMP 平面的字符，采用 utf-16 编码
+char c1 = 'a';
+char c2 = 97;
+char c3 = 0x61;
+char c4 = 0b1100001;
+char c5 = '\u0061';
+log(c1, c2, c3, c4, c5); // a  a  a  a  a
+
+// 注意此处的最后 4 个 char 表示为两个 unicode 的 SMP 平面的字符
+char[] chars = new char[]{'\u0061', '\u0033','\u0020', '\u03b1', '\u03b2', '\u0020', '\u4f60', '\u597d',
+                '\u0020', '\ud83c', '\udca1', '\ud83c', '\udca2'};
+String s1 = new String(chars);
+log(s1, s1.length());       // a3 αβ 你好 🂡🂢 13
+String s2 = "a3 αβ 你好 \uD83C\uDCA1\uD83C\uDCA2";
+/** 此处数出的字符只有 11 个，但是它的长度为 13, 因为 String 内部使用 char[] 存储， length() 函数返回 char[] 长度 */
+log(s2, s2.length());       // a3 αβ 你好 🂡🂢 13
+log(s1.equals(s2)); // true
+
+log(Integer.MIN_VALUE, Integer.MAX_VALUE); // -2147483648  2147483647
+int i_min = -2147483648;
+int i_max = 2147483647;
+log(i_min, i_max);                         // -2147483648  2147483647
+/** 首先确定为负数，值为按位取反+1; 0x01111111111111111111111111111111 + 1 */
+int ib_min = 0b10000000000000000000000000000000;
+int ib_max = 0b01111111111111111111111111111111;
+log(ib_min, ib_max);                       // -2147483648  2147483647
+int ix_min = 0x80000000;
+int ix_max = 0x7FFFFFFF;
+log(ix_min, ix_max);                       // -2147483648  2147483647
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><b>String 类的编码/解码/转换</b></p>
+							<pre class="brush: java;">
+public static void main(String[] args) {
+	// 注意此处的最后 4 个 char 表示为两个 unicode 的 SMP 平面的字符
+	char[] chars = new char[]{'\u0061', '\u0033','\u0020', '\u03b1', '\u03b2', '\u0020', '\u4f60',
+			'\u597d', '\u0020', '\ud83c', '\udca1', '\ud83c', '\udca2'};
+	String s1 = new String(chars);
+	log(s1, s1.length());       // a3 αβ 你好 🂡🂢 13
+	String s2 = "a3 αβ 你好 \uD83C\uDCA1\uD83C\uDCA2";
+	// 数出类的字符只有 11 个，但是它的长度为 13, 因为 String 内部使用 char[] 存储， length() 函数返回 char[] 长度
+	log(s2, s2.length());       // a3 αβ 你好 🂡🂢 13
+	log(s1.equals(s2)); // true
+
+	// s1 的 utf-8 编码： 61 33 20 ce b1 ce b2 20 e4 bd a0 e5 a5 bd 20 f0 9f 82 a1 f0 9f 82 a2
+	String UTF8Hex = bytesToHex(s1.getBytes(StandardCharsets.UTF_8));
+	log("UTF-8: " + UTF8Hex);
+	log("UTF-8 Hex 还原: " + new String(hexToBytes(UTF8Hex)));
+	String UTF16Hex = bytesToHex(s1.getBytes(StandardCharsets.UTF_16));
+	log("UTF-16: " + UTF16Hex);
+	log("UTF-16 Hex 还原: " + new String(hexToBytes(UTF16Hex), StandardCharsets.UTF_16));
+	String UTF16BEHex = bytesToHex(s1.getBytes(StandardCharsets.UTF_16BE));
+	log("UTF-16BE: " + UTF16BEHex);
+	log("UTF-16BE Hex 还原: " + new String(hexToBytes(UTF16BEHex), StandardCharsets.UTF_16BE));
+	String UTF16LEHex = bytesToHex(s1.getBytes(StandardCharsets.UTF_16LE));
+	log("UTF-16LE: " + UTF16LEHex);
+	log("UTF-16LE Hex 还原: " + new String(hexToBytes(UTF16LEHex), StandardCharsets.UTF_16LE));
+
+	// 以上部分为标准编码， 以下部分不保证所有平台都有
+	String UTF32Hex = bytesToHex(s1.getBytes(Charset.forName("UTF-32")));
+	log("UTF-32: " + UTF32Hex);
+	log("UTF-32 Hex 还原: " + new String(hexToBytes(UTF32Hex), Charset.forName("UTF-32")));
+	String UTF32BEHex = bytesToHex(s1.getBytes(Charset.forName("UTF-32BE")));
+	log("UTF-32BE: " + UTF32BEHex);
+	log("UTF-32BE Hex 还原: " + new String(hexToBytes(UTF32BEHex), Charset.forName("UTF-32BE")));
+	String UTF32LEHex = bytesToHex(s1.getBytes(Charset.forName("UTF-32LE")));
+	log("UTF-32LE: " + UTF32LEHex);
+	log("UTF-32LE Hex 还原: " + new String(hexToBytes(UTF32LEHex), Charset.forName("UTF-32LE")));
+
+	// 以下为当前平台所有支持的编码
+	Charset.availableCharsets().forEach((name, c) -> {
+		log(name);
+	});
+}
+
+public static byte[] hexToBytes(String hex){
+	// 必须为 16 进制字符，否则返回空的 bytes
+	if(!Pattern.matches("^[0-9A-Fa-f]+$", hex)) {
+		return new byte[]{};
+	}
+	// 如果不是偶数，前面补一个 0
+	hex = hex.length() % 2 != 0 ? "0" + hex : hex;
+
+	byte[] b = new byte[hex.length() / 2];
+	for (int i = 0; i < b.length; i++) {
+		int index = i * 2;
+		int v = Integer.parseInt(hex.substring(index, index + 2), 16);
+		b[i] = (byte) v;
+	}
+	return b;
+}
+
+public static String bytesToHex(byte[] bytes) {
+	StringBuilder builder = new StringBuilder();
+	for (byte b : bytes) {
+		String hex = Integer.toHexString(b & 0xff);
+		builder.append(hex.length() == 1 ? "0" + hex : hex);
+	}
+	return builder.toString().toUpperCase();
+}
+</pre>
+
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
@@ -2432,9 +2675,9 @@ singleThreadExecutor.shutdown();
 					</div>
 					<div class="panel-body">
 						<div class="sub-item">
-							<h5 class="text-primary">Java运行时内存区</h5>
-							<p>Java虚拟机在执行Java程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则是依赖用户线程的启动和结束而建立和销毁。根据《Java虚拟机规范（第2版）》的规
-								定，Java虚拟机所管理的内存将会包括以下几个运行时数据区域，如下图所示：</p>
+							<h5 class="text-primary">Java 运行时内存区</h5>
+							<p>Java 虚拟机在执行 Java 程序的过程中会把它所管理的内存划分为若干个不同的数据区域。这些区域都有各自的用途，以及创建和销毁的时间，有的区域随着虚拟机进程的启动而存在，有些区域则是依赖用户线程的启动和结束而建立和销毁。根据《Java 虚拟机规范（第2版）》的规
+								定，Java 虚拟机所管理的内存将会包括以下几个运行时数据区域，如下图所示：</p>
 							<p class="100%">
 								<img src="images/java-memory.gif" class="center-block">
 							</p>
@@ -2445,41 +2688,41 @@ singleThreadExecutor.shutdown();
 							<p>多线程中，为了让线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各条线程之间互不影响、独立存储，因此这块内存是
 								线程私有 的。</p>
 							<p>
-								当线程正在执行的是一个Java方法，这个计数器记录的是在正在执行的虚拟机字节码指令的地址；当执行的是Native方法，这个计数器值为空。
+								当线程正在执行的是一个 Java 方法，这个计数器记录的是在正在执行的虚拟机字节码指令的地址；当执行的是 Native 方法，这个计数器值为空。
 							</p>
-							<p>此内存区域是唯一一个没有规定任何OutOfMemoryError情况的区域 。</p>
+							<p>此内存区域是唯一一个没有规定任何 OutOfMemoryError 情况的区域 。</p>
 
 							<p>
-								<b>Java虚拟机栈</b>
+								<b>Java 虚拟机栈</b>
 							</p>
-							<p>Java虚拟机栈也是线程私有的
-								，它的生命周期与线程相同。虚拟机栈描述的是Java方法执行的内存模型：每个方法在执行的同时都会创建一个栈帧用于存储局部变量表、操作数栈、动态链表、方法出口信息等。每一个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。</p>
+							<p>Java 虚拟机栈也是线程私有的，它的生命周期与线程相同。虚拟机栈描述的是 Java 方法执行的内存模型：每个方法在执行的同时都会创建一个栈帧用于存储局部变量表、操作数栈、动态链表、方法出口信息等。每一个方法从调用直至执行完成的过程，就对应着一个栈帧在虚拟机栈中入栈到出栈的过程。</p>
 							<p>局部变量表中存放了编译器可知的各种基本数据类型(boolean、byte、char、short、int、float、long、double)、对象引用和returnAddress类型(指向了一条字节码指令的地址)。</p>
-							<p>如果扩展时无法申请到足够的内存，就会抛出OutOfMemoryError异常。</p>
+							<p>如果扩展时无法申请到足够的内存，就会抛出 OutOfMemoryError 异常。</p>
 							<p>
 								<b>本地方法栈</b>
 							</p>
-							<p>本地方法栈与虚拟机的作用相似，不同之处在于虚拟机栈为虚拟机执行的Java方法服务，而本地方法栈则为虚拟机使用到的Native方法服务。有的虚拟机直接把本地方法栈和虚拟机栈合二为一。</p>
-							<p>会抛出stackOverflowError和OutOfMemoryError异常。</p>
+							<p>本地方法栈与虚拟机的作用相似，不同之处在于虚拟机栈为虚拟机执行的 Java 方法服务，而本地方法栈则为虚拟机使用到的 Native 方法服务。有的虚拟机直接把本地方法栈和虚拟机栈合二为一。</p>
+							<p>会抛出 stackOverflowError 和 OutOfMemoryError异常。</p>
 							<p>
-								<b>Java堆</b>
+								<b>Java 堆</b>
 							</p>
-							<p>Java堆是所有线程共享的一块内存区域，在虚拟机启动时创建，此内存区域的唯一目的就是存放对象实例 。</p>
-							<p>Java堆是垃圾收集器管理的主要区域。由于现在收集器基本采用分代回收算法，所以Java堆还可细分为：新生代和老年代。从内存分配的角度来看，线程共享的Java堆中可能划分出多个线程私有的分配缓冲区(TLAB)。</p>
-							<p>Java堆可以处于物理上不连续的内存空间，只要逻辑上连续的即可。在实现上，既可以实现固定大小的，也可以是扩展的。</p>
-							<p>如果堆中没有内存完成实例分配，并且堆也无法完成扩展时，将会抛出OutOfMemoryError异常。</p>
+							<p>Java 堆是所有线程共享的一块内存区域，在虚拟机启动时创建，此内存区域的唯一目的就是存放对象实例以及数组，目前由于编译器的优化，对象在堆上分配已经没有那么绝对了。</p>
+							<p>Java 堆是垃圾收集器管理的主要区域。由于现在收集器基本采用分代回收算法，所以 Java 堆还可细分为：新生代和老年代。从内存分配的角度来看，线程共享的Java堆中可能划分出多个线程私有的分配缓冲区(TLAB)。</p>
+							<p>Java 堆可以处于物理上不连续的内存空间，只要逻辑上连续的即可。在实现上，既可以实现固定大小的，也可以是扩展的。</p>
+							<p>如果堆中没有内存完成实例分配，并且堆也无法完成扩展时，将会抛出 OutOfMemoryError 异常。</p>
 							<p>
 								<b>方法区</b>
 							</p>
 							<p>方法区是各个线程共享的内存区域，它用于存储已被虚拟机加载的类信息、常量、静态变量、即时编译器编译后的代码等数据 。</p>
 							<p>相对而言，垃圾收集行为在这个区域比较少出现，但并非数据进了方法区就永久的存在了，这个区域的内存回收目标主要是针对常量池的回收和对类型的卸载，</p>
-							<p>当方法区无法满足内存分配需要时，将抛出OutOfMemoryError异常。</p>
-							<p>运行时常量池：是方法区的一部分，它用于存放编译期生成的各种字面量和符号引用。</p>
+							<p>当方法区无法满足内存分配需要时，将抛出 OutOfMemoryErro r异常。</p>
+							<p><b>运行时常量池</b>：是方法区的一部分，它用于存放编译期生成的各种字面量和符号引用。</p>
+							<p>JDK1.7 及之后版本的 JVM 已经将运行时常量池从方法区中移了出来，在 Java 堆（Heap）中开辟了一块区域存放运行时常量池。</p>
 							<p>
 								<b>直接内存</b>
 							</p>
-							<p>直接内存不是虚拟机运行时数据区的一部分，在NIO类中引入一种基于通道与缓冲区的IO方式，它可以使用Native函数库直接分配堆外内存，然后通过一个存储在Java堆中的DirectByteBuffer对象作为这块内存的引用进行操作。</p>
-							<p>直接内存的分配不会受到Java堆大小的限制，但是会受到本机内存大小的限制，所有也可能会抛OutOfMemoryError异常。</p>
+							<p>直接内存不是虚拟机运行时数据区的一部分，在 NIO 类中引入一种基于通道与缓冲区的 IO 方式，它可以使用 Native 函数库直接分配堆外内存，然后通过一个存储在 Java 堆中的 DirectByteBuffer 对象作为这块内存的引用进行操作。</p>
+							<p>直接内存的分配不会受到 Java 堆大小的限制，但是会受到本机内存大小的限制，所有也可能会抛 OutOfMemoryError 异常。</p>
 
 						</div>
 

@@ -6317,17 +6317,17 @@ public abstract class Uri implements Parcelable, Comparable&lt;Uri> {
                     <pre class="brush: java;">
 &lt;scheme>://&lt;authority>&lt;path>?&lt;query>#&lt;fragment>
 
-content://com.example.project:8080/folder/subfolder/etc?name=bqt&age=28#android
-|------|  |------------------||---||-------------------||--------------|-------|
- scheme           host         port         path              query     fragment
-          |-----------------------|
+content://nate:123456@com.example.project:8080/folder/subfolder/etc?name=bqt&age=28#android
+|------|  |---------||------------------||---||-------------------||--------------|-------|
+ scheme       user           host         port         path              query     fragment
+          |-----------------------------|
                  authority
 
 /** 完整的 Uri 组成如下： */
 &lt;scheme>://&lt;user>:&lt;password>@&lt;host>:&lt;port>/&lt;path>;&lt;params>?&lt;query>#&lt;fragment>
 /** 一共由 9 个参数组成，
  * scheme -- 获取资源使用的协议，例如http、ftp等
- * user:password -- 用户名与密码，这个是一个特殊的存在，一般访问 ftp 时会用到
+ * user -- 用户名与密码，这个是一个特殊的存在，一般访问 ftp 时会用到
  * host -- 主机，访问那台主机
  * port -- 端口，访问主机时的端口
  * path -- 路径

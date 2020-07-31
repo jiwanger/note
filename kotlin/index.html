@@ -80,8 +80,9 @@
 							<a href="#kotlin-base-class" class="list-group-item">类和对象</a>
 							<a href="#kotlin-base-fun" class="list-group-item">函数和 Lambda 表达式</a>
 							<a href="#kotlin-base-collection" class="list-group-item">集合</a>
-							<a href="#kotlin-base-" class="list-group-item">...</a>
+							<a href="#kotlin-base-structure" class="list-group-item">更多语言结构</a>
 						</div>
+						<a href="#kotlin-base-coroutine" class="list-group-item">协程</a>
 						<a href="#kotlin-" class="list-group-item">...</a>
 					</div>
 				</div>
@@ -156,6 +157,15 @@ $ sdk install kotlin
 							<p><b>根据目标平台还会导入额外的包：</b></p>
 							<p><b>JVM:</b> -- <a href="" target="_blank">java.lang.*</a>, <a href="" target="_blank">kotlin.jvm.*</a></p>
 							<p><b>JS:</b> -- <a href="" target="_blank">kotlin.js.*</a></p>
+						</div>
+
+						<div class="sub-item">
+							<h3>Kotlin & Java</h3>
+							<ul>
+								<li><p>Kotlin 的函数和属性可以属于包，意味着只要导入包就可以使用这些函数和属性；</p></li>
+								<li><p>Kotlin 有扩展函数，意味着我们在调用某个实例的函数时，某些函数可能在别的地方申明了；</p></li>
+								<li><p>Kotlin 的接口可以有属性，意味着我们可以要求实现类也要有此属性；</p></li>
+							</ul>
 						</div>
 					</div>
 				</div>
@@ -262,7 +272,7 @@ fun sum(a: Int, b: Int): Int {            // 带有两个 Int 参数、返回 In
 	return a + b
 }
 
-funn sum(a: Int, b: Int) = a + b          // 表达式作为函数体、返回值类型自动推断的函数：
+fun sum(a: Int, b: Int) = a + b          // 表达式作为函数体、返回值类型自动推断的函数：
 
 fun printSum(a: Int, b: Int): Unit {      // 函数返回无意义的值
 	println("sum of $a and $b is ${a + b}")
@@ -322,24 +332,184 @@ value?.let {
 					<div class="panel-body">
                         <div class="sub-item">
                             <h3>Kotlin 关键字, 参见：<a href="https://www.kotlincn.net/docs/reference/keyword-reference.html" target="_blank">关键字与操作符</a></h3>
+							<p><a href="#keyword-hard">硬关键字</a>， <a href="#keyword-soft">软关键字</a>， <a href="#keyword-modifier">修饰符关键字</a>， <a href="#keyword-special">特殊关键字</a>， <a href="#operator">操作符</a> </p>
                             <ul>
-                                <li><p><b>硬关键字</b> -- 无论在什么情况下都不能用作标识符</p></li>
-                                <li><p><b>软关键字</b> -- 可以在它们不起作用的上下文中作标识符</p></li>
-                                <li><p><b>修饰符关键字</b> -- 可以在代码中作标识符</p></li>
-                                <li><p><b>特殊标识符</b> -- <code>field</code>(用在属性访问器内部来引用该属性的幕后字段) 和 <code>it</code>(用在 lambda 表达式内部来隐式引用其参数)</p></li>
+                                <li>
+									<p><b>硬关键字</b> -- 无论在什么情况下都不能用作标识符</p>
+									<table class="table table-bordered table-responsive">
+										<tr>
+											<td><code>package</code></td>
+											<td><code>val</code></td>
+											<td><code>var</code></td>
+											<td><code>fun</code></td>
+											<td><code>true</code></td>
+											<td><code>false</code></td>
+											<td><code>typealias</code></td>
+										</tr>
+										<tr>
+											<td><code>if</code></td>
+											<td><code>else</code></td>
+											<td><code>break</code></td>
+											<td><code>continue</code></td>
+											<td><code>return</code></td>
+											<td><code>for</code></td>
+											<td><code>do</code></td>
+											<td><code>while</code></td>
+											<td><code>when</code></td>
+										</tr>
+
+										<tr>
+											<td><code>is</code></td>
+											<td><code>is!</code></td>
+											<td><code>in</code></td>
+											<td><code>in!</code></td>
+											<td><code>as</code></td>
+											<td><code>as?</code></td>
+											<td><code>try</code></td>
+											<td><code>throw</code></td>
+										</tr>
+
+										<tr>
+											<td><code>class</code></td>
+											<td><code>interface</code></td>
+											<td><code>object</code></td>
+											<td><code>null</code></td>
+											<td><code>this</code></td>
+											<td><code>super</code></td>
+											<td><code>typeof</code></td>
+										</tr>
+									</table>
+								</li>
+                                <li>
+									<p><b>软关键字</b> -- 可以在它们不起作用的上下文中作标识符</p>
+									<table class="table table-bordered table-responsive">
+										<tr>
+											<td><code>import</code></td>
+											<td><code>constructor</code></td>
+											<td><code>init</code></td>
+											<td><code>by</code></td>
+											<td><code>where</code></td>
+											<td><code>catch</code></td>
+											<td><code>finally</code></td>
+											<td><code>set</code></td>
+											<td><code>get</code></td>
+											<td><code>dynamic</code></td>
+										</tr>
+
+										<tr>
+											<td><code>delegate</code></td>
+											<td><code>field</code></td>
+											<td><code>file</code></td>
+											<td><code>param</code></td>
+											<td><code>property</code></td>
+											<td><code>receiver</code></td>
+											<td><code>setparam</code></td>
+										</tr>
+									</table>
+								</li>
+                                <li>
+									<p><b>修饰符关键字</b> -- 可以在代码中作标识符</p>
+									<table class="table table-bordered table-responsive">
+										<tr>
+											<td><code>public</code></td>
+											<td><code>internal</code></td>
+											<td><code>protected</code></td>
+											<td><code>private</code></td>
+											<td><code>open</code></td>
+											<td><code>abstract</code></td>
+											<td><code>override</code></td>
+											<td><code>final</code></td>
+										</tr>
+										<tr>
+											<td><code>data</code></td>
+											<td><code>enum</code></td>
+											<td><code>annotation</code></td>
+											<td><code>sealed</code></td>
+											<td><code>companion</code></td>
+											<td><code>inner</code></td>
+										</tr>
+										<tr>
+											<td><code>const</code></td>
+											<td><code>lateinit</code></td>
+											<td><code>out</code></td>
+											<td><code>reified</code></td>
+											<td><code>suspend</code></td>
+										</tr>
+
+										<tr>
+											<td><code>operator</code></td>
+											<td><code>infix</code></td>
+											<td><code>tailrec</code></td>
+											<td><code>vararg</code></td>
+											<td><code>inline</code></td>
+											<td><code>noinline</code></td>
+											<td><code>crossinline</code></td>
+										</tr>
+										<tr>
+											<td><code>actual</code></td>
+											<td><code>expect</code></td>
+											<td><code>external</code></td>
+										</tr>
+									</table>
+
+								</li>
+                                <li>
+									<p><b>特殊标识符</b> -- <code>field</code>(用在属性访问器内部来引用该属性的幕后字段) 和 <code>it</code>(用在 lambda 表达式内部来隐式引用其参数)</p>
+									<table class="table table-bordered table-responsive">
+										<tr>
+											<td><code>field</code></td>
+											<td><code>it</code></td>
+										</tr>
+									</table>
+								</li>
                             </ul>
+
                         </div>
 
 						<div class="sub-item">
+							<a id="keyword-hard" class="offset"></a>
 							<div class="split-item">
 								<p><b>Kotlin 的硬关键字</b></p>
 								<ul>
 									<li><p><code>package</code> -- 用于为当前文件指定包</p></li>
 
-									<li><p><code>as</code> -- 用于做类型转换或为 import 语句指定别名</p></li>
-									<li><p><code>fun</code> -- 声明函数</p></li>
 									<li><p><code>val</code> -- 声明只读属性或变量</p></li>
-									<li><p><code>var</code> -- 声明可变属性或变量</p>
+									<li><p><code>var</code> -- 声明可变属性或变量</p></li>
+									<li><p><code>fun</code> -- 声明函数</p></li>
+									<li><p><code>true</code> -- 在 Boolean 类型中表式真的直接量</p></li>
+									<li><p><code>false</code> -- 在 Boolean 类型中表式假的直接量</p></li>
+									<li><p><code>typealias</code> -- 用于定义类型别名</p>
+										<pre class="brush: kotlin;">
+/** 1.typealias -- 声明一个类型别名为现有类型提供替代名称 */
+typealias StringMapList = ArrayList&lt;HashMap&lt;String, String>>    // 1.为泛型提供别名
+typealias UtilDate = java.util.Date                             // 2.普通类提供别名
+typealias SqlDate = java.sql.Date
+typealias Compute = (Int, Int) -> Int                           // 3.为函数类型提供别名
+
+fun typealiasUseAge(x: Int, y: Int, compute: Compute) {
+    val list = StringMapList()
+    val utilDate = UtilDate()
+    val sqlDate = SqlDate(System.currentTimeMillis())
+    LogUtil.log(list, utilDate, sqlDate)
+    LogUtil.log("$x, $y -> ${compute(x, y)}")
+}
+</pre>
+									</li>
+
+
+									<li class="group"><p><code>if</code> -- 在 if 分支中使用</p></li>
+									<li><p><code>else</code> -- 在 if 分支中使用</p></li>
+									<li><p><code>break</code> -- 中断循环</p></li>
+									<li><p><code>continue</code> -- 忽略本次循环剩下的语句，重新开始下一次循环</p></li>
+									<li><p><code>return</code> -- 声明函数的返回</p></li>
+									<li><p><code>for</code> -- 用于 for 循环</p></li>
+									<li><p><code>do</code> -- 用于 do while 循环</p></li>
+									<li><p><code>while</code> -- 用于 while 循环或 do while 循环</p></li>
+									<li><p><code>when</code> -- 取代了 switch 操作符</p></li>
+
+
+									<li class="group"><p><code>as</code> -- 用于做类型转换或为 import 语句指定别名</p></li>
+									<li><p><code>as?</code> -- 类型安全的类型转换运算符</p>
 										<pre class="brush: kotlin;">
 package main
 
@@ -347,27 +517,13 @@ import util.LogUtil
 import model.Person as ModelPerson    // 两个不同包下的 Person, 使用 as 指定别名避免冲突
 import entity.Person as EntityPerson
 
-fun main() {
-    val p1 = ModelPerson("jiwanger")
-    LogUtil.log(p1.name, p1.age)
-
-    val p2 = EntityPerson("431122198903241712")
-    LogUtil.log(p2.id)
-
-    var code = ErrorCode(1)
-    LogUtil.log(code.code, code.message)
-    code = ErrorCode(0, "请求成功！")
-    LogUtil.log(code.code, code.message)
-}
-</pre>
-									</li>
-									<li><p><code>true</code> -- 在 Boolean 类型中表式真的直接量</p></li>
-									<li><p><code>false</code> -- 在 Boolean 类型中表式假的直接量</p></li>
-									<li><p><code>as?</code> -- 类型安全的类型转换运算符</p>
-										<pre class="brush: kotlin;">
 val x: String? = y as? String
 
 fun main() {
+	val p1 = ModelPerson("jiwanger")
+    val p2 = EntityPerson("431122198903241712")
+	LogUtil.log(p1.name, p1.age, p2.id)
+
     val name = "jiwanger"
     val age = 30
 
@@ -385,20 +541,14 @@ fun safeConvert(src: Any): String? {
 }
 </pre>
 									</li>
-									<li><p><code>null</code> -- 代表空的直接量</p></li>
-									<li><p><code>return</code> -- 声明函数的返回</p></li>
-									<li><p><code>continue</code> -- 忽略本次循环剩下的语句，重新开始下一次循环</p></li>
-									<li><p><code>break</code> -- 中断循环</p></li>
-									<li><p><code>if</code> -- 在 if 分支中使用</p></li>
-									<li><p><code>else</code> -- 在 if 分支中使用</p></li>
-									<li><p><code>for</code> -- 用于 for 循环</p></li>
 									<li><p><code>in</code> -- 在 for 循环中使用；作为双目运算符，检查是否处于区间或者集合内；用于修饰泛型参数，表式该泛型参数支持逆变</p></li>
-									<li><p><code>do</code> -- 用于 do while 循环</p></li>
-									<li><p><code>while</code> -- 用于 while 循环或 do while 循环</p></li>
-									<li><p><code>when</code> -- 取代了 switch 操作符</p></li>
+									<li><p><code>in!</code> -- 用作中缀操作符以检测一个值不属于一个区间</p></li>
 									<li><p><code>is</code> -- 用于做类型检查（类似 Java 的 instanceof）或在 when 表达式中使用</p></li>
 									<li><p><code>!is</code> -- 用于做类型检查（is 的反义词）或在 when 表达式中使用</p>
 										<pre class="brush: kotlin;">
+open class Base
+class Child: Base()
+
 fun main() {
     val base = Base()
     val child = Child()
@@ -406,71 +556,97 @@ fun main() {
     LogUtil.log(base is Base, child is Base)   // true, true
     LogUtil.log(base !is Base, child !is Base) // false, false
 }
-
-open class Base {}
-
-class Child: Base() {}
 </pre>
 									</li>
+									<li><p><code>try</code> -- 开始异常处理</p></li>
+									<li><p><code>throw</code> -- 用于抛出异常</p></li>
 
-									<li><p><code>object</code> -- 用于声明对象表达式或定义命名对象</p>
+									<li class="group"><p><code>class</code> -- 声明类</p></li>
+									<li><p><code>interface</code> -- 声明接口</p></li>
+									<li><p><code>object</code> -- 同时声明一个类及其实例(单列声明和伴生对象)和对象表达式</p>
 										<pre class="brush: kotlin;">
-// 1.object 作为对象表达式使用
+/** 1.object 作为对象表达式使用 */
 val textView = findViewById&lt;TextView>(R.id.tv)
 textView.setOnClickListener(object : OnClickListener {
 	override fun onClick(v: View?) {
 		...
 	}
-
 })
 
-// 2.用 object 修饰的类为静态类，里面的方法和变量都为静态的
+/** 2.object -- 同时声明一个类及其实例(单列声明和伴生对象)和对象表达式
+ * 伴生对象的初始化是在相应的类被加载时
+ * 对象声明是在第一次被访问到时延迟初始化的
+ */
 object Const {
-    const val SERVER = "http://api.lesson1234.com"
+    private const val SERVER_API = "https://www.lesson1234.com"
+    private const val SERVER_DATA = "https://cdn.lesson1234.com"
 
-    fun resGet(path: String): String {
-        return "$SERVER/$path"
+    private const val MODEL_USER = "/user"
+
+    const val API_REGISTER = "${SERVER_API}${MODEL_USER}/register"
+    const val API_LOGIN = "${SERVER_API}${MODEL_USER}/login"
+
+    fun getImage(path: String) : String {
+        return "${SERVER_DATA}$path"
     }
 }
 
-// 3. companion object 修饰为伴生对象,伴生对象在类中只能存在一个(参见以下实例， s1 和 s2 的 name 值都为一个了)
-class Shared {
-    companion object {
-        const val NAME = "name"
+interface Base {
+    fun base() }
 
-        val map = HashMap&lt;String, Any>()
+class Outer {
+    open class A { open fun a() {} }
+
+    inner class B { fun b() {} }
+
+    object C {
+        init { LogUtil.log("C initialize!") }
+        fun c() {}
     }
 
-    fun save(key: String, value: Any) {
-        map[key] = value
+    companion object D {
+        init { LogUtil.log("D initialize!") }
+        fun d() {}
     }
 
-    fun read(key: String) : Any? {
-        return map[key]
+    fun test(a: A) {
+        a.a()
+        if(a is Base) {
+            a.base()
+        }
     }
 }
 
-fun main() {
-    LogUtil.log(Const.SERVER, Const.resGet("image/001.png"))
-    // val cst = Const() // 编译报错，不允许构造实例
+fun objectUseAge() {
+    LogUtil.log(Const.getImage("/res/images/001.webp"))
 
-    val s1 = Shared()
-    s1.save(Shared.NAME, "jiwanger")
-    LogUtil.log(s1.read(Shared.NAME)) // jiwanger
+    Outer.A().a()       // 嵌套类成员调用, 此时伴生对象 D 的 init 代码块会被执行，并且只会执行一次
+    Outer().B().b()     // 内部类成员调用
+    Outer.C.c()         // 对象声明可以嵌套到其他对象声明或非内部类中，对象声明 C 的 init 代码块只会被执行一次
+    Outer.d()           // 伴生对象成员调用
 
-    val s2 = Shared()
-    s2.save(Shared.NAME, "nate")
-    LogUtil.log(s1.read(Shared.NAME), s2.read(Shared.NAME)) // nate, nate
+    val adHoc = object { // 匿名对象可以用作只在本地和私有作用域中声明的类型
+        var x: Int = 0
+        var y: Int = 0
+    }
+    LogUtil.log(adHoc.x + adHoc.y)
+
+    Outer().test(Outer.A())
+    Outer().test(object :Outer.A() {        // 继承自某个类型的匿名类的对象
+        override fun a() {}
+    })
+    val aBase = object :Outer.A(), Base {  // 继承自某某些类型的匿名类的对象
+        override fun a() {}
+        override fun base() {}
+    }
+    Outer().test(aBase)
+
 }
 </pre>
 									</li>
-
-
-									<li><p><code>interface</code> -- 声明接口</p></li>
-									<li><p><code>class</code> -- 声明类</p></li>
-                                    <li><p><code>typeof</code> --  保留以供未来使用</p></li>
+									<li><p><code>typeof</code> --  保留以供未来使用</p></li>
+									<li><p><code>null</code> -- 代表空的直接量</p></li>
                                     <li><p><code>super</code> -- 用于引用父类实现的方法或属性，或者在子类构造器中调用父类构造器</p></li>
-
 									<li><p><code>this</code> -- 代表当前类的对象或在构造器中调用当前类的其他构造器</p>
 										<pre class="brush: kotlin;">
 fun main() {
@@ -507,34 +683,17 @@ class Sub(): Child() {
 }
 </pre>
 									</li>
-									<li><p><code>try</code> -- 开始异常处理</p></li>
-									<li><p><code>throw</code> -- 用于抛出异常</p></li>
-									<li><p><code>typealias</code> -- 用于定义类型别名</p>
-										<pre class="brush: kotlin;">
-// 泛型别名
-typealias NodeSet = Set&lt;Network.Node>
-typealias FileTable&lt;K> = MutableMap&lt;K, MutableList&lt;File>>
-
-// 函数别名
-typealias MyHandler = (Int, String, Any) -> Unit
-typealias Predicate&lt;T> = (T) -> Boolean
-
-class A { inner class Inner }
-class B { inner class Inner }
-
-// 同名类型别名
-typealias AInner = A.Inner
-typealias BInner = B.Inner
-</pre>
-									</li>
 								</ul>
 							</div>
 
-
+							<a id="keyword-soft" class="offset"></a>
                             <div class="split-item">
                                 <p><b>Kotlin 的软关键字</b></p>
                                 <ul>
-                                    <li><p><code>by</code> -- 用于将接口或祖先类的实现代理给其他对象</p>
+									<li><p><code>import</code> -- 用于导包</p></li>
+									<li><p><code>constructor</code> -- 用于声明构造器</p></li>
+									<li><p><code>init</code> -- 用于声明初始化块</p></li>
+                                    <li><p><code>by</code> -- 用于将接口或祖先类的实现代理给其他对象，更多请查看:  <a href="#class-delegate">委托</a> 和 <a href="#class-delegate-attr">委托属性</a></p>
                                         <pre class="brush: kotlin;">
 // 创建接口
 interface Base { fun print() }
@@ -553,18 +712,21 @@ fun main(args: Array&lt;String>) {
 }
 </pre>
                                     </li>
-                                    <li><p><code>catch</code> -- 在异常处理中用于捕捉异常</p></li>
-                                    <li><p><code>constructor</code> -- 用于声明构造器</p></li>
-                                    <li><p><code>delegate</code> -- 用于指定该注解修饰委托属性存储其委托实例的字段</p></li>
-                                    <li><p><code>dynamic</code> -- 主要用于在 Kotlin/JavaScript 中引用一个动态类型</p></li>
-                                    <li><p><code>file</code> -- 用于指定该注解修饰该源文件本身</p></li>
-                                    <li><p><code>field</code> -- 用作注解使用处目标</p></li>
-
-                                    <li><p><code>finally</code> -- 异常处理中的 finally 块</p></li>
-
-                                    <li><p><code>set</code> -- 用于申明属性的 setter 方法，或者用于指定该注解修饰属性的 setter 方法</p></li>
-                                    <li><p><code>get</code> -- 用于申明属性的 getter 方法，或者用于指定该注解修饰属性的 getter 方法</p>
-                                        <pre class="brush: kotlin;">
+									<li><p><code>where</code> -- 用于为泛型参数增加限制，单个上界不需要，当泛型有多个上界的时候，需要用 where 子句指定</p>
+										<pre class="brush: kotlin;">
+// 使用 where 约束泛型的多个上边界
+fun &lt;T> copyWhenGreater(list: List&lt;T>, threshold: T): List&lt;String>
+    where T : CharSequence,
+          T : Comparable&lt;T> {
+    return list.filter { it > threshold }.map { it.toString() }
+}
+</pre>
+									</li>
+									<li><p><code>catch</code> -- 在异常处理中用于捕捉异常</p></li>
+									<li><p><code>finally</code> -- 异常处理中的 finally 块</p></li>
+									<li><p><code>set</code> -- 用于申明属性的 setter 方法，或者用于指定该注解修饰属性的 setter 方法</p></li>
+									<li><p><code>get</code> -- 用于申明属性的 getter 方法，或者用于指定该注解修饰属性的 getter 方法</p>
+										<pre class="brush: kotlin;">
 class Person(var name: String) {
     lateinit var description: String   // 延迟初始化属性与变量(在初始化前不能访问)
 
@@ -583,55 +745,60 @@ class Person(var name: String) {
         }
 }
 </pre>
-                                    </li>
-                                    <li><p><code>setparam</code> -- 用于指定该注解修饰 setter 方法参数</p></li>
-                                    <li><p><code>import</code> -- 用于导包</p></li>
-                                    <li><p><code>init</code> -- 用于声明初始化块</p></li>
-                                    <li><p><code>param</code> -- 用于指定该注解修饰构造器参数</p></li>
-                                    <li><p><code>property</code> -- 用于指定该注解修饰整个属性</p></li>
-                                    <li><p><code>receiveris</code> -- 用于指定该注解修饰扩展方法或扩展属性的接收者</p></li>
+									</li>
+									<li><p><code>dynamic</code> -- 主要用于在 Kotlin/JavaScript 中引用一个动态类型</p></li>
 
-                                    <li><p><code>where</code> -- 用于为泛型参数增加限制，单个上界不需要，当泛型有多个上界的时候，需要用 where 子句指定</p>
-                                        <pre class="brush: kotlin;">
-// 使用 where 约束泛型的多个上边界
-fun &lt;T> copyWhenGreater(list: List&lt;T>, threshold: T): List&lt;String>
-    where T : CharSequence,
-          T : Comparable&lt;T> {
-    return list.filter { it > threshold }.map { it.toString() }
-}
-</pre>
-                                    </li>
 
+
+                                    <li class="group"><p><code>delegate</code> -- 用于指定该注解修饰委托属性存储其委托实例的字段</p></li>
+									<li><p><code>field</code> -- 用作注解使用处目标</p></li>
+									<li><p><code>file</code> -- 用于指定该注解修饰该源文件本身</p></li>
+									<li><p><code>receiver</code> -- 用于指定该注解修饰扩展方法或扩展属性的接收者</p></li>
+									<li><p><code>param</code> -- 用于指定该注解修饰构造器参数</p></li>
+									<li><p><code>property</code> -- 用于指定该注解修饰整个属性</p></li>
+									<li><p><code>setparam</code> -- 用于指定该注解修饰 setter 方法参数</p></li>
                                 </ul>
                             </div>
 
+							<a id="keyword-modifier" class="offset"></a>
 							<div class="split-item">
 								<p><b>Kotlin 的修饰符关键字</b></p>
 								<ul>
 									<li><p><code>private</code> -- private 访问权限</p></li>
 									<li><p><code>protected</code> -- protected 访问权限</p></li>
-									<li><p><code>public</code> -- public 访问权限</p></li>
-                                    <li><p><code>actual</code> -- 表示多平台项目中的一个平台相关实现</p></li>
-                                    <li><p><code>expect</code> -- 将一个声明标记为平台相关，并期待在平台模块中实现</p></li>
-                                    <li><p><code>operator</code> -- 将一个函数标记为重载一个操作符或者实现一个约定</p></li>
-									<li><p><code>abstract</code> -- 用于修饰抽象类或者抽象成员</p></li>
-									<li><p><code>annotation</code> -- 用于修饰一个注解类</p></li>
-									<li><p><code>open</code> -- 用于修饰类，表示该类可派生子类； 或者用于修饰成员，表示该成员可以被重写</p></li>
-									<li><p><code>companion</code> -- 用于声明一个伴生对象</p></li>
-									<li><p><code>const</code> -- 用于声明编译时常量</p></li>
-									<li><p><code>data</code> -- 用于声明数据类</p></li>
-									<li><p><code>enum</code> -- 用于声明枚举</p></li>
-									<li><p><code>final</code> -- 用于禁止被重写</p></li>
-									<li><p><code>infix</code> -- 声明该函数能以双目运算符的格式执行</p></li>
-									<li><p><code>inline</code> -- 用于声明内联函数，Lambda 表达式可在内联函数中执行局部返回</p></li>
-									<li><p><code>crossinline</code> -- 用于禁止在传给内联函数的 Lambda 表达式中执行非局部返回</p></li>
-									<li><p><code>noinline</code> -- 用于禁止内联函数中个别 Lambda 表达式被内联化</p></li>
-									<li><p><code>inner</code> -- 用于声明内部类，内部类可以访问外部类的实例</p></li>
 									<li><p><code>internal</code> -- 用于表示被修饰的声明只能在当前模板内可见</p></li>
-									<li><p><code>external</code> -- 用于声明某个方法不由 Kotlin 实现（与 Java 的 native 相似）</p></li>
+									<li><p><code>public</code> -- public 访问权限</p></li>
+									<li><p><code>abstract</code> -- 用于修饰抽象类或者抽象成员(用 abstract 修饰的类不需要用 open 修饰)</p></li>
+									<li><p><code>open</code> -- 用于修饰类，表示该类可派生子类； 或者用于修饰成员，表示该成员可以被重写</p></li>
+									<li><p><code>override</code> -- 用于声明重写父类的成员</p></li>
+									<li><p><code>final</code> -- 用于禁止被重写(只用于 override 关键字前，禁止再次覆盖)</p></li>
+
+									<li class="group"><p><code>data</code> -- 用于声明数据类</p></li>
+									<li><p><code>enum</code> -- 用于声明枚举</p></li>
+									<li><p><code>annotation</code> -- 用于修饰一个注解类</p></li>
+									<li><p><code>sealed</code> -- 用于声明一个密封类</p></li>
+									<li><p><code>companion</code> -- 用于声明一个伴生对象</p></li>
+									<li><p><code>inner</code> -- 用于声明内部类，内部类可以访问外部类的实例</p></li>
+
+									<li class="group"><p><code>const</code> -- 用于声明编译时常量</p>
+										<pre class="brush: kotlin">
+const val NAME = ""
+
+object Code {
+	const val SUCCESS = 0
+	const val ERROR = 1
+}
+
+class API {
+	companion object API {
+		const val API_LOGIN = ""
+	}
+}
+</pre>
+									</li>
 									<li><p><code>lateinit</code> -- 用于修饰一个 non-null 属性，用于指定该属性可在构造器以外的地方完成初始化</p></li>
 									<li><p><code>out</code> -- 用于修饰泛型参数，表明该泛型参数支持协变</p>
-                                        <pre class="brush: kotlin;">
+										<pre class="brush: kotlin;">
 // 型变注解: out -- 协变,  Producer&lt;Number> 可以安全地作为 Producer&lt;Int> 的超类
 class Producer&lt;out T>(val t: T) {
     fun produce(): T {
@@ -646,21 +813,260 @@ class Consumer&lt;in T>{
     }
 }
 </pre>
-                                    </li>
-									<li><p><code>override</code> -- 用于声明重写父类的成员</p></li>
-									<li><p><code>reified</code> -- 用于修饰内联函数中的泛型形参，接下里在该函数中就可像使用普通类型一样使用该类型参数</p></li>
-									<li><p><code>sealed</code> -- 用于声明一个密封类</p></li>
-									<li><p><code>suspend</code> -- 用于标识一个函数后 Lambda 表达式可作为暂停</p></li>
+									</li>
+									<li><p><code>reified</code> -- 用于修饰内联函数中的泛型形参，接下来在该函数中就可像使用普通类型一样使用该类型参数</p></li>
+									<li><p><code>suspend</code> -- 用于标识一个函数后 Lambda 表达式可作为暂停(标识为挂起函数，只能在协程或另一个挂起函数中调用)</p></li>
+
+									<li class="group"><p><code>operator</code> -- 将一个函数标记为重载一个操作符或者实现一个约定</p></li>
+									<li><p><code>infix</code> -- 声明该函数能以双目运算符的格式执行</p></li>
 									<li><p><code>tailrec</code> -- 用于修改一个函数可作为尾随递归函数使用</p></li>
 									<li><p><code>vararg</code> -- 用于修饰形参，表明该参数是个数可变的形参</p></li>
+									<li><p><code>inline</code> -- 用于声明内联函数，Lambda 表达式可在内联函数中执行局部返回</p></li>
+									<li><p><code>crossinline</code> -- 用于禁止在传给内联函数的 Lambda 表达式中执行非局部返回</p></li>
+									<li><p><code>noinline</code> -- 用于禁止内联函数中个别 Lambda 表达式被内联化</p></li>
+
+									<li class="group"><p><code>actual</code> -- 表示多平台项目中的一个平台相关实现</p></li>
+									<li><p><code>expect</code> -- 将一个声明标记为平台相关，并期待在平台模块中实现</p></li>
+									<li><p><code>external</code> -- 用于声明某个方法不由 Kotlin 实现（与 Java 的 native 相似）</p></li>
 								</ul>
+							</div>
+
+							<a id="keyword-special" class="offset"></a>
+							<div class="split-item">
+								<p><b>特殊关键字: <code>field</code> 和 <code>it</code></b></p>
+								<ul>
+									<li><p><code>field</code> -- 用在属性访问器内部来引用该属性的幕后字段</p></li>
+									<li><p><code>it</code> -- 用在 lambda 表达式内部来隐式引用其参数(只有一个参数的时候)</p></li>
+								</ul>
+								<pre class="brush: kotlin;">
+class Student(var name: String, var score:Float = 0f) {
+    var age = -1
+        set(value) { if(value in 0..199) field = value }
+
+    fun passLine(expr: (Float) -> Float): Float {
+        return expr(score)
+    }
+}
+
+fun main() {
+	val s = Student("jiwanger", 80f)
+    s.age = 31
+    LogUtil.log(s.name, s.age, s.score, s.passLine { it - 60 }, s.passLine { it - 90 })
+}
+</pre>
 							</div>
 						</div>
 
+						<a id="operator" class="offset"></a>
                         <div class="sub-item">
                             <h3>操作符和特殊符号</h3>
-                        </div>
-                    </div>
+							<ul>
+								<li>
+									<p><code>+ - * / %</code> -- 数学操作符(其中 <code>*</code> 也用于将数组传递给 vararg 参数)，重载方法为: <code>plus minus times div rem</code>，对于 <code>+ -</code> 还用于一元前缀操作符，重载方法为: <code>unaryPlus unaryMinus</code></p>
+									<pre class="brush: kotlin;">
+fun log(vararg arg: Any) { println(Gson().toJson(arg)) }
+
+fun main() {
+    val stringArr = arrayOf("a", "b", "c")
+    log(stringArr)  // 相当于传了 1 个 Array&lt;String> 类型参数给 log
+    log(*stringArr) // 把 Array 中的每个 String 参数传给 log
+}
+</pre>
+								</li>
+								<li>
+									<p><code>=</code> -- 赋值操作符(也用于指定参数的默认值)</p>
+									<pre class="brush: kotlin;">class User(id: String, score: Int = 0) { var age = 0 }</pre>
+								</li>
+								<li><p><code>+=、 -=、 *=、 /=、 %=</code> -- 广义赋值操作符，重载方法为: <code>plusAssign minusAssign timesAssign divAssign remAssign</code></p></li>
+								<li><p><code>++ --</code> -- 递增与递减操作符，重载方法为: <code>inc dec</code></p></li>
+								<li><p><code>&& || !</code> -- 逻辑"与"、"或"、"非"操作符</p></li>
+								<li>
+									<p><code>== !=</code> -- 相等操作符(对于非原生类型会翻译为调用 <code>equals()</code>)</p>
+									<pre class="brush: kotlin;">a == b 翻译为 a?.equals(b) ?: (b === null)</pre>
+								</li>
+								<li><p><code>=== !==</code> -- 引用相等操作符</p></li>
+								<li>
+									<p><code>< > <= >=</code> -- 比较操作符(对于非原生类型会翻译为调用 <code>compareTo())</code></p>
+									<pre class="brush: kotlin;">
+a > b 	a.compareTo(b) > 0
+a < b 	a.compareTo(b) < 0
+a >= b 	a.compareTo(b) >= 0
+a <= b 	a.compareTo(b) <= 0
+</pre>
+								</li>
+								<li>
+									<p><code>[]</code> -- 索引访问操作符(会翻译为调用 get 与 set)</p>
+									<pre class="brush: kotlin;">
+a[i] 			a.get(i)
+a[i, j] 		a.get(i, j)
+a[i] = b 		a.set(i, b)
+a[i, j] = b 	a.set(i, j, b)
+</pre>
+								</li>
+								<li>
+									<p><code>!!</code> -- 断言一个表达式非空</p>
+									<pre class="brush: kotlin;">
+fun npe(name: String?) {
+    // val len = name!!      // 如果 name 为 NULL, 这里就报 NullPointException
+    val len = name!!.length
+}
+</pre>
+								</li>
+								<li>
+									<p><code>?.</code> -- 执行安全调用(如果接收者非空，就调用一个方法或访问一个属性)</p>
+									<pre class="brush: kotlin;">fun safe(name: String?) { println(name?.length) }// 如果 name 为 Null，则直接返回 Null，不会报错</pre>
+								</li>
+								<li>
+									<p><code>?:</code> -- 如果左侧的值为空，就取右侧的值</p>
+									<pre class="brush: kotlin;">fun safe(name: String?) { println(name ?: "DEFAULT") }  // 如果 name 为 Null，则返回右侧值</pre>
+								</li>
+								<li>
+									<p><code>::</code> -- 类引用或成员引用</p>
+									<pre class="brush: kotlin;">
+fun log(arg: Any) { println(Gson().toJson(arg)) }
+
+class User(val id: String) {
+    var age = 0
+    fun show(impl: (Any) -> Unit) { impl(this) }
+}
+
+fun main() {
+	/** Kotlin class 和 Java class 是有区别的 */
+    LogUtil.log(Any::class.qualifiedName)                 // KClass
+    LogUtil.log(java.util.ArrayList::class.qualifiedName) // KClass
+    LogUtil.log(java.util.ArrayList::class.java.name)     // Java Class
+
+    val u1 = User("jiwanger")
+    User::age.set(u1, 31)       // 成员引用
+    u1.show(::log)				// 引用顶级函数
+}
+</pre>
+								</li>
+								<li>
+									<p><code>..</code> -- 区间</p>
+									<pre class="brush: kotlin;">
+for (i in 1..4) print(i)                // [1,2,3,4]
+for (i in 4 downTo 1) print(i)          // [4,3,2,1]
+for (i in 1..8 step 2) print(i)         // [1,3,5,7]
+for (i in 8 downTo 1 step 2) print(i)   // [8,6,4,2]
+
+for (i in 1 until 4 ) print(i)          // [1,2,3]
+</pre>
+								</li>
+								<li><p><code>:</code> -- 分隔声明中的名称与类型</p></li>
+								<li><p><code>?</code> -- 将类型标记为可空</p></li>
+								<li>
+									<p><code>-></code> -- 分隔 lambda 表达式的参数与主体; 分隔在函数类型中的参数类型与返回类型声明; 分隔 when 表达式分支的条件与代码体</p>
+									<pre class="brush: kotlin;">
+fun show(arg: String, impl: (Any) -> Unit) { impl(arg) } // 分隔在函数类型中的参数类型与返回类型声明
+show("hello") { t -> println(t) }  // 分隔 lambda 表达式的参数与主体
+
+when (x) {
+    1 -> print("x == 1")
+    2 -> print("x == 2")
+    else -> { // 注意这个块
+        print("x is neither 1 nor 2")
+    }
+}
+</pre>
+								</li>
+								<li>
+									<p><code>@</code> -- 引入一个注解; 引入或引用一个循环标签; 引入或引用一个 lambda 表达式标签; 引用一个来自外部作用域的 “this”表达式; 引用一个外部超类</p>
+									<pre class="brush: kotlin;">
+open class Parent { open fun draw() { println("Parent.draw()") } }
+
+class Child: Parent() {
+    override fun draw() { println("Child.draw()") }
+    val label = "Child"
+
+    inner class Inner {
+        val label = "Inner"
+        fun drawAndFile() {
+            super@Child.draw()  // 内部类中访问外部类的超类
+            println("$label ${this@Child.label}") // 访问来自外部作用域的 this
+        }
+    }
+}
+
+
+fun main() {
+    Child().Inner().drawAndFile()
+
+    loop@ for (i in 1..10) {
+        for (j in 1..10) {
+            if (j == 5) break@loop
+        }
+    }
+}
+</pre>
+								</li>
+								<li><p><code>;</code> -- 分隔位于同一行的多个语句</p></li>
+								<li><p><code>$</code> -- 在字符串模版中引用变量或者表达式</p></li>
+								<li><p><code>_</code> -- 在 lambda 表达式中代替未使用的参数; 在解构声明中代替未使用的参数</p></li>
+							</ul>
+
+						</div>
+
+						<a id="operator_demo" class="offset"></a>
+						<div class="sub-item">
+							<p><b>操作符</b></p>
+							<p>重载操作符的函数需要用 <code>operator</code> 修饰符标记。中缀操作符的函数使用 <code>infix</code> 修饰符标记。</p>
+							<pre class="brush: kotlin;">
+// 1. 一元操作符
+// 1.1 前缀操作符
++a 			a.unaryPlus()
+-a 			a.unaryMinus()
+!a 			a.not()
+
+// 1.2 递增和递减
+a++ 		a.inc() 返回值是 a, 执行后 a = a + 1
+a-- 		a.dec() 返回值是 a, 执行后 a = a - 1
+++a 		a.inc() 返回值是 a+1, 执行后 a = a + 1
+--a         a.dec() 返回值是 a-1, 执行后 a = a - 1
+
+// 2.二元操作符
+// 2.1 算术运算符
+a + b 		a.plus(b)
+a - b 		a.minus(b)
+a * b 		a.times(b)
+a / b 		a.div(b)
+a % b 		a.rem(b)、 a.mod(b)
+a..b 		a.rangeTo(b)
+
+// 2.2 in 操作符
+a in b 		b.contains(a)
+a !in b 	!b.contains(a)
+
+// 2.3 索引访问操作符
+a[i] 		a.get(i)
+a[i] = b 	a.set(i, b)
+
+// 2.4 调用操作符
+a() 		a.invoke()
+a(i) 		a.invoke(i)
+
+// 2.5 计算并赋值
+a += b 		a.plusAssign(b)
+a -= b 		a.minusAssign(b)
+a *= b 		a.timesAssign(b)
+a /= b 		a.divAssign(b)
+a %= b 		a.modAssign(b)
+
+// 2.6 相等与不等操作符
+a == b 		a?.equals(b) ?: (b === null)
+a != b 		!(a?.equals(b) ?: (b === null))
+
+// 2.7 Elvis 操作符
+y = x?:0    val y = if(x !== null) x else 0
+
+// 2.8 比较操作符
+a > b 		a.compareTo(b) > 0
+a < b 		a.compareTo(b) < 0
+a >= b 		a.compareTo(b) >= 0
+a <= b 		a.compareTo(b) <= 0
+</pre>
+						</div>
+					</div>
 				</div>
 				<!-- item end -->
 
@@ -816,6 +1222,9 @@ for (i in 1..4) print(i)                // 输出“1234”
 for (i in 4 downTo 1) print(i)          // 输出“4321”
 for (i in 1..4 step 2) print(i)         // 输出“13”
 for (i in 4 downTo 1 step 2) print(i)   // 输出“42”
+
+val array = arrayOf("a", "b", "c")
+for (i in array.indices) print(array[i]) // 索引遍历
 </pre>
 							<p><b>While 循环</b></p>
 							<p>while 与 do..while 照常使用</p>
@@ -889,18 +1298,22 @@ loop@ for (i in 1..100) {
 								<pre class="brush: kotlin;">class Person {...}</pre>
 								<p>类声明由类名、类头（指定其类型参数、主构造函数等）以及由花括号包围的类体构成。类头与类体都是可选的； 如果一个类没有类体，可以省略花括号。</p>
 								<pre class="brush: kotlin;">class Empty</pre>
-								<p>在 Kotlin 中的一个类可以有一个主构造函数以及一个或多个次构造函数。主构造函数是类头的一部分：它跟在类名（与可选的类型参数）后。</p>
+								<p>在 Kotlin 中的一个类可以有一个主构造函数以及一个或多个次构造函数。主构造函数是类头的一部分：它跟在类名（与可选的类型参数）后，主构造函数可以使用 <code>var/val</code> 关键字使参数变为成员。</p>
 								<pre class="brush: kotlin;">class Person constructor(firstName: String) { ... }</pre>
 								<p>如果主构造函数没有任何注解或者可见性修饰符，可以省略这个 <code>constructor</code> 关键字。</p>
 								<pre class="brush: kotlin;">class Person(firstName: String) { ... }</pre>
 								<p><b>主构造函数不能包含任何的代码</b>。初始化的代码可以放到以 init 关键字作为前缀的初始化块（initializer blocks）中。</p>
+								<p>主构造函数中的参数：</p>
+								<ul>
+									<li><p>如果主构造函数中的参数不是属性(不使用 <code>val/var</code> 声明)，那么在 <code>init</code> 代码块和 属性声明时可用，在次级构造函数和普通函数中不能使用；</p></li>
+									<li><p>如果主构造函数中的参数是属性(使用 <code>val/var</code> 声明)，在以上任何地方可用；</p></li>
+								</ul>
 								<pre class="brush: kotlin;">
 // 主构造的参数可以在初始化块中使用。它们也可以在类体内声明的属性初始化器中使用：
 class Customer(name: String) {
+    val customerKey = name.toUpperCase()     // 编译为 class 后将会放在构造函数中初始化
 
-    val customerKey = name.toUpperCase()
-
-	init {
+	init { // 编译为 class 后将会放在构造函数
 		println("First initializer block that prints ${name}")
 	}
 }
@@ -940,7 +1353,7 @@ fun main() {
 class Person(var name: String, var age: Int) {
     lateinit var number: String
 
-    constructor(name: String, age: Int, number: String) : this(name, age) {
+    constructor(name: String, age: Int, number: String): this(name, age) {
         this.number = number
     }
 }
@@ -958,13 +1371,13 @@ class Constructors {
 							<div class="split-item">
 								<p><b>继承</b></p>
                                 <p>在 Kotlin 中所有类都有一个共同的超类 <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html" target="_blank">Any</a>，这对于没有超类型声明的类是默认超类。</p>
-								<p><b>注意</b>：<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html" target="_blank">Any</a> 并不是 java.lang.Object；尤其是，它除了 equals()、hashCode() 与 toString() 外没有任何成员。 </p>
+								<p><b>注意</b>：<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html" target="_blank">Any</a> 并不是 java.lang.Object；尤其是，它除了 <code>equals()</code>、<code>hashCode()</code> 与 <code>toString()</code> 外没有任何成员。 </p>
 								<p>如果派生类有一个主构造函数，其基类型可以（并且必须） 用基类的主构造函数参数就地初始化。</p>
 								<pre class="brush: kotlin;">
 open class Person(var name: String, var age: Int)
 
 // 如果派生类有一个主构造函数，其基类型可以（并且必须） 用基类的主构造函数参数就地初始化。
-class Student(name: String, age: Int, var number: String) :Person(name, age)
+class Student(name: String, age: Int, var number: String): Person(name, age)
 
 fun main() {
     val p1 = Person("jiwanger", 30)
@@ -980,21 +1393,23 @@ fun main() {
 // 比如 android.view.View 类
 class MyView : View {
     constructor(ctx: Context) : super(ctx)
-    constructor(ctx: Context, attrs: AttributeSet) : super(ctx, attrs)
+    constructor(ctx: Context, attrs: AttributeSet): super(ctx, attrs)
 }
 								</pre>
-								<p><b>覆盖方法</b></p>
+								<p><b>覆盖方法和属性</b></p>
 								<p>Kotlin 力求清晰显式。与 Java 不同，Kotlin 对于可覆盖的成员（我们称之为开放）以及覆盖后的成员需要显式修饰符：</p>
 								<pre class="brush: kotlin;">
 open class Base {
-    open fun v() { ... } // 使用 open 修饰，表示可以覆盖
-    open fun nv() { ... }
-	fun m() {...}        // 子类不能覆盖此方法
+    open val base = "Base"
+    open fun v() {} // 使用 open 修饰，表示可以覆盖
+    open fun nv() {}
+    fun m() {}        // 子类不能覆盖此方法
 }
 
-class Derived() : Base() {
-    override fun v() { ... }        // 使用 override 修饰，表示覆盖基类的方法
-	final override fun nv() { ... } // 使用 final 修饰，表示不能再次覆盖
+open class Derived() : Base() {
+    override val base = "Derived"
+    override fun v() {}        // 使用 override 修饰，表示覆盖基类的方法
+    final override fun nv() {} // 使用 final 修饰，表示不能再次覆盖
 }
 </pre>
 								<p><b>覆盖规则</b></p>
@@ -1010,7 +1425,7 @@ interface B {
     fun b() { print("b") }
 }
 
-class C() : A(), B {
+class C: A(), B {
     // 编译器要求覆盖 f()：
 	override fun f() {
         super&lt;A>.f() // 调用 A.f()
@@ -1092,16 +1507,23 @@ class Person(var name: String) {
                         <a id="class-interface" class="offset"></a>
 						<div class="sub-item">
 							<p><b>接口</b></p>
-							<p>Kotlin 的接口与 Java 8 类似，既包含抽象方法的声明，也包含实现。与抽象类不同的是，接口无法保存状态。它可以有属性但必须声明为抽象或提供访问器实现。</p>
+							<p>Kotlin 的接口与 Java 8 类似，既包含抽象方法的声明，也包含实现。与抽象类不同的是，接口无法保存状态。</p>
+							<p><b>接口可以有属性但必须声明为抽象(不能初始化)或提供访问器实现(相当于申明一个常量)。</b></p>
 							<p>使用关键字 interface 来定义接口：</p>
 							<pre class="brush: kotlin;">
 interface MyInterface {
+	val age: Int // 不能初始化
+	val propertyWithImplementation: String // 访问器实现，相当于申明一个常量
+        get() = "foo"
+
     fun bar()
     fun foo() { // 可选的方法体 }
 }
 
 // 实现接口
 class Child : MyInterface {
+	override val age = 30
+
     override fun bar() { // 方法体 }
 }
 </pre>
@@ -1109,9 +1531,9 @@ class Child : MyInterface {
 							<p>在接口中声明的属性要么是抽象的，要么提供访问器的实现。在接口中声明的属性不能有幕后字段（backing field），因此接口中声明的访问器不能引用它们。</p>
 							<pre class="brush: kotlin;">
 interface MyInterface {
-    val prop: Int // 抽象的
+    val prop: Int // 不能初始化
 
-    val propertyWithImplementation: String
+    val propertyWithImplementation: String // 访问器实现，相当于申明一个常量
         get() = "foo"
 
     fun foo() { print(prop) }
@@ -1252,6 +1674,22 @@ val Person.length: Int        // 这里用 val 来定义属性，因为此属性
 
 class Person(var name: String)
 </pre>
+								<p><b>扩展是静态解析的</b></p>
+								<p>扩展不能真正的修改他们所扩展的类。通过定义一个扩展，你并没有在一个类中插入新成员， 仅仅是可以通过该类型的变量用点表达式去调用这个新函数。</p>
+								<p>我们想强调的是扩展函数是静态分发的，即他们不是根据接收者类型的虚方法。 这意味着调用的扩展函数是由函数调用所在的表达式的类型来决定的， 而不是由表达式运行时求值结果决定的。</p>
+								<pre class="brush: kotlin;">
+open class Shape
+class Rectangle: Shape()
+
+fun Shape.getName() = "Shape"
+fun Rectangle.getName() = "Rectangle"
+
+fun printClassName(s: Shape) { println(s.getName()) }
+
+fun main() {
+    printClassName(Rectangle()) // 输出 "Shape"，因为调用的扩展函数只取决于参数 s 的声明类型，该类型是 Shape 类
+}
+</pre>
                             </div>
 
                             <div class="split-item">
@@ -1330,13 +1768,37 @@ fun main() {
 							<p>在 Kotlin 中，这叫做 数据类 并标记为 data：</p>
 							<pre class="brush: kotlin;">data class User(var name: String, var age: Int)</pre>
 							<p>数据类的 toString() 格式是 "User(name=John, age=42)"。</p>
+							<p>编译器自动从主构造函数中声明的所有属性导出以下成员：</p>
+
+							<ul>
+								<li><p>equals()/hashCode() 对；</p></li>
+								<li><p>toString() 格式是 "User(name=John, age=42)"；</p></li>
+								<li><p>componentN() 函数 按声明顺序对应于所有属性(用于解构声明)；</p></li>
+								<li><p>copy() 函数。</p></li>
+							</ul>
+
 							<p>为了确保生成的代码的一致性以及有意义的行为，数据类必须满足以下要求：</p>
 							<ul>
 								<li><p>主构造函数需要至少有一个参数；</p></li>
 								<li><p>主构造函数的所有参数需要标记为 val 或 var；</p></li>
-								<li><p>数据类不能是抽象、开放、密封或者内部的；(数据类没有子类)</p></li>
+								<li><p>数据类不能是抽象、开放、密封或者内部的(数据类没有子类)；</p></li>
 								<li><p>在 JVM 中，如果生成的类需要含有一个无参的构造函数，则所有的属性必须指定默认值。 </p></li>
 							</ul>
+							<p>此外，成员生成遵循关于成员继承的这些规则：</p>
+							<ul>
+								<li><p>如果在数据类体中有显式实现 equals()、 hashCode() 或者 toString()，或者这些函数在父类中有 final 实现，那么不会生成这些函数，而会使用现有函数；</p></li>
+								<li><p>如果超类型具有 open 的 componentN() 函数并且返回兼容的类型， 那么会为数据类生成相应的函数，并覆盖超类的实现。如果超类型的这些函数由于签名不兼容或者是 final 而导致无法覆盖，那么会报错；</p></li>
+								<li><p>从一个已具 copy(……) 函数且签名匹配的类型派生一个数据类在 Kotlin 1.2 中已弃用，并且在 Kotlin 1.3 中已禁用。</p></li>
+								<li><p>不允许为 componentN() 以及 copy() 函数提供显式实现。</p></li>
+							</ul>
+							<p><b>请注意，对于那些自动生成的函数，编译器只使用在主构造函数内部定义的属性。如需在生成的实现中排除一个属性，请将其声明在类体中：</b></p>
+							<pre class="brush: kotlin;">
+// 自动生成的 toString()、 equals()、 hashCode() 以及 copy() 的实现中只会用到 name 属性
+data class Person(val name: String) {
+    var age: Int = 0
+}
+</pre>
+
 							<p><code>copy()</code> 方法可以复制对象，并修改其属性</p>
 							<pre class="brush: kotlin;">
 fun main() {
@@ -1354,6 +1816,27 @@ val jane = User("Jane", 35)
 val (name, age) = jane
 println("$name, $age years of age") // 输出 "Jane, 35 years of age"
  </pre>
+							<p><b>标准数据类</b></p>
+							<p>标准库提供了 <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-pair/" target="_blank">Pair</a> 与 <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-triple/" target="_blank">Triple</a>。尽管在很多情况下具名数据类是更好的设计选择， 因为它们通过为属性提供有意义的名称使代码更具可读性。</p>
+							<pre class="brush: kotlin;">
+fun main() {
+    val aPair = Pair("jiwanger", 31)
+    val bPair = "Jane" to 30            // 提供了中缀表达式的方式构造一个 Pair 对象
+
+	// mapOf 使用了 Pair 作为参数来填充数据, 以下两种写法等价
+    val map = mapOf("name" to "jiwanger", "age" to 31)
+    val newMap = mapOf(Pair("name","jiwanger"), Pair("age", 31))
+
+    val triple = Triple("jiwanger", 31, 120)
+	log(triple.first, triple.second, triple.third)  // Pair 和 Triple 访问成员(不可修改，因为是用 val 声明的)
+    for (any in triple.toList()) {      			// Triple 和 Pair 都有一个 toList 方法
+        println(any)
+    }
+
+	val (name, age) = pair      		// 解构
+	val (name, age, score) = triple     // 解构
+}
+</pre>
 						</div>
 
                         <a id="class-sealed" class="offset"></a>
@@ -1406,38 +1889,55 @@ val box = Box(1) // 1 具有类型 Int，所以编译器知道我们说的是 Bo
                             <div class="split-item">
                                 <p><b>声明处型变</b></p>
                                 <ul>
-                                    <li><p><code>out</code> -- <b>协变</b>, 泛型 T 只能出现在 C 的输出位置</p></li>
-                                    <li><p><code>in</code> -- <b>逆变</b>, 泛型 T 只可以被消费而不可以被生产</p></li>
+                                    <li><p><code>out</code> -- <b>协变</b>, 泛型 T 只能出现在输出位置(作为返回值), 能够将使用子类泛型的对象赋值给使用父类泛型的对象</p></li>
+                                    <li><p><code>in</code> -- <b>逆变</b>, 泛型 T 只可以被消费而不可以被生产(作为参数), 可以将使用父类泛型的对象赋值给使用子类泛型的对象</p></li>
                                 </ul>
                                 <pre class="brush: kotlin;">
+interface Production&lt;out T> { fun produce(): T }
+
+interface Consumer&lt;in T> { fun consume(item: T) }
+
+interface ProductionConsumer&lt;T> {
+    fun produce(): T
+    fun consume(item: T)
+}
+
+open class Food
+open class FastFood : Food()
+class Burger : FastFood()
+
+/** 生产者 -- Production 是用 out 是修饰的泛型 */
+class FoodStore : Production&lt;Food> {
+    override fun produce(): Food { println("Produce food"); return Food() }
+}
+class FastFoodStore : Production&lt;FastFood> {
+    override fun produce(): FastFood { println("Produce food"); return FastFood() }
+}
+class InOutBurger : Production&lt;Burger> {
+    override fun produce(): Burger { println("Produce burger"); return Burger() }
+}
+
+/** 消费者 -- Consumer 是用 in 是修饰的泛型 */
+class Everybody : Consumer&lt;Food> {
+    override fun consume(item: Food) { println("Eat food") }
+}
+class ModernPeople : Consumer&lt;FastFood> {
+    override fun consume(item: FastFood) { println("Eat fast food") }
+}
+class American : Consumer&lt;Burger> {
+    override fun consume(item: Burger) { println("Eat burger") }
+}
+
 fun main() {
-    val genericsInt = Generics(2)
-//  val genericsNumber: Generics&lt;Number> = genericsInt // ERROR
+    // 对于 out 泛型，能够将使用子类泛型的对象赋值给使用父类泛型的对象
+    val production1: Production&lt;Food> = FoodStore()      // 如果改为 Production&lt;Burger> 编译不能通过
+    val production2: Production&lt;Food> = FastFoodStore()  // 如果改为 Production&lt;Burger> 编译不能通过
+    val production3: Production&lt;Food> = InOutBurger()
 
-    val producerInt = Producer(2)
-    val genericsNumber: Producer&lt;Number> = producerInt // OK， 子类转父类
-
-    val consumerNumber = Consumer&lt;Number>()
-    consumerNumber.consumer(3.0f)
-    val consumerInt: Consumer&lt;Int> = consumerNumber    // OK, 注意，这里是父类转子类
-    consumerInt.consumer(2)
-}
-
-// 普通泛型
-class Generics&lt;T>(var t: T)
-
-// 型变注解: out -- 协变, 泛型 T 只能出现在 C 的输出位置，回报是 Producer&lt;Number> 可以安全地作为 Producer&lt;Int> 的超类
-class Producer&lt;out T>(val t: T) {
-    fun produce(): T {
-        return t
-    }
-}
-
-// 型变注解: in -- 逆变, 使得泛型 T 只可以被消费而不可以被生产(不允许作为返回值)
-class Consumer&lt;in T>{
-    fun consumer(t: T) {
-        LogUtil.log(t)
-    }
+    // 对于 in 泛型，可以将使用父类泛型的对象赋值给使用子类泛型的对象
+    val consumer1 : Consumer&lt;Burger> = Everybody()
+    val consumer2 : Consumer&lt;Burger> = ModernPeople()  // 如果改为 Consumer&lt;Burger> 编译不能通过
+    val consumer3 : Consumer&lt;Burger> = American()      // 如果改为 Consumer&lt;Burger> 编译不能通过
 }
 </pre>
                             </div>
@@ -1454,7 +1954,7 @@ class Array&lt;T>(val size: Int) {
                                 <p>这里我们遇到同样熟悉的问题：Array&lt;T> 在 T 上是不型变的，因此 Array&lt;Int> 和 Array&lt;Any> 都不是另一个的子类型。为什么？ 再次重复，因为 copy 可能做坏事，也就是说，例如它可能尝试写一个 String 到 from， 并且如果我们实际上传递一个 Int 的数组，一段时间后将会抛出一个 ClassCastException 异常。</p>
                                 <p>那么，我们唯一要确保的是 copy() 不会做任何坏事。我们想阻止它写到 from，我们可以：</p>
                                 <pre class="brush: kotlin;">fun copy(from: Array&lt;out Any>, to: Array&lt;Any>) { …… } // 限制 from 只能读</pre>
-                                <p>这里发生的事情称为类型投影：我们说 from 不仅仅是一个数组，而是一个受限制的（投影的）数组：我们只可以调用返回类型为类型参数 T 的方法，如上，这意味着我们只能调用 get()。这就是我们的使用处型变的用法，并且是对应于 Java 的 Array&lt;? extends Object>、 但使用更简单些的方式。</p>
+                                <p>这里发生的事情称为<b>类型投影</b>：我们说 from 不仅仅是一个数组，而是一个受限制的（投影的）数组：我们只可以调用返回类型为类型参数 T 的方法，如上，这意味着我们只能调用 get()。这就是我们的使用处型变的用法，并且是对应于 Java 的 Array&lt;? extends Object>、 但使用更简单些的方式。</p>
                                 <p>你也可以使用 in 投影一个类型：</p>
                                 <pre class="brush: kotlin;">fun fill(dest: Array&lt;in String>, value: String) { …… }  // 限制 dest 只能写</pre>
                                 <p>Array&lt;in String> 对应于 Java 的 Array&lt;? super String>，也就是说，你可以传递一个 CharSequence 数组或一个 Object 数组给 fill() 函数。</p>
@@ -1468,7 +1968,15 @@ class Array&lt;T>(val size: Int) {
                                     <li><p>对于 <code>Foo&lt;in T></code>，其中 T 是一个逆变类型参数，<code>Foo&lt;*></code> 等价于 <code>Foo&lt;in Nothing></code>。 这意味着当 T 未知时，没有什么可以以安全的方式写入 <code>Foo&lt;*></code>。</p></li>
                                     <li><p>对于 <code>Foo&lt;T : TUpper></code>，其中 T 是一个具有上界 TUpper 的不型变类型参数，<code>Foo&lt;*></code> 对于读取值时等价于 <code>Foo&lt;out TUpper></code> 而对于写值时等价于 <code>Foo&lt;in Nothing></code>。</p></li>
                                 </ul>
-                            </div>
+								<p>如果泛型类型具有多个类型参数，则每个类型参数都可以单独投影。 例如，如果类型被声明为 <code>interface Function&lt;in T, out U></code>，我们可以想象以下星投影：</p>
+
+								<ul>
+									<li><p>Function<*, String> 表示 Function&lt;in Nothing, String>；</p></li>
+									<li><p>Function&lt;Int, *> 表示 Function&lt;Int, out Any?>；</p></li>
+									<li><p>Function<*, *> 表示 Function&lt;in Nothing, out Any?>。</p></li>
+								</ul>
+
+							</div>
 
                             <div class="split-item">
                                 <p><b>泛型函数和约束</b></p>
@@ -1490,6 +1998,13 @@ fun &lt;T> copyWhenGreater(list: List&lt;T>, threshold: T): List&lt;String>
 }
 </pre>
                             </div>
+							<div class="split-item">
+								<p><b>类型擦除</b></p>
+								<p>Kotlin 为泛型声明用法执行的类型安全检测仅在编译期进行。 运行时泛型类型的实例不保留关于其类型实参的任何信息。 其类型信息称为被擦除。例如，Foo&lt;Bar> 与 Foo&lt;Baz?> 的实例都会被擦除为 Foo&lt;*>。</p>
+								<p>因此，并没有通用的方法在运行时检测一个泛型类型的实例是否通过指定类型参数所创建 ，并且编译器禁止这种 is 检测。</p>
+								<p>类型转换为带有具体类型参数的泛型类型，如 foo as List&lt;String> 无法在运行时检测。 当高级程序逻辑隐含了类型转换的类型安全而无法直接通过编译器推断时， 可以使用这种非受检类型转换。编译器会对非受检类型转换发出警告，并且在运行时只对非泛型部分检测（相当于 foo as List&lt;*>）。	</p>
+								<p>泛型函数调用的类型参数也同样只在编译期检测。在函数体内部， 类型参数不能用于类型检测，并且类型转换为类型参数（foo as T）也是非受检的。然而， 内联函数的具体化的类型参数会由调用处内联函数体中的类型实参所代入，因此可以用于类型检测与转换， 与上述泛型类型的实例具有相同限制。</p>
+							</div>
 
 
                         </div>
@@ -1782,7 +2297,7 @@ fun main() {
 							<p>委托模式已经证明是实现继承的一个很好的替代方式， 而 Kotlin 可以零样板代码地原生支持它。 </p>
 							<div class="row">
 								<div class="col-md-6">
-									<p><b>Kotlin 中的委托</b></p>
+									<p><b>Kotlin 中的接口实现委托</b></p>
 									<pre class="brush: kotlin;">
 interface Base { fun print() }
 
@@ -1790,7 +2305,8 @@ class BaseImpl(val x: Int) : Base {
     override fun print() { print(x) }
 }
 
-class Derived(b: Base) : Base by b // 只能是接口
+// 只能是接口，可以增加别的方法实现更多功能
+class Derived(b: Base) : Base by b
 
 // 如果重写 print() 方法，需要 override
 class Derived2(b: Base) : Base by b	{
@@ -1831,7 +2347,6 @@ public class App {
         new Derived(new BaseImpl(10)).print();
     }
 }
-
 </pre>
 								</div>
 							</div>
@@ -1841,14 +2356,17 @@ public class App {
                         <div class="sub-item">
 							<div class="split-item">
 								<p><b>委托属性</b></p>
-								<p>属性的委托不必实现任何的接口，但是需要提供一个 getValue() 函数（与 setValue() -- 对于 var 属性）</p>
+								<p>属性的委托不必实现任何的接口，但是必须提供一个 getValue() 函数（与 setValue() -- 对于 var 属性）</p>
 								<pre class="brush: kotlin;">
-class Person {
+class Person(val d2: Delegate2) {
+
     var name: String by Delegate() // 将 p 属性的 set/get 方法委托给 Delegate 类实现
+
+    val age by d2 // 对于 val 属性的委托必须有 getValue
 }
 
 class Delegate {
-    private var name = "Default" // 可以提供一个默认值
+    var name = "Default" // 可以提供一个默认值
 
     operator fun getValue(thisRef: Any?, property: KProperty<*>): String {
         LogUtil.log("委托属性的实例：$thisRef, 委托属性的名字：'${property.name}'")
@@ -1861,10 +2379,16 @@ class Delegate {
     }
 }
 
+class Delegate2(override val value: Int) : Lazy&lt;Int> { // 这里的名字必须是 value，Lazy 接口定义了这个成员
+    override fun isInitialized(): Boolean {
+        return true
+    }
+}
+
 fun main() {
-    val p = Person()
-    p.name = "jiwanger" // 将会调用 Delegate 的 setValue 方法
-    LogUtil.log(p.name) // 返回的值由 Delegate 类的 getValue 方法返回
+	val b = Person(Delegate2(31))
+    b.name = "jiwanger"        // 将会调用 Delegate 的 setValue 方法
+    LogUtil.log(b.name, b.age)
 }
 </pre>
 							</div>
@@ -2052,7 +2576,7 @@ fun main() {
     val u1 = User("jiwanger", 80)
     val u2 = User("nate", 90)
 
-    println(u1.add(u2)) // 170
+    log(u1.add(u2), u1 add u2) // 这两种调用方式等价
 }
 
 class User(var id: String, var score: Int = 0) {
@@ -2080,6 +2604,23 @@ println(sum(100)) // 5050
 							<p><b>高阶函数与 Lambda 表达式</b></p>
 							<p>Kotlin 函数都是<b>头等的</b>，这意味着它们可以存储在变量与数据结构中、作为参数传递给其他高阶函数以及从其他高阶函数返回。可以像操作任何其他非函数值一样操作函数。</p>
 							<p><b>高阶函数</b>是将函数用作参数或返回值的函数。</p>
+							<pre class="brush: kotlin;">
+/** SDK 提供的函数 */
+public inline fun &lt;T, R> Iterable&lt;T>.fold(initial: R, operation: (acc: R, T) -> R): R {
+    var accumulator = initial
+    for (element in this) accumulator = operation(accumulator, element) // for 循环中调用这个函数
+    return accumulator
+}
+
+fun main() {
+    val items = listOf(10, 20, 30, 40, 50)
+
+    val result = items.fold(0) { // 托尾 lambda
+        acc: Int, i: Int ->
+        acc + i // lambda 表达式中的最后一个表达式是返回值
+    }
+}
+</pre>
 							<p><b>函数类型</b> -- Kotlin 使用类似 <code>(Int) -> String</code> 的一系列函数类型来处理函数的声明：</p>
 							<pre class="brush: kotlin;">
 fun exe(lam: () -> Unit) { ... }              // exe { ... } 无参数，无返回，Unit 返回类型不可省略
@@ -2094,7 +2635,7 @@ fun exe(lam: (Int) -> (Int) -> Unit) { ... }  // exe { i -> ... }
 							<p>函数类型声明规则</p>
 							<ul>
 								<li><p>所有函数类型都有一个圆括号括起来的参数类型列表以及一个返回类型：(A, B) -> C 表示接受类型分别为 A 与 B 两个参数并返回一个 C 类型值的函数类型。 参数类型列表可以为空，如 () -> A。Unit 返回类型不可省略。</p></li>
-								<li><p>函数类型可以有一个额外的接收者类型，它在表示法中的点之前指定： 类型 A.(B) -> C 表示可以在 A 的接收者对象上以一个 B 类型参数来调用并返回一个 C 类型值的函数。</p>
+								<li><p>函数类型可以有一个额外的接收者类型(在 lambda 中可用 <code>this</code> 应用接受者对象)，它在表示法中的点之前指定： 类型 A.(B) -> C 表示可以在 A 的接收者对象上以一个 B 类型参数来调用并返回一个 C 类型值的函数。</p>
 									<pre class="brush: kotlin;">
 fun show(user: User, pux: User.(String) -> Int) { // 指定接受者类型
     println(user.pux(user.name))
@@ -2104,7 +2645,10 @@ class User(var name: String, var age: Int)
 
 fun main() {
     val u = User("jiwanger", 30)
-    show(u) { this.name.length }
+    show(u) {
+        println("$u, $this, $it")  // 这里的 u 和 this 等价， it 为 lambda 的参数
+        this.name.length
+    }
     show(u) { this.age }
 }
 </pre>
@@ -2180,6 +2724,44 @@ fun main() {
 	compute(-30) { if (it > 0) it else -it }    // 单个参数的隐式名称可以省略，隐式声明为 it
 }
 </pre>
+							<p><b>带有接收者的函数类型</b></p>
+							<p>在 <code>kotlin.Standard.kt</code> 中的作用域函数：</p>
+							<pre class="brush: kotlin;">
+public inline fun &lt;T> T.apply(block: T.() -> Unit): T {...}
+public inline fun &lt;T, R> with(receiver: T, block: T.() -> R): R {...}
+
+/** 这个函数自己写的，调用方法不一样，但效果和上面的 with 一样 */
+inline fun &lt;T, R> T.with(block: T.() -> R): R {
+    return block()
+}
+
+fun main() {
+    val numbers = mutableListOf("one", "two", "three")
+
+    var firstAndLast = with(numbers) {
+        "The first element is ${first()}, the last element is ${last()}"
+    }
+    println(firstAndLast)
+
+    firstAndLast = numbers.with {
+        "The first element is ${first()}, the last element is ${last()}"
+    }
+    println(firstAndLast)
+}
+</pre>
+							<p>Kotlin 提供了调用带有接收者（提供接收者对象）的函数类型实例的能力。</p>
+							<p><b>在这样的函数字面值内部，传给调用的接收者对象成为隐式的 <code>this</code>，以便访问接收者对象的成员而无需任何额外的限定符，亦可使用 <code>this</code> 表达式 访问接收者对象。</b></p>
+							<p>这里有一个带有接收者的函数字面值及其类型的示例，其中在接收者对象上调用了 add ：</p>
+							<pre class="brush: kotlin;">
+public inline fun &lt;T> T.apply(block: T.() -> Unit): T {...}
+
+val apply = mutableListOf&lt;String>().apply {
+	add("Red")			// 此处可以直接访问接收者的成员函数
+	this.add("Green")	// 同样也可以使用 this
+}
+</pre>
+							<p>匿名函数语法允许你直接指定函数字面值的接收者类型。 如果你需要使用带接收者的函数类型声明一个变量，并在之后使用它，这将非常有用。</p>
+							<pre class="brush: kotlin;">val sum = fun Int.(other: Int): Int = this + other</pre>
 						</div>
 
 						<div class="sub-item">
@@ -2231,30 +2813,561 @@ inline var bar: Bar
 						<h3 class="panel-title">集合</h3>
 					</div>
 					<div class="panel-body">
-                        <div class="sub-item">
-                            <p><b>集合</b></p>
-                            <p>Kotlin 没有自己的集合库，完全依赖 Java 标准库中的集合类，并通过扩展函数增加特性来增强集合。意味着 Kotlin 与 Java 交互时，永远不需要包装或者转换这些集合对象，大大增强与 Java 的互操作性。</p>
-                            <p>Kotlin 与 Java 最大的不同之一就是：Kotlin 将集合分为只读集合和可变集合。这种区别源自最基础的集合接口：<code>Collection</code>。该接口可以对集合进行一些基本操作，但无任何添加和移除元素的方法。</p>
-                            <p>只有实现 <code>MutableCollection</code> 接口才可以修改集合的数据。<code>MutableCollection</code> 接口继承自 <code>Collection</code>，并提供添加、移除和清空集合元素的方法。当一个函数接收 <code>Collection</code>，而不是 <code>MutableCollection</code>，即意味着函数不对集合做修改操作。</p>
-                        </div>
-                        <div class="sub-item">
+						<div class="sub-item">
+							<p><b>数组</b></p>
+							<p>Kotlin 中的数组是型变的。也就是说<code>Array&lt;Int></code>不能赋值给<code>Array&lt;Any></code>。</p>
 
-                        </div>
+							<pre class="brush: kotlin;">
+val array = arrayOf("Red", "Blue", "Green")       // 数组创建
+val arr = Array(3) { it * 2 }               	  // 使用构造函数初始化 [0, 2, 4]
+val nullArray = arrayOfNulls&lt;String>(3)     	    // 指定长度的 null 数组
+
+// 遍历和迭代
+for(item in array) { log(item) }
+array.forEach { log(it) }
+val iterator = array.iterator()
+while(iterator.hasNext()) {
+	log(iterator.next())
+}
+
+// 翻转
+log(array)
+array.reverse()                         // 翻转，保存在原数组
+log(array)
+val reversed = array.reversedArray()    // 翻转，创建了新的数组
+log(reversed)
+log(array.reversed())                   // 翻转，变成 List
+
+// 基本类型数组，注意它们不是 Array 的子类
+val booleanArr: BooleanArray = booleanArrayOf(false, true, false)
+val charArr: CharArray = charArrayOf('A', 'B', 'C')
+val byteArr: ByteArray = byteArrayOf(1, 2, 3)
+val shortArr: ShortArray  = shortArrayOf(1, 2, 3)
+val intArr: IntArray = intArrayOf(1, 2, 3)
+val longArr: LongArray = longArrayOf(1L, 2L, 3L)
+val floatArr: FloatArray = floatArrayOf(1.0f, 2.0f, 3.0f)
+val doubleArr: DoubleArray = doubleArrayOf(1.0, 2.02, 3.03333)
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><b>集合</b></p>
+							<p>Kotlin 没有自己的集合库，完全依赖 Java 标准库中的集合类，并通过扩展函数增加特性来增强集合。意味着 Kotlin 与 Java 交互时，永远不需要包装或者转换这些集合对象，大大增强与 Java 的互操作性。</p>
+							<p>Kotlin 与 Java 最大的不同之一就是：Kotlin 将集合分为只读集合和可变集合。这种区别源自最基础的集合接口：<code>Collection</code>。该接口可以对集合进行一些基本操作，但无任何添加和移除元素的方法。</p>
+							<p>只有实现 <code>MutableCollection</code> 接口才可以修改集合的数据。<code>MutableCollection</code> 接口继承自 <code>Collection</code>，并提供添加、移除和清空集合元素的方法。当一个函数接收 <code>Collection</code>，而不是 <code>MutableCollection</code>，即意味着函数不对集合做修改操作。</p>
+							<p>集合初始化</p>
+							<pre class="brush: kotlin;">
+fun main() {
+	/** 1.List 构建 */
+    listOf("RED", "BLUE", "GREEN", null)            // 不可变 List, 实现类为 java.util.Arrays$ArrayList
+    listOfNotNull("RED", "BLUE", "GREEN", null)     // 自动过滤 Null 元素，实现为 java.util.ArrayList
+	mutableListOf&lt;String>()                         // 空的可变 List，必须指定类型
+	mutableListOf("RED", "BLUE", "GREEN", null)     // 可变 List, 实现为 java.util.ArrayList
+	arrayListOf("RED", "BLUE", "GREEN", null)       // 同上
+
+	/** 2.Set 构建 */
+    setOf("RED", "BLUE", "GREEN", null)                         // 不可变 Set
+    mutableSetOf&lt;String>()                                      // 空的可变 Set，必须指定类型
+    mutableSetOf("RED", "BLUE", "GREEN", null)                  // 可变 Set
+
+	/** 3.Map 构建 */
+    mapOf("R" to "RED", "G" to "GREEN", "B" to "BLUE")          // 不可变 Map
+    mutableMapOf&lt;String, String>()                              // 空的可变 Map，必须指定类型
+    mutableMapOf("R" to "RED", "G" to "GREEN", "B" to "BLUE")   // 可变 Map
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><b>序列</b></p>
+							<p>除了集合之外，Kotlin 标准库还包含另一种容器类型 - 序列(<code>Sequence&lt;T></code>)。 序列提供与 <code>Iterable</code> 相同的函数，但实现另一种方法来进行多步骤集合处理。</p>
+							<p>当 <code>Iterable</code> 的处理包含多个步骤时，它们会优先执行：每个处理步骤完成并返回其结果——中间集合。 在此集合上执行以下步骤。反过来，序列的多步处理在可能的情况下会延迟执行：仅当请求整个处理链的结果时才进行实际计算。</p>
+							<p>操作执行的顺序也不同：<code>Sequence</code> 对每个元素逐个执行所有处理步骤。 反过来，<code>Iterable</code> 完成整个集合的每个步骤，然后进行下一步。</p>
+							<p>因此，这些序列可避免生成中间步骤的结果，从而提高了整个集合处理链的性能。 但是，序列的延迟性质增加了一些开销，这些开销在处理较小的集合或进行更简单的计算时可能很重要。 因此，应该同时考虑使用 <code>Sequence</code> 与 <code>Iterable</code>，并确定在哪种情况更适合。</p>
+							<pre class="brush: kotlin;">
+val sequence = sequenceOf("Red", "Blue", "Green")		// 构建序列
+sequence.forEach { log(it) }
+for (a in sequence) { log(a) }
+val filtered = sequence.filter { !it.startsWith("B") }
+log(filtered.toList())
+
+listOf("Red", "Blue", "Green").asSequence()				// 由 Iterable 构建
+</pre>
+							<p>在数据量级比较大情况下使用 <code>Sequence</code> 序列性能会比普通数据集合更优；但是在数据量级比较小情况下使用 <code>Sequence</code> 序列性能反而会比普通数据集合更差。</p>
+							<p><b>序列内部的实现原理</b>是采用状态设计模式，根据不同的操作符的扩展函数，实例化对应的 <code>Sequence</code> 子类对象，每个子类对象重写了 <code>Sequence</code> 接口中的 <code>iterator()</code> 抽象方法，内部实现根据传入的迭代器对象中的数据元素，加以变换、过滤、合并等操作，返回一个新的迭代器对象。这就能解释为什么序列中工作原理是逐个元素执行不同的操作，而不是像普通集合所有元素先执行 A 操作，再所有元素执行 B 操作。这是因为序列内部始终维护着一个迭代器，当一个元素被迭代的时候，就需要依次执行 A,B,C 各个操作后，如果此时没有末端操作，那么值将会存储在 C 的迭代器中，依次执行，等待原始集合中共享的数据被迭代完毕，或者不满足某些条件终止迭代，最后取出 C 迭代器中的数据即可。</p>
+							<p><b>序列的末端操作(不返回<code>Sequence</code>的函数)会执行原来中间操作的所有延迟计算。</b></p>
+							<pre class="brush: kotlin;">
+/** Sequence 是执行一条 filter, 如果 filter 满足条件执行 map, 如此反复； 如果不满足条件，再对下一个元素执行 filter；
+ * Iterable 会对所有元素执行 filter，然会再对满足条件的中间集合执行 map 操作。
+ */
+val words = "The quick brown fox jumps over the lazy dog".split(" ")
+val lengthsSequence = words.asSequence()
+		.filter {
+			println("filter: $it");
+			it.length > 3
+		}
+		.map {
+			println("length: ${it.length}")
+			it.length
+		}
+
+println("Lengths of words longer than 3 chars")
+println(lengthsSequence.toList())					// 此处才会开始执行序列的操作
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><b>集合常见操作</b></p>
+							<p>Kotlin 标准库提供了用于对集合执行操作的多种函数。这包括简单的操作，例如获取或添加元素，以及更复杂的操作，包括搜索、排序、过滤、转换等。</p>
+							<p>集合操作在标准库中以两种方式声明：集合接口的<b>成员函数</b>和<b>扩展函数</b>。</p>
+							<ol>
+								<li>
+									<p><b>过滤<code>filter</code></b> -- 过滤条件由 谓词 定义 -- 接受一个集合元素并且返回布尔值的 <code>lambda</code> 表达式：<code>true</code> 说明给定元素与谓词匹配，<code>false</code> 则表示不匹配。</p>
+									<pre class="brush: kotlin;">
+val list = listOf("Red", "Green", "Blue", "Alpha")
+val map = mapOf("R" to "Red", "G" to "Green", "B" to "Blue", "A" to "Alpha")
+
+list.filter { "Alpha" == it }                                      // ["Alpha"]
+list.filterNot { "Alpha" == it }                                   // ["Red","Green", "Blue"]
+list.filterIndexed { index, s -> (index != 0) && (s.length < 5) }  // ["Blue"]
+
+map.filter { it.key == "R" || it.value == "Blue" }                 // {"R":"Red","B":"Blue"}
+map.filter { (k, v) -> k == "R" || v == "Blue" }                   // {"R":"Red","B":"Blue"}
+
+val mutableList = mutableListOf("张三", 30, "李四", 21, null, 31)
+mutableList.filterIsInstance&lt;String>()                             // ["张三","李四"]
+mutableList.filterNotNull()                                        // ["张三",30,"李四",21,31]
+
+/* 划分，符合条件一个列表，不符合条件的一个单独的列表中, match=["Red","Green","Blue"], rest=["Alpha"] */
+val (match, rest) = list.partition { "Alpha" != it }
+
+// 检验谓词
+log(list.any())                                 // 不为空返回 true
+log(list.any { it.contains("Alpha")} )          // 至少有一个元素满足条件返回 true
+log(list.none())                                // 为空返回 true
+log(list.none { it.contains("Alpha")} )         // 没有元素满足条件返回 true
+log(list.all { it.elementAt(0).isUpperCase() }) // 所有元素满足条件返回 true
+</pre>
+								</li>
+								<li>
+									<p><b>排序<code></code></b> -- 元素的顺序是某些集合类型的一个重要方面。</p>
+									<pre class="brush: kotlin;">
+/** 对于可变集合有以下不同：
+ *   sort* -- 在所有排序函数的名称中代替 sorted*：sort()、sortDescending()、sortBy() 等等
+ *   shuffle() -- 代替 shuffled()
+ *   reverse() -- 代替 reversed()
+ */
+val names = listOf("Red", "Green", "Blue", "Alpha")
+val map = mapOf("R" to "Red", "G" to "Green", "B" to "Blue")
+
+log(names.asReversed())         // 逆向
+log(names.shuffled())			// 打乱
+
+log(names.sorted())             // 自然排序
+log(names.sortedDescending())   // 自然逆序
+
+log(names.sortedBy { it.first() })
+log(names.sortedByDescending { it.first() })
+
+log(names.sortedWith(Comparator{ s1, s2 -> s1.first() - s2.first() } ))
+log(names.sortedWith(compareBy { it.first() }))
+
+log(map.toSortedMap())
+</pre>
+								</li>
+								<li>
+									<p><b>映射<code>map</code></b> -- 根据提供的转换规则从现有集合中构建新集合。</p>
+									<pre class="brush: kotlin;">
+val list = listOf("Red", "Green", "Blue", "Alpha")
+val map = mapOf("R" to "Red", "G" to "Green", "B" to "Blue", "A" to "Alpha")
+
+log(list.map { it.elementAt(0) })                			// ["R","G","B","A"]
+log(list.mapIndexed { index, s -> "$index:${s[0]}"})   	   // ["0:R","1:G","2:B","3:A"]
+// 从结果集中过滤掉 null 值
+log(list.mapNotNull { if (it.length < 4) null else it[0] }) // ["G","B","A"]
+
+log(map.map { it.key })                                     // ["R","G","B","A"]
+log(map.map { it.value })                           		// ["Red","Green","Blue","Alpha"]
+// 只转换 Key {"r":"Red","g":"Green","b":"Blue","a":"Alpha"}
+log(map.mapKeys { it.key.toLowerCase(Locale.getDefault()) })
+// 只转换 Value {"R":"RED","G":"GREEN","B":"BLUE","A":"ALPHA"}
+log(map.mapValues { it.value.toUpperCase(Locale.getDefault()) })
+</pre>
+								</li>
+								<li>
+									<p><b>双路合并<code>zip</code></b> -- 根据两个集合中具有相同位置的元素构建配对。 如果集合的大小不同，则 <code>zip()</code> 的结果为较小集合的大小；结果中不包含较大集合的后续元素。 <code>zip()</code> 也可以中缀形式调用 <code>a zip b</code>。</p>
+									<pre class="brush: kotlin;">
+val names = listOf("Red", "Green", "Blue")
+val values = listOf("255", "255", "0")
+
+// [{"first":"Red","second":"255"},{"first":"Green","second":"255"},{"first":"Blue","second":"0"}]
+val listMap = names.zip(values)
+log(listMap)
+
+log(listMap.toMap()) // {"Red":255,"Green":255,"Blue":0}
+
+// 当拥有 Pair 的 List 时，可以进行反向转换
+val (firstList, secondList) = listMap.unzip()
+log(firstList)      // ["Red","Green","Blue"]
+log(secondList)     // ["255","255","0"]
+</pre>
+								</li>
+								<li>
+									<p><b>关联<code>associate</code></b> -- 允许从集合元素和与其关联的某些值构建 <code>Map</code>。 在不同的关联类型中，元素可以是关联 <code>Map</code> 中的键或值。</p>
+									<pre class="brush: kotlin;">
+val names = listOf("Red", "Green", "Blue", "Alpha")
+
+names.associateWith { it.length }  // {"Red":3,"Green":5,"Blue":4,"Alpha":5}
+names.associateBy { it[0] }        // {"R":"Red","G":"Green","B":"Blue","A":"Alpha"}
+names.associate { it[0] to 0 }     // {"R":0,"G":0,"B":0,"A":0}
+</pre>
+								</li>
+								<li>
+									<p><b>打平<code>flatten</code></b> -- 对于一个 <code>Iterable&lt;Iterable&lt;T>></code> 可以将所有元素打平放在一个 Iterable 对象中。</p>
+									<pre class="brush: kotlin;">
+val names = listOf("Red", "Green", "Blue", "Alpha")
+val values = listOf(255, 255, 0, 0)
+
+val listList = listOf(names, values)
+log(listList)                   // [["Red","Green","Blue","Alpha"],[255,255,0,0]]
+log(listList.flatten())         // ["Red","Green","Blue","Alpha",255,255,0,0]
+</pre>
+								</li>
+								<li>
+									<p><b>字符串表示<code>joinToString</code></b> -- 将集合的元素链接为字符串</p>
+									<pre class="brush: kotlin;">
+val names = listOf("Red", "Green", "Blue", "Alpha")
+
+log(names.joinToString { it })						 // "Red, Green, Blue, Alpha"， 默认分割符为: ", "
+log(names.joinToString(" ") { it })					 // "Red Green Blue Alpha" 指定分隔符
+log(names.joinToString(", ", "values[", "]") { it }) // 指定前缀，后缀；还可以指定长度限制和超出的符号
+
+log(names.joinTo(StringBuilder()) { it })            // 等同于第一个, joinToString 调用此方法
+log(names.joinTo(StringBuffer()) { it })
+</pre>
+								</li>
+								<li>
+									<p><b>加减操作符</b> -- Kotlin 为集合定义了 <code>plus (+)</code> 和 <code>minus (-)</code> 操作符。</p>
+									<pre class="brush: kotlin;">
+val names = listOf("Red", "Green", "Blue")
+val values = listOf(255, 255, 0)
+
+val map = names.zip(values).toMap() // {"Red":255,"Green":255,"Blue":0}
+
+log(names + "Alpha")                // ["Red","Green","Blue","Alpha"]
+log(names + values - "Blue" - 0)    // ["Red","Green",255,255]
+
+log(map + ("Alpha" to 0))           // {"Red":255,"Green":255,"Blue":0,"Alpha":0}
+</pre>
+								</li>
+								<li>
+									<p><b>分组<code>groupBy</code></b> -- 对集合元素进行分组的扩展函数。</p>
+									<pre class="brush: kotlin;">
+val names = listOf("One", "Two", "Three", "Four", "Five")
+
+// 首字母作为 Key 分组
+log(names.groupBy { it.first() })
+// 首字母作为 Key 分组，并将值转换为大写
+log(names.groupBy({ it.first() }) { it.toUpperCase(Locale.ROOT) })
+</pre>
+								</li>
+								<li>
+									<p><b>取集合的一部分<code>slice / take / drop / chunked</code></b> -- 用于取集合的一部分的扩展函数。</p>
+									<pre class="brush: kotlin;">
+val names = listOf("One", "Two", "Three", "Four", "Five", "Six")
+
+// 1.slice -- 给定索引的集合元素列表
+log(names.slice(0..2))              // ["One","Two","Three"]
+log(names.slice(0..4 step 2))       // ["One","Three","Five"]
+log(names.slice(setOf(1, 3, 5)))            // ["Two","Four","Six"]
+
+// 2.take -- 获取指定数量的元素
+log(names.take(3))                      // ["One","Two","Three"]
+log(names.takeLast(3))                  // ["Four","Five","Six"]
+
+// 3.drop -- 去除给定数量的元素
+log(names.drop(3))                      // ["Four","Five","Six"]
+log(names.dropLast(3))                  // ["One","Two","Three"]
+
+// 4.分解为给定大小的“块”, 可以做转换
+log(names.chunked(2))                 // [["One","Two"],["Three","Four"],["Five","Six"]]
+log(names.chunked(2) { it.map { item -> item.toUpperCase(Locale.ROOT) } })
+
+// 5.[["One","Two","Three"],["Two","Three","Four"],["Three","Four","Five"],["Four","Five","Six"]]
+log(names.windowed(3))
+</pre>
+								</li>
+								<li>
+									<p><b>取元素<code>elementAt / first / last / find / random / contains / index</code></b> -- 从集合中检索单个元素的函数。</p>
+									<pre class="brush: kotlin;">
+val names = listOf("Red", "Green", "Blue", "Alpha")
+
+log(names[1])                                  // 按索引取
+log(names.elementAt(1))                        // 按索引取
+log(names.elementAtOrNull(5))                         // 索引超出返回 null
+log(names.elementAtOrElse(5) {  "$it unreachable!" }) // 索引超出返回指定值
+
+log(names.first())                             // 第一个元素
+log(names.firstOrNull())                       // 同上， 如果 isEmpty 返回 null
+log(names.first { it.startsWith("G") })        // 符合条件的第一个元素
+log(names.firstOrNull { it.startsWith("G") })  // 同上， 如果 isEmpty 返回 null
+
+log(names.last())                              // 最后一个元素
+log(names.lastOrNull())                        // 同上， 如果 isEmpty 返回 null
+log(names.last { it.startsWith("G") })         // 符合条件的最后一个元素
+log(names.lastOrNull() { it.startsWith("G") }) // 同上， 如果 isEmpty 返回 null
+
+log(names.find { it.startsWith("G") })         // 等同于 firstOrNull
+log(names.findLast { it.startsWith("G") })     // 等同于 lastOrNull
+
+log(names.random())                            // 随机取
+
+log(names.contains("Green"))                   // 是否包含
+log(names.containsAll(setOf("Red", "Blue")))   // 是否包含所有元素
+
+log(names.indexOf("Green"))                    // 第一次元素出现的索引
+log(names.lastIndexOf("Green"))                // 最后一次元素出现的索引
+log(names.indexOfFirst { it.startsWith("G") }) // 第一个符合条件的索引
+log(names.indexOfLast { it.startsWith("G") })  // 最后一个符合条件的索引
+</pre>
+								</li>
+								<li>
+									<p><b>有序列表中二分查找<code>binarySearch</code></b> -- 二分查找的工作速度明显快于其他内置搜索功能，但要求该列表按照一定的顺序（自然排序或函数参数中提供的另一种排序）按升序排序过。 否则，结果是不确定的。</p>
+									<pre class="brush: kotlin;">
+data class User(val idx: Int, val uuid: String)
+
+fun main() {
+    val spec = User(1024_0000, UUID.randomUUID().toString())
+    var users = (0..99_9998).map {
+        User(it, UUID.randomUUID().toString())
+    }
+    users = users.toMutableList()
+    users.add(spec)
+
+    users.shuffle()
+    users = users.sortedBy { it.uuid }
+
+    // 线行查找
+    var start = System.currentTimeMillis()
+    log(users.indexOfFirst { it == spec })
+    log(System.currentTimeMillis() - start)
+
+    // 二分查找，对于 Comparable 元素不指定 Comparator; 否则需要指定 Comparator
+    start = System.currentTimeMillis()
+    log(users.binarySearch(spec, compareBy { it.uuid })) // 这个 Comparator 要和排序使用同一种方式
+    log(System.currentTimeMillis() - start)
+}
+</pre>
+								</li>
+								<li>
+									<p><b>聚合操作<code>fold / reduce / count / min / max / sum</code></b> -- 基于集合内容返回单个值的操作。</p>
+									<pre class="brush: kotlin;">
+val names = listOf("Red", "Green", "Blue", "Alpha")
+val values = listOf(255, 255, 0, 100)
+
+// 将初始值用作第一步的累积值（第一步 sum 为 1000, item 为 "Red"）
+log(names.fold(1000) { sum, item -> sum + item.length }) // 1017
+// 将第一个和第二个元素作为第一步的操作参数（第一步 sum 为 "Red", item 为 "Green"）
+log(names.reduce { sum, item -> sum + item.length })	 // "Red545"
+// 带索引
+log(values.foldIndexed(0) { idx, sum, item -> if (idx % 2 == 0) sum + item else sum  })
+log(values.reduceIndexed { idx, sum, item -> if (idx % 2 == 0) sum + item else sum  })
+
+log(names.foldRight("...") { sum, item -> "$sum,$item" }) // "Red,Green,Blue,Alpha,..."
+log(names.reduceRight { sum, item -> "$sum,$item" })	  // "Red,Green,Blue,Alpha"
+
+log(names.count())
+log(names.count{ it.contains("e")})
+
+log(names.min())
+log(names.max())
+log(names.minBy { it.length })
+log(names.maxBy { it.first() })
+log(names.minWith(Comparator { s1, s2 -> s1.first() - s2.first() }))
+
+// 部分扩展函数为 Iterable&lt;Int> 而不是 Iterable&lt;T>
+log(values.average())
+log(values.sum())
+log(names.sumBy { it.length })
+log(values.sumBy { it })
+</pre>
+								</li>
+							</ol>
+
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
 
-                <!-- item start -->
-                <a class="offset" id="kotlin-base-"></a>
+				<!-- item start -->
+                <a class="offset" id="kotlin-base-structure"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">...</h3>
+                        <h3 class="panel-title">更多语言结构</h3>
                     </div>
                     <div class="panel-body">
+						<div class="sub-item">
+							<p><b>解构声明</b></p>
+							<p>有时把一个对象解构成很多变量会很方便，一个解构声明同时创建多个变量。</p>
+							<pre class="brush: kotlin;">
+class Animal(var name:String = "", var action:String = "") {
+    operator fun component1(): String {
+        return name
+    }
 
+    operator fun component2(): String {
+        return action
+    }
+}
+
+fun main() {
+    val animal = Animal("Bird", "Fly")
+    var (name, action) = animal // 解构声明，生成新的变量，而不是引用；多少个变量就需要多少个 componentN 函数
+    log(animal, name, action)
+    name = "Fish"               // 不会改动到 animal 成员
+    action = "Swimming"
+    log(animal, name, action)   // animal 的成员不会变
+
+    for (v in listOf("A", "B", "C")) { log(v) }
+    val map = mapOf("path" to "/usr/share/", "name" to "config.xml")
+    for ((k, v) in map) { log(k, v) }
+    for ((_, v) in map) { log(v) } // 下划线用于未使用的变量
+}
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><b>作用域函数</b></p>
+							<p>Kotlin 标准库包含几个函数，它们的唯一目的是在对象的上下文中执行代码块。当对一个对象调用这样的函数并提供一个 lambda 表达式时，它会形成一个临时作用域。在此作用域中，可以访问该对象而无需其名称。这些函数称为作用域函数。共有以下五种：<code>let</code>、<code>run</code>、<code>with</code>、<code>apply</code> 以及 <code>also</code>。</p>
+							<p>这些函数基本上做了同样的事情：在一个对象上执行一个代码块。每个作用域函数之间有两个主要区别： <b>引用上下文对象的方式</b> 和 <b>返回值</b>。</p>
+							<p>在作用域函数的 lambda 表达式里，上下文对象可以不使用其实际名称而是使用一个更简短的引用来访问。每个作用域函数都使用以下两种方式之一来访问上下文对象：作为 lambda 表达式的接收者（this）或者作为 lambda 表达式的参数（it）。</p>
+							<pre class="brush: kotlin;">
+// 引用 this, 返回对象本身; 此处的 lambda 带有接收者类型，可以直接调用其成员函数
+public inline fun &lt;T> T.apply(block: T.() -> Unit): T {...}
+// 引用 it, 返回对象本身
+public inline fun &lt;T> T.also(block: (T) -> Unit): T {...}
+
+// 引用 it, 返回值是 lambda 的返回值
+public inline fun &lt;T, R> T.let(block: (T) -> R): R {...}
+// 引用 this, 返回值是 lambda 的返回值; 此处的 lambda 带有接收者类型，可以直接调用其成员函数
+public inline fun &lt;T, R> T.run(block: T.() -> R): R {...}
+
+// 引用 it, lambda 返回为 true 则返回对象本身, 否则返回 null
+public inline fun &lt;T> T.takeIf(predicate: (T) -> Boolean): T? {...}
+// 引用 it, lambda 返回为 false 则返回对象本身, 否则返回 null
+public inline fun &lt;T> T.takeUnless(predicate: (T) -> Boolean): T? {...}
+
+// 此函数用于执行一个 lambda 并获取它的返回值
+public inline fun &lt;R> run(block: () -> R): R {...}
+
+// 引用 this, 返回值是 lambda 的返回值; 和 run 差不多，只是接收者类型在参数里面
+public inline fun &lt;T, R> with(receiver: T, block: T.() -> R): R {...}	//
+// 重复调用 action 指定次数, lambda 的参数依次为 [0,times)
+public inline fun repeat(times: Int, action: (Int) -> Unit) {...}
+</pre>
+							<p>通过实例看它们的区别：</p>
+							<pre class="brush: kotlin;">
+val apply = mutableListOf&lt;String>().apply { // 引用 this, 返回对象本身
+	add("Red")			// lambda 带有接收者类型，可以直接调用其成员函数
+	this.add("Green")
+}
+log(apply)              // ["Red","Green"]
+
+val also = mutableListOf&lt;String>().also {   // 引用 it, 返回对象本身
+	it.add("Red")
+}
+log(also)               // ["Red"]
+
+val let = mutableListOf&lt;String>().let {	   // 引用 it, 返回值是 lambda 的返回值
+	it.add("Red")
+	it
+}
+log(let)                // ["Red"]
+
+val run = mutableListOf&lt;String>().run {	   // 引用 this, 返回值是 lambda 的返回值
+	add("Red")			// lambda 带有接收者类型，可以直接调用其成员函数
+	this.add("Green")
+	this
+}
+log(run)                // ["Red","Green"]
+
+val scope = run {
+	if ((0..1).random() % 2 == 0) 2 else 3
+}
+log(scope)              // 2 or 3
+
+val takeIf = mutableListOf("Red").takeIf {
+	it.add("Green")
+	it.contains("Red")	// true, 返回对象本身
+}
+log(takeIf)             // ["Red","Green"]
+
+val takeUnless = mutableListOf("Red").takeUnless {
+	it.add("Green")
+	it.contains("Red")	// true, 返回 null
+}
+log(takeUnless)         // null
+
+val with = with(mutableListOf&lt;String>()) {
+	add("Red")
+	this.add("Green")
+	this
+}
+log(with)               // ["Red","Green"]
+
+// 将 lambda 执行 9 次，传入的 it 值为 [0,9), 第二个 repeat 函数是 CharSequence 的扩展函数
+repeat(9) { log("*".repeat(it + 1)) }
+</pre>
+
+						</div>
                     </div>
                 </div>
                 <!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="kotlin-base-coroutine"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">协程</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<pre class="brush: bash;">
+implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7'
+implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7'
+</pre>
+							<ul>
+								<li><p><b>Kotlin-JVM</b> 中协程本质上还是一套基于原生 Java Thread API 的封装。</p></li>
+								<li><p><b>Kotlin-JVM</b> 中的协程挂起，就是开启了一个子线程去执行任务（不会阻塞原先 Thread 的执行，要理解对于 CPU 来说，在宏观上每个线程得到执行的概率都是相等的）。</p></li>
+								<li><p><b>Kotlin-JVM</b> 中的协程最大的价值是写起来比 RxJava 的线程切换还要方便。</p></li>
+								<li><p><b>Kotlin</b> 官网中那个创建 10W 个 Kotlin 协程没有 OOM 的例子其实有误导性，本质上那 10W 个 Kotlin 协程就是 10W 个并发任务仅此而已，下面运行的就是一个单线程的线程池。你往一个线程池里面丢多少个任务都不会 OOM 的（前提是你的线程池创建的时候设定了对应的拒绝策略，否则无界队列下，任务过多一定会 OOM），因为在运行的始终是那几个线程。</p></li>
+							</ul>
+						</div>
+
+						<div class="sub-item">
+
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="kotlin-base-"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+
+						</div>
+
+						<div class="sub-item">
+
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
 			</div>
 		</div>
 	</div>

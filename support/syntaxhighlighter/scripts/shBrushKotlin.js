@@ -21,13 +21,24 @@
 
 	function Brush()
 	{
-		var keywords =	'package import as fun val var true false ' +
-				'if else for in !in do while when is !is return break continue null ' + 
-				'interface class object as? super constructor by this init ' + 
-				'try catch throw finally ' + 
-				'typealias delegate dynamic fieId file set get setparam param property receiveris ' + 
-				'abstract annnotation companion const crossinline data enum external final infix inline inner internal ' +
-				'lateinit noinline open out override private protected public reified sealed suspend tailrec vararg';
+
+		var keywords =  'package  val 	     var 	fun 	 true 	   false    typealias ' +
+			       'if 	 else 	     break 	continue return	   for 	    do 	      while 	when ' + 
+                               'is 	 is! 	     in 	in! 	 as 	   as&#161; 	    try       throw ' +
+                               'class 	 interface   object 	null 	 this 	   super    typeof '  +
+
+	                       'import 	 constructor init 	by 	 where 	   catch    finally   set 	get 	dynamic ' +
+                               'delegate field 	     file 	param 	 property  receiver setparam  ' +
+
+			       'public 	 internal    protected 	private  open 	   abstract override  final ' +
+	                       'data 	 enum 	     annotation	sealed 	 companion inner '  +
+                               'const 	 lateinit    out 	reified	 suspend ' +
+                               'operator infix 	     tailrec 	vararg 	 inline    noinline crossinline ' +
+	                       'actual 	 expect      external';
+
+
+
+
 
 		this.regexList = [
 			{ regex: SyntaxHighlighter.regexLib.singleLineCComments,	css: 'comments' },		// one line comments
