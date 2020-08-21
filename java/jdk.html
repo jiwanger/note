@@ -127,6 +127,9 @@
                             <a href="#java-util-Timer" class="list-group-item">Timer 和 TimerTask</a>
                             <a href="#java-util-List" class="list-group-item">List, Map, Set, Queue...</a>
                             <a href="#java-util-function" class="list-group-item"><code>.function</code> 包</a>
+                            <a href="#java-util-stream" class="list-group-item"><code>.stream</code> 包</a>
+                            <a href="#java-util-Random" class="list-group-item">Random 子类及 SplittableRandom</a>
+                            <a href="#java-util-Optional" class="list-group-item">Optional 和 Objects</a>
 							<a href="#java-util-concurrent-atomic" class="list-group-item"><code>.concurrent.atomic</code> 包</a>
 							<a href="#java-util-concurrent-locks" class="list-group-item"><code>.concurrent.locks</code> 包</a>
                             <a href="#java-util-Formatter" class="list-group-item">Formatter, Formattable</a>
@@ -145,16 +148,20 @@
 							 role="tabpanel">
 							<a href="#java-io-InputStream" class="list-group-item">InputStream & OutputStream</a>
 							<a href="#java-io-Reader" class="list-group-item">Reader & Writer</a>
-							<a href="#java-io-File" class="list-group-item">File</a>
+							<a href="#java-io-File" class="list-group-item">File & RandomAccessFile</a>
 							<a href="#java-io-Console" class="list-group-item">Console</a>
 						</div>
 						<a class="list-group-item active drop" data-toggle="collapse"
 						   data-parent="#accordion" href="#java-nio" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
 							<code>java.nio</code><span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-nio" class="panel-collapse collapse"
-							 role="tabpanel">
-							<a href="#java-" class="list-group-item"></a>
+						<div id="java-nio" class="panel-collapse collapse" role="tabpanel">
+							<a href="#java-nio-intro" class="list-group-item">NIO 简介</a>
+							<a href="#java-nio-Buffer" class="list-group-item">Buffer 及子类</a>
+							<a href="#java-nio-channels-Channel" class="list-group-item">Channel 及实现类</a>
+							<a href="#java-nio-channels-Selector" class="list-group-item">Selector 及相关类</a>
+							<a href="#java-nio-charset-Charset" class="list-group-item">Charset 及相关类</a>
+							<a href="#java-nio-file-Files" class="list-group-item">Path / Files 及相关类</a>
 						</div>
 
 						<a class="list-group-item active drop" data-toggle="collapse"
@@ -167,7 +174,6 @@
 							<a href="#java-net-URLConnection" class="list-group-item">URLConnection 及子类</a>
 							<a href="#java-net-URLEncoder" class="list-group-item">URLEncoder 和 URLDecoder</a>
 						</div>
-
 
                         <a class="list-group-item active drop" data-toggle="collapse"
                            data-parent="#accordion" href="#java-sql" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
@@ -1448,8 +1454,8 @@ public abstract class ClassLoader {
 
 
                             <li class="group"><p><code>protected Class&lt;?> 	defineClass(String name, byte[] b, int off, int len)</code> -- 将一个 byte 数组转换为 Class 类的实例</p></li>
-                            <li><p><code>protected Class&lt;?> 	defineClass(String name, byte[] b, int off, int len, ProtectionDomain protectionDomain)</code> -- 使用可选的 ProtectionDomain 将一个 byte 数组转换为 Class 类的实例</p></li>
-                            <li><p><code>protected Class<?> 	defineClass(String name, ByteBuffer b, ProtectionDomain protectionDomain)</code> -- 使用可选的 ProtectionDomain 将 ByteBuffer 转换为 Class 类的实例</p></li>
+                            <li><p><code>protected Class&lt?> 	defineClass(String name, byte[] b, int off, int len, ProtectionDomain protectionDomain)</code> -- 使用可选的 ProtectionDomain 将一个 byte 数组转换为 Class 类的实例</p></li>
+                            <li><p><code>protected Class&lt;?> 	defineClass(String name, ByteBuffer b, ProtectionDomain protectionDomain)</code> -- 使用可选的 ProtectionDomain 将 ByteBuffer 转换为 Class 类的实例</p></li>
                             <li><p><code>protected Package 	definePackage(String name, String specTitle, String specVersion, String specVendor, String implTitle, String implVersion, String implVendor, URL sealBase)</code> -- 根据 name 在此 ClassLoader 中定义包</p></li>
 
                             <li class="group"><p><code>protected Object 	getClassLoadingLock(String className)</code> -- 返回类加载操作的锁定对象</p></li>
@@ -4897,67 +4903,37 @@ public abstract class TimerTask implements Runnable {
                             <ul>
                                 <li><p><b>List</b> -- 有序的 Collection（也称为序列）；</p>
 									<pre class="brush: java;">
-List
- ├─ AbstractList implements List /** 抽象类，提供 List 接口的骨干实现，一般不直接使用此类 */
- │	 ├─ ArrayList /** 大小可变数组的实现，内部使用数组实现，当内部数组容量不够时，自动增长内部数组的容量 */
- │	 ├─ AbstractSequentialList /** 链接列表骨干实现(非数组) */
- │	 │   └─ LinkedList implements List, Deque /** List 接口的链表实现，并实现 Deque，支持在两端插入和移除元素 */
- │	 └─ Vector /** 实现可增长的对象数组，和 ArrayList 相同，但此类是线程安全的 */
- │	        └─ Stack /** 后进先出（LIFO）的对象堆栈 */
- └─	CopyOnWriteArrayList /** ArrayList 的一个线程安全的变体，修改操作是复制副本修改，修改完成再更改引用 */
+List&lt;E> extends Collection&lt;E>
+├ AbstractList implements List /** 抽象类，提供 List 接口的骨干实现，一般不直接使用此类 */
+│ ├ ArrayList /** 大小可变数组的实现，内部使用数组实现，当内部数组容量不够时，自动增长内部数组的容量 */
+│ ├ AbstractSequentialList /** 链接列表骨干实现(非数组) */
+│ │ └ LinkedList implements List, Deque /** List 接口的链表实现，并实现 Deque，支持在两端插入和移除元素 */
+│ └ Vector /** 实现可增长的对象数组，和 ArrayList 相同，但此类是线程安全的 */
+│   └ Stack /** 后进先出（LIFO）的对象堆栈 */
+└ CopyOnWriteArrayList /** ArrayList 的一个线程安全的变体，修改操作是复制副本修改，修改完成再更改引用 */
 
 ArrayList -- 大小可变数组的实现，插入和查询比较快，移除/修改慢
-LinkedList -- List 接口的链表实现，支持(FIFO/LIFO)，大量数据插入/查询操作要慢于 ArrayList，但是删除/修改操作要快
+LinkedList -- List 接口的链表实现，支持(FIFO/LIFO)，大数据插入/查询操作慢于 ArrayList，但删除/修改操作要快
 Vector -- 同样是数组实现，多数方法加了 synchronized 关键字，扩容方式和 ArrayList 有区别
 Stack -- 支持 LIFO(push(E)/pop())
 CopyOnWriteArrayList -- 同 ArrayList, 添加/修改/删除都是复制副本操作，修改完成再更改引用
 </pre>
 								</li>
-								<li><p><b>Map</b> -- 将键映射到值的对象；</p>
-									<pre class="brush: java;">
-Map /** 将键映射到值的对象。一个映射不能包含重复的键；每个键最多只能映射到一个值 */
- ├─ SortedMap /** 进一步提供关于键的总体排序的 Map */
- │   └─ NavigableMap /** 扩展的 SortedMap，具有了针对给定搜索目标返回最接近匹配项的导航方法 */
- └─ ConcurrentMap /** 提供其他原子 putIfAbsent、remove、replace 方法的 Map */
-	  └─ ConcurrentNavigableMap extends ConcurrentMap, NavigableMap/**递归方式支持子映射的 ConcurrentMap */
-Map
- ├─	AbstractMap implements Map /** 提供 Map 接口的骨干实现 */
- │	 ├─	HashMap /**  Map 接口的哈希表和单向链表实现，数组是主体，链表则是主要为了解决哈希冲突而存在的 */
- │	 │	 └─	LinkedHashMap /** 额外维护了一个双向链表用于保持迭代顺序，该迭代顺序可以是插入顺序，也可以是访问顺序 */
- │	 ├─	TreeMap implements NavigableMap /** 基于红黑树（Red-Black tree）的 NavigableMap 实现 */
- │	 ├─	EnumMap /** 与枚举类型键一起使用的专用 Map 实现 */
- │	 ├─	WeakHashMap /** 以弱引用实现的基于哈希表的 Map */
- │	 ├─	IdentityHashMap /** 利用哈希表实现 Map 接口，比较键（和值）时使用引用相等性代替对象相等性 */
- │	 ├─	ConcurrentHashMap implements ConcurrentMap /** 支持获取的完全并发和更新的所期望可调整并发的哈希表 */
- │	 └─	ConcurrentSkipListMap implements ConcurrentNavigableMap /** 可缩放的 ConcurrentNavigableMap 实现 */
- └─ Hashtable implements Map /** 类似 HashMap，但它是同步的，并不允许空的键和值 */
-     └─ Properties /** 线程安全的，支持从属性文件，xml 文件等读写键值的方便类 */
 
-HashMap -- 基于哈希表的 Map 接口的实现，使用数组+单向链表的方式，数组是主体，链表则是主要为了解决哈希冲突而存在的
-LinkedHashMap -- 额外维护了一个双向链表用于保持迭代顺序，可以是插入顺序，也可以是访问顺序，非常适合实现 LRU 算法
-TreeMap -- 有序的，基于红黑树（Red-Black tree）的 NavigableMap 实现，可以指定比较器来排序；如不指定，使用自然排序
-WeakHashMap -- 其存储的 Entry 是 WeakReference 的子类，在 GC 后会变成 null
-EnumMap -- 自动枚举值排序，K 值一定是枚举类型，基于枚举优化的 Map 实现
-IdentityHashMap -- 只认为 k1 == k2 时才认为相等，和 equals 无关
-ConcurrentHashMap -- 线程安全的 HashMap 实现，根据散列值锁住了散列值锁对应的那段，因此提高了并发性能
-ConcurrentSkipListMap -- 线程安全的并发访问的排序映射表，内部是 SkipList（跳表）结构实现
-Hashtable -- 同 HashMap，键值都不能为空，多数操作使用 synchronized 同步，建议使用 ConcurrentHashMap 替代此类
-Properties -- 线程安全的，支持从属性文件，xml 文件等读写键值的方便类
-</pre>
-								</li>
 								<li><p><b>Set</b> -- 不包含重复元素的 Collection；</p>
 									<pre class="brush: java;">
-Set /** 有两个子接口 */
- └─ SortedSet /** 进一步提供关于元素的总体排序的 Set */
-     └─ NavigableSet /** 扩展的 SortedSet，具有了为给定搜索目标报告最接近匹配项的导航方法 */
-Set
- └─ AbstractSet implements Set /** 提供 Set 接口的骨干实现 */
-    ├─ HashSet /** 实现 Set 接口，由哈希表（实际上是一个 HashMap 实例）支持 */
-    │   └─ LinkedHashSet /** LinkedHashSet 支持 */
-    ├─ TreeSet implements NavigableSet /** 基于 TreeMap 的 NavigableSet 实现 */
-    ├─ EnumSet /** 与枚举类型一起使用的专用 Set 实现，抽象类，提供了若干静态工厂方法创建 */
-    ├─ ConcurrentSkipListSet implements NavigableSet /** 可缩放并发 NavigableSet 实现 */
-    └─ CopyOnWriteArraySet /** 对其所有操作使用内部 CopyOnWriteArrayList 的 Set，修改操作是复制副本修改 */
+Set&lt;E> extends Collection&lt;E> /** 有两个子接口 */
+└ SortedSet /** 进一步提供关于元素的总体排序的 Set */
+   └ NavigableSet /** 扩展的 SortedSet，具有了为给定搜索目标报告最接近匹配项的导航方法 */
+
+Set&lt;E> extends Collection&lt;E> /** 实现类 */
+└ AbstractSet implements Set /** 提供 Set 接口的骨干实现 */
+  ├ HashSet /** 实现 Set 接口，由哈希表（实际上是一个 HashMap 实例）支持 */
+  │ └ LinkedHashSet /** LinkedHashSet 支持 */
+  ├ TreeSet implements NavigableSet /** 基于 TreeMap 的 NavigableSet 实现 */
+  ├ EnumSet /** 与枚举类型一起使用的专用 Set 实现，抽象类，提供了若干静态工厂方法创建 */
+  ├ ConcurrentSkipListSet implements NavigableSet /** 可缩放并发 NavigableSet 实现 */
+  └ CopyOnWriteArraySet /** 对其所有操作使用内部 CopyOnWriteArrayList 的 Set，修改操作是复制副本修改 */
 
 HashSet -- 等同于 HashMap 只存储 K 值
 LinkedHashSet -- 等同于 LinkedHashMap 只存储 K 值
@@ -4969,25 +4945,25 @@ EnumSet -- 和 EnumMap 无关，抽象类，提供了若干静态工厂方法创
 								</li>
 								<li><p><b>Queue</b> -- 队列，先进先出，子接口为 Deque， 后进先出。</p>
 									<pre class="brush: java;">
-Queue /** 队列，FIFO， 入队：add(E)/offer(E)，获取队头：element()/peek()，出队：remove()/pool() */
- ├─	Deque /** 双向队列，FIFO/LIFO，入栈：push(E)，出栈：pop(), xxXFirst/xxxLast... */
- └─ BlockingQueue /** 阻塞队列，阻塞出队：take()，延迟入队/出队：offer(E, long, TimeUnit)pool(long, TimeUnit) */
-	 ├─	TransferQueue /** 生产者可以等待消费者接收元素 */
-	 └─ BlockingDeque extends BlockingQueue, Deque /** 双向阻塞队列 */
+Queue&lt;E> extends Collection&lt;E> /** 队列，FIFO， 入队：add(E)/offer(E)，出队：remove()/pool() */
+├ Deque /** 双向队列，FIFO/LIFO，入栈：push(E)，出栈：pop(), xxXFirst/xxxLast... */
+└ BlockingQueue /** 阻塞队列，阻塞出队：take()，延迟入队/出队 */
+  ├	TransferQueue /** 生产者可以等待消费者接收元素 */
+  └ BlockingDeque extends BlockingQueue, Deque /** 双向阻塞队列 */
 
-Queue
- ├─	ArrayDeque implements Deque /** 双向队列，Deque 接口的大小可变数组的实现 */
- └─ AbstractQueue implements Queue /** 提供某些 Queue 操作的骨干实现 */
- 	 ├─	PriorityQueue /** 基于优先级的队列，默认自然排序 */
- 	 ├─	PriorityBlockingQueue implements BlockingQueue /** 同 PriorityQueue，但是无数据时支持阻塞等待数据 */
- 	 ├─	ArrayBlockingQueue implements BlockingQueue /** 由数组支持的阻塞队列，维护插入顺序 */
- 	 ├─	LinkedBlockingQueue implements BlockingQueue /** 由链表支持的阻塞队列，维护插入顺序 */
- 	 ├─	LinkedBlockingDeque implements BlockingDeque /** 由链表支持的双向阻塞队列，维护插入顺序 */
- 	 ├─	ConcurrentLinkedQueue implements Queue /** 链表支持的，线程安全的队列 */
- 	 ├─	ConcurrentLinkedDeque implements Deque /** 链表支持的，线程安全的双向队列 */
- 	 ├─	DelayQueue implements BlockingQueue /** Delayed 元素的一个阻塞队列，只有在延迟期满时才能从中提取元素 */
- 	 ├─	SynchronousQueue implements BlockingQueue /** 同步阻塞队列，不具有数据或链表缓存数据 */
-     └─	LinkedTransferQueue implements TransferQueue /** 基于链表实现的队列，通过 CAS 的方式避免整个队列的加锁操作 */
+Queue&lt;E> extends Collection&lt;E> /** 实现类 */
+├ ArrayDeque implements Deque /** 双向队列，Deque 接口的大小可变数组的实现 */
+└ AbstractQueue implements Queue /** 提供某些 Queue 操作的骨干实现 */
+  ├	PriorityQueue /** 基于优先级的队列，默认自然排序 */
+  ├	PriorityBlockingQueue implements BlockingQueue /** 同 PriorityQueue，但是无数据时支持阻塞等待数据 */
+  ├	ArrayBlockingQueue implements BlockingQueue /** 由数组支持的阻塞队列，维护插入顺序 */
+  ├	LinkedBlockingQueue implements BlockingQueue /** 由链表支持的阻塞队列，维护插入顺序 */
+  ├	LinkedBlockingDeque implements BlockingDeque /** 由链表支持的双向阻塞队列，维护插入顺序 */
+  ├ ConcurrentLinkedQueue implements Queue /** 链表支持的，线程安全的队列 */
+  ├	ConcurrentLinkedDeque implements Deque /** 链表支持的，线程安全的双向队列 */
+  ├	DelayQueue implements BlockingQueue /** Delayed 元素的一个阻塞队列，只有在延迟期满时才能从中提取元素 */
+  ├	SynchronousQueue implements BlockingQueue /** 同步阻塞队列，不具有数据或链表缓存数据 */
+  └	LinkedTransferQueue implements TransferQueue /** 基于链表实现的队列，通过 CAS 避免整个队列的加锁操作 */
 
 LinkedList -- 实现 List 和 Deque 接口
 ArrayDeque -- 大小可变的数组实现的双向队列
@@ -5003,6 +4979,39 @@ SynchronousQueue -- 无缓存，取数据的线程先等待，才能发送数据
 LinkedTransferQueue -- 基于链表实现的队列，通过 CAS 的方式避免整个队列的加锁操作
 </pre>
 								</li>
+                                <li><p><b>Map</b> -- 将键映射到值的对象；</p>
+                                    <pre class="brush: java;">
+Map&lt;K,V> /** 将键映射到值的对象。一个映射不能包含重复的键；每个键最多只能映射到一个值 */
+├ SortedMap /** 进一步提供关于键的总体排序的 Map */
+│ └ NavigableMap /** 扩展的 SortedMap，具有了针对给定搜索目标返回最接近匹配项的导航方法 */
+└ ConcurrentMap /** 提供其他原子 putIfAbsent、remove、replace 方法的 Map */
+  └ ConcurrentNavigableMap extends ConcurrentMap, NavigableMap/**递归方式支持子映射的 ConcurrentMap */
+
+Map&lt;K,V> /** 实现类 */
+├ AbstractMap implements Map /** 提供 Map 接口的骨干实现 */
+│ ├	HashMap /**  Map 接口的哈希表和单向链表实现，数组是主体，链表则是主要为了解决哈希冲突而存在的 */
+│ │	└ LinkedHashMap /** 额外维护了一个双向链表用于保持迭代顺序，该迭代顺序可以是插入顺序，也可以是访问顺序 */
+│ ├	TreeMap implements NavigableMap /** 基于红黑树（Red-Black tree）的 NavigableMap 实现 */
+│ ├	EnumMap /** 与枚举类型键一起使用的专用 Map 实现 */
+│ ├	WeakHashMap /** 以弱引用实现的基于哈希表的 Map */
+│ ├	IdentityHashMap /** 利用哈希表实现 Map 接口，比较键（和值）时使用引用相等性代替对象相等性 */
+│ ├	ConcurrentHashMap implements ConcurrentMap /** 支持获取的完全并发和更新的所期望可调整并发的哈希表 */
+│ └	ConcurrentSkipListMap implements ConcurrentNavigableMap /** 可缩放 ConcurrentNavigableMap 实现 */
+└ Hashtable implements Map /** 类似 HashMap，但它是同步的，并不允许空的键和值 */
+  └ Properties /** 线程安全的，支持从属性文件，xml 文件等读写键值的方便类 */
+
+HashMap -- 基于哈希表的 Map 接口的实现，使用数组+单向链表的方式，数组是主体，链表则是主要为了解决哈希冲突而存在的
+LinkedHashMap -- 额外维护了一个双向链表用于保持迭代顺序，可以是插入顺序，也可以是访问顺序，非常适合实现 LRU 算法
+TreeMap -- 有序基于红黑树（Red-Black tree）的 NavigableMap 实现，可以指定比较器来排序；如不指定，使用自然排序
+WeakHashMap -- 其存储的 Entry 是 WeakReference 的子类，在 GC 后会变成 null
+EnumMap -- 自动枚举值排序，K 值一定是枚举类型，基于枚举优化的 Map 实现
+IdentityHashMap -- 只认为 k1 == k2 时才认为相等，和 equals 无关
+ConcurrentHashMap -- 线程安全的 HashMap 实现，根据散列值锁住了散列值锁对应的那段，因此提高了并发性能
+ConcurrentSkipListMap -- 线程安全的并发访问的排序映射表，内部是 SkipList（跳表）结构实现
+Hashtable -- 同 HashMap，键值都不能为空，多数操作使用 synchronized 同步，建议使用 ConcurrentHashMap 替代此类
+Properties -- 线程安全的，支持从属性文件，xml 文件等读写键值的方便类
+</pre>
+                                </li>
                             </ul>
                             <p>还有一些用于操作的工具类： <a href="#Arrays">Arrays</a>, <a href="#Collections">Collections</a></p>
                             <p><b>Java Collections Framework</b> 类和接口导航:</p>
@@ -8050,61 +8059,63 @@ prop.stringPropertyNames().forEach(s -> log(s, prop.getProperty(s)));
                             <p>该软件包中的接口是 JDK 所使用的通用功能接口，也可供用户代码使用。虽然它们没有识别一个完整的函数形状集合，lambda 表达式可以被应用，但是它们提供了足够的覆盖共同需求的功能。</p>
                             <p>接口列表和简要说明:</p>
                             <pre class="brush: java;">
-Consumer&lt;T> /** 无返回值，接收一个对象，然后对这个对象执行某些操作 */
- └─ java.util.stream.Stream.Builder&lt;T>
-BiConsumer&lt;T,U> /** 无返回值，接收两个相关联的对象，然后对这两个对象执行某些操作 */
-Function&lt;T,R> /** 接收一个 T 对象，返回的是 R 对象 */
- └─ UnaryOperator&lt;T> /** 接收一个 T 对象，返回一个新的或经过加工的 T 对象 */
-BiFunction&lt;T,U,R> /** 接收 T 和 U(一般是相关的，如 Map 的 K, V), 返回 R, 如传入 Map 的 K, V, 返回一个新的 V */
- └─ BinaryOperator&lt;T> /** 接收两个 T 对象，返回经过比较的 T 对象 */
-Predicate&lt;T> /** 接收一个 T 对象，看其是否符合某些条件(返回 true 或 false) */
-BiPredicate&lt;T,U> /** 接收 T 和 R(一般是相关的，如 Map 的 K, V)，看其是否符合某些条件(返回 true 或 false) */
-Supplier&lt;T> /** 用于获取一个指定类型对象 */
+Supplier&lt;T> --          T get();                // 供应者，用于返回一个数据
+Consumer&lt;T> --          void accept(T t);       // 消费者，消费一个数据
+BiConsumer&lt;T, U> --     void accept(T t, U u);  // 消费者，消费相关联的两个数据
+Predicate&lt;T> --         boolean test(T t);      // 测试一个数据是否符合条件
+BiPredicate&lt;T, U> --    boolean test(T t, U u); // 测试相关联的两个数据是否符合条件
+Function&lt;T, R> --       R apply(T t);           // 对数据进行变换返回新的类型数据
+ └ UnaryOperator&lt;T> --  T apply(T t);           // Function 简单化，参数和返回值类型相同
+BiFunction&lt;T, U, R> --  R apply(T t, U u);      // 对相关联的两个数据进行变换返回新的类型数据
+ └ BinaryOperator&lt;T> -- T apply(T t, T t);      // BiFunction 简单化，参数和返回值类型相同
+
+// 1.Supplier 变种
 BooleanSupplier /** 用于获取一个 boolean 对象 */
-
-ObjDoubleConsumer&lt;T> /** 参照 Consumer， 接收一个 Object 和 一个 double */
-ObjIntConsumer&lt;T> /** 参照 Consumer， 接收一个 Object 和 一个 int */
-ObjLongConsumer&lt;T> /** 参照 Consumer， 接收一个 Object 和 一个 long */
-
-ToDoubleFunction&lt;T> /** 参照 Function， 接收 T, 返回 double */
-ToDoubleBiFunction&lt;T,U> /** 参照 BiFunction， 接收 T, U, 返回 double */
-ToLongFunction&lt;T> /** 参照 Function， 接收 T 返回 long */
-ToIntBiFunction&lt;T,U> /** 参照 BiFunction， 接收 T, U, 返回 int */
-ToLongBiFunction&lt;T,U> /** 参照 BiFunction， 接收 T, U, 返回 long */
-
-IntBinaryOperator /** 参照 BinaryOperator， 接收两个 int, 返回经过比较的 int */
-IntConsumer /** 参照 Consumer， 接收一个 int，然后对 int 执行某些操作 */
- ├─ java.util.stream.IntStream.Builder
- ├─ java.util.IntSummaryStatistics
- └─ java.util.LongSummaryStatistics
-IntPredicate /** 参照 Predicate， 接收一个 int，看其是否符合某些条件(返回 true 或 false) */
 IntSupplier /** 参照 Supplier， 用于获取一个 int */
+LongSupplier /** 参照 Supplier， 用于获取一个 long */
+DoubleSupplier /** 参照 Supplier， 用于获取一个 double */
+
+// 2.Consumer 变种
+IntConsumer /** 参照 Consumer， 接收一个 int，然后对 int 执行某些操作 */
+LongConsumer /** 参照 Consumer， 接收一个 long，然后对 long 执行某些操作 */
+DoubleConsumer /** 参照 Consumer， 接收一个 double，然后对 double 执行某些操作 */
+ObjIntConsumer&lt;T> /** 参照 Consumer， 接收一个 T 和 一个 int */
+ObjLongConsumer&lt;T> /** 参照 Consumer， 接收一个 T 和 一个 long */
+ObjDoubleConsumer&lt;T> /** 参照 Consumer， 接收一个 T 和 一个 double */
+
+// 3.Predicate 变种
+IntPredicate /** 参照 Predicate， 接收一个 int，看其是否符合某些条件(返回 true 或 false) */
+LongPredicate /** 参照 Predicate， 接收一个 long，看其是否符合某些条件(返回 true 或 false) */
+DoublePredicate /** 参照 Predicate， 接收一个 double，看其是否符合某些条件(返回 true 或 false) */
+
+// 4.Function 及 BiFunction 变种
 IntFunction&lt;R> /** 参照 Function， 接收一个 int，返回 R 类型对象 */
+LongFunction&lt;R> /** 参照 Function， 接收一个 long，返回 R 类型对象 */
+DoubleFunction&lt;R> /** 参照 Function， 接收一个 double，返回 R 类型对象 */
+
 IntToLongFunction /** 参照 Function， 接收一个 int，返回 long */
 IntToDoubleFunction /** 参照 Function， 接收一个 int，返回 double */
-IntUnaryOperator /** 参照 UnaryOperator， 接收一个int，返回一个新的或经过加工的 int */
-
-LongBinaryOperator /** 参照 BinaryOperator， 接收两个 long, 返回经过比较的 long */
-LongConsumer /** 参照 Consumer， 接收一个 long，然后对 long 执行某些操作 */
- ├─ java.util.stream.LongStream.Builder
- └─ java.util.LongSummaryStatistics
-LongPredicate /** 参照 Predicate， 接收一个 long，看其是否符合某些条件(返回 true 或 false) */
-LongSupplier /** 参照 Supplier， 用于获取一个 long */
-LongFunction&lt;R> /** 参照 Function， 接收一个 long，返回 R 类型对象 */
 LongToIntFunction /** 参照 Function， 接收一个 long，返回 int */
-LongToDoubleFunction  /** 参照 Function， 接收一个 long，返回 bouble */
-LongUnaryOperator /** 参照 UnaryOperator， 接收一个 long，返回一个新的或经过加工的 long */
-
-DoubleBinaryOperator /** 参照 BinaryOperator， 接收两个 double, 返回经过比较的 double */
-DoubleConsumer /** 参照 Consumer， 接收一个 double，然后对 double 执行某些操作 */
- ├─ java.util.stream.DoubleStream.Builder
- └─ java.util.DoubleSummaryStatistics
-DoublePredicate /** 参照 Predicate， 接收一个 double，看其是否符合某些条件(返回 true 或 false) */
-DoubleSupplier /** 参照 Supplier， 用于获取一个 double */
-DoubleFunction&lt;R> /** 参照 Function， 接收一个 double，返回 R 类型对象 */
+LongToDoubleFunction  /** 参照 Function， 接收一个 long，返回 double */
 DoubleToIntFunction /** 参照 Function， 接收一个 double，返回 int */
 DoubleToLongFunction /** 参照 Function， 接收一个 double，返回 long */
+
+ToIntFunction&lt;T>  /** 参照 Function， 接收 T 返回 int */
+ToLongFunction&lt;T> /** 参照 Function， 接收 T 返回 long */
+ToDoubleFunction&lt;T> /** 参照 Function， 接收 T, 返回 double */
+ToIntBiFunction&lt;T,U> /** 参照 BiFunction， 接收 T, U, 返回 int */
+ToLongBiFunction&lt;T,U> /** 参照 BiFunction， 接收 T, U, 返回 long */
+ToDoubleBiFunction&lt;T,U> /** 参照 BiFunction， 接收 T, U, 返回 double */
+
+// 5.UnaryOperator 变种 */
+IntUnaryOperator /** 参照 UnaryOperator， 接收一个int，返回一个新的或经过加工的 int */
+LongUnaryOperator /** 参照 UnaryOperator， 接收一个 long，返回一个新的或经过加工的 long */
 DoubleUnaryOperator /** 参照 UnaryOperator， 接收一个 double，返回一个新的或经过加工的 double */
+
+// 6.BinaryOperator 变种 */
+IntBinaryOperator /** 参照 BinaryOperator， 接收两个 int, 返回经过比较的 int */
+LongBinaryOperator /** 参照 BinaryOperator， 接收两个 long, 返回经过比较的 long */
+DoubleBinaryOperator /** 参照 BinaryOperator， 接收两个 double, 返回经过比较的 double */
 </pre>
                             <p>标注为 <code>FunctionalInterface</code> 的接口被称为函数式接口，该接口只能有一个自定义方法，但是可以包括从 Object 类继承而来的方法。如果一个接口只有一个方法，则编译器会认为这就是一个函数式接口。是否是一个函数式接口，需要注意的有以下几点：</p>
                             <ul>
@@ -8353,6 +8364,538 @@ public interface BooleanSupplier {
 }
 </pre>
 						</div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-util-stream"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">java.util.stream 包</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public interface BaseStream&lt;T,S extends BaseStream&lt;T,S>> extends AutoCloseable {}
+
+public interface Stream&lt;T> extends BaseStream&lt;T,Stream&lt;T>> {
+    public interface Builder&lt;T> extends Consumer&lt;T> {
+        void accept(T t);
+        default Builder&lt;T> add(T t) {...}
+        Stream&lt;T> build();
+    }
+}
+
+public interface IntStream extends BaseStream&lt;Integer,IntStream> {
+    public static interface Builder {}
+}
+
+public interface LongStream extends BaseStream&lt;Long,LongStream> {
+    public static interface Builder {}
+}
+
+public interface DoubleStream extends BaseStream&lt;Double,DoubleStream> {
+    public static interface Builder {}
+}
+</pre>
+                            <p>Stream 使用一种类似用 SQL 语句从数据库查询数据的直观方式来提供一种对 Java 集合运算和表达的高阶抽象。</p>
+                            <p>Stream 风格将要处理的元素集合看作一种流， 流在管道中传输， 并且可以在管道的节点上进行处理， 比如筛选， 排序，聚合等。</p>
+                            <p><b>Java 中的 Stream 并不会存储元素，而是按需计算。Stream 只能被消费一次(中间操作可以有多次)，否则会报 <code>IllegalStateException</code></b></p>
+                            <pre class="brush: java;">
+List&lt;String> strings = new ArrayList<>();
+Collections.addAll(strings, "A", "B", "C");
+Stream&lt;String> stream = strings.stream();
+strings.clear();
+stream.forEach(LogUtil::log); // 没有元素被打印，因为 数据源 已被清空
+</pre>
+                            <p>和以前的 Collection 操作不同， Stream 操作还有两个基础的特征：</p>
+                            <ul>
+                                <li><p><b>Pipelining</b> -- 中间操作都会返回流对象本身。 这样多个操作可以串联成一个管道， 如同流式风格。 这样做可以对操作进行优化， 比如延迟执行和短路。</p></li>
+                                <li><p><b>内部迭代</b> -- 以前对集合遍历都是通过 Iterator 或者 For-Each 的方式, 显式的在集合外部进行迭代， 这叫做外部迭代。 Stream 提供了内部迭代的方式， 通过访问者模式实现。</p></li>
+                            </ul>
+
+                            <p>先来看一个 Stream 的应用：</p>
+                            <pre class="brush: java;">
+// 将 JDK 支持的 java.secure.Provider 的 Service 按类型分组
+Map&lt;String, List&lt;Provider.Service>> map = Providers.getProviderList().providers().stream()
+            .map(Provider::getServices)   // 转换操作，将 Provider 的 Service 提取出来
+            .flatMap(Collection::stream)  // 打平操作
+            .collect(Collectors.groupingBy(Provider.Service::getType)); // 分组
+
+map.keySet().stream().sorted().forEach(k -> {
+    log(k);
+    List&lt;Provider.Service> services =  map.get(k);
+    for (Provider.Service service : services) {
+        log("  -- ", service.getAlgorithm(), service.getClassName());
+    }
+});
+</pre>
+
+                            <p>Stream 是支持元素流功能性操作的类，以下操作可以获取一个 Stream 的实例：</p>
+                            <pre class="brush: java;">
+java.util.Arrays 类提供了以下静态方法将数组转为 Stream 对象：
+    static &lt;T> Stream&lt;T> stream(T[] array) {...}
+    static IntStream stream(int[] array) {...}
+    static LongStream stream(long[] array) {...}
+    static DoubleStream stream(double[] array) {...}
+
+    static &lt;T> Stream&lt;T> stream(T[] array, int startInclusive, int endExclusive) {...}
+    static IntStream stream(int[] array, int startInclusive, int endExclusive) {...}
+    static LongStream stream(long[] array, int startInclusive, int endExclusive) {...}
+    static DoubleStream stream(double[] array, int startInclusive, int endExclusive) {...}
+
+java.util.Collection&lt;E> 接口(List,Set,Queue)提供了将集合的元素转为 Stream 的默认实现：
+    default Stream&lt;E> stream() {...}
+    default Stream&lt;E> parallelStream() {...}
+
+java.util.stream.StreamSupport 类提供以下静态方法生成 Stream 对象：
+    static &lt;T> Stream&lt;T> stream(Spliterator&lt;T> spliterator, boolean parallel) {...}
+    static &lt;T> Stream&lt;T> stream(Supplier&lt;? extends Spliterator&lt;T>> supplier,
+        int characteristics, boolean parallel) {...}
+    static IntStream intStream(Spliterator.OfInt spliterator, boolean parallel) {...}
+    static IntStream intStream(Supplier&lt;? extends Spliterator.OfInt> supplier,
+        int characteristics, boolean parallel) {...}
+    static LongStream longStream(Spliterator.OfLong spliterator, boolean parallel) {...}
+    static LongStream longStream(Supplier&lt;? extends Spliterator.OfLong> supplier,
+        int characteristics, boolean parallel) {...}
+    static DoubleStream doubleStream(Spliterator.OfDouble spliterator, boolean parallel) {...}
+    static DoubleStream doubleStream(Supplier&lt;? extends Spliterator.OfDouble> supplier,
+        int characteristics, boolean parallel) {...}
+</pre>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><a href="docs/docs-java/api/java/util/stream/BaseStream.html" target="_blank">BaseStream</a> 是流的基本接口，它们是支持顺序和并行聚合操作的元素序列。</p>
+                            <ol>
+                                <li><p><code>Iterator&lt;T> 	iterator()</code> -- 返回此流的元素的迭代器</p></li>
+                                <li><p><code>Spliterator&lt;T> 	spliterator()</code> -- 返回此流的元素的拼接器</p></li>
+
+                                <li class="group"><p><code>S 	sequential()</code> -- 返回顺序的等效流</p></li>
+                                <li><p><code>S 	parallel()</code> -- 返回并行的等效流(多线程执行)</p></li>
+                                <li><p><code>S 	unordered()</code> -- 返回无序的等效流</p></li>
+
+                                <li class="group"><p><code>boolean 	isParallel()</code> -- 此流是否并行执行终端操作</p></li>
+
+                                <li class="group"><p><code>S 	onClose(Runnable closeHandler)</code> -- 返回带有附加关闭处理程序的等效流</p></li>
+                                <li><p><code>void 	close()</code> -- 关闭此流</p></li>
+                            </ol>
+                            <p><a href="docs/docs-java/api/java/util/stream/Stream.html" target="_blank">Stream</a> 使用一种类似用 SQL 语句从数据库查询数据的直观方式来提供一种对 Java 集合运算和表达的高阶抽象。</p>
+                            <ol>
+                                <li><p><code>static &lt;T> Stream&lt;T> 	empty()</code> -- 空的顺序流</p></li>
+                                <li><p><code>static &lt;T> Stream&lt;T> 	of(T t)</code> -- 包含单个元素的顺序流</p></li>
+                                <li><p><code>static &lt;T> Stream&lt;T> 	of(T... values)</code> -- 包含指定元素的数序流</p></li>
+                                <li><p><code>static &lt;T> Stream&lt;T> 	generate(Supplier&lt;T> s)</code> -- 无限连续的无序流</p></li>
+                                <li><p><code>static &lt;T> Stream&lt;T> 	iterate(T seed, UnaryOperator&lt;T> f)</code> -- 无限连续有序流</p></li>
+                                <li><p><code>static &lt;T> Stream&lt;T> 	concat(Stream&lt;? extends T> a, Stream&lt;? extends T> b)</code> -- 懒惰连接两个流</p></li>
+
+                                <li class="group"><p><code>static &lt;T> Stream.Builder&lt;T> 	builder()</code> -- 返回一个 Stream 的构建器</p></li>
+
+                                <li class="group"><p><code>long 	count()</code> -- 返回此流中的元素数</p></li>
+
+                                <li class="group"><p><code>void 	forEach(Consumer&lt;? super T> action)</code> -- 迭代</p></li>
+                                <li><p><code>void 	forEachOrdered(Consumer&lt;? super T> action)</code> -- 保证顺序迭代(包括并行流)</p></li>
+
+                                <li class="group"><p><code>Object[] 	toArray()</code> -- 返回一个包含此流的元素的数组</p></li>
+                                <li><p><code>&lt;A> A[] 	toArray(IntFunction&lt;A[]> generator)</code> -- 返回一个包含此流的元素的数组</p>
+                                    <pre class="brush: java;">
+IntFunction&lt;String[]> function = String[]::new;
+String[] arr = Stream.of(1, 3, 9, 8, 7, 10).map(i -> {
+    if(i < 6) return "不及格";
+    else if(i < 8) return "及格";
+    else return "优秀";
+}).toArray(function); // ["不及格","不及格","优秀","优秀","及格","优秀"]
+                                    </pre>
+                                </li>
+
+                                <li class="group"><p><code>boolean 	allMatch(Predicate&lt;? super T> predicate)</code> -- 是否所有元素满足指定条件</p></li>
+                                <li><p><code>boolean 	noneMatch(Predicate&lt;? super T> predicate)</code> -- 是否所有元素不满足指定条件</p></li>
+                                <li><p><code>boolean 	anyMatch(Predicate&lt;? super T> predicate)</code> -- 是否有元素满足指定条件</p></li>
+
+
+                                <li class="group"><p><code>Stream&lt;T> 	filter(Predicate&lt;? super T> predicate)</code> -- 过滤</p></li>
+                                <li><p><code>Stream&lt;T> 	peek(Consumer&lt;? super T> action)</code> -- 惰性操作，在消费元素时对每个元素执行提供的操作</p>
+                                    <pre class="brush: java;">
+int sum = Stream.of(1, 2, 3, 4, 5)
+            .peek(i -> System.out.print(String.format("%s %s ", i, i == 5 ? "=" : "+")))
+            .mapToInt(value -> value)
+            .sum(); // 此处才开始消费，如果不消费，那么 peek 中的函数也不会执行
+System.out.println(sum); // 1 + 2 + 3 + 4 + 5 = 15
+</pre>
+                                </li>
+                                <li><p><code>Stream&lt;T> 	skip(long n)</code> -- 跳过指定数量元素</p></li>
+                                <li><p><code>Stream&lt;T> 	sorted()</code> -- 排序</p></li>
+                                <li><p><code>Stream&lt;T> 	sorted(Comparator&lt;? super T> comparator)</code> -- 排序</p></li>
+                                <li><p><code>Stream&lt;T> 	limit(long maxSize)</code> -- 指定最多获取数量</p></li>
+                                <li><p><code>Stream&lt;T> 	distinct()</code> -- 逆向</p></li>
+
+                                <li class="group"><p><code>&lt;R> Stream&lt;R> 	map(Function&lt;? super T,? extends R> mapper)</code> -- 转换</p>
+                                <li><p><code>&lt;R> Stream&lt;R> 	flatMap(Function&lt;? super T,? extends Stream&lt;? extends R>> mapper)</code> -- 转换为 R 元素 Stream 流</p></li>
+
+                                <li class="group"><p><code>&lt;R> R 	collect(Supplier&lt;R> supplier, BiConsumer&lt;R,? super T> accumulator, BiConsumer&lt;R,R> combiner)</code> -- 可变还原操作</p></li>
+                                <li><p><code>&lt;R,A> R 	collect(Collector&lt;? super T,A,R> collector)</code> -- 可变还原操作，参见 <a href="#java-util-stream-Collectors">Collectors</a></p>
+                                    <pre class="brush: java;">
+public interface Collector&lt;T, A, R> {
+  Supplier&lt;A> supplier();            // 创建新的元素准本并入
+  BiConsumer&lt;A, T> accumulator();    // 将新的数据元素和原元素进行消费
+  BinaryOperator&lt;A> combiner();      // 合并
+  Function&lt;A, R> finisher();         // 对结果进行最终变换
+  Set&lt;Characteristics> characteristics();
+
+  enum Characteristics {
+     CONCURRENT,      // 标识 Collector 是并发的
+     UNORDERED,       // 标识 Collector 不保证顺序
+     IDENTITY_FINISH  // 标识 Collector 的 finisher 可以被删除，不会被调用
+  }
+
+  static&lt;T, R> Collector&lt;T, R, R> of(Supplier&lt;R> supplier, BiConsumer&lt;R, T> accumulator,
+    BinaryOperator&lt;R> combiner, Characteristics... characteristics) {...}
+
+  static&lt;T, A, R> Collector&lt;T, A, R> of(Supplier&lt;A> supplier, BiConsumer&lt;A, T> accumulator,
+    BinaryOperator&lt;A> combiner, Function&lt;A, R> finisher, Characteristics... characteristics) {...}
+}
+</pre>
+                                </li>
+
+
+
+                                <li class="group"><p><code>IntStream 	mapToInt(ToIntFunction&lt;? super T> mapper)</code> -- 转换为 IntStream</p></li>
+                                <li><p><code>IntStream 	flatMapToInt(Function&lt;? super T,? extends IntStream> mapper)</code> -- 同上，转换函数的返回值类型不一样</p></li>
+                                <li><p><code>LongStream 	mapToLong(ToLongFunction&lt;? super T> mapper)</code> -- 转换为 LongStream</p></li>
+                                <li><p><code>LongStream 	flatMapToLong(Function&lt;? super T,? extends LongStream> mapper)</code> -- 转换为 LongStream</p></li>
+                                <li><p><code>DoubleStream 	mapToDouble(ToDoubleFunction&lt;? super T> mapper)</code> -- 转换为 DoubleStream</p></li>
+                                <li><p><code>DoubleStream 	flatMapToDouble(Function&lt;? super T,? extends DoubleStream> mapper)</code> -- 同上，转换函数的返回值类型不一样</p></li>
+
+                                <li class="group"><p><code>Optional&lt;T> 	findAny()</code> -- 获取任意一个元素(针对并行流而言，顺序流为第一个元素)</p></li>
+                                <li><p><code>Optional&lt;T> 	findFirst()</code> -- 获取第一个元素</p></li>
+                                <li><p><code>Optional&lt;T> 	max(Comparator&lt;? super T> comparator)</code> -- 最大值</p></li>
+                                <li><p><code>Optional&lt;T> 	min(Comparator&lt;? super T> comparator)</code> -- 最小值</p></li>
+
+                                <li class="group"><p><code>Optional&lt;T> 	reduce(BinaryOperator&lt;T> accumulator)</code> -- 累积函数</p>
+                                    <pre class="brush: java;">
+String value = Arrays.asList("A", "B", "C").stream().reduce(new BinaryOperator&lt;String>() {
+    @Override
+    public String apply(String s1, String s2) {
+        return s1 + s2; // A,B -> AB,C
+    }
+}).orElse("None");
+log(value); // ABC
+</pre>
+                                </li>
+                                <li><p><code>T 	reduce(T identity, BinaryOperator&lt;T> accumulator)</code> -- 同上，前面接一个初始值</p>
+                                    <pre class="brush: java;">
+String value = stream.reduce("start:", new BinaryOperator&lt;String>() {
+    @Override
+    public String apply(String s, String s2) {
+        return s + s2; // start:,A -> start:A  B -> start:AB  C
+    }
+});
+log(value); // start:ABC
+</pre>
+                                </li>
+                                <li><p><code>&lt;U> U 	reduce(U identity, BiFunction&lt;U,? super T,U> accumulator, BinaryOperator&lt;U> combiner)</code> -- 同上,执行 <code>accumulator</code> 的计算</p></li>
+                            </ol>
+
+                            <a id="java-util-stream-Collectors" class="offset"></a>
+                            <p><a href="docs/docs-java/api/java/util/stream/Collectors.html" target="_blank">Collectors</a> 是实现各种有用的归约操作的收集器实现。</p>
+                            <pre class="brush: java;">
+public class Score {
+    String name; int score;
+    public Score(String name, int score) { this.name = name; this.score = score; }
+}
+
+List<&lt;core> scores = Arrays.asList(new Score("A", 70), new Score("B", 80), new Score("C", 90));
+Supplier&lt;Stream&lt;Score>> s = scores::stream;
+</pre>
+                            <ol>
+                                <li><p><code>static &lt;T> Collector&lt;T,?,Long> 	counting()</code> -- 数量，对于 Stream，可以直接使用 <code>count()</code> 函数</p></li>
+
+                                <li class="group"><p><code>static Collector&lt;CharSequence,?,String> 	joining()</code> -- 拼接</p></li>
+                                <li><p><code>static Collector&lt;CharSequence,?,String> 	joining(CharSequence delimiter)</code> -- 拼接，指定分隔符</p></li>
+                                <li><p><code>static Collector&lt;CharSequence,?,String> 	joining(CharSequence delimiter, CharSequence prefix, CharSequence suffix)</code> -- 拼接，指定分隔符，前缀，后缀</p>
+                                    <pre class="brush: java;">
+log(s.get().map(score -> score.name).collect(Collectors.joining())); // ABC
+log(s.get().map(score -> score.name).collect(Collectors.joining("-"))); // A-B-C
+log(s.get().map(score -> score.name).collect(Collectors.joining("-", "<", ">"))); // &lt;A-B-C>
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static &lt;T,K> Collector&lt;T,?,Map&lt;K,List&lt;T>>> 	groupingBy(Function&lt;? super T,? extends K> classifier)</code> -- 分组</p>
+                                    <pre class="brush: java;">
+Map&lt;String, List&lt;Score>> groups = s.get().collect(Collectors.groupingBy(score -> {
+    if(score.score < 60) return "差";
+    else if(score.score < 80) return "良";
+    else return "优";
+})); // {"优":[{"name":"B","score":80},{"name":"C","score":90}],"良":[{"name":"A","score":70}]}
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T,K> Collector&lt;T,?,ConcurrentMap&lt;K,List&lt;T>>> 	groupingByConcurrent(Function&lt;? super T,? extends K> classifier)</code> -- 同上，并发支持</p></li>
+                                <li><p><code>static &lt;T,K,A,D> Collector&lt;T,?,Map&lt;K,D>> 	groupingBy(Function&lt;? super T,? extends K> classifier, Collector&lt;? super T,A,D> downstream)</code> -- 分组后再计算</p>
+                                    <pre class="brush: java;">
+Map&lt;String, Double> map = s.get().collect(Collectors.groupingBy(score -> {
+        if(score.score < 60) return "差";
+        else if(score.score < 80) return "良";
+        else return "优";
+    }, Collectors.averagingInt(score -> score.score))); // {"优":85.0,"良":70.0}
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T,K,A,D> Collector&lt;T,?,ConcurrentMap&lt;K,D>> 	groupingByConcurrent(Function&lt;? super T,? extends K> classifier, Collector&lt;? super T,A,D> downstream)</code> -- 同上，并发支持</p></li>
+                                <li><p><code>static &lt;T,K,D,A,M extends Map&lt;K,D>> Collector&lt;T,?,M> 	groupingBy(Function&lt;? super T,? extends K> classifier, Supplier&lt;M> mapFactory, Collector&lt;? super T,A,D> downstream)</code> -- </p>
+                                    <pre class="brush: java;">
+Map&lt;String, List&lt;Score>> maps = s.get().collect(Collectors.groupingBy(score -> {
+        if(score.score < 60) return "差";
+        else if(score.score < 80) return "良";
+        else return "优";
+    }, (Supplier&lt;Map&lt;String, List&lt;Score>>>) HashMap::new,  // 提供转换类型
+        Collectors.mapping(t -> t, Collectors.toList()) // 下游处理
+    )); // [{"优":[{"name":"B","score":80},{"name":"C","score":90}],"良":[{"name":"A","score":70}]}]
+
+</pre>
+                                </li>
+                                <li><p><code>static &lt;T,K,A,D,M extends ConcurrentMap&lt;K,D>> Collector&lt;T,?,M> 	groupingByConcurrent(Function&lt;? super T,? extends K> classifier, Supplier&lt;M> mapFactory, Collector&lt;? super T,A,D> downstream)</code> -- 同上，并发支持</p></li>
+
+                                <li class="group"><p><code>static &lt;T,U,A,R> Collector&lt;T,?,R> 	mapping(Function&lt;? super T,? extends U> mapper, Collector&lt;? super U,A,R> downstream)</code> -- 转换</p>
+                                    <pre class="brush: java;">
+String result = s.get().collect(Collectors.mapping(score -> score.name + ":" + score.score,
+        Collectors.joining("|") // 下游处理
+    ));
+// 以下操作等价
+result = s.get().map(score -> score.name + ":" + score.score).collect(Collectors.joining("|"));
+log(result); // A:70|B:80|C:90
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static &lt;T> Collector&lt;T,?,Optional&lt;T>> 	maxBy(Comparator&lt;? super T> comparator)</code> -- 最大值</p></li>
+                                <li><p><code>static &lt;T> Collector&lt;T,?,Optional&lt;T>> 	minBy(Comparator&lt;? super T> comparator)</code> -- 最小值</p>
+                                    <pre class="brush: java;">
+Score score = s.get().collect(Collectors.maxBy((s1, s2) -> s1.score - s2.score )).get();
+// 以下操作等价
+score = s.get().max((s1, s2) -> s1.score - s2.score).get();
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static &lt;T> Collector&lt;T,?,Map&lt;Boolean,List&lt;T>>> 	partitioningBy(Predicate&lt;? super T> predicate)</code> -- 分组</p></li>
+                                <li><p><code>static &lt;T,D,A> Collector&lt;T,?,Map&lt;Boolean,D>> 	partitioningBy(Predicate&lt;? super T> predicate, Collector&lt;? super T,A,D> downstream)</code> -- 同上，下游处理</p>
+                                    <pre class="brush: java;">
+Map&lt;Boolean, List&lt;Score>> parts = s.get().collect(Collectors.partitioningBy(it -> it.score > 80));
+// [{"false":[{"name":"A","score":70},{"name":"B","score":80}],"true":[{"name":"C","score":90}]}]
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static &lt;T> Collector&lt;T,?,Optional&lt;T>> 	reducing(BinaryOperator&lt;T> op)</code> -- 累积函数, 同 Stream 的 <code>reduce</code></p></li>
+                                <li><p><code>static &lt;T> Collector&lt;T,?,T> 	reducing(T identity, BinaryOperator&lt;T> op)</code> -- 累积函数</p></li>
+                                <li><p><code>static &lt;T,U> Collector&lt;T,?,U> 	reducing(U identity, Function&lt;? super T,? extends U> mapper, BinaryOperator&lt;U> op)</code> -- 累积函数</p>
+                                    <pre class="brush: java">
+Score score1 = s.get().collect(Collectors.reducing((s1, s2) -> s1.score > s2.score?s1:s2)).get();
+// 以下操作等价
+score1 = s.get().reduce((s1, s2) -> s1.score > s2.score ? s1 : s2).get();
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static &lt;T> Collector&lt;T,?,Double> 	averagingInt(ToIntFunction&lt;? super T> mapper)</code> -- 平均值</p></li>
+                                <li><p><code>static &lt;T> Collector&lt;T,?,Double> 	averagingLong(ToLongFunction&lt;? super T> mapper)</code> -- 平均值</p></li>
+                                <li><p><code>static &lt;T> Collector&lt;T,?,Double> 	averagingDouble(ToDoubleFunction&lt;? super T> mapper)</code> -- 平均值</p>
+                                    <pre class="brush: java;">
+log(s.get().collect(Collectors.averagingInt(value -> value.score)));    // 类型转为 int
+log(s.get().collect(Collectors.averagingLong(value -> value.score)));   // 类型转为 long
+log(s.get().collect(Collectors.averagingDouble(value -> value.score))); // 类型转为 double
+                                    </pre>
+                                </li>
+
+                                <li class="group"><p><code>static &lt;T> Collector&lt;T,?,Integer> 	summingInt(ToIntFunction&lt;? super T> mapper)</code> -- 和求和差不多</p></li>
+                                <li><p><code>static &lt;T> Collector&lt;T,?,Double> 	summingDouble(ToDoubleFunction&lt;? super T> mapper)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Collector&lt;T,?,Long> 	summingLong(ToLongFunction&lt;? super T> mapper)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Collector&lt;T,?,IntSummaryStatistics> 	summarizingInt(ToIntFunction&lt;? super T> mapper)</code> -- 结果包含了 max,min,count,sum 信息</p></li>
+                                <li><p><code>static &lt;T> Collector&lt;T,?,LongSummaryStatistics> 	summarizingLong(ToLongFunction&lt;? super T> mapper)</code> -- 同上</p></li>
+                                <li><p><code>static &lt;T> Collector&lt;T,?,DoubleSummaryStatistics> 	summarizingDouble(ToDoubleFunction&lt;? super T> mapper)</code> -- 同上</p>
+                                    <pre class="brush: java;">
+int sum = s.get().collect(Collectors.summingInt(item -> item.score));
+
+IntSummaryStatistics value = s.get().collect(Collectors.summarizingInt(item -> item.score));
+log(value.getSum(), value.getAverage(), value.getCount());
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static &lt;T,C extends Collection&lt;T>> Collector&lt;T,?,C> 	toCollection(Supplier&lt;C> collectionFactory)</code> -- 存入 Collection</p></li>
+                                <li><p><code>static &lt;T> Collector&lt;T,?,List&lt;T>> 	toList()</code> -- 存入 List</p></li>
+                                <li><p><code>static &lt;T> Collector&lt;T,?,Set&lt;T>> 	toSet()</code> -- 存入 Set</p></li>
+
+                                <li class="group"><p><code>static &lt;T,K,U> Collector&lt;T,?,Map&lt;K,U>> 	toMap(Function&lt;? super T,? extends K> keyMapper, Function&lt;? super T,? extends U> valueMapper)</code> -- 存入 Map</p></li>
+                                <li class="group"><p><code>static &lt;T,K,U> Collector&lt;T,?,ConcurrentMap&lt;K,U>> 	toConcurrentMap(Function&lt;? super T,? extends K> keyMapper, Function&lt;? super T,? extends U> valueMapper)</code> -- 同上，支持并发</p></li>
+                                <li><p><code>static &lt;T,K,U> Collector&lt;T,?,Map&lt;K,U>> 	toMap(Function&lt;? super T,? extends K> keyMapper, Function&lt;? super T,? extends U> valueMapper, BinaryOperator&lt;U> mergeFunction)</code> -- 存入 Map</p></li>
+                                <li><p><code>static &lt;T,K,U> Collector&lt;T,?,ConcurrentMap&lt;K,U>> 	toConcurrentMap(Function&lt;? super T,? extends K> keyMapper, Function&lt;? super T,? extends U> valueMapper, BinaryOperator&lt;U> mergeFunction)</code> -- 同上，支持并发</p></li>
+                                <li><p><code>static &lt;T,K,U,M extends Map&lt;K,U>> Collector&lt;T,?,M> 	toMap(Function&lt;? super T,? extends K> keyMapper, Function&lt;? super T,? extends U> valueMapper, BinaryOperator&lt;U> mergeFunction, Supplier&lt;M> mapSupplier)</code> -- 存入 Map</p></li>
+                                <li><p><code>static &lt;T,K,U,M extends ConcurrentMap&lt;K,U>> Collector&lt;T,?,M> 	toConcurrentMap(Function&lt;? super T,? extends K> keyMapper, Function&lt;? super T,? extends U> valueMapper, BinaryOperator&lt;U> mergeFunction, Supplier&lt;M> mapSupplier)</code> -- 同上，支持并发</p></li>
+
+                                <li class="group"><p><code>static &lt;T,A,R,RR> Collector&lt;T,A,RR> 	collectingAndThen(Collector&lt;T,A,R> downstream, Function&lt;R,RR> finisher)</code> -- 下游处理后，可以额外转换</p>
+                                    <pre class="brush: java;">
+Score score1 = s.get().collect(Collectors.collectingAndThen(Collectors.toList(), list -> {
+    for (Score item : list) {
+        if(item.score == 90) return item;
+    }
+    return null;
+}));
+</pre>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-util-Random"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Random 子类及 SplittableRandom</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+java.lang.Object
+    java.util.Random                            // 伪随机数生成器
+        java.security.SecureRandom              // 加密安全的伪随机数生成器
+        java.util.concurrent.ThreadLocalRandom  // 线程优化的伪随机数生成器
+
+java.lang.Object
+    java.util.SplittableRandom                  // 并行计算的均匀伪随机值的生成器(不是加密安全的)
+
+public class Random implements Serializable {
+    public Random() {...}
+    public Random(long seed) {...}
+}
+
+public class SecureRandom extends Random {
+    public SecureRandom() {...}
+    public Random(byte[] seed) {...}
+}
+
+public class ThreadLocalRandom extends Random {}
+
+public final class SplittableRandom {
+    public SplittableRandom() {...}
+    public SplittableRandom(long seed) {...}
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/util/Random.html" target="_blank">Random</a> 是伪随机数生成器，相同的随机数种子总是生成同样的随机数。</p>
+                        <p><a href="docs/docs-java/api/java/util/concurrent/ThreadLocalRandom.html" target="_blank">ThreadLocalRandom</a> 是线程优化的伪随机数生成器，将随机数生成器隔离到当前线程，在并发程序中使用它而不是共享 Random 对象，通常会更少的开销和争用。必须使用静态方法 <code>current()</code> 获取实例，并且不支持设置随机数种子。</p>
+                        <p><a href="docs/docs-java/api/java/util/SecureRandom.html" target="_blank">SecureRandom</a> 加密安全的伪随机数生成器，不管是否相同的随机数种子总是生成不同的随机数。</p>
+                        <p><a href="docs/docs-java/api/java/util/SplittableRandom.html" target="_blank">SplittableRandom</a> 和 Random 类似，但是在 <code>split()</code> 后会生成一个不同的实例，主要在 JDK 内部使用。</p>
+                        <ol>
+                            <li><p><code>void 	setSeed(long seed)</code> -- 更新随机数种子</p></li>
+
+                            <li class="group"><p><code>int 	nextInt()</code> -- 范围 <code>[Integer.MIN_VALUE, Integer.MAX_VALUE]</code></p></li>
+                            <li><p><code>int 	nextInt(int bound)</code> -- 范围 <code>[0,bound)</code></p></li>
+                            <li><p><code>protected int 	next(int bits)</code> -- 指定二进制位数</p></li>
+                            <li><p><code>boolean 	nextBoolean()</code> -- 范围 <code>true / false</code></p></li>
+                            <li><p><code>void 	nextBytes(byte[] bytes)</code> -- 长度为 bytes.length 的随机 byte 数组</p></li>
+                            <li><p><code>long 	nextLong()</code> -- 范围 <code>[Long.MIN_VALUE, Long.MAX_VALUE]</code></p></li>
+                            <li><p><code>float 	nextFloat()</code> -- 范围 <code>[0.0, 1.0]</code></p></li>
+                            <li><p><code>double 	nextDouble()</code> -- 范围 <code>[0.0, 1.0]</code></p></li>
+                            <li><p><code>double 	nextGaussian()</code> -- 高斯分布 double 值，平均值为 0.0 ，标准差 1.0</p></li>
+
+                            <li class="group"><p><code>IntStream 	ints()</code> -- 无限 int 流， 范围 <code>[Integer.MIN_VALUE, Integer.MAX_VALUE]</code></p></li>
+                            <li><p><code>IntStream 	ints(int randomNumberOrigin, int randomNumberBound)</code> -- 无限 int 流， 范围 <code>[randomNumberOrigin, randomNumberBound)</code></p></li>
+                            <li><p><code>IntStream 	ints(long streamSize)</code> -- 有限 int 流， 范围 <code>[Integer.MIN_VALUE, Integer.MAX_VALUE]</code></p></li>
+                            <li><p><code>IntStream 	ints(long streamSize, int randomNumberOrigin, int randomNumberBound)</code> -- 有限 int 流， 范围 <code>[randomNumberOrigin, randomNumberBound)</code></p></li>
+                            <li class="group"><p><code>LongStream 	longs()</code> -- 参照 ints</p></li>
+                            <li><p><code>LongStream 	longs(long streamSize)</code> -- 参照 ints</p></li>
+                            <li><p><code>LongStream 	longs(long randomNumberOrigin, long randomNumberBound)</code> -- 参照 ints</p></li>
+                            <li><p><code>LongStream 	longs(long streamSize, long randomNumberOrigin, long randomNumberBound)</code> -- 参照 ints</p></li>
+                            <li class="group"><p><code>DoubleStream 	doubles()</code> -- 参照 ints, 范围 <code>[0.0, 1.0]</code></p></li>
+                            <li><p><code>DoubleStream 	doubles(double randomNumberOrigin, double randomNumberBound)</code> -- 参照 ints, 范围 <code>[randomNumberOrigin, randomNumberBound)</code></p></li>
+                            <li><p><code>DoubleStream 	doubles(long streamSize)</code> -- 参照 ints, 范围 <code>[0.0, 1.0]</code></p></li>
+                            <li><p><code>DoubleStream 	doubles(long streamSize, double randomNumberOrigin, double randomNumberBound)</code> -- 参照 ints, 范围 <code>[randomNumberOrigin, randomNumberBound)</code></p></li>
+                        </ol>
+                        <p><a href="docs/docs-java/api/java/security/SecureRandom.html" target="_blank">SecureRandom</a> 提供了一个加密的强随机数生成器。</p>
+                        <p>支持 <b>SecureRandom</b> 的算法:</p>
+                        <pre class="brush: java;">
+/** 支持 SecureRandom 的算法如下: NativePRNG, SHA1PRNG, NativePRNGBlocking, NativePRNGNonBlocking */
+for (Provider provider : Providers.getProviderList().toArray()) {
+    provider.getServices().forEach(s -> {
+        if("SecureRandom".equalsIgnoreCase(s.getType())) {
+            log(s.getAlgorithm());
+        }
+    });
+}
+</pre>
+                        <ol>
+                            <li><p><code>static SecureRandom 	getInstanceStrong()</code> -- 使用 <code>NativePRNGBlocking</code> 算法</p></li>
+                            <li><p><code>static SecureRandom 	getInstance(String algorithm)</code> -- 指定算法，默认为 <code>NativePRNG</code></p></li>
+                            <li><p><code>static SecureRandom 	getInstance(String algorithm, Provider provider)</code> -- 指定提供者和算法</p></li>
+                            <li><p><code>static SecureRandom 	getInstance(String algorithm, String provider)</code> -- 指定提供者和算法</p></li>
+
+                            <li class="group"><p><code>void 	setSeed(long seed)</code> -- 重设随机种子</p></li>
+                            <li><p><code>static byte[] 	getSeed(int numBytes)</code> -- 获取随机种子</p></li>
+                            <li><p><code>void 	setSeed(byte[] seed)</code> -- 重设随机种子</p></li>
+                            <li><p><code>byte[] 	generateSeed(int numBytes)</code> -- 生成指定长度随机种子</p></li>
+
+                            <li class="group"><p><code>String 	getAlgorithm()</code> -- 获取算法</p></li>
+                            <li><p><code>Provider 	getProvider()</code> -- 获取算法提供者</p></li>
+
+                            <li class="group"><p><code>protected int 	next(int numBits)</code> -- 生成一个包含用户指定数量的伪随机位的整数</p></li>
+                            <li><p><code>void 	nextBytes(byte[] bytes)</code> -- 生成用户指定的随机字节数</p></li>
+
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-util-Optional"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Optional 和 Objects</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+public final class Optional&lt;T> {}
+
+/** 还有以下 Optional 变种 */
+public final class OptionalInt {}
+public final class OptionalLong {}
+public final class OptionalDouble {}
+</pre>
+                        <p><a href="docs/docs-java/api/java/util/Optional.html" target="_blank">Optional</a> 是一个简单的容器，其值可能是 null 或者不是 null。</p>
+                        <p><a href="docs/docs-java/api/java/util/Optional.html" target="_blank">Optional</a> 只用作函数的返回值，作为字段或方法参数都是不可取的。</p>
+                        <ol>
+                            <li><p><code>static &lt;T> Optional&lt;T> 	empty()</code> -- 值为 NULL 的 Optional</p></li>
+                            <li><p><code>static &lt;T> Optional&lt;T> 	of(T value)</code> -- 值为 value 的 Optional(value 不能为 NULL)</p></li>
+                            <li><p><code>static &lt;T> Optional&lt;T> 	ofNullable(T value)</code> -- 值为 value 的 Optional(value 可能为 NULL)</p></li>
+
+                            <li class="group"><p><code>T 	get()</code> -- 获取值，如果为 NULL 则抛出异常</p></li>
+                            <li><p><code>T 	orElse(T other)</code> -- 值为 NULL 则返回 other(other 可为 NULL)</p></li>
+                            <li><p><code>T 	orElseGet(Supplier&lt;? extends T> other)</code> -- 值为 NULL 则从 Supplier 中获取(other 不能为 NULL)</p></li>
+                            <li><p><code>&lt;X extends Throwable> T 	orElseThrow(Supplier&lt;? extends X> exceptionSupplier)</code> -- 值为 NULL 则从 Supplier 中获取异常</p></li>
+
+                            <li class="group"><p><code>boolean 	isPresent()</code> -- 值是否为 NULL</p></li>
+                            <li><p><code>void 	ifPresent(Consumer&lt;? super T> consumer)</code> -- 值不为 NULL 则执行 Consumer 代码(consumer 不能为 NULL)</p></li>
+
+                            <li class="group"><p><code>Optional&lt;T> 	filter(Predicate&lt;? super T> predicate)</code> -- 过滤，如果符合条件则返回本身，否则返回 <code>empty()</code></p></li>
+                            <li><p><code>&lt;U> Optional&lt;U> 	map(Function&lt;? super T,? extends U> mapper)</code> -- 转换，值不为 NULL 才执行转换</p></li>
+                            <li><p><code>&lt;U> Optional&lt;U> 	flatMap(Function&lt;? super T,Optional&lt;U>> mapper)</code> -- 同上</p></li>
+
+                            <li class="group"><p><code>int 	hashCode()</code> -- NULL 支持的 hashCode</p></li>
+                            <li><p><code>boolean 	equals(Object obj)</code> -- NULL 支持的 equals</p></li>
+                            <li><p><code>String 	toString()</code> -- NULL 支持的 toString</p></li>
+                        </ol>
+                        <p><a href="docs/docs-java/api/java/util/Objects.html" target="_blank">Objects</a> 包括一些静态的工具方法，用于操作 Object、或是对某些操作进行前提检测。</p>
+                        <ol>
+                            <li><p><code>static &lt;T> T 	requireNonNull(T obj)</code> -- 获取不为 NULL 的对象，否个抛出异常</p></li>
+                            <li><p><code>static &lt;T> T 	requireNonNull(T obj, String message)</code> -- 同上</p></li>
+                            <li><p><code>static &lt;T> T 	requireNonNull(T obj, Supplier&lt;String> messageSupplier)</code> -- 同上</p></li>
+
+                            <li class="group"><p><code>static boolean 	isNull(Object obj)</code> -- 为 NULL 返回 true</p></li>
+                            <li><p><code>static boolean 	nonNull(Object obj)</code> -- 不为 NULL 返回 true</p></li>
+
+                            <li><p><code>static &lt;T> int 	compare(T a, T b, Comparator&lt;? super T> c)</code> -- 比较两个对象</p></li>
+
+                            <li class="group"><p><code>static int 	hashCode(Object o)</code> -- 为输入值生成哈希码，NULL 返回 0</p></li>
+                            <li><p><code>static int 	hash(Object... values)</code> -- 为输入值序列生成哈希码</p></li>
+                            <li><p><code>static boolean 	equals(Object a, Object b)</code> -- 是否相等</p></li>
+                            <li><p><code>static boolean 	deepEquals(Object a, Object b)</code> -- 是否深层相等</p></li>
+                            <li><p><code>static String 	toString(Object o)</code> -- 返回非 null参数调用 toString和 NULL 参数的 "null"</p></li>
+                            <li><p><code>static String 	toString(Object o, String nullDefault)</code> -- 返回非 null 参数调用 toString 和 null 参数的 nullDefault</p></li>
+                        </ol>
                     </div>
                 </div>
                 <!-- item over -->
@@ -9085,7 +9628,7 @@ public interface Future&lt;V> {
 	V get(long timeout, TimeUnit unit); // 如有必要，最多等待为使计算完成所给定的时间之后，获取其结果
 }
 </pre>
-						<p><a href="docs/docs-java/api/java/util/concurrent/Future.html" target="_blank">Future</a> 表示异步计算的结果。它提供了检查计算是否完成的方法，以等待计算的完成，并获取计算的结果。计算完成后只能使用 get 方法来获取结果，如有必要，计算完成前可以阻塞此方法。取消则由 cancel 方法来执行。还提供了其他方法，以确定任务是正常完成还是被取消了。一旦计算完成，就不能再取消计算。如果为了可取消性而使用 Future 但又不提供可用的结果，则可以声明 Future<?> 形式类型、并返回 null 作为底层任务的结果。 </p>
+						<p><a href="docs/docs-java/api/java/util/concurrent/Future.html" target="_blank">Future</a> 表示异步计算的结果。它提供了检查计算是否完成的方法，以等待计算的完成，并获取计算的结果。计算完成后只能使用 get 方法来获取结果，如有必要，计算完成前可以阻塞此方法。取消则由 cancel 方法来执行。还提供了其他方法，以确定任务是正常完成还是被取消了。一旦计算完成，就不能再取消计算。如果为了可取消性而使用 Future 但又不提供可用的结果，则可以声明 Future&lt;?> 形式类型、并返回 null 作为底层任务的结果。 </p>
 						<p><b>Future 的子接口及实现类:</b></p>
 						<ul>
 							<li><p><a href="docs/docs-java/api/java/util/concurrent/RunnableFuture.html" target="_blank">RunnableFuture</a> 成功执行 run 方法可以完成 Future 并允许访问其结果。</p>
@@ -9145,8 +9688,6 @@ public class FutureTask&lt;V> implements RunnableFuture&lt;V> {
                 </div>
                 <!-- item over -->
 
-
-
 				<!-- item start -->
 				<a class="offset" id="java-io-InputStream"></a>
 				<div class="panel panel-default">
@@ -9156,6 +9697,9 @@ public class FutureTask&lt;V> implements RunnableFuture&lt;V> {
 					<div class="panel-body">
 						<div class="col-md-6">
 							<pre class="brush: java;">
+interface DataInput // 基本类型读取支持
+ └ interface ObjectInput // 对象读支持
+
 InputStream
 ├ FileInputStream   // 从文件获得输入字节流
 ├ ByteArrayInputStream // 内存字节流
@@ -9181,6 +9725,9 @@ InputStream
 						</div>
 						<div class="col-md-6">
 							<pre class="brush: java;">
+interface DataOutput  // 基本类型写入支持
+ └ interface ObjectOutput // 对象写支持
+
 OutputStream
 ├ FileOutputStream // 将字节流写入文件
 ├ ByteArrayOutputStream // 内存字节流
@@ -9231,6 +9778,17 @@ public abstract class OutputStream implements Closeable, Flushable {
 	void flush() {...}          // 刷新此输出流并强制写出所有缓冲的输出字节
 	void close() {...}          // 关闭此输出流并释放与此流有关的所有系统资源
 }
+
+/** 用于 Java 基本类型和对象读取的流 */
+class DataInputStream extends FilterInputStream implements DataInput
+class ObjectInputStream extends InputStream implements ObjectInput, ObjectStreamConstants
+
+/** 用于 Java 基本类型和对象写入的流 */
+class DataOutputStream extends FilterOutputStream implements DataOutput
+class ObjectOutputStream extends OutputStream implements ObjectOutput, ObjectStreamConstants
+
+/** 支持对随机访问文件的读取和写入，包括读写基本类型/对象/按行读等方法 */
+class RandomAccessFile implements DataOutput, DataInput, Closeable
 </pre>
 						<p><a href="docs/docs-java/api/java/io/InputStream.html" target="_blank">InputStream</a> 抽象类是表示字节输入流的所有类的超类。需要定义 InputStream 子类的应用程序必须总是提供返回下一个输入字节的方法。  </p>
 						<p><a href="docs/docs-java/api/java/io/OutputStream.html" target="_blank">OutputStream</a> 抽象类是表示输出字节流的所有类的超类。需要定义 OutputStream 子类的应用程序必须始终提供至少一种可写入一个输出字节的方法。  </p>
@@ -9318,7 +9876,7 @@ public abstract class Writer implements Appendable, Closeable, Flushable {
 				<a class="offset" id="java-io-File"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">File</h3>
+						<h3 class="panel-title">File & RandomAccessFile</h3>
 					</div>
 					<div class="panel-body">
 						<div class="sub-item">
@@ -9444,8 +10002,74 @@ File f = File.createTempFile("xxx", ".txt");
 						<div class="sub-item">
 							<pre class="brush: java;">
 
+public class RandomAccessFile implements DataOutput, DataInput, Closeable {
+	/** mode 支持的 4 中模式(区分大小写，并保证顺序):
+	 * r   -- 以只读方式打开, 任何 write 方法都将导致抛出 IOException
+	 * rw  -- 以读取和写入方式打开, 如果该文件尚不存在，则尝试创建该文件
+	 * rwd -- 在 rw 基础上还要求对文件内容的每个更新都同步写入到底层存储设备
+	 * rws -- 在 rw 基础上还要求对文件的内容或元数据的每个更新都同步写入到底层存储设备
+	 */
+	public RandomAccessFile(File file, String mode) {...}
+	public RandomAccessFile(String name, String mode) {...}
+}
 </pre>
-							<p><a href="docs/docs-java/api/java/io/File.html" target="_blank">File</a></p>
+							<p><a href="docs/docs-java/api/java/io/RandomAccessFile.html" target="_blank">RandomAccessFile</a> 支持对随机访问文件的读取和写入。</p>
+							<p><a href="docs/docs-java/api/java/io/RandomAccessFile.html" target="_blank">RandomAccessFile</a> 实现 <a href="docs/docs-java/api/java/io/DataInput.html" target="_blank">DataInput</a> 接口，因此支持 Java 基本类型和 UTF 编码的 String 读取操作。</p>
+							<p><a href="docs/docs-java/api/java/io/RandomAccessFile.html" target="_blank">RandomAccessFile</a> 实现 <a href="docs/docs-java/api/java/io/DataOutput.html" target="_blank">DataOutput</a> 接口，因此支持 Java 基本类型和 UTF 编码的 String 写入操作。</p>
+							<p>随机访问文件的行为类似存储在文件系统中的一个大型 byte 数组。存在指向该隐含数组的光标或索引，称为文件指针；输入操作从文件指针开始读取字节，并随着对字节的读取而前移此文件指针。如果随机访问文件以读取/写入模式创建，则输出操作也可用；输出操作从文件指针开始写入字节，并随着对字节的写入而前移此文件指针。写入隐含数组的当前末尾之后的输出操作导致该数组扩展。</p>
+							<p>通常，如果此类中的所有读取例程在读取所需数量的字节之前已到达文件末尾，则抛出 <code>EOFException</code>。如果由于某些原因无法读取任何字节，而不是在读取所需数量的字节之前已到达文件末尾，则抛出 <code>IOException</code>，而不是 <code>EOFException</code>。需要特别指出的是，如果流已被关闭，则可能抛出 <code>IOException</code>。 </p>
+							<ol>
+
+								<li><p><code>void 	write(int b)</code> -- 此方法虽然也是一个 int 参数，但是只写入了 int 的低 8 位,范围 [0,255]</p></li>
+								<li><p><code>void 	write(byte[] b)</code> -- 将 b.length 个字节从指定 byte 数组写入到此文件，并从当前文件指针开始</p></li>
+								<li><p><code>void 	write(byte[] b, int off, int len)</code> -- 将 len 个字节从指定 byte 数组写入到此文件，并从偏移量 off 处开始</p></li>
+
+								<li class="group"><p><code>void 	writeBoolean(boolean v)</code> -- 实际写入一个字节(true 为 0x01, false 为 0x00)</p></li>
+								<li><p><code>boolean 	readBoolean()</code> -- 实际读取一个字节(0x00 则为 false, 否则为 true)</p></li>
+								<li><p><code>void 	writeByte(int v)</code> -- 按单字节值将 byte 写入该文件</p></li>
+								<li><p><code>byte 	readByte()</code> -- 从此文件读取一个有符号的八位值</p></li>
+								<li><p><code>void 	writeChar(int v)</code> -- 写入两个字节，使用 UTF-16 编码，如果字符不在 BMP 平面(超过两个字节)，那么需要使用 UTF-16 分开两次写</p></li>
+								<li><p><code>char 	readChar()</code> -- 从此文件读取一个字符</p></li>
+								<li><p><code>void 	writeShort(int v)</code> -- 按两个字节将 short 写入该文件，先写高字节</p></li>
+								<li><p><code>short 	readShort()</code> -- 从此文件读取一个有符号的 16 位数</p></li>
+								<li><p><code>void 	writeInt(int v)</code> -- 按四个字节将 int 写入该文件，先写高字节</p></li>
+								<li><p><code>int 	readInt()</code> -- 从此文件读取一个有符号的 32 位整数</p></li>
+								<li><p><code>void 	writeLong(long v)</code> -- 按八个字节将 long 写入该文件，先写高字节</p></li>
+								<li><p><code>long 	readLong()</code> -- 从此文件读取一个有符号的 64 位整数</p></li>
+								<li><p><code>float 	readFloat()</code> -- 从此文件读取一个 float</p></li>
+								<li><p><code>void 	writeFloat(float v)</code> -- 使用 Float 类中的 floatToIntBits 方法将浮点参数转换为一个 int，然后按四字节数量将该 int 值写入该文件，先写高字节</p></li>
+								<li><p><code>void 	writeDouble(double v)</code> -- 使用 Double 类中的 doubleToLongBits 方法将双精度参数转换为一个 long，然后按八字节数量将该 long 值写入该文件，先定高字节</p></li>
+								<li><p><code>double 	readDouble()</code> -- 从此文件读取一个 double</p></li>
+
+								<li class="group"><p><code>void 	writeBytes(String s)</code> -- 按字节序列将该字符串写入该文件</p></li>
+								<li><p><code>void 	writeChars(String s)</code> -- 按字符序列将一个字符串写入该文件</p></li>
+								<li><p><code>void 	writeUTF(String str)</code> -- 使用 modified UTF-8 编码以与机器无关的方式将一个字符串写入该文件</p></li>
+
+								<li class="group"><p><code>int 	read()</code> -- 此方法虽然返回一个 int 值，但是只会读取一个字节,范围 [0,255]</p></li>
+								<li><p><code>int 	read(byte[] b)</code> -- 将最多 b.length 个数据字节从此文件读入 byte 数组</p></li>
+								<li><p><code>int 	read(byte[] b, int off, int len)</code> -- 将最多 len 个数据字节从此文件读入 byte 数组</p></li>
+
+								<li class="group"><p><code>String 	readUTF()</code> -- 从此文件读取一个字符串</p></li>
+								<li><p><code>String 	readLine()</code> -- 从此文件读取文本的下一行</p></li>
+
+								<li><p><code>void 	readFully(byte[] b)</code> -- 将 b.length 个字节从此文件读入 byte 数组，并从当前文件指针开始</p></li>
+								<li><p><code>void 	readFully(byte[] b, int off, int len)</code> -- 将正好 len 个字节从此文件读入 byte 数组，并从当前文件指针开始</p></li>
+
+								<li class="group"><p><code>int 	readUnsignedByte()</code> -- 从此文件读取一个无符号的八位数</p></li>
+								<li><p><code>int 	readUnsignedShort()</code> -- 从此文件读取一个无符号的 16 位数</p></li>
+
+								<li class="group"><p><code>void 	seek(long pos)</code> -- 设置到此文件开头测量到的文件指针偏移量，在该位置发生下一个读取或写入操作</p></li>
+								<li><p><code>int 	skipBytes(int n)</code> -- 尝试跳过输入的 n 个字节以丢弃跳过的字节</p></li>
+								<li><p><code>long 	getFilePointer()</code> -- 返回此文件中的当前偏移量</p></li>
+
+								<li class="group"><p><code>FileChannel 	getChannel()</code> -- 返回与此文件关联的唯一 FileChannel 对象，参见 <a href="#java-nio-Channel">NIO 的 Channel</a></p></li>
+								<li><p><code>FileDescriptor 	getFD()</code> -- 返回与此流关联的不透明文件描述符对象 </p></li>
+
+								<li class="group"><p><code>long 	length()</code> -- 返回此文件的长度</p></li>
+								<li><p><code>void 	setLength(long newLength)</code> -- 设置此文件的长度</p></li>
+
+								<li class="group"><p><code>void 	close()</code> -- 关闭此随机访问文件流并释放与该流关联的所有系统资源</p></li>
+							</ol>
 						</div>
 					</div>
 				</div>
@@ -9487,6 +10111,1231 @@ console.printf("hello -> %s\n", line);
 							<li><p><code>char[] 	readPassword(String fmt, Object... args)</code> -- 提供一个格式化提示，然后从控制台读取密码，禁用回显</p></li>
 						</ol>
 					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-nio-intro"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">NIO 简介</h3>
+					</div>
+					<div class="panel-body">
+                        <p><b>NIO</b> 主要有三大核心部分：<b>Buffer</b>, <b>Channel</b> 和 <b>Selector</b>。传统 IO 基于字节流和字符流进行操作，而 <b>NIO</b> 基于 <b>Channel</b> 和 <b>Buffer</b> 进行操作，数据总是从通道读取到缓冲区中，或者从缓冲区写入到通道中。<b>Selector</b> 用于监听多个通道的事件（比如：连接打开，数据到达）。因此，单个线程可以监听多个数据通道。</p>
+						<p>缓冲区本质上是一块可以写入数据，然后可以从中读取数据的内存。这块内存被包装成 Buffer 对象，并提供了一组方法，用来方便的访问该块内存。</p>
+						<p><b>NIO</b> 和传统 IO 之间第一个最大的区别是，IO 是面向流的，<b>NIO</b> 是面向缓冲区的。 Java IO 面向流意味着每次从流中读一个或多个字节，直至读取所有字节，它们没有被缓存在任何地方。此外，它不能前后移动流中的数据。如果需要前后移动从流中读取的数据，需要先将它缓存到一个缓冲区。<b>NIO</b> 的缓冲导向方法略有不同。数据读取到一个它稍后处理的缓冲区，需要时可在缓冲区中前后移动。这就增加了处理过程中的灵活性。但是，还需要检查是否该缓冲区中包含所有您需要处理的数据。而且，需确保当更多的数据读入缓冲区时，不要覆盖缓冲区里尚未处理的数据。</p>
+						<p>IO 的各种流是阻塞的。这意味着，当一个线程调用 <code>read()</code> 或 <code>write()</code>时，该线程被阻塞，直到有一些数据被读取，或数据完全写入。该线程在此期间不能再干任何事情了。 <b>NIO</b> 的非阻塞模式，使一个线程从某通道发送请求读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取。而不是保持线程阻塞，所以直至数据变得可以读取之前，该线程可以继续做其他的事情。 非阻塞写也是如此。一个线程请求写入一些数据到某通道，但不需要等待它完全写入，这个线程同时可以去做别的事情。 线程通常将非阻塞 IO 的空闲时间用于在其它通道上执行 IO 操作，所以一个单独的线程现在可以管理多个输入和输出通道。</p>
+                        <p><b>一个使用 NIO 读写文件的例子</b></p>
+                        <pre class="brush: java;">
+try {
+    File f = File.createTempFile("nio", ".txt"); // 创建一个临时文件，并在退出时删除
+    f.deleteOnExit();
+
+    RandomAccessFile rw = new RandomAccessFile(f, "rw");
+    FileChannel channel = rw.getChannel();
+    ByteBuffer buffer = ByteBuffer.allocate(1024); // 注意此 Buffer 的大小
+
+    // UTF-8 编码将字节存入 ByteBuffer
+    for (int i = 0; i < 10; i++) {
+        buffer.put("a3 αβ 你好 \uD83C\uDCA1\uD83C\uDCA2\n".getBytes());
+    }
+    buffer.flip(); // 准备写： limit = position; position = 0;
+    channel.write(buffer);
+
+    // 文件回到开始位置，准备读
+    rw.seek(0);
+    byte[] bytes = new byte[(int) f.length()];
+    int index = 0;
+
+    buffer = ByteBuffer.allocate(24);
+    int bytesRead = channel.read(buffer);
+    while (bytesRead != -1) {
+        buffer.flip();
+        while(buffer.hasRemaining()){
+            bytes[index++] = buffer.get();
+        }
+        buffer.clear();
+        bytesRead = channel.read(buffer);
+    }
+    rw.close();
+
+    log(new String(bytes, StandardCharsets.UTF_8));
+} catch (IOException e) {
+    e.printStackTrace();
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/nio/channels/Channels.html" target="_blank">java.nio.channel.Channels</a> <b>定义了支持 <code>java.io</code> 包中的流类与 <code>java.nio.channel</code> 包中的信道类之间进行互操作的静态方法。 针对信道和流的实用工具方法。</b></p>
+                        <ol>
+                            <li><p><code>static ReadableByteChannel 	newChannel(InputStream in)</code> -- 构造从给定流读取字节的信道</p></li>
+                            <li><p><code>static WritableByteChannel 	newChannel(OutputStream out)</code> -- 构造向给定流写入字节的信道</p></li>
+
+                            <li class="group"><p><code>static InputStream 	newInputStream(ReadableByteChannel ch)</code> -- 构造从给定信道读取字节的流</p></li>
+                            <li><p><code>static OutputStream 	newOutputStream(WritableByteChannel ch)</code> -- 构造向给定信道写入字节的流</p></li>
+                            <li><p><code>static InputStream 	newInputStream(AsynchronousByteChannel ch)</code> -- 构造从给定异步信道读取字节的流</p></li>
+                            <li><p><code>static OutputStream 	newOutputStream(AsynchronousByteChannel ch)</code> --  构造向给定异步信道写入字节的流</p></li>
+
+                            <li class="group"><p><code>static Reader 	newReader(ReadableByteChannel ch, CharsetDecoder dec, int minBufferCap)</code> -- 构造一个 reader，用给定的解码器对取自给定信道的字节进行解码</p></li>
+                            <li><p><code>static Reader 	newReader(ReadableByteChannel ch, String csName)</code> -- 构造一个 reader，根据命名的 charset 对取自给定信道的字节进行解码</p></li>
+                            <li><p><code>static Writer 	newWriter(WritableByteChannel ch, CharsetEncoder enc, int minBufferCap)</code> -- 构造一个 writer，用给定的编码器对字符进行编码，并将所得的字节写入给定的信道</p></li>
+                            <li><p><code>static Writer 	newWriter(WritableByteChannel ch, String csName)</code> -- 构造一个 writer，根据指定的 charset 对字符进行编码，并将所得的字节写入给定的信道</p></li>
+                        </ol>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-nio-Buffer"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Buffer 及子类</h3>
+					</div>
+					<div class="panel-body">
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+Buffer                  /** 特定基本类型元素的线性有限序列 */
+   ├ ByteBuffer         /** byte 缓冲区 */
+   │ └ MappedByteBuffer /** FileChannel 的 map 方法会返回此实例 */
+   ├ CharBuffer         /** char 缓冲区 */
+   ├ ShortBuffer        /** short 缓冲区 */
+   ├ IntBuffer          /** int 缓冲区 */
+   ├ LongBuffer         /** long 缓冲区 */
+   ├ FloatBuffer        /** float 缓冲区 */
+   └ DoubleBuffer       /** double 缓冲区 */
+
+public abstract class Buffer {
+    // mark <= position <= limit <= capacity
+    private int mark = -1;          // 标记
+    private int position = 0;       // 位置
+    private int limit;              // 限制
+    private int capacity;           // 容量
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/nio/Buffer.html" target="_blank">Buffer</a> 用于和 NIO 通道进行交互， 一个用于特定基本类型数据的容器。 </p>
+                            <p>缓冲区本质上是一块可以写入数据，然后可以从中读取数据的内存。这块内存被包装成 Buffer 对象，并提供了一组方法，用来方便的访问该块内存。</p>
+                            <p>缓冲区是特定基本类型元素的线性有限序列(数组)。除内容外，缓冲区的基本属性还包括容量、限制和位置：</p>
+                            <ul>
+                                <li><p><b>容量</b> -- 是它所包含的元素的数量。缓冲区的容量不能为负并且不能更改。</p></li>
+                                <li><p><b>限制</b> -- 是第一个不应该读取或写入的元素的索引。缓冲区的限制不能为负，并且不能大于其容量。</p></li>
+                                <li><p><b>位置</b> -- 是下一个要读取或写入的元素的索引。缓冲区的位置不能为负，并且不能大于其限制。</p></li>
+                            </ul>
+                            <p>标记、位置、限制和容量值遵守以下不变式： <code>标记 <= 位置 <= 限制 <= 容量</code></p>
+                            <p>此类的每个子类都定义了两种 <b>获取</b> 和 <b>放置</b> 操作：</p>
+                            <ul>
+                                <li><p><b>相对</b> 操作读取或写入一个或多个元素，它从当前位置开始，然后将位置增加所传输的元素数。</p></li>
+                                <li><p><b>绝对</b> 操作采用显式元素索引，该操作不影响位置。</p></li>
+                            </ul>
+                            <p>新创建的缓冲区总有一个 0 位置和一个未定义的标记。初始限制可以为 0，也可以为其他值，这取决于缓冲区类型及其构建方式。一般情况下，缓冲区的初始内容是未定义的。 </p>
+                            <p>除了访问位置、限制、容量值的方法以及做标记和重置的方法外，此类还定义了以下可对缓冲区进行的操作： </p>
+                            <ul>
+                                <li><p><code>clear()</code> -- 使缓冲区为一系列新的通道读取或相对放置 操作做好准备：它将限制设置为容量大小，将位置设置为 0。 </p></li>
+                                <li><p><code>flip()</code> -- 使缓冲区为一系列新的通道写入或相对获取 操作做好准备：它将限制设置为当前位置，然后将位置设置为 0。 </p></li>
+                                <li><p><code>rewind()</code> -- 使缓冲区为重新读取已包含的数据做好准备：它使限制保持不变，将位置设置为 0。</p></li>
+                            </ul>
+                            <p>每个缓冲区都是可读取的，但并非每个缓冲区都是可写入的。每个缓冲区类的转变方法都被指定为可选操作，当对只读缓冲区调用时，将抛出 <code>ReadOnlyBufferException</code>。只读缓冲区不允许更改其内容，但其标记、位置和限制值是可变的。可以调用其 <code>isReadOnly</code> 方法确定缓冲区是否为只读。 </p>
+                            <p>多个当前线程使用缓冲区是不安全的。如果一个缓冲区由不止一个线程使用，则应该通过适当的同步来控制对该缓冲区的访问。</p>
+                            <ol>
+                                <li><p><code>final int 	position() </code> -- 返回位置 <code>position</code></p></li>
+                                <li><p><code>final int 	limit() </code> -- 返回限制 <code>limit</code></p></li>
+                                <li><p><code>final int capacity() </code> -- 返回容量 <code>capacity</code></p></li>
+
+                                <li class="group"><p><code>final Buffer 	mark() </code> -- 在此缓冲区的位置设置标记 <code>mark = position</code></p></li>
+                                <li><p><code>final Buffer 	position(int newPosition) </code> -- 设置此缓冲区的位置，遵循：<code>标记 <= 位置 <= 限制 <= 容量</code></p>
+                                    <pre class="brush: java;">position = newPosition; if(mark > position) mark = -1;</pre>
+                                </li>
+                                <li><p><code>final Buffer 	limit(int newLimit) </code> -- 设置此缓冲区的限制，遵循：<code>标记 <= 位置 <= 限制 <= 容量</code></p>
+                                    <pre class="brush: java;">limit = newLimit; if(position > limit) position = limit; if(mark > limit) mark = -1;</pre>
+                                </li>
+
+                                <li class="group"><p><code>abstract  boolean 	hasArray() </code> -- 告知此缓冲区是否具有可访问的底层实现数组</p></li>
+                                <li><p><code>abstract  Object 	array() </code> -- 返回此缓冲区的底层实现数组</p></li>
+                                <li><p><code>abstract  int 	arrayOffset() </code> -- 返回此缓冲区的底层实现数组中第一个缓冲区元素的偏移量</p></li>
+                                <li><p><code>abstract  boolean 	isDirect() </code> -- 告知此缓冲区是否为直接缓冲区</p></li>
+                                <li><p><code>abstract  boolean 	isReadOnly() </code> -- 告知此缓冲区是否为只读缓冲区</p></li>
+
+                                <li class="group"><p><code>final boolean 	hasRemaining() </code> -- 告知在当前位置和限制之间是否有元素<code>position < limit</code></p></li>
+                                <li><p><code>final int 	remaining() </code> -- 返回当前位置与限制之间的元素数<code>limit - position</code></p></li>
+
+                                <li class="group"><p><code>final Buffer 	flip() </code> -- 反转此缓冲区：<code>limit = position; position = 0; mark = -1;</code></p></li>
+                                <li><p><code>final Buffer 	clear() </code> -- 清除此缓冲区：<code>position = 0; limit = capacity; mark = -1;</code></p></li>
+                                <li><p><code>final Buffer 	reset() </code> -- 将此缓冲区的位置重置为以前标记的位置：<code>position = mark;</code>;mark 少于 0 抛出异常；</p></li>
+                                <li><p><code>final Buffer 	rewind() </code> -- 重绕此缓冲区：<code>position = 0; mark = -1;</code></p></li>
+                            </ol>
+                        </div>
+
+                        <div class="sub-item">
+                            <p><a href="docs/docs-java/api/java/nio/ByteBuffer.html" target="_blank">ByteBuffer</a> 是字节缓冲区。</p>
+                            <p><a href="docs/docs-java/api/java/nio/ByteBuffer.html" target="_blank">ByteBuffer</a> 有两个内部子类，由静态方法构建。</p>
+                            <ul>
+                                <li><p><b>DirectByteBuffer</b> -- 是无可访问的底层实现数组支持的直接字节缓冲区。</p></li>
+                                <li><p><b>HeapByteBuffer</b> -- 是有可访问的底层实现数组支持的非直接字节缓冲区。</p></li>
+                            </ul>
+                            <p>字节缓冲区要么是直接的，要么是非直接的。如果为直接字节缓冲区，则 Java 虚拟机会尽最大努力直接在此缓冲区上执行本机 I/O 操作。也就是说，在每次调用基础操作系统的一个本机 I/O 操作之前（或之后），虚拟机都会尽量避免将缓冲区的内容复制到中间缓冲区中（或从中间缓冲区中复制内容）。 </p>
+                            <p>直接字节缓冲区可以通过调用此类的 <code>allocateDirect</code> 工厂方法来创建。此方法返回的缓冲区进行分配和取消分配所需成本通常高于非直接缓冲区。直接缓冲区的内容可以驻留在常规的垃圾回收堆之外，因此，它们对应用程序的内存需求量造成的影响可能并不明显。所以，建议将直接缓冲区主要分配给那些易受基础系统的本机 I/O 操作影响的大型、持久的缓冲区。一般情况下，最好仅在直接缓冲区能在程序性能方面带来明显好处时分配它们。 </p>
+                            <p>此类定义了除 boolean 之外，读写所有其他基本类型值的方法。这些基本值可以根据缓冲区的当前字节顺序与字节序列互相进行转换，并可以通过 order 方法获取和修改。特定的字节顺序由 ByteOrder 类的实例表示。字节缓冲区的初始顺序始终是 BIG_ENDIAN。 </p>
+                            <ol>
+                                <li><p><code>static ByteBuffer 	allocateDirect(int capacity)</code> -- 指定容量无可访问的底层实现数组的直接字节缓存</p></li>
+                                <li><p><code>static ByteBuffer 	allocate(int capacity)</code> -- 指定容量有可访问的底层实现数组的非直接字节缓存</p></li>
+                                <li><p><code>static ByteBuffer 	wrap(byte[] array)</code> -- 同上，容量和限制为 <code>array.length</code>, <code>position = 0</code>元素被写入缓存</p></li>
+                                <li><p><code>static ByteBuffer 	wrap(byte[] array, int offset, int length)</code> -- 同上，但是 <code>position = offset</code></p></li>
+
+                                <li class="group"><p><code>abstract ByteBuffer 	asReadOnlyBuffer()</code> -- 转为只读模式</p></li>
+                                <li><p><code>abstract CharBuffer 	asCharBuffer()</code> -- 返回 CharBuffer 视图来操作(<b>注意操作的还是当前的 Buffer)</b></p>
+                                    <pre class="brush: java;">
+ByteBuffer buffer = ByteBuffer.allocate(5);
+buffer.put((byte) 1); // buffer 的值为： 0[1],1[0],2[0],3[0],4[0]
+
+CharBuffer cBuffer = buffer.asCharBuffer();
+cBuffer.put('a');   // buffer 的值变为： 0[1],1[0],2[97],3[0],4[0]
+</pre>
+                                </li>
+                                <li><p><code>abstract ShortBuffer 	asShortBuffer()</code> -- 返回 ShortBuffer 视图来操作(<b>注意操作的还是当前的 Buffer)</b></p></li>
+                                <li><p><code>abstract IntBuffer 	asIntBuffer()</code> -- 返回 IntBuffer 视图来操作(<b>注意操作的还是当前的 Buffer)</b></p></li>
+                                <li><p><code>abstract LongBuffer 	asLongBuffer()</code> -- 返回 LongBuffer 视图来操作(<b>注意操作的还是当前的 Buffer)</b></p></li>
+                                <li><p><code>abstract FloatBuffer 	asFloatBuffer()</code> -- 返回 FloatBuffer 视图来操作(<b>注意操作的还是当前的 Buffer)</b></p></li>
+                                <li><p><code>abstract DoubleBuffer 	asDoubleBuffer()</code> -- 返回 DoubleBuffer 视图来操作(<b>注意操作的还是当前的 Buffer)</b></p></li>
+
+                                <li class="group"><p><code>abstract ByteBuffer 	put(byte b)</code> -- 在 position 处写入 b, 并且把 position 加 1</p></li>
+                                <li><p><code>abstract ByteBuffer 	put(int index, byte b)</code> -- 绝对 put 方法</p></li>
+                                <li><p><code>abstract ByteBuffer 	putChar(char value)</code> -- 在 position 处写入 value, 并且把 position 加 2</p></li>
+                                <li><p><code>abstract ByteBuffer 	putChar(int index, char value)</code> -- 写入 char 值的绝对 put 方法</p></li>
+                                <li><p><code>abstract ByteBuffer 	putShort(short value)</code> -- 在 position 处写入 value, 并且把 position 加 2</p></li>
+                                <li><p><code>abstract ByteBuffer 	putShort(int index, short value)</code> -- 写入 short 值的绝对 put 方法</p></li>
+                                <li><p><code>abstract ByteBuffer 	putInt(int value)</code> -- 在 position 处写入 value, 并且把 position 加 4</p></li>
+                                <li><p><code>abstract ByteBuffer 	putInt(int index, int value)</code> -- 写入 int 值的绝对 put 方法</p></li>
+                                <li><p><code>abstract ByteBuffer 	putLong(long value)</code> -- 在 position 处写入 value, 并且把 position 加 8</p></li>
+                                <li><p><code>abstract ByteBuffer 	putLong(int index, long value)</code> -- 写入 long 值的绝对 put 方法</p></li>
+                                <li><p><code>abstract ByteBuffer 	putFloat(float value)</code> -- 在 position 处写入 value, 并且把 position 加 4</p></li>
+                                <li><p><code>abstract ByteBuffer 	putFloat(int index, float value)</code> -- 写入 float 值的绝对 put 方法</p></li>
+                                <li><p><code>abstract ByteBuffer 	putDouble(double value)</code> -- 在 position 处写入 value, 并且把 position 加 8</p></li>
+                                <li><p><code>abstract ByteBuffer 	putDouble(int index, double value)</code> -- 写入 double 值的绝对 put 方法</p></li>
+
+                                <li class="group"><p><code>ByteBuffer 	put(byte[] src)</code> -- 在 position 处写入 src, 并且把 position 加 <code>src.length</code></p></li>
+                                <li><p><code>ByteBuffer 	put(byte[] src, int offset, int length)</code> -- 在 position 处写入 <code>src[offset],src[src.length-1]</code>, 并且把 position 加 <code>src.length - offset</code></p></li>
+                                <li><p><code>ByteBuffer 	put(ByteBuffer src)</code> -- 写入 src 的 position 到 limit 的元素</p></li>
+
+                                <li class="group"><p><code>abstract byte 	get()</code> -- 读取一个字节，并把 position 加 1</p></li>
+                                <li><p><code>abstract byte 	get(int index)</code> -- 读取指定位置的字节</p></li>
+                                <li><p><code>abstract char 	getChar()</code> -- 读取 2 个字节作为一个 char 返回，并把 position 加 2</p></li>
+                                <li><p><code>abstract char 	getChar(int index)</code> -- 读取指定位置连续的 2 个字节作为一个 char 返回</p></li>
+                                <li><p><code>abstract short 	getShort()</code> -- 读取 2 个字节作为一个 short 返回，并把 position 加 2</p></li>
+                                <li><p><code>abstract short 	getShort(int index)</code> -- 读取指定位置连续的 2 个字节作为一个 short 返回</p></li>
+                                <li><p><code>abstract int 	getInt()</code> -- 读取 4 个字节作为一个 int 返回，并把 position 加 4</p></li>
+                                <li><p><code>abstract int 	getInt(int index)</code> -- 读取指定位置连续的 4 个字节作为一个 int 返回</p></li>
+                                <li><p><code>abstract long 	getLong()</code> -- 读取 8 个字节作为一个 long 返回，并把 position 加 8</p></li>
+                                <li><p><code>abstract long 	getLong(int index)</code> -- 读取指定位置连续的 8 个字节作为一个 long 返回</p></li>
+                                <li><p><code>abstract float 	getFloat()</code> -- 读取 4 个字节作为一个 float 返回，并把 position 加 4</p></li>
+                                <li><p><code>abstract float 	getFloat(int index)</code> -- 读取指定位置连续的 4 个字节作为一个 float 返回</p></li>
+                                <li><p><code>abstract double 	getDouble()</code> -- 读取 8 个字节作为一个 double 返回，并把 position 加 8</p></li>
+                                <li><p><code>abstract double 	getDouble(int index)</code> -- 读取指定位置连续的 8 个字节作为一个 double 返回</p></li>
+
+                                <li class="group"><p><code>ByteBuffer 	get(byte[] dst)</code> -- 读取 <code>dst.length()</code> 长度的字节写入 dst，把 position 加 <code>dst.length()</code></p></li>
+                                <li><p><code>ByteBuffer 	get(byte[] dst, int offset, int length)</code> -- 读取 <code>dst.length() - offset</code> 长度的字节写入 <code>[dst[offset],dst[dst.length - 1]]</code>，把 position 加 <code>dst.length() - offset</code></p></li>
+
+                                <li class="group"><p><code>abstract boolean 	isDirect()</code> -- 告知此缓冲区是否为直接缓冲区</p></li>
+                                <li><p><code>boolean 	hasArray()</code> -- 告知此缓冲区是否具有可写的底层实现数组</p></li>
+                                <li><p><code>byte[] 	array()</code> -- 返回此缓冲区的底层实现数组</p></li>
+                                <li><p><code>int 	arrayOffset()</code> -- 返回此缓冲区的底层实现数组中第一个缓冲区元素的偏移量</p></li>
+
+                                <li class="group"><p><code>ByteOrder 	order()</code> -- 获取此缓冲区的字节顺序</p></li>
+                                <li><p><code>ByteBuffer 	order(ByteOrder bo)</code> -- 修改此缓冲区的字节顺序</p></li>
+
+                                <li class="group"><p><code>abstract ByteBuffer 	compact()</code> -- 压缩此缓冲区</p></li>
+                                <li><p><code>abstract ByteBuffer 	duplicate()</code> -- 创建共享此缓冲区内容的新的字节缓冲区</p></li>
+                                <li><p><code>abstract ByteBuffer 	slice()</code> -- 创建新的字节缓冲区，其内容是此缓冲区内容的共享子序列</p></li>
+
+                                <li class="group"><p><code>int 	hashCode()</code> -- 返回此缓冲区的当前哈希码</p></li>
+                                <li><p><code>int 	compareTo(ByteBuffer that)</code> -- 将此缓冲区与另一个缓冲区进行比较</p></li>
+                                <li><p><code>String 	toString()</code> -- 返回汇总了此缓冲区状态的字符串</p></li>
+                                <li><p><code>boolean 	equals(Object ob)</code> -- 判断此缓冲区是否与另一个对象相同</p></li>
+                            </ol>
+                        </div>
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-nio-channels-Channel"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Channel 及实现类</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+                            <p><b>NIO Channel:</b></p>
+                            <ul>
+                                <li><p><a href="#java-nio-channels-FileChannel">FileChannel</a></p></li>
+                                <li>
+                                    <p><a href="#java-nio-channels-SelectableChannel">SelectableChannel</a></p>
+                                    <ul>
+                                        <li><p><a href="#java-nio-channels-DatagramChannel">DatagramChannel</a></p></li>
+                                        <li><p><a href="#java-nio-channels-SocketChannel">SocketChannel</a></p></li>
+                                        <li><p><a href="#java-nio-channels-ServerSocketChannel">ServerSocketChannel</a></p></li>
+                                    </ul>
+                                </li>
+
+                            </ul>
+							<pre class="brush: java;">
+/** Channel 的顶级接口结构 */
+Channel extends Closeable, AutoCloseable
+ ├ InterruptibleChannel                         // 可 异步关闭 和 中断 的通道
+ ├ AsynchronousChannel                          // 异步通道
+ │  └ AsynchronousByteChannel                   // 异步字节读写通道
+ ├ ReadableByteChannel                          // 可从字节缓存读取字节的通道
+ │  ├ ByteChannel extends WritableByteChannel   // 可读取和写入字节的通道，结合了读/写接口
+ │  │  └ SeekableByteChannel                    // position 支持的可读写字节数组
+ │  └ ScatteringByteChannel                     // 从字节缓存数组读取字节的通道(分散)
+ ├ WritableByteChannel                          // 可从字节缓存写入字节的通道
+ │  └ GatheringByteChannel                      // 从字节缓存数组写入字节的通道(聚集)
+ └ NetworkChannel                               // 网络套接字通道
+    └ MulticastChannel                          // 支持组播的网络套接字通道
+
+/** Channel 的实现类结构 */
+AbstractInterruptibleChannel implements InterruptibleChannel // 可中断通道的基本实现类
+ ├ FileChannel implements SeekableByteChannel, GatheringByteChannel, ScatteringByteChannel
+ └ SelectableChannel // 可通过 Selector 实现多路复用的通道
+   └ AbstractSelectableChannel // 多路复用通道的基本实现类
+    ├ DatagramChannel implements ByteChannel,ScatteringByteChannel,GatheringByteChannel,MulticastChannel
+    ├ SocketChannel implements ByteChannel, ScatteringByteChannel, GatheringByteChannel, NetworkChannel
+    ├ ServerSocketChannel implements NetworkChannel
+    ├ Pipe.SinkChannel implements GatheringByteChannel
+    └ Pipe.SourceChannel implements ScatteringByteChannel
+
+AsynchronousFileChannel implements AsynchronousChannel
+AsynchronousSocketChannel implements AsynchronousByteChannel, NetworkChannel
+AsynchronousServerSocketChannel implements AsynchronousChannel, NetworkChannel
+
+public interface Channel extends Closeable {
+    boolean isOpen();                // 判断此通道是否处于打开状态
+    void close() throws IOException; // 关闭此通道
+}
+
+/** 可 异步关闭 和 中断 的通道 */
+public interface InterruptibleChannel extends Channel {
+    void close() throws IOException; // 此方法行为和 Channel 相同
+}
+
+/** 异步通道 */
+public interface AsynchronousChannel extends Channel {
+    void close() throws IOException; // 此方法行为和 Channel 相同
+}
+
+/** 异步字节读写通道 */
+public interface AsynchronousByteChannel extends AsynchronousChannel {
+    Future&lt;Integer> read(ByteBuffer dst);
+    Future&lt;Integer> write(ByteBuffer src);
+    &lt;A> void read(ByteBuffer dst, A attachment, CompletionHandler&lt;Integer,? super A> handler);
+    &lt;A> void write(ByteBuffer src, A attachment, CompletionHandler&lt;Integer,? super A> handler);
+}
+
+/** 可读取字节的通道 */
+public interface ReadableByteChannel extends Channel {
+    int read(ByteBuffer dst) throws IOException;
+}
+
+/** 从字节缓存数组读取字节的通道 */
+public interface ScatteringByteChannel extends ReadableByteChannel {
+    long read(ByteBuffer[] dsts) throws IOException;
+    long read(ByteBuffer[] dsts, int offset, int length) throws IOException;
+}
+
+/** 可写入字节的通道 */
+public interface WritableByteChannel extends Channel {
+    int write(ByteBuffer src) throws IOException;
+}
+
+/** 从字节缓存数组写入字节的通道 */
+public interface GatheringByteChannel extends WritableByteChannel {
+    long write(ByteBuffer[] srcs) throws IOException;
+    public long write(ByteBuffer[] srcs, int offset, int length) throws IOException;
+}
+
+/** 可读取和写入字节的通道，结合了读/写接口 */
+public interface ByteChannel extends ReadableByteChannel, WritableByteChannel {}
+
+/** position 支持的可读写字节数组 */
+public interface SeekableByteChannel extends ByteChannel {
+    long position() throws IOException;                                // 返回通道的 position
+    SeekableByteChannel position(long newPosition) throws IOException; // 更改此通道的 position
+    long size() throws IOException;                                    // 返回此通道连接实体的大小
+    SeekableByteChannel truncate(long size) throws IOException;        // 截断此通道连接实体为指定大小
+}
+
+/** 网络套接字通道 */
+public interface NetworkChannel extends Channel {
+    NetworkChannel bind(SocketAddress local) throws IOException;    // 通道套接字绑定到本地地址
+    SocketAddress getLocalAddress() throws IOException;             // 获取通道套接字绑定的本地地址
+
+    &lt;T> NetworkChannel setOption(SocketOption&lt;T> name, T value) throws IOException; // 设置套接字选项值
+    Set&lt;SocketOption&lt;?>> supportedOptions();                  // 返回套接字支持的选项值
+}
+
+/** 支持组播的网络套接字通道 */
+public interface MulticastChannel extends NetworkChannel {
+    MembershipKey join(InetAddress group, NetworkInterface netf) throws IOException;
+    MembershipKey join(InetAddress group, NetworkInterface netf, InetAddress source) throws IOException;
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/nio/channels/Channel.html" target="_blank">Channel</a> 用于 I/O 操作的连接。</p>
+                            <p>通道表示到实体，如硬件设备、文件、网络套接字或可以执行一个或多个不同 I/O 操作的程序组件的开放的连接。 </p>
+                            <p>通道可处于打开或关闭状态。创建通道时它处于打开状态，一旦将其关闭，则保持关闭状态。一旦关闭了某个通道，试图对其调用 I/O 操作就会导致 <code>ClosedChannelException</code> 被抛出。通过调用通道的 <code>isOpen</code> 方法可测试通道是否处于打开状态。 </p>
+                            <p>正如扩展和实现此接口的各个接口和类规范中所描述的，一般情况下通道对于多线程的访问是安全的。 </p>
+							<p>NIO 中的 Channel 的主要实现有：</p>
+
+
+						</div>
+
+                        <a class="offset" id="java-nio-channels-FileChannel"></a>
+						<div class="sub-item">
+							<pre class="brush: java;">
+public abstract class FileChannel extends AbstractInterruptibleChannel implements SeekableByteChannel,
+                                GatheringByteChannel, ScatteringByteChannel {
+    protected FileChannel() {}
+
+    /** 文件映射模式的类型安全的枚举 */
+    public static class MapMode {
+        // 只读映射模式
+        public static final MapMode READ_ONLY = new MapMode("READ_ONLY");
+        // 读取/写入映射模式
+        public static final MapMode READ_WRITE = new MapMode("READ_WRITE");
+        // 专用（写入时拷贝）映射模式
+        public static final MapMode PRIVATE = new MapMode("PRIVATE");
+
+        private final String name;
+        private MapMode(String name) { this.name = name; }
+        public String toString() { return name; }
+    }
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/nio/FileChannel.html" target="_blank">FileChannel</a> 用于读取、写入、映射和操作文件的通道。</p>
+                            <ul>
+                                <li><p><code>FileInputStream.getChannel()</code> -- 只用于读取，任何写入操作将会报 NonWritableChannelException 异常</p></li>
+                                <li><p><code>FileOutputStream.getChannel()</code> -- 只用于写入，任何读取操作将会报 NonReadableChannelException 异常</p></li>
+                                <li><p><code>RandomAccessFile.getChannel()</code> -- 可用于读写，取决于 mode 参数</p></li>
+                            </ul>
+                            <p><a href="docs/docs-java/api/java/nio/FileChannel.html" target="_blank">FileChannel</a> 在其文件中有一个当前 position，可对其进行查询和修改。该文件本身包含一个可读写的长度可变的字节序列，并且可以查询该文件的当前大小。写入的字节超出文件的当前大小时，则增加文件的大小；截取 该文件时，则减小文件的大小。文件可能还有某个相关联的元数据，如访问权限、内容类型和最后的修改时间；此类未定义访问元数据的方法。 </p>
+                            <p>除了字节通道中常见的读取、写入和关闭操作外，此类还定义了下列特定于文件的操作：</p>
+                            <ul>
+                                <li><p>以不影响通道当前位置的方式，对文件中绝对位置的字节进行读取或写入。</p></li>
+                                <li><p>将文件中的某个区域直接映射到内存中；对于较大的文件，这通常比调用普通的 read 或 write 方法更为高效。</p></li>
+                                <li><p>强制对底层存储设备进行文件的更新，确保在系统崩溃时不丢失数据。</p></li>
+                                <li><p>以一种可被很多操作系统优化为直接向文件系统缓存发送或从中读取的高速传输方法，将字节从文件传输到某个其他通道中，反之亦然。</p></li>
+                                <li><p>可以锁定某个文件区域，以阻止其他程序对其进行访问。</p></li>
+                            </ul>
+                            <p>多个并发线程可安全地使用文件通道。可随时调用关闭方法，正如 Channel 接口中所指定的。对于涉及通道位置或者可以更改其文件大小的操作，在任意给定时间只能进行一个这样的操作；如果尝试在第一个操作仍在进行时发起第二个操作，则会导致在第一个操作完成之前阻塞第二个操作。可以并发处理其他操作，特别是那些采用显式位置的操作；但是否并发处理则取决于基础实现，因此是未指定的。 </p>
+                            <ol>
+                                <li><p><code>static FileChannel 	open(Path path, OpenOption... options)</code> -- 打开或创建文件，返回访问文件的通道</p></li>
+                                <li><p><code>static FileChannel 	open(Path path, Set&lt;&lt;? extends OpenOption> options, FileAttribute&lt;?>... attrs)</code> -- 打开或创建文件，返回访问文件的通道</p>
+                                    <pre class="brush: java;">
+public interface OpenOption {}
+
+public enum StandardOpenOption implements OpenOption {
+    CREATE,                // 如果文件不存在创建；存在则打开
+    CREATE_NEW,            // 如果文件已存在，返回失败
+    READ,                  // 只读
+    WRITE,                 // 写
+    APPEND,                // 追加
+    TRUNCATE_EXISTING,     // 如果已存在，且为写访问而打开的，那么它的长度将被截断为 0
+    DELETE_ON_CLOSE,       // 关闭时删除文件
+    SPARSE,                // 稀疏文件(在创建一个文件的时候，就预先分配了文件需要的连续存储空间)
+    SYNC,                  // 要求对文件内容或元数据的每次更新都同步写入底层存储设备
+    DSYNC;                 // 要求对文件内容的每次更新都同步写入底层存储设备
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>abstract long 	position()</code> -- 返回此通道的文件位置</p></li>
+                                <li><p><code>abstract FileChannel 	position(long newPosition)</code> -- 设置此通道的文件位置</p></li>
+                                <li><p><code>abstract long 	size()</code> -- 返回此通道的文件的当前大小</p></li>
+
+                                <li class="group"><p><code>abstract int 	read(ByteBuffer dst)</code> -- 将字节序列从此通道读入给定的缓冲区</p></li>
+                                <li><p><code>abstract int 	read(ByteBuffer dst, long position)</code> -- 从给定的文件位置开始，将字节序列从此通道读入给定的缓冲区</p></li>
+                                <li><p><code>long 	read(ByteBuffer[] dsts)</code> -- 将字节序列从此通道依次读入给定的缓冲区</p></li>
+                                <li><p><code>abstract long 	read(ByteBuffer[] dsts, int offset, int length)</code> -- 同上，指定偏移和大小</p></li>
+
+                                <li class="group"><p><code>abstract int 	write(ByteBuffer src)</code> -- 将字节序列从给定的缓冲区写入此通道</p></li>
+                                <li><p><code>abstract int 	write(ByteBuffer src, long position)</code> -- 从给定的文件位置开始，将字节序列从给定缓冲区写入此通道</p></li>
+                                <li><p><code>long 	write(ByteBuffer[] srcs)</code> -- 将字节序列从给定的缓冲区依次写入此通道</p></li>
+                                <li><p><code>abstract long 	write(ByteBuffer[] srcs, int offset, int length)</code> -- 同上，指定偏移和大小</p></li>
+
+                                <li class="group"><p><code>abstract long 	transferFrom(ReadableByteChannel src, long position, long count)</code> -- 将字节从给定的可读取字节通道传输到此通道的文件中(<b>写文件</b>)</p></li>
+                                <li><p><code>abstract long 	transferTo(long position, long count, WritableByteChannel target)</code> -- 将字节从此通道的文件传输到给定的可写入字节通道(<b>读文件</b>)</p></li>
+
+                                <li class="group"><p><code>FileLock 	lock()</code> -- 获取对此通道的文件的独占锁定(如果别的进程获取了独有锁会阻塞，直到独有锁被别的进程释放)</p></li>
+                                <li><p><code>abstract FileLock 	lock(long position, long size, boolean shared)</code> -- 获取此通道的文件给定区域上的锁定</p></li>
+                                <li><p><code>FileLock 	tryLock()</code> -- 试图获取对此通道的文件的独占锁定(如果别的进程获取了独有锁也不会阻塞，但是会抛出 IO 异常)</p></li>
+                                <li><p><code>abstract FileLock 	tryLock(long position, long size, boolean shared)</code> -- 试图获取对此通道的文件给定区域的锁定</p></li>
+
+                                <li class="group"><p><code>abstract MappedByteBuffer 	map(FileChannel.MapMode mode, long position, long size)</code> -- 将此通道的文件区域直接映射到内存中</p></li>
+                                <li class="group"><p><code>abstract void 	force(boolean metaData)</code> -- 强制将所有对此通道的文件更新写入包含该文件的存储设备中</p></li>
+
+                                <li class="group"><p><code>abstract FileChannel 	truncate(long size)</code> -- 将此通道的文件截取为给定大小</p></li>
+                            </ol>
+						</div>
+
+                        <a class="offset" id="java-nio-channels-SelectableChannel"></a>
+                        <div class="sub-item">
+							<pre class="brush: java;">
+public abstract class SelectableChannel extends AbstractInterruptibleChannel {
+    protected SelectableChannel() {}
+}
+
+/** 表示 SelectableChannel 在 Selector 中的注册的标记 */
+public abstract class SelectionKey {
+    public static int OP_ACCEPT = 1 << 0;  // 套接字接受操作的操作集位
+    public static int OP_CONNECT = 1 << 1; // 套接字连接操作的操作集位
+    public static int OP_READ = 1 << 2;    // 取操作的操作集位
+    public static int OP_WRITE = 1 << 3;   // 写入操作的操作集位
+
+    protected SelectionKey() {}
+
+    Object attach(Object ob) {...} // 将给定的对象附加到此键
+    Object attachment() {...}      // 获取当前的附加对象
+
+    abstract Selector selector();  // 返回为此选择器创建的键
+    abstract SelectableChannel channel(); // 返回为之创建此键的通道
+
+    abstract int interestOps();                 // 获取此键的 interest 集合
+    abstract SelectionKey interestOps(int ops); // 将此键的 interest 集合设置为给定值
+    abstract int readyOps();                    // 获取此键的 ready 操作集合
+
+    boolean isConnectable() {...}  // 测试此键的通道是否已完成其套接字连接操作
+    boolean isAcceptable() {...}   // 测试此键的通道是否已准备好接受新的套接字连接
+    boolean isReadable() {...}     // 测试此键的通道是否已准备好进行读取
+    boolean isWritable() {...}     // 测试此键的通道是否已准备好进行写入
+
+    abstract void cancel();        // 请求取消此键的通道到其选择器的注册
+    abstract boolean isValid();    // 告知此键是否有效
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/nio/channels/SelectableChannel.html" target="_blank">SelectableChannel</a> 是可通过 Selector 实现多路复用的通道。</p>
+                            <p>为了与选择器一起使用，此类的实例必须首先通过 <code>register</code> 方法进行注册。此方法返回一个表示该通道已向选择器注册的新 <a href="docs/docs-java/api/java/nio/channels/SelectionKey.html" target="_blank">SelectionKey</a> 对象。 </p>
+                            <p>向选择器注册后，通道在注销 之前将保持注册状态。注销涉及释放选择器已分配给该通道的所有资源。 </p>
+                            <p>不能直接注销通道；相反，必须取消 表示通道注册的键。取消某个键要求在选择器的下一个选择操作期间注销通道。可通过调用某个键的 <code>cancel</code> 方法显式地取消该键。无论是通过调用通道的 <code>close</code> 方法，还是中断阻塞于该通道上 I/O 操作中的线程来关闭该通道，都会隐式地取消该通道的所有键。 </p>
+                            <p>一个通道至多只能在任意特定选择器上注册一次。 </p>
+                            <p>可选择的通道要么处于阻塞 模式，要么处于非阻塞 模式。在阻塞模式中，每一个 I/O 操作完成之前都会阻塞在其通道上调用的其他 I/O 操作。在非阻塞模式中，永远不会阻塞 I/O 操作，并且传输的字节可能少于请求的数量，或者可能根本不传输字节。可通过调用可选择通道的 isBlocking 方法来确定其阻塞模式。 </p>
+                            <p>新创建的可选择通道总是处于阻塞模式。在结合使用基于选择器的多路复用时，非阻塞模式是最有用的。向选择器注册某个通道前，必须将该通道置于非阻塞模式，并且在注销之前可能无法返回到阻塞模式。 </p>
+                            <ol>
+
+                                <li><p><code><a href="docs/docs-java/api/java/nio/channels/SelectionKey.html" target="_blank">SelectionKey</a>  	register(<a href="#java-nio-channels-Selector">Selector</a> sel, int ops)</code> -- 向给定的选择器注册此通道，返回一个选择键</p></li>
+                                <li><p><code>abstract <a href="docs/docs-java/api/java/nio/channels/SelectionKey.html" target="_blank">SelectionKey</a>  	register(<a href="#java-nio-channels-Selector">Selector</a> sel, int ops, Object att)</code> -- 向给定的选择器注册此通道，返回一个选择键</p></li>
+
+                                <li class="group"><p><code>abstract SelectorProvider 	provider()</code> -- 返回创建此通道的提供者</p></li>
+
+                                <li class="group"><p><code>abstract boolean 	isBlocking()</code> -- 判断此通道上的每个 I/O 操作在完成前是否被阻塞</p></li>
+                                <li><p><code>abstract SelectableChannel 	configureBlocking(boolean block)</code> -- 调整此通道的阻塞模式</p></li>
+                                <li><p><code>abstract Object 	blockingLock()</code> -- 获取其 configureBlocking 和 register 方法实现同步的对象</p></li>
+
+                                <li class="group"><p><code>abstract boolean 	isRegistered()</code> -- 判断此通道当前是否已向任何选择器注册</p></li>
+                                <li><p><code>abstract <a href="docs/docs-java/api/java/nio/channels/SelectionKey.html" target="_blank">SelectionKey</a>  	keyFor(Selector sel)</code> -- 获取表示通道向给定选择器注册的键</p></li>
+                                <li><p><code>abstract int 	validOps()</code> -- 返回一个操作集，标识此通道所支持的操作</p></li>
+                            </ol>
+                        </div>
+
+                        <a class="offset" id="java-nio-channels-DatagramChannel"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public abstract class DatagramChannel extends AbstractSelectableChannel implements ByteChannel,
+        ScatteringByteChannel, GatheringByteChannel, MulticastChannel {
+    protected DatagramChannel(SelectorProvider provider) {...}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/nio/channels/DatagramChannel.html" target="_blank">DatagramChannel</a> 针对面向数据报套接字(UDP)的可选择通道。 </p>
+                            <ol>
+
+                                <li><p><code>static DatagramChannel 	open()</code> -- 打开数据报通道</p></li>
+                                <li><p><code>static DatagramChannel 	open(ProtocolFamily family)</code> -- 打开数据报通道</p></li>
+
+                                <li class="group"><p><code>abstract DatagramChannel 	connect(SocketAddress remote)</code> -- 连接此通道的套接字</p></li>
+                                <li><p><code>abstract DatagramChannel 	disconnect()</code> -- 断开此通道套接字的连接</p></li>
+                                <li><p><code>abstract boolean 	isConnected()</code> -- 判断是否已连接此通道的套接字</p></li>
+
+                                <li class="group"><p><code>abstract DatagramChannel 	bind(SocketAddress local)</code> -- 将通道的套接字绑定到本地地址</p></li>
+
+                                <li class="group"><p><code>abstract &lt;T> DatagramChannel 	setOption(SocketOption&lt;T> name, T value)</code> -- 配置套接字选项</p>
+                                    <pre class="brush: java;">
+/** SocketOption 参数支持 java.net.StandardSocketOptions 的以下成员：
+ * DatagramChannel -- 支持前面 8 个参数类型
+ * ServerSocketChannel -- 支持 IP_TOS 和 SO_REUSEADDR
+ * SocketChannel -- 支持后面 6 个参数类型
+ */
+public final class StandardSocketOptions {
+    static SocketOption&lt;NetworkInterface> IP_MULTICAST_IF  // 多播数据报的网络接口
+    static SocketOption&lt;Boolean> IP_MULTICAST_LOOP         // 多播数据报是否环回
+    static SocketOption&lt;Integer> IP_MULTICAST_TTL          // 多播数据报的生存时间
+    static SocketOption&lt;Integer> IP_TOS                    // IP 报头服务类型的八位字节
+    static SocketOption&lt;Boolean> SO_BROADCAST              // 允许传输广播数据报
+
+    static SocketOption&lt;Integer> SO_SNDBUF                 // 套接字发送缓冲区的大小
+    static SocketOption&lt;Integer> SO_RCVBUF                 // 套接字接收缓冲区的大小
+    static SocketOption&lt;Boolean> SO_REUSEADDR              // 是否重复使用地址
+
+    static SocketOption&lt;Boolean> SO_KEEPALIVE              // 是否 Keep-Alive
+    static SocketOption&lt;Integer> SO_LINGER                 // 如果存在数据，则在关闭时延迟
+    static SocketOption&lt;Boolean> TCP_NODELAY               // 是否禁用 Nagle 算法
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>abstract SocketAddress 	receive(ByteBuffer dst)</code> -- 通过此通道接收数据报</p></li>
+                                <li><p><code>abstract int 	send(ByteBuffer src, SocketAddress target)</code> -- 通过此通道发送数据报</p></li>
+
+                                <li class="group"><p><code>abstract int 	read(ByteBuffer dst)</code> -- 将字节序列从此通道读入给定的缓冲区</p></li>
+                                <li><p><code>long 	read(ByteBuffer[] dsts)</code> -- 将字节序列从此通道依次读入给定的缓冲区</p></li>
+                                <li><p><code>abstract long 	read(ByteBuffer[] dsts, int offset, int length)</code> -- 同上，指定偏移和大小</p></li>
+
+                                <li class="group"><p><code>abstract int 	write(ByteBuffer src)</code> -- 将字节序列从给定的缓冲区写入此通道</p></li>
+                                <li><p><code>long 	write(ByteBuffer[] srcs)</code> -- 将字节序列从给定的缓冲区依次写入此通道</p></li>
+                                <li><p><code>abstract long 	write(ByteBuffer[] srcs, int offset, int length)</code> -- 同上，指定偏移和大小</p></li>
+
+                                <li class="group"><p><code>int 	validOps()</code> -- 返回一个操作集，标识此通道所支持的操作，参见: <a href="#java-nio-channels-SelectableChannel">SelectableChannel</a></p></li>
+                                <li><p><code>abstract DatagramSocket 	socket()</code> -- 获取与此通道关联的数据报套接字</p></li>
+                                <li><p><code>abstract SocketAddress 	getLocalAddress()</code> -- 返回此通道的套接字绑定到的本地套接字地址</p></li>
+                                <li><p><code>abstract SocketAddress 	getRemoteAddress()</code> -- 返回此通道的套接字连接到的远程地址</p></li>
+                            </ol>
+                        </div>
+
+                        <a class="offset" id="java-nio-channels-SocketChannel"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public abstract class SocketChannel extends AbstractSelectableChannel implements ByteChannel,
+        ScatteringByteChannel, GatheringByteChannel, NetworkChannel {
+    protected SocketChannel(SelectorProvider provider) {...}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/nio/channels/SocketChannel.html" target="_blank">SocketChannel</a> 针对面向流的连接套接字的可选择通道。 </p>
+                            <p>套接字通道不是连接网络套接字的完整抽象。</p>
+                            <ul>
+                                <li><p><code>static SocketChannel 	open()</code> -- 打开套接字通道</p></li>
+                                <li><p><code>static SocketChannel 	open(SocketAddress remote)</code> -- 打开套接字通道并将其连接到远程地址</p></li>
+
+                                <li><p><code>abstract SocketChannel 	bind(SocketAddress local)</code> -- 将通道的套接字绑定到本地地址</p></li>
+                                <li><p><code>abstract boolean 	connect(SocketAddress remote)</code> -- </p></li>
+                                <li><p><code>abstract boolean 	finishConnect()</code> -- 完成套接字通道的连接过程</p></li>
+
+                                <li><p><code>abstract boolean 	isConnected()</code> -- 判断是否已连接此通道的网络套接字</p></li>
+                                <li><p><code>abstract boolean 	isConnectionPending()</code> -- 判断此通道上是否正在进行连接操作</p></li>
+
+                                <li class="group"><p><code>abstract int 	read(ByteBuffer dst)</code> -- 将字节序列从此通道读入给定的缓冲区</p></li>
+                                <li><p><code>long 	read(ByteBuffer[] dsts)</code> -- 将字节序列从此通道依次读入给定的缓冲区</p></li>
+                                <li><p><code>abstract long 	read(ByteBuffer[] dsts, int offset, int length)</code> -- 同上，指定偏移和大小</p></li>
+
+                                <li class="group"><p><code>abstract int 	write(ByteBuffer src)</code> -- 将字节序列从给定的缓冲区写入此通道</p></li>
+                                <li><p><code>long 	write(ByteBuffer[] srcs)</code> -- 将字节序列从给定的缓冲区依次写入此通道</p></li>
+                                <li><p><code>abstract long 	write(ByteBuffer[] srcs, int offset, int length)</code> -- 同上，指定偏移和大小</p></li>
+
+                                <li><p><code>abstract SocketChannel 	shutdownInput()</code> -- 在不关闭通道的情况下关闭读取连接</p></li>
+                                <li><p><code>abstract SocketChannel 	shutdownOutput()</code> -- 在不关闭通道的情况下关闭写入连接</p></li>
+
+                                <li><p><code>abstract &lt;T> SocketChannel 	setOption(SocketOption&lt;T> name, T value)</code> -- 配置套接字选项，参见 <a href="#java-nio-channels-SelectableChannel">SelectableChannel</a></p></li>
+
+                                <li class="group"><p><code>int 	validOps()</code> -- 返回一个操作集，标识此通道所支持的操作，参见: <a href="#java-nio-channels-SelectableChannel">SelectableChannel</a></p></li>
+                                <li><p><code>abstract Socket 	socket()</code> -- 获取与此通道关联的数据报套接字</p></li>
+                                <li><p><code>abstract SocketAddress 	getLocalAddress()</code> -- 返回此通道的套接字绑定到的本地套接字地址</p></li>
+                                <li><p><code>abstract SocketAddress 	getRemoteAddress()</code> -- 返回此通道的套接字连接到的远程地址</p></li>
+                            </ul>
+                        </div>
+
+                        <a class="offset" id="java-nio-channels-ServerSocketChannel"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public abstract class ServerSocketChannel extends AbstractSelectableChannel implements NetworkChannel {
+    protected ServerSocketChannel(SelectorProvider provider) {...}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/nio/channels/ServerSocketChannel.html" target="_blank">ServerSocketChannel</a> 针对面向流的侦听套接字的可选择通道。 </p>
+                            <p>服务器套接字通道不是侦听网络套接字的完整抽象。</p>
+                            <ul>
+
+                                <li><p><code>static ServerSocketChannel 	open()</code> -- 打开服务器套接字通道</p></li>
+
+                                <li><p><code>ServerSocketChannel 	bind(SocketAddress local)</code> -- 将通道的套接字绑定到本地地址</p></li>
+                                <li><p><code>abstract ServerSocketChannel 	bind(SocketAddress local, int backlog)</code> -- 同上，指定挂起连接的最大数目</p></li>
+                                <li><p><code>abstract SocketChannel 	accept()</code> -- 接受到此通道套接字的连接</p></li>
+
+                                <li class="group"><p><code>abstract &lt;T> ServerSocketChannel 	setOption(SocketOption&lt;T> name, T value)</code> -- 配置套接字选项，参见 <a href="#java-nio-channels-SelectableChannel">SelectableChannel</a></p></li>
+                                <li class="group"><p><code>int 	validOps()</code> -- 返回一个操作集，标识此通道所支持的操作，参见: <a href="#java-nio-channels-SelectableChannel">SelectableChannel</a></p></li>
+                                <li><p><code>abstract DatagramSocket 	socket()</code> -- 获取与此通道关联的数据报套接字</p></li>
+                                <li><p><code>abstract SocketAddress 	getLocalAddress()</code> -- 返回此通道的套接字绑定到的本地套接字地址</p></li>
+                            </ul>
+                            <pre class="brush: java;">
+/** TCP Server */
+void server() {
+    try {
+        ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+        serverSocketChannel.bind(new InetSocketAddress(6024));
+
+        while(true) {
+            SocketChannel socketChannel = serverSocketChannel.accept();
+
+            // 从连接的 client 读取数据
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            int readyBytes = socketChannel.read(buffer);
+            while(readyBytes > 0) {
+                byte[] bytes = new byte[readyBytes];
+                buffer.flip();
+                buffer.get(bytes);
+                log("accepted", new String(bytes, StandardCharsets.UTF_8));
+                readyBytes = socketChannel.read(buffer);
+            }
+
+            // 如入数据到 client
+            buffer.clear();
+            buffer.put("Hi".getBytes());
+            buffer.flip();
+            socketChannel.write(buffer);
+        }
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+/** TCP Client */
+void client() {
+    try {
+        SocketChannel socketChannel = SocketChannel.open();
+        socketChannel.connect(new InetSocketAddress("192.168.0.192", 6024));
+
+        // 发送数据到 server
+        ByteBuffer buffer = ByteBuffer.allocate(1024);
+        buffer.put("Hello".getBytes());
+        buffer.flip();
+        socketChannel.write(buffer);
+
+        // 从 server 读取数据
+        buffer.clear();
+        int bytesReady = socketChannel.read(buffer);
+        while(bytesReady > 0) {
+            byte[] bytes = new byte[bytesReady];
+            buffer.flip();
+            buffer.get(bytes);
+            log("accepted", new String(bytes, StandardCharsets.UTF_8));
+            bytesReady = socketChannel.read(buffer);
+        }
+
+        socketChannel.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+</pre>
+                        </div>
+                    </div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-nio-channels-Selector"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Selector 及相关类</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<pre class="brush: java;">
+public abstract class Selector implements Closeable {
+    protected Selector() {}
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/nio/channels/Selector.html" target="_blank">Selector</a> 是 <a href="#java-nio-channels-SelectableChannel">SelectableChannel</a> 对象的多路复用器。 </p>
+                            <p>可通过调用此类的 <code>open</code> 方法创建选择器，该方法将使用系统的默认选择器提供者创建新的选择器。也可通过调用自定义选择器提供者的 <code>openSelector</code> 方法来创建选择器。通过选择器的 <code>close</code> 方法关闭选择器之前，它一直保持打开状态。 </p>
+                            <ol>
+                                <li><p><code>static Selector 	open()</code> -- 打开一个选择器</p></li>
+
+                                <li class="group"><p><code>abstract Set&lt;SelectionKey> 	keys()</code> -- 返回此选择器的键集</p></li>
+                                <li><p><code>abstract Set&lt;SelectionKey> 	selectedKeys()</code> -- 返回此选择器的已选择键集</p></li>
+
+                                <li class="group"><p><code>abstract SelectorProvider 	provider()</code> -- 返回创建此通道的提供者</p></li>
+
+                                <li class="group"><p><code>abstract int 	select()</code> -- 阻塞到至少有一个通道在注册的事件上就绪了。返回的 int 值表示有多少通道已经就绪。亦即，自上次调用此方法后有多少通道变成就绪状态。如果调用此方法，因为有一个通道变成就绪状态，返回了 1，若再次调用此方法，如果另一个通道就绪了，它会再次返回1。如果对第一个就绪的 channel 没有做任何操作，现在就有两个就绪的通道，但在每次 select() 方法调用之间，只有一个通道就绪了。</p></li>
+                                <li><p><code>abstract int 	select(long timeout)</code> -- 同上，指定最长阻塞时间</p></li>
+                                <li><p><code>abstract int 	selectNow()</code> -- 不会阻塞，不管什么通道就绪都立刻返回(此方法执行非阻塞的选择操作)</p></li>
+
+                                <li class="group"><p><code>abstract boolean 	isOpen()</code> -- 选择器是否已打开</p></li>
+                                <li><p><code>abstract Selector 	wakeup()</code> -- 使尚未返回的第一个选择操作立即返回</p></li>
+                                <li><p><code>abstract void 	close()</code> -- 关闭此选择器</p></li>
+                            </ol>
+						</div>
+
+						<div class="sub-item">
+							<pre class="brush: java;">
+/** 一个 Server 可以在同一个线程上接收多个客户端收发数据 */
+void server() {
+    try {
+        ServerSocketChannel ssc = ServerSocketChannel.open();
+        ssc.bind(new InetSocketAddress(6024));
+        ssc.configureBlocking(false);
+
+        Selector selector = Selector.open();
+        // 注册 channel，并且指定感兴趣的事件是 Accept
+        ssc.register(selector, SelectionKey.OP_ACCEPT);
+
+        ByteBuffer readBuff = ByteBuffer.allocate(1024);
+        ByteBuffer writeBuff = ByteBuffer.allocate(128);
+
+        while (true) {
+            int nReady = selector.select();
+            Set&lt;SelectionKey> keys = selector.selectedKeys();
+            Iterator&lt;SelectionKey> it = keys.iterator();
+
+            while (it.hasNext()) {
+                SelectionKey key = it.next();
+                it.remove();
+
+                if (key.isAcceptable()) {
+                    // 创建新的连接，并且把连接注册到selector上，而且，
+                    // 声明这个channel只对读操作感兴趣。
+                    SocketChannel socketChannel = ssc.accept();
+                    socketChannel.configureBlocking(false);
+                    socketChannel.register(selector, SelectionKey.OP_READ);
+                } else if (key.isReadable()) {
+                    SocketChannel socketChannel = (SocketChannel) key.channel();
+                    readBuff.clear();
+                    int readed = socketChannel.read(readBuff);
+
+                    readBuff.flip();
+                    String fromClient = new String(readBuff.array(), 0, readed);
+                    System.out.println(Thread.currentThread().getName() + "received : " + fromClient);
+                    key.interestOps(SelectionKey.OP_WRITE);
+                } else if (key.isWritable()) {
+                    writeBuff.rewind();
+                    SocketChannel socketChannel = (SocketChannel) key.channel();
+                    writeBuff.put("received".getBytes());
+                    writeBuff.flip();
+                    socketChannel.write(writeBuff);
+                    key.interestOps(SelectionKey.OP_READ);
+                }
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+
+void client() {
+     try {
+        SocketChannel socketChannel = SocketChannel.open();
+        socketChannel.connect(new InetSocketAddress("192.168.0.192", 6024));
+
+        ByteBuffer writeBuffer = ByteBuffer.allocate(32);
+        ByteBuffer readBuffer = ByteBuffer.allocate(32);
+
+        writeBuffer.put((new Random().nextInt() + "hello").getBytes());
+        writeBuffer.flip();
+
+        while (true) {
+            writeBuffer.rewind();
+            socketChannel.write(writeBuffer);
+            readBuffer.clear();
+
+            int readed = socketChannel.read(readBuffer);
+            System.out.println(new String(readBuffer.array(), 0, readed));
+            Thread.sleep(1000);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+</pre>
+							<p><a href="docs/docs-java/api/" target="_blank"></a></p>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-nio-charset-Charset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Charset 及相关类</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<pre class="brush: java;">
+java.lang.Object
+    java.nio.charset.Charset
+
+public abstract class Charset implements Comparable&lt;Charset> {
+    protected Charset(String canonicalName, String[] aliases) {...}
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/nio/charset/Charset.html" target="_blank">Charset</a> 16 位的 Unicode 代码单元序列和字节序列之间的指定映射关系。定义了用于创建解码器和编码器以及获取与 charset 关联的各种名称的方法。</p>
+                            <p>此类也定义了用于测试是否支持特定 charset 的静态方法、通过名称查找 charset 实例的静态方法，以及构造一个包含目前 Java 虚拟机支持的每个 charset 的映射静态方法。通过类 CharsetProvider 中定义的服务提供者接口可以添加对新 charset 的支持。 </p>
+                            <p>Java 平台的每一种实现都需要支持以下标准 charset，在 JDK 7 中规范化了以下名称:</p>
+                            <pre class="brush: java;">
+public final class StandardCharsets {
+    /** 7 位 ASCII 字符 */
+    public static final Charset US_ASCII = Charset.forName("US-ASCII");
+    /** ISO 拉丁字母表 */
+    public static final Charset ISO_8859_1 = Charset.forName("ISO-8859-1");
+    /** 8 位 UCS 转换格式 */
+    public static final Charset UTF_8 = Charset.forName("UTF-8");
+    /** 16 位 UCS 转换格式，Big Endian（最低地址存放高位字节）字节顺序 */
+    public static final Charset UTF_16BE = Charset.forName("UTF-16BE");
+    /** 16 位 UCS 转换格式，Little-endian（最高地址存放低位字节）字节顺序 */
+    public static final Charset UTF_16LE = Charset.forName("UTF-16LE");
+    /** 16 位 UCS 转换格式，字节顺序由可选的字节顺序标记来标识 */
+    public static final Charset UTF_16 = Charset.forName("UTF-16");
+}
+                            </pre>
+                            <ol>
+                                <li><p><code>static Charset 	defaultCharset()</code> -- 返回此 Java 虚拟机的默认 charset</p></li>
+                                <li><p><code>static Charset 	forName(String charsetName)</code> -- 返回指定 charset 的 charset 对象</p></li>
+                                <li><p><code>static boolean 	isSupported(String charsetName)</code> -- 通知是否支持指定的 charset</p></li>
+                                <li><p><code>static SortedMap&lt;String,Charset> 	availableCharsets()</code> -- 构造从规范 charset 名称到 charset 对象的有序映射</p></li>
+
+                                <li class="group"><p><code>String 	name()</code> -- 返回此 charset 的规范名称</p></li>
+                                <li><p><code>String 	displayName()</code> -- 返回此 charset 用于默认语言环境的可读名称</p></li>
+                                <li><p><code>String 	displayName(Locale locale)</code> -- 返回此 charset 用于给定语言环境的可读名称</p></li>
+                                <li><p><code>Set&lt;String> 	aliases()</code> -- 返回包含此 charset 各个别名的集合</p></li>
+
+                                <li class="group"><p><code>boolean 	canEncode()</code> -- 通知此 charset 是否支持编码</p></li>
+                                <li><p><code>ByteBuffer 	encode(CharBuffer cb)</code> -- 将此 charset 中的 Unicode 字符编码成字节的便捷方法</p></li>
+                                <li><p><code>ByteBuffer 	encode(String str)</code> --  将此 charset 中的字符串编码成字节的便捷方法</p></li>
+                                <li><p><code>CharBuffer 	decode(ByteBuffer bb)</code> --  将此 charset 中的字节解码成 Unicode 字符的便捷方法</p></li>
+                                <li><p><code>abstract CharsetDecoder 	newDecoder()</code> -- 为此 charset 构造新的解码器</p></li>
+                                <li><p><code>abstract CharsetEncoder 	newEncoder()</code> -- 为此 charset 构造新的编码器</p></li>
+
+                                <li class="group"><p><code>boolean 	isRegistered()</code> -- 通知此 charset 是否已在 IANA Charset Registry 中注册</p></li>
+                                <li><p><code>abstract boolean 	contains(Charset cs)</code> -- 通知此 charset 是否包含给定的 charset</p></li>
+
+                                <li class="group"><p><code>boolean 	equals(Object ob)</code> -- 通知此对象是否和其他对象相等</p></li>
+                                <li><p><code>int 	hashCode()</code> -- 计算此 charset 的哈希码</p></li>
+                                <li><p><code>int 	compareTo(Charset that)</code> -- 比较此 charset 与其他 charset</p></li>
+                                <li><p><code>String 	toString()</code> -- 返回描述此 charset 的字符串</p></li>
+                            </ol>
+
+						</div>
+
+						<div class="sub-item">
+                            <p><a href="docs/docs-java/api/java/nio/charset/CharsetEncoder.html" target="_blank">CharsetEncoder</a> 能够把 16 位 Unicode 字符序列转换成特定 charset 中字节序列的引擎。</p>
+                            <p><a href="docs/docs-java/api/java/nio/charset/CharsetDecoder.html" target="_blank">CharsetDecoder</a> 能够把特定 charset 中的字节序列转换成 16 位 Unicode 字符序列的引擎。</p>
+							<pre class="brush: java;">
+Charset utf8 = StandardCharsets.UTF_8;
+CharsetEncoder encoder = utf8.newEncoder();
+CharsetDecoder decoder = utf8.newDecoder();
+
+CharBuffer charBuffer = CharBuffer.allocate(1000);
+// a3 αβ 你好 🂡🂢, utf-8 编码分别是: 单字节，双字节，三字节，四字节
+charBuffer.put("a3 αβ 你好 \uD83C\uDCA1\uD83C\uDCA2");
+try {
+    // 编码
+    charBuffer.flip();
+    ByteBuffer byteBuffer = encoder.encode(charBuffer);
+    byte[] bytes = new byte[byteBuffer.limit()];
+    byteBuffer.get(bytes);
+    log(bytesToHex(bytes));
+
+    // 解码
+    byteBuffer.flip();
+    charBuffer = decoder.decode(byteBuffer);
+    char[] arr = new char[charBuffer.limit()];
+    charBuffer.get(arr);
+    log(new String(arr));
+} catch (CharacterCodingException e) {
+    e.printStackTrace();
+}
+</pre>
+
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="java-nio-file-Files"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Files 及相关类</h3>
+					</div>
+					<div class="panel-body">
+                        <div class="sub-item">
+                            <p><a href="#java-nio-file-Files">Path</a> 和 <a href="#java-nio-file-Files-class">Files</a></p>
+							<pre class="brush: java;">
+public interface Path extends Comparable&lt;Path>, Iterable&lt;Path>, Watchable {...}
+
+/** 可以向监视服务注册的对象，以便监视它的更改和事件 */
+public interface Watchable {
+  WatchKey register(WatchService watcher, WatchEvent.Kind&lt;?>... events);
+  WatchKey register(WatchService watcher, WatchEvent.Kind&lt;?>[] events, WatchEvent.Modifier... modifiers);
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/nio/file/Path.html" target="_blank">Path</a> 接口表示一种可用于在文件系统中定位文件的对象。它通常表示依赖于系统的文件路径。</p>
+                            <p><a href="docs/docs-java/api/java/nio/file/Path.html" target="_blank">Path</a> 由一系列由特殊分隔符或分隔符分隔的目录和文件名元素组成。 </p>
+                            <p><a href="docs/docs-java/api/java/nio/file/Paths.html" target="_blank">Paths</a> 提供了创建 Path 的静态方法。</p>
+                            <ol>
+                                <li><p><code>static Path 	get(String first, String... more)</code> -- 从指定路径创建一个 Path 对象</p></li>
+                                <li><p><code>static Path 	get(URI uri)</code> -- 从 URI 创建一个 Path 对象</p></li>
+                            </ol>
+                            <p><a href="docs/docs-java/api/java/nio/file/Path.html" target="_blank">Path</a> 可以和 <code>java.io.File</code> 相互转换: File 类有一个 <code>toPath()</code> 方法，Path 类有一个 <code>toFile()</code> 方法。</p>
+                            <ol>
+                                <li class="group"><p><code>Path 	toAbsolutePath()</code> -- 转换为绝对路径</p></li>
+                                <li><p><code>boolean 	isAbsolute()</code> -- 是否为绝对路径</p></li>
+                                <li><p><code>Path 	toRealPath(LinkOption... options)</code> -- 可以理解转换为绝对路径，如果存在 <code>LinkOption.NOFOLLOW_LINKS</code> 参数，则此方法不解析符号链接</p></li>
+                                <li><p><code>File 	toFile()</code> -- 转换为文件</p></li>
+                                <li><p><code>URI 	toUri()</code> -- 转换为 Uri 表示形式：<code>file:///tmp/</code></p></li>
+
+                                <li class="group"><p><code>Iterator&lt;Path> 	iterator()</code> -- 每一级目录迭代器</p></li>
+                                <li><p><code>int 	getNameCount()</code> -- 组成级别数，这个参数范围为: <code> >= 1</code></p></li>
+
+                                <li class="group"><p><code>Path 	getName(int index)</code> -- 指定级别的文件名称，如果超出则抛出 <code>IllegalArgumentException</code></p></li>
+                                <li><p><code>Path 	getFileName()</code> -- 获取文件名(如果最后一级的文件名称，可能是目录或文件，也可能为 <code>""</code>)</p></li>
+                                <li><p><code>Path 	subpath(int beginIndex, int endIndex)</code> -- 指定索引范围的的目录</p></li>
+                                <li><p><code>Path 	getParent()</code> -- 父目录</p></li>
+                                <li><p><code>Path 	getRoot()</code> -- 根目录，如果是相对目录则返回 NULL</p></li>
+                                <li><p><code>Path 	normalize()</code> -- 规范化</p></li>
+
+                                <li class="group"><p><code>Path 	resolve(Path other)</code> -- 根据此路径解析给定路径</p></li>
+                                <li><p><code>Path 	resolve(String other)</code> -- 同上:<code>"a/b".resolve("c/d") == "a/b/c/d"</code></p></li>
+                                <li><p><code>Path 	relativize(Path other)</code> -- 在该路径和给定路径之间构造一个相对路径: <code>p.relativize(p.resolve(q)).equals(q) </code></p></li>
+                                <li><p><code>Path 	resolveSibling(Path other)</code> -- 根据此路径的父路径解析给定路径(替换最后一级)</p></li>
+                                <li><p><code>Path 	resolveSibling(String other)</code> -- 同上:<code>"a/b".resolve("c/d") == "a/c/d"</code></p></li>
+
+                                <li class="group"><p><code>boolean 	startsWith(Path other)</code> -- 是否以指定路径开始</p></li>
+                                <li><p><code>boolean 	startsWith(String other)</code> -- 是否以指定路径开始</p></li>
+                                <li><p><code>boolean 	endsWith(Path other)</code> -- 是否以指定路径结束</p></li>
+                                <li><p><code>boolean 	endsWith(String other)</code> -- 是否以指定路径结束</p></li>
+
+                                <li class="group"><p><code>FileSystem 	getFileSystem()</code> -- 返回创建此对象的文件系统</p></li>
+
+                                <li class="group"><p><code>WatchKey 	register(WatchService watcher, WatchEvent.Kind&lt;?>... events)</code> -- 向监视服务注册此路径下的文件</p></li>
+                                <li><p><code>WatchKey 	register(WatchService watcher, WatchEvent.Kind&lt;?>[] events, WatchEvent.Modifier... modifiers)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>String 	toString()</code> -- 转换为 String 表示形式</p></li>
+                                <li><p><code>int 	compareTo(Path other)</code> -- 比较</p></li>
+                                <li><p><code>boolean 	equals(Object other)</code> -- 相等</p></li>
+                                <li><p><code>int 	hashCode()</code> -- 哈希值</p></li>
+                            </ol>
+                        </div>
+
+                        <a class="offset" id="java-nio-file-Files-class"></a>
+						<div class="sub-item">
+							<pre class="brush: java;">
+java.lang.Object
+    java.nio.file.Files
+
+public final class Files {
+    private Files() {}
+}
+</pre>
+							<p><a href="docs/docs-java/api/java/nio/file/Files.html" target="_blank">Files</a> 包含对文件、目录或其他类型的文件进行操作的静态方法。</p>
+                            <p>在大多数情况下，这里定义的方法将委托给关联的文件系统提供程序来执行文件操作。</p>
+                            <ol>
+                                <li><p><code>static Path 	createDirectories(Path dir, FileAttribute&lt;?>... attrs)</code> -- 创建目录，包括不存在的父目录，目录存在返回目录</p></li>
+                                <li><p><code>static Path 	createDirectory(Path dir, FileAttribute&lt;?>... attrs)</code> -- 创建目录，目录已存在抛出 <code>FileAlreadyExistsException</code>, 父目录不存在则抛出 <code>NoSuchFileException</code></p></li>
+                                <li><p><code>static Path 	createFile(Path path, FileAttribute&lt;?>... attrs)</code> -- 创建空文件，异常同上</p></li>
+                                <li><p><code>static Path 	createLink(Path link, Path existing)</code> -- 创建链接(硬链接，不能指向目录)，异常同上，若指向文件则抛出 <code>FileSystemException</code></p></li>
+                                <li><p><code>static Path 	createSymbolicLink(Path link, Path target, FileAttribute&lt;?>... attrs)</code> -- 创建软链接(符号链接)，可以指向目录，异常同上</p></li>
+                                <li><p><code>static Path 	createTempDirectory(Path dir, String prefix, FileAttribute&lt;?>... attrs)</code> -- 在 dir 下创建临时目录(目录名由 prefix + 系统自动生成串 组成)，异常同上</p></li>
+                                <li><p><code>static Path 	createTempDirectory(String prefix, FileAttribute&lt;?>... attrs)</code> -- 同上，在临时目录下创建(Linux 为 /tmp)，异常同上</p></li>
+                                <li><p><code>static Path 	createTempFile(Path dir, String prefix, String suffix, FileAttribute&lt;?>... attrs)</code> -- 在 dir 下创建临时文件(目录名由 prefix + 系统自动生成串 组成)，异常同上</p></li>
+                                <li><p><code>static Path 	createTempFile(String prefix, String suffix, FileAttribute&lt;?>... attrs)</code> -- 同上，在临时目录下创建(Linux 为 /tmp)，异常同上</p>
+                                    <pre class="brush: java;">
+Set&lt;PosixFilePermission> permissions = new TreeSet<>();
+// PosixFilePermission 枚举类型分别为: owner,group,others 的 rwx 权限
+permissions.add(PosixFilePermission.OWNER_READ);
+FileAttribute&lt;Set&lt;PosixFilePermission>> attrs = PosixFilePermissions.asFileAttribute(permissions);
+try {
+    Path dir = Paths.get("tmp", "files");
+    Path file = dir.resolve("file");
+    if(Files.notExists(dir)) {
+        Files.createDirectories(dir);  // 创建目录，包括父目录
+    }
+    if(Files.notExists(file)) {
+        Files.createFile(file, attrs); // 创建文件，指定创建者只读
+    }
+    Path link = dir.resolve("linkToFile");
+    if(Files.notExists(link)) {
+        Files.createLink(link, file);
+    }
+    Path softLink = dir.resolve("linkToDir");
+    if(Files.notExists(softLink, LinkOption.NOFOLLOW_LINKS)) { // 指定包含符号链接
+        Files.createSymbolicLink(softLink, dir);
+    }
+    log(Files.exists(link), Files.exists(softLink, LinkOption.NOFOLLOW_LINKS));
+} catch (IOException e) {
+    e.printStackTrace();
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static boolean 	exists(Path path, LinkOption... options)</code> -- 存在返回 true, 否则 false，如果存在 LinkOption.NOFOLLOW_LINKS 参数，才计入符号链接</p></li>
+                                <li><p><code>static boolean 	notExists(Path path, LinkOption... options)</code> -- 不存在返回 true, 否则 false，如果存在 LinkOption.NOFOLLOW_LINKS 参数，才计入符号链接</p>
+                                    <pre class="brush: java;">
+Path softLink = dir.resolve("linkToDir");
+if(Files.notExists(softLink, LinkOption.NOFOLLOW_LINKS)) { // 指定包含符号链接
+    Files.createSymbolicLink(softLink, dir);
+}
+log(Files.exists(softLink), Files.exists(softLink, LinkOption.NOFOLLOW_LINKS)); // false, true
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static long 	copy(Path source, OutputStream out)</code> -- 复制，将 source 写入到指定输出流</p></li>
+                                <li><p><code>static long 	copy(InputStream in, Path target, CopyOption... options)</code> -- 复制，将 in 写入到 target</p></li>
+                                <li><p><code>static Path 	copy(Path source, Path target, CopyOption... options)</code> -- 复制，将 source 写入到 target</p></li>
+
+                                <li class="group"><p><code>static Path 	move(Path source, Path target, CopyOption... options)</code> -- 移动/重命名文件</p></li>
+
+                                <li class="group"><p><code>static void 	delete(Path path)</code> -- 删除文件</p></li>
+                                <li><p><code>static boolean 	deleteIfExists(Path path)</code> -- 删除文件，不存在也不会抛出异常</p></li>
+
+
+
+                                <li class="group"><p><code>static FileTime 	getLastModifiedTime(Path path, LinkOption... options)</code> -- 返回文件的上次修改时间</p></li>
+                                <li><p><code>static Path 	setLastModifiedTime(Path path, FileTime time)</code> -- 更新文件上次修改的时间属性</p></li>
+                                <li><p><code>static UserPrincipal 	getOwner(Path path, LinkOption... options)</code> -- 获取文件所有者</p></li>
+                                <li><p><code>static Path 	setOwner(Path path, UserPrincipal owner)</code> -- 更新文件所有者</p></li>
+                                <li><p><code>static Set&lt;PosixFilePermission> 	getPosixFilePermissions(Path path, LinkOption... options)</code> -- 获取权限列表</p></li>
+                                <li><p><code>static Path 	setPosixFilePermissions(Path path, Set&lt;PosixFilePermission> perms)</code> -- 设置文件的POSIX权限</p></li>
+
+                                <li class="group"><p><code>static Object 	getAttribute(Path path, String attribute, LinkOption... options)</code> -- 设置文件属性的值，不支持的属性报 <code>UnsupportedOperationException</code></p></li>
+                                <li><p><code>static Path 	setAttribute(Path path, String attribute, Object value, LinkOption... options)</code> -- 获取文件属性的值，不支持的属性报 <code>UnsupportedOperationException</code></p>
+                                    <pre class="brush: java;">
+/* attribute 的格式如下：
+ *    [view-name:]attribute-name
+ * view-name 是视图名，默认为: basic, 其实对应的是 BasicFileAttributeView 的属性:
+ *    "lastModifiedTime" 	FileTime
+ *    "lastAccessTime" 	    FileTime
+ *    "creationTime" 	    FileTime
+ *    "size" 	            Long
+ *    "isRegularFile" 	    Boolean
+ *    "isDirectory" 	    Boolean
+ *    "isSymbolicLink" 	    Boolean
+ *    "isOther" 	        Boolean
+ *    "fileKey" 	        Object
+ *
+ * 对于 Posix 和 Win 下有两个不同的子接口实现 PosixFileAttributeView 和 DosFileAttributeView
+ * PosixFileAttributeView
+ *    "permissions" 	    Set&lt;PosixFilePermission>
+ *    "group" 	            GroupPrincipal
+ *    "owner" 	            UserPrincipal
+
+ * DosFileAttributeView
+ *    "readonly" 	        Boolean
+ *    "hidden"	            Boolean
+ *    "system" 	            Boolean
+ *    "archive" 	        Boolean
+ */
+log(Files.getAttribute(file, "size"));        // 文件大小
+log(Files.getAttribute(file, "basic:size"));  // 同上
+
+log(Files.getAttribute(file, "posix:group")); // 所属组，在 Posix 下才有效
+log(Files.getAttribute(file, "dos:hidden"));  // 是否为隐藏文件，在 Win 下才有效
+</pre>
+                                </li>
+
+
+                                <li><p><code>static Map&lt;String,Object> 	readAttributes(Path path, String attributes, LinkOption... options)</code> -- 属性名 attributes 支持以下写法</p>
+                                    <pre class="brush: java;">
+"*" 	                  -- 读取 BasicFileAttributeView 定义的所有属性
+"size,lastModifiedTime"   -- 多个属性用 ',' 分割
+"posix:*" 	              -- PosixFileAttributeView 的所有属性
+"posix:permissions,size"  -- 多个属性用 ',' 分割
+</pre>
+                                </li>
+                                <li class="group"><p><code>static &lt;A extends BasicFileAttributes> A 	readAttributes(Path path, Class&lt;A> type, LinkOption... options)</code> -- 读取文件属性</p>
+                                    <pre class="brush: java;">
+// 通用属性, 支持的方法参见 BasicFileAttributeView 的属性
+BasicFileAttributes attrs = Files.readAttributes(file, BasicFileAttributes.class);
+// Posix 系统
+BasicFileAttributes posixAttrs = Files.readAttributes(file, PosixFileAttributes.class);
+// Dos 系统
+BasicFileAttributes dosAttrs = Files.readAttributes(file, DosFileAttributes.class);
+</pre>
+                                </li>
+                                <li><p><code>static &lt;V extends FileAttributeView> V 	getFileAttributeView(Path path, Class&lt;V> type, LinkOption... options)</code> -- 返回给定类型的文件属性视图</p>
+                                    <pre class="brush: java;">
+try {
+    log(Files.getFileAttributeView(file, BasicFileAttributeView.class).name());
+    log(Files.getFileAttributeView(file, PosixFileAttributeView.class).name());
+    log(Files.getFileAttributeView(file, DosFileAttributeView.class).name());
+
+    Files.getFileAttributeView(file, DosFileAttributeView.class).setHidden(true);
+
+    FileTime now = FileTime.fromMillis(System.currentTimeMillis());
+    Files.getFileAttributeView(file, PosixFileAttributeView.class).setTimes(now, now, now);
+} catch (IOException e) {
+    e.printStackTrace();
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>static Stream&lt;Path> 	find(Path start, int maxDepth, BiPredicate&lt;Path,BasicFileAttributes> matcher, FileVisitOption... options)</code> -- 文件查找</p></li>
+                                <li><p><code>static Path 	readSymbolicLink(Path link)</code> -- 读取链接的目标，如果文件不是符号链接，则会失败</p></li>
+
+                                <li class="group"><p><code>static boolean 	isDirectory(Path path, LinkOption... options)</code> -- 是否为目录，参数类型了是否包含指向目录的符号链接</p></li>
+                                <li><p><code>static boolean 	isRegularFile(Path path, LinkOption... options)</code> -- 是否为文件，参数类型了是否包含指向文件的符号链</p></li>
+                                <li><p><code>static boolean 	isSymbolicLink(Path path)</code> -- 是否为符号链接</p></li>
+                                <li><p><code>static boolean 	isSameFile(Path path, Path path2)</code> -- 是否指向同一个文件</p></li>
+                                <li><p><code>static boolean 	isHidden(Path path)</code> -- 是否为隐藏文件</p></li>
+                                <li><p><code>static boolean 	isReadable(Path path)</code> -- 是否可读</p></li>
+                                <li><p><code>static boolean 	isWritable(Path path)</code> -- 是否可写</p></li>
+                                <li><p><code>static boolean 	isExecutable(Path path)</code> -- 是否为可执行文件</p></li>
+
+                                <li class="group"><p><code>static Stream&lt;String> 	lines(Path path)</code> -- 按行读取(Stream 是支持顺序和并行聚合操作的元素序列)</p></li>
+                                <li><p><code>static Stream&lt;String> 	lines(Path path, Charset cs)</code> -- 指定编码按行读取</p></li>
+
+                                <li class="group"><p><code>static byte[] 	readAllBytes(Path path)</code> -- 按字节读取所有字节</p></li>
+                                <li><p><code>static List&lt;String> 	readAllLines(Path path)</code> -- 读取所有行</p></li>
+                                <li><p><code>static List&lt;String> 	readAllLines(Path path, Charset cs)</code> -- 指定编码读取所有行</p></li>
+
+                                <li class="group"><p><code>static Path 	write(Path path, byte[] bytes, OpenOption... options)</code> -- 写入字节，可以指定打开方式</p></li>
+                                <li><p><code>static Path 	write(Path path, Iterable&lt;? extends CharSequence> lines, OpenOption... options)</code> -- 按行写入，可以指定打开方式</p></li>
+                                <li><p><code>static Path 	write(Path path, Iterable&lt;? extends CharSequence> lines, Charset cs, OpenOption... options)</code> -- 指定编码按行写入，可以指定打开方式</p></li>
+
+                                <li class="group"><p><code>static BufferedReader 	newBufferedReader(Path path)</code> -- 字符流读取</p></li>
+                                <li><p><code>static BufferedReader 	newBufferedReader(Path path, Charset cs)</code> -- 指定编码字符流读取</p></li>
+                                <li><p><code>static BufferedWriter 	newBufferedWriter(Path path, OpenOption... options)</code> -- 字符流写入，可以指定打开方式</p></li>
+                                <li><p><code>static BufferedWriter 	newBufferedWriter(Path path, Charset cs, OpenOption... options)</code> -- 指定编码字符流写入，可以指定打开方式</p></li>
+
+                                <li class="group"><p><code>static SeekableByteChannel 	newByteChannel(Path path, OpenOption... options)</code> -- 可读写/移动的字节数组，可以指定打开方式</p></li>
+                                <li><p><code>static SeekableByteChannel 	newByteChannel(Path path, Set&lt;? extends OpenOption> options, FileAttribute&lt;?>... attrs)</code> -- 通上，可指定属性，可以指定打开方式</p></li>
+
+                                <li class="group"><p><code>static Stream&lt;Path> 	list(Path dir)</code> -- 子目录/文件列表</p></li>
+                                <li><p><code>static DirectoryStream&lt;Path> 	newDirectoryStream(Path dir)</code> -- 目录迭代器</p></li>
+                                <li><p><code>static DirectoryStream&lt;Path> 	newDirectoryStream(Path dir, DirectoryStream.Filter&lt;? super Path> filter)</code> -- 可以指定过滤条件</p>
+                                    <pre class="brush: java;">Files.newDirectoryStream(base, path -> Files.isRegularFile(path)).forEach(LogUtil::log);</pre>
+                                </li>
+                                <li><p><code>static DirectoryStream&lt;Path> 	newDirectoryStream(Path dir, String glob)</code> -- 过滤路径表示形式 <code>*.java</code></p></li>
+
+                                <li class="group"><p><code>static InputStream 	newInputStream(Path path, OpenOption... options)</code> -- 读取字节流，可以指定打开方式</p></li>
+                                <li><p><code>static OutputStream 	newOutputStream(Path path, OpenOption... options)</code> -- 写入字节流，可以指定打开方式</p></li>
+
+                                <li class="group"><p><code>static long 	size(Path path)</code> -- 文件/目录大小</p></li>
+                                <li><p><code>static String 	probeContentType(Path path)</code> -- 探测文件的内容类型</p></li>
+                                <li><p><code>static FileStore 	getFileStore(Path path)</code> -- 文件存储的设备，分区，卷等信息</p></li>
+
+                                <li class="group"><p><code>static Stream&lt;Path> 	walk(Path start, FileVisitOption... options)</code> -- 遍历文件树，包括子目录下目录/文件</p></li>
+                                <li><p><code>static Stream&lt;Path> 	walk(Path start, int maxDepth, FileVisitOption... options)</code> -- 同上，指定最大深度</p></li>
+                                <li><p><code>static Path 	walkFileTree(Path start, FileVisitor&lt;? super Path> visitor)</code> -- 过程可控遍历文件树，FileVisitor 是访问过程</p></li>
+                                <li><p><code>static Path 	walkFileTree(Path start, Set&lt;FileVisitOption> options, int maxDepth, FileVisitor&lt;? super Path> visitor)</code> -- 同上，指定最大深度</p>
+                                    <pre class="brush: java;">
+// 文件访问者。该接口的实现 SimpleFileVisitor 用来访问文件树中的每个文件
+public interface FileVisitor&lt;T> {
+    // 在目录中的条目被访问之前调用一个目录
+    FileVisitResult preVisitDirectory(T dir, BasicFileAttributes attrs) throws IOException
+    // 在目录中的条目之后调用目录，并且已经访问了所有的后代
+    FileVisitResult postVisitDirectory(T dir, IOException exc) throws IOException;
+    // 为目录中的文件调用
+    FileVisitResult visitFile(T file, BasicFileAttributes attrs) throws IOException;
+    // 为无法访问的文件调用
+    FileVisitResult visitFileFailed(T file, IOException exc) throws IOException;
+}
+
+public enum FileVisitResult {
+    CONTINUE,          // 继续
+    TERMINATE,         // 终止
+    SKIP_SUBTREE,      // 跳过此目录中的文件或目录
+    SKIP_SIBLINGS;     // 跳过此文件或目录的兄弟节点
+}
+</pre>
+                                </li>
+
+
+                            </ol>
+						</div>
+                    </div>
 				</div>
 				<!-- item over -->
 
@@ -9700,7 +11549,63 @@ java.lang.Object
 
 public abstract class URLConnection {}
 
-public abstract class HttpURLConnection extends URLConnection {}
+/** 此类定义了 HTTP 状态码 */
+public abstract class HttpURLConnection extends URLConnection {
+    /** 成功 */
+    public static final int HTTP_OK = 200;
+    public static final int HTTP_CREATED = 201;
+    public static final int HTTP_ACCEPTED = 202;
+    public static final int HTTP_NOT_AUTHORITATIVE = 203;
+    public static final int HTTP_NO_CONTENT = 204;
+    public static final int HTTP_RESET = 205;
+    public static final int HTTP_PARTIAL = 206;
+
+    /** 重定向 */
+    public static final int HTTP_MULT_CHOICE = 300;
+    public static final int HTTP_MOVED_PERM = 301;
+    public static final int HTTP_MOVED_TEMP = 302;
+    public static final int HTTP_SEE_OTHER = 303;
+    public static final int HTTP_NOT_MODIFIED = 304;
+    public static final int HTTP_USE_PROXY = 305;
+
+    /** 客户端错误，比如 不存在或未授权 */
+    public static final int HTTP_BAD_REQUEST = 400;
+    public static final int HTTP_UNAUTHORIZED = 401;
+    public static final int HTTP_PAYMENT_REQUIRED = 402;
+    public static final int HTTP_FORBIDDEN = 403;
+    public static final int HTTP_NOT_FOUND = 404;
+    public static final int HTTP_BAD_METHOD = 405;
+    public static final int HTTP_NOT_ACCEPTABLE = 406;
+    public static final int HTTP_PROXY_AUTH = 407;
+    public static final int HTTP_CLIENT_TIMEOUT = 408;
+    public static final int HTTP_CONFLICT = 409;
+    public static final int HTTP_GONE = 410;
+    public static final int HTTP_LENGTH_REQUIRED = 411;
+    public static final int HTTP_PRECON_FAILED = 412;
+    public static final int HTTP_ENTITY_TOO_LARGE = 413;
+    public static final int HTTP_REQ_TOO_LONG = 414;
+    public static final int HTTP_UNSUPPORTED_TYPE = 415;
+
+    /** 服务器错误 */
+    public static final int HTTP_INTERNAL_ERROR = 500;
+    public static final int HTTP_NOT_IMPLEMENTED = 501;
+    public static final int HTTP_BAD_GATEWAY = 502;
+    public static final int HTTP_UNAVAILABLE = 503;
+    public static final int HTTP_GATEWAY_TIMEOUT = 504;
+    public static final int HTTP_VERSION = 505;
+
+    static void setFollowRedirects(boolean set) {...}              // 重定向自动跟随, 默认不跟随
+    static boolean 	getFollowRedirects() {...}
+
+    void setInstanceFollowRedirects(boolean followRedirects) {...} // 重定向自动跟随, 默认不跟随
+    boolean getInstanceFollowRedirects() {...}
+
+    void setRequestMethod(String method) {...}  // 设置请求方法: GET POST HEAD OPTIONS PUT DELETE TRACE
+    String 	getRequestMethod() {...}            // 获取请求方法
+    int getResponseCode() {...}                 // 获取响应码
+
+    ...
+}
 </pre>
 							<p><a href="docs/docs-java/api/java/net/URLConnection.html" target="_blank">URLConnection</a> 代表应用程序和 URL 之间的通信链接。此类的实例可用于读取和写入此 URL 引用的资源。</p>
 							<p><a href="docs/docs-java/api/java/net/HttpURLConnection.html" target="_blank">HttpURLConnection</a> 支持 HTTP 特定功能的 URLConnection。每个 HttpURLConnection 实例都可用于生成单个请求，但是其他实例可以透明地共享连接到 HTTP 服务器的基础网络。</p>
@@ -9855,6 +11760,7 @@ public class HttpClient {
             connection = (HttpURLConnection) mUrl.openConnection();
             connection.setConnectTimeout(connectTimeout);
             connection.setReadTimeout(readTimeout);
+            connection.setInstanceFollowRedirects(true); // 重定向自动跟随
 
             headers.forEach((key, values) -> {
                 values.forEach(value -> {
@@ -11850,7 +13756,7 @@ try {
 </pre>
                             <p>生成的 XML 文件如下：</p>
                             <pre class="brush: xml;">
-<?xml version="1.0" encoding="UTF-8"?>
+&lt;?xml version="1.0" encoding="UTF-8"?>
 <java version="1.8.0_65" class="java.beans.XMLDecoder">
  <object class="java.util.ArrayList">
   <void method="add">
