@@ -126,10 +126,13 @@
 							<a href="#java-util-Date" class="list-group-item">Date, TimeZone, Calendar</a>
                             <a href="#java-util-Timer" class="list-group-item">Timer 和 TimerTask</a>
                             <a href="#java-util-List" class="list-group-item">List, Map, Set, Queue...</a>
+                            <a href="#java-util-BitSet" class="list-group-item">BitSet</a>
                             <a href="#java-util-function" class="list-group-item"><code>.function</code> 包</a>
                             <a href="#java-util-stream" class="list-group-item"><code>.stream</code> 包</a>
                             <a href="#java-util-Random" class="list-group-item">Random 子类及 SplittableRandom</a>
                             <a href="#java-util-Optional" class="list-group-item">Optional 和 Objects</a>
+                            <a href="#java-util-ResourceBundle" class="list-group-item">ResourceBundle 及子类</a>
+                            <a href="#java-util-logging" class="list-group-item"><code>.logging</code> 原生日志</a>
 							<a href="#java-util-concurrent-atomic" class="list-group-item"><code>.concurrent.atomic</code> 包</a>
 							<a href="#java-util-concurrent-locks" class="list-group-item"><code>.concurrent.locks</code> 包</a>
                             <a href="#java-util-Formatter" class="list-group-item">Formatter, Formattable</a>
@@ -2117,6 +2120,20 @@ public interface CharSequence {
     int length(); // 返回此字符序列的长度。
     CharSequence subSequence(int start, int end); // 返回一个新的 CharSequence，它是此序列的子序列。
     String toString(); // 返回一个包含此序列中字符的字符串，该字符串与此序列的顺序相同。
+}
+
+/** 字符串拼接
+ * String s = new StringJoiner("-", "[", "]").add("a").add("b").add("c").toString(); // [a-b-c]
+ */
+public final class StringJoiner {
+    public StringJoiner(CharSequence delimiter) {...}
+    public StringJoiner(CharSequence delimiter, CharSequence prefix, CharSequence suffix) {...}
+
+    public StringJoiner add(CharSequence newElement) {...}
+    public int 	length() {...}
+    public StringJoiner 	merge(StringJoiner other) {...}
+    public StringJoiner 	setEmptyValue(CharSequence emptyValue) {...}
+    public String 	toString() {...}
 }
 </pre>
                             <p><a href="docs/docs-java/api/java/lang/String.html" target="_blank">String</a> 类代表字符串。Java 程序中的所有字符串字面值（如 "abc" ）都作为此类的实例实现。</p>
@@ -8047,6 +8064,104 @@ prop.stringPropertyNames().forEach(s -> log(s, prop.getProperty(s)));
                 <!-- item over -->
 
                 <!-- item start -->
+                <a class="offset" id="java-util-BitSet"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">BitSet</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+public class BitSet implements Cloneable, Serializable {
+    public BitSet() {...}
+    public BitSet(int nbits) {...}
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/util/BitSet.html" target="_blank">BitSet</a> 实现了根据需要增长的位向量。位组的每个组件都有一个 boolean(0/1) 值。 可以检查，设置或清除单独的索引位。 </p>
+                        <p><a href="docs/docs-java/api/java/util/BitSet.html" target="_blank">BitSet</a> 默认情况下，集合中的所有位最初都具有值 false(0)。 </p>
+                        <p><a href="docs/docs-java/api/java/util/BitSet.html" target="_blank">BitSet</a> 内部使用 <code>long[]</code> 存储二进制位，一个 long 值可以存储 64 位(8 字节)二进制数据。 </p>
+                        <pre class="brush: java;">
+BitSet bitSet = new BitSet(64); // 初始化位长; size 方法得到的数值总是 64(2^6) 的倍数(因为 long 占用 8 个字节)
+bitSet.set(0);
+bitSet.set(1);
+bitSet.set(2);
+bitSet.set(63);
+
+/** 经过以上操作，位值变为以下: 10101000 00000000 00000000 00000000 00000000 00000000 00000000 00000001 */
+</pre>
+
+                        <ol>
+                            <li><p><code>static BitSet 	valueOf(byte[] bytes)</code> -- 返回包含给定字节数组中所有位的新位集合</p></li>
+                            <li><p><code>static BitSet 	valueOf(ByteBuffer bb)</code> -- 返回一个新的位集，其中包含给定字节缓冲区中 position 到 limit 之间的所有位</p>
+                                <pre class="brush: java;">
+/* 注意其存储方式的字节序: */
+BitSet bitSet = BitSet.valueOf("01234567".getBytes()); // 十六进制: 3031323334353637
+// 00001100 10001100 01001100 11001100 00101100 10101100 01101100 11101100
+BitSet bitSet = BitSet.valueOf("abcdefg".getBytes());  // 十六进制: 61626364656667
+// 10000110 01000110 11000110 00100110 10100110 01100110 11100110 00000000
+</pre>
+                            </li>
+                            <li><p><code>static BitSet 	valueOf(long[] longs)</code> -- 返回包含给定长数组中所有位的新位集</p></li>
+                            <li><p><code>static BitSet 	valueOf(LongBuffer lb)</code> -- 返回包含给定长缓冲区中其 position 到 limit 之间的所有位的新位集合</p>
+                                <pre class="brush: java;">
+BitSet bitSet = BitSet.valueOf(new long[]{1024, 2});
+BitSet bitSet = BitSet.valueOf(LongBuffer.wrap(new long[]{1024, 2}));
+/* 对于以上两个方法生成的 BitSet 等价，注意其存储方式的字节序:
+ * 00000000 00100000 00000000 00000000 00000000 00000000 00000000 00000000
+ * 01000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+ */
+</pre>
+                            </li>
+
+
+                            <li class="group"><p><code>int 	size()</code> -- 实际使用的空间位数, 使用的 long 数目 * 64</p></li>
+                            <li><p><code>int 	length()</code> --  最高位的索引(最后一个 true(1) 的索引)</p></li>
+
+                            <li class="group"><p><code>void 	set(int bitIndex)</code> -- 将指定位设为 true(1)</p></li>
+                            <li><p><code>void 	set(int bitIndex, boolean value)</code> -- 将指定位设为 value</p></li>
+                            <li><p><code>void 	set(int fromIndex, int toIndex)</code> -- 将 <code>[fromIndex,toIndex)</code> 设为 true(1)</p></li>
+                            <li><p><code>void 	set(int fromIndex, int toIndex, boolean value)</code> -- 将 <code>[fromIndex,toIndex)</code> 设为 value</p></li>
+
+                            <li class="group"><p><code>boolean 	get(int bitIndex)</code> -- 获取指定位的值 true/false(1/0)</p></li>
+                            <li><p><code>BitSet 	get(int fromIndex, int toIndex)</code> -- 获取<code>[fromIndex,toIndex)</code> 的值作为新的 BitSet 返回</p></li>
+
+
+                            <li class="group"><p><code>void 	and(BitSet set)</code> -- 按位 "与"</p></li>
+                            <li><p><code>void 	or(BitSet set)</code> -- 按位 "或"</p></li>
+                            <li><p><code>void 	andNot(BitSet set)</code> -- 清除 set 中的 true(1)</p></li>
+                            <li><p><code>void 	xor(BitSet set)</code> -- 按位 "异或"</p></li>
+
+                            <li class="group"><p><code>void 	flip(int bitIndex)</code> -- 翻转指定位</p></li>
+                            <li><p><code>void 	flip(int fromIndex, int toIndex)</code> -- 翻转 <code>[fromIndex,toIndex)</code></p></li>
+
+                            <li class="group"><p><code>void 	clear()</code> -- 清除所有 true(1)</p></li>
+                            <li><p><code>void 	clear(int bitIndex)</code> -- 从指定位置开始清除</p></li>
+                            <li><p><code>void 	clear(int fromIndex, int toIndex)</code> -- 清除 <code>[fromIndex,toIndex)</code> true(1)</p></li>
+
+                            <li class="group"><p><code>IntStream 	stream()</code> -- 返回 true(1) 状态位的索引流</p></li>
+
+                            <li class="group"><p><code>int 	nextSetBit(int fromIndex)</code> -- 返回指定索引(包括)后的第一个 true(1) 位的索引</p></li>
+                            <li><p><code>int 	nextClearBit(int fromIndex)</code> -- 返回指定索引(包括)后的第一个 false(0) 位的索引</p></li>
+                            <li><p><code>int 	previousSetBit(int fromIndex)</code> -- 返回指定索引(包括)前的第一个 true(1) 位的索引</p></li>
+                            <li><p><code>int 	previousClearBit(int fromIndex)</code> -- 返回指定索引(包括)前的第一个 false(0) 位的索引</p></li>
+
+
+                            <li class="group"><p><code>int 	cardinality()</code> -- 统计 true(1) 的数量</p></li>
+                            <li><p><code>boolean 	intersects(BitSet set)</code> -- 任何相同位置有 true(1) 值都返回 true</p></li>
+                            <li><p><code>boolean 	isEmpty()</code> -- 是否全 false(0)</p></li>
+
+                            <li class="group"><p><code>byte[] 	toByteArray()</code> -- 返回 byte 数组表示的值(小端序)</p></li>
+                            <li><p><code>long[] 	toLongArray()</code> -- 返回内部使用的 long 数组</p></li>
+
+                            <li class="group"><p><code>int 	hashCode()</code> -- 返回此位集的哈希码值</p></li>
+                            <li><p><code>boolean 	equals(Object obj)</code> -- 将此对象与指定对象进行比较</p></li>
+                            <li><p><code>Object 	clone()</code> -- 克隆 BitSet 产生一个新的 BitSet</p></li>
+                            <li><p><code>String 	toString()</code> -- 返回此位集的字符串表示形式</p></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
                 <a class="offset" id="java-util-function"></a>
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -8896,6 +9011,438 @@ public final class OptionalDouble {}
                             <li><p><code>static String 	toString(Object o)</code> -- 返回非 null参数调用 toString和 NULL 参数的 "null"</p></li>
                             <li><p><code>static String 	toString(Object o, String nullDefault)</code> -- 返回非 null 参数调用 toString 和 null 参数的 nullDefault</p></li>
                         </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-util-ResourceBundle"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">ResourceBundle 及子类</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+public abstract class ResourceBundle {
+    public abstract Enumeration&lt;String> getKeys();
+    protected abstract Object handleGetObject(String key);
+
+    public static class Control {}
+}
+
+public abstract class ListResourceBundle extends ResourceBundle {
+    protected abstract Object[][] getContents();
+}
+
+public class PropertyResourceBundle extends ResourceBundle {
+    public PropertyResourceBundle(InputStream stream) {...}
+    public PropertyResourceBundle(Reader reader) {...}
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/util/ResourceBundle.html" target="_blank">ResourceBundle</a> 资源约束包含区域特定的对象。主要用来解决国际化和本地化问题。 </p>
+                        <pre class="brush: java;">
+/* 1.先在 classpath 下创建两个文件:
+ *     lang.properties -- 内容为: ok=Ok \n cancel=Cancel
+ *     lang_zh_CN.properties -- 内容为: ok=确定 \n cancel=取消
+ *
+ * 2.对于中文要进行一个转码操作(JDK 提供的 native2ascii 工具)，ResourceBundle 只能读取 ISO-8859-1 编码
+ *     $ native2ascii lang_zh_CN.properties lang_zh_CN.properties
+ *     lang_zh_CN.properties -- 内容变为: ok=\u786e\u5b9a \n cancel=\u53d6\u6d88
+ */
+ResourceBundle defBundle = ResourceBundle.getBundle("lang");
+log(defBundle.getString("ok")); // Ok
+
+ResourceBundle cnBundle = ResourceBundle.getBundle("lang", Locale.CHINA);
+log(cnBundle.getString("ok"));  // 确定， 如果不存在 lang_zh_CN.properties，此处会输出 Ok
+</pre>
+                        <p><a href="docs/docs-java/api/java/util/PropertyResourceBundle.html" target="_blank">PropertyResourceBundle</a> 可以从 InputStream 或 Reader 中获取数据，<code>ResourceBundle.getBundle()</code> 方法返回的也是该类的实例。 </p>
+                        <p><a href="docs/docs-java/api/java/util/ListResourceBundle.html" target="_blank">ListResourceBundle</a> 必须覆盖 <code>getContents()</code> 并提供一个数组(二维数组)，其中数组中的每个项都是一对对象。 每对的第一个元素是键，它必须是 String ，第二个元素是与该键相关联的值。 </p>
+                        <pre class="brush: java;">
+ResourceBundle listResourceBundle = new ListResourceBundle() {
+    private final Object[][] message_en_US = { { "hello", "Hello" } };
+    private final Object[][] message_zh_CN = { { "hello", "你好" } };
+
+    @Override
+    protected Object[][] getContents() {
+        if ("CN".equals(Locale.getDefault().getCountry())
+                && "zh".equals(Locale.getDefault().getLanguage())) {
+            return message_zh_CN;
+        }
+        if ("US".equals(Locale.getDefault().getCountry())
+                && "en".equals(Locale.getDefault().getLanguage())) {
+            return message_en_US;
+        }
+        return null;
+    }
+};
+</pre>
+
+                        <ol>
+                            <li><p><code>static ResourceBundle 	getBundle(String baseName)</code> -- 使用指定的基本名称获取资源包，返回的是 PropertyResourceBundle</p></li>
+                            <li><p><code>static ResourceBundle 	getBundle(String baseName, Locale locale)</code> -- 指定的基本名称和区域设置获取资源包</p></li>
+                            <li><p><code>static ResourceBundle 	getBundle(String baseName, Locale locale, ClassLoader loader)</code> -- 使用指定的基本名称，区域设置和类加载器获取资源包</p></li>
+                            <li><p><code>static ResourceBundle 	getBundle(String baseName, Locale targetLocale, ResourceBundle.Control control)</code> -- 使用指定的基本名称，目标语言环境，调用者的类加载和控件返回资源包</p></li>
+                            <li><p><code>static ResourceBundle 	getBundle(String baseName, Locale targetLocale, ClassLoader loader, ResourceBundle.Control c)</code> -- 使用指定的基本名称，目标语言环境，类加载器和控件返回资源包</p></li>
+                            <li><p><code>static ResourceBundle 	getBundle(String baseName, ResourceBundle.Control control)</code> -- 使用指定的基本名称，指定的控件返回资源包</p></li>
+
+                            <li class="group"><p><code>static void 	clearCache()</code> -- 删除缓存(在寻找 ResourceBundle 过程中会将其加入缓存，如果资源变更了应该清除这个缓存)</p></li>
+                            <li><p><code>static void 	clearCache(ClassLoader loader)</code> -- 删除指定类加载器的缓存</p></li>
+
+                            <li class="group"><p><code>abstract Enumeration&lt;String> 	getKeys()</code> -- 获取 Key 列表</p></li>
+                            <li><p><code>protected abstract Object 	handleGetObject(String key)</code> -- 从此资源包获取给定键的对象</p></li>
+
+                            <li class="group"><p><code>protected Set&lt;String> 	handleKeySet()</code> -- 获取 Key 的 Set 集合</p></li>
+                            <li><p><code>protected void 	setParent(ResourceBundle parent)</code> -- 设置此捆绑包的父捆绑包</p></li>
+
+                            <li class="group"><p><code>boolean 	containsKey(String key)</code> -- 是否包含指定键</p></li>
+                            <li><p><code>String 	getBaseBundleName()</code> -- 获取 BaseName</p></li>
+                            <li><p><code>Locale 	getLocale()</code> -- 获取语言</p></li>
+                            <li><p><code>String 	getString(String key)</code> -- 获取指定 key 的值</p></li>
+                            <li><p><code>Object 	getObject(String key)</code> -- 获取指定 key 的值</p></li>
+                            <li><p><code>String[] 	getStringArray(String key)</code> -- 调用 <code>(String[]) getObject(key)</code>不支持 PropertyResourceBundle</p></li>
+                            <li><p><code>Set&lt;String> 	keySet()</code> -- 获取 Key 的 Set 集合</p></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- item over -->
+
+
+                <!-- item start -->
+                <a class="offset" id="java-util-logging"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Java 原生日志系统</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <p><code>java.util.logging</code> 包提供 Java 平台核心日志记录工具的类和接口。 </p>
+                            <p>Java 中的 Logging API 让 Java 应用可以记录不同级别的信息，它在 debug 过程中非常有用，如果系统因为各种各样的原因而崩溃，崩溃原因可以在日志中清晰地追溯。</p>
+                            <p>Java 通过 Java.util.logging 包为应用程序提供了记录消息的可能，在 API 中的核心类为 Logger 类。理解在记录消息中的日志的不同级别是非常重要的。Java 为此定时了 8 个级别，它们分别是: <b>SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST 以及 ALL</b>，它们按照优先级降序排列，在应用运行的任何时间点，日志级别可以被更改。</p>
+                            <p>通常来说，当为 Logger 指定了一个 Level, 该 Logger 会包含当前指定级别以及更高级别的日志。</p>
+                            <p><b>几个重要类的说明</b></p>
+                            <ul>
+                                <li><p><a href="#java-util-logging-Logger">Logger</a> 对外发布的日志记录器，应用系统可以通过该对象完成日志记录的功能</p></li>
+                                <li><p><a href="#java-util-logging-Level">Level</a> 日志的记录级别，定义了 8 个日志级别</p></li>
+                                <li><p><a href="#java-util-logging-LogRecord">LogRecord</a> 日志信息描述对象，相当于一个实体类，保存日志的：级别，消息，异常，时间，线程...</p></li>
+                                <li><p><a href="docs/docs-java/api/java/util/logging/Filter.html">Filter</a> 日志过滤器，在日志被 Handler 处理之前，起过滤作用。只有 <code>boolean isLoggable(LogRecord record)</code> 方法</p></li>
+                                <li><p><a href="#java-util-logging-Handler">Handler</a> 日志处理器，接口对象，决定日志的输出方式，由子类实现了：内存，控制台，文件，网络的输出方式</p></li>
+                                <li><p><a href="#java-util-logging-Formatter">Formatter</a> 日志格式化转换器，接口对象，决定日志的输出格式，JDK 提供了 <code>SimpleFormatter</code> 和 <code>XMLFormatter</code> 实现</p></li>
+                                <li><p><a href="#java-util-logging-LogRecord">LoggingMXBean</a> 接口对象，对外发布的日志管理器</p></li>
+                                <li><p><a href="#java-util-logging-LogRecord">LoggerManager</a> 日志管理器</p></li>
+                            </ul>
+                        </div>
+
+                        <a id="java-util-logging-Logger" class="offset"></a>
+                        <div class="sub-item">
+						    <pre class="brush: java;">
+public class Logger {
+    public static final String GLOBAL_LOGGER_NAME = "global";
+
+    protected Logger(String name, String resourceBundleName) {...}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/util/logging/Logger.html" target="_blank">Logger</a> 是对外发布的日志记录器，应用系统可以通过该对象完成日志记录的功能。</p>
+                            <ol>
+                                <li><p><code>static Logger 	getGlobal()</code> -- 返回名为 <code>Logger.GLOBAL_LOGGER_NAME(global)</code> 的全局记录器对象</p></li>
+                                <li><p><code>static Logger 	getLogger(String name)</code> -- 查找或创建一个命名子系统的记录器</p></li>
+                                <li><p><code>static Logger 	getLogger(String name, String resourceBundleName)</code> -- 同上，支持国际化</p></li>
+                                <li><p><code>static Logger 	getAnonymousLogger()</code> -- 创建一个匿名记录器</p></li>
+                                <li><p><code>static Logger 	getAnonymousLogger(String resourceBundleName)</code> -- 同上，支持国际化</p></li>
+
+                                <li class="group"><p><code>void 	log(<a href="#java-util-logging-LogRecord">LogRecord</a> record)</code> -- 类中的所有其他日志记录方法最终通过此方法调用以实际执行任何日志记录</p></li>
+
+                                <li class="group"><p><code>void 	severe(String msg)</code> -- 级别为 <code>SEVERE</code> 的日志</p></li>
+                                <li><p><code>void 	severe(Supplier&lt;String> msgSupplier)</code> -- 同上</p></li>
+
+                                <li><p><code>void 	warning(String msg)</code> -- 级别为 <code>WARNING</code> 的日志</p></li>
+                                <li><p><code>void 	warning(Supplier&lt;String> msgSupplier)</code> -- 同上</p></li>
+
+                                <li><p><code>void 	info(String msg)</code> -- 级别为 <code>INFO</code> 的日志</p></li>
+                                <li><p><code>void 	info(Supplier&lt;String> msgSupplier)</code> -- 同上</p></li>
+
+                                <li><p><code>void 	config(String msg)</code> -- 级别为 <code>CONFIG</code> 的日志</p></li>
+                                <li><p><code>void 	config(Supplier&lt;String> msgSupplier)</code> -- 同上</p></li>
+
+                                <li><p><code>void 	fine(String msg)</code> -- 级别为 <code>FINE</code> 的日志</p></li>
+                                <li><p><code>void 	fine(Supplier&lt;String> msgSupplier)</code> -- 同上</p></li>
+
+                                <li><p><code>void 	finer(String msg)</code> -- 级别为 <code>FINER</code> 的日志</p></li>
+                                <li><p><code>void 	finer(Supplier&lt;String> msgSupplier)</code> -- 同上</p></li>
+
+                                <li><p><code>void 	finest(String msg)</code> -- 级别为 <code>FINEST</code> 的日志</p></li>
+                                <li><p><code>void 	finest(Supplier&lt;String> msgSupplier)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>void 	log(<a href="#java-util-logging-Level">Level</a> level, String msg)</code> -- 指定级别和消息</p></li>
+                                <li><p><code>void 	log(<a href="#java-util-logging-Level">Level</a> level, Supplier&lt;String> msgSupplier)</code> -- 同上</p></li>
+                                <li><p><code>void 	log(<a href="#java-util-logging-Level">Level</a> level, String msg, Object param1)</code> -- 同上，指定 msg 参数，使用 <code>{index}</code> 占位</p></li>
+                                <li><p><code>void 	log(<a href="#java-util-logging-Level">Level</a> level, String msg, Object[] params)</code> -- 同上</p>
+                                    <pre class="brush: java;">log.log(Level.INFO, "Key is {0}, Value is {1}", new Object[]{"age", 3});</pre>
+                                </li>
+                                <li><p><code>void 	log(<a href="#java-util-logging-Level">Level</a> level, String msg, Throwable thrown)</code> -- 指定级别,消息和相关联的 Throwable</p></li>
+                                <li><p><code>void 	log(<a href="#java-util-logging-Level">Level</a> level, Throwable thrown, Supplier&lt;String> msgSupplier)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>void 	logp(<a href="#java-util-logging-Level">Level</a> level, String sourceClass, String sourceMethod, String msg)</code> -- 指名日志请求的类和方法</p></li>
+                                <li><p><code>void 	logp(<a href="#java-util-logging-Level">Level</a> level, String srcCls, String srcMtd, String msg, Object param1)</code> -- 同上</p></li>
+                                <li><p><code>void 	logp(<a href="#java-util-logging-Level">Level</a> level, String srcCls, String srcMtd, String msg, Object[] params)</code> -- 同上</p></li>
+                                <li><p><code>void 	logp(<a href="#java-util-logging-Level">Level</a> level, String srcCls, String srcMtd, String msg, Throwable thrown)</code> -- 同上</p></li>
+                                <li><p><code>void 	logp(<a href="#java-util-logging-Level">Level</a> level, String srcCls, String srcMtd, Supplier&lt;String> msgSupplier)</code> -- 同上</p></li>
+                                <li><p><code>void 	logp(<a href="#java-util-logging-Level">Level</a> level, String srcCls, String srcMtd, Throwable thrown, Supplier&lt;String> s)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>void 	logrb(<a href="#java-util-logging-Level">Level</a> level, String sourceClass, String sourceMethod, ResourceBundle bundle, String msg, Object... params)</code> -- 国际化支持</p></li>
+                                <li><p><code>void 	logrb(<a href="#java-util-logging-Level">Level</a> level, String sourceClass, String sourceMethod, ResourceBundle bundle, String msg, Throwable thrown)</code> -- 同上</p></li>
+
+                                <li class="group"><p><code>void 	addHandler(Handler handler)</code> -- 添加日志处理程序</p></li>
+                                <li><p><code>void 	removeHandler(Handler handler)</code> -- 移除日志处理程序</p></li>
+                                <li><p><code>Handler[] 	getHandlers()</code> -- 获取与此记录器关联的处理程序</p></li>
+                                <li><p><code>void 	setUseParentHandlers(boolean useParentHandlers)</code> -- 配置记录器是否将其输出发送到其父记录器(默认为 true)</p></li>
+                                <li><p><code>boolean 	getUseParentHandlers()</code> -- 记录器是否将其输出发送到其父记录器</p></li>
+
+                                <li class="group"><p><code>void 	entering(String sourceClass, String sourceMethod)</code> -- <code>logp</code>便捷特殊方法</p></li>
+                                <li><p><code>void 	entering(String sourceClass, String sourceMethod, Object param1)</code> -- 同上</p></li>
+                                <li><p><code>void 	entering(String sourceClass, String sourceMethod, Object[] params)</code> -- 同上</p></li>
+                                <li><p><code>void 	exiting(String sourceClass, String sourceMethod)</code> -- 同上</p></li>
+                                <li><p><code>void 	exiting(String sourceClass, String sourceMethod, Object result)</code> -- 同上</p>
+                                    <pre class="brush: java;">
+// entering 方法内容:
+logp(Level.FINER, sourceClass, sourceMethod, "ENTRY");
+
+// exiting 方法内容:
+logp(Level.FINER, sourceClass, sourceMethod, "RETURN");
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>void 	setLevel(<a href="#java-util-logging-Level">Level</a> newLevel)</code> -- 配置级别</p></li>
+                                <li><p><code>Level 	getLevel()</code> -- 获取级别</p></li>
+                                <li><p><code>void 	setFilter(Filter newFilter)</code> -- 配置过滤器</p></li>
+                                <li><p><code>Filter 	getFilter()</code> -- 获取过滤器</p></li>
+
+                                <li class="group"><p><code>boolean 	isLoggable(<a href="#java-util-logging-Level">Level</a> level)</code> -- 检查该记录器是否实际记录给定级别的消息</p></li>
+                                <li><p><code>String 	getName()</code> -- 获取此记录器的名称</p></li>
+                                <li><p><code>void 	setParent(Logger parent)</code> -- 设置此记录器的父级</p></li>
+                                <li><p><code>Logger 	getParent()</code> -- 返回此记录器的父级</p></li>
+
+                                <li class="group"><p><code>void 	setResourceBundle(ResourceBundle bundle)</code> -- 设置此记录器的本地化资源包</p></li>
+                                <li><p><code>ResourceBundle 	getResourceBundle()</code> -- 获取此记录器的本地化资源包</p></li>
+                                <li><p><code>String 	getResourceBundleName()</code> -- 获取此记录器的本地化资源包名称</p></li>
+
+                                <li class="group"><p><code>void 	throwing(String sourceClass, String sourceMethod, Throwable thrown)</code> -- 日志抛出异常</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="java-util-logging-Level" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class Level implements Serializable {
+    /** 用于关闭日志记录的特殊级别 */
+    public static final Level OFF = new Level("OFF",Integer.MAX_VALUE, defaultBundle);
+    /** 定义的 8 个日志级别，优先级从高到低 */
+    public static final Level SEVERE = new Level("SEVERE",1000, defaultBundle);
+    public static final Level WARNING = new Level("WARNING", 900, defaultBundle);
+    public static final Level INFO = new Level("INFO", 800, defaultBundle);
+    public static final Level CONFIG = new Level("CONFIG", 700, defaultBundle);
+    public static final Level FINE = new Level("FINE", 500, defaultBundle);
+    public static final Level FINER = new Level("FINER", 400, defaultBundle);
+    public static final Level FINEST = new Level("FINEST", 300, defaultBundle);
+    public static final Level ALL = new Level("ALL", Integer.MIN_VALUE, defaultBundle);
+
+    protected Level(String name, int value) {...}
+    protected Level(String name, int value, String resourceBundleName) {...}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/util/logging/Level.html" target="_blank">Level</a> 定义了 8 个级别：<b>SEVERE, WARNING, INFO, CONFIG, FINE, FINER, FINEST 以及 ALL</b>，它们按照优先级降序排列，在应用运行的任何时间点，日志级别可以被更改。</p>
+                            <ol>
+                                <li><p><code>static Level 	parse(String name)</code> -- 将级别名称字符串解析为级别，支持名称(注意大小写)和等级值</p></li>
+
+                                <li class="group"><p><code>String 	getName()</code> -- 返回Level的非本地化字符串名称</p></li>
+                                <li><p><code>String 	getLocalizedName()</code> -- 返回当前默认语言环境的 Level 的本地化字符串名称</p></li>
+                                <li><p><code>String 	getResourceBundleName()</code> -- 返回级别的本地化资源包名称，如果未定义本地化包，则返回null</p></li>
+                                <li><p><code>int 	intValue()</code> -- 获取此级别的整数值</p></li>
+
+                                <li class="group"><p><code>String 	toString()</code> -- 返回此级别的字符串表示形式</p></li>
+                                <li><p><code>int 	hashCode()</code> -- 生成哈希码</p></li>
+                                <li><p><code>boolean 	equals(Object ox)</code> -- 比较两个对象的值相等</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="java-util-logging-LogRecord" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class LogRecord implements Serializable {
+    public LogRecord(Level level, String msg) {...}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/util/logging/LogRecord.html" target="_blank">LogRecord</a> 对象用于在日志框架和各个日志处理程序之间传递日志请求。</p>
+                            <p>当 LogRecord 被传递到日志框架中时，逻辑上属于框架，不应再被客户端应用程序使用或更新。</p>
+                            <ol>
+                                <li><p><code>String 	getLoggerName()</code> -- 获取源记录器的名称</p></li>
+                                <li><p><code>void 	setLoggerName(String name)</code> -- 设置源记录器的名称</p></li>
+                                <li><p><code>Level 	getLevel()</code> -- 获取日志消息级别</p></li>
+                                <li><p><code>void 	setLevel(Level level)</code> -- 设置日志消息级别，例如Level.SEVERE</p></li>
+                                <li><p><code>String 	getMessage()</code> -- 在本地化或格式化之前获取“原始”日志消息</p></li>
+                                <li><p><code>void 	setMessage(String message)</code> -- 在本地化或格式化之前设置“原始”日志消息</p></li>
+
+                                <li class="group"><p><code>void 	setMillis(long millis)</code> -- 设置事件时间</p></li>
+                                <li><p><code>long 	getMillis()</code> -- 自1970年以来，以毫秒为单位获得活动时间</p></li>
+                                <li><p><code>void 	setThreadID(int threadID)</code> -- 设置消息始发线程的标识符</p></li>
+                                <li><p><code>int 	getThreadID()</code> -- 获取消息发起的线程的标识符</p></li>
+                                <li><p><code>void 	setSequenceNumber(long seq)</code> -- 设置序列号</p></li>
+                                <li><p><code>long 	getSequenceNumber()</code> -- 获取序列号，构造时自动增长</p></li>
+
+                                <li class="group"><p><code>void 	setSourceClassName(String sourceClassName)</code> -- 设置（据称）发出日志记录请求的类的名称</p></li>
+                                <li><p><code>String 	getSourceClassName()</code> -- 获取（据称）发出日志记录请求的类的名称</p></li>
+                                <li><p><code>void 	setSourceMethodName(String sourceMethodName)</code> -- 设置（据称）发出日志记录请求的方法的名称</p></li>
+                                <li><p><code>String 	getSourceMethodName()</code> -- 获取（据称）发出日志记录请求的方法的名称</p></li>
+
+                                <li class="group"><p><code>Throwable 	getThrown()</code> -- 获取与日志记录相关联的任何可抛出的值</p></li>
+                                <li><p><code>void 	setThrown(Throwable thrown)</code> -- 设置与日志事件相关联的可抛出</p></li>
+                                <li><p><code>void 	setParameters(Object[] parameters)</code> -- 将参数设置为日志消息</p></li>
+                                <li><p><code>Object[] 	getParameters()</code> -- 获取日志消息的参数</p></li>
+                                <li><p><code>void 	setResourceBundle(ResourceBundle bundle)</code> -- 设置本地化资源包</p></li>
+                                <li><p><code>ResourceBundle 	getResourceBundle()</code> -- 获取本地化资源包</p></li>
+                                <li><p><code>void 	setResourceBundleName(String name)</code> -- 设置本地化资源包名称</p></li>
+                                <li><p><code>String 	getResourceBundleName()</code> -- 获取本地化资源包名称</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="java-util-logging-Handler" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public abstract class Handler {
+    protected Handler() {...}
+}
+
+/** 内存中循环缓冲区，在某些触发条件下， 将其当前缓冲区内容推送到目标 Handler */
+public class MemoryHandler extends Handler {
+    public MemoryHandler() {...}
+    public MemoryHandler(Handler target, int size, Level pushLevel) {...}
+}
+
+/** 基于流的日志记录处理器，用于实现其他日志记录的基类或支持类 */
+public class StreamHandler extends Handler {
+    public StreamHandler() {...}
+    public StreamHandler(OutputStream out, Formatter formatter) {...}
+}
+
+/** 控制台日志处理器，将日志信息发布到 System.err，使用 SimpleFormatter 格式化日志 */
+public class ConsoleHandler extends StreamHandler {
+    public ConsoleHandler() {...}
+}
+
+/** 简单的文件日志处理器，也可写入环形缓冲文件，默认情况下使用 XMLFormatter 格式化日志 */
+public class FileHandler extends StreamHandler {
+    /** FileHandler 的参数:
+     * pattern -- 为日志文件名生成的方式，比如: ./log/java%g-%u.log 会在 log 目录(目录必须存在)生成： java0-0.log
+     *    %h -- 代表用户目录
+     *    %t -- 代表临时目录
+     *    %g -- 日志使用多个文件的时候，这个数代表编号
+     *    %u -- 另外的进程使用同一个日志文件时，这个数会自增
+     *    %% -- 代表 % 号本身
+     *    /  -- 是路径分割
+     * append -- 是否追加到文件末尾而不是覆盖重写
+     * limit -- 要写入任何一个文件的最大字节数，超过此数重新生成一个文件(前提是一个 LogRecord 不会写入两个文件)
+     * count -- 最多使用的文件数，当到达此数，重新覆盖第一个创建的
+     */
+    public FileHandler() {...}
+    public FileHandler(String pattern) {...}
+    public FileHandler(String pattern, boolean append) {...}
+    public FileHandler(String pattern, int limit, int count) {...}
+    public FileHandler(String pattern, int limit, int count, boolean append) {...}
+}
+
+/** 简单网络日志处理器，默认情况下使用 XMLFormatter 类格式化日志 */
+public class SocketHandler extends StreamHandler {
+    public SocketHandler() {...}
+    public SocketHandler(String host, int port) {...}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/util/logging/Handler.html" target="_blank">Handler</a> 日志处理器，接口对象，决定日志的输出方式。</p>
+                            <p><a href="docs/docs-java/api/java/util/logging/Handler.html" target="_blank">Handler</a> 的具体实现主要有以上的子类负责处理。</p>
+                            <ol>
+                                <li><p><code>abstract void 	publish(LogRecord record)</code> -- 发布 LogRecord</p></li>
+                                <li><p><code>abstract void 	flush()</code> -- 刷新任何缓冲输出</p></li>
+                                <li><p><code>abstract void 	close()</code> -- 关闭 Handler并释放所有相关资源</p></li>
+
+                                <li class="group"><p><code>void 	setLevel(Level newLevel)</code> -- 设置本 Handler 记录日志的最低级别</p></li>
+                                <li><p><code>Level 	getLevel()</code> -- 获取此级别</p></li>
+                                <li><p><code>void 	setEncoding(String encoding)</code> -- 设置本 Handler 记录日志的使用的字符编码</p></li>
+                                <li><p><code>String 	getEncoding()</code> -- 获取此编码</p></li>
+                                <li><p><code>void 	setFormatter(<a href="#java-util-logging-Formatter">Formatter</a> newFormatter)</code> -- 设置本 Handler 记录日志的格式化器</p></li>
+                                <li><p><code><a href="#java-util-logging-Formatter">Formatter</a> 	getFormatter()</code> -- 获取此格式化器</p></li>
+                                <li><p><code>void 	setFilter(Filter newFilter)</code> -- 设置本 Handler 记录日志的过滤器</p></li>
+                                <li><p><code>Filter 	getFilter()</code> -- 获取此过滤器</p></li>
+                                <li><p><code>void 	setErrorManager(ErrorManager em)</code> -- 设置本 Handler 记录日志的错误管理器</p></li>
+                                <li><p><code>ErrorManager 	getErrorManager()</code> -- 获取此错误管理器</p>
+                                    <pre class="brush: java;">
+public class ErrorManager {
+    public final static int GENERIC_FAILURE = 0; // 用于不符合其他类别的故障
+    public final static int WRITE_FAILURE = 1;   // 写输出流失败时
+    public final static int FLUSH_FAILURE = 2;   // 当输出流的刷新失败
+    public final static int CLOSE_FAILURE = 3;   // 当关闭输出流失败时
+    public final static int OPEN_FAILURE = 4;    // 当输出流的打开失败
+    public final static int FORMAT_FAILURE = 5;  // 由于任何原因格式化失败
+
+    public synchronized void error(String msg, Exception ex, int code) {...}
+}
+</pre>
+                                </li>
+
+                                <li class="group"><p><code>boolean 	isLoggable(LogRecord record)</code> -- 指定的日志是否被此 Handler 记录</p></li>
+                                <li><p><code>protected void 	reportError(String msg, Exception ex, int code)</code> -- 受保护的方便方法来向此处理程序的 ErrorManager 报告错误</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="java-util-logging-Formatter" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public abstract class Formatter {
+    protected Formatter() {}
+}
+
+public class SimpleFormatter extends Formatter {
+    public SimpleFormatter() {}
+}
+
+public class XMLFormatter extends Formatter {
+    public SimpleFormatter() {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/util/logging/Formatter.html" target="_blank">Formatter</a> 格式化程序，提供对 LogRecord 进行格式化的支持。</p>
+                            <p>通常每个记录处理程序都将有一个与它相关联的格式化程序。 格式化器采用 LogRecord 并将其转换为字符串。 </p>
+                            <p>一些格式化器（如 XMLFormatter）需要围绕一组格式化的记录包裹头和尾字符串。 <code>getHeader</code> 和 <code>getTail</code> 方法可用于获取这些字符串。 </p>
+                            <ol>
+                                <li><p><code>abstract String 	format(LogRecord record)</code> -- 格式化给定的日志记录并返回格式化的字符串</p></li>
+                                <li><p><code>String 	formatMessage(LogRecord record)</code> -- 从日志记录本地化和格式化消息字符串</p></li>
+
+                                <li class="group"><p><code>String 	getHead(Handler h)</code> -- 返回一组格式化记录的标题字符串</p></li>
+                                <li><p><code>String 	getTail(Handler h)</code> -- 返回一组格式化记录的尾部字符串</p></li>
+                            </ol>
+                        </div>
+
+                        <a id="java-util-logging-LogManager" class="offset"></a>
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+public class LogManager {
+    public final static String LOGGING_MXBEAN_NAME = "java.util.logging:type=Logging";
+
+    protected LogManager() {}
+}
+</pre>
+                            <p><a href="docs/docs-java/api/java/util/logging/LogManager.html" target="_blank">LogManager</a> 对象用于全局维护关于日志记录器和日志服务的一组共享状态。</p>
+                            <ol>
+                                <li><p><code>static LogManager 	getLogManager()</code> -- 返回全局 LogManager 对象</p></li>
+                                <li><p><code>static LoggingMXBean 	getLoggingMXBean()</code> -- 返回 LoggingMXBean 用于管理记录器</p></li>
+
+                                <li class="group"><p><code>Logger 	getLogger(String name)</code> -- 返回一个命名记录器的方法</p></li>
+                                <li><p><code>boolean 	addLogger(Logger logger)</code> -- 添加一个命名记录器</p></li>
+
+                                <li><p><code>void 	checkAccess()</code> -- 检查当前上下文是否受信任以修改日志记录配置</p></li>
+                                <li><p><code>void 	readConfiguration()</code> -- 重新初始化日志记录属性并重新读取日志配置</p></li>
+                                <li><p><code>void 	readConfiguration(InputStream ins)</code> -- 从给定流重新读取日志记录配置，流是 <code>java.util.Properties</code> 格式</p></li>
+                                <li><p><code>String 	getProperty(String name)</code> -- 获取日志记录属性的值</p></li>
+                                <li><p><code>Enumeration&lt;String> 	getLoggerNames()</code> -- 获取已知记录器名称的枚举</p></li>
+                                <li><p><code>void 	reset()</code> -- 重置日志配置</p></li>
+                            </ol>
+                        </div>
                     </div>
                 </div>
                 <!-- item over -->
@@ -10507,13 +11054,13 @@ public abstract class FileChannel extends AbstractInterruptibleChannel implement
     }
 }
 </pre>
-							<p><a href="docs/docs-java/api/java/nio/FileChannel.html" target="_blank">FileChannel</a> 用于读取、写入、映射和操作文件的通道。</p>
+							<p><a href="docs/docs-java/api/java/nio/channels/FileChannel.html" target="_blank">FileChannel</a> 用于读取、写入、映射和操作文件的通道。</p>
                             <ul>
                                 <li><p><code>FileInputStream.getChannel()</code> -- 只用于读取，任何写入操作将会报 NonWritableChannelException 异常</p></li>
                                 <li><p><code>FileOutputStream.getChannel()</code> -- 只用于写入，任何读取操作将会报 NonReadableChannelException 异常</p></li>
                                 <li><p><code>RandomAccessFile.getChannel()</code> -- 可用于读写，取决于 mode 参数</p></li>
                             </ul>
-                            <p><a href="docs/docs-java/api/java/nio/FileChannel.html" target="_blank">FileChannel</a> 在其文件中有一个当前 position，可对其进行查询和修改。该文件本身包含一个可读写的长度可变的字节序列，并且可以查询该文件的当前大小。写入的字节超出文件的当前大小时，则增加文件的大小；截取 该文件时，则减小文件的大小。文件可能还有某个相关联的元数据，如访问权限、内容类型和最后的修改时间；此类未定义访问元数据的方法。 </p>
+                            <p><a href="docs/docs-java/api/java/nio/channels/FileChannel.html" target="_blank">FileChannel</a> 在其文件中有一个当前 position，可对其进行查询和修改。该文件本身包含一个可读写的长度可变的字节序列，并且可以查询该文件的当前大小。写入的字节超出文件的当前大小时，则增加文件的大小；截取 该文件时，则减小文件的大小。文件可能还有某个相关联的元数据，如访问权限、内容类型和最后的修改时间；此类未定义访问元数据的方法。 </p>
                             <p>除了字节通道中常见的读取、写入和关闭操作外，此类还定义了下列特定于文件的操作：</p>
                             <ul>
                                 <li><p>以不影响通道当前位置的方式，对文件中绝对位置的字节进行读取或写入。</p></li>
