@@ -81,6 +81,7 @@
                             <a href="#java-lang-Thread" class="list-group-item">Thread 与 ThreadGroup</a>
                             <a href="#java-lang-String" class="list-group-item">String 及相关类</a>
                             <a href="#java-lang-Math" class="list-group-item">Math 及 RoundingMode</a>
+                            <a href="#java-lang-Character" class="list-group-item">Character 类</a>
                             <a href="#java-lang-Number" class="list-group-item">Number 及子类</a>
                             <a href="#java-lang-Exception" class="list-group-item">Exception 和 Error</a>
                             <a href="#java-lang-ref-Reference" class="list-group-item">ref.Reference 及子类</a>
@@ -177,6 +178,16 @@
 							<a href="#java-net-URLConnection" class="list-group-item">URLConnection 及子类</a>
 							<a href="#java-net-URLEncoder" class="list-group-item">URLEncoder 和 URLDecoder</a>
 						</div>
+
+                        <a class="list-group-item active drop" data-toggle="collapse"
+                           data-parent="#accordion" href="#java-security" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
+                            <code>java.security/javax.crypto</code><span class="caret pull-right" style="margin-top: 5px;"></span>
+                        </a>
+                        <div id="java-security" class="panel-collapse collapse"
+                             role="tabpanel">
+                            <a href="#java-security-intro" class="list-group-item">Java 安全体系简介</a>
+                            <a href="#java-security-" class="list-group-item">...</a>
+                        </div>
 
                         <a class="list-group-item active drop" data-toggle="collapse"
                            data-parent="#accordion" href="#java-sql" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
@@ -1639,7 +1650,7 @@ Package.getPackage("io.github"); // null
 Package.getPackage("io.github.jiwanger"); // 不为空
 Package.getPackage("io.github.java.helper"); // null
 Package.getPackage("io.github.java.lang"); // 不为空
-                                </pre>
+</pre>
                                 </li>
                                 <li><p><code>static Package[] 	getPackages()</code> -- ClassLoader 实例当前已知的所有包</p></li>
 
@@ -1685,7 +1696,7 @@ public final class System {
     public final static PrintStream out = null; // “标准”输出流
     public final static PrintStream err = null; // “标准”错误输出流
 }
-                            </pre>
+</pre>
 							<p><a href="docs/docs-java/api/java/lang/System.html" target="_blank">System</a> 类代表系统，系统级的很多属性和控制方法都放置在该类的内部。</p>
 							<p>System类内部包含 <code>in</code>、<code>out</code> 和 <code>err</code> 三个成员变量，分别代表标准输入流(键盘输入)，标准输出流(显示器)和标准错误输出流(显示器)。</p>
 							<ol>
@@ -1695,7 +1706,7 @@ public final class System {
 
                                 <li class="group"><p><code>static void setProperty(String key, String value)</code> -- 设置系统属性</p></li>
                                 <li><p><code>static String getProperty(String key)</code> -- 获得系统属性</p></li>
-                                <li><p><code>static StringgetProperty(String key, String def)</code> -- 获得系统属性，如果为空则返回默认值</p></li>
+                                <li><p><code>static String getProperty(String key, String def)</code> -- 获得系统属性，如果为空则返回默认值</p></li>
                                 <li><p><code>static String clearProperty(String key)</code> -- 清除属性</p></li>
                                 <li><p><code>static void 	setProperties(Properties props)</code> -- 将系统属性设置为 Properties 参数</p></li>
                                 <li><p><code>static Properties getProperties()</code> -- 获得所有系统属性，参见: <a href="#Properties">java.util.Properties</a></p>
@@ -1808,7 +1819,7 @@ long start = System.nanoTime();
 long time = System.nanoTime() - start;
 
 Date date = new Data(System.currentTimeMillis());
-                                </pre>
+</pre>
                                 </li>
 
                                 <li class="group"><p><code>static void exit(int status)</code> -- 退出程序(调用 Runtime 的 exit) </p>
@@ -2575,6 +2586,271 @@ public enum RoundingMode {
                             <p><a href="docs/docs-java/api/java/math/RoundingMode.html" target="_blank">RoundingMode</a> 为可能丢弃精度的数值操作指定一种舍入行为。</p>
                             <p>每种舍入模式都指示如何计算返回舍入结果位数的最低有效位。如果返回的位数比表示精确数值结果所需的位数少，则舍弃的位数称为舍弃部分，而不管这些位数对数值的作用如何。换句话说，假设是一个数值，舍弃部分的绝对值可能大于 1。 </p>
                         </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-lang-Character"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Character</h3>
+                    </div>
+                    <div class="panel-body">
+						<pre class="brush: java;">
+public final class Character implements Serializable, Comparable&lt;Character> {
+    public static final int SIZE = 16;                // char 的二进制位数
+    public static final int BYTES = SIZE / Byte.SIZE; // char 的字节数
+
+    public static final int MIN_RADIX = 2;  // 用于转换到字符串和从字符串转换的最小基数
+    public static final int MAX_RADIX = 36; // 用于转换到字符串和从字符串转换的最大基数
+
+    public static final char MIN_VALUE = '\u0000'; // char 字符最小值
+    public static final char MAX_VALUE = '\uFFFF'; // char 字符最大值
+
+    // char 的增补最小值，已不能再使用 16 位表示了，必须使用两个 char
+    public static final int MIN_SUPPLEMENTARY_CODE_POINT = 0x010000;
+    // char 字符最小码点值和最大码点值
+    public static final int MIN_CODE_POINT = 0x000000;
+    public static final int MAX_CODE_POINT = 0X10FFFF;
+
+    /** 非 BMP 平面 UTF-16 转换相关，参见 UTF-16 编码 */
+    public static final char MIN_HIGH_SURROGATE = '\uD800';
+    public static final char MAX_HIGH_SURROGATE = '\uDBFF';
+    public static final char MIN_LOW_SURROGATE  = '\uDC00';
+    public static final char MAX_LOW_SURROGATE  = '\uDFFF';
+
+    // UTF-16 编码中的 Unicode 代理代码单元的最小值和最大值
+    public static final char MIN_SURROGATE = MIN_HIGH_SURROGATE;
+    public static final char MAX_SURROGATE = MAX_LOW_SURROGATE;
+
+    public static class Subset {...} // 表示 Unicode 字符集的特定子集，只有一个 name 成员
+    public static final class UnicodeBlock extends Subset {
+        // 定义了字符块名字和范围(unicode 码点值)
+        ...
+
+        public static UnicodeBlock of(char c) {...}
+        public static UnicodeBlock of(int codePoint) {...}
+        public static final UnicodeBlock forName(String blockName) {...} // 支持名字和别名
+    }
+    public static enum UnicodeScript {
+        //
+        ...
+
+        public static UnicodeScript of(int codePoint) {...}
+        public static UnicodeScript forName(String scriptName) {...}
+    }
+
+    public Character(char value) {...}
+}
+</pre>
+                        <p><a href="docs/docs-java/api/java/lang/Character.html" target="_blank">Character</a> 类包装一个对象中的基本类型 char 的值。 类型为 Character 的对象包含一个单一字段，其类型为 char 。</p>
+                        <p><a href="docs/docs-java/api/java/lang/Character.html" target="_blank">Character</a> 类还提供了几种方法来确定字符的类别（小写字母，数字等），并将字符从大写转换为小写，反之亦然。</p>
+                        <p><a href="docs/docs-java/api/java/lang/Character.html" target="_blank">Character</a> 字符信息基于 Unicode 标准版本 6.2.0。</p>
+                        <p><a href="docs/docs-java/api/java/lang/Character.html" target="_blank">Character</a> 使用 UTF-16 编码。范围在 [U+0000,U+FFFF] 时被称为基本多语言平面（BMP） 。 Characters其代码点大于 U+FFFF 称为增补字符平面。 Java 平台在 char 数组和 String 类中使用 UTF-16 表示。 在此表示中，增补平面的字符表示为一对 char 值，第一个来自高替代范围（[\uD800, \uDBFF]），第二个来自低代理范围（[\uDC00, \uDFFF]）。</p>
+                        <pre class="brush: java;">
+log("少于 0x10000 的码点用 1 个 char", Character.charCount(Character.MIN_SUPPLEMENTARY_CODE_POINT - 1));
+log("超过 0x10000 的码点用 2 个 char", Character.charCount(Character.MIN_SUPPLEMENTARY_CODE_POINT));
+
+// 对于小于 0x10000 的 int 值，可以直接转为 char; 对于大于 0x10000 的 int 值，强制转为 char 导致数据丢失
+log((char)0x61, (char)0x62, Integer.toHexString('a'), Integer.toHexString('b')); // a  b  61  62
+log(Integer.toHexString(0x1F0A1), Integer.toHexString((char)0x1F0A1));  // 1f0a1  f0a1
+
+log(Integer.toHexString(Character.toCodePoint('\uD83C', '\uDCA1')));            // 0x1F0A1
+log(Integer.toHexString(Character.toCodePoint('\uD83C', '\uDCA2')));            // 0x1F0A2
+log(Integer.toHexString(Character.codePointAt(new char[]{'\uD83C', '\uDCA1'}, 0))); // 0x1F0A1
+log(Integer.toHexString(Character.codePointAt(new char[]{'\uD83C', '\uDCA2'}, 0))); // 0x1F0A2
+
+for (char c : Character.toChars(0x1F0A1)) {
+    log(Integer.toHexString(c).toUpperCase()); // [D83C, DCA1]
+}
+for (char c : Character.toChars(0x1F0A2)) {
+    log(Integer.toHexString(c).toUpperCase()); // [D83C, DCA2]
+}
+</pre>
+                        <ol>
+                            <li><p><code>static Character 	valueOf(char c)</code> -- 返回一个表示指定的 char 值的 Character 实例，一般不这样使用</p>
+                                <pre class="brush: java;">
+Character a = 'a';
+Character b = '\u0062';
+Character c = 0x63;
+</pre>
+                            </li>
+
+                            <li class="group"><p><code>static int 	charCount(int codePoint)</code> -- 确定代表指定字符（Unicode代码点）所需的 char 值</p></li>
+                            <li><p><code>static boolean 	isBmpCodePoint(int codePoint)</code> -- 是否是 BMP 平面的字符码点(<code>c < 0x10000</code>)</p></li>
+                            <li><p><code>static boolean 	isSupplementaryCodePoint(int codePoint)</code> -- 增补平面码点(<code>0x10000 <= c < 0x10FFFF</code>)</p></li>
+
+                            <li class="group"><p><code>static char[] 	toChars(int codePoint)</code> -- 得到 unicode 码点经过 utf-16 编码后的字符(超过 0x10000 的就是两个字符)</p></li>
+                            <li><p><code>static int 	toChars(int codePoint, char[] dst, int dstIndex)</code> -- 同上，指定存储的 char 数组和位置，返回宽度</p></li>
+
+                            <li class="group"><p><code>static int 	toCodePoint(char high, char low)</code> -- 获取指定的代理对的 unicode 码点</p></li>
+                            <li><p><code>static boolean 	isSurrogate(char ch)</code> -- 是否是代理单元字符(<code>0xD800 <= ch < 0xDFFF</code>)</p></li>
+                            <li><p><code>static boolean 	isHighSurrogate(char ch)</code> -- 是否为高位代理单元字符(<code>0xD800 <= ch < 0xDBFF</code>)</p></li>
+                            <li><p><code>static boolean 	isLowSurrogate(char ch)</code> -- 是否为低位代理单元字符(<code>0xDC00 <= ch < 0xDFFF</code>)</p></li>
+                            <li><p><code>static boolean 	isSurrogatePair(char high, char low)</code> -- 综合以上两项</p></li>
+                            <li><p><code>static char 	highSurrogate(int codePoint)</code> -- 得到增补平面码点的高位 char 值</p></li>
+                            <li><p><code>static char 	lowSurrogate(int codePoint)</code> -- 得到增补平面码点的低位 char 值</p></li>
+
+                            <li class="group"><p><code>static int 	codePointAt(CharSequence seq, int index)</code> -- 获取码点，指定位置读取 1 个或 2 个字符</p></li>
+                            <li><p><code>static int 	codePointAt(char[] a, int index)</code> -- 同上，可以从指定的位置开始读取 1 个或 2 个字符</p></li>
+                            <li><p><code>static int 	codePointAt(char[] a, int index, int limit)</code> -- 同上，限制读取 1 个或 2 个字符</p></li>
+                            <li><p><code>static int 	codePointBefore(CharSequence seq, int index)</code> -- 获取码点，从指定位置向前读取 1 个或 2 个字符</p></li>
+                            <li><p><code>static int 	codePointBefore(char[] a, int index)</code> -- 同上，从指定位置向前读取 1 个或 2 个字符</p></li>
+                            <li><p><code>static int 	codePointBefore(char[] a, int index, int start)</code> -- 同上</p></li>
+
+                            <li class="group"><p><code>static int 	codePointCount(CharSequence seq, int begin, int end)</code> -- 指定范围的字符使用 unicode 字符数</p></li>
+                            <li><p><code>static int 	codePointCount(char[] a, int offset, int count)</code> -- 同上</p></li>
+
+                            <li class="group"><p><code>static boolean 	isLetter(int codePoint)</code> -- 是否为字母</p></li>
+                            <li><p><code>static boolean 	isLetter(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+                            <li><p><code>static boolean 	isAlphabetic(int codePoint)</code> -- 是否为字母，和上面有点区别</p></li>
+                            <li><p><code>static boolean 	isLetterOrDigit(int codePoint)</code> -- 是否为字母或数字</p></li>
+                            <li><p><code>static boolean 	isLetterOrDigit(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+                            <li><p><code>static boolean 	isLowerCase(int codePoint)</code> -- 是否为小写字母</p></li>
+                            <li><p><code>static boolean 	isLowerCase(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+                            <li><p><code>static boolean 	isUpperCase(int codePoint)</code> -- 是否为大写字母</p></li>
+                            <li><p><code>static boolean 	isUpperCase(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+
+                            <li class="group"><p><code>static int 	toUpperCase(int codePoint)</code> -- 转为大写字母</p></li>
+                            <li><p><code>static char 	toUpperCase(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+                            <li><p><code>static int 	toLowerCase(int codePoint)</code> -- 转为小写字母</p></li>
+                            <li><p><code>static char 	toLowerCase(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+
+                            <li class="group"><p><code>static int 	toTitleCase(int codePoint)</code> -- 部分实现为 <code>toUpperCase</code></p></li>
+                            <li><p><code>static char 	toTitleCase(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+                            <li><p><code>static boolean 	isTitleCase(int codePoint)</code> -- 返回 <code>getType(codePoint) == Character.TITLECASE_LETTER</code></p></li>
+                            <li><p><code>static boolean 	isTitleCase(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+
+                            <li class="group"><p><code>static int 	digit(int codePoint, int radix)</code> -- 在指定的基数返回字符ch的数值</p></li>
+                            <li><p><code>static int 	digit(char ch, int radix)</code> -- 同上，只适用 BMP 平面字符</p></li>
+                            <li><p><code>static char 	forDigit(int digit, int radix)</code> -- 确定指定基数中特定数字的字符表示</p>
+                                <pre class="brush: java;">
+log(Character.digit('1', 2), Character.digit('3', 10), Character.digit('a', 16)); // 1 3 10
+log(Character.forDigit(2, 10), Character.forDigit(10, 16)); // '2' 'a'
+</pre>
+                            </li>
+                            <li><p><code>static boolean 	isDigit(int codePoint)</code> -- 是否为数字</p></li>
+                            <li><p><code>static boolean 	isDigit(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+
+                            <li class="group"><p><code>static int 	offsetByCodePoints(CharSequence seq, int index, int codePointOffset)</code> -- 返回此 String 中从给定的 index 处偏移 codePointOffset 个代码点的索引</p></li>
+                            <li><p><code>static int 	offsetByCodePoints(char[] a, int start, int count, int index, int offset)</code> -- 同上</p></li>
+
+                            <li class="group"><p><code>static int 	getNumericValue(int codePoint)</code> -- 返回指定的 Unicode 码点代表的 int 值，对于非数字返回 -1</p></li>
+                            <li><p><code>static int 	getNumericValue(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+
+                            <li class="group"><p><code>static String 	getName(int codePoint)</code> -- 获取字符名字</p></li>
+
+                            <li class="group"><p><code>static int 	getType(int codePoint)</code> -- 获取 unicode 通用类别(31 个常量定义了类别)</p></li>
+                            <li><p><code>static int 	getType(char ch)</code> -- 同上，只适用 BMP 平面字符</p>
+                                <pre class="brush: java;">
+/** Unicode 通用类别(getType 方法返回值): */
+public static final byte UNASSIGNED                = 0;  // Cn -- 其他，未赋值 0x378
+public static final byte UPPERCASE_LETTER          = 1;  // Lu -- 字母，大写 [0x41,0x5A]
+public static final byte LOWERCASE_LETTER          = 2;  // Ll -- 字母，小写 [0x61,0x7A]
+public static final byte TITLECASE_LETTER          = 3;  // Lt -- 字母，词首字母大写 0x1C5
+public static final byte MODIFIER_LETTER           = 4;  // Lm -- 字母，修饰符 0x2B0
+public static final byte OTHER_LETTER              = 5;  // Lo -- 字母，其他 0xAA
+public static final byte NON_SPACING_MARK          = 6;  // Mn -- 标记，非间距 0x300
+public static final byte ENCLOSING_MARK            = 7;  // Me -- 标记，封闭 0x488
+public static final byte COMBINING_SPACING_MARK    = 8;  // Mc -- 标记，间距组合 0x903
+public static final byte DECIMAL_DIGIT_NUMBER      = 9;  // Nd -- 数字，十进制数 [0x30,0x39]
+public static final byte LETTER_NUMBER             = 10; // Nl -- 数字，字母 [0x2160,216b]
+public static final byte OTHER_NUMBER              = 11; // No -- 数字，其他 0xB2,0xB3
+public static final byte SPACE_SEPARATOR           = 12; // Zs -- 分隔符，空白 0x20,0xA0
+public static final byte LINE_SEPARATOR            = 13; // Zl -- 分隔符，行 0x2028
+public static final byte PARAGRAPH_SEPARATOR       = 14; // Zp -- 分隔符，段落 0x2029
+public static final byte CONTROL                   = 15; // Cc -- 其他，控制 [0x0,0x1F]
+public static final byte FORMAT                    = 16; // Cf -- 其他，格式 0xAD
+public static final byte PRIVATE_USE               = 18; // Co -- 其他，私用 0x103CF4
+public static final byte SURROGATE                 = 19; // Cs -- 其他，代理项 [0xD800,0xDFFF]
+public static final byte DASH_PUNCTUATION          = 20; // Pd -- 标点，短划线 0x2D
+public static final byte START_PUNCTUATION         = 21; // Ps -- 标点，开始 0x28
+public static final byte END_PUNCTUATION           = 22; // Pe -- 标点，结束 0x29
+public static final byte CONNECTOR_PUNCTUATION     = 23; // Pc -- 标点，连接符 0x5f
+public static final byte OTHER_PUNCTUATION         = 24; // Po -- 标点，其他 0x21,0x22
+public static final byte MATH_SYMBOL               = 25; // Sm -- 符号，数学 0x2B
+public static final byte CURRENCY_SYMBOL           = 26; // Sc -- 符号，货币 0x24
+public static final byte MODIFIER_SYMBOL           = 27; // Sk -- 符号，修饰符 0x5E
+public static final byte OTHER_SYMBOL              = 28; // So -- 符号，其他 0xA6
+public static final byte INITIAL_QUOTE_PUNCTUATION = 29; // Pi -- 标点，前引号 0xAB
+public static final byte FINAL_QUOTE_PUNCTUATION   = 30; // Pf -- 标点，后引号 0xBB
+</pre>
+                            </li>
+
+                            <li class="group"><p><code>static byte 	getDirectionality(int codePoint)</code> -- 返回给定字符的 Unicode 方向性属性</p></li>
+                            <li><p><code>static byte 	getDirectionality(char ch)</code> -- 同上，只适用 BMP 平面字符</p>
+                                <pre class="brush: java;">
+/** Unicode 定义的文本视觉顺序 */
+public static final byte DIRECTIONALITY_UNDEFINED                  = -1; // 未定义
+public static final byte DIRECTIONALITY_LEFT_TO_RIGHT              = 0;  // L
+public static final byte DIRECTIONALITY_RIGHT_TO_LEFT              = 1;  // R
+public static final byte DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC       = 2;  // AL
+public static final byte DIRECTIONALITY_EUROPEAN_NUMBER            = 3;  // EN
+public static final byte DIRECTIONALITY_EUROPEAN_NUMBER_SEPARATOR  = 4;  // ES
+public static final byte DIRECTIONALITY_EUROPEAN_NUMBER_TERMINATOR = 5;  // ET
+public static final byte DIRECTIONALITY_ARABIC_NUMBER              = 6;  // AN
+public static final byte DIRECTIONALITY_COMMON_NUMBER_SEPARATOR    = 7;  // CS
+public static final byte DIRECTIONALITY_NONSPACING_MARK            = 8;  // NSM
+public static final byte DIRECTIONALITY_BOUNDARY_NEUTRAL           = 9;  // BN
+public static final byte DIRECTIONALITY_PARAGRAPH_SEPARATOR        = 10; // B
+public static final byte DIRECTIONALITY_SEGMENT_SEPARATOR          = 11; // S
+public static final byte DIRECTIONALITY_WHITESPACE                 = 12; // WS
+public static final byte DIRECTIONALITY_OTHER_NEUTRALS             = 13; // ON
+public static final byte DIRECTIONALITY_LEFT_TO_RIGHT_EMBEDDING    = 14; // LRE
+public static final byte DIRECTIONALITY_LEFT_TO_RIGHT_OVERRIDE     = 15; // LRO
+public static final byte DIRECTIONALITY_RIGHT_TO_LEFT_EMBEDDING    = 16; // RLE
+public static final byte DIRECTIONALITY_RIGHT_TO_LEFT_OVERRIDE     = 17; // RLO
+public static final byte DIRECTIONALITY_POP_DIRECTIONAL_FORMAT     = 18; // PDF
+</pre>
+                            </li>
+
+                            <li class="group"><p><code>static boolean 	isValidCodePoint(int codePoint)</code> -- 是否为有效代码点</p></li>
+                            <li><p><code>static char 	reverseBytes(char ch)</code> -- 返回反转指定的 char 值中的字节顺序获得的值</p></li>
+                            <li><p><code>static boolean 	isDefined(int codePoint)</code> -- 类型是否未定义，调用 <code>getType(codePoint) != UNASSIGNED</code></p></li>
+                            <li><p><code>static boolean 	isDefined(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+
+                            <li class="group"><p><code>static boolean 	isIdeographic(int codePoint)</code> -- 是否为中文，日文，韩文和越南文</p></li>
+                            <li><p><code>static boolean 	isIdentifierIgnorable(int codePoint)</code> -- 是否为 Java 标识符或 Unicode 标识符中的可忽略字符</p></li>
+                            <li><p><code>static boolean 	isIdentifierIgnorable(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+                            <li><p><code>static boolean 	isISOControl(int codePoint)</code> -- 是否为 ISO 控制字符</p></li>
+                            <li><p><code>static boolean 	isISOControl(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+
+                            <li class="group"><p><code>static boolean 	isMirrored(int codePoint)</code> -- 根据 Unicode 规范确定字符是否镜像。 当从右到左的文本中显示时，镜像字符应具有水平镜像的字形</p></li>
+                            <li><p><code>static boolean 	isMirrored(char ch)</code> -- 同上，只适用 BMP 平面字符</p>
+                                <pre class="brush: java;">
+IntStream.range(0, 0x10FFFF).filter(Character::isValidCodePoint).limit(100).forEach(i -> {
+   log((char)i, i, Integer.toHexString(i));
+});
+</pre>
+                            </li>
+
+                            <li class="group"><p><code>static boolean 	isWhitespace(int codePoint)</code> -- 是否为空白字符，包括空格，换行，制表等</p></li>
+                            <li><p><code>static boolean 	isWhitespace(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+                            <li><p><code>static boolean 	isSpaceChar(int codePoint)</code> -- 否是 Unicode 空格字符</p></li>
+                            <li><p><code>static boolean 	isSpaceChar(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+
+                            <li class="group"><p><code>static boolean 	isJavaIdentifierPart(int codePoint)</code> -- 是否可以是 Java 标识符的一部分，而不是第一个字符</p></li>
+                            <li><p><code>static boolean 	isJavaIdentifierPart(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+                            <li><p><code>static boolean 	isJavaIdentifierStart(int codePoint)</code> -- 是否允许作为 Java 标识符中的第一个字符</p></li>
+                            <li><p><code>static boolean 	isJavaIdentifierStart(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+
+                            <li class="group"><p><code>static boolean 	isUnicodeIdentifierPart(int codePoint)</code> -- 是否是 Unicode 标识符的一部分，而不是第一个字符</p></li>
+                            <li><p><code>static boolean 	isUnicodeIdentifierPart(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+                            <li><p><code>static boolean 	isUnicodeIdentifierStart(int codePoint)</code> -- 是否为 Unicode 标识符中的第一个字符</p></li>
+                            <li><p><code>static boolean 	isUnicodeIdentifierStart(char ch)</code> -- 同上，只适用 BMP 平面字符</p></li>
+
+                            <li class="group"><p><code>static int 	hashCode(char value)</code> -- 哈希值</p></li>
+                            <li><p><code>static String 	toString(char c)</code> -- 转为 String</p></li>
+                            <li><p><code>static int 	compare(char x, char y)</code> -- 比较对应码点</p></li>
+
+                            <li class="group"><p><code>char 	charValue()</code> -- 对应 char 值</p></li>
+                            <li><p><code>int 	hashCode()</code> -- 哈希值</p></li>
+                            <li><p><code>boolean 	equals(Object obj)</code> -- 码点相同</p></li>
+                            <li><p><code>int 	compareTo(Character anotherCharacter)</code> -- 比较</p></li>
+                            <li><p><code>String 	toString()</code> -- 转为 String</p></li>
+
+                        </ol>
                     </div>
                 </div>
                 <!-- item over -->
@@ -9128,8 +9404,30 @@ ResourceBundle listResourceBundle = new ListResourceBundle() {
                                 <li><p><a href="#java-util-logging-Handler">Handler</a> 日志处理器，接口对象，决定日志的输出方式，由子类实现了：内存，控制台，文件，网络的输出方式</p></li>
                                 <li><p><a href="#java-util-logging-Formatter">Formatter</a> 日志格式化转换器，接口对象，决定日志的输出格式，JDK 提供了 <code>SimpleFormatter</code> 和 <code>XMLFormatter</code> 实现</p></li>
                                 <li><p><a href="#java-util-logging-LogRecord">LoggingMXBean</a> 接口对象，对外发布的日志管理器</p></li>
-                                <li><p><a href="#java-util-logging-LogRecord">LoggerManager</a> 日志管理器</p></li>
+                                <li><p><a href="#java-util-logging-LogManager">LogManager</a> 日志管理器</p></li>
                             </ul>
+                            <p><code>logging.properties</code> 文件可配置日志，以下为 Java 的日志默认配置: <code>jre/lib/logging.properties</code> 文件</p>
+                            <pre class="brush: bash;">
+handlers = java.util.logging.ConsoleHandler
+# handlers = java.util.logging.FileHandler, java.util.logging.ConsoleHandler
+
+## 全局日志级别
+.level = INFO
+
+# 以下配置并未起作用，因为 handlers 没有使用 FileHandler
+java.util.logging.FileHandler.pattern = %h/java%u.log
+java.util.logging.FileHandler.limit = 50000
+java.util.logging.FileHandler.count = 1
+java.util.logging.FileHandler.formatter = java.util.logging.XMLFormatter
+
+java.util.logging.ConsoleHandler.level = INFO
+java.util.logging.ConsoleHandler.formatter = java.util.logging.SimpleFormatter
+
+# java.util.logging.SimpleFormatter.format = %4$s: %5$s [%1$tc]%n
+
+## 只对名为 io.jiwanger 包以下的日志生效
+#io.jiwanger.Level = INFO
+</pre>
                         </div>
 
                         <a id="java-util-logging-Logger" class="offset"></a>
@@ -9421,6 +9719,12 @@ public class XMLFormatter extends Formatter {
                         <a id="java-util-logging-LogManager" class="offset"></a>
                         <div class="sub-item">
                             <pre class="brush: java;">
+/** LogManager 定义了两个可选的系统属性，允许控制初始配置:
+ *   java.util.logging.config.file -- 用于指定 logging.properties 的位置
+ *   java.util.logging.config.class -- 由此类负责初始化配置(默认构造函数里处理，比如:  readConfiguration())
+ * 指定 logging.properties 位置：System.setProperty("java.util.logging.config.file", "logging.properties")
+ */
+
 public class LogManager {
     public final static String LOGGING_MXBEAN_NAME = "java.util.logging:type=Logging";
 
@@ -9526,7 +9830,7 @@ public final class Formatter implements Closeable, Flushable {
     public Formatter(PrintStream ps) {}
     public Formatter(String fileName) {}
     public Formatter(String fileName, String csn) {}
-    public Formatter(String fileName, String csn, Locale l)
+    public Formatter(String fileName, String csn, Locale l) {}
 }
 </pre>
                         <p><a href="docs/docs-java/api/java/util/Formatter.html" target="_blank">Formatter</a> 是 <code>printf</code> 风格的格式字符串的解释程序。此类提供了对布局对齐和排列的支持，以及对数值、字符串和日期/时间数据的常规格式和特定于语言环境的输出的支持。</p>
@@ -9562,7 +9866,7 @@ log(formatter.toString()); // abc 123 1024
 # 所需 conversion 是一个表明应该如何格式化参数的字符。给定参数的有效转换集取决于参数的数据类型
 
 format("%s - %d", "nate", 1024); // nate - 1024
-format("%2$s - %1$d", 1024, "nate"); // 先使用第二个为 String 的参数，再使用第一个为 int 的参数: nate - 1024
+format("%2$s - %1$d", 1024, "nate"); // 先使用第二个 String 的参数，再使用第一个 int 的参数: nate - 1024
 format("%6s - %d", "nate", 1024); // 左侧填充了 2 个空格:     nate - 1024
 format("%-6s - %d", "nate", 1024); // 右侧填充了 2 个空格: nate   - 1024
 format("%.2s - %d", "nate", 1024); // 最多限制为 2 个字符: na - 1024
@@ -9615,7 +9919,7 @@ format("%1$tY %1$tm %1$td %1$tT", Calendar.getInstance()); // 2018 07 18 16:19:5
 # 'S' -- 分钟中的秒，被格式化为必要时带前导零的两位数，即 00 - 60 （"60" 是支持闰秒所需的一个特殊值）。
 # 'L' -- 秒中的毫秒，被格式化为必要时带前导零的三位数，即 000 - 999。
 # 'N' -- 秒中的毫微秒，被格式化为必要时带前导零的九位数，即 000000000 - 999999999。
-# 'p' -- 特定于语言环境的 上午或下午 标记以小写形式表示，例如 "am" 或 "pm"。使用转换前缀 'T' 可以强行转换为大写形式
+# 'p' -- 特定于语言环境的 上午或下午 标记以小写形式表示，例如 "am" 或 "pm"。使用转换前缀 'T' 可以强行转换为大写
 # 'z' -- 相对于 GMT 的 RFC 822 格式的数字时区偏移量，例如 -0800。
 # 'Z' -- 表示时区缩写形式的字符串。Formatter 的语言环境将取代参数的语言环境（如果有）。
 # 's' -- 自协调世界时 (UTC) 1970 年 1 月 1 日 00:00:00 至现在所经过的秒数
@@ -12559,6 +12863,126 @@ public class URLDecoder {
 					</div>
 				</div>
 				<!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-security-intro"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Java 安全体系</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sub-item">
+                            <p><b>Java 安全体系结构总共分为 4 个部分：</b></p>
+                            <ul>
+                                <li><p><b>JCA（Java Cryptography Architecture，Java加密体系结构）</b> -- 提供基本的加密框架， 如证书、 数字签名、消息摘要和密钥对产生器。</p></li>
+                                <li><p><b>JCE（Java Cryptography Extension，Java 加密扩展包）</b> -- 提供了各种加密算法、 消息摘要算法和密钥管理等功能。</p></li>
+                                <li><p><b>JSSE（Java Secure Sockets Extension，Java 安全套接字扩展包）</b> -- 提供了基于 SSL（Secure Sockets Layer，安全套接字层）的加密功能。</p></li>
+                                <li><p><b>JAAS（Java Authentication and Authentication Service，Java 鉴别与安全服务）</b> -- 提供了在 Java 平台上进行用户身份鉴别的功能。</p></li>
+                            </ul>
+                            <p><b>JCA</b> 和 <b>JCE</b> 是 Java 平台提供的用于安全和加密服务的两组 API。它们并不执行任何算法，它们只是连接应用和实际算法实现程序的一组接口。软件开发商可以根据 <b>JCE</b> 接口（ 又称安全提供者接口） 将各种算法实现后，打包成一个 Provider（ 安全提供者） ， 动态地加载到 Java 运行环境中。</p>
+                            <p><b>JCA</b> 围绕以下原则设计：</p>
+                            <ul>
+                                <li><p><b>实现独立性</b>：应用程序不需要实现安全算法。相反，他们可以从 Java 平台请求安全服务。安全服务在提供程序中实现，它们通过标准接口插入 Java 平台。应用程序可能依赖多个独立提供程序来实现安全功能。</p></li>
+                                <li><p><b>实现互操作性</b>：提供程序可跨应用程序进行互操作。具体而言，应用程序未绑定到特定提供程序，并且提供程序未绑定到特定应用程序。</p></li>
+                                <li><p><b>算法可扩展性</b>：Java 平台包括许多内置提供程序，这些提供程序实现了当今广泛使用的基本安全服务集。但是，某些应用程序可能依赖于尚未实施的新兴标准或专有服务。Java 平台支持安装实现此类服务的自定义提供程序。</p></li>
+                            </ul>
+                            <p><b>JCA</b> 包括各种加密服务的 API:</p>
+                            <ul>
+                                <li><p><b>消息摘要算法</b></p></li>
+                                <li><p><b>数字签名算法</b></p></li>
+                                <li><p><b>对称批量加密</b></p></li>
+                                <li><p><b>对称流加密</b></p></li>
+                                <li><p><b>非对称加密</b></p></li>
+                                <li><p><b>基于密码的加密（PBE）</b></p></li>
+                                <li><p><b>椭圆曲线密码（ECC）</b></p></li>
+                                <li><p><b>密钥协商算法</b></p></li>
+                                <li><p><b>密码生成器</b></p></li>
+                                <li><p><b>消息验证码（MAC）</b></p></li>
+                                <li><p><b>随机数生成器</b></p></li>
+                            </ul>
+                        </div>
+
+                        <div class="sub-item">
+                            <pre class="brush: java;">
+Key extends Serializable                                     // 所有密钥的顶层接口
+ ├─ SecretKey extends Key, Destroyable                       // 对称密钥，实现类改写 equals 和 hashCode 方法
+ │   ├─ SecretKeySpec implements KeySpec, SecretKey          // 指定密钥，此类既是 Key 又是 KeySpec
+ │   ├─ KerberosKey implements SecretKey, Destroyable        // 封装一个长期秘钥
+ │   └─ PBEKey                                               // PBE 密钥
+ ├─ PrivateKey extends Key, Destroyable                      // 非对称加密的私钥，接口不包含任何方法或常量
+ │   ├─ RSAPrivateKey extends RSAKey, PrivateKey             // RSA 加密私钥
+ │   │   ├─ RSAPrivateCrtKey extends RSAPrivateKey           // RSA CRT 加密私钥，CRT 是中国余数定理
+ │   │   └─ RSAMultiPrimePrivateCrtKey extends RSAPrivateKey // 多素数专用私钥
+ │   ├─ DSAPrivateKey extends DSAKey, PrivateKey             // DSA 加密私钥
+ │   ├─ DHPrivateKey extends DHKey, PrivateKey               // DH 算法私钥，密钥交换算法
+ │   └─ ECPrivateKey extends ECKey, PrivateKey               // EC 算法私钥
+ └─ PublicKey extends Key                                    // 非对称加密的公钥
+     ├─ RSAPublicKey extends PublicKey                       // RSA 加密公钥
+     ├─ DSAPublicKey extends DSAKey, PublicKey               // DSA 加密公钥
+     ├─ DHPublicKey extends DHKey, PublicKey                 // DH 算法公钥，密钥交换算法
+     └─ ECPublicKey extends ECKey, PublicKey                 // EC 算法公钥
+
+RSAKey // RSA 加密的 Key
+DSAKey // DSA 加密的 Key
+DHKey  // DH 算法的 Key，DH 为密钥交换算法
+ECKey  // EC 算法的 Key
+
+KeySpec                                         // 密钥规范，使用指定的密码生成符合规范的密钥
+ ├─ SecretKeySpec implements KeySpec, SecretKey // 用于生成对称加密和不可逆加密的密钥，此类既是 Key 又是 KeySpec
+ ├─ DESKeySpec                                  // DES 密钥生成
+ ├─ DESedeKeySpec                               // DESede 密钥生成
+ ├─ RSAPrivateKeySpec                           // RSA 私钥生成
+ │   ├─ RSAPrivateCrtKeySpec
+ │   └─ RSAMultiPrimePrivateCrtKeySpec
+ ├─ RSAPublicKeySpec                            // RSA 公钥生成
+ ├─ EncodedKeySpec                              // 编码过的公钥或私钥
+ │   ├─ PKCS8EncodedKeySpec                     // PKCS8 编码的私钥定义
+ │   └─ X509EncodedKeySpec                      // X509 编码的公钥定义
+ ├─ DSAPrivateKeySpec                           // DSA 私钥生成
+ ├─ DSAPublicKeySpec                            // DSA 公钥生成
+ ├─ DHPrivateKeySpec                            // DH 私钥生成
+ ├─ DHPublicKeySpec                             // DH 公钥生成
+ ├─ ECPrivateKeySpec                            // EC 私钥生成
+ ├─ ECPublicKeySpec                             // EC 公钥生成
+ └─ PBEKeySpec                                  // PBE 密钥生成
+
+Key // 密钥的顶级接口
+KeyPair // 公钥/私钥对，PublicKey 和 PrivateKey 包装
+
+KeyGenerator // 用于创建密钥，支持：AES, DES, DESede, RC4(ARCFOUR), Blowfish, HmacSHA256, HmacSHA512...
+SecretKeyFactory // 用于创建密钥(支持 KeySpec)，支持：AES, DES, DESede, RC4(ARCFOUR)...
+
+KeyPairGenerator // 用于创建公钥/私钥对，支持：RSA, DSA, EC, DH(DiffieHellman)
+KeyFactory // 用于创建公钥/私钥对(支持 KeySpec)，支持：RSA, DSA, EC, DH(DiffieHellman)
+
+KeyStore // 密钥库，根据不同的类型可以从中提取密钥，公钥，私钥，证书
+Certificate // 证书
+
+Cipher // 加密和解密，包括对称加密和非对称加密，包括：DES, DESede, RC4(ARCFOUR), Blowfish, AES, RSA...
+Mac // 单向加密，哈希加密，包括： HmacSHA1, HmacSHA224, HmacSHA256, HmacSHA384, HmacSHA512, HmacSHAMD5
+
+MessageDigest // 消息摘要，用于生成： MD5, SHA, SHA-256, SHA-512...
+Signature // 数字签名，包括：MD5withRSA, SHA256withRSA, SHA512withRSA, SHA256withDSA, SHA256withECDSA...
+</pre>
+                        </div>
+                    </div>
+                </div>
+                <!-- item over -->
+
+                <!-- item start -->
+                <a class="offset" id="java-security-"></a>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">...</h3>
+                    </div>
+                    <div class="panel-body">
+                        <pre class="brush; java;">
+
+</pre>
+                        <p><a href="docs/docs-java/api/" target="_blank"></a></p>
+                    </div>
+                </div>
+                <!-- item over -->
 
                 <!-- item start -->
                 <a class="offset" id="java-sql-DriverManager"></a>
