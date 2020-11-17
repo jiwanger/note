@@ -67,8 +67,7 @@
 					<div class="list-group">
 						<a href="#spring-intro" class="list-group-item">简介</a>
 						<a href="#spring-docs" class="list-group-item">文档和 JAR 包</a>
-						<a class="list-group-item active dropdown" data-toggle="collapse"
-							data-parent="#accordion" href="#spring-base" aria-expanded="true">
+						<a class="list-group-item active dropdown" data-toggle="collapse" data-parent="#accordion" href="#spring-base" aria-expanded="true">
 							Spring 基础<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
 						<div id="spring-base" class="panel-collapse collapse"
@@ -77,21 +76,18 @@
 							<a href="#spring-bean" class="list-group-item">Bean</a>
 							<a href="#spring-dependency" class="list-group-item">依赖注入</a>
 							<a href="#spring-list" class="list-group-item">注入集合</a>
-							<a href="#spring-autowriting" class="list-group-item">Beans
-								自动装配</a>
+							<a href="#spring-autowriting" class="list-group-item">Beans 自动装配</a>
 							<a href="#spring-annotation" class="list-group-item">基于注解的配置</a>
 							<a href="#spring-java" class="list-group-item">基于 Java 的配置</a>
 						</div>
 						<a href="#spring-aop" class="list-group-item">Spring 框架的 AOP</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#spring-mvc" aria-expanded="true"
-							style="border-top: 1px solid #DDDDDD;">
+						<a href="#spring-boot" class="list-group-item">Spring Boot 实例</a>
+						<a href="#spring-thymeleaf" class="list-group-item">Thymeleaf</a>
+						<a class="list-group-item active dropup" data-toggle="collapse" data-parent="#accordion" href="#spring-mvc" aria-expanded="true" style="border-top: 1px solid #DDDDDD;">
 							Spring MVC<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="spring-mvc" class="panel-collapse collapse in"
-							role="tabpanel">
-							<a href="#spring-mvc-example" class="list-group-item">WEBMVC
-								实例</a>
+						<div id="spring-mvc" class="panel-collapse collapse in" role="tabpanel">
+							<a href="#spring-mvc-example" class="list-group-item">WEBMVC 实例</a>
 							<a href="#spring-" class="list-group-item">...</a>
 							<a href="#spring-" class="list-group-item">...</a>
 						</div>
@@ -305,9 +301,9 @@
 						<h3 class="panel-title">文档和 JAR 包</h3>
 					</div>
 					<div class="panel-body">
-						<p>
-							Javadoc: <a href="docs/docs-spring/javadoc-api/index.html" target="_blank">spring-5.2.8-javadoc</a>
-						</p>
+						<p>官网: <a href="https://spring.io" target="_blank">spring.io</a></p>
+						<p>Javadoc: <a href="https://docs.spring.io/spring-framework/docs/current/javadoc-api/" target="_blank">spring-${current}-javadoc</a> 本地副本: <a href="docs/docs-spring/javadoc-api/index.html" target="_blank">spring-5.2.8-javadoc</a></p>
+						<p>Spring Boot Javadoc: <a href="https://docs.spring.io/spring-boot/docs/current/api/" target="_blank">spring-boot-${current}-javadoc</a></p>
 						<ul>
 							<li>
 								<p>
@@ -766,7 +762,7 @@ obj.getMessage();
 &lt;bean id="helloIndia" class="com.tutorialspoint.HelloIndia" parent="helloWorld">
    &lt;property name="message1" value="Hello India!" />
 &lt;/bean>
-							</pre>
+</pre>
 
 						</div>
 					</div>
@@ -976,60 +972,57 @@ public class JavaCollection {
 	}
 }
 </pre>
-						<p>
-							<code>Beans.xml</code>
-							配置
-						</p>
+						<p><code>Beans.xml</code> 配置</p>
 						<pre class="brush: xml;">
-<?xml version="1.0" encoding="UTF-8"?>
+&lt;?xml version="1.0" encoding="UTF-8"?>
 
 &lt;beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
     
-	<bean id="javaCollection" class="cm.nate.spring.model.JavaCollection">
+	&lt;bean id="javaCollection" class="cm.nate.spring.model.JavaCollection">
 
 		<!-- results in a setAddressList(java.util.List) call -->
-		<property name="addressList">
-			<list>
-				<value>INDIA</value>
-				<value>Pakistan</value>
-				<value>USA</value>
-				<value>USA</value>
-			</list>
-		</property>
+		&lt;property name="addressList">
+			&lt;list>
+				&lt;value>INDIA&lt;/value>
+				&lt;value>Pakistan&lt;/value>
+				&lt;value>USA&lt;/value>
+				&lt;value>USA&lt;/value>
+			&lt;/list>
+		&lt;/property>
 
 		<!-- results in a setAddressSet(java.util.Set) call -->
-		<property name="addressSet">
-			<set>
-				<value>INDIA</value>
-				<value>Pakistan</value>
-				<value>USA</value>
-				<value>USA</value>
-			</set>
-		</property>
+		&lt;property name="addressSet">
+			&lt;set>
+				&lt;value>INDIA&lt;/value>
+				&lt;value>Pakistan&lt;/value>
+				&lt;value>USA&lt;/value>
+				&lt;value>USA&lt;/value>
+			&lt;/set>
+		&lt;/property>
 
 		<!-- results in a setAddressMap(java.util.Map) call -->
-		<property name="addressMap">
-			<map>
-				<entry key="1" value="INDIA" />
-				<entry key="2" value="Pakistan" />
-				<entry key="3" value="USA" />
-				<entry key="4" value="USA" />
-			</map>
-		</property>
+		&lt;property name="addressMap">
+			&lt;map>
+				&lt;entry key="1" value="INDIA" />
+				&lt;entry key="2" value="Pakistan" />
+				&lt;entry key="3" value="USA" />
+				&lt;entry key="4" value="USA" />
+			&lt;/map>
+		&lt;/property>
 
 		<!-- results in a setAddressProp(java.util.Properties) call -->
-		<property name="addressProp">
-			<props>
-				<prop key="one">INDIA</prop>
-				<prop key="two">Pakistan</prop>
-				<prop key="three">USA</prop>
-				<prop key="four">USA</prop>
-			</props>
-		</property>
-	</bean>
+		&lt;property name="addressProp">
+			&lt;props>
+				&lt;prop key="one">INDIA&lt;/prop>
+				&lt;prop key="two">Pakistan&lt;/prop>
+				&lt;prop key="three">USA&lt;/prop>
+				&lt;prop key="four">USA&lt;/prop>
+			&lt;/props>
+		&lt;/property>
+	&lt;/bean>
 
 &lt;/beans>
 </pre>
@@ -1702,6 +1695,1010 @@ helloWorld.getMessage();
 				<!-- item over -->
 
 				<!-- item start -->
+				<a class="offset" id="spring-boot"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Spring Boot Web 项目</h3>
+					</div>
+					<div class="panel-body">
+						<p>Spring Boot 是由 Pivotal 团队提供的全新框架，其设计目的是用来简化新 Spring 应用的初始搭建以及开发过程。</p>
+						<div class="row">
+							<div class="col-md-8">
+								<p><b>本文使用命令行形式创建基于 Gradle 的 SpringBoot Web 项目。</b></p>
+								<p>简单的方式可以直接从 <a href="https://start.spring.io/" target="_blank">start.spring.io</a> 配置，然后下载模板</p>
+								<p>SpringBoot 推荐使用  <a href="https://www.thymeleaf.org/whoisusingthymeleaf.html" target="_blank">Thymeleaf</a> 替代 jsp。</p>
+								<p>最终的项目结构如右图所示：</p>
+								<p><b>以下为当前环境：</b></p>
+								<ul>
+									<li><p>Linux Mint</p></li>
+									<li><p>Gradle 6.6.1</p></li>
+									<li><p>Java 1.8</p></li>
+									<li><p>Spring Boot 2.3.3</p></li>
+								</ul>
+								<ol>
+									<li>
+										<p>创建目录 <code>spring-boot</code></p>
+										<pre class="brush: bash;">
+$ mkdir spring-boot
+$ cd spring-boot
+</pre>
+									</li>
+									<li>
+										<p>使用 Gradle 初始化类型为 <code>java-application</code> 项目</p>
+										<pre class="brush: bash;">
+## 本实例使用的是 6.6.1 版本，基础包为 io.jiwanger.boot
+$ gradle init --type java-application
+</pre>
+									</li>
+								</ol>
+							</div>
+							<div class="col-md-4">
+								<img src="images/spring-boot.png" class="img-responsive center-block"/>
+							</div>
+						</div>
+						<ol start="3">
+							<li>
+								<p>修改 <code>build.gradle</code> 文件如下:</p>
+								<pre class="brush: groovy;">
+buildscript {
+    repositories {
+        mavenLocal()
+        maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+        maven { url 'https://jitpack.io' }
+        jcenter()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.3.3.RELEASE")
+        classpath("org.springframework.boot:spring-boot-starter-parent:2.3.3.RELEASE")
+    }
+}
+
+plugins {
+    id 'java'
+    id 'war'
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+}
+
+repositories {
+    mavenLocal()
+    maven{ url 'http://maven.aliyun.com/nexus/content/groups/public/'}
+    maven { url 'https://jitpack.io' }
+    jcenter()
+}
+
+dependencies {
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:29.0-jre'
+
+//    implementation 'org.springframework.boot:spring-boot-starter-web:2.3.3.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    implementation 'mysql:mysql-connector-java:8.0.21'
+
+    // 阿里的 Druid 数据库连接池
+//    implementation 'com.alibaba:druid:1.1.23'
+    implementation 'com.alibaba:druid-spring-boot-starter:1.1.23'
+
+	// spring boot 已不再推荐 jsp 展示页面，使用 thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+    // Spring Mybatis 集成
+//    implementation 'org.mybatis:mybatis:3.5.5'
+//    implementation 'org.mybatis:mybatis-spring:2.0.5'
+    // 自动配置 mybatis(对以上两个包自动依赖)
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3'
+
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+
+    testImplementation 'junit:junit:4.13'
+}
+
+// 复制 war 到本机安装的 tomcat 的 webapps 目录下
+task publish(dependsOn: 'bootWar', type: Copy) {
+   from './build/libs/'
+   into '/home/nate/soft/apache-tomcat-8.5.24/webapps/'
+}
+</pre>
+							</li>
+							<li>
+								<p>在 <code>src/main/java/</code> 目录下创建 <code>io.jiwanger.boot</code> 包，并创建 <code>BootApplication</code> 类，代码如下:</p>
+								<pre class="brush: java;">
+package io.jiwanger.boot;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class BootApplication {
+	public static void main(String[] args) {
+    	SpringApplication.run(BootApplication.class, args);
+  	}
+}
+</pre>
+							</li>
+							<li>
+								<p>在 <code>src/main/java/</code> 目录 <code>io.jiwanger.boot</code> 包下创建 <code>ServletInitializer</code> 类，代码如下:</p>
+								<p><b>SpringBootServletInitializer 就是原有的 <code>web.xml</code> 文件的替代。</b></p>
+								<pre class="brush: java;">
+package io.jiwanger.boot;
+
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+
+public class ServletInitializer extends SpringBootServletInitializer {
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(BootApplication.class);
+	}
+}
+</pre>
+							</li>
+							<li>
+								<p>在 <code>src/main/java/</code> 目录 <code>io.jiwanger.boot</code> 包下创建 <code>model</code> 包，并创建 <code>Book</code> 类，代码如下:</p>
+								<pre class="brush: java;">
+package io.jiwanger.boot.model;
+
+public class Book {
+    private int id;
+    private String uuid;
+    private String type;
+    private String name;
+    private float price;
+    private String date;
+
+    public Book() {
+    }
+
+    public Book(int id, String uuid, String type, String name, float price, String date) {
+        this.id = id;
+        this.uuid = uuid;
+        this.type = type;
+        this.name = name;
+        this.price = price;
+        this.date = date;
+    }
+	...
+}
+</pre>
+							</li>
+							<li>
+								<p>在 <code>src/main/java/</code> 目录 <code>io.jiwanger.boot</code> 包下创建 <code>dao</code> 包，并创建 <code>BookDao</code> 类，代码如下:</p>
+								<pre class="brush: java;">
+package io.jiwanger.boot.dao;
+
+import io.jiwanger.boot.model.Book;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Service;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+@Service
+public class BookDao {
+    private final JdbcTemplate jdbcTemplate;
+
+    public BookDao(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+    class BookMapper implements RowMapper&lt;Book> {
+        @Override
+        public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Book book = new Book();
+            book.setId(rs.getInt(1));
+            book.setType(rs.getString(2));
+            book.setName(rs.getString(3));
+            book.setPrice(rs.getFloat(4));
+            book.setUuid(rs.getString(5));
+            book.setDate(rs.getString(6));
+
+            return book;
+        }
+    }
+
+    public Book getById(int id) {
+        String sql = "SELECT `id`, `type`, `name`, `price`, `uuid`, `date` FROM `test`.`book` WHERE `id` = ?;";
+        return jdbcTemplate.queryForObject(sql, new BookMapper(), id);
+    }
+}
+</pre>
+							</li>
+							<li>
+								<p>在 <code>src/main/java/</code> 目录 <code>io.jiwanger.boot</code> 包下创建 <code>mapper</code> 包，并创建 <code>BookMapper</code> 类，代码如下:</p>
+								<pre class="brush: java;">
+package io.jiwanger.boot.mapper;
+
+import io.jiwanger.boot.model.Book;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import org.springframework.stereotype.Repository;
+
+@Mapper
+@Repository
+public interface BookMapper {
+    @Select("select id,type,name,price,uuid,date from test.book where id=#{id}")
+    Book getById(int id);
+}
+</pre>
+							</li>
+							<li>
+								<p>在 <code>src/main/java/</code> 目录 <code>io.jiwanger.boot</code> 包下创建 <code>controller</code> 包，并创建 <code>HomeController</code> 类，代码如下:</p>
+								<pre class="brush: java;">
+package io.jiwanger.boot.controller;
+
+import io.jiwanger.boot.dao.BookDao;
+import io.jiwanger.boot.mapper.BookMapper;
+import io.jiwanger.boot.model.Book;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+@RestController
+public class HomeController {
+    private final BookDao bookDao;
+    private final BookMapper bookMapper;
+
+    public HomeController(BookDao bookDao, BookMapper bookMapper) {
+		this.bookDao = bookDao;
+        this.bookMapper = bookMapper;
+    }
+
+    @RequestMapping(value = {"/", "index"})
+    public ModelAndView index() {
+        ModelAndView model = new ModelAndView("index");
+        model.addObject("message", "Message From Controller!");
+        return model;
+    }
+
+    @GetMapping("/book")
+    @ResponseBody
+    public Book getBook(@RequestParam() int id) {
+        return bookDao.getById(id);
+    }
+
+    @GetMapping("/mybatis")
+    @ResponseBody
+    public Book getById(@RequestParam() int id) {
+        return bookMapper.getById(id);
+    }
+}
+</pre>
+							</li>
+							<li>
+								<p>在 <code>src/main/</code> 目录下创建 <code>templates</code> 目录，并创建 <code>index.html</code> 文件，内容如下:</p>
+								<pre class="brush: xml;">
+&lt;!DOCTYPE html>
+&lt;html lang="zh_cn">
+&lt;head>
+    &lt;meta charset="utf-8">
+    &lt;meta http-equiv="X-UA-Compatible" content="IE=edge">
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    &lt;title>Thymeleaf&lt;/title>
+&lt;/head>
+&lt;body>
+&lt;div>
+    &lt;div class="container">
+        &lt;h1 data-th-text="${message}">Spring Boot!&lt;/h1>
+    &lt;/div>
+&lt;/div>
+&lt;/body>
+&lt;/html>
+</pre>
+							</li>
+							<li>
+								<p>在 <code>src/main/resources/</code> 下创建 <code>application.yml</code> 文件，内容如下:</p>
+								<pre class="brush: bash;">
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost/test?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource
+
+    druid:
+      #初始化大小
+      initialSize: 5
+      #最小值
+      minIdle: 5
+      #最大值
+      maxActive: 20
+      #最大等待时间，配置获取连接等待超时，时间单位都是毫秒ms
+      maxWait: 60000
+      stat-view-servlet:
+        url-pattern: "/druid/*"
+        login-username: root
+        login-password: 123456
+        #禁止那些ip
+        deny: 192.168.1.102
+        #是否可以重置
+        reset-enable: true
+        #启用
+        enabled: true
+        allow: 192.168.0.192
+</pre>
+							</li>
+							<li>
+								<p><code>src/main/resources/static/</code> 目录用于存放静态文件，可以直接访问</p>
+							</li>
+							<li>
+								<p>运行测试</p>
+								<pre class="brush: bash;">
+$ gradle publish
+## http://localhost:8080/spring-boot/
+## http://localhost:8080/spring-boot/index.html   ## 如果 static 目录下有此文件，可以直接访问
+## http://localhost:8080/spring-boot/book?id=1    ## jdbcTemplate 查询
+## http://localhost:8080/spring-boot/mybatis?id=2 ## Mybatis 查询
+## http://localhost:8080/spring-boot/druid/       ## druid 数据库监控
+</pre>
+							</li>
+						</ol>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="spring-thymeleaf"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Thymeleaf</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p><b>Thymeleaf</b> 是一个适用于 Web 和独立环境的现代服务器端 Java 模板引擎，能够处理 HTML，XML，JavaScript，CSS 甚至纯文本。</p>
+							<p><b>Thymeleaf</b> 的主要目标是提供一种优雅且高度可维护的模板创建方式。为实现这一目标，它以自然模板的概念为基础，将其逻辑注入模板文件，其方式不会影响模板被用作设计原型。</p>
+							<p><b>Thymeleaf</b> 官网: <a href="https://www.thymeleaf.org" target="_blank">thymeleaf.org</a> javadoc: <a href="https://www.thymeleaf.org/apidocs/thymeleaf/3.0.11.RELEASE/" target="_blank">docs-3.0.11</a> 使用说明: <a href="https://www.thymeleaf.org/doc/tutorials/3.0/usingthymeleaf.html" target="_blank">tutorials 3.0</a> </p>
+							<p>先来看两个使用 Thymeleaf 的例子: </p>
+							<ul>
+								<li>
+									<p>使用 <code>data-th-XX</code> 方式：</p>
+									<pre class="brush: xml;">
+&lt;!DOCTYPE html>
+&lt;html lang="zh_cn">
+&lt;head>
+    &lt;meta charset="utf-8">
+    &lt;title>Thymeleaf&lt;/title>
+    &lt;link data-th-href="@{css/common.css}" rel="stylesheet"> &lt;!-- 引用 static 下的样式 -->
+&lt;/head>
+&lt;body>
+    &lt;div class="container">
+        &lt;h1 data-th-text="${message}">Spring Boot!&lt;/h1> &lt;!-- 此处可以拿到 Controller 传递过来的值 -->
+    &lt;/div>
+&lt;/body>
+&lt;script data-th-src="@{js/common.js}">&lt;/script> &lt;!-- 引用 static 下的脚本 -->
+&lt;/html>
+</pre>
+								</li>
+								<li>
+									<p>使用 <code>th:XX</code> 方式：</p>
+									<pre class="brush: xml;">
+&lt;!DOCTYPE html>
+&lt;html lang="zh_cn" xmlns:th="http://www.thymeleaf.org">  &lt;!-- 引入 th 命名空间 -->
+&lt;head>
+    &lt;meta charset="utf-8">
+    &lt;title>Thymeleaf&lt;/title>
+    &lt;link th:href="@{css/common.css}" rel="stylesheet">
+&lt;/head>
+&lt;body>
+    &lt;div class="container">
+        &lt;h1 th:text="${message}">Spring Boot!&lt;/h1> &lt;!-- 此处可以拿到 Controller 传递过来的值 -->
+    &lt;/div>
+&lt;/body>
+&lt;script th:src="@{js/common.js}">&lt;/script>
+&lt;/html>
+</pre>
+								</li>
+							</ul>
+						</div>
+						<div class="sub-item">
+                            <p><b>Thymeleaf 基础</b></p>
+							<ul>
+								<li>
+									<p><b>Spring Boot 项目引入 <code>Thymeleaf</code></b></p>
+									<pre class="brush: java;">implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'</pre>
+								</li>
+								<li>
+									<p><b>静态资源规则</b>(按以下顺序查找)</p>
+									<pre class="brush: bash;">classpath:/META-INF/resources/ > classpath:/resources/ > classpath:/static/ > classpath:/public/</pre>
+								</li>
+								<li>
+									<p><b>标准表达式</b></p>
+									<table class="table table-bordered table-responsive table-condensed">
+										<thead>
+											<tr><td>属性</td> 	<td style="width: 30%">描述</td> 	<td>示例</td></tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td><code>@{...}</code></td><td>链接⽹址表达式，用于替换网页中的 src、href 等的值</td>
+												<td>
+													<pre class="brush: xml;">
+														&lt;link th:href="@{css/common.css}" rel="stylesheet">
+														&lt;script data-th-src="@{js/common.js}">&lt;/script>
+														&lt;a data-th-href="@{list}" target="_blank">list&lt;/a>
+														&lt;a data-th-href="@{root/login}" target="_blank">manager&lt;/a>
+														&lt;a data-th-href="@{https://it.ithome.com}" target="_blank">ithome&lt;/a>
+														&lt;a data-th-href="@{list(from=search,key=${message})}" target="_blank">args&lt;/a>
+</pre>
+												</td>
+											</tr>
+											<tr><td><code>${...}</code></td><td>变量表达式，可用于获取后台传过来的值</td>
+												<td>
+													<pre class="brush: xml;">
+													&lt;p th:text="${message}">中国&lt;/p>
+													&lt;p th:text="${book.name}">21&lt;/p>
+</pre>
+												</td>
+											</tr>
+											<tr>
+												<td><code>*{...}</code></td><td>选择变量表达式，可以和 <code>${...}</code> 混用</td>
+												<td>
+													<pre class="brush: xml;">
+													&lt;div>
+														&lt;b>Name: &lt;/b>&lt;span data-th-text="*{book.name}">...&lt;/span>
+														&lt;b>Type: &lt;/b>&lt;span data-th-text="${book.type}">...&lt;/span>
+														&lt;b>Price: &lt;/b>&lt;span data-th-text="*{book.price}">...&lt;/span>
+													&lt;/div>
+
+													&lt;div data-th-object="${book}"> <!-- 以下只能用 * 号，不能用 $ 号 -->
+														&lt;b>Name:&lt;/b> &lt;span data-th-text="*{name}">...&lt;/span>
+														&lt;b>Type:&lt;/b> &lt;span data-th-text="*{type}">...&lt;/span>
+														&lt;b>Price:&lt;/b> &lt;span data-th-text="*{price}">...&lt;/span>
+													&lt;/div>
+</pre>
+												</td>
+											</tr>
+											<tr>
+												<td><code>#{...}</code></td><td>表达式基本对象和文字国际化表达式</td>
+												<td>
+													<pre class="brush: xml;">
+														<!-- 国际化先不管，基本对象的使用(具体有哪些基本对象和属性后面章节再说)： -->
+														&lt;p data-th-text="${#locale.country + #locale.language}">CN, ZH&lt;/p>
+														&lt;p data-th-text="${#request.method + #request.queryString}">GET,id=-1&lt;/p>
+</pre>
+												</td>
+											</tr>
+											<tr>
+												<td><code>~{...}</code></td><td>⽚段表达式，可以用于引用公共的目标片段</td>
+												<td>
+													<pre class="brush: xml;">
+														&lt;div data-th-insert="~{footer.html}" />
+														&lt;div data-th-insert="~{footer::copy}" />
+														&lt;div data-th-replace="~{footer.html::frag1}" />
+														&lt;div data-th-insert="~{footer.html::span[class='content']}">
+</pre>
+												</td>
+											</tr>
+										</tbody>
+
+
+									</table>
+								</li>
+								<li>
+									<p><b>迭代<code>th:each/data-th-each</code></b> -- 除了元素，还可以获取迭代状态</p>
+									<pre class="brush: xml;">
+&lt;table class="table table-responsive table-striped">
+	&lt;thead>
+	&lt;tr>
+		&lt;td class="width: 30%">Name&lt;/td>
+		&lt;td>Index&lt;/td>
+		&lt;td>Type&lt;/td>
+		&lt;td>Price&lt;/td>
+		&lt;td>Date&lt;/td>
+	&lt;/tr>
+	&lt;/thead>
+	&lt;tbody>
+
+	&lt;tr data-th-each="book,loopStatus : ${books}"> &lt;!-- 除了元素，还可以获取迭代状态 -->
+		&lt;td data-th-text="${loopStatus.count}">1&lt;/td>
+		&lt;td data-th-text="${book.name}">name&lt;/td>
+		&lt;td data-th-text="${book.type}">type&lt;/td>
+		&lt;td data-th-text="${book.price}">price&lt;/td>
+		<!-- book.date 必须是 java.util.date 类型 -->
+		&lt;td data-th-text="${#dates.format(book.date, 'yyyy-MM-dd HH:mm')}">2020-04-24 12:30&lt;/td>
+	&lt;/tr>
+	&lt;/tbody>
+&lt;/table>
+</pre>
+								</li>
+								<li>
+									<p><b>条件判断<code>th:if/data-th-if</code></b> -- 条件满足才展示</p>
+									<pre class="brush: xml;">
+<!--表达式的结果为布尔类型时，if 直接以它为结果-->
+&lt;p th:if="true">th:if="true"&lt;/p>
+<!--当表达式结果为null时，则if判定为false-->
+&lt;p th:if="null">th:if="null"&lt;/p>
+<!--表达式为数字时，不为0，if判定为true,为0,时，if判定为false-->
+&lt;p th:if="11">th:if="11"&lt;/p>
+&lt;p th:if="0">th:if="0"&lt;/p>
+
+<!--表达式结果为字符串时，如果为 true，则if判定为true；值为 false，则if判定为false-->
+<!--结果为 off、no 等特殊字符串时，if 判定为false-->
+&lt;p th:if="'true'">th:if="'true'"&lt;/p>
+&lt;p th:if="'false'">th:if="'false'"&lt;/p>
+&lt;p th:if="'off'">th:if="'off'"&lt;/p>
+&lt;p th:if="'no'">th:if="'no'"&lt;/p>
+&lt;!--表达式结果字符串不为false，off,no时，if判定为true-->
+&lt;p th:if="'Love China'">th:if="'Love China'"&lt;/p>
+
+<!--后台传输：model.addAttribute("userList", User.getUsers());-->
+<!--只要 userList 不等于null，则if判定为true，否则为false-->
+&lt;p th:if="${userList}">th:if="${userList}"&lt;/p>
+
+<!--后台传输：model.addAttribute("name", "");-->
+<!--字符串为空时，if判定为 true-->
+&lt;p th:if="${name}eq''">name 等于空&lt;/p>
+&lt;p th:if="${name}">th:if="${name}"&lt;/p>
+</pre>
+								</li>
+								<li>
+									<p><b>条件判断<code>th:unless/data-th-unless</code></b> -- 条件不满足才展示(if 的反向属性)</p>
+									<pre class="brush: xml;">
+<!--unless与if判定规则一致，但是显示条件相反，unless当结果为false时才进行显示-->
+&lt;p th:unless="false">th:unless="false"&lt;/p>
+&lt;p th:unless="true">th:unless="true"&lt;/p>
+
+<!--后台传输：model.addAttribute("isMarry", true);-->
+&lt;p th:if="${isMarry}">已婚1&lt;/p>
+&lt;p th:unless="!${isMarry}">已婚2&lt;/p>
+</pre>
+								</li>
+								<li>
+									<p><b>条件匹配<code>th:switch|case/data-th-switch|data-th-case</code></b> -- 与 Java 中的 switch 语句等效</p>
+									<pre class="brush: xml;">
+<!--数字类型/布尔类型/字符串类型，有匹配取第一个; 无匹配，取默认值; 无默认值，不显示-->
+&lt;div th:switch="1">
+    &lt;p th:case="0">管理员&lt;/p>
+	&lt;p th:case="1">操作员&lt;/p>
+	&lt;p th:case="*">未知用户&lt;/p>
+&lt;/div>
+</pre>
+								</li>
+								<li>
+									<p><b>表达式基本对象</b> 包含以下内容：</p>
+									<ul>
+										<li><p><code>#ctx</code> -- 上下文对象，对于 web 环境，实现 org.thymeleaf.context.IWebContext 接口</p>
+											<p><code>#vars / #root</code> -- 是同一对象，推荐使用 <code>#ctx</code></p>
+											<pre class="brush: java;">
+// 这两个属性来自 org.thymeleaf.context.IContext 接口
+${#ctx.locale}          // Locale
+${#ctx.variableNames} 	// Set&lt;String>
+
+// 属性来自 org.thymeleaf.context.IWebContext 接口
+${#ctx.request}         // HttpServletRequest
+${#ctx.response}        // HttpServletResponse
+${#ctx.session}         // HttpSession
+${#ctx.servletContext}  // ServletContext
+</pre>
+										</li>
+
+										<li><p><code>#locale</code> -- 区域对象，国家和语言，来自 java.util.Locale 类</p>
+											<pre class="brush: java;">
+${#locale.country}      // CN
+${#locale.language}     // zh
+</pre>
+										</li>
+										<li><p><code>#request</code> -- 请求对象, 来自 HttpServletRequest</p>
+											<pre class="brush: java;">
+${#request.getHeader('token')}
+${#request.getParameter('id')}
+${#request.getMethod()}
+${#request.method				// 无参方法这样写也可已
+...
+</pre>
+										</li>
+										<li><p><code>#response</code> -- 响应对象, 来自 HttpServletResponse</p>
+											<pre class="brush: java;">
+
+</pre>
+										</li>
+										<li><p><code>#session</code> -- 会话对象, 来自 HttpSession</p>
+											<pre class="brush: java;">
+${#session.getAttribute('foo')}
+${#session.id}
+${#session.lastAccessedTime}
+...
+</pre>
+										</li>
+										<li><p><code>#servletContext</code> -- 容器上下文, 来自 ServletContext</p>
+											<pre class="brush: java;">
+
+</pre>
+										</li>
+									</ul>
+								</li>
+								<li><p><b>表达式工具对象</b> -- 包含以下内容：</p>
+									<ul>
+										<li><p><code>#execInfo</code> -- 正在处理的模板信息， <code>org.thymeleaf.expression.ExecutionInfo</code> 类实例</p>
+											<pre class="brush: java;">
+${#execInfo.templateName}
+${#execInfo.templateMode}
+${#execInfo.processedTemplateName}
+${#execInfo.processedTemplateMode}
+${#execInfo.templateNames}
+${#execInfo.templateModes}
+${#execInfo.templateStack}
+</pre>
+										</li>
+										<li><p><code>#messages</code> -- 在变量表达式中获取外部化消息的实用方法，<code>org.thymeleaf.expression.Messages</code> 类实例</p>
+											<pre class="brush: java;">
+${#messages.msg('msgKey')}
+${#messages.msg('msgKey', param1)}
+${#messages.msg('msgKey', param1, param2)}
+${#messages.msg('msgKey', param1, param2, param3)}
+${#messages.msgWithParams('msgKey', new Object[] {param1, param2, param3, param4})}
+${#messages.arrayMsg(messageKeyArray)}
+${#messages.listMsg(messageKeyList)}
+${#messages.setMsg(messageKeySet)}
+
+${#messages.msgOrNull('msgKey')}
+${#messages.msgOrNull('msgKey', param1)}
+${#messages.msgOrNull('msgKey', param1, param2)}
+${#messages.msgOrNull('msgKey', param1, param2, param3)}
+${#messages.msgOrNullWithParams('msgKey', new Object[] {param1, param2, param3, param4})}
+${#messages.arrayMsgOrNull(messageKeyArray)}
+${#messages.listMsgOrNull(messageKeyList)}
+${#messages.setMsgOrNull(messageKeySet)}
+</pre>
+										</li>
+										<li><p><code>#uris</code> -- 用于在标准表达式中执行 URI/URL 操作（尤其是转义/取消转义）的实用性对象，<code>org.thymeleaf.expression.Uris</code> 类实例</p>
+											<pre class="brush: java;">
+${#uris.escapePath(uri)}
+${#uris.escapePath(uri, encoding)}
+${#uris.unescapePath(uri)}
+${#uris.unescapePath(uri, encoding)}
+
+${#uris.escapePathSegment(uri)}
+${#uris.escapePathSegment(uri, encoding)}
+${#uris.unescapePathSegment(uri)}
+${#uris.unescapePathSegment(uri, encoding)}
+
+${#uris.escapeFragmentId(uri)}
+${#uris.escapeFragmentId(uri, encoding)}
+${#uris.unescapeFragmentId(uri)}
+${#uris.unescapeFragmentId(uri, encoding)}
+
+${#uris.escapeQueryParam(uri)}
+${#uris.escapeQueryParam(uri, encoding)}
+${#uris.unescapeQueryParam(uri)}
+${#uris.unescapeQueryParam(uri, encoding)}
+</pre>
+										</li>
+										<li><p><code>#conversions</code> -- 允许在模板的任何点执行转换服务的实用程序对象，<code>org.thymeleaf.expression.Conversions</code> 类实例</p>
+											<pre class="brush: java;">
+${#conversions.convert(object, 'java.util.TimeZone')}
+${#conversions.convert(object, targetClass)}
+</pre>
+										</li>
+										<li><p><code>#dates</code> -- 日期工具类，处理 <code>java.util.Date</code>对象，<code>org.thymeleaf.expression.Dates</code> 类实例</p>
+											<pre class="brush: java;">
+${#dates.format(date)}
+${#dates.arrayFormat(datesArray)}
+${#dates.listFormat(datesList)}
+${#dates.setFormat(datesSet)}
+
+${#dates.formatISO(date)}
+${#dates.arrayFormatISO(datesArray)}
+${#dates.listFormatISO(datesList)}
+${#dates.setFormatISO(datesSet)}
+
+${#dates.format(date, 'dd/MMM/yyyy HH:mm')}
+${#dates.arrayFormat(datesArray, 'dd/MMM/yyyy HH:mm')}
+${#dates.listFormat(datesList, 'dd/MMM/yyyy HH:mm')}
+${#dates.setFormat(datesSet, 'dd/MMM/yyyy HH:mm')}
+
+${#dates.day(date)}                    // also arrayDay(...), listDay(...), etc.
+${#dates.month(date)}                  // also arrayMonth(...), listMonth(...), etc.
+${#dates.monthName(date)}              // also arrayMonthName(...), listMonthName(...), etc.
+${#dates.monthNameShort(date)}         // also arrayMonthNameShort(...), listMonthNameShort(...), etc.
+${#dates.year(date)}                   // also arrayYear(...), listYear(...), etc.
+${#dates.dayOfWeek(date)}              // also arrayDayOfWeek(...), listDayOfWeek(...), etc.
+${#dates.dayOfWeekName(date)}          // also arrayDayOfWeekName(...), listDayOfWeekName(...), etc.
+${#dates.dayOfWeekNameShort(date)}     // also arrayDayOfWeekNameShort(...), listDayOfWeekNameShort(...), etc.
+${#dates.hour(date)}                   // also arrayHour(...), listHour(...), etc.
+${#dates.minute(date)}                 // also arrayMinute(...), listMinute(...), etc.
+${#dates.second(date)}                 // also arraySecond(...), listSecond(...), etc.
+${#dates.millisecond(date)}            // also arrayMillisecond(...), listMillisecond(...), etc.
+
+${#dates.create(year,month,day)}
+${#dates.create(year,month,day,hour,minute)}
+${#dates.create(year,month,day,hour,minute,second)}
+${#dates.create(year,month,day,hour,minute,second,millisecond)}
+
+${#dates.createNow()}
+${#dates.createNowForTimeZone()}
+${#dates.createToday()}
+
+${#dates.createTodayForTimeZone()}
+</pre>
+										</li>
+										<li><p><code>#calendars</code> -- 日历工具类，和 <code>#dates</code> 类似，但处理 <code>java.util.Calendar</code> 对象，<code>org.thymeleaf.expression.Calendars</code> 类实例</p>
+											<pre class="brush: java;">
+${#calendars.format(cal)}
+${#calendars.arrayFormat(calArray)}
+${#calendars.listFormat(calList)}
+${#calendars.setFormat(calSet)}
+
+${#calendars.formatISO(cal)}
+${#calendars.arrayFormatISO(calArray)}
+${#calendars.listFormatISO(calList)}
+${#calendars.setFormatISO(calSet)}
+
+${#calendars.format(cal, 'dd/MMM/yyyy HH:mm')}
+${#calendars.arrayFormat(calArray, 'dd/MMM/yyyy HH:mm')}
+${#calendars.listFormat(calList, 'dd/MMM/yyyy HH:mm')}
+${#calendars.setFormat(calSet, 'dd/MMM/yyyy HH:mm')}
+
+${#calendars.day(date)}                // also arrayDay(...), listDay(...), etc.
+${#calendars.month(date)}              // also arrayMonth(...), listMonth(...), etc.
+${#calendars.monthName(date)}          // also arrayMonthName(...), listMonthName(...), etc.
+${#calendars.monthNameShort(date)}     // also arrayMonthNameShort(...), listMonthNameShort(...), etc.
+${#calendars.year(date)}               // also arrayYear(...), listYear(...), etc.
+${#calendars.dayOfWeek(date)}          // also arrayDayOfWeek(...), listDayOfWeek(...), etc.
+${#calendars.dayOfWeekName(date)}      // also arrayDayOfWeekName(...), listDayOfWeekName(...), etc.
+${#calendars.dayOfWeekNameShort(date)} // also arrayDayOfWeekNameShort(...), listDayOfWeekNameShort(...), etc.
+${#calendars.hour(date)}               // also arrayHour(...), listHour(...), etc.
+${#calendars.minute(date)}             // also arrayMinute(...), listMinute(...), etc.
+${#calendars.second(date)}             // also arraySecond(...), listSecond(...), etc.
+${#calendars.millisecond(date)}        // also arrayMillisecond(...), listMillisecond(...), etc.
+
+${#calendars.create(year,month,day)}
+${#calendars.create(year,month,day,hour,minute)}
+${#calendars.create(year,month,day,hour,minute,second)}
+${#calendars.create(year,month,day,hour,minute,second,millisecond)}
+
+${#calendars.createForTimeZone(year,month,day,timeZone)}
+${#calendars.createForTimeZone(year,month,day,hour,minute,timeZone)}
+${#calendars.createForTimeZone(year,month,day,hour,minute,second,timeZone)}
+${#calendars.createForTimeZone(year,month,day,hour,minute,second,millisecond,timeZone)}
+
+${#calendars.createNow()}
+
+${#calendars.createNowForTimeZone()}
+
+${#calendars.createToday()}
+
+${#calendars.createTodayForTimeZone()}
+</pre>
+										</li>
+										<li><p><code>#numbers</code> -- 数字工具类，<code>org.thymeleaf.expression.Numbers</code> 类实例</p>
+											<pre class="brush: java;">
+${#numbers.formatInteger(num,3)}
+${#numbers.arrayFormatInteger(numArray,3)}
+${#numbers.listFormatInteger(numList,3)}
+${#numbers.setFormatInteger(numSet,3)}
+
+${#numbers.formatInteger(num,3,'POINT')}
+${#numbers.arrayFormatInteger(numArray,3,'POINT')}
+${#numbers.listFormatInteger(numList,3,'POINT')}
+${#numbers.setFormatInteger(numSet,3,'POINT')}
+
+${#numbers.formatDecimal(num,3,2)}
+${#numbers.arrayFormatDecimal(numArray,3,2)}
+${#numbers.listFormatDecimal(numList,3,2)}
+${#numbers.setFormatDecimal(numSet,3,2)}
+
+${#numbers.formatDecimal(num,3,2,'COMMA')}
+${#numbers.arrayFormatDecimal(numArray,3,2,'COMMA')}
+${#numbers.listFormatDecimal(numList,3,2,'COMMA')}
+${#numbers.setFormatDecimal(numSet,3,2,'COMMA')}
+
+${#numbers.formatDecimal(num,3,'POINT',2,'COMMA')}
+${#numbers.arrayFormatDecimal(numArray,3,'POINT',2,'COMMA')}
+${#numbers.listFormatDecimal(numList,3,'POINT',2,'COMMA')}
+${#numbers.setFormatDecimal(numSet,3,'POINT',2,'COMMA')}
+
+${#numbers.formatCurrency(num)}
+${#numbers.arrayFormatCurrency(numArray)}
+${#numbers.listFormatCurrency(numList)}
+${#numbers.setFormatCurrency(numSet)}
+
+${#numbers.formatPercent(num)}
+${#numbers.arrayFormatPercent(numArray)}
+${#numbers.listFormatPercent(numList)}
+${#numbers.setFormatPercent(numSet)}
+
+${#numbers.formatPercent(num, 3, 2)}
+${#numbers.arrayFormatPercent(numArray, 3, 2)}
+${#numbers.listFormatPercent(numList, 3, 2)}
+${#numbers.setFormatPercent(numSet, 3, 2)}
+
+${#numbers.sequence(from,to)}
+${#numbers.sequence(from,to,step)}
+</pre>
+										</li>
+										<li><p><code>#strings</code> -- 字符窗工具类，<code>org.thymeleaf.expression.Strings</code> 类实例</p>
+											<pre class="brush: java;">
+${#strings.toString(obj)}                           // also array*, list* and set*
+
+${#strings.isEmpty(name)}
+${#strings.arrayIsEmpty(nameArr)}
+${#strings.listIsEmpty(nameList)}
+${#strings.setIsEmpty(nameSet)}
+
+${#strings.defaultString(text,default)}
+${#strings.arrayDefaultString(textArr,default)}
+${#strings.listDefaultString(textList,default)}
+${#strings.setDefaultString(textSet,default)}
+
+${#strings.contains(name,'ez')}                     // also array*, list* and set*
+${#strings.containsIgnoreCase(name,'ez')}           // also array*, list* and set*
+
+${#strings.startsWith(name,'Don')}                  // also array*, list* and set*
+${#strings.endsWith(name,endingFragment)}           // also array*, list* and set*
+
+${#strings.indexOf(name,frag)}                      // also array*, list* and set*
+${#strings.substring(name,3,5)}                     // also array*, list* and set*
+${#strings.substringAfter(name,prefix)}             // also array*, list* and set*
+${#strings.substringBefore(name,suffix)}            // also array*, list* and set*
+${#strings.replace(name,'las','ler')}               // also array*, list* and set*
+
+${#strings.prepend(str,prefix)}                     // also array*, list* and set*
+${#strings.append(str,suffix)}                      // also array*, list* and set*
+
+
+${#strings.toUpperCase(name)}                       // also array*, list* and set*
+${#strings.toLowerCase(name)}                       // also array*, list* and set*
+
+${#strings.arrayJoin(namesArray,',')}
+${#strings.listJoin(namesList,',')}
+${#strings.setJoin(namesSet,',')}
+${#strings.arraySplit(namesStr,',')}                // returns String[]
+${#strings.listSplit(namesStr,',')}                 // returns List&lt;String>
+${#strings.setSplit(namesStr,',')}                  // returns Set&lt;String>
+
+${#strings.trim(str)}                               // also array*, list* and set*
+
+${#strings.length(str)}                             // also array*, list* and set*
+
+${#strings.abbreviate(str,10)}                      // also array*, list* and set*
+
+${#strings.capitalize(str)}                         // also array*, list* and set*
+${#strings.unCapitalize(str)}                       // also array*, list* and set*
+
+${#strings.capitalizeWords(str)}                    // also array*, list* and set*
+${#strings.capitalizeWords(str,delimiters)}         // also array*, list* and set*
+
+${#strings.escapeXml(str)}                          // also array*, list* and set*
+${#strings.escapeJava(str)}                         // also array*, list* and set*
+${#strings.escapeJavaScript(str)}                   // also array*, list* and set*
+${#strings.unescapeJava(str)}                       // also array*, list* and set*
+${#strings.unescapeJavaScript(str)}                 // also array*, list* and set*
+
+${#strings.equals(first, second)}
+${#strings.equalsIgnoreCase(first, second)}
+${#strings.concat(values...)}
+${#strings.concatReplaceNulls(nullValue, values...)}
+
+${#strings.randomAlphanumeric(count)}
+</pre>
+										</li>
+										<li><p><code>#objects</code> -- 普通对象工具类，<code>class org.thymeleaf.expression.Objects</code> 类实例</p>
+											<pre class="brush: java;">
+${#objects.nullSafe(obj,default)}
+${#objects.arrayNullSafe(objArray,default)}
+${#objects.listNullSafe(objList,default)}
+${#objects.setNullSafe(objSet,default)}
+</pre>
+										</li>
+										<li><p><code>#bools</code> -- <code>org.thymeleaf.expression.Bools</code> 类实例</p>
+											<pre class="brush: java;">
+${#bools.isTrue(obj)}
+${#bools.arrayIsTrue(objArray)}
+${#bools.listIsTrue(objList)}
+${#bools.setIsTrue(objSet)}
+
+${#bools.isFalse(cond)}
+${#bools.arrayIsFalse(condArray)}
+${#bools.listIsFalse(condList)}
+${#bools.setIsFalse(condSet)}
+
+${#bools.arrayAnd(condArray)}
+${#bools.listAnd(condList)}
+${#bools.setAnd(condSet)}
+
+${#bools.arrayOr(condArray)}
+${#bools.listOr(condList)}
+${#bools.setOr(condSet)}
+</pre>
+										</li>
+										<li><p><code>#arrays</code> -- 数组工具类，<code>org.thymeleaf.expression.Arrays</code> 类实例</p>
+											<pre class="brush: java;">
+${#arrays.toArray(object)}
+
+${#arrays.toStringArray(object)}
+${#arrays.toIntegerArray(object)}
+${#arrays.toLongArray(object)}
+${#arrays.toDoubleArray(object)}
+${#arrays.toFloatArray(object)}
+${#arrays.toBooleanArray(object)}
+
+${#arrays.length(array)}
+
+${#arrays.isEmpty(array)}
+
+${#arrays.contains(array, element)}
+${#arrays.containsAll(array, elements)}
+</pre>
+										</li>
+										<li><p><code>#lists</code> -- List 工具类，<code>org.thymeleaf.expression.Lists</code> 类实例</p>
+											<pre class="brush: java;">
+${#lists.toList(object)}
+
+${#lists.size(list)}
+
+${#lists.isEmpty(list)}
+
+${#lists.contains(list, element)}
+${#lists.containsAll(list, elements)}
+
+${#lists.sort(list)}
+${#lists.sort(list, comparator)}
+</pre>
+										</li>
+										<li><p><code>#sets</code> -- Set 工具类，<code>org.thymeleaf.expression.Sets</code> 类实例</p>
+											<pre class="brush: java;">
+${#sets.toSet(object)}
+
+${#sets.size(set)}
+
+${#sets.isEmpty(set)}
+
+${#sets.contains(set, element)}
+${#sets.containsAll(set, elements)}
+</pre>
+										</li>
+										<li><p><code>#maps</code> -- Map 工具类，，<code>org.thymeleaf.expression.Maps</code> 类实例</p>
+											<pre class="brush: java;">
+${#maps.size(map)}
+
+${#maps.isEmpty(map)}
+
+${#maps.containsKey(map, key)}
+${#maps.containsAllKeys(map, keys)}
+${#maps.containsValue(map, value)}
+${#maps.containsAllValues(map, value)}
+</pre>
+										</li>
+										<li><p><code>#aggregates</code> -- 在数组或集合上创建聚合的实用方法，<code>org.thymeleaf.expression.Aggregates</code> 类实例</p>
+											<pre class="brush: java;">
+${#aggregates.sum(array)}
+${#aggregates.sum(collection)}
+
+${#aggregates.avg(array)}
+${#aggregates.avg(collection)}
+</pre>
+										</li>
+										<li><p><code>#ids</code> -- 处理可能重复的id属性的实用方法，<code>org.thymeleaf.expression.Ids</code> 类实例</p>
+											<pre class="brush: java;">
+${#ids.seq('someId')}
+
+${#ids.next('someId')}
+${#ids.prev('someId')}
+</pre>
+										</li>
+
+									</ul>
+								</li>
+								<li>
+									<p><b>模板布局<code>th:fragment/th:replace/th:insert/th:remove</code></b> -- 引入模板文件，或者文件的部分内容</p>
+									<p></p>
+									<pre class="brush: xml;">
+
+</pre>
+								</li>
+							</ul>
+
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
 				<a class="offset" id="spring-mvc-example"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -1709,21 +2706,42 @@ helloWorld.getMessage();
 					</div>
 					<div class="panel-body">
 						<div class="sub-item">
-							<p><b>使用 Gradle 创建 SpringMVC 项目，支持 MySQL 访问</b></p>
-							<ol>
-								<li>
-									<p>创建目录 <code>spring</code></p>
-									<pre class="brush: bash;">
+							<p><b>使用 Gradle 创建 SpringMVC 项目，整合 Mybatis，DRUID 连接池</b></p>
+							<div class="row">
+								<div class="col-md-8">
+									<p>本文使用命令行形式创建基于 Gradle 的 SpringMVC 项目。</p>
+									<p>最终的项目结构如右图所示：</p>
+									<p><b>以下为当前环境：</b></p>
+									<ul>
+										<li><p>Linux Mint</p></li>
+										<li><p>Gradle 6.6.1</p></li>
+										<li><p>Java 1.8</p></li>
+										<li><p>Spring 5.2.8</p></li>
+										<li><p>MyBatis 3.5.5</p></li>
+									</ul>
+									<p><b>以下为所有步骤：</b></p>
+									<ol>
+										<li>
+											<p>创建目录 <code>spring</code></p>
+											<pre class="brush: bash;">
 $ mkdir spring
 $ cd spring
 </pre>
-								</li>
-								<li>
-									<p>使用 Gradle 初始化类型为 <code>java-application</code> 项目</p>
-<pre class="brush: bash;">
-$ gradle init --type java-application    # 本实例使用的是 6.6.1 版本，基础包为 io.jiwanger.spring
+										</li>
+										<li>
+											<p>使用 Gradle 初始化类型为 <code>java-application</code> 项目</p>
+											<pre class="brush: bash;">
+## 本实例使用的是 6.6.1 版本，基础包为 io.jiwanger.spring
+$ gradle init --type java-application    
 </pre>
-								</li>
+										</li>
+									</ol>
+								</div>
+								<div class="col-md-4">
+									<img src="images/ssm.png" class="img-responsive center-block"/>
+								</div>
+							</div>
+							<ol start="3">
 								<li>
 									<p>修改 <code>build.gradle</code> 文件如下:</p>
 									<pre class="brush: groovy;">
@@ -1767,6 +2785,9 @@ dependencies {
     // Spring Mybatis 集成
     implementation 'org.mybatis:mybatis:3.5.5'
     implementation 'org.mybatis:mybatis-spring:2.0.5'
+
+	// 阿里的 Druid 数据库连接池
+    implementation 'com.alibaba:druid:1.1.23'
 
     // JUnit test framework
     testImplementation 'junit:junit:4.13'
@@ -2318,12 +3339,115 @@ $ gradle publish    # 如果 Tomcat 已在 8080 端口启动了，那么可以�
 ## http://localhost:8080/spring/?name=Jiwanger&id=1
 </pre>
 								</li>
+								<li>
+									<p>加入 <code>druid</code> 连接池，在 <code>src/resources/jdbc.properties</code> 加入以下内容:</p>
+									<pre class="brush: bash;">
+#初始化时建立物理连接的个数。初始化发生在显示调用init方法，或者第一次getConnection时
+druid.initialSize=0
+#最大连接池数量
+druid.maxActive=20
+#已经不再使用，配置了也没效果
+druid.maxIdle=20
+#定义最小空闲,最小连接池数量
+druid.minIdle=1
+#定义最长等待时间,获取连接时最大等待时间，单位毫秒。配置了maxWait之后，缺省启用公平锁，并发效率会有所下降，如果需要可以通过配置useUnfairLock属性为true使用非公平锁
+druid.maxWait=60000
+#属性类型是字符串，通过别名的方式配置扩展插件，常用的插件有：
+#监控统计用的filter:stat日志用的filter:log4j防御sql注入的filter:wall
+druid.filters=stat
+#有两个含义：
+#1) Destroy线程会检测连接的间隔时间2) testWhileIdle的判断依据，详细看testWhileIdle属性的说明
+druid.timeBetweenEvictionRunsMillis=60000
+druid.minEvictableIdleTimeMillis=300000
+#用来检测连接是否有效的sql，要求是一个查询语句。
+#如果validationQuery为null，testOnBorrow、testOnReturn、testWhileIdle都不会其作用
+druid.validationQuery=SELECT 'x'
+#建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，
+#如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。
+druid.testWhileIdle=true
+#申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+druid.testOnBorrow=false
+#归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能
+druid.testOnReturn=false
+#要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true。
+#在Druid中，不会存在Oracle下PSCache占用内存过多的问题，可以把这个数值配置大一些，比如说100
+druid.maxOpenPreparedStatements=100
+druid.removeAbandoned=true
+druid.removeAbandonedTimeout=1800
+druid.logAbandoned=true
+</pre>
+								</li>
+								<li>
+									<p>修改 <code>application-context.xml</code> 的 <code>dataSource</code> 如下：</p>
+									<pre class="brush: xml;">
+<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+	&lt;property name="driverClassName" value="${jdbc.driver}"/>
+	&lt;property name="url" value="${jdbc.url}"/>
+	&lt;property name="username" value="${jdbc.username}"/>
+	&lt;property name="password" value="${jdbc.password}"/>
+
+	&lt;property name="filters" value="${druid.filters}"/>
+
+	<!-- 最大并发连接数 -->
+	&lt;property name="maxActive" value="${druid.maxActive}"/>
+
+	<!-- 初始化连接数量 -->
+	&lt;property name="initialSize" value="${druid.initialSize}"/>
+
+	<!-- 配置获取连接等待超时的时间 -->
+	&lt;property name="maxWait" value="${druid.maxWait}"/>
+
+	<!-- 最小空闲连接数 -->
+	&lt;property name="minIdle" value="${druid.minIdle}"/>
+
+	<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+	&lt;property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}"/>
+
+	<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+	&lt;property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}"/>
+	&lt;property name="validationQuery" value="${druid.validationQuery}"/>
+	&lt;property name="testWhileIdle" value="${druid.testWhileIdle}"/>
+	&lt;property name="testOnBorrow" value="${druid.testOnBorrow}"/>
+	&lt;property name="testOnReturn" value="${druid.testOnReturn}"/>
+	&lt;property name="maxOpenPreparedStatements" value="${druid.maxOpenPreparedStatements}"/>
+
+	<!-- 打开 removeAbandoned 功能 -->
+	&lt;property name="removeAbandoned" value="${druid.removeAbandoned}"/>
+
+	<!-- 1800 秒，也就是 30 分钟 -->
+	&lt;property name="removeAbandonedTimeout" value="${druid.removeAbandonedTimeout}"/>
+
+	<!-- 关闭 abanded 连接时输出错误日志 -->
+	&lt;property name="logAbandoned" value="${druid.logAbandoned}"/>
+</bean>
+</pre>
+								</li>
+								<li>
+									<p>在 <code>src/main/webapp/WEB-INF/web.xml</code> 加入以下内容:</p>
+									<pre class="brush: xml;">
+<!-- 查看数据源 -->
+&lt;servlet>
+	&lt;servlet-name>DruidStatView&lt;/servlet-name>
+	&lt;servlet-class>com.alibaba.druid.support.http.StatViewServlet&lt;/servlet-class>
+&lt;/servlet>
+&lt;servlet-mapping>
+	&lt;servlet-name>DruidStatView&lt;/servlet-name>
+	&lt;url-pattern>/druid/*&lt;/url-pattern>
+&lt;/servlet-mapping>
+</pre>
+								</li>
+								<li>
+									<p>运行测试(此时我们已经能使用 druid 从数据库查询数据了)，在 <code>http://localhost:8080/spring/druid/</code> 查看链接数据库性能</p>
+									<pre class="brush: xml;">
+$ gradle publish    # 如果 Tomcat 已在 8080 端口启动了，那么可以在浏览其输入以下链接
+## http://localhost:8080/spring/?name=Jiwanger&id=1
+</pre>
+								</li>
 							</ol>
 						</div>
 					</div>
 				</div>
 				<!-- item over -->
-
 
 
 				<!-- item start -->
@@ -2332,7 +3456,19 @@ $ gradle publish    # 如果 Tomcat 已在 8080 端口启动了，那么可以�
 					<div class="panel-heading">
 						<h3 class="panel-title"></h3>
 					</div>
-					<div class="panel-body"></div>
+					<div class="panel-body">
+						<div class="row">
+								<div class="col-md-8">
+									<p>本文使用命令行形式创建 SpringMVC 项目。</p>
+									<ol>
+										
+									</ol>
+								</div>
+								<div class="col-md-4">
+									<img src="images/ssm.png" class="img-responsive center-block"/>
+								</div>
+							</div>
+					</div>
 				</div>
 				<!-- item over -->
 

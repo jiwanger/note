@@ -12,7 +12,7 @@
 <link href="images/favicon.ico" rel="bookmark" type="image/x-icon" />
 <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
 <link href="images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<title>NATE--笔记</title>
+<title>NATE--笔记--GO</title>
 <!-- Bootstrap -->
 <link href="../support/bootstrap/theme/yeti-bootstrap.min.css"
 	rel="stylesheet">
@@ -62,19 +62,18 @@
 				<div class="panel panel-default"
 					  id="left_menu_modify">
 					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
+						<h3 class="panel-title">Go</h3>
 					</div>
 					<div class="list-group">
-						<a href="#" class="list-group-item">...</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
+						<a href="#" class="list-group-item">简介</a>
+						<a href="#go-gofmt" class="list-group-item"><code>go</code></a>
+						<a class="list-group-item active dropup" data-toggle="collapse" data-parent="#accordion" href="#go-base" aria-expanded="true">基础语法<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
+						<div id="go-base" class="panel-collapse collapse in"
 							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
+							<a href="#base-syntax" class="list-group-item" style="border-top: 1px solid #DDDDDD;">基本语法</a>
+							<a href="#base-keyword" class="list-group-item">关键字和操作符</a>
+							<a href="#base-type" class="list-group-item">基本类型和流程控制</a>
 							<a href="#" class="list-group-item">...</a>
 						</div>
 						<a href="#java-class-loader" class="list-group-item">...</a>
@@ -90,6 +89,195 @@
 		<div class="row">
 			<div class="col-md-3"></div>
 			<div class="col-md-9" style="float: left;">
+				<!-- item start -->
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">简介</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p><b>Go (Golang) </b> 是 Google 开发的一种静态强类型、编译型、并发型，并具有垃圾回收功能的编程语言。
+							<p><b>官网:</b> <a href="https://golang.org/" target="blank">golang.org</a> </p>
+							<p><b>源码:</b> <a href="https://github.com/golang/go" target="blank">github.com/golang/go</a></p>
+							<p><b>Go 中文社区:</b> <a href="https://studygolang.com" target="blank">studygolang.com</a> <b>标准库中文版(旧):</b> <a href="https://studygolang.com/pkgdoc">studygolang.com/pkgdoc</a></p>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="go-gofmt"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title"><code>go</code></h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: bash;">
+$ go run hello.go
+$ go help
+
+Usage:
+	go &lt;command> [arguments]
+
+The commands are:
+	bug         start a bug report
+	build       compile packages and dependencies
+	clean       remove object files and cached files
+	doc         show documentation for package or symbol
+	env         print Go environment information
+	fix         update packages to use new APIs
+	fmt         gofmt (reformat) package sources
+	generate    generate Go files by processing source
+	get         add dependencies to current module and install them
+	install     compile and install packages and dependencies
+	list        list packages or modules
+	mod         module maintenance
+	run         compile and run Go program
+	test        test packages
+	tool        run specified go tool
+	version     print Go version
+	vet         report likely mistakes in packages
+
+Use "go help &lt;command>" for more information about a command.
+
+Additional help topics:
+	buildconstraint build constraints
+	buildmode       build modes
+	c               calling between Go and C
+	cache           build and test caching
+	environment     environment variables
+	filetype        file types
+	go.mod          the go.mod file
+	gopath          GOPATH environment variable
+	gopath-get      legacy GOPATH go get
+	goproxy         module proxy protocol
+	importpath      import path syntax
+	modules         modules, module versions, and more
+	module-get      module-aware go get
+	module-auth     module authentication using go.sum
+	module-private  module configuration for non-public modules
+	packages        package lists and patterns
+	testflag        testing flags
+	testfunc        testing functions
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="base-syntax"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">基本语法</h3>
+					</div>
+					<div class="panel-body">
+						<pre class="brush: go;">
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello, World!")
+}
+</pre>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="base-keyword"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">关键字和操作符</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p><b>关键字</b></p>
+							<p>以下为保留关键字，不能用作标识符。 </p>
+							<pre class="brush: go;">
+break        default      func         interface    select
+case         defer        go           map          struct
+chan         else         goto         package      switch
+const        fallthrough  if           range        type
+continue     for          import       return       var
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><b>操作符</b></p>
+							<p> </p>
+							<pre class="brush: go;">
++    &     +=    &=     &&    ==    !=    (    )
+-    |     -=    |=     ||    <     <=    [    ]
+*    ^     *=    ^=     <-    >     >=    {    }
+/    <<    /=    <<=    ++    =     :=    ,    ;
+%    >>    %=    >>=    --    !     ...   .    :
+	 &^          &^=
+
+// 二元操作符五种优先级:
+  优先级             操作符
+	5             *  /  %  <<  >>  &  &^
+	4             +  -  |  ^
+	3             ==  !=  <  <=  >  >=
+	2             &&
+	1             ||
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="base-type"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">基本类型和流程控制</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p><b>基本类型</b></p>
+							<pre class="brush: go;">
+/** 1.布尔类型 */
+bool        true / false
+
+/** 2.数值类型 */
+int         32 或 64 位，有符号整数
+uint        32 或 64 位，无符号整数
+
+int8        带符号  8 位整数集（-128 到 127）
+int16       带符号 16 位整数集（-32768 到 32767）
+int32       带符号 32 位整数集（-2147483648 到 2147483647）
+int64       带符号 64 位整数集（-9223372036854775808 到 9223372036854775807）
+
+uint8       无符号  8 位整数集（0 到 255）
+uint16      无符号 16 位整数集（0 到 65535）
+uint32      无符号 32 位整数集（0 到 4294967295）
+uint64      无符号 64 位整数集（0 到 18446744073709551615）
+
+float32     IEEE-754 32 位浮点数集
+float64     IEEE-754 64 位浮点数集
+
+complex64   带 float32 实部和虚部的复数集
+complex128  带 float64 实部和虚部的复数集
+
+byte        uint8 的别名
+rune        int32 的别名
+
+/** 3.string 类型 */
+string
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<p><b>流程控制</b></p>
+							<pre class="brush: go;">
+
+</pre>
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
 				<!-- item start -->
 				<a class="offset" id="..."></a>
 				<div class="panel panel-default">
@@ -121,7 +309,8 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushGo.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushBash.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
