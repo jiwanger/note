@@ -173,22 +173,70 @@ doc/*.txt	# 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
 						<h3 class="panel-title">常用命令</h3>
 					</div>
 					<div class="panel-body">
-						<div class="sub-item">
-							<p>记录每次更新到仓库</p>
-							<pre class="brush: bash;">
-$ git status					# 检查当前文件状态
-$ git add file/path				# 跟踪新文件/目录, 暂存已修改文件
-$ git commit -m "更改说明"			# 提交更新
-$ git commit -am "更改说明"			# 跳过暂存，提交更新;已经跟踪过的文件暂存起来一并提交
-$ git rm file					# 删除文件，提交的时候,该文件就不再纳入版本管理
-$ git rm -f file				# 强制删除，如果删除之前修改过并且已经放到暂存区域的话,则必须要用强制删除选项
-$ git rm --cached file			# 不删除文件，仅是从跟踪清单中删除（如果不小心暂存了不必要暂存的文件）
-$ git mv file rename_file		# 移动文件
+						<p>以 <code>version.txt</code> 文件为例</p>
+						<p>1. 添加/提交/状态/日志/比对</p>
+						<pre class="brush: bash;">
+## 1.version.txt 内容：
+## ONE: ONE: The first line.
+## TWO: The second line. 
+$ git add .                   # 跟踪新文件/目录, 暂存已修改文件
+$ git commit -m 'init'        # 提交更新到库
+$ git status                  # 检查当前文件状态(是否有更改)
+
+## 2.version.txt 内容：（第一行添加: number）
+## ONE: The first number line.
+## TWO: The second line. 
+$ git commit -am 'add number'  # 暂存已修改文件并更新
+$ git log                      # 查看前面两次提交
+
+## 3.version.txt 内容：（第二行: second -> third）
+## ONE: The first number line.
+## TWO: The third line. 
+$ git status				   # 查看状态（提示有文件修改未暂存）
+$ git diff version.txt         # 比对修改的文件
+$ git add .                    # 暂存所有文件
+$ git status                   # 查看状态（提示有文件提交）
+$ git commit -m 'modify third' # 提交
 </pre>
-						</div>
-						<div class="sub-item">
-							<p>查看提交历史</p>
-							<pre class="brush: bash;">
+						
+						<p>2. 版本回退</p>
+						<pre class="brush: bash;">
+$ git log --pretty=oneline     # 显示从最近到最远的提交日志(单行模式显示)
+## 2fa86e3d1416ddcfca369ccec5ef8392156e3256 modify third
+## d256c95bd173362053eb04bea4ff91a5865fc8f2 add number
+## a2989999cd2f7aac717fde3b5f7354f3c9deba6d first commit
+
+$ git reset --hard d256c95bd173362053eb04bea4ff91a5865fc8f2
+## version.txt 的内容变为第二次提交的内容
+## ONE: The first number line.
+## TWO: The second line.
+
+$ git log --pretty=oneline     # 此时查看提交记录，只有以前的两次提交了
+## d256c95bd173362053eb04bea4ff91a5865fc8f2 add number
+## a2989999cd2f7aac717fde3b5f7354f3c9deba6d first commit
+
+$ git reflog                   # 此时如果想回到 ’modify third‘，可以使用此命令找到 commit id
+## d256c95 HEAD@{0}: reset: moving to d256c95bd173362053eb04bea4ff91a5865fc8f2
+## 2fa86e3 HEAD@{1}: commit: modify third
+## d256c95 HEAD@{2}: commit: add number
+## a298999 HEAD@{3}: commit (initial): first commit
+
+$ git reset --hard 2fa86e3      # 我们又回到最新的版本了
+</pre>
+
+						<p>3. 撤销操作</p>
+						<pre class="brush: bash;">
+## 场景1：修改了文件未暂存，想直接丢弃修改: git checkout -- file
+## 场景2：修改了文件还添加到了暂存区，想丢弃修改分两步，第一步: git reset HEAD file，就回到了场景1，第二步按场景1操作。
+## 场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，使用版本回退，不过前提是没有推送到远程库。
+
+$ git checkout -- version.txt   # 场景1
+
+$ git reset 2fa86e3d1416ddcfca369ccec5ef8392156e3256 version.txt # 场景2
+$ git checkout -- version.txt
+</pre>
+						<p>查看提交历史</p>
+						<pre class="brush: bash;">
 $ gitk							# 图形化界面查看提交历史
 $ git log						# 查看提交历史
 	# -p 按补丁格式显示每个更新之间的差异。
@@ -220,10 +268,9 @@ $ git log --pretty=format:"%h - %an, %ar : %s"		# 指定格式显示每次提交
 	# %cr 提交日期,按多久以前的方式显示
 	# %s 提交说明
 </pre>
-						</div>
-						<div class="sub-item">
-							<p>撤消操作</p>
-							<pre class="brush: bash;">
+			
+						<p>撤消操作</p>
+						<pre class="brush: bash;">
 # 启动文本编辑器后,会看到上次提交时的说明,编辑它确认没问题后保存退出,就会使用新的提交说明覆盖刚才失误的提交
 $ git commit --amend
 
@@ -235,10 +282,9 @@ $ git commit --amend
 $ git reset HEAD file			# 取消已经暂存的文件
 $ git checkout -- file			# 取消对文件的修改
 </pre>
-						</div>
-						<div class="sub-item">
-							<p>远程仓库的使用</p>
-							<pre class="brush: bash;">
+				
+						<p>远程仓库的使用</p>
+						<pre class="brush: bash;">
 $ git remote -v					# 查看当前的远程库
 $ git remote add my-name git@github.com/jiwanger/note	# 添加仓库
 $ git fetch pb my-name			# 从刚添加的远程仓库抓取数据
@@ -248,10 +294,7 @@ $ git remote show origin		# 查看过程仓库信息
 $ git remote rename my-name paul		# 重命名过程仓库
 $ git remote rm paul					# 删除远程仓库
 </pre>
-						</div>
-						<div class="sub-item">
-							<p>打标签: 轻量级标签 和 含附注的标签</p>
-						</div>
+						
 					</div>
 				</div>
 				<!-- item over -->
