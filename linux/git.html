@@ -106,6 +106,11 @@
 							<li>已修改(modified) -- 已修改表示修改了某个文件,但还没有提交保存</li>
 							<li>已暂存(staged) -- 已暂存表示把已修改的文件放在下次提交时要保存的清单中</li>
 						</ul>
+						 <p>Git 安装完成后先配置账户和邮箱</p>
+						 <pre class="brush: bash;">
+$ git config --global user.name "jiwanger"
+$ git config --global user.email "jiwanger@126.com"
+</pre>
 					</div>
 				</div>
 				<!-- item over -->
@@ -235,66 +240,41 @@ $ git checkout -- version.txt   # 场景1
 $ git reset 2fa86e3d1416ddcfca369ccec5ef8392156e3256 version.txt # 场景2
 $ git checkout -- version.txt
 </pre>
-						<p>查看提交历史</p>
-						<pre class="brush: bash;">
-$ gitk							# 图形化界面查看提交历史
-$ git log						# 查看提交历史
-	# -p 按补丁格式显示每个更新之间的差异。
-	# --stat 显示每次更新的文件修改统计信息。
-	# --shortstat 只显示 --stat 中最后的行数修改添加移除统计。
-	# --name-only 仅在提交信息后显示已修改的文件清单。
-	# --name-status 显示新增、修改、删除的文件清单。
-	# --abbrev-commit 仅显示 SHA-1 的前几个字符,而非所有的 40 个字符。
-	# --relative-date 使用较短的相对时间显示(比如,“2 weeks ago”)。
-	# --graph 显示 ASCII 图形表示的分支合并历史。
-	# --pretty 使用其他格式显示历史提交信息。可用的选项包括 oneline,short,full,fuller 和 format(后跟指定格式)。
-$ git log -2					# 查看最近两次提交
-$ git log -p -2					# 查看最近两次提交差异 -p 选项展开显示每次提交的内容差异
-$ git log -stat					# 查看提交差异摘要，仅显示简要的增改行数统计
-$ git log --pretty=format:"%h - %an, %ar : %s"		# 指定格式显示每次提交日志
-	# %H 提交对象(commit)的完整哈希字串
-	# %h 提交对象的简短哈希字串
-	# %T 树对象(tree)的完整哈希字串
-	# %t 树对象的简短哈希字串
-	# %P 父对象(parent)的完整哈希字串
-	# %p 父对象的简短哈希字串
-	# %an 作者(author)的名字
-	# %ae 作者的电子邮件地址
-	# %ad 作者修订日期(可以用 -date= 选项定制格式)
-	# %ar 作者修订日期,按多久以前的方式显示
-	# %cn 提交者(committer)的名字
-	# %ce 提交者的电子邮件地址
-	# %cd 提交日期
-	# %cr 提交日期,按多久以前的方式显示
-	# %s 提交说明
-</pre>
-			
-						<p>撤消操作</p>
-						<pre class="brush: bash;">
-# 启动文本编辑器后,会看到上次提交时的说明,编辑它确认没问题后保存退出,就会使用新的提交说明覆盖刚才失误的提交
-$ git commit --amend
+						  <p>4. 远程仓库</p>
+						  <pre class="brush: bash;">
+## 先使用 Github 账户的邮箱创建 RSA 密钥对(什么都不填，一直回车)
+$ ssh-keygen -t rsa -C "jiwanger@126.com"
 
-# 如果有文件没有提交，先提交，再运行　--amend,三条命令最终得到一个提交,第二个提交命令修正了第一个的提交内容
-$ git commit -m 'initial commit'
-$ git add forgotten_file
-$ git commit --amend
+## 登录 Github 账户，在设置中 SSH abd GPG keys -> New SSH key 添加上一步创建的公钥
 
-$ git reset HEAD file			# 取消已经暂存的文件
-$ git checkout -- file			# 取消对文件的修改
+## 方式一: 使用 git/https 协议克隆远程库(如果是自己的项目，那么具有修改和提交的权力)
+$ git clone git@github.com:jiwanger/example.git
+$ git clone https://github.com/jiwanger/example.git
+
+## 方式二: 添加远程库 
+$ git remote add origin git@github.com:jiwanger/example.git
+$ git remote add origin https://github.com/jiwanger/example.git
+
+## -u 参数，Git 不但会把本地的 master 分支推送的远程新的 master 分支，还会把本地的 master 分支和远程的master分支关联起来
+$ git push -u origin master 	# 首次推送
+$ git push origin master        # 以后推送
 </pre>
-				
-						<p>远程仓库的使用</p>
+
+						  <p>5. 分支管理</p>
+						  <pre class="brush: bash;">
+$ git checkout -b dev            # 创建一个 dev 分支并切换（git branch dev & git checkout dev） 
+$ git switch -c dev              # 同上，新版的 Git 使用 switch 更科学
+$ git branch                     # 查看分支 
+$ git checkout master            # 切换到 master 分支
+$ git switch master              # 同上，新版的 Git 使用 switch 更科学
+
+$ git merge dev                  # 将 dev 分支合并到当前分支
+$ git branch -d dev              # 删除 dev 分支
+</pre>
+						<p>6. 冲突解决</p>
 						<pre class="brush: bash;">
-$ git remote -v					# 查看当前的远程库
-$ git remote add my-name git@github.com/jiwanger/note	# 添加仓库
-$ git fetch pb my-name			# 从刚添加的远程仓库抓取数据
-$ git push origin master		# 推送数据到远程仓库
-$ git remote show origin		# 查看过程仓库信息
 
-$ git remote rename my-name paul		# 重命名过程仓库
-$ git remote rm paul					# 删除远程仓库
 </pre>
-						
 					</div>
 				</div>
 				<!-- item over -->
