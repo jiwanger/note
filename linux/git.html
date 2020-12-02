@@ -289,6 +289,7 @@ $ git commit -m "conflict fixed"   # 冲突的文件修改后再提交
 $ git log --graph --pretty=oneline # 查看合并的情况
 
 $ git branch -d dev                # 合并分支后删除 dev 分支
+$ git branch -d dev                # 合并分支后删除 dev 分支
 </pre>
 						<p>7. Bug 分支 -- 在 dev 分支做开发时，碰到 master 分支有 Bug 需要解决</p>
 						<pre class="brush: bash;">
@@ -311,9 +312,11 @@ $ git stash apply {stash}     # 恢复指定的现场
 $ git cherry-pick 4c805e2     # 在 dev 分支上只需要把 fix bug 101 这个提交所做的修改“复制”到 dev 分支
 </pre>
 
-						<p>8. Feature 分支</p>
+						<p>8. 多人协作</p>
 						<pre class="brush: bash;">
-
+$ git remote -v 		 # 抓取和推送的 origin 的地址。如果没有推送权限，就看不到 push 的地址
+$ git push origin master # 推送指定分支(master)到远程库对应的远程分支 
+$ git push origin dev    # 推送 dev 分支
 </pre>
 					</div>
 				</div>
@@ -326,20 +329,19 @@ $ git cherry-pick 4c805e2     # 在 dev 分支上只需要把 fix bug 101 这个
 						<h3 class="panel-title">检出指定文件或者文件夹</h3>
 					</div>
 					<div class="panel-body">
-						<p>在进行项目开发的时候，有时候会有这样的需求那就是：我们只希望从Git仓库里取指定的文件或者文件夹出来。在SVN里面，这非常容易实现，因为SVN基于文件方式存储，而Git却是基于元数据方式分布式存储文件信息的，它会在每一次Clone的时候将所有信息都取回到本地，即相当于在你的机器上生成一个克隆版的版本库。因此在Git1.7.0以前，这无法实现，但是幸运的是在Git1.7.0以后加入了Sparse
-							Checkout模式，这使得Check Out指定文件或者文件夹成为可能。</p>
+						<p>在进行项目开发的时候，有时候会有这样的需求那就是：我们只希望从 Git 仓库里取指定的文件或者文件夹出来。在 SVN 里面，这非常容易实现，因为 SVN 基于文件方式存储，而 Git 却是基于元数据方式分布式存储文件信息的，它会在每一次 Clone 的时候将所有信息都取回到本地，即相当于在你的机器上生成一个克隆版的版本库。因此在 Git1.7.0 以前，这无法实现，但是幸运的是在 Git1.7.0 以后加入了 Sparse Checkout 模式，这使得Check Out指定文件或者文件夹成为可能。</p>
 						<pre class="brush: bash;">
 $ mkdir project_folder
 $ cd project_folder
 $ git init
-$ git remote add -f origin &lt;https://github.com/jiwanger/note.git>
+$ git remote add -f origin https://github.com/jiwanger/note.git
 
 # 在 Config 中配置允许使用 Sparse Checkout 模式
 $ git config core.sparsecheckout true
 
 # 添加要 check out的文件和文件夹, 作为一个列表保存在.git/info/sparse-checkout
-$ echo “android/adb.html” >> .git/info/sparse-checkout
-$ echo “android/images” >> .git/info/sparse-checkout
+$ echo "android/adb.html" >> .git/info/sparse-checkout
+$ echo "android/images" >> .git/info/sparse-checkout
 
 # 检出你的文件
 $ git pull origin master
