@@ -259,7 +259,7 @@ $ git clone https://github.com/jiwanger/example.git
 $ git remote add origin git@github.com:jiwanger/example.git
 $ git remote add origin https://github.com/jiwanger/example.git
 
-## -u 参数，Git 不但会把本地的 master 分支推送的远程新的 master 分支，还会把本地的 master 分支和远程的master分支关联起来
+## -u 参数，Git 不但会把本地的 master 推送的远程 master 分支，还会关联起来
 $ git push -u origin master 	# 首次推送
 $ git push origin master        # 以后推送
 </pre>
@@ -289,6 +289,31 @@ $ git commit -m "conflict fixed"   # 冲突的文件修改后再提交
 $ git log --graph --pretty=oneline # 查看合并的情况
 
 $ git branch -d dev                # 合并分支后删除 dev 分支
+</pre>
+						<p>7. Bug 分支 -- 在 dev 分支做开发时，碰到 master 分支有 Bug 需要解决</p>
+						<pre class="brush: bash;">
+$ git stash                   # (dev 分支) 如果在当前分支还不想 commit 时，可以选择 stash
+$ git checkout master         # 切换到主分支（去处理主分支上的 Bug）
+
+$ git checkout -b issue-101   # 创建 Bug 分支（修改 Bug 并提交更改）
+
+$ git switch master           # 回到主分支
+$ git merge --no-ff -m "merged bug fix 101" issue-101   # 合并 issue-101
+$ git branch -d issue-101     # 删除 issue-101 分支
+
+$ git switch dev              # 回到 dev 分支继续工作
+$ git stash pop               # 恢复存储的工作(可能需要解决冲突)
+## 如果保存有多个（执行了多次 git stash）
+$ git stash list              # 查看存储的列表
+$ git stash apply {stash}     # 恢复指定的现场
+
+## 在 master 分支上修复了 bug 后，发现 dev 分支是从 master 分支分出来的，所以，这个 bug 其实在当前 dev 分支上也存在
+$ git cherry-pick 4c805e2     # 在 dev 分支上只需要把 fix bug 101 这个提交所做的修改“复制”到 dev 分支
+</pre>
+
+						<p>8. Feature 分支</p>
+						<pre class="brush: bash;">
+
 </pre>
 					</div>
 				</div>
