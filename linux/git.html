@@ -77,7 +77,8 @@
 								文件配置</a>
 							<a href="#git-command" class="list-group-item">常用命令</a>
 						</div>
-						<a href="#git-checkout-folder" class="list-group-item">检出指定文件或者文件夹</a>
+						<a href="#git-github" class="list-group-item">Github & Gitee</a>
+						<a href="#git-" class="list-group-item"></a>
 					</div>
 				</div>
 			</div>
@@ -170,6 +171,12 @@ $ git clone https://www.github.com/jiwanger/note.git
 /TODO		# 仅仅忽略项目根目录下的 TODO 文件,不包括 subdir/TODO
 build/		# 忽略 build/ 目录下的所有文件
 doc/*.txt	# 会忽略 doc/notes.txt 但不包括 doc/server/arch.txt
+</pre>
+						<p>对于 <code>.gitignore</code> 中忽略的文件：</p>
+						<pre class="brush: bash;">
+$ git add -f App.class			# 就算 .gitignore 忽略了该文件，也可以添加进去
+$ git check-ignore -v App.class # 此命令可以检查哪个规则忽略了改文件
+
 </pre>
 					</div>
 				</div>
@@ -316,47 +323,55 @@ $ git cherry-pick 4c805e2     # 在 dev 分支上只需要把 fix bug 101 这个
 						<pre class="brush: bash;">
 $ git remote -v 		 # 抓取和推送的 origin 的地址。如果没有推送权限，就看不到 push 的地址
 $ git push origin master # 推送指定分支(master)到远程库对应的远程分支 
-$ git push origin dev    # 推送 dev 分支
+$ git push origin dev    # 推送 dev 分支(如果失败：$ git pull 先把远程分支取下来解决冲突)
+
+$ git checkout -b nate origin/nate         # 本地创建和远程分支对应的分支
+$ git branch --set-upstream dev origin/dev # 建立本地分支和远程分支的关联
+
+$ git rebase             # 可以把本地未 push 的分叉提交历史整理成直线(提交变得好看)
 </pre>
+
+						<p>9. 标签管理</p>
+						<pre class="brush: bash;">
+$ git switch dev         # 切换到需要打标签的分支 
+$ git tag v0.4           # 打标签
+$ git tag                # 产看当前分支上的标签（字母顺序）
+
+$ git log --pretty=oneline --abbrev-commit  # 查看提交记录
+$ git tag v0.2 f52c633                      # 将标签打在指定的 commit id 上
+
+$ git show v0.4          # 查看标签信息
+$ git tag -a v0.1 -m "version 0.1 released" 1094adb  # 带说明的 tag, -a 指定标签名，-m 指定说明文字
+
+$ git push origin v0.4   # 推送标签到远程(创建的标签存储在本地)
+$ git push origin --tags # 一次性推送全部尚未推送到远程的本地标签
+
+$ git tag -d v0.2                 # 删除标签
+$ git push origin :refs/tags/v0.2 # 标签已经推送到远程，先从本地删除，再删除远程
+</pre>
+					
 					</div>
 				</div>
 				<!-- item over -->
 
 				<!-- item start -->
-				<a class="offset" id="git-checkout-folder"></a>
+				<a class="offset" id="git-github"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">检出指定文件或者文件夹</h3>
+						<h3 class="panel-title">Github 和 Gitee</h3>
 					</div>
 					<div class="panel-body">
-						<p>在进行项目开发的时候，有时候会有这样的需求那就是：我们只希望从 Git 仓库里取指定的文件或者文件夹出来。在 SVN 里面，这非常容易实现，因为 SVN 基于文件方式存储，而 Git 却是基于元数据方式分布式存储文件信息的，它会在每一次 Clone 的时候将所有信息都取回到本地，即相当于在你的机器上生成一个克隆版的版本库。因此在 Git1.7.0 以前，这无法实现，但是幸运的是在 Git1.7.0 以后加入了 Sparse Checkout 模式，这使得Check Out指定文件或者文件夹成为可能。</p>
+						<p>首先在 <a href="https://github.com" target="_blank">https://github.com</a> 注册帐号，然后把 ssh 公钥添加到自己帐号下</p>
+						<p>公钥生成: <code>$ ssh-keygen -t rsa -C "jiwanger@126.com"</code>, 在用户目录的 <code>.ssh</code> 文件夹下可以找到 <code>id_pub.rsa</code> 文件，将其内容复制下载上传。</p>
 						<pre class="brush: bash;">
-$ mkdir project_folder
-$ cd project_folder
-$ git init
-$ git remote add -f origin https://github.com/jiwanger/note.git
+## 先去 https://github.com/twbs/bootstrap 下点击 "Fork", 这样在我们自己的账户下就克隆了一个副本
+$ git clone https://github.com/jiwanger/bootstrap.git  # 克隆下来对自己的副本有修改的权限
+$ git clone git@github.com:jiwanger/bootstrap.git      # 使用 git 协议
 
-# 在 Config 中配置允许使用 Sparse Checkout 模式
-$ git config core.sparsecheckout true
-
-# 添加要 check out的文件和文件夹, 作为一个列表保存在.git/info/sparse-checkout
-$ echo "android/adb.html" >> .git/info/sparse-checkout
-$ echo "android/images" >> .git/info/sparse-checkout
-
-# 检出你的文件
-$ git pull origin master
+## 如果希望 bootstrap 的官方库能接受你的修改，你就可以在 GitHub 上发起一个 "pull request"
 </pre>
+						<p>对于 <a href="https://gitee.com" target="_blank">https://gitee.com</a> 来说，速度会快，操作没有多大的区别。</p>
 					</div>
-				</div>
-				<!-- item over -->
-
-				<!-- item start -->
-				<a class="offset" id="git-"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">...</h3>
-					</div>
-					<div class="panel-body"></div>
 				</div>
 				<!-- item over -->
 
