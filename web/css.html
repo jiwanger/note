@@ -166,15 +166,21 @@
 					<div class="panel-body">
 						<ul>
 							<li>
-								<p>
-									<span class="text-primary">元素总高度 = 外边距 + 边框 + 内边距 + 字大小
-										+/- (|行高 - 字大小|)</span>;行高大于字大小就加，反之则减。
-								</p>
+								<p><span class="text-primary">元素总高度 = 外边距 + 边框 + 内边距 + 字大小 +/- (|行高 - 字大小|)</span>;行高大于字大小就加，反之则减。</p>
+								<p><span class="text-primary">height = margin + border + padding + font-size +/- (|line-height - font-size|)</span>;行高大于字大小就加，反之则减。</p>
 							</li>
 							<li>
 								<p>元素总高度计算不包括轮廓，轮廓是浮动的，不占空间;这意味着如果轮廓比外边距还大，可能覆盖其它元素。</p>
 							</li>
 						</ul>
+						<pre class="brush: css;">
+font-size: 14px;           /* 黑色部分 */
+line-height: 1;            /* 大小刚好为 font-size */
+padding: 10px;             /* 红色部分 */
+border: 20px solid green;  /* 绿色部分，从 padding 外开始计量 */
+outline-width: 30px;       /* 蓝色部分，但是此部分不占空间 */
+margin: 50px;              /* 紫色部分，从 border 以外开始计量 */
+</pre>
 						<div class="row" style="font-size: 12px;">
 							<div class="col-xs-1 col-sm-1 col-md-1">外边距</div>
 							<div class="col-xs-1 col-sm-1 col-md-1">轮廓</div>
@@ -186,14 +192,10 @@
 							<div class="box-container">
 								<div class="row">
 									<div class="col-xs-1 col-sm-1 col-md-1 box-height text-center">174px</div>
-									<div
-										class="col-xs-1 col-sm-1 col-md-1 box-height-outline text-center">134px</div>
-									<div
-										class="col-xs-1 col-sm-1 col-md-1 box-height-border text-center">74px</div>
-									<div
-										class="col-xs-1 col-sm-1 col-md-1 box-height-padding text-center">34px</div>
-									<div
-										class="col-xs-1 col-sm-1 col-md-1 box-height-line-height text-center">14px</div>
+									<div class="col-xs-1 col-sm-1 col-md-1 box-height-outline text-center">134px</div>
+									<div class="col-xs-1 col-sm-1 col-md-1 box-height-border text-center">74px</div>
+									<div class="col-xs-1 col-sm-1 col-md-1 box-height-padding text-center">34px</div>
+									<div class="col-xs-1 col-sm-1 col-md-1 box-height-line-height text-center">14px</div>
 									<div class="col-xs-1 col-sm-1 col-md-1"></div>
 									<div class="col-xs-4 col-sm-4 col-md-4 box-conent text-center">
 										<div>CSS 盒模型</div>
