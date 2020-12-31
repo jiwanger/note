@@ -1527,6 +1527,19 @@ class Child : MyInterface {
 
     override fun bar() { // 方法体 }
 }
+
+/* Kotlin 接⼝的 SAM(只有⼀个抽象⽅法的接⼝) 转换, 1.4.0 新增加的 SAM 转换接口
+ * 如果不使⽤ SAM 转换，那么你需要像这样编写代码：
+ * val isEven = object : MyPredicate {
+ *     override fun accept(i: Int): Boolean { return i % 2 == 0 }
+ * }	
+ * 通过利⽤ Kotlin 的 SAM 转换，可以改为以下等效代码：
+ * val isEven = MyPredicate { i -> i % 2 == 0 }
+ * 在 Kotlin 1.4.0 以前，只能对 Java 中的单一方法接口做 SAM 转换
+ */ 
+fun interface MyPredicate {
+	fun accept(i: Int): Boolean
+}
 </pre>
 							<p><b>接口中的属性</b></p>
 							<p>在接口中声明的属性要么是抽象的，要么提供访问器的实现。在接口中声明的属性不能有幕后字段（backing field），因此接口中声明的访问器不能引用它们。</p>
@@ -2101,33 +2114,31 @@ enum class IntArithmetics : BinaryOperator&lt;Int>, IntBinaryOperator {
 								<p>对象表达式就像 Java 中的匿名类，但有不同之处。</p>
 								<pre class="brush: kotlin;">
 fun main() {
-	// val listener = object : Listener { override fun event() { ... } } // 这样写也行
-    val v1 = View(object : Listener {
-        override fun notify() { LogUtil.log("Listener") }
-    })
-    v1.doEvent()
+	View { log("Listener") }.doEvent()
 
-	// val listener = object : DefaultListener { override fun event() { ... } } // 这样写也行
-    val v2 = View(object : DefaultListener() {
-        override fun notify() {
-            super.event()
-            LogUtil.log("Listener")
-        }
-    })
-    v2.doEvent()
+	View(object : DefaultListener() {
+		override fun event() {
+			super.event()
+			log("Listener")
+		}
+	}).doEvent()
 }
 
-interface Listener { fun notify() }
+fun interface Listener { // 1.4.0 新增的函数式接口， 可用于 SAM 转换
+	fun event()
+}
 
 open class DefaultListener : Listener {
-    override fun notify() { LogUtil.log("DefaultListener") }
+	override fun event() {
+		log("DefaultListener")
+	}
 }
 
-class View(var listener : Listener) {
-    fun doEvent() {
-        LogUtil.log("doEvent")
-        listener.notify()
-    }
+class View(var listener: Listener) {
+	fun doEvent() {
+		log("doEvent")
+		listener.event()
+	}
 }
 </pre>
 								<p>如果超类型有一个构造函数，则必须传递适当的构造函数参数给它。 多个超类型可以由跟在冒号后面的逗号分隔的列表指定：</p>
