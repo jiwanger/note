@@ -1534,12 +1534,16 @@ class Child : MyInterface {
  *     override fun accept(i: Int): Boolean { return i % 2 == 0 }
  * }	
  * 通过利⽤ Kotlin 的 SAM 转换，可以改为以下等效代码：
- * val isEven = MyPredicate { i -> i % 2 == 0 }
+ * val isEven = MyPredicate { it % 2 == 0 }
+ * 在函数中可以以如下方式传入：
+ * call { it % 2 == 0 }
  * 在 Kotlin 1.4.0 以前，只能对 Java 中的单一方法接口做 SAM 转换
  */ 
 fun interface MyPredicate {
 	fun accept(i: Int): Boolean
 }
+
+fun call(predicate: MyPredicate) { ... }
 </pre>
 							<p><b>接口中的属性</b></p>
 							<p>在接口中声明的属性要么是抽象的，要么提供访问器的实现。在接口中声明的属性不能有幕后字段（backing field），因此接口中声明的访问器不能引用它们。</p>
