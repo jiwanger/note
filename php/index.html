@@ -66,15 +66,10 @@
 					</div>
 					<div class="list-group">
 						<a href="#" class="list-group-item">简介</a>
-						<a class="list-group-item active dropup" data-toggle="collapse"
-							data-parent="#accordion" href="#java-tools" aria-expanded="true">
-							...<span class="caret pull-right" style="margin-top: 5px;"></span>
-						</a>
-						<div id="java-tools" class="panel-collapse collapse in"
-							role="tabpanel">
-							<a href="#" class="list-group-item"
-								style="border-top: 1px solid #DDDDDD;">...</a>
-							<a href="#" class="list-group-item">...</a>
+						<a class="list-group-item active dropup" data-toggle="collapse" data-parent="#accordion" href="#java-tools" aria-expanded="true">语言参考<span class="caret pull-right" style="margin-top: 5px;"></span></a>
+						<div id="java-tools" class="panel-collapse collapse in" role="tabpanel">
+							<a href="#base" class="list-group-item" style="border-top: 1px solid #DDDDDD;">基本语法</a>
+							<a href="#type" class="list-group-item">数据类型</a>
 							<a href="#" class="list-group-item">...</a>
 						</div>
 						<a href="#java-class-loader" class="list-group-item">...</a>
@@ -98,13 +93,164 @@
 					</div>
 					<div class="panel-body">
 						<p><b>PHP 手册：</b><a href="http://php.net/manual/zh/" target="_blank">PHP 官方中文手册</a></p>
-						<p>PHP（外文名:PHP: Hypertext Preprocessor，中文名：“超文本预处理器”）是一种通用开源脚本语言。语法吸收了 C 语言、Java 和 Perl 的特点，利于学习，使用广泛，主要适用于 Web 开发领域。PHP 独特的语法混合了 C、Java、Perl 以及 PHP 自创的语法。它可以比 CGI 或者 Perl 更快速地执行动态网页。用 PHP 做出的动态页面与其他的编程语言相比，PHP是将程序嵌入到 HTML（标准通用标记语言下的一个应用）文档中去执行，执行效率比完全生成 HTML 标记的 CGI 要高许多; PHP 还可以执行编译后代码，编译可以达到加密和优化代码运行，使代码运行更快。</p>
+						<p>PHP(PHP：Hypertext Preprocessor) 是一种通用开源脚本语言。语法吸收了 C 语言、Java 和 Perl 的特点，利于学习，使用广泛，主要适用于 Web 开发领域。PHP 独特的语法混合了 C、Java、Perl 以及 PHP 自创的语法。它可以比 CGI 或者 Perl 更快速地执行动态网页。用 PHP 做出的动态页面与其他的编程语言相比，PHP是将程序嵌入到 HTML（标准通用标记语言下的一个应用）文档中去执行，执行效率比完全生成 HTML 标记的 CGI 要高许多; PHP 还可以执行编译后代码，编译可以达到加密和优化代码运行，使代码运行更快。</p>
+						<p>在 Linux 中一般通过 Apache 来使用 PHP，Windows 中则通过 IIS 来使用 PHP。</p>
 					</div>
 				</div>
 				<!-- item over -->
 				
 				<!-- item start -->
-				<a class="offset" id="php-"></a>
+				<a class="offset" id="base"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">基本语法</h3>
+					</div>
+					<div class="panel-body">
+						<p><b>PHP 基本语法</b></p>
+						<ul>
+							<li><p>PHP 文件的默认文件扩展名是 <code>.php</code>;</p></li>
+							<li><p>PHP 脚本以 <code>&lt;?php</code> 开始，以 <code>?></code> 结束：</p>
+<pre class="brush: php;">
+&lt;?php 
+	// php 代码 
+?>
+
+/* 如果在 php.ini 中配置了 short_open_tag=On，那么支持短标签 */
+&lt;?
+	// php 代码
+?>
+</pre>
+							</li>
+							<li><p>PHP 中的每个代码行都必须以分号结束。</p></li>
+							<li><p>PHP 支持单行和多行注释：</p>
+<pre class="brush: php;">
+&lt;?php
+	// 这是 PHP 单行注释
+	
+	/*
+	这是 PHP 多行 注释
+	*/
+?>
+</pre>
+							</li>
+							<li><p>如果文件内容仅仅包含 PHP 代码，最好在文件末尾删除 PHP 结束标记。</p>
+<pre class="brush: php;">
+&lt;?php
+	echo "Hello world";
+	// ... more code
+	echo "Last statement";
+
+	// 脚本至此结束，并无 PHP 结束标记
+</pre>
+							</li>
+							<li><p>PHP 的输出 <code>echo</code> 和 <code>print</code>: echo 输出的速度比 print 快， echo 没有返回值，print 有返回值1。</p>
+<pre class="brush: php;">
+&lt;?
+    $x = 5;
+    $y = 6;
+    $sum = $x + $y;
+
+    // echo 可以输出一个或多个字符串
+	echo "$x + $y = $sum <br>";
+    echo $x, " + ",  $y, " = ", $sum, "<br>";
+    // print 只能输出一个变量，并且有一个返回值 1
+    $ret = print "$x + $y = $sum <br>";
+
+    echo $ret
+?>
+
+&lt;p>使用 &lt;?= ?> 可以替代 echo: &lt;/p>
+
+&lt;?= $x, " + ",  $y, " = ", $sum; ?>
+</pre>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="type"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">数据类型</h3>
+					</div>
+					<div class="panel-body">
+						<div class="item">
+							<p><b>PHP 支持 10 种原始数据类型。</b></p>
+							<ul>
+								<li><p>四种标量类型: bool, int, float, string</p></li>
+								<li><p>四种复合类型：array, object, callable, iterable</p></li>
+								<li><p>两种特殊类型：resource, NULL</p></li>
+							</ul>
+<pre class="brush: php;">
+&lt;?
+	require 'util/Log.class.php';
+
+	$bool = true;           // 不区分大小写
+	$int = 10;              
+	$float = 3.14;           
+	$string = "Hello";      
+
+	Log::log(gettype($bool), gettype($int), gettype($float), gettype($string));
+	Log::line();
+	Log::log(is_bool($bool), is_int($int), is_integer($int), is_float($int), is_float($float), 
+			is_double($float), is_string($string));
+
+	$array = array();
+	$object = new Log();
+
+	Log::log(gettype($array), gettype($object));
+?>
+</pre>
+							<ol>
+								<li><p><b>Boolean 类型</b></p></li>
+								<li><p><b>Integer 类型</b></p></li>
+								<li><p><b>Float 类型</b></p></li>
+								<li><p><b>String 类型</b></p></li>
+								<li><p><b>Array 数组</b></p></li>
+								<li><p><b>Object 对象</b></p></li>
+								<li><p><b>Iterable 可迭代对象</b></p></li>
+								<li><p><b>Callback/Callable 类型</b></p></li>
+								<li><p><b>Resource 资源对象</b></p></li>
+								<li><p><b>Null 空类型</b></p></li>
+							</ol>
+						</div>
+
+						<div class="item">
+
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+
+				<!-- item start -->
+				<a class="offset" id="base"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+						
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="base"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">...</h3>
+					</div>
+					<div class="panel-body">
+						
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a class="offset" id="base"></a>
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">...</h3>
@@ -134,7 +280,7 @@
 	<!-- Include all compiled plugins (below), or include individual files as needed -->
 	<script src="../support/bootstrap/js/bootstrap.min.js"></script>
 	<script src="../support/syntaxhighlighter/scripts/shCore.js"></script>
-	<script src="../support/syntaxhighlighter/scripts/shBrushJScript.js"></script>
+	<script src="../support/syntaxhighlighter/scripts/shBrushPhp.js"></script>
 	<script src="res/menu.js"></script>
 	<script src="../commons/js/common.js"></script>
 </body>
