@@ -1668,89 +1668,94 @@ public class MyReflect {
 						<h3 class="panel-title">Java 注解</h3>
 					</div>
 					<div class="panel-body">
-						<p>Java 注解是附加在代码中的一些元信息，用于编译和运行时进行解析和使用，起到说明、配置的功能。注解不会影响代码的实际逻辑，仅仅起到辅助性的作用。包含在java.lang.annotation包中。注解的定义类似于接口的定义，使用@interface来定义，定义一个方法即为注解类型定义了一个元素，方法的声明不允许有参数或throw语句，返回值类型被限定为原始数据类型、字符串String、Class、enums、注解类型，或前面这些的数组，方法可以有默认值。注解并不直接影响代码的语义，但是他可以被看做是程序的工具或者类库。它会反过来对正在运行的程序语义有所影响。注解可以从源文件、class文件或者在运行时通过反射机制多种方式被读取。</p>
-						<p>Java 元注解 -- 元注解是指注解的注解。包括 @Retention @Target @Document
-							@Inherited 四种。</p>
-						<table class="table table-responsive table-striped table-bordered">
-							<thead>
-								<tr>
-									<th>注解</th>
-									<th>说明</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>@Target</td>
-									<td>定义注解的作用目标</td>
-								</tr>
-								<tr>
-									<td>@Retention</td>
-									<td>定义注解的保留策略。RetentionPolicy.SOURCE:注解仅存在于源码中，在class字节码文件中不包含；RetentionPolicy.CLASS:默认的保留策略，注解会在class字节码文件中存在，但运行时无法获得;RetentionPolicy.RUNTIME:注解会在class字节码文件中存在，在运行时可以通过反射获取到。</td>
-								</tr>
-								<tr>
-									<td>@Document</td>
-									<td>说明该注解将被包含在 javadoc 中</td>
-								</tr>
-								<tr>
-									<td>@Inherited</td>
-									<td>说明子类可以继承父类中的该注解</td>
-								</tr>
-							</tbody>
-						</table>
+						<div class="item">
+							<p>Java 注解是附加在代码中的一些元信息，用于编译和运行时进行解析和使用，起到说明、配置的功能。注解不会影响代码的实际逻辑，仅仅起到辅助性的作用。包含在java.lang.annotation包中。注解的定义类似于接口的定义，使用@interface来定义，定义一个方法即为注解类型定义了一个元素，方法的声明不允许有参数或throw语句，返回值类型被限定为原始数据类型、字符串String、Class、enums、注解类型，或前面这些的数组，方法可以有默认值。注解并不直接影响代码的语义，但是他可以被看做是程序的工具或者类库。它会反过来对正在运行的程序语义有所影响。注解可以从源文件、class文件或者在运行时通过反射机制多种方式被读取。</p>
+							<p>Java 元注解 -- 元注解是指注解的注解。包括 @Retention @Target @Document @Inherited 四种。</p>
+							<table class="table table-responsive table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>注解</th>
+										<th>说明</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>@Target</td>
+										<td>定义注解的作用目标</td>
+									</tr>
+									<tr>
+										<td>@Retention</td>
+										<td>定义注解的保留策略。RetentionPolicy.SOURCE:注解仅存在于源码中，在class字节码文件中不包含；RetentionPolicy.CLASS:默认的保留策略，注解会在class字节码文件中存在，但运行时无法获得;RetentionPolicy.RUNTIME:注解会在class字节码文件中存在，在运行时可以通过反射获取到。</td>
+									</tr>
+									<tr>
+										<td>@Document</td>
+										<td>说明该注解将被包含在 javadoc 中</td>
+									</tr>
+									<tr>
+										<td>@Inherited</td>
+										<td>说明子类可以继承父类中的该注解</td>
+									</tr>
+								</tbody>
+							</table>
 
-						<p>当注解未指定 Target 值时，则此注解可以用于任何元素之上，多个值使用 {} 包含并用逗号隔开，如下：</p>
-						<pre class="brush: java;">@Target(value={CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE})</pre>
-						<table class="table table-responsive table-striped table-bordered">
-							<thead>
-								<tr>
-									<th>Target 类型</th>
-									<th>说明</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td>ElementType.TYPE</td>
-									<td>接口、类、枚举、注解</td>
-								</tr>
-								<tr>
-									<td>ElementType.FIELD</td>
-									<td>字段、枚举的常量</td>
-								</tr>
-								<tr>
-									<td>ElementType.METHOD</td>
-									<td>方法</td>
-								</tr>
-								<tr>
-									<td>ElementType.CONSTRUCTOR</td>
-									<td>构造函数</td>
-								</tr>
-								<tr>
-									<td>ElementType.LOCAL_VARIABLE</td>
-									<td>局部变量</td>
-								</tr>
-								<tr>
-									<td>ElementType.ANNOTATION_TYPE</td>
-									<td>注解</td>
-								</tr>
-								<tr>
-									<td>ElementType.PACKAGE</td>
-									<td>包</td>
-								</tr>
-								<tr>
-									<td>ElementType.PARAMETER</td>
-									<td>方法参数</td>
-								</tr>
-								<tr>
-									<td>ElementType.TYPE_USE</td>
-									<td>类型使用声明</td>
-								</tr>
-							</tbody>
-						</table>
-						<p class="text-primary">example</p>
-						<ol>
-							<li>
-								<p>定义: FruitColor, FruitName, FruitProvider 三个注解类</p>
-								<pre class="brush: java;">
+							<p>当注解未指定 Target 值时，则此注解可以用于任何元素之上，多个值使用 {} 包含并用逗号隔开，如下：</p>
+							<pre class="brush: java;">@Target(value={CONSTRUCTOR, FIELD, LOCAL_VARIABLE, METHOD, PACKAGE, PARAMETER, TYPE})</pre>
+							<table class="table table-responsive table-striped table-bordered">
+								<thead>
+									<tr>
+										<th>Target 类型</th>
+										<th>说明</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>ElementType.TYPE</td>
+										<td>接口、类、枚举、注解</td>
+									</tr>
+									<tr>
+										<td>ElementType.FIELD</td>
+										<td>字段、枚举的常量</td>
+									</tr>
+									<tr>
+										<td>ElementType.METHOD</td>
+										<td>方法</td>
+									</tr>
+									<tr>
+										<td>ElementType.CONSTRUCTOR</td>
+										<td>构造函数</td>
+									</tr>
+									<tr>
+										<td>ElementType.LOCAL_VARIABLE</td>
+										<td>局部变量</td>
+									</tr>
+									<tr>
+										<td>ElementType.ANNOTATION_TYPE</td>
+										<td>注解</td>
+									</tr>
+									<tr>
+										<td>ElementType.PACKAGE</td>
+										<td>包</td>
+									</tr>
+									<tr>
+										<td>ElementType.PARAMETER</td>
+										<td>方法参数</td>
+									</tr>
+									<tr>
+										<td>ElementType.TYPE_USE</td>
+										<td>类型使用声明</td>
+									</tr>
+								</tbody>
+							</table>
+
+						</div>
+
+						<div class="item">
+							<h3>运行时注解</h3>
+							<p class="text-primary">Example</p>
+							<ol>
+								<li>
+									<p>定义: FruitColor, FruitName, FruitProvider 三个注解类</p>
+									<pre class="brush: java;">
 /** 水果颜色注解 */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -1788,10 +1793,10 @@ public @interface FruitProvider {
     public String address() default "";
 }
 </pre>
-							</li>
-							<li>
-								<p>注解使用: Apple</p>
-								<pre class="brush: java;">
+								</li>
+								<li>
+									<p>注解使用: Apple</p>
+									<pre class="brush: java;">
 public class Apple {
 
 	@FruitName("Apple")
@@ -1832,10 +1837,10 @@ public class Apple {
 	}
 }
 </pre>
-							</li>
-							<li>
-								<p>注解处理器: FruitInfoUtil</p>
-								<pre class="brush: java;">
+								</li>
+								<li>
+									<p>运行时注解处理器: FruitInfoUtil</p>
+									<pre class="brush: java;">
 public class FruitInfoUtil {
 	public static void getFruitInfo(Class&lt;?> clazz) {
 
@@ -1847,19 +1852,15 @@ public class FruitInfoUtil {
 
 		for (Field field : fields) {
 			if (field.isAnnotationPresent(FruitName.class)) {
-				FruitName fruitName = (FruitName) field
-						.getAnnotation(FruitName.class);
+				FruitName fruitName = (FruitName) field.getAnnotation(FruitName.class);
 				strFruitName = strFruitName + fruitName.value();
 				System.out.println(strFruitName);
 			} else if (field.isAnnotationPresent(FruitColor.class)) {
-				FruitColor fruitColor = (FruitColor) field
-						.getAnnotation(FruitColor.class);
-				strFruitColor = strFruitColor
-						+ fruitColor.fruitColor().toString();
+				FruitColor fruitColor = (FruitColor) field.getAnnotation(FruitColor.class);
+				strFruitColor = strFruitColor + fruitColor.fruitColor().toString();
 				System.out.println(strFruitColor);
 			} else if (field.isAnnotationPresent(FruitProvider.class)) {
-				FruitProvider fruitProvider = (FruitProvider) field
-						.getAnnotation(FruitProvider.class);
+				FruitProvider fruitProvider = (FruitProvider) field.getAnnotation(FruitProvider.class);
 				strFruitProvicer = " 供应商编号：" + fruitProvider.id() + " 供应商名称："
 						+ fruitProvider.name() + " 供应商地址："
 						+ fruitProvider.address();
@@ -1873,8 +1874,14 @@ public class FruitInfoUtil {
 	}
 }
 </pre>
-							</li>
-						</ol>
+								</li>
+							</ol>
+						</div>
+
+						<div class="item">
+							<h3>编译时注解</h3>
+							
+						</div>
 					</div>
 				</div>
 				<!-- item over -->
