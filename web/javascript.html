@@ -63,11 +63,13 @@
 					<div class="list-group">
 						<a href="#js-intro" class="list-group-item">简介</a>
 						<a href="#js-base" class="list-group-item">基础</a>
+						<a href="#js-global" class="list-group-item">标准内置对象</a>
 						<a class="list-group-item active dropup" data-toggle="collapse" data-parent="#accordion"
 							href="#js-object-manual" aria-expanded="true">
 							JavaScript 对象参考手册<span class="caret pull-right" style="margin-top: 5px;"></span>
 						</a>
 						<div id="js-object-manual" class="panel-collapse collapse in" role="tabpanel">
+							<a href="#js-object" class="list-group-item">Object 对象</a>
 							<a href="#js-array" class="list-group-item">Array 对象</a>
 							<a href="#js-boolean" class="list-group-item">Boolean 对象</a>
 							<a href="#js-date" class="list-group-item">Date 对象</a>
@@ -75,7 +77,6 @@
 							<a href="#js-number" class="list-group-item">Number 对象</a>
 							<a href="#js-string" class="list-group-item">String 对象</a>
 							<a href="#js-regexp" class="list-group-item">RegExp 对象</a>
-							<a href="#js-global" class="list-group-item">全局属性和函数</a>
 						</div>
 
 						<a class="list-group-item active dropdown" data-toggle="collapse" data-parent="#accordion"
@@ -122,9 +123,9 @@
 						<h3 class="panel-title">简介</h3>
 					</div>
 					<div class="panel-body">
-						<p>JavaScript
-							种直译式脚本语言，是一种动态类型、弱类型、基于原型的语言，内置支持类型。它的解释器被称为JavaScript引擎，为浏览器的一部分，广泛用于客户端的脚本语言，最早是在HTML（标准通用标记语言下的一个应用）网页上使用，用来给HTML网页增加动态功能。
+						<p>JavaScript 是直译式脚本语言，是一种动态类型、弱类型、基于原型的语言，内置支持类型。它的解释器被称为 JavaScript 引擎，为浏览器的一部分，广泛用于客户端的脚本语言，最早是在 HTML 网页上使用，用来给 HTML 网页增加动态功能。
 						</p>
+						<p>JavaScript 参考：<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference" target="_blank">JavaScript 参考</a></p>
 						<p>JavaScript 组成部分:</p>
 						<ul>
 							<li><b>ECMAScript</b>，描述了该语言的语法和基本对象。ECMAScript
@@ -337,9 +338,819 @@
 						<div class="sub-item">
 
 						</div>
-						
+
 						<div class="sub-item">
 
+						</div>
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-global" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">标准内置对象分类</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<h4>值属性</h4>
+							<p>全局属性返回一个简单值，这些值没有自己的属性和方法。</p>
+							<ul>
+								<li><p><code>globalThis</code> -- 提供了一个标准的方式来获取不同环境下的全局 this  对象。</p></li>
+								<li><p><code>Infinity</code> -- 是一个数值，表示无穷大。初始值是 <code>Number.POSITIVE_INFINITY</code>。</p></li>
+								<li><p><code>NaN</code> -- 表示不是一个数字，初始值就是 <code>NaN</code>，和 <code>Number.NaN</code> 的值一样。</p></li>
+								<li><p><code>undefined</code> -- 表示原始值 <code>undefined</code>。它是一个 JavaScript 的 原始数据类型 。</p></li>
+							</ul>
+							<pre class="brush: js;">
+"use strict";
+
+console.log(Infinity);
+console.log(Number.POSITIVE_INFINITY);
+console.log(Infinity === Number.POSITIVE_INFINITY); // true
+
+console.log(NaN);
+console.log(Number.NaN);
+console.log(NaN == Number.NaN);     // false
+console.log(NaN === Number.NaN);
+
+// globalThis 提供了一个标准的方式来获取不同环境下的全局 this  对象
+console.log(this);
+console.log(globalThis);
+console.log(this === globalThis);   // true
+
+console.log(undefined);
+</pre>
+						</div>
+
+						<div class="sub-item">
+							<h4>函数属性</h4>
+							<p>全局函数可以直接调用，不需要在调用时指定所属对象，执行结束后会将结果直接返回给调用者。</p>
+							<ol>
+								<li><p><code>eval(string)</code> -- 将传入的字符串当做 JavaScript 代码进行执行。</p></li>
+
+								<li class="group"><p><code>isFinite(number)</code> -- 判断被传入的参数值是否为一个有限数值</p></li>
+								<li><p><code>isNaN(number)</code> -- 确定一个值是否为 NaN 。</p></li>
+
+								<li class="group"><p><code>parseInt(string, number)</code> -- 解析一个字符串并返回指定基数的十进制整数， radix 是2-36 之间的整数，表示被解析字符串的基数。</p></li>
+								<li><p><code>parseFloat(string)</code> --给定值被解析成浮点数。如果给定值不能被转换成数值，则会返回 NaN。 </p></li>
+								
+								<li class="group"><p><code>encodeURI(string)</code> -- 对整个 URL 进行编码（空格，百分号，中文等），特殊符号 <code>; / ? : @ & = + $ , #</code> 不进行编码。</p></li>
+								<li><p><code>decodeURI(string)</code> -- 解码由 <code>encodeURI()</code> 创建或其它流程得到的统一资源标识符。</p></li>
+								<li><p><code>encodeURIComponent(string)</code> -- URI 编码，产生能适用于 HTTP GET 或 POST 请求的 URI。</p></li>
+								<li><p><code>decodeURIComponent(string)</code> -- 解码由 <code>encodeURIComponent()</code> 方法或者其它类似方法编码的部分统一资源标识符。</p>
+									<pre class="brush: js;">
+"use strict";
+
+const uri = "http://x.com:80/path/file.php?x=316&y=你好&z=sum(a + b)#anchor";
+
+const encodedURI = encodeURI(uri);
+// http://x.com:80/path/file.php?x=1&y=%E4%BD%A0%E5%A5%BD&z=s(a%20+%20b)#anchor
+console.log(encodedURI);
+const encodedURIComponent = encodeURIComponent(uri);
+// http%3A%2F%2Fx.com%3A80%2Fpath%2Ffile.php%3Fx%3D1%26y%3D%E4%BD%A0%E5%A5%BD%26z%3Ds(a%20%2B%20b)%23anchor
+console.log(encodedURIComponent);
+
+console.log(uri === decodeURI(encodedURI));						// true
+console.log(uri === decodeURIComponent(encodedURIComponent));	// true
+
+// 多次处理
+console.log(encodeURI(encodedURI));
+console.log(encodeURIComponent(encodedURIComponent));
+
+// 多次处理过的数据需要多次还原，以下两个都是 true
+console.log(uri === decodeURI(decodeURI(encodeURI(encodedURI))));       
+console.log(uri === decodeURIComponent(decodeURIComponent(encodeURIComponent(encodedURIComponent))));
+
+/** encodeURIComponent() 和 encodeURI 有以下几个不同点 */
+var set1 = ";,/?:@&=+$";  // 保留字符
+var set2 = "-_.!~*'()";   // 不转义字符
+var set3 = "#";           // 数字标志
+var set4 = "ABC abc 123"; // 字母数字字符和空格
+
+console.log(encodeURI(set1)); // ;,/?:@&=+$
+console.log(encodeURI(set2)); // -_.!~*'()
+console.log(encodeURI(set3)); // #
+console.log(encodeURI(set4)); // ABC%20abc%20123 (the space gets encoded as %20)
+
+console.log(encodeURIComponent(set1)); // %3B%2C%2F%3F%3A%40%26%3D%2B%24
+console.log(encodeURIComponent(set2)); // -_.!~*'()
+console.log(encodeURIComponent(set3)); // %23
+console.log(encodeURIComponent(set4)); // ABC%20abc%20123 (the space gets encoded as %20)
+</pre>
+								</li>
+							</ol>
+						</div>
+
+
+					</div>
+				</div>
+				<!-- item over -->
+
+				<!-- item start -->
+				<a id="js-object" class="offset"></a>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">Object 对象</h3>
+					</div>
+					<div class="panel-body">
+						<div class="sub-item">
+							<p>在 <b>JavaScript</b> 中，几乎所有的对象都是 <b>Object</b> 类型的实例，它们都会从 <code>Object.prototype</code>
+								继承属性和方法。<b>Object</b> 构造函数为给定值创建一个对象包装器。<b>Object</b> 构造函数，会根据给定的参数创建对象，具体有以下情况：</p>
+							<ul>
+								<li>
+									<p>如果给定值是 <code>null</code> 或 <code>undefined</code>，将会创建并返回一个空对象；</p>
+								</li>
+								<li>
+									<p>如果传进去的是一个基本类型的值，则会构造其包装类型的对象；</p>
+								</li>
+								<li>
+									<p>如果传进去的是引用类型的值，仍然会返回这个值，经他们复制的变量保有和源对象相同的引用地址。</p>
+								</li>
+							</ul>
+							<p>当以非构造函数形式被调用时，<b>Object</b> 的行为等同于 <code>new Object()</code>。</p>
+						</div>
+
+						<div class="sub-item">
+							<p><b>Object 构造函数的属性</b></p>
+							<ul>
+								<li>
+									<p><code>Object.length</code> -- 值为 1。</p>
+								</li>
+								<li>
+									<p><code>Object.prototype</code> -- 可以为所有 <b>Object</b> 类型的对象添加属性。</p>
+								</li>
+							</ul>
+							<p><b>Object 静态方法</b></p>
+							<ol>
+								<li>
+									<p><code>Object.assign(target, ...sources)</code> -- 通过复制一个或多个对象来创建一个新的对象。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-assign"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-assign" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+const target = { a: 1, b: 2 };
+const source = { b: 4, c: 5 };
+
+const returnedTarget = Object.assign(target, source); // source 和 target 合并，并返回新的对象给 target
+
+console.log(source);                    // {b: 4, c: 5}
+console.log(target);                    // {a:1, b: 4, c: 5}
+console.log(returnedTarget);            // {a:1, b: 4, c: 5}
+console.log(target === returnedTarget); // true
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p>
+										<code>Object.create(proto, [propertiesObject])</code> -- 使用指定的原型对象和属性创建一个新对象。
+									</p>
+
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-create"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-create" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+const person = {
+	isHuman: false,
+	printIntroduction: function () {
+		console.log(`My name is ${this.name}. Am I human? ${this.isHuman}`);
+	}
+};
+
+const me = Object.create(person);
+
+me.name = 'Matthew';
+me.isHuman = true;
+
+me.printIntroduction();    // My name is Matthew. Am I human? true
+
+const other = Object.create(me);
+
+other.printIntroduction(); // My name is Matthew. Am I human? true
+
+other.name = "Jiwanger";   // 因为是使用原型创建一个新的对象，因此 me 的值不会改变
+other.printIntroduction();
+me.printIntroduction();
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.defineProperty(obj, prop, descriptor)</code> -- 给对象添加一个属性并指定该属性的配置。
+									</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-defineProperty"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-defineProperty" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+const jiwanger = { name: "Jiwanger" };
+
+Object.defineProperty(jiwanger, "school", {
+	value: "湖南人文科技学院",
+	writable: true,     // 是否可改变，默认为 false
+	configurable: true, // 是否能从对象上删除，默认为 false
+	enumerable: true    // 是否可迭代，默认为 false
+});
+
+// enumerable 将影响以下方法
+console.log(jiwanger.propertyIsEnumerable('school'));
+console.log(Object.keys(jiwanger));  // ["name", "school"]
+for (var i in jiwanger) {
+	console.log(i);                  // [name, school]
+}
+
+let tmp = null;
+Object.defineProperty(jiwanger, "age", {
+	set(val) {              // 等同于 set: function(val) {...}
+		if (val < 0 || val > 150) {
+			throw "Invalid parameter!";
+		} else {
+			tmp = val;
+		}
+	},
+	get() { return tmp; }   // 等同于 get: function(val) {...}
+});
+
+jiwanger.age = 31;
+// jiwanger.age = 301; // 抛出异常，set 方法对参数做出了检查
+console.log(jiwanger);
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.defineProperties(obj, props)</code> -- 给对象添加多个属性并分别指定它们的配置。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-defineProperties"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-defineProperties" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+const jiwanger = { name: "Jiwanger" };
+
+let tmp = null;
+Object.defineProperties(jiwanger, {
+	'age': {
+		set(val) {              // 等同于 set: function(val) {...}
+			if (val < 0 || val > 150) {
+				throw "Invalid parameter!";
+			} else {
+				tmp = val;
+			}
+		},
+		get() { return tmp; }   // 等同于 get: function(val) {...},
+	},
+	'school': {
+		value: '湖南人文科技学院',
+		writable: false
+	}
+});
+try {
+    jiwanger.age = 301; // 抛出异常，set 方法对参数做出了检查
+} catch(e) {
+    console.log(e);
+}
+console.log(jiwanger);
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.keys(obj)</code> -- 返回一个包含所有给定对象自身可枚举属性名称的数组。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-keys"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-keys" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+var arr = ['a', 'b', 'c'];
+console.log(Object.keys(arr)); // console: ['0', '1', '2']
+
+// array like object
+var obj = { 0: 'a', 1: 'b', 2: 'c' };
+console.log(Object.keys(obj)); // console: ['0', '1', '2']
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.values(obj)</code> -- 返回给定对象自身可枚举值的数组。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-values"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-values" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+var obj = { foo: 'bar', baz: 42 };
+console.log(Object.values(obj)); // ['bar', 42]
+
+// array like object
+var obj = { 0: 'a', 1: 'b', 2: 'c' };
+console.log(Object.values(obj)); // ['a', 'b', 'c']
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.entries(obj)</code> -- 返回给定对象自身可枚举属性的 [key, value] 数组。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-entries"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-entries" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+Object.prototype.a = 'a';
+Array.prototype.b = function () { };
+
+const iterable = [3, 6, 9];
+iterable.x = 'x';
+
+for (let i in iterable) {	// for..in 是返回可枚举对象的属性, 会继承
+	console.log(i); // 0:3, 1:6, 2:9, x:x, b:function() {}, a:a
+}
+
+for (let j of iterable) {	// for..of 是返回可枚举对象的值，不会继承
+	console.log(j); // 3, 6, 9
+}
+for (let [k, v] of Object.entries(iterable)) {
+	console.log(k + ':' + v);   // 0:3, 1:6, 2:9, x:x
+}
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.freeze(obj)</code> -- 冻结对象：其他代码不能删除或更改任何属性。一个被冻结的对象再也不能被修改；冻结了一个对象则不能向这个对象添加新的属性，不能删除已有属性，不能修改该对象已有属性的可枚举性、可配置性、可写性，以及不能修改已有属性的值。此外，冻结一个对象后该对象的原型也不能被修改。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-freeze"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-freeze" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+const obj = { 
+	prop: 42,
+	inner: {}
+	};
+	
+Object.freeze(obj);
+	
+try {
+	obj.prop = 33;
+} catch(e) {
+	console.log(e);
+}
+console.log(obj.prop);// 42
+
+obj.inner.mod = "modify";   // 冻结对象不是常量对象，内部可以改变（）
+console.log(obj.inner.mod); // 除非内部对象也被冻结
+
+Object.freeze(obj.inner);   // 此时 inner 对象将不能被修改了
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.isFrozen(obj)</code> -- 判断对象是否已经冻结。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-isFrozen"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-isFrozen" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+const obj = {
+	prop: 42,
+	inner: {}
+};
+	
+Object.freeze(obj);
+
+console.log(Object.isFrozen(obj));          // true
+console.log(Object.isFrozen(obj.inner));    // false
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.getOwnPropertyDescriptor(obj, prop)</code> -- 返回对象指定的属性配置。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-getOwnPropertyDescriptor"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-getOwnPropertyDescriptor" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+const object1 = { property1: 42 };
+	
+const descriptor1 = Object.getOwnPropertyDescriptor(object1, 'property1');
+	
+console.log(descriptor1.configurable);	// true
+console.log(descriptor1.value);			// 42
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.getOwnPropertyNames(obj)</code> -- 返回一个数组，它包含了指定对象所有的可枚举或不可枚举的属性名。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-getOwnPropertyNames"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-getOwnPropertyNames" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+var arr = ["a", "b", "c"];
+console.log(Object.getOwnPropertyNames(arr).sort()); // ["0", "1", "2", "length"]
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.getOwnPropertySymbols(obj)</code> -- 返回一个数组，它包含了指定对象自身所有的符号属性。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-getOwnPropertySymbols"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-getOwnPropertySymbols" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+var obj = {};
+var a = Symbol("a");
+var b = Symbol.for("b");
+
+obj[a] = "localSymbol";
+obj[b] = "globalSymbol";
+
+var objectSymbols = Object.getOwnPropertySymbols(obj);
+
+console.log(objectSymbols.length); // 2
+console.log(objectSymbols)         // [Symbol(a), Symbol(b)]
+console.log(objectSymbols[0])      // Symbol(a)
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.getPrototypeOf(obj)</code> -- 返回指定对象的原型对象。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-getPrototypeOf"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-getPrototypeOf" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";							
+
+var proto = {};
+var obj = Object.create(proto);
+Object.getPrototypeOf(obj) === proto; 				// true
+
+var reg = /a/;
+Object.getPrototypeOf(reg) === RegExp.prototype;	// true
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.setPrototypeOf(obj, prototype)</code> -- 设置对象的原型（即内部 [[Prototype]] 属性）。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-setPrototypeOf"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-setPrototypeOf" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+var dict = Object.setPrototypeOf({}, null);
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.is(value1, value2)</code> -- 比较两个值是否相同。所有 NaN 值都相等（这与==和===不同）。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-is"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-is" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+/** 满足以下条件则两个值相等:
+ * 		都是 undefined
+ * 		都是 null
+ * 		都是 true 或 false
+ * 		都是相同长度的字符串且相同字符按相同顺序排列
+ * 		都是相同对象（意味着每个对象有同一个引用）
+ * 		都是数字且
+ * 			都是 +0
+ * 			都是 -0
+ * 			都是 NaN
+ * 			或都是非零而且非 NaN 且为同一个值
+ */
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.preventExtensions(obj)</code> -- 防止对象的任何扩展。</p>
+								</li>
+								<li>
+									<p><code>Object.isExtensible(obj)</code> -- 判断对象是否可扩展。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-isExtensible"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-isExtensible" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+// 新对象默认是可扩展的.
+var empty = {};
+Object.isExtensible(empty); // === true
+
+// 防止对象的任何扩展
+Object.preventExtensions(empty);
+Object.isExtensible(empty); // === false
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>Object.isSealed(obj)</code> -- 判断对象是否已经密封。</p>
+								</li>
+								<li>
+									<p><code>Object.seal(obj)</code> -- 封闭一个对象，阻止添加新属性并将所有现有属性标记为不可配置。防止其他代码删除对象的属性。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-seal"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-seal" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"use strict";
+
+var obj = {
+	prop: function () { },
+	foo: 'bar'
+};
+
+// 可以添加新的属性，更改或删除现有的属性
+obj.foo = 'baz';
+obj.lumpy = 'woof';
+delete obj.prop;
+
+var o = Object.seal(obj);
+
+o === obj;              // true
+Object.isSealed(obj);   // === true
+
+
+obj.foo = 'quux';       // 仍然可以修改密封对象的属性值，但是不可以删除了
+// delete obj.foo;
+</pre>
+										</div>
+									</div>
+								</li>
+							</ol>
+						</div>
+
+						<div class="sub-item">
+							<p><b>Object 实例和 Object 原型对象</b></p>
+							<p><b>属性</b></p>
+							<p><code>constructor</code> -- 返回创建实例对象的 Object 构造函数的引用。注意，此属性的值是对函数本身的引用，而不是一个包含函数名称的字符串。</p>
+							<p>对原始类型来说，如 <code>1</code>，<code>true</code> 和 <code>"test"</code>，该值只可读。</p>
+							<p>所有对象都会从它的原型上继承一个 <code>constructor</code> 属性：</p>
+							<pre class="brush: js;">
+"user strict";
+
+var o = {};
+o.constructor === Object; // true
+
+var o = new Object;
+o.constructor === Object; // true
+
+var a = [];
+a.constructor === Array; // true
+
+var a = new Array;
+a.constructor === Array // true
+
+var n = new Number(3);
+n.constructor === Number; // true
+</pre>
+
+							<p><b>方法</b></p>
+							<ol>
+								<li><p><code>valueOf()</code> -- 对象转换为原始值。你很少需要自己调用 <code>valueOf</code> 方法；当遇到要预期的原始值的对象时，JavaScript 会自动调用它。</p>
+									<p>JavaScript 的许多内置对象都重写了该函数，以实现更适合自身的功能需要。因此，不同类型对象的 <code>valueOf</code> 方法的返回值和返回值类型均可能不同。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-valueOf"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-valueOf" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"user strict";
+
+function MyNumberType(n) {
+    this.number = n;
+}
+
+// 每当 MyNumberType 要被转换为原始类型值时，JavaScript 在此之前会自动调用自定义的 valueOf 方法。
+MyNumberType.prototype.valueOf = function() {
+    return this.number;
+};
+
+var myObj = new MyNumberType(4);
+myObj + 3; // 7
+</pre>
+										</div>
+									</div>
+								</li>
+								<li><p><code>hasOwnProperty(prop)</code> -- 返回一个布尔值，指示对象自身属性中是否具有指定的属性。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-hasOwnProperty"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-hasOwnProperty" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"user strict";
+
+const object1 = {};
+object1.property1 = 42;
+
+console.log(object1.hasOwnProperty('property1'));       // true
+console.log(object1.hasOwnProperty('toString'));        // false
+console.log(object1.hasOwnProperty('hasOwnProperty'));  // false
+</pre>
+										</div>
+									</div>
+								</li>
+								<li><p><code>propertyIsEnumerable(prop)</code> -- 返回一个布尔值，表示指定的属性是否可枚举。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-propertyIsEnumerable"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-propertyIsEnumerable" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"user strict";
+
+const object1 = {};
+const array1 = [];
+object1.property1 = 42;
+array1[0] = 42;
+
+console.log(object1.propertyIsEnumerable('property1')); // true
+console.log(array1.propertyIsEnumerable(0));            // true
+console.log(array1.propertyIsEnumerable('length'));     // false
+</pre>
+										</div>
+									</div>
+								</li>
+								<li><p><code>isPrototypeOf(object)</code> -- 用于测试一个对象是否存在于另一个对象的原型链上。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-isPrototypeOf"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-isPrototypeOf" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"user strict";
+
+function Foo() {}
+function Bar() {}
+function Baz() {}
+
+Bar.prototype = Object.create(Foo.prototype);
+Baz.prototype = Object.create(Bar.prototype);
+
+var baz = new Baz();
+
+console.log(Baz.prototype.isPrototypeOf(baz));      // true
+console.log(Bar.prototype.isPrototypeOf(baz));      // true
+console.log(Foo.prototype.isPrototypeOf(baz));      // true
+console.log(Object.prototype.isPrototypeOf(baz));   // true
+</pre>
+										</div>
+									</div>
+								</li>
+								
+								<li><p><code>toString()</code> -- 返回一个表示该对象的字符串。</p>
+									<p>每个对象都有一个 <code>toString()</code> 方法，当该对象被表示为一个文本值时，或者一个对象以预期的字符串方式引用时自动调用。默认情况下，<code>toString()</code> 方法被每个 Object 对象继承。如果此方法在自定义对象中未被覆盖，<code>toString()</code> 返回 <code>"[object type]"</code>，其中 <code>type</code> 是对象的类型。</p>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<a data-toggle="collapse" data-parent="#accordion" href="#object-toString"
+												aria-expanded="true" class="code-header">
+												<span class="glyphicon glyphicon-plus"></span> View Code
+											</a>
+										</div>
+										<div id="object-toString" class="panel-collapse collapse" aria-expanded="true">
+											<pre class="brush: js;">
+"user strict";
+
+function Dog(name) {
+    this.name = name;
+}
+
+const dog1 = new Dog('Gabby');
+
+Dog.prototype.toString = function dogToString() {
+    return `${this.name}`;
+};
+
+console.log(dog1.toString()); // "Gabby"
+</pre>
+										</div>
+									</div>
+								</li>
+								<li>
+									<p><code>toLocaleString()</code> -- 返回一个该对象的字符串表示。此方法被用于派生对象为了特定语言环境的目的而重载使用。</p>
+									<p><code>Array</code>, <code>Number</code>, <code>Date</code> 覆盖了 <code>toLocaleString</code> 的方法。</p>
+								</li>
+								
+							</ol>
 						</div>
 					</div>
 				</div>
@@ -1180,102 +1991,6 @@
 									<td>把字符串分割为字符串数组。</td>
 									<td>1</td>
 									<td>4</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<!-- item over -->
-
-				<!-- item start -->
-				<a id="js-global" class="offset"></a>
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						<h3 class="panel-title">JavaScript 全局属性</h3>
-					</div>
-					<div class="panel-body">
-
-						<h5 class="text-primary">JavaScript 全局属性</h5>
-						<table class="table table-responsive table-striped table-bordered runoob"
-							data-base="http://www.runoob.com/jsref/">
-							<tbody>
-								<tr>
-									<th width="32%" align="left">属性</th>
-									<th width="68%" align="left">描述</th>
-								</tr>
-								<tr>
-									<td><a href="jsref-infinity.html">Infinity</a></td>
-									<td>代表正的无穷大的数值。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-nan.html">NaN</a></td>
-									<td>指示某个值是不是数字值。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-undefined.html">undefined</a></td>
-									<td>指示未定义的值。</td>
-								</tr>
-							</tbody>
-						</table>
-						<h5 class="text-primary">JavaScript 全局函数</h5>
-						<table class="table table-responsive table-striped table-bordered runoob"
-							data-base="http://www.runoob.com/jsref/">
-							<tbody>
-								<tr>
-									<th width="32%" align="left">函数</th>
-									<th width="68%" align="left">描述</th>
-								</tr>
-								<tr>
-									<td><a href="jsref-decodeuri.html">decodeURI()</a></td>
-									<td>解码某个编码的 URI。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-decodeuricomponent.html">decodeURIComponent()</a></td>
-									<td>解码一个编码的 URI 组件。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-encodeuri.html">encodeURI()</a></td>
-									<td>把字符串编码为 URI。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-encodeuricomponent.html">encodeURIComponent()</a></td>
-									<td>把字符串编码为 URI 组件。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-escape.html">escape()</a></td>
-									<td>对字符串进行编码。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-eval.html">eval()</a></td>
-									<td>计算 JavaScript 字符串，并把它作为脚本代码来执行。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-isfinite.html">isFinite()</a></td>
-									<td>检查某个值是否为有穷大的数。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-isnan.html">isNaN()</a></td>
-									<td>检查某个值是否是数字。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-number.html">Number()</a></td>
-									<td>把对象的值转换为数字。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-parsefloat.html">parseFloat()</a></td>
-									<td>解析一个字符串并返回一个浮点数。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-parseint.html">parseInt()</a></td>
-									<td>解析一个字符串并返回一个整数。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-string.html">String()</a></td>
-									<td>把对象的值转换为字符串。</td>
-								</tr>
-								<tr>
-									<td><a href="jsref-unescape.html">unescape()</a></td>
-									<td>对由 escape() 编码的字符串进行解码。</td>
 								</tr>
 							</tbody>
 						</table>
